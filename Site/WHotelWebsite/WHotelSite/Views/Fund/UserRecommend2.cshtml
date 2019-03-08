@@ -1,0 +1,205 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    ViewBag.Title = "邀请好友";
+
+    var userid = ViewBag.UserId;
+
+    //用户信息
+    UserInfoResult userInfo = ViewBag.UserInfo;
+    
+    //微信好友
+    var shareLink_WeixinFriend = ViewBag.ShareLink_WeixinFriend;
+
+    //微信朋友圈
+    var shareLink_WeixinLoop = ViewBag.ShareLink_WeixinLoop;
+
+    //QQ好友
+    var shareLink_QqFriend = ViewBag.ShareLink_QqFiend;
+
+    //QQ空间
+    var shareLink_QqZone = ViewBag.ShareLink_QqZone;
+
+    //新浪
+    var shareLink_Sina = ViewBag.ShareLink_Sina;
+
+    //复制链接
+    var shareLink_CopyLink = ViewBag.ShareLink_CopyLink;
+
+    //更多
+    var shareLink_More = ViewBag.ShareLink_More;
+
+    //当前系统环境（ios | android）
+    var appType = ViewBag.AppType;
+    
+    //检查当前版本是否大于等于4.4版本
+    var isThanVer4_4 = ViewBag.IsThanVer4_4;
+    
+    //分享链接
+    var shareLink = ViewBag.ShareLink;
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    ViewBag.LoadHmBaidu = false;
+}
+
+@section styles
+{
+    <link href="~/Content/css/fund/userrecommend2.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style type="text/css">
+    </style>
+}
+
+@*<div class="userrecommendBg2"></div>*@
+<div class="rec-panel">
+    <div class="tit"></div>
+    <div class="info">
+        <img src="http://whfront.b0.upaiyun.com/app/img/acount/invitefriend/invite-friend-icon.png" alt="" />
+    </div>
+    <div class="info-txt1">邀请朋友注册</div>
+    <div class="info-txt2">好友使用邀请码注册成功，TA将成为你的好友哦</div>
+    <div class="info-txt2">@*好友使用邀请码注册成功，你和TA均可获得50积分*@</div>
+    <div class="invitation">
+        <div class="head"><img src="http://whfront.b0.upaiyun.com/app/img/fund/invitation-tit-pic.png" alt="" /></div>
+        <div class="code">@(userInfo.InvitationCode)</div>
+    </div>
+    <div class="btns">
+        <div class="share">邀请好友</div>
+        <div class="copy">复制邀请码</div>
+        <div class="link">@*<a href="http://www.zmjiudian.com/active/activepage?pageid=44&defbg=1&_newpage=1">条款及细则</a>*@</div>
+    </div>
+</div>
+<div style="margin:2em 0 0 0;display:none;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3a%2f%2f192.168.1.22%3a8081%2fFund%2fUserRecommend2%3frealuserid%3d1%26_newpage%3d1%26userid%3d%7buserid%7d%26_dorpdown%3d1">GO APP (Local) >>></a></div>
+<div class="subed-share-panel" style="display:none;">
+    <div class="icons">
+        <ul>
+            <li id="li-weixin" onclick="gourl('@shareLink_WeixinFriend')">
+                <div class="icon"><img src="http://whfront.b0.upaiyun.com/www/img/comment/weixin.png" alt="微信好友" /></div>
+                <div class="txt">微信好友</div>
+            </li>
+            <li id="li-wloop" onclick="gourl('@shareLink_WeixinLoop')">
+                <div class="icon"><img src="http://whfront.b0.upaiyun.com/www/img/comment/w-loop.png" alt="朋友圈" /></div>
+                <div class="txt">朋友圈</div>
+            </li>
+            <li id="li-qfriend" onclick="gourl('@shareLink_QqFriend')" style="@(isThanVer4_4 ? "" : "display:none;")">
+                <div class="icon"><img src="http://whfront.b0.upaiyun.com/www/img/comment/q-friend.png" alt="QQ好友" /></div>
+                <div class="txt">QQ好友</div>
+            </li>
+            <li id="li-qzone" onclick="gourl('@shareLink_QqZone')" style="@(isThanVer4_4 ? "" : "display:none;")">
+                <div class="icon"><img src="http://whfront.b0.upaiyun.com/www/img/comment/q-zone.png" alt="QQ空间" /></div>
+                <div class="txt">QQ空间</div>
+            </li>
+            <li id="li-sina" onclick="gourl('@shareLink_Sina')">
+                <div class="icon"><img src="http://whfront.b0.upaiyun.com/www/img/comment/sina.png" alt="新浪微博" /></div>
+                <div class="txt">新浪微博</div>
+            </li>
+            <li id="li-copylink" onclick="gourl('@shareLink_CopyLink')" style="@(isThanVer4_4 ? "" : "display:none;")">
+                <div class="icon"><img src="http://whfront.b0.upaiyun.com/www/img/comment/copy-link.png" alt="复制链接" /></div>
+                <div class="txt">复制链接</div>
+            </li>
+            <li id="li-more" onclick="gourl('@shareLink_More')" style="@(appType.Contains("android") && isThanVer4_4 ? "" : "display:none;")">
+                <div class="icon"><img src="http://whfront.b0.upaiyun.com/www/img/comment/more.png" alt="更多" /></div>
+                <div class="txt">更多</div>
+            </li>
+        </ul>
+    </div>
+    <div class="btn">
+        <div class="cancel">取消</div>
+    </div>
+</div>
+<div class="subed-share-md" style="display:none;"></div>
+<input type="hidden" id="thanVer44" value="@(isThanVer4_4 ? "1" : "0")" />
+<input type="hidden" id="shareNativeLink" value="@shareLink" />
+
+@section scripts
+{
+    <script src="~/Content/js/framework/jquery.lazyload.min.js"></script>
+    <script src="~/Content/js/fund/userrecommend2.js?v=@(Helpers.curAppVer())"></script>
+    <script type="text/javascript" charset="utf-8">
+        function gourl(url)
+        {
+            location.href = url;
+        }
+
+        var appType = "@(appType)";
+
+        $(".share").click(function () {
+            var thanVer44 = $("#thanVer44").val();
+            if (thanVer44 == "1") {
+                var shareNativeLink = $("#shareNativeLink").val();
+                gourl(shareNativeLink);
+            }
+            else {
+                var op = $(this).data("op");
+                if (op == "1") {
+                    showMd(false);
+                    $(".subed-share-panel").slideUp(100);
+                    $(this).data("op", "0");
+                }
+                else {
+                    showMd(true);
+                    $(".subed-share-panel").slideDown(200);
+                    $(this).data("op", "1");
+                }
+            }
+        });
+
+        $(".cancel").click(function () {
+            showMd(false);
+            $(".subed-share-panel").slideUp(100);
+            $(".share").data("op", "0");
+        });
+        $(".subed-share-md").click(function () { $(".cancel").click(); });
+        function showMd(s) {
+            if (s) {
+                $(".subed-share-md").fadeIn();
+            }
+            else {
+                $(".subed-share-md").fadeOut();
+            }
+        }
+
+        var copyTxtSuccess = function () {
+            alert("邀请码已复制")
+        }
+        var copyTxtFail = function () {
+            alert("邀请码复制有误")
+        }
+
+        //app相关参数初始化以后，回调处理
+        var _appInitCallback = function () {
+
+            //copy invitation code
+            $(".copy").click(function () {
+
+                var invCode = "@(userInfo.InvitationCode)";
+
+                zmjd.copyTxt(invCode);
+
+                //if (appType == "android") {
+                //    whotel.copyTxt(invCode, "copyTxtSuccess", "copyTxtFail")
+                //}
+                //else {
+                //    var _u = 'whotelapp://runFunc?data={"method":"copyTxt","param":"' + invCode + '","success":"copyTxtSuccess","fail":"copyTxtFail"}';
+                //    location.href = _u;
+                //}
+            });
+
+        }
+
+        //该方法为app主动调用（目前为页面加载完成后调用）
+        var _getAppData = function (userid, apptype, appvercode, appverno) {
+
+            //init data
+            _InitApp(userid, apptype, appvercode, appverno);
+
+            //call back
+            try {
+                _appInitCallback();
+            } catch (e) {
+
+            }
+        }
+
+    </script>
+}

@@ -1,0 +1,147 @@
+﻿@model HomePageData30
+@{
+    Layout = null;
+
+    var cssVersion = "190001010000";
+    try
+    {
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex) { }
+
+    var isInWeixin = ViewBag.isInWeixin;
+    var isApp = ViewBag.IsApp;
+    var userid = ViewBag.UserId;
+    var appType = ViewBag.AppType;
+    var isThanVer46 = ViewBag.IsThanVer46;
+
+    //腰部banner
+    var adInfo = ViewBag.AdInfo;
+    List<ADItem> adList = ViewBag.AdList;
+
+    //顶部banner
+    var selectedList = ViewBag.SelectedList;
+}
+
+@if (selectedList != null && selectedList.Count > 0)
+{
+    var firstAd = selectedList[0];
+    if (selectedList.Count == 1)
+    {
+        <div class="home-banner-item">
+            <a href="@WHotelSite.App_Code.UrlHelperExtension.HomeDistrictBannerUrl(isApp, firstAd.ActionURL)">
+                <img src="@firstAd.ADURL" alt="" />
+                <div class="tip-div">
+                    <div class="t1">@firstAd.ADTitle.Split('\n')[0]</div>
+                    <div class="t2">@(firstAd.ADTitle.Split('\n').Length > 1 ? firstAd.ADTitle.Split(' ')[1] : "")</div>
+                </div>
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="home-multiple home-hide">
+            <div id="top-banner" class="am-slider am-slider-default am-slider-carousel"
+                    style="margin:0 0 0 0;">
+                <ul class="am-slides" style="border: none;">
+                    @for (int i = 0; i < selectedList.Count; i++)
+                    {
+                        var ad = selectedList[i];
+                        <li class="home-banner-item">
+                            <a href="@WHotelSite.App_Code.UrlHelperExtension.HomeDistrictBannerUrl(isApp, ad.ActionURL)">
+                                @if (i == 0)
+                                {
+                                    <img src="@(ad.ADURL)" alt="" />
+                                }
+                                else
+                                {
+                                    <img data-orisrc="@(ad.ADURL)" src="http://whfront.b0.upaiyun.com/app/img/home/home-load2-16x9.png" alt="" />
+                                }
+                                <div class="tip-div">
+                                    <div class="t1">@ad.ADTitle.Split('\n')[0]</div>
+                                    <div class="t2">@(@ad.ADTitle.Split('\n').Length > 1 ? ad.ADTitle.Split('\n')[1] : "")</div>
+                                </div>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+}
+
+@if (!isInWeixin && isApp && !isThanVer46)
+{ 
+    <div class="home-search">
+        <div class="h-s-center"><div class="input-div" id="h-s-inp-div">想去哪里度假</div></div>
+    </div>
+    if (adList != null && adList.Count > 0)
+    {
+        <div class="home-multiple home-hide" id="home-middle-banner">
+            <div id="xiaomo-banner" class="am-slider am-slider-default am-slider-carousel" style="margin:0 0 0 0;">
+                <ul class="am-slides" style="border:none;">
+                    @for (int i = 0; i < adList.Count; i++)
+                    {
+                        var ad = adList[i];
+                        var t1 = ad.ADTitle.Split('\n')[0];
+                        var t2 = ad.ADTitle.Split('\n').Length > 1 ? ad.ADTitle.Split('\n')[1] : "";
+                        
+                        <li class="middle-banner-item">
+                            <a href="@WHotelSite.App_Code.UrlHelperExtension.HomeDefBannerUrl(isApp, ad.ActionURL)">
+                                <img src="@ad.ADURL" alt="" />
+                                <div class="tip-div @(!string.IsNullOrEmpty(t2) ? "tip-div-mlt" : "")">
+                                    <div class="t1">@t1</div>
+                                    @if (!string.IsNullOrEmpty(t2))
+                                    {
+                                        <div class="t2">@t2</div>   
+                                    }
+                                </div>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="home-multiple-border"></div>
+        <script>
+            var wwidth = $(window).width();
+            var itemWidth = 180; if (wwidth < 410) itemWidth = 165; if (wwidth == 360) itemWidth = 158; if (wwidth < 350) itemWidth = 141;
+
+            $('#xiaomo-banner').flexslider({
+                itemWidth: itemWidth,
+                itemMargin: 3,
+                slideshow: false,
+                animationLoop: false,
+                animationSpeed: 300,
+                pauseOnAction: true,
+                controlNav: false,
+                directionNav: false
+            });
+        </script>
+    }
+}
+<script>
+    $(".home-multiple").show();
+</script>
+<script>
+    //首页顶部轮播
+    $('#top-banner').flexslider({
+        slideshow: false,
+        animationSpeed: 150,
+        pauseOnAction: true,
+        controlNav: true,
+        directionNav: false,
+        after: function (slider) {
+            for (var i = 0; i < slider.slides.length; i++) {
+                var li = $(slider.slides[i]);
+                if (li.attr("class").indexOf("am-active-slide") > 0) {
+                    var imgObj = li.find("img");
+                    setImgOriSrc(imgObj);
+                    return;
+                }
+            }
+        }
+    });
+</script>

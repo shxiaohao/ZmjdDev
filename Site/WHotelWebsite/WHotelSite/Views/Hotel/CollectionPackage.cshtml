@@ -1,0 +1,327 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    Layout = null;
+
+    var isApp = ViewBag.IsApp;
+    var userid = ViewBag.UserId;
+    var cid = ViewBag.Cid;
+    var isInWeixin = ViewBag.isInWeixin;
+    var appType = ViewBag.AppType;
+
+    int districtId = ViewBag.StartDistrictId;
+    var districtName = ViewBag.StartDistrictName;
+
+    var showType = ViewBag.ShowType;
+
+    PackageAlbumDetail albumDetail = ViewBag.AlbumDetail;
+
+    var pageTitle = isInWeixin ? albumDetail.albumEntity.SubTitle : albumDetail.albumEntity.SubTitle;
+
+    ScreenConditionsEntity cityInfo = ViewBag.CityInfo;
+    //if (appType != "android")
+    //{
+    //    pageTitle = "";
+    //}
+
+    ViewBag.Title = pageTitle;
+}
+
+<!DOCTYPE html>
+
+<script type="text/javascript">
+
+    function openHotel(hotelid) {
+        var isapp = $("#isapp").val() == "1";
+        if (isapp) {
+            goto('hotel/' + hotelid);
+        }
+        else {
+            location.href = "http://www.zmjiudian.com/hotel/" + hotelid;
+        }
+    }
+
+    function gourl(url) {
+        location.href = url;
+    }
+
+    function loginCallback(userid) {
+        location.replace(location.pathname + "?userid=" + userid);
+    }
+
+    var pub_userid = "@userid";
+</script>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>@pageTitle</title>
+    <link href="/Content/css/framework/util.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="/content/css/hotel/collection.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+</head>
+<body>
+    <div class="collection-panel">
+        <div class="pic">
+            <img src="@albumDetail.albumEntity.CoverPicSUrl" alt="" />
+            @*<img src="http://p1.zmjiudian.com/116dMgJ0Hq_theme" alt="" />*@
+        </div>
+        @if (ViewBag.ShowType == 0)
+        {
+            <div class="tit">@albumDetail.albumEntity.SubTitle</div>
+        }
+        @if (!string.IsNullOrWhiteSpace(albumDetail.albumEntity.Description))
+        {
+            <div class="@(ViewBag.ShowType == 0 ? "desc" : "desc1") ">@albumDetail.albumEntity.Description</div>
+        }
+    </div>
+    @if (albumDetail.packageList != null && albumDetail.packageList.Count > 0)
+    {
+        if (ViewBag.ShowType == 0)
+        {
+            <div class="list-panel list-panelboder">
+                <div class="list">
+                    @for (int i = 0; i < albumDetail.packageList.Count; i++)
+                {
+                    var packageEntity = albumDetail.packageList[i];
+
+                    var url = string.Format("/Hotel/Package/{0}", packageEntity.PID);
+                    if (isApp)
+                    {
+                        url = string.Format("http://www.zmjiudian.com/Hotel/Package/{0}", packageEntity.PID);
+                        url += string.Format("?userid={{userid}}&_newtitle=1");
+                        url = string.Format("whotelapp://www.zmjiudian.com/gotopage?url={0}", HttpUtility.UrlEncode(url));
+                    }
+                    else
+                    {
+                        url += string.Format("?userid={0}", userid);
+
+                    }
+                    <div class="item" onclick="gourl('@url')">
+                        <div class="around">
+                            <div class="tit">@(i + 1)、@(packageEntity.HotelName)</div>
+                            <div style="clear:both;"></div>
+                            <div class="pic"><img src="@(!string.IsNullOrEmpty(packageEntity.RecommendPicUrl) ? packageEntity.RecommendPicUrl : packageEntity.HotelPicUrl)" alt="" /></div>
+                            <div class="info">@packageEntity.RecomemndWord</div>
+                            @if (!string.IsNullOrEmpty(packageEntity.RecommendPicUrl2))
+                            {
+                        <div class="pic pic-margintop"><img src="@(packageEntity.RecommendPicUrl2)" alt="" /></div>
+                            }
+                            @if (!string.IsNullOrEmpty(packageEntity.RecomemndWord2))
+                            {
+                        <div class="info">@packageEntity.RecomemndWord2</div>
+                            }
+                            <div class="border"></div>
+                            <div class="left">
+                                <div class="tit1">@packageEntity.HotelName</div>
+                                <div class="brief1">@packageEntity.PackageBrief</div>
+                            </div>
+                            <div class="right">
+                                <div class="go">￥@(packageEntity.HotelPrice)</div>
+                            </div>
+                            <div style="clear:both;"></div>
+                        </div>
+                    </div>
+                }
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="list-panel" id="listpanel">
+                @if (ViewBag.IsShowStartDistrict)
+                {
+                    <div class="sdiv">
+                        <div class="selectstartdistrict"><span onclick="showSelect()" class="districtspan @(districtId > 0 ? "selectedcity" : "") ">出发地：@(districtName)</span></div>
+                    </div>
+                }
+                <div class="list">
+                    @for (int i = 0; i < albumDetail.packageList.Count; i++)
+                    {
+                        var packageEntity = albumDetail.packageList[i];
+
+                        var url = string.Format("/Hotel/Package/{0}", packageEntity.PID);
+                        if (isApp)
+                        {
+                            url = string.Format("http://www.zmjiudian.com/Hotel/Package/{0}", packageEntity.PID);
+                            url += string.Format("?userid={{userid}}&_newtitle=1");
+                            url = string.Format("whotelapp://www.zmjiudian.com/gotopage?url={0}", HttpUtility.UrlEncode(url));
+                        }
+                        else
+                        {
+                            url += string.Format("?userid={0}", userid);
+
+                        }
+                        <div class="item" onclick="gourl('@url')">
+                            <div class="around">
+                                @*<div class="tit">@(i + 1)、@(packageEntity.HotelName)</div>
+                                    <div style="clear:both;"></div>*@
+                                <div class="pic">
+                                    @if (ViewBag.IsShowStartDistrict)
+                                    {
+                                        <div class="area">@(!string.IsNullOrEmpty(packageEntity.StartDistrictName) ? packageEntity.StartDistrictName : "上海")出发</div>
+                                    }
+                                    <img src="@(!string.IsNullOrEmpty(packageEntity.RecommendPicUrl) ? packageEntity.RecommendPicUrl.Replace("_theme", "_640x360") : packageEntity.HotelPicUrl.Replace("_theme", "_640x360"))" alt="" />
+                                    @*<img src="http://p1.zmjiudian.com/116dMgJ0Hq_theme" alt="" />*@
+                                </div>
+                                <div class="packagedesc">@(!string.IsNullOrEmpty(packageEntity.Title) ? packageEntity.Title : packageEntity.PackageName) </div>
+                                @*<div class="infonew">@(!string.IsNullOrEmpty(packageEntity.RecomemndWord2) ? packageEntity.RecomemndWord2 : packageEntity.RecomemndWord)</div>*@
+                                @*@if (!string.IsNullOrEmpty(packageEntity.RecommendPicUrl2))
+                                    {
+                                        <div class="pic pic-margintop"><img src="@(packageEntity.RecommendPicUrl2)" alt="" /></div>
+                                    }*@
+                                @*if (!string.IsNullOrEmpty(packageEntity.RecomemndWord2))
+                                    {
+                                        <div class="info1">@packageEntity.RecomemndWord2</div>
+                                    }*@
+                                <div class="border"></div>
+                                <div class="left1">
+                                    <div class="price"><span>￥</span>@(packageEntity.VIPPrice)</div>
+                                    <div class="infonew">@packageEntity.PackageBrief</div>
+                                </div>
+                                <div class="right1">
+                                    <div class="gobook">查看</div>
+                                </div>
+                                <div style="clear:both;"></div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="_selector-model" style="display:none;"></div>
+            <div class="_selector" style="display:none;" id="startcity-selector">
+                <div class="_head">
+                    <div class="_tit">出发地</div>
+                    <div class="zmjd-iconfont _close">&#xe673;</div>
+                    <div class="_clear" onclick="selectedCity(@cid,0,@showType)">清空</div>
+                </div>
+                <div class="_list">
+                    @foreach (var item in cityInfo.StartCityList)
+                    {
+                        <div class="_item  @(item.ID == districtId ? "_item-seled" : "")" data-did="@(item.ID)" data-dname="@(item.Name)" onclick="selectedCity(@cid,@item.ID,@showType)">
+                            @(item.Name)
+                            <div class="zmjd-iconfont _icon">&#xe660;</div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    }
+
+    <footer>
+        <input type="hidden" id="userid" value="@userid" />
+        <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+    </footer>
+    @*<div style="margin: 2em 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3a%2f%2fwww.zmjd100.com%2fpackage%2fcollection%2f61%3fshowType%3d1%26_newpage%3d1">GO APP (Local) >>></a></div>*@
+    <script src="~/Content/js/jquery-1.10.2-min.js"></script>
+    <script src="~/Content/js/framework/config.js"></script>
+    <script src="~/Content/js/framework/zmjiudian.js"></script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/hotel/collection.js?v=@(Helpers.curAppVer())"></script>
+
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+        <script>
+
+            GetWeixinApiConfig();//注册
+
+            wx.ready(function () {
+
+                wx.onMenuShareTimeline({
+                    title: '@albumDetail.shareModel.title',
+                    link: '@albumDetail.shareModel.shareLink',
+                    imgUrl: '@(albumDetail.shareModel.photoUrl)',
+                    success: function (res) {
+                    },
+                    cancel: function (res) {
+                    }
+                });
+
+                wx.onMenuShareAppMessage({
+                    title: '@albumDetail.shareModel.title',
+                    link: '@albumDetail.shareModel.shareLink',
+                    imgUrl: '@(albumDetail.shareModel.photoUrl)',
+                    success: function (res) {
+                    },
+                    cancel: function (res) {
+                    }
+                });
+
+            });
+
+            function GetWeixinApiConfig() {
+
+                var url = location.href.split("#")[0];
+                $.ajax({
+                    url: '/Coupon/GetWeixinConfigInfo',
+                    type: 'POST',
+                    data: { url: url },
+                    dataType: 'json',
+                    async: false,
+                    error: function () {
+                        console.log("网络服务错误");
+                    },
+                    success: function (result) {
+                        if (typeof (result.Success) != undefined && result.Success == 1) {
+                            return false;
+                        }
+                        else {
+                            //得到微信config的值
+                            var array = [
+                              'checkJsApi',
+                              'onMenuShareTimeline',
+                              'onMenuShareAppMessage',
+                              'hideOptionMenu'
+                            ];
+                            if (result.jsApiList) {
+                                var jsArray = result.jsApiList.split(',');
+                                for (var key in jsArray) {
+                                    array.push("" + jsArray[key]);
+                                }
+                            }
+
+                            wx.config({
+                                debug: false,
+                                appId: result.appId,
+                                timestamp: "" + result.timestamp,
+                                nonceStr: result.nonceStr,
+                                signature: result.signature,
+                                jsApiList: array
+                            });
+                        }
+                    }
+                });
+            }
+
+        </script>
+    }
+    else if (isApp)
+    {
+        <script>
+            try {
+                onAppShareCall = function () {
+                    var title = "@(albumDetail.shareModel.title)";
+                    var Content = "@(albumDetail.shareModel.Content)";
+                    var photoUrl = "@(albumDetail.shareModel.photoUrl)";
+                    var shareLink = "@(albumDetail.shareModel.shareLink)";
+                    try { whotel.appShareData(title, Content, photoUrl, shareLink); } catch (e) { }
+                    var returnStr = '{"title":"{0}","Content":"{1}","photoUrl":"{2}","shareLink":"{3}"}';
+                    return returnStr.format(title, Content, photoUrl, shareLink);
+                }
+                onAppShareCall();
+            }
+            catch (e) { }
+        </script>
+    }
+</body>
+</html>

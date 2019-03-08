@@ -1,0 +1,73 @@
+﻿@model BrowsingRecordResult
+@{
+    Layout = null;
+
+    var isApp = ViewBag.IsApp;
+    var userid = ViewBag.UserId;
+}
+@if (Model != null && Model.BorwsRecordList.Count > 0)
+{
+    <ul>
+        @for (int i = 0; i < Model.BorwsRecordList.Count; i++)
+        {
+            var borwsEntity = Model.BorwsRecordList[i];
+
+            if (string.IsNullOrEmpty(borwsEntity.BrowRecordPicUrl))
+            {
+                borwsEntity.BrowRecordPicUrl = "http://whfront.b0.upaiyun.com/app/img/home/home-load2-3x2.png";
+            }
+            var actionurl = "";
+            if (borwsEntity.BrowRecordBizType == 3)
+            {
+                actionurl = "/coupon/product/" + borwsEntity.BrowRecordBizID + "?userid={userid}&_newpage=1&_dorpdown=1&_newtitle=1";
+            }
+            else
+            {
+                if (isApp)
+                {
+                    actionurl = "whotelapp://www.zmjiudian.com/hotel/" + (borwsEntity.BrowRecordBizID);
+                }
+                else
+                {
+                    actionurl = "/hotel/" + (borwsEntity.BrowRecordBizID);
+                }
+            }
+            
+            <li class="li-line" onclick="gourl('@(actionurl)')">
+                <div class="h-img">
+                    <img @(i == 0 ? string.Format(" src={0} ", borwsEntity.BrowRecordPicUrl) : string.Format(" data-original={0} data-lazyload-id={1} ", borwsEntity.BrowRecordPicUrl, i)) alt="">
+                    @*<div class="h-tit-tip-price3">
+                        @if (hotelEntity.VIPPrice > 0)
+                        {
+                            <div class="v-price">
+                                <span>￥</span>@hotelEntity.VIPPrice<span>起</span>
+                                <div class="v-icon"><span class="zmjd-iconfont">&#xe623;</span></div>
+                            </div>
+                            <div class="d-price"><span>￥</span>@hotelEntity.HotelPrice<span>起</span></div>
+                        }
+                        else
+                        { 
+                            <div class="d-price"><span>查询价格</span></div>
+                        }
+                    </div>*@
+                </div>
+                <div class="hname-info">
+                    <div class="hotel-name2">@borwsEntity.BrowRecordName</div>
+                    <div class="hotel-packagebrief2">@borwsEntity.BrowRecordBrief</div>
+
+                    @if (borwsEntity.BrowRecordVipPrice > 0)
+                    {
+                        <div class="hotel-price">
+                            <span class="atv-price"><span class="zmjd-iconfont p-un">&#xe623;</span> <span class="p-un">¥ &nbsp;</span>@borwsEntity.BrowRecordVipPrice</span>
+                            @if (borwsEntity.BrowRecordVipPrice != borwsEntity.BrowRecordNotVipPrice)
+                            {
+                                <span class="del-price">普通价 ¥@borwsEntity.BrowRecordNotVipPrice</span>   
+                            }
+                        </div>    
+                    }
+                    
+                </div>
+            </li>
+        }
+    </ul>
+}

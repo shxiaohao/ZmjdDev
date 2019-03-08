@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C63748C9-501D-472A-AEFF-36C4C77814B6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HJD.AccessService.Contract</RootNamespace>
+    <AssemblyName>HJD.AccessService.Contract</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HJD.Framework.Entity">
+      <HintPath>..\..\..\Library\HJD.Framework.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BehaviorProfile.cs" />
+    <Compile Include="Enum.cs" />
+    <Compile Include="IAccessExService.cs" />
+    <Compile Include="IAccessService.cs" />
+    <Compile Include="Model\Acount\UserRecommendRel.cs" />
+    <Compile Include="Model\Acount\OriginCoupon.cs" />
+    <Compile Include="Model\BehaviorField.cs" />
+    <Compile Include="Model\Behavior.cs" />
+    <Compile Include="Model\Dialog\DialogItemBase.cs" />
+    <Compile Include="Model\Dialog\DialogItemsEntity.cs" />
+    <Compile Include="Model\Dialog\Enum.cs" />
+    <Compile Include="Model\Dialog\UserWordItem.cs" />
+    <Compile Include="Model\Dialog\UserWordOptionItem.cs" />
+    <Compile Include="Model\DistrictInfoAroundEntity.cs" />
+    <Compile Include="Model\Fund\CheckInOrderInfo.cs" />
+    <Compile Include="Model\Fund\UserFundIncomeStat.cs" />
+    <Compile Include="Model\Fund\UserFundIncomeDetail.cs" />
+    <Compile Include="Model\Fund\UserFund.cs" />
+    <Compile Include="Model\Hotel\PackageNotMatchOta.cs" />
+    <Compile Include="Model\Hotel\PRateMatchOtaEntity.cs" />
+    <Compile Include="Model\Hotel\HotelPackageEntity.cs" />
+    <Compile Include="Model\Hotel\HotelPriceSlot.cs" />
+    <Compile Include="Model\Search\AnswerEntity.cs" />
+    <Compile Include="Model\Search\QaSearchBehavior.cs" />
+    <Compile Include="Model\Search\QaFeedback.cs" />
+    <Compile Include="Model\Search\QaRelationWordEntity.cs" />
+    <Compile Include="Model\Search\FilterSearchResult.cs" />
+    <Compile Include="Model\Search\QaParticipleEntity.cs" />
+    <Compile Include="Model\Search\QaSearchResult.cs" />
+    <Compile Include="Model\Search\InterestInfoEntity.cs" />
+    <Compile Include="Model\Search\DistrictRelationInfoEntity.cs" />
+    <Compile Include="Model\Search\CommentSearchResult.cs" />
+    <Compile Include="Model\Search\BrandEntity.cs" />
+    <Compile Include="Model\Search\HotelEntity.cs" />
+    <Compile Include="Model\Search\DistrictInfoEntity.cs" />
+    <Compile Include="Model\Search\QuestionContext.cs" />
+    <Compile Include="Model\Search\QuestionEntity.cs" />
+    <Compile Include="Model\Search\ThemeSearchResult.cs" />
+    <Compile Include="Model\Search\BrandSearchResult.cs" />
+    <Compile Include="Model\Search\DistrictSearchResult.cs" />
+    <Compile Include="Model\Search\SearchResult.cs" />
+    <Compile Include="Model\Search\IndexJob.cs" />
+    <Compile Include="Model\Search\HotelSearchResult.cs" />
+    <Compile Include="Model\Search\BaseSearchResult.cs" />
+    <Compile Include="Model\Weixin\WeixinChatRecordResult.cs" />
+    <Compile Include="Model\Weixin\WeixinChatRecordEntity.cs" />
+    <Compile Include="Params\BehaviorParams.cs" />
+    <Compile Include="Params\Weixin\WeixinChatRecordParams.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\Notice\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy *.dll  ..\..\..\..\..\Contracts /s/y/f/r</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

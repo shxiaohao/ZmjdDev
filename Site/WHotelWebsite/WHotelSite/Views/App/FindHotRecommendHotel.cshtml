@@ -1,0 +1,98 @@
+﻿@{
+    Layout = null;
+
+    //大家都说好
+    RecommendHotelResult recHotels = ViewBag.RecHotels;
+    
+    var isInWeixin = ViewBag.isInWeixin;
+    var isApp = ViewBag.IsApp;
+    var appType = ViewBag.AppType;
+}
+
+@if (recHotels != null && recHotels.HotelList != null && recHotels.HotelList.Count > 0)
+{
+    <div class="find-tit find-tit-big-height">
+        @*<div class="center">－ 大家都说好 －</div>*@
+        <div class="left">大家都说好</div>
+        <div class="right"></div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="find-multiple find-hide" id="find-middle-banner">
+        <div id="rechotel-banner" class="am-slider am-slider-default am-slider-carousel find-hlist-panel" style="margin:0 0 0 0;">
+            <ul class="am-slides" style="border:none;">
+                @for (int i = 0; i < recHotels.HotelList.Count; i++)
+                {
+                    var hItem = recHotels.HotelList[i];
+
+                    var hotelPicUrl = hItem.HotelPicUrl.Replace("theme", "640x360");
+                    if (string.IsNullOrEmpty(hotelPicUrl))
+                    {
+                        hotelPicUrl = "http://whfront.b0.upaiyun.com/app/img/home/home-load2-16x9.png";
+                    }
+
+                    <li onclick="goto('hotel/@hItem.HotelID')">
+                        <div class="h-img">
+                            @if (i < 2)
+                            {
+                                <img src="@hotelPicUrl" alt="" />
+                            }
+                            else
+                            {
+                                <img data-orisrc="@hotelPicUrl" src="http://whfront.b0.upaiyun.com/app/img/home/home-load2-16x9.png" alt="" />
+                            }
+                            <div class="h-tit-tip-mode"></div>
+                            <div class="h-tit-tip-txt" style="left: 1em;top: 0.6em;">
+                                @if (hItem.RecommendCount > 0)
+                                {
+                                    <span class="state"><span>@(hItem.HotelScore)</span>分&nbsp;&nbsp;<span>@(hItem.RecommendCount)</span>人推荐</span>
+                                }
+                                else
+                                {
+                                    <span class="state"><span>@(hItem.HotelScore)</span>分</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="hname-info">
+                            <div class="hotel-name">@hItem.HotelName</div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="find-multiple-border"></div>
+    <input type="hidden" id="find-rechotel-count" value="@recHotels.HotelList.Count" />
+    <script>
+        $("#find-middle-banner").show();
+    </script>
+    <script>
+        //大家都说好
+        var recHotelCount = parseInt($("#find-rechotel-count").val());
+        var onlyOneRecHotel = recHotelCount == 1;
+        var wwidth = $(window).width();
+        var itemWidth = 363; if (wwidth < 410) itemWidth = 333; if (wwidth == 360) itemWidth = 320; if (wwidth < 350) itemWidth = 285;
+        if (onlyOneRecHotel) {
+            itemWidth = wwidth;
+        }
+
+        var rechotelImgSwIndex = 2;
+        $('#rechotel-banner').flexslider({
+            itemWidth: itemWidth,
+            itemMargin: 6,
+            slideshow: false,
+            animationLoop: false,
+            animationSpeed: 300,
+            pauseOnAction: true,
+            controlNav: false,
+            directionNav: false,
+            after: function (slider) {
+                if (rechotelImgSwIndex < slider.slides.length) {
+                    var li = $(slider.slides[rechotelImgSwIndex]);
+                    var imgObj = li.find("img");
+                    setImgOriSrc(imgObj);
+                    rechotelImgSwIndex++;
+                }
+            }
+        });
+    </script>
+}

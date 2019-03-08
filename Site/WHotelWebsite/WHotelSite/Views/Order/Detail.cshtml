@@ -1,0 +1,598 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params.Order
+@using HJD.HotelPrice.Contract.DataContract.Order
+
+@model PackageOrderInfo20
+@{
+    ViewBag.Title = "订单详情";
+    ViewBag.BodyClass = "hotellistpage";
+    string returnUrl = Url.RouteUrl("我的订单");
+    OrderParam param = (OrderParam)ViewBag.param;
+    bool isMobile = WHotelSite.Utils.IsMobile();
+    var isInWeixin = ViewBag.IsInWeixin;
+    var isApp = ViewBag.IsApp;
+    
+    //是否可以发红包
+    var canShareRedCoupon = ViewBag.CanShareRedCoupon;
+
+    //发红包配置对象
+    RedOrderInfoEntity shareRedEntity = ViewBag.ShareRedEntity;
+
+    //分享配置
+    var s_poto_url = "";
+    var s_url = "";
+    var s_title = "";
+    var s_content = "";
+    var shareTitle_Timeline = "";
+    var shareDesc_Timeline = "";
+    var shareCallBackUrl = "";
+    var shareCallBackUrlForApp = "";
+
+    //红包分享链接
+    if (canShareRedCoupon)
+    {
+        //s_poto_url = "http://whfront.b0.upaiyun.com/app/img/coupon/redcoupon/redcoupon-share-icon.png";
+        //s_url = shareRedCouponUrl;
+        //s_title = "恭喜你获得一个大红包";
+        //s_content = "度假选酒店，红包送不停！";
+        //shareTitle_Timeline = "度假选酒店，红包送不停！";
+        //shareDesc_Timeline = "";
+
+        s_poto_url = shareRedEntity.RedShare.photoUrl;
+        s_url = shareRedEntity.RedShare.shareLink;
+        s_title = shareRedEntity.RedShare.title;
+        s_content = shareRedEntity.RedShare.Content;
+        shareTitle_Timeline = shareRedEntity.RedShare.Content;
+        shareDesc_Timeline = "";
+
+        shareCallBackUrl = shareRedEntity.RedShare.returnApiUrl;
+        shareCallBackUrlForApp = shareRedEntity.RedShare.returnUrl;
+
+        //微信环境修改红包领取提示
+        if (isInWeixin)
+        {
+            shareRedEntity.Description = "分享成功后在“我的”-“我的券”里查看已获得的红包";
+        }
+    }
+
+    //原生分享链接
+    var _shareLink = "whfriend://comment?title={0}&photoUrl={1}&shareLink={2}&nextUrl={3}&content={4}&shareType={5}";
+    _shareLink = string.Format(_shareLink, HttpUtility.UrlEncode(s_title), HttpUtility.UrlEncode(s_poto_url), HttpUtility.UrlEncode(s_url), HttpUtility.UrlEncode(shareCallBackUrl), HttpUtility.UrlEncode(s_content), "{0}");
+    var appShareLink = string.Format(_shareLink, 0);
+}
+
+<!-- Add -->
+<div class="container mainbody hidden-xs">
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            @Helpers.BreadCrumbs(Url, 0, 0, 1)
+        </div>
+        <div class="col-md-1" >
+        </div>
+    </div>
+</div>
+
+<div class="container mainbody">
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            <div class="row">
+                <!-- 订单列表 左侧导航 Left -->
+                <div class="col-md-3 col-sm-3  Screening hidden-xs">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">个人中心</h3>
+                        </div>
+                        @Helpers.InsertLeftNaviPanel(1,Url)
+                    </div>
+                    <div class="tel">
+                        客服电话:<i>4000-021-702</i>
+                    </div>
+                </div>
+                <!-- 订单列表 右侧导航 Right -->
+                <div class="col-md-9 col-sm-9">
+                    <!-- 条件选择栏 mobile 开始 -->
+                    <div class="row toolbar2 visible-xs">
+                        <div class="col-xs-3">
+                            <button type="button" onclick="history.back()" class="btn btn-sm  btn-img01"><img src="@Url.Content("~/content/images/icon-back.png")" class="mobilepic" alt="" /></button>
+                        </div>
+                        <div class="col-xs-6 text-center listtitle">
+                            订单详情
+                        </div>
+                        <div class="col-sm-2 col-xs-3 text-right">
+                        </div>
+                    </div>
+                    <!-- 条件选择栏 mobile 结束 -->
+                    <!-- 订单详细内容 pc 开始 -->
+                    <div class="row userright hidden-xs">
+                        <div class="col-sm-12 Toolbar">
+                            <button type="submit" data-return-url="@returnUrl" class="btn btn-default btngray2 btnReturnList">返回订单列表</button>
+                        </div>
+                        <div class="col-sm-12 dddetail">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <dl class="dl-horizontal ddinfo">
+                                        <dt>订单号：</dt>
+                                        <dd>@param.OrderID</dd>
+                                        <dt>预定日期：</dt>
+                                        <dd>@Model.SubmitDate.ToShortDateString()</dd>
+                                        @if(!string.IsNullOrEmpty(Model.PayInfo)){
+                                            <dt>支付方式：</dt>
+                                            <dd>@Model.PayInfo</dd>
+                                        }
+                                    </dl>
+                                </div>
+                                <div class="col-sm-4">
+                                    订单状态：@Model.StateName
+                                </div>
+                                <div class="col-sm-4 jg">
+                                    实际金额：<span class="price">￥<strong><span class="price">@Math.Round(Model.Amount, 0)</span></strong></span>
+                                </div>
+                            </div>
+                            <hr class="linedotted" />
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <dl class="dl-horizontal ddinfo">
+                                        <dt>入住酒店：</dt>
+                                        <dd><h4>@Model.HotelName</h4></dd>
+
+                                        @if (Model.OrderDateName != null &&　Model.OrderDateName.Length > 0)
+                                        {
+                                             <dt>@(Model.OrderDateName) ：</dt>
+                                             <dd>@(Model.OrderDateDescription)</dd>
+                                        }
+                                        else
+                                        {                                       
+                                        <dt>入住日期：</dt>
+                                        <dd>@Model.CheckIn.ToShortDateString() —— @Model.CheckIn.AddDays(@Model.NightCount).ToShortDateString()&nbsp;&nbsp;@(Model.NightCount) 晚</dd>
+                                        <dt>数    量：</dt>
+                                        <dd>@(Model.RoomCount)</dd>
+                                        }
+                                        <br/>
+                                        <dt>套    餐：</dt>
+                                        <dd>@Model.PackageName &nbsp; ￥@Math.Round(Model.Amount/Model.RoomCount,0) </dd>
+                                        <dt>套餐说明：</dt>
+                                        <dd>
+                                            @foreach (OrderDetailDailyEntity dailyEntity in Model.DailyItems)
+                                            {
+                                                foreach (OrderDetailItem packageItem in @dailyEntity.Items)
+                                                {
+                                                    <div>@packageItem.Description </div>
+                                                }
+                                            }
+                                        </dd>
+                                        <br />
+                                        <dt>注意事项：</dt>
+                                        <dd>
+                                            @foreach(OrderDetailItem noticeItem in Model.Notice){
+                                                @Html.Raw(noticeItem.Description) <br />
+                                            }
+                                        </dd>
+                                        <br />
+                                        <dt>订单备注：</dt>
+                                        <dd>@Model.Note</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <hr class="linedotted" />
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <dl class="dl-horizontal ddinfo">
+                                        <dt>入 住 人：</dt>
+                                        <dd>@Model.Contact</dd>
+                                        <dt>联 系 人：</dt>
+                                        <dd>@Model.Contact</dd>
+                                        <dt>联系电话：</dt>
+                                        <dd>@Model.ContactPhone</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            @if (Model.InvoiceInfo != null)
+                            {
+                                <hr class="linedotted" />
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <dl class="dl-horizontal ddinfo">
+                                            <dt>发票类型：</dt>
+                                            <dd>@Model.InvoiceInfo.Type</dd>
+                                            <dt>发票抬头：</dt>
+                                            <dd>@Model.InvoiceInfo.Title</dd>
+                                            <dt>发票金额：</dt>
+                                            <dd>@(Model.InvoiceInfo.Price/100)</dd>
+                                            <dt>快递状态：</dt>
+                                            <dd>@Model.InvoiceInfo.State</dd>
+                                            <dt>收 件 人：</dt>
+                                            <dd>@Model.InvoiceInfo.Contact</dd>
+                                            <dt>寄送地址：</dt>
+                                            <dd>@Model.InvoiceInfo.Address</dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            }
+                            <hr class="linedotted" />
+                            <div class="text-center">
+                                @Helpers.BindOrderDetailOption(Url, param.OrderID, Model.HotelID, Model.PID, Model.CheckIn, Model.CheckIn.AddDays(Model.NightCount), Model.State, Model.Contact, Model.ContactPhone, Model.RoomCount, Model.Note, Model.CanWriteComment, Model.PayType, Model.CanShowButtons)
+                            </div>
+                        </div>
+                    </div>                    
+                    <!-- 订单详细内容 pc 开始 -->
+                    <!-- 订单详细内容 mobile 开始 -->
+                    <div class="dddetailmobile visible-xs">
+                        <div class="row">
+                            @if (param.ShowTit == 1)
+                            {
+                                <table cellspacing="0" cellpadding="0" border="0" class="ddtable">
+                                    <tr>
+                                        <td align="center">
+                                            <div class="subok-tit1"><img src="~/Content/images/yes-right-gay.png" alt="" />您已成功提交订单</div>
+                                            <div class="subok-tit2">我们将尽快为您确认</div>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <hr class="ddtablehr" />
+                            }
+                            <table cellspacing="0" cellpadding="0" border="0" class="ddtable">
+                                <tr>
+                                    <th>实际金额</th>
+                                    <td class="price alignright valignmiddle">￥<strong><span class="price alignright valignmiddle"> @Math.Round(Model.Amount, 0)</span></strong></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <table cellspacing="0" cellpadding="0" border="0" class="ddtable">
+                                <tr>
+                                    <th>订单状态</th>
+                                    <td><span class="dt-confirm">@Model.StateName</span></td>
+                                </tr>
+                                <tr>
+                                    <th>订&nbsp;&nbsp;单&nbsp;&nbsp;号</th>
+                                    <td>@param.OrderID</td>
+                                </tr>
+                                <tr>
+                                    <th>预定日期</th>
+                                    <td>@Model.SubmitDate.ToShortDateString()</td>
+                                </tr>
+                            </table>
+                            @if (!string.IsNullOrEmpty(Model.PayInfo))
+                            {
+                                <hr class="ddtablehr" />
+                                <table cellspacing="0" cellpadding="0" border="0" class="ddtable">
+                                    <tr>
+                                        <th>支付方式</th>
+                                        <td>@Model.PayInfo</td>
+                                    </tr>
+                                </table>
+                            }
+                        </div>
+                        <div class="row">
+                            <a href="@Url.Action("Detail", "Hotel", new { hotel = @Model.HotelID })" target="_parent" class="alink01">
+                                <table cellspacing="0" cellpadding="0" border="0" class="ddtable">
+                                    <tr>
+                                        <th>入住酒店</th>
+                                        <td>@Model.HotelName</td>
+                                        <td width="20"><img src="@Url.Content("~/Content/images/icon-aarow3.png")" alt="=>" /></td>
+                                    </tr>
+                                </table>
+                            </a>
+                            <hr class="ddtablehr" />
+                            <table cellspacing="0" cellpadding="0" border="0" class="ddtable">
+                                @if (Model.OrderDateName != null && Model.OrderDateName.Length > 0)
+                                {
+                                    <tr>
+                                        <th>@(Model.OrderDateName) ：</th>
+                                        <td>@(Model.OrderDateDescription)</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <th>入住日期</th>
+                                        <td>@Model.CheckIn.ToShortDateString() —— @Model.CheckIn.AddDays(@Model.NightCount).ToShortDateString() &nbsp;&nbsp;@(Model.NightCount) 晚</td>
+                                    </tr>
+                                    <tr>
+                                        <th>数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;量</th>
+                                        <td>@Model.RoomCount </td>
+                                    </tr>
+                                }
+                            </table>
+                            <hr class="ddtablehr" />
+                            <table cellspacing="0" cellpadding="0" border="0" class="ddtable">
+                                <tr>
+                                    <th>套&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;餐</th>
+                                    <td>@Model.PackageName &nbsp; ￥@Math.Round(Model.Amount / Model.RoomCount, 0) </td>
+                                </tr>
+                                <tr>
+                                    <th>套餐说明</th>
+                                    <td>
+                                        @foreach (OrderDetailDailyEntity dailyEntity in Model.DailyItems)
+                                        {
+                                            foreach (OrderDetailItem packageItem in @dailyEntity.Items)
+                                            {
+                                                @packageItem.Description <br />
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            </table>
+                            <hr class="ddtablehr2" />
+                            <table cellspacing="0" cellpadding="0" border="0" class="ddtable">
+                                <tr>
+                                    <th>注意事项</th>
+                                    <td>
+                                        @foreach (OrderDetailItem noticeItem in Model.Notice)
+                                        {
+                                            @Html.Raw(noticeItem.Description) <br />
+                                        }
+                                    </td>
+                                </tr>
+                            </table>
+                            <hr class="ddtablehr2" />
+                            <table cellspacing="0" cellpadding="0" border="0" class="ddtable">
+                                <tr>
+                                    <th>订单备注</th>
+                                    <td>@Model.Note</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <table cellspacing="0" cellpadding="0" border="0" class="ddtable">
+                                <tr>
+                                    <th>入&nbsp;&nbsp;住&nbsp;&nbsp;人</th>
+                                    <td>@Model.Contact</td>
+                                </tr>
+                                <tr>
+                                    <th>联&nbsp;&nbsp;系&nbsp;&nbsp;人</th>
+                                    <td>@Model.Contact</td>
+                                </tr>
+                                <tr>
+                                    <th>联系电话</th>
+                                    <td>@Model.ContactPhone</td>
+                                </tr>
+                            </table>
+                            <!---暂时拿掉-->
+                            @*@if (Model.InvoiceInfo != null)
+                            {
+                                <hr class="ddtablehr2" />
+                                <table cellspacing="0" cellpadding="0" border="0" class="ddtable">
+                                    <tr>
+                                        <th>发票类型：</th>
+                                        <td>@Model.InvoiceInfo.Type</td>
+                                    </tr>
+                                    <tr>
+                                        <th>发票抬头：</th>
+                                        <td>@Model.InvoiceInfo.Title</td>
+                                    </tr>
+                                    <tr>
+                                        <th>发票金额：</th>
+                                        <td>@Model.InvoiceInfo.Price</td>
+                                    </tr>
+                                    <tr>
+                                        <th>快递状态：</th>
+                                        <td>@Model.InvoiceInfo.State</td>
+                                    </tr>
+                                    <tr>
+                                        <th>收&nbsp;&nbsp;件&nbsp;&nbsp;人：</th>
+                                        <td>@Model.InvoiceInfo.Contact</td>
+                                    </tr>
+                                    <tr>
+                                        <th>寄送地址：</th>
+                                        <td>@Model.InvoiceInfo.Address</td>
+                                    </tr>
+                                </table>
+                            }*@
+                            <hr class="ddtablehr2" />
+                            <table cellspacing="0" cellpadding="0" border="0" class="ddtable">
+                                <tr>
+                                    <td>周末酒店客服电话<br /><span class="tel"><i>4000-021-702</i></span></td>
+                                    <td width="20" class="valignmiddle"><img src="@Url.Content("~/Content/images/icon-aarow3.png")" alt="=>" /></td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        @*<div class="row">
+                            <div onclick="openInvoice(@param.OrderID,@Model.PID,@Model.PackageType,@Model.UserID,@param.UserID)">开发票</div>
+                        </div>*@
+                        <div class="text-center" style="padding:0 0 1em 0;">
+                            @if (Model.InvoiceType == 0)
+                            {
+                                <button type="button" class="btn btn-01-od btn-od-delete" style="width:90%;color:#3E9EC0;" onclick="openInvoice(@param.OrderID,@Model.HotelID,@Model.PID,@Model.PackageType,@Model.UserID)">开发票</button>
+                            }
+
+                            @Helpers.BindOrderDetailOption(Url, param.OrderID, Model.HotelID, Model.PID, Model.CheckIn, Model.CheckIn.AddDays(Model.NightCount), Model.State, Model.Contact, Model.ContactPhone, Model.RoomCount, Model.Note, Model.CanWriteComment, Model.PayType, Model.CanShowButtons)
+                        </div>
+                    </div>
+                    <!-- 订单详细内容 mobile 结束 -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>
+
+@if (isMobile)
+{
+    <link href="~/Content/css/framework/zmjd.modal.min.css" rel="stylesheet" />
+    <link href="~/Content/css/order/detail.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+
+    <div class="group-share-tip" style="display:none;">
+        <img data-orisrc="http://whfront.b0.upaiyun.com/www/img/Active/vipactive/genvip-share-tip.png?v=2017111601" src="" alt="点击右上角分享哦" />
+    </div>
+
+    if (canShareRedCoupon && shareRedEntity != null)
+    {
+        <div id="send-red-coupon-template" style="display:none;">
+            <div class="get-coupon-info">
+                <div class="img"><img src="@(shareRedEntity.BigPicture)" alt="" /></div>
+                <div class="txt">@(shareRedEntity.ResultTitle)</div>
+                <div class="txt2">@(shareRedEntity.Description)</div>
+            </div>
+        </div>
+        <div class="send-red-coupon-float" style="display:none;">
+            <img src="@(shareRedEntity.SmallPicture)" alt="" />
+        </div>
+    }
+    else
+    {
+        <div id="send-red-coupon-template" style="display:none;">
+            <div class="get-coupon-info">
+                <div class="img"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/redcoupon/red-coupon-big.png" alt="" /></div>
+                <div class="txt">恭喜你获得一个大红包</div>
+                <div class="txt2">分享给好友立即领取</div>
+            </div>
+        </div>
+        <div class="send-red-coupon-float" style="display:none;">
+            <img src="http://whfront.b0.upaiyun.com/app/img/coupon/redcoupon/red-coupon-sml.png" alt="" />
+        </div>
+    }
+    
+    <input type="hidden" id="canShareRedCoupon" value="@(canShareRedCoupon ? 1 : 0)" />
+}
+else
+{
+    <div class="modal fade paymodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true" style="margin-top:0;padding-top:80px;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">选择支付方式</h4>
+                </div>
+                <div class="modal-body row">
+                    <div class="col-xs-1">
+                    </div>
+                    <div class="col-xs-9">
+                        <ul class="list-inline">
+                            <li style="margin-right:120px">
+                                <input id="upayRadio" type="radio" name="optionsRadios" value="upay" style="margin-right:10px" checked="checked" />
+                                <a href="javascript:;" id="upayLink" style="font-size:large">银行卡支付</a>
+                            </li>
+                            @if (Model.PayType != 2)
+                            {
+                                //担保不显示 支付宝 支付方式
+                                <li>
+                                   <input id="alipayRadio" type="radio" name="optionsRadios" value="alipay" style="margin-right:10px" />
+                                   <a href="javascript:;" id="alipayLink" style="font-size:large">支付宝支付</a>
+                                </li>   
+                            }
+                        </ul>
+                        <button id="gotoPay" data-href="" style="margin-right: 0px; position: relative; left: 400px;" class="btn btn-01">去付款</button>
+                    </div>
+                    <div class="col-xs-1">
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+}
+
+<footer>
+    <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+    <input type="hidden" id="isInWeixin" value="@(isInWeixin ? 1 : 0)" />
+    <input type="hidden" id="appShareLink" value="@(appShareLink)" />
+</footer>
+
+@section scripts
+{
+    <script src="~/Content/js/framework/zmjd.modal.min.js"></script>
+    @*<script src="~/Content/js/order/detail.js?v=@(Helpers.curAppVer())"></script>*@
+
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+        <script>
+
+                GetWeixinApiConfig();//注册
+
+                wx.ready(function () {
+
+                    var _shareCallBack = '@(shareCallBackUrl)';
+
+                    wx.onMenuShareTimeline({
+                        title: '@shareTitle_Timeline',
+                        desc: '@(shareDesc_Timeline)',
+                        link: '@(s_url)',
+                        imgUrl: '@(s_poto_url)',
+                        success: function (res) {
+                            if (_shareCallBack) {
+                                $.get(_shareCallBack, {}, function (_data) {
+
+                                });
+                            }
+                        },
+                        cancel: function (res) {
+
+                        }
+                    });
+
+                    wx.onMenuShareAppMessage({
+                        title: '@s_title',
+                        desc: '@(s_content)',
+                        link: '@(s_url)',
+                        imgUrl: '@(s_poto_url)',
+                        success: function (res) {
+                            if (_shareCallBack) {
+                                $.get(_shareCallBack, {}, function (_data) {
+
+                                });
+                            }
+                        },
+                        cancel: function (res) {
+
+                        }
+                    });
+
+                });
+
+                function GetWeixinApiConfig() {
+
+                    var url = location.href.split("#")[0];
+                    $.ajax({
+                        url: '/Coupon/GetWeixinConfigInfo',
+                        type: 'POST',
+                        data: { url: url },
+                        dataType: 'json',
+                        async: false,
+                        error: function () {
+                            console.log("网络服务错误");
+                        },
+                        success: function (result) {
+                            if (typeof (result.Success) != undefined && result.Success == 1) {
+                                return false;
+                            }
+                            else {
+                                //得到微信config的值
+                                var array = [
+                                    'checkJsApi',
+                                    'onMenuShareTimeline',
+                                    'onMenuShareAppMessage',
+                                    'onMenuShareQQ',
+                                    'onMenuShareQZone',
+                                    'hideOptionMenu'
+                                ];
+                                if (result.jsApiList) {
+                                    var jsArray = result.jsApiList.split(',');
+                                    for (var key in jsArray) {
+                                        array.push("" + jsArray[key]);
+                                    }
+                                }
+
+                                wx.config({
+                                    debug: false,
+                                    appId: result.appId,
+                                    timestamp: "" + result.timestamp,
+                                    nonceStr: result.nonceStr,
+                                    signature: result.signature,
+                                    jsApiList: array
+                                });
+                            }
+                        }
+                    });
+                }
+
+        </script>
+    }
+}

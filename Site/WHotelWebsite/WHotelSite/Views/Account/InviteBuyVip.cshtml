@@ -1,0 +1,54 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+    
+    var isApp = ViewBag.IsApp;
+    var userid = ViewBag.UserId; //userid = 4512064;
+    var isMobile = ViewBag.isMobile;
+
+    //用户信息
+    UserInfoResult userInfo = ViewBag.UserInfo;
+
+    //分享链接
+    var shareLink = ViewBag.ShareLink;
+    
+    ViewBag.Title = "邀请朋友成为VIP";
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    if (isApp)
+    {
+        ViewBag.LoadHmBaidu = false;
+    }
+}
+
+@section styles
+{
+    <link href="/content/css/acount/invitebuyvip.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+}
+
+<div class="rec-panel">
+    <div class="tit"></div>
+    <div class="info">
+        <img src="http://whfront.b0.upaiyun.com/app/img/acount/invitefriend/invite-vip-icon.png" alt="" />
+    </div>
+    <div class="info-txt1">邀请朋友成为VIP</div>
+    @*<div class="info-txt2">被邀请好友成功购买VIP后，你可获得100元立减券</div>*@
+    <div class="btns">
+        <div class="share" onclick="gourl('@(shareLink)')">邀请好友</div>
+    </div>
+</div>
+
+<footer>
+    <input type="hidden" id="userid" value="@userid" />
+    <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+</footer>
+
+@section scripts
+{
+    <script src="~/Content/js/coupon/invitebuyvip.js?v=@(Helpers.curAppVer())"></script>
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+}

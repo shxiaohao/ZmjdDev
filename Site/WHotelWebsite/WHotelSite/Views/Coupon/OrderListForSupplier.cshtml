@@ -1,0 +1,270 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.IsInWeixin;
+    var userid = ViewBag.UserId;// = 4512304; // = 4512068; //userid = 4512064;
+    var unionid = ViewBag.Unionid;
+    
+    //供应商ID
+    var supplierId = ViewBag.SupplierId;
+
+    var shareTitle = "";
+    var shareDesc = "";
+    var shareLink = "";
+    var shareImgUrl = "";
+
+    ViewBag.Title = "周末酒店";
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    ViewBag.LoadHmBaidu = false;
+}
+
+@section styles
+{
+    <link href="~/Content/css/framework/zmjd.modal.min.css" rel="stylesheet" />
+    <link href="/content/css/framework/iscroll.css" rel="stylesheet">
+    <link href="~/Content/css/framework/zmjd.swiper.min.css" rel="stylesheet" />
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="/content/css/coupon/orderlistforsupplier.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+}
+
+<style>
+    [v-cloak] {
+        display: none;
+    }
+
+    .login-section {
+        font-size: 0.8em;
+    }
+</style>
+
+<div class="user-info" id="user-def-panel">
+    <div class="head-img"><img src="http://p1.zmjiudian.com/115CN1V08W_jupiter" alt="" /></div>
+    <div class="phone">加载中..</div>
+    <div class="tip">此页面仅展示当日可使用的券</div>
+</div>
+<div class="user-info" style="display:none;" id="user-panel">
+    <div class="head-img"><img src="{{userInfo.Avatar.replace('p1.test.sl.corp','p1.zmjiudian.com').replace('_theme','_290x290').replace('_small','_290x290')}}" alt="" /></div>
+    <div class="phone">{{userInfo.Mobile}}</div>
+    <div class="tip">此页面仅展示当日可使用的券，<a href="http://www.zmjiudian.com/active/activepage?pageid=128&_newpage=1">帮助说明>></a></div>
+</div>
+<div class="more-olist-panel" id="order-list">
+    <div v-cloak class="order-item" v-if="orderList&&orderList.length" v-for="orderEntity in orderList">
+        <div class="item-info">
+            <div class="tit">
+                <div class="_icon"><img src="{{orderEntity.OrderTypeIcon}}" alt="" /></div>
+                {{orderEntity.PageTitle}}
+            </div>
+            <div class="package clearfloat">
+                <div class="name">{{orderEntity.SKUName}}</div>
+                <div class="price" v-if="false&&orderEntity.Points">积分兑换</div>
+                <div class="price" v-if="false&&orderEntity.Price">¥{{orderEntity.Price}}</div>
+            </div>
+            <div class="others" v-if="orderEntity.Others">{{orderEntity.Others}}</div>
+            <div class="ctrl clearfloat">
+                <div class="state"></div>
+                <div class="btns">
+                    <a class="go-use-btn" v-if="orderEntity.ShowUseBtn" target="_blank" data-skuid="{{orderEntity.SKUID}}" data-exno="{{orderEntity.ExchangeNo}}" data-excid="{{orderEntity.ExchangeCouponID}}">去使用</a>
+                    <a class="used-btn" v-if="orderEntity.ShowUsedBtn" target="_blank" data-skuid="{{orderEntity.SKUID}}" data-exno="{{orderEntity.ExchangeNo}}" data-excid="{{orderEntity.ExchangeCouponID}}">已使用</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="null-list" style="display:none;" id="null-list">
+        <img src="http://whfront.b0.upaiyun.com/app/img/nothing-pic.png" alt="" />
+        <div class="_txt">暂无可用订单</div>
+    </div>
+</div>
+
+<div class="order-detail" id="order-detail-panel" style="display:none;">
+    <div class="close"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/viparea-welcome-close.png" /></div>
+    <div class="scroll-div" id="order-detail-scroll">
+        <div class="sku-info">
+            <div class="item-info">
+                <div class="tit">
+                    <div class="_icon"><img src="{{detailInfo.OrderIcon}}" alt="" /></div>
+                    {{detailInfo.PageTitle}}
+                </div>
+                <div class="package clearfloat">
+                    <div class="name">{{detailInfo.SkuName}}</div>
+                    <div class="price" v-if="false&&detailInfo.TotalPoints">积分兑换</div>
+                    <div class="price" v-if="false&&detailInfo.TotalPrice">¥{{detailInfo.TotalPrice}}</div>
+                </div>
+                <div class="others clearfloat">
+                    <div class="desc">{{{detailInfo.OthersTip}}}</div>
+                    <div class="state">@*{{detailInfo.StateName}}*@</div>
+                </div>
+            </div>
+            @*<div class="ctrl">
+                <a href="{{detailInfo.productUrl}}" class="link" target="_blank">查看详情>></a>
+            </div>*@
+        </div>
+        <div class="order-info" v-if="detailInfo.FirstReserveInfo">
+            <div class="reserve-info">已预约：{{detailInfo.FirstReserveInfo.BookDay}} {{detailInfo.FirstReserveInfo.PlayNumName}}</div>
+        </div>
+        <div class="order-info" v-if="detailInfo.TravelPerson&&detailInfo.TravelPerson.length">
+            <div class="travel-info">
+                <div class="tit">出行人</div>
+                <div class="item {{$index+1==detailInfo.TravelPerson.length?'item-nobr':''}}" v-for="item in detailInfo.TravelPerson">
+                    <div class="lab">{{item.TravelPersonName}}</div>
+                    <div class="val">{{item.CardTypeName}} {{item.IDNumber}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="order-info" v-if="detailInfo.TemplateData&&detailInfo.TemplateData.ContentList&&detailInfo.TemplateData.ContentList.length">
+            <div class="tempData-info">
+                <div class="item clearfloat {{$index+1==detailInfo.TemplateData.ContentList.length?'item-nobr':''}}" v-for="item in detailInfo.TemplateData.ContentList">
+                    <div class="lab">{{item.Name}}</div>
+                    <div class="val">{{item.Content}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="detail-info">
+            <div class="tit" v-if="detailInfo.PackageInfoList&&detailInfo.PackageInfoList.length">套餐内容</div>
+            <div class="detail" v-if="detailInfo.PackageInfoList&&detailInfo.PackageInfoList.length">
+                <div class="item" v-for="nitem in detailInfo.PackageInfoList">
+                    <div class="no">{{nitem.indexOf('#')==0||!nitem?'':'&bull;'}}</div>
+                    {{{nitem.indexOf('#')==0?nitem.replace('#',''):nitem}}}
+                </div>
+            </div>
+            <div class="line" v-if="detailInfo.PackageInfoList&&detailInfo.PackageInfoList.length"></div>
+            <div class="tit">使用说明</div>
+            <div class="detail">
+                <div class="item" v-for="nitem in detailInfo.Notice">
+                    <div class="no">{{nitem.indexOf('#')==0||!nitem?'':'&bull;'}}</div>
+                    {{{nitem.indexOf('#')==0?nitem.replace('#',''):nitem}}}
+                </div>
+            </div>
+            <div class="line" v-if="detailInfo.otherObjList&&detailInfo.otherObjList.length"></div>
+            <div class="moreinfo" v-if="detailInfo.otherObjList&&detailInfo.otherObjList.length">
+                <div v-for="item in detailInfo.otherObjList">
+                    <div class="item" v-if="item.istel">{{item.lab}}：<a href="tel:{{item.tel}}" class="tel">{{item.tel}}</a> {{item.telex}}</div>
+                    <div class="item" v-else>{{item.lab}}：{{item.val}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="detail-btns">
+        <div class="bottom-isused-btn" v-if="detailInfo.IsUsed">已使用</div>
+        <div class="bottom-timer-btn" v-if="!detailInfo.IsUsed&&detailInfo.UseBtnTimerNum>0">请将手机交由商家核销  {{detailInfo.UseBtnTimerNum}}s</div>
+        <div class="bottom-use-btn" v-if="!detailInfo.IsUsed">核销</div>
+        <div class="bottom-useing-btn" v-if="!detailInfo.IsUsed&&detailInfo.WriteOffIng">正在核销..</div>
+    </div>
+</div>
+
+<div class="use-complated" id="use-complated-panel" style="display:none;">
+    <div class="top">
+        <div class="_icon zmjd-iconfont">&#xe672;</div>
+        <div class="_txt">核销成功</div>
+    </div>
+    <div class="line-list">
+        <div class="line-item clearfloat">
+            <div class="_l">商户</div><div class="_r">{{detailInfo.SupplierName}}</div>
+        </div>
+        <div class="line-item clearfloat">
+            <div class="_l">商品名</div><div class="_r">{{detailInfo.SKUName}}</div>
+        </div>
+        <div class="line-item clearfloat" v-if="false">
+            <div class="_l">价格</div><div class="_r"><span class="h">¥{{detailInfo.Price}}</span></div>
+        </div>
+        <div class="line-item clearfloat">
+            <div class="_l">核销时间</div><div class="_r"><span class="t">{{detailInfo.WriteOffTime}}</span></div>
+        </div>
+    </div>
+    <div class="ctrl">
+        <a href="javascript:;" class="confirm-btn">确定</a>
+    </div>
+</div>
+
+<div class="model-bg" id="model-bg-panel" style="display:none;"></div>
+
+<footer>
+    <input type="hidden" id="userId" value="@userid" />
+    <input type="hidden" id="unionId" value="@unionid" />
+    <input type="hidden" id="supplierId" value="@supplierId" />
+    <input type="hidden" id="isApp" value="@(isApp ? "1" : "0")" />
+    <input type="hidden" id="isInWeixin" value="@(isInWeixin ? "1" : "0")" />
+</footer>
+
+@section scripts
+{
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/framework/zmjd.modal.min.js"></script>
+    <script src="~/Content/js/login.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/coupon/orderlistforsupplier.js?v=@(Helpers.curAppVer())"></script>
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js?v=@(Helpers.curAppVer())" type="text/javascript"></script>
+        <script>
+
+    var loadWechat = function(_shareTitle,_shareDesc,_shareLink,_shareImgUrl, _shareSucessFunc){
+
+        GetWeixinApiConfig();//注册
+
+        wx.ready(function () {
+
+            wx.hideMenuItems({
+                menuList: ["menuItem:share:timeline", "menuItem:copyUrl", "menuItem:share:appMessage", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:QZone", "menuItem:openWithSafari", "menuItem:openWithQQBrowser", "menuItem:share:brand", "menuItem:share:email"]
+            });
+        });
+
+        function GetWeixinApiConfig() {
+
+            var url = location.href.split("#")[0];
+            $.ajax({
+                url: '/Coupon/GetWeixinConfigInfo',
+                type: 'POST',
+                data: { url: url },
+                dataType: 'json',
+                //async: false,
+                error: function () {
+                    console.log("网络服务错误");
+                },
+                success: function (result) {
+                    if (typeof (result.Success) != undefined && result.Success == 1) {
+                        return false;
+                    }
+                    else {
+                        //得到微信config的值
+                        var array = [
+                            'checkJsApi',
+                            'onMenuShareTimeline',
+                            'onMenuShareAppMessage',
+                            'onMenuShareQQ',
+                            'onMenuShareQZone',
+                            'hideOptionMenu'
+                        ];
+                        if (result.jsApiList) {
+                            var jsArray = result.jsApiList.split(',');
+                            for (var key in jsArray) {
+                                array.push("" + jsArray[key]);
+                            }
+                        }
+
+                        wx.config({
+                            debug: false,
+                            appId: result.appId,
+                            timestamp: "" + result.timestamp,
+                            nonceStr: result.nonceStr,
+                            signature: result.signature,
+                            jsApiList: array
+                        });
+                    }
+                }
+            });
+        }
+
+    }
+    loadWechat('@shareTitle','@shareDesc','@shareLink','@shareImgUrl', function(){});
+
+</script>
+    }
+}

@@ -1,0 +1,266 @@
+html, body {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    background: #fff !important;
+    -webkit-user-select: none;
+    user-select: none;
+    font-family: Arial;
+}
+
+/*禁止长按链接与图片弹出菜单*/
+a, img {
+    -webkit-touch-callout: none;
+}
+
+
+.fpalert-section {
+    width:100%;
+    height:auto;
+    margin:0 auto 0 auto;
+    padding:5em 0 0.5em 0;
+}
+    .fpalert-section .icon{
+        width:100%;
+        height:auto;
+        margin:0 auto 0 auto;
+        text-align:center;
+        font-size:7em;
+        color:#8DD234;
+    }
+    .fpalert-section .text{
+        width:100%;
+        height:auto;
+        margin:0 auto 0 auto;
+        text-align:center;
+        font-size:1.5em;
+        font-weight:bold;
+        color:#474747;
+    }
+
+.alert-section {
+    width:100%;
+    height:auto;
+    margin:0 auto 0 auto;
+    padding:3em 0 0.5em 0;
+}
+    .alert-section .icon{
+        width:100%;
+        height:auto;
+        margin:0 auto 0 auto;
+        text-align:center;
+        font-size:7em;
+        color:#8DD234;
+    }
+    .alert-section .text{
+        width:100%;
+        height:auto;
+        margin:0 auto 0 auto;
+        text-align:center;
+        font-size:1.5em;
+        font-weight:bold;
+        color:#474747;
+    }
+    .alert-section .text2{
+        width:100%;
+        height:auto;
+        margin:0.5em auto 0 auto;
+        text-align:center;
+        font-size:1.2em;
+        color:#919191;
+    }
+
+.main {
+    width:100%;
+    margin: 1em auto 0 auto;
+    padding: 0 0 1em 0;
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+}
+    .main .hotel {
+        width: 90%;
+        height: auto;
+        margin: 0 auto 0 auto;
+        padding: 1em 0 0 0;
+        font-size:1.2em;
+        font-family:Arial;
+    }
+    .main .hotel-bor {
+        padding-bottom: 1em;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+        .main .hotel .left {
+            width: 25%;
+            float: left;
+            color: #2c2c2c;
+            font-size:1em;
+            font-family:Arial;
+        }
+
+        .main .hotel .right {
+            width: 74%;
+            float: right;
+            font-size:1em;
+            color: #555;
+            text-align: left;
+        }
+
+.btn-section{
+    width:80%;
+    height:auto;
+    margin:2.5em auto 0 auto;
+}
+    .btn-section .row{
+        width:100%;
+        height:auto;
+        margin:1.5em 0 0 0;
+    }
+    .btn-section .order-btn{
+        width:100%;
+        height:auto;
+        padding:0.8em 0 0.8em 0;
+        background:#3E9EC0;
+        border:1px solid #3E9EC0;
+        color:#fff;
+        border-radius:4px;
+        text-align:center;
+        font-size:1.3em;
+        display:table;
+    }
+    .btn-section .download-app{
+        width:100%;
+        height:auto;
+        padding:0.8em 0 0.8em 0;
+        background:#fff;
+        border:1px solid #3E9EC0;
+        color:#3E9EC0;
+        border-radius:4px;
+        text-align:center;
+        font-size:1.3em;
+        display:table;
+    }
+.foot-section{
+    width:100%;
+    height:auto;
+    margin:3em auto 0 auto;
+    text-align:center;
+}
+    .foot-section .tel{
+        width:100%;
+        height:auto;
+        text-align:center;
+        font-size:1.2em;
+        font-family:Arial;
+        color:#3E9EC0;
+    }
+    .fpfoot-section{
+    width:100%;
+    height:auto;
+    /*margin:3em auto 0 auto;*/
+    bottom: 3em;
+    position:fixed;
+    text-align:center;
+}
+    .fpfoot-section .tel{
+        width:100%;
+        height:auto;
+        text-align:center;
+        font-size:1.2em;
+        font-family:Arial;
+        color:#3E9EC0;
+    }
+.wxqrcode-section {
+    width:100%;
+    height:auto;
+    margin:0em auto 0 auto;
+    padding:0 0 0 0;
+    text-align:center;
+}
+    .wxqrcode-section ._tip{
+        width:80%;
+        margin:0 auto 0 auto;
+        padding:0 0 0 0;
+        font-size:1em;
+        font-family:Arial;
+        color:#919191;
+    }
+        .wxqrcode-section ._tip ._h1{
+            color:#3E9EC0;
+        }
+        .wxqrcode-section ._tip ._h2{
+            color:#252525;
+        }
+    .wxqrcode-section ._qrcode{
+        width:80%;
+        height:auto;
+        margin:0.5em auto 0 auto;
+        padding:0 0 0 0;
+    }
+        .wxqrcode-section ._qrcode img{
+            width:58%;
+            margin:0 auto 0 auto;
+        }
+
+.get-coupon-info {
+    width:100%;
+    height:auto;
+    margin:0 0 0 0;
+    padding:0 0 0 0;
+    font-family:Arial;
+}
+    .get-coupon-info .img{
+        width:55%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0 0 0 0;
+    }
+        .get-coupon-info .img img{
+            width:100%;
+        }
+    .get-coupon-info .txt{
+        width:88%;
+        height:auto;
+        margin:0.8em auto 0 auto;
+        padding:0 0 0 0;
+        font-size:1.1em;
+        font-weight:bold;
+        color:#2c2c2c;
+        text-align:center;
+    }
+    .get-coupon-info .txt2{
+        width:88%;
+        height:auto;
+        margin:0.2em auto 0 auto;
+        padding:0 0 0 0;
+        font-size:1em;
+        color:#555;
+        text-align:center;
+    }
+
+.send-red-coupon-float {
+    width:4em;
+    height:auto;
+    position:fixed;
+    right:-0.8em;
+    top:10em;
+    cursor:pointer;
+}
+    .send-red-coupon-float img{
+        width:100%;
+    }
+
+.group-share-tip {
+    width:100%;
+    height:100%;
+    position:fixed;
+    left:0;
+    top:0;
+    z-index:210;
+    background: rgba(0,0,0,0.80);
+    overflow-y:auto;
+    -webkit-box-sizing : border-box;
+    -webkit-overflow-scrolling : touch;
+}
+    .group-share-tip img{
+        width:100%;
+    }

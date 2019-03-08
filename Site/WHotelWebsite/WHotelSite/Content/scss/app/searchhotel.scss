@@ -1,0 +1,208 @@
+html, body{
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+}
+
+.search-bg2 {
+    z-index: -1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: url(http://whphoto.b0.upaiyun.com/115BPk10jY_jupiter) no-repeat bottom left;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+}
+
+.search-head {
+    width:92%;
+    height:auto;
+    margin:0.7em auto 0 auto;
+    padding:0.3em 0 0.3em 0;
+    background:rgba(0,0,0,.2);
+    display:table;
+    position:absolute;
+    top:0;
+    left:4%;
+    border-radius:5px;
+}
+    .search-head .search-inp{
+        width:100%;
+        height:auto;
+        margin:0 auto 0 auto;
+        background: url(http://whfront.b0.upaiyun.com/app/img/search/icon-search.png) no-repeat 0.5em 0.3em;
+        background-size: 1em;
+        padding:0 0 0 2em;
+        text-align:left;
+        font-size:0.8em;
+        color:#eee;
+        border:none;
+        border-radius:5px;
+        display:table;
+    }
+    .search-head .search-inp-focus{
+        padding:0 0 0 2em;
+        text-align:left;
+    }
+        .search-head .search-inp::-webkit-input-placeholder {
+            color: #ddd;
+        }
+        .search-head .search-inp:-moz-placeholder {
+            color: #ddd;
+        }
+        .search-head .search-inp::-moz-placeholder {
+            color: #ddd;
+        }
+        .search-head .search-inp:-ms-input-placeholder {
+            color: #ddd;
+        }
+    .search-head .closeIcon{
+        width:1.8em;
+        height:auto;
+        line-height:1.8em;
+        text-align:center;
+        background:rgba(0,0,0,.4);
+        border-radius:2em;
+        color:#fff;
+        font-size:0.7em;
+        font-family:Arial;
+        position:absolute;
+        right:0.4em;
+        top:0.5em;
+        z-index:3;
+    }
+.hotelquicklist {
+    width:100%;
+    padding-left: 0;
+    margin: 0 0 0 0;
+    padding-bottom: 0;
+    background:#fff;
+    position:absolute;
+    top:3em;
+    left:0;
+    z-index:2;
+}
+
+    .hotelquicklist ul {
+        padding: 0 0 0 10px;
+        margin-bottom: 0;
+        list-style: none;
+    }
+
+    .hotelquicklist li {
+        height: 40px;
+        line-height:1em;
+        margin-left: 0;
+        padding: 5px;
+        padding-left: 0px;
+        padding-top: 9px;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        overflow:hidden;
+        list-style: none;
+    }
+
+        .hotelquicklist li a {
+            color: #000;
+            font-size: 0.9em;
+            font-weight: normal;
+        }
+
+            .hotelquicklist li a i {
+                color: #5dabff;
+                font-style: normal;
+                font-size: 0.9em;
+            }
+
+            .hotelquicklist li span {
+                position: absolute;
+                right: 15px;
+                color: #5dabff;
+                top: 10px;
+            }
+
+.search-filter {
+    width:100%;
+    height:auto;
+    margin:2.8em auto 0 auto;
+    position:relative;
+}
+
+    .search-filter .option-item {
+        width: 92%;
+        height: auto;
+        margin: 0 auto 0 auto;
+        padding: 1.3em 1.3em 1.3em 0;
+        border-bottom: 1px solid rgba(255,255,255,.3);
+        background: url(http://whfront.b0.upaiyun.com/app/img/search/icon-arrow-right.png) no-repeat right 1.4em;
+        background-size: 0.4em;
+        font-size:1em;
+    }
+
+        .search-filter .option-item .left {
+            width: 5%;
+            height: auto;
+            float: left;
+        }
+
+            .search-filter .option-item .left img {
+                width:0.9em;
+            }
+
+        .search-filter .option-item .right {
+            width: 91%;
+            height: auto;
+            float: right;
+            text-align: left;
+        }
+
+            .search-filter .option-item .right .val {
+                width: 10em;
+                overflow: hidden;
+                font-size: 1em;
+                color: #f0f0f0;
+            }
+
+            .search-filter .option-item .right .val-ok {
+                color: #000;
+            }
+
+
+.search-ctrl {
+    width:100%;
+    height:auto;
+    margin:2em auto 0 auto;
+    display:table;
+    position:relative;
+}
+    .search-ctrl .search{
+        width:90%;
+        height:auto;
+        line-height:1.5em;
+        margin:0 auto 0 auto;
+        background:#10b188;
+        border:1px solid #10b188;
+        border-radius:5px;
+        display:table;
+        color:#fff;
+        font-size:1em;
+    }
+
+.foot-link {
+    width:100%;
+    height:auto;
+    position:fixed;
+    left:0;
+    bottom:1em;
+    text-align:right;
+}
+    .foot-link img{
+        width:0.7em;
+    }
+    .foot-link a {
+        font-size:0.9em;
+        color:rgba(255,255,255,.8);
+        margin:0 0.8em 0 0.1em;
+    }

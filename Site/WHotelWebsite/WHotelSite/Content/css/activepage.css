@@ -1,0 +1,86 @@
+﻿@charset "UTF-8";
+html, body {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.tc {
+    text-align: center;
+}
+
+.tr {
+    text-align: right;
+}
+
+.rich_media_inner {
+    padding: 15px 10px;
+    word-wrap: break-word;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+}
+
+.rich_media_title {
+    margin-bottom: 4px;
+    line-height: 1.2;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.rich_media_meta_list {
+    overflow: hidden;
+}
+
+.rich_media_meta {
+    float: left;
+    margin-right: 10px;
+    font-size: 12px;
+}
+
+.rich_media_meta_text {
+    color: #8c8c8c;
+}
+
+.rich_media_meta_nickname {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 9em;
+}
+
+.rich_media_thumb {
+    width: 100%;
+    margin: 18px 0 -6px;
+}
+
+.rich_media_content {
+    overflow: hidden;
+    margin-top: -9px;
+    color: #3e3e3e;
+}
+
+    .rich_media_content * {
+        max-width: 100% !important;
+        -webkit-box-sizing: border-box !important;
+        box-sizing: border-box !important;
+        word-wrap: break-word !important;
+    }
+
+    .rich_media_content p {
+        overflow: hidden;
+        min-height: 1em;
+        white-space: pre-wrap;
+        margin: 0;
+        padding: 0;
+    }
+
+        .rich_media_content p img {
+            height: auto !important;
+        }
+

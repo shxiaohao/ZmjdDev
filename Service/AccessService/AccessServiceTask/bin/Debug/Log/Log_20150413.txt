@@ -1,0 +1,23 @@
+
+[2015/4/13 14:56:48] Start Job [SyncCrawlerHotelJob]
+[2015/4/13 14:57:00] GetUpdatedRoomList Count:2
+[2015/4/13 14:57:54] Start Job [SyncCrawlerHotelJob]
+[2015/4/13 14:58:08] GetUpdatedRoomList Count:2
+[2015/4/13 14:58:19] Job [SyncCrawlerHotelJob] Error:远程服务器返回错误: (500) 内部服务器错误。
+[2015/4/13 14:58:27] GetUpdatedRoomList Count:1
+[2015/4/13 15:06:55] Start Job [SyncCrawlerHotelJob]
+[2015/4/13 15:07:10] GetUpdatedRoomList Count:0
+[2015/4/13 15:08:08] GetUpdatedPriceRateList Count:4
+[2015/4/13 15:15:23] Start Job [SyncCrawlerHotelJob]
+[2015/4/13 15:15:26] GetUpdatedRoomList Count:2
+[2015/4/13 15:24:38] Start Job [SyncCrawlerHotelJob]
+[2015/4/13 15:24:41] GetUpdatedRoomList Count:2
+[2015/4/13 15:26:26] Start Job [SyncCrawlerHotelJob]
+[2015/4/13 15:26:35] GetUpdatedRoomList Count:1
+[2015/4/13 15:26:41] GetUpdatedPriceRateList Count:4
+[2015/4/13 15:26:50] Stop Job [SyncCrawlerHotelJob]
+[2015/4/13 15:29:30] Start Job [SyncCrawlerHotelJob]
+[2015/4/13 15:29:34] GetUpdatedRoomList Count:1
+[2015/4/13 15:29:37] GetUpdatedPriceRateList Count:1
+[2015/4/13 15:29:37] Stop Job [SyncCrawlerHotelJob]
+[2015/4/13 17:35:29] Start Job [CheckRealHotelJob]

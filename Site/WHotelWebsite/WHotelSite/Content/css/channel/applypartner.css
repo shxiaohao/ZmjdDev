@@ -1,0 +1,272 @@
+﻿@charset "UTF-8";
+html, body {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  background: #fff;
+  font-family:Arial;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+a, img {
+  -webkit-touch-callout: none; 
+}
+
+.top-space {
+    margin:1.5em 0 0 0;
+}
+
+.form-item {
+    width:88%;
+    height:auto;
+    margin:0.5em auto 0 auto;
+    padding:0 0 0 0;
+}
+    .form-item .lab{
+        width:100%;
+        height:auto;
+        margin:0 0 0 0;
+        padding:0.5em 0 0.5em 0;
+        font-size:0.8em;
+        color:#919191;
+    }
+        .form-item .lab .select_city {
+            width: 100%;
+            height: auto;
+            margin: 0 0.5em 0 0.5em;
+            padding: 0.5em 0 0.5em 0;
+            /*font-size: 0.9em;*/
+            color: #FE8000;
+        }
+    .form-item .inp{
+        width:100%;
+        height:auto;
+        margin:0 0 0 0;
+        padding:0 0 0 0;
+    }
+        .form-item .inp input{
+            width:100%;
+            height:auto;
+            margin:0 0 0 0;
+            padding:0.9em 0 1em 1em;
+            background: #F5F5F5;
+            border-radius: 4px;
+            box-sizing:border-box;
+            border:none;
+            font-size:1em;
+            color:#2c2c2c;
+        }
+
+.ctrl {
+    width:100%;
+    height:auto;
+    margin:6em 0 0 0;
+    padding:0 0 0 0;
+}
+    .ctrl .btn {
+        width: 88%;
+        height: auto;
+        margin: 0 auto 0 auto;
+        padding: 0.7em 0 0.7em 0;
+        background: #919191;
+        border-radius: 4px;
+        font-size: 1em;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+    }
+
+.sub-complate {
+    width:100%;
+    height:auto;
+    margin:0 0 0 0;
+    padding:2.5em 0 0 0;
+}
+    .sub-complate .state-icon{
+        width:100%;
+        height:auto;
+        margin:0 0 0 0;
+        padding:0 0 0 0;
+        text-align:center;
+        font-size:5em;
+        color:#8DD234;
+    }
+    .sub-complate .state-tip{
+        width:100%;
+        height:auto;
+        margin:0.7em 0 0.7em 0;
+        padding:0 0 0 0;
+        text-align:center;
+        font-size:1.1em;
+        font-weight:bold;
+        color:#2c2c2c;
+    }
+    .sub-complate .sub-remark{
+        width:76%;
+        height:auto;
+        line-height:1.5em;
+        margin:0 auto 0 auto;
+        padding:0 0 0 0;
+        text-align:center;
+        font-size:0.9em;
+        color:#555;
+    }
+    .sub-complate .remark-qrcode{
+        width:9em;
+        height:auto;
+        margin:1em auto 0.3em auto;
+        padding:0 0 0 0;
+    }
+        .sub-complate .remark-qrcode img{
+            width:100%;
+        }
+    .sub-complate .wx-no{
+        width:12em;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0.6em 0 0.6em 0;
+        text-align:center;
+        font-size:1em;
+        color:#2c2c2c;
+        background:#f5f5f5;
+        border-radius:4px;
+        -webkit-user-select: text;
+        user-select: text;
+    }
+    .sub-complate .copy-wxno-link{
+        width:7.2em;
+        height:auto;
+        margin:1.3em auto 1em auto;
+        padding:0 0 0 0;
+        text-align:center;
+        font-size:1em;
+        color:#00A0C4;
+        text-decoration:none;
+        display:table;
+    }
+
+
+
+
+
+
+.selector_cover {
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10000;
+}
+
+
+.selector_city {
+    width: 100%;
+    height: auto;
+    font-family: Arial;
+    background: #fff;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 10001;
+    overflow: hidden;
+}
+    .selector_city .search_city {
+        width: 90%;
+        height: auto;
+        margin: auto;
+        padding: 1em 0 1em 0;
+        position: relative;
+        font-size: 1em;
+    }
+
+        .selector_city .search_city .input_city {
+            width: 73%;
+            /*height: 2.1em;
+            line-height: 2.2em;*/
+            margin: 0 auto 0 auto;
+            padding: 0.6em 1.7em 0.7em 1em;
+            background: #F1F3F2;
+            border: none;
+            border-radius: 2em;
+            outline: none;
+        }
+
+        .selector_city .search_city .cancel {
+            color: #555555;
+            float: right;
+            line-height: 2em;
+        }
+    .selector_city .hot_cities {
+        min-height: 350px;
+        max-height: 350px;
+        width: 100%;
+        height: auto;
+    }
+        .selector_city .hot_cities .sub-items {
+            width: 100%;
+            height: auto;
+            margin: 0 auto 0 auto;
+            padding: 0 0 0 0;
+            position: relative;
+            box-sizing: border-box;
+        }
+            .selector_city .hot_cities .sub-items .sub-item-col {
+                width: 33.3%;
+                height: auto;
+                margin: 0 auto 0 auto;
+                padding: 0.8rem 0 0.8rem 0;
+                font-size: 0.9em;
+                color: #2c2c2c;
+                position: relative;
+                cursor: pointer;
+                box-sizing: border-box;
+                text-align: center;
+                float: left;
+            }
+
+.searchbody {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+}
+    .searchbody .search_city {
+        width: 90%;
+        height: auto;
+        margin: auto;
+        padding: 1em 0 0 0;
+        position: relative;
+        font-size: 1em;
+    }
+        .searchbody .search_city .search_icon {
+            margin-left: 0.6em;
+            position: absolute;
+            line-height: 1.8em;
+        }
+
+        .searchbody .search_city .input_city_search {
+            width: 73%;
+            /*height: 2.1em;
+            line-height: 2.2em;*/
+            margin: 0 auto 0 auto;
+            padding: 0.6em 1.7em 0.7em 2.5em;
+            background: #F1F3F2;
+            border: none;
+            border-radius: 2em;
+            outline: none;
+        }
+
+        .searchbody .search_city .cancel {
+            color: #555555;
+            float: right;
+            line-height: 2em;
+        }
+    .searchbody .searchcities {
+        width: 88%;
+        margin: 0 auto 0 auto;
+    }
+        .searchbody .searchcities .sub_search_item {
+            margin: 1.5em auto 1.5em auto;
+        }
+

@@ -1,0 +1,171 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+
+    InspectorHotelParam param = ViewBag.param;
+    List<HotelVoucherAndInspectorHotel> hotelList = ViewBag.HotelList;
+    //var pastList = result.pastResult;
+    
+    var isApp = ViewBag.IsApp;
+    
+    ViewBag.Title = string.Format("免费品鉴酒店");
+    ViewBag.Keywords = string.Format("免费品鉴酒店，免费");
+    ViewBag.Description = string.Format("免费品鉴酒店");
+
+    ViewBag.BodyStyle = "overflow-x:hidden;";
+    ViewBag.BodyClass = "inspectorhotellistpage";
+}
+@section styles
+{
+    <style>
+        html, body {
+                height: 100%;
+                margin: 0;
+            }
+        .modal-content {
+            width: 90%;
+            margin: auto;
+        }
+
+        .modal-body {
+            padding: 2.6em 0.8em 1.7em 0.8em;
+        }
+
+        .modal-footer {
+            margin-top: 0;
+            padding: 0.7em 0.9em;
+        }
+
+        .btn-default, .btn-primary {
+            width: auto;
+            min-width: 4em;
+            border: none;
+            color: #3e9ec0;
+            font-size: 1.4em;
+        }
+
+        .box-big-btn {
+            width: 96%;
+        }
+
+        .box-btn-bottomborder {
+            padding-bottom: 0.7em;
+            margin-bottom: 0.3em;
+            border-bottom: 1px solid #eeeded;
+            border-radius: 0;
+        }
+    </style>
+}
+<script>
+    function goto(param) {
+        var url = "@(ViewBag.AccessProtocal)" + param;
+        this.location = url;
+    }
+    function gotopage(param) {
+        var url = "@(ViewBag.AccessProtocalPage)" + param;
+        this.location = url;
+    }
+
+    function openHotel(hotelid) {
+        var isapp = $("#isapp").val() == "1";
+        if (isapp) {
+            goto('hotel/' + hotelid);
+        }
+        else {
+            location.href = "http://www.zmjiudian.com/hotel/" + hotelid;
+        }
+    }
+
+    function loginCallback(userid) {
+        goApplyInspector(userid);
+        //bootbox.alert({ message: "【Callback】已返回用户ID：" + userid, closeButton: false });
+    }
+    function loadLoginCallback(userid) {
+        //location.replace(location.href + "?userid=4512003");
+        location.href = location.href + "?userid=" + userid;    // + userid;
+    }
+
+</script>
+<header class="hotellist-head @(isApp ? " hidden" : "")">
+    <table class="head-tab" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+            <td class="left-td"><a href="/inspector/explain?userid=@(param.UserId)"><img src="~/content/images/icon-back.png" alt="返回" /></a></td>
+            <td class="center-td" valign="middle">免费品鉴酒店</td>
+            <td class="right-td"></td>
+        </tr>
+    </table>
+</header>
+<section class="hotellist-current">
+    <div class="title hidden">本期酒店</div>
+    <!-- 酒店列表 开始 -->
+    @if (hotelList != null && hotelList.Any())
+    {
+        @Html.Partial("HotelListContent", hotelList)
+        @*<div class="pager1 text-right">
+            @Helpers.Pagination(Url, param, currentList.count, param.Count, param.Start)
+        </div>*@
+    }
+    else
+    {
+        <div class="nullalert text-center">
+            <h5>对不起！没有找到符合您要求的酒店！</h5>
+        </div>
+    }
+    <!-- 酒店列表 结束 -->
+</section>
+@*<section class="hotellist-past">
+    <div class="title">往期酒店</div>
+    <!-- 酒店列表 开始 -->
+    @if (pastList.items != null && pastList.items.Any())
+    {
+        @Html.Partial("HotelListContent", pastList.items)
+    }
+    else
+    {
+        <div class="nullalert text-center">
+            <h5>对不起！没有找到符合您要求的酒店！</h5>
+        </div>
+    }
+    <!-- 酒店列表 结束 -->
+</section>*@
+<footer>
+    <input type="hidden" id="userid" value="@(param.UserId)" />
+    <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)"/>
+</footer>
+<!--  -->
+
+@section scripts
+{
+    <script src="~/Content/js/jquery.lazyload.min.js"></script>
+    @Scripts.Render("~/Content/js/srollpage.js", "~/Content/js/bootbox.js", "~/Content/js/inspector/inspector.js")
+    <script>
+        @*var userid = "@(param.UserId)"; //alert(userid);
+        if (userid == "0") {
+            var loadloginapphref = "whotelapp://loadJS?url=javascript:loadLoginCallback('{userid}')";
+            location.href = loadloginapphref;
+        }*@
+    </script>
+    <script>
+        try {
+            onAppShareCall = function () {
+                var title = "免费品鉴酒店清单";
+                var Content = "Wow，这些五星级酒店可以免费入住哦！";
+                var photoUrl = "http://whfront.b0.upaiyun.com/app/img/zmjd-logo-x167.png";
+                var shareLink = "http://www.shangjiudian.com/Inspector/hotellist";
+                try { whotel.appShareData(title, Content, photoUrl, shareLink); } catch (e) { }
+                var returnStr = '{"title":"{0}","Content":"{1}","photoUrl":"{2}","shareLink":"{3}"}';
+                return returnStr.format(title, Content, photoUrl, shareLink);
+            }
+            onAppShareCall();
+        }
+        catch (e) { }
+
+        $(".hotellist-current img").lazyload({
+            threshold: 20,
+            placeholder: "http://whfront.b0.upaiyun.com/app/img/home/home-load2-3x2.png",
+            effect: "show"
+        });
+
+    </script>
+}

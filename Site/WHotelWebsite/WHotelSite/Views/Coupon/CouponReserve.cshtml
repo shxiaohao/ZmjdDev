@@ -1,0 +1,390 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    Layout = null;
+
+    var cssVersion = "190001010000";
+    try
+    {
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex) {}
+
+    ViewBag.Title = "券预约";
+
+    var exid = ViewBag.ExchangeId;
+    var skuid = ViewBag.SKUID;
+    var isApp = ViewBag.IsApp;
+    var appType = ViewBag.AppType;
+    var userid = ViewBag.UserId;
+    var userPhone = ViewBag.UserPhone;
+    var preReserve = ViewBag.PreReserve;
+    var paynum = ViewBag.PayNum;
+    var fromwxuid = ViewBag.FromWxuid;
+    var groupid = ViewBag.GroupId;
+    var openid = ViewBag.OpenId;
+    var coid = ViewBag.CouponOrderId;
+
+    SKUCouponActivityDetailModel couponSkuInfo = ViewBag.CouponSkuInfo;
+    HJD.CouponService.Contracts.Entity.CouponActivityEntity activity = couponSkuInfo.activity;
+
+    //日期label/姓名label
+    var isSingleSelectDate = true;
+    var dateTypeName = "预约日期";
+    var userLabel = "联系人";
+    var userPlaceholder = "填写联系人姓名";
+    var checkIn = ViewBag.CheckIn;
+    var checkOut = ViewBag.CheckOut;
+
+    List<PDayItem> calendar = ViewBag.calendar;
+    var dayLimitMin = ViewBag.DayLimitMin;
+    var dayLimitMax = ViewBag.DayLimitMax;
+
+    //出行人信息
+    var maxPersonNum = couponSkuInfo.SKUInfo.SKU.MaxBookCount;
+    var minPersonNum = couponSkuInfo.SKUInfo.SKU.MinBookCount;
+    couponSkuInfo.SKUInfo.SKU.CardTypeList = couponSkuInfo.SKUInfo.SKU.CardTypeList.Where(_ => !string.IsNullOrEmpty(_)).ToList();
+    var cartTypeList = string.Join(",", couponSkuInfo.SKUInfo.SKU.CardTypeList != null ? couponSkuInfo.SKUInfo.SKU.CardTypeList : new List<string>());
+    var personDesc = couponSkuInfo.SKUInfo.SKU.BookDesc; //hotelPackage.TravelPersonDescribe;
+}
+
+<!DOCTYPE html>
+
+<script type="text/javascript">
+    function goto(param) {
+        var url = "@(ViewBag.AccessProtocal)" + param;
+        this.location = url;
+    }
+    function openHotel(hotelid) {
+        var isapp = $("#isapp").val() == "1";
+        if (isapp) {
+            goto('hotel/' + hotelid);
+        }
+        else {
+            location.href = "http://www.zmjiudian.com/hotel/" + hotelid;
+        }
+    }
+    
+    function gourl(url) {
+        location.href = url;
+    }
+    
+    function loginCallback(userid) {
+        location.replace(location.pathname + "?userid=" + userid);
+    }
+
+    var pub_userid = "@userid";
+
+</script>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="format-detection" content="telephone=no">
+    <title>预约</title>
+    <link href="~/Content/css/zmjiudian-ex.css" rel="stylesheet" />
+    <link href="~/Content/css/framework/zmjd.modal.min.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    @*<link href="~/Content/css/bootstrap.min.css" rel="stylesheet" />*@
+    <link href="/content/css/coupon/couponreserve.css?v=@cssVersion" rel="stylesheet">
+    <link href="/content/css/calendar_price.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .modal {
+            top: 24%;
+        }
+
+        .modal-content {
+            width: 90%;
+            margin: auto;
+        }
+
+        .modal-body {
+            padding: 2.6em 0.8em 1.7em 0.8em;
+        }
+
+        .modal-footer {
+            margin-top: 0;
+            padding: 0.7em 0.9em;
+            text-align: center;
+        }
+
+        .btn-default, .btn-primary {
+            width: auto;
+            min-width: 4em;
+            border: none;
+            color: #3e9ec0;
+            font-size: 1.2em;
+        }
+
+        .btn-default0 {
+            color: #333;
+        }
+
+        .box-big-btn {
+            width: 96%;
+        }
+
+        .box-btn-bottomborder {
+            padding-bottom: 0.7em;
+            margin-bottom: 0.3em;
+            border-bottom: 1px solid #eeeded;
+            border-radius: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="ex-panel">
+
+        <div class="ex-group-panel">
+            <div class="basic-panel top-package">
+                <div class="all-panel">
+                    <div class="left-item">
+                        <div class="top-package-hotelname">@couponSkuInfo.activity.PageTitle</div>
+                        <div class="top-package-pname">@couponSkuInfo.SKUInfo.SKU.Name</div>
+                    </div>
+                    <div class="right-item">
+                        @*<img src="~/Content/images/coupon/icon-arrow-right.png" alt="" style="margin:1em 0 0 0;" />*@
+                    </div>
+                </div>
+                <div style="clear:none;"></div>
+            </div>
+            <div class="basic-panel top-checktime">
+                <div class="left-panel">
+                    <span>@(dateTypeName)</span>
+                </div>
+                <div class="right-panel">
+                    <div class="left-item">
+                        <div id="def-datetxt" class="top-checktime-item">点击选择日期</div>
+                        <div id="dates" class="top-checktime-item" style="display:none;">@(checkIn.ToString("yyyy/MM/dd"))</div>
+                        <input type="hidden" id="checkIn" value="@(checkIn.ToString("yyyy-MM-dd"))" />
+                        <input type="hidden" id="checkOut" value="@(checkOut.ToString("yyyy-MM-dd"))" />
+                    </div>
+                    <div class="right-item">
+                        <img src="~/Content/images/coupon/icon-arrow-right.png" alt="" />
+                    </div>
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+            <div class="basic-panel top-shows" id="top-shows" style="display:none;">
+                <div class="left-panel">
+                    <span>预约场次</span>
+                </div>
+                <div class="right-panel">
+                    <div class="icheck-panel">
+                        <div class="item-div" v-for="item in listData">
+                            <input name="rd-shows" type="radio" v-if="item.State" value="{{item.ID}}">
+                            <input name="rd-shows" type="radio" v-else disabled value="{{item.ID}}">
+                            <label fn="rd-shows" v-if="item.State">{{item.NumPlayName}}</label>
+                            <label fn="rd-shows" class="label-0" v-else>{{item.NumPlayName}}</label>
+                        </div>
+                        @*<div class="item-div"><input name="rd-shows" type="radio" value="0"><label fn="rd-shows">08:00~12:00</label></div>
+                            <div class="item-div"><input name="rd-shows" type="radio" value="1"><label fn="rd-shows">下午</label></div>
+                            <div class="item-div"><input name="rd-shows" type="radio" value="3"><label fn="rd-shows">晚上</label></div>*@
+                    </div>
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+        </div>
+
+        @if (couponSkuInfo.SKUInfo.SKU.WriteOtherPostion == 2)
+        {
+            <div class="b-hide" id="person-panel">
+                @if (!string.IsNullOrEmpty(personDesc))
+                {
+                    <div class="b-d-desc" style="background:#f5f5f5;">
+                        <div class="info">@personDesc</div>
+                    </div>
+                }
+                @if (couponSkuInfo.SKUInfo.SKU.CardTypeList.Count > 0 && maxPersonNum > 0)
+                {
+                    <div class="b-d-row">
+                        <div class="r-tit">出行人信息</div>
+                        <div class="r-tip">请添加<span class="h">@(maxPersonNum)名</span>出行人信息</div>
+                    </div>
+                    <div v-for="item in sels" class="b-d-row b-d-row-bder b-d-person-item">
+                        <div class="r-left"><a href="javascript:;" onclick="delSelPerson({{$index}})" title="删除"><img src="http://whfront.b0.upaiyun.com/www/img/hotel/book/icon-del.png" alt="" /></a></div>
+                        <div class="r-right">
+                            <div class="pname">{{item.TravelPersonName}}</div>
+                            <div class="pno">{{item.CardTypeName}} {{item.IDNumber2}}</div>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                    <div v-for="item in adds" class="b-d-row b-d-row-bder b-d-row-arrow-2 b-d-person-item" onclick="showSelPerson()">
+                        <div class="r-left"></div>
+                        <div class="r-right"><a href="javascript:;" class="r-link">添加出行人1</a></div>
+                        <div style="clear:both;"></div>
+                    </div>
+                }
+            </div>
+            <script id="ex-user-item-template" type="text/template">
+                <div class="basic-panel top-users">
+                    <div class="left-panel">
+                        <span>@(userLabel):</span>
+                    </div>
+                    <div class="right-panel">
+                        <input type="text" name="ex-checkinUser" class="top-users-input" placeholder="@(userPlaceholder)" value="" />
+                    </div>
+                    <div style="clear:none;"></div>
+                </div>
+            </script>
+        }
+
+        <div class="ex-group-panel no-border" style="display:none;" id="form-section" v-if="formData.TemplateItemObjs">
+            <div v-for="item in formData.TemplateItemObjs">
+                <div class="basic-panel form-input" v-if="item.Type=='TXT'">
+                    <div class="left-panel">
+                        <span>{{item.Name}}</span>
+                    </div>
+                    <div class="right-panel">
+                        <input type="text" id="{{item.Code}}" name="{{item.Code}}" class="_input" placeholder="{{item.Description}}" v-model="item.Content" />
+                    </div>
+                    <div style="clear:none;"></div>
+                </div>
+                <div class="basic-panel form-input" v-if="item.Type=='TXT2'">
+                    <div class="left-panel">
+                        <span>{{item.Name}}</span>
+                    </div>
+                    <div class="right-panel">
+                        <textarea id="{{item.Code}}" name="{{item.Code}}" class="_txtarea" rows="4" placeholder="{{item.Description}}" v-model="item.Content"></textarea>
+                    </div>
+                    <div style="clear:none;"></div>
+                </div>
+            </div>
+        </div>
+        <div style="margin:5em 0 0 0;">&nbsp;</div>
+        <div class="ex-ctrl-panel">
+            <div class="ex-exchange-btn" style="">@(preReserve ? "下一步" : "确定预约")</div>
+        </div>
+
+    </div>
+
+    <div class="b-d-win-model b-hide"></div>
+    <div class="b-d-win-panel b-hide">
+        <div id="ad-person">
+            <div class="w-tit"><div class="left-btn"><a href="javascript:;" id="back-selperson"><img src="http://whfront.b0.upaiyun.com/www/img/hotel/book/icon-back-blue.png" alt="" /></a></div>添加出行人</div>
+            <div>
+                <button type="button" class="add-person-btn" id="add-person-btn">+ 新增出行人</button>
+                <div class="p-list">
+                    <div v-for="item in list" class="p-item">
+                        <label for="p-ck-{{$index}}">
+                            <div class="pck">
+                                <input type="checkbox" v-if="item.select" v-model="item.ck" name="person-ck" id="p-ck-{{$index}}" data-psid="{{item.ID}}" data-psnum="{{$index}}" />
+                                <input type="checkbox" v-else name="person-ck" id="p-ck-{{$index}}" disabled="disabled" />
+                            </div>
+                            <div class="pinfo">
+                                <div class="pname">{{item.TravelPersonName}}</div>
+                                <div class="pno">{{item.CardTypeName}} {{item.IDNumber}}</div>
+                            </div>
+                            <div class="pedit"><a href="javascript:personEditType = 1;showEditPerson({{$index}});" data-psnum="{{$index}}">编辑</a></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="edit-person" style="display:none;">
+            <div class="w-tit">
+                <div class="left-btn"><a href="javascript:;" id="back-editperson"><img src="http://whfront.b0.upaiyun.com/www/img/hotel/book/icon-back-blue.png" alt="" /></a></div>
+                编辑信息
+                <div class="right-btn"><a href="javascript:;" id="save-editperson">完成</a></div>
+            </div>
+            <div class="edit-row">
+                <div class="left">姓名</div>
+                <div class="right"><input type="text" placeholder="请与证件保持一致" v-model="person.TravelPersonName" /></div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="edit-row">
+                <div class="left">证件类型</div>
+                <div class="right">
+                    <select id="idtype-select" v-model="person.IDType">
+                        <option value="1">身份证</option>
+                        <option value="2">护照</option>
+                        <option value="3">户口簿</option>
+                        <option value="4">港澳通行证</option>
+                        <option value="5">台胞证</option>
+                        <option value="10">其他</option>
+                    </select>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="edit-row">
+                <div class="left">证件号码</div>
+                <div class="right"><input type="text" placeholder="请输入证件号码" v-model="person.IDNumber" /></div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="edit-row" v-show="person.IDType!=1" id="birthday-input">
+                <div class="left">出生日期</div>
+                <div class="right"><input type="date" placeholder="yyyy-mm-dd" id="brithdayTime" v-model="person.Birthday" /></div>
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <input type="hidden" id="userid" value="@userid" />
+        <input type="hidden" id="exchangeid" value="@exid" />
+        <input type="hidden" id="skuid" value="@skuid" />
+        <input type="hidden" id="checkIn" value="@checkIn" />
+        <input type="hidden" id="checkOut" value="@checkOut" />
+        <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+
+        <input type="hidden" id="writeOtherPostion" value="@(couponSkuInfo.SKUInfo.SKU.WriteOtherPostion)" />
+        <input type="hidden" id="maxPersonNum" value="@(maxPersonNum)" />
+        <input type="hidden" id="minPersonNum" value="@(minPersonNum)" />
+        <input type="hidden" id="cartTypeList" value="@(cartTypeList)" />
+        <input type="hidden" id="travelPersonDesc" value="@(personDesc)" />
+        <input type="hidden" id="isSingleSelectDate" value="@(isSingleSelectDate ? 1 : 0)" />
+        <input type="hidden" id="dateTypeName" value="@(dateTypeName)" />
+        <input type="hidden" id="userLabel" value="@(userLabel)" />
+        <input type="hidden" id="userPlaceholder" value="@(userPlaceholder)" />
+        <input type="hidden" id="hidNotes" value="@(ViewBag.Notes)" />
+        <input type="hidden" id="preReserve" value="@(preReserve ? 1 : 0)" />
+        <input type="hidden" id="paynum" value="@(paynum)" />
+        <input type="hidden" id="fromwxuid" value="@(fromwxuid)" />
+        <input type="hidden" id="groupid" value="@(groupid)" />
+        <input type="hidden" id="openid" value="@(openid)" />
+        <input type="hidden" id="coid" value="@coid" />
+
+        <form style="display:none;">
+            <input type="text" id="loginput" value="0" />
+        </form>
+    </footer>
+
+    <script src="~/Content/js/jquery-1.10.2-min.js"></script>
+    <script src="~/Content/js/bootbox.js"></script>
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <script src="~/Content/js/framework/config.js"></script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/framework/zmjiudian.js"></script>
+    <script src="~/Content/js/framework/zmjd.modal.min.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/geetest/gt.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/login.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/coupon/couponreserve.js?v=@cssVersion"></script>
+    <script src="~/Content/js/calendar_price.js?v=@(Helpers.curAppVer())"></script>
+    @if (Utils.IsMobile())
+    {
+        <script src="~/Content/js/iscroll-lite.js"></script>
+    }
+    else
+    {
+        <script src="~/Content/js/ctrip_cquery.js"></script>
+        <script src="~/Content/js/ctrip_calendar.js"></script>
+    }
+    @Helpers.CalendarOptions(Html, calendar, dayLimitMin, dayLimitMax)
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Ctrip.APICall.ProxyLib</name>
+    </assembly>
+    <members>
+        <member name="M:Ctrip.APICall.ProxyLib.APICallProxy.#ctor(System.Int32,System.Int32,System.String)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="AllianceID">联盟ID</param>
+            <param name="SID">站点ID</param>
+            <param name="SecretKey">密钥</param>
+        </member>
+        <member name="M:Ctrip.APICall.ProxyLib.APICallProxy.Call(Ctrip.APICall.BaseLib.BaseClass.BaseAPICallEntity)">
+             <summary>
+            集群服务请求
+             </summary>
+             <param name="APICallEntity">请求实体</param>
+             <returns>返回实体</returns>
+        </member>
+        <member name="M:Ctrip.APICall.ProxyLib.APICallProxy.CallAPIAsyn(Ctrip.APICall.BaseLib.BaseClass.BaseAPICallEntity)">
+            <summary>
+            异步请求 应用于平台请求
+            </summary>
+            <param name="APICallEntity">Api请求实体</param>
+        </member>
+        <member name="M:Ctrip.APICall.ProxyLib.APICallProxy.CallAPISyn(Ctrip.APICall.BaseLib.BaseClass.BaseAPICallEntity)">
+            <summary>
+            同步请求 应用于引擎请求
+            </summary>
+            <param name="APICallEntity">Api请求实体</param>
+        </member>
+    </members>
+</doc>

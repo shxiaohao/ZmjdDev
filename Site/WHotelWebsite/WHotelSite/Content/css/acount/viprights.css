@@ -1,0 +1,114 @@
+﻿@charset "UTF-8";
+html, body {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  background: #fff;
+  -webkit-user-select: none;
+  user-select: none;
+  overflow-x: hidden; 
+  font-family:Arial;
+}
+
+/*禁止长按链接与图片弹出菜单*/
+a, img {
+  -webkit-touch-callout: none; }
+
+.cart-info {
+    width:100%;
+    margin:1.5em 0 1.5em 0;
+}
+    .cart-info .pic{
+        width:88%;
+        margin:0 auto 0 auto;
+    }
+        .cart-info .pic img{
+            width:100%;
+        }
+.acount-info {
+    width:88%;
+    margin:0em auto 0 auto;
+    padding:0 0 1em 0;
+    border-bottom:1px solid #e0e0e0;
+}
+    .acount-info .name{
+        font-size:1.1em;
+        color:#474747;
+    }
+    .acount-info .carttime{
+        font-size:0.9em;
+        color:#474747;
+    }
+.cart-rights {
+    width:88%;
+    margin:0 auto 0 auto;
+}
+    .cart-rights .lab{
+        padding:1.3em 0 1.3em 0;
+        font-size:1.2em;
+        color:#474747;
+    }
+    .cart-rights .lab-viptip-0{
+        background: url(http://whfront.b0.upaiyun.com/app/img/coupon/vip/icon_vip_0.png?v=2016112221) no-repeat right center;
+        background-size: 2.3em;
+    }
+    .cart-rights .lab-viptip-1{
+        background: url(http://whfront.b0.upaiyun.com/app/img/coupon/vip/icon_vip_1.png?v=2016112221) no-repeat right center;
+        background-size: 2.3em;
+    }
+    .cart-rights .lab-viptip-2{
+        background: url(http://whfront.b0.upaiyun.com/app/img/coupon/vip/icon_vip_2.png?v=2016112221) no-repeat right center;
+        background-size: 2.3em;
+    }
+        .cart-rights .lab .upgrade{
+            padding:0.1em 0 0em 0;
+        }
+            .cart-rights .lab .upgrade a{
+                font-size:0.7em;
+                color:#3e9ec0;
+                text-decoration:none;
+            }
+    .cart-rights .rights-border{
+        width:4.5em;
+        margin:0em 0 0em 0;
+        border-bottom:1px solid #e0e0e0;
+    }
+    .cart-rights .list{
+    
+    }
+        .cart-rights .list .item{
+            width:100%;
+            padding:1.2em 0 1.2em 0;
+            border-bottom:1px solid #e0e0e0;
+        }
+            .cart-rights .list .item .t1{
+                font-size:1em;
+                color:#474747;
+            }
+            .cart-rights .list .item .t2{
+                margin:0.2em 0 0 0;
+                font-size:0.8em;
+                color:#919191;
+            }
+        .cart-rights .list .link{
+            background: url(http://whfront.b0.upaiyun.com/app/img/coupon/vip/icon-arowright.png) no-repeat right center;
+            background-size: 0.5em;
+        }
+    .cart-rights .tip-txt{
+        margin:1.2em 0 0 0;
+        font-size:0.7em;
+        color:#919191;
+    }
+.tel {
+    width:auto;
+    margin:2em auto 1em auto;
+    padding:0.5em 1.5em 0.5em 1.5em;
+    display:table;
+    text-align:center;
+    font-size:1em;
+    color:#474747;
+    border:1px solid #919191;
+}
+    .tel .num{
+        text-decoration:none;
+        color:#0094ff;
+    }

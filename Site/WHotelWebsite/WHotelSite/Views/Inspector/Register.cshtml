@@ -1,0 +1,117 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    var cssVersion = "190001010000";
+    try
+    {
+        //var last = this.GetType().Assembly.Location;
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex)
+    {
+    }
+    
+    InspectorRegisterParam param = ViewBag.param;
+
+    ViewBag.Title = string.Format("成为品鉴师");
+    ViewBag.Keywords = string.Format("成为品鉴师");
+    ViewBag.Description = string.Format("成为品鉴师");
+
+    ViewBag.BodyStyle = "overflow-x:hidden;";
+    ViewBag.BodyClass = "inspectorregpage";
+
+    var isApp = true;// ViewBag.IsApp;
+}
+@section styles
+{
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            }
+        .modal-content {
+            width:90%;
+            margin:auto;
+        } 
+        .modal-body {
+            padding: 2.6em 0.8em 1.7em 0.8em;
+        }
+        .modal-footer {
+            margin-top:0;
+            padding: 0.7em 0.9em;
+        }
+        .btn-default, .btn-primary {
+            width: auto;
+            min-width: 4em;
+            border: none;
+            color: #3e9ec0;
+            font-size: 1.4em;
+        }
+        .box-big-btn {
+            width:96%;
+        }
+        .box-btn-bottomborder {
+            padding-bottom: 0.7em;
+            margin-bottom: 0.3em;
+            border-bottom: 1px solid #eeeded;
+            border-radius: 0;
+        }
+    </style>
+}
+<script>
+    function goto(param) {
+        var url = "@(ViewBag.AccessProtocal)" + param;
+        this.location = url;
+    }
+
+    function gotopage(param) {
+        var url = "@(ViewBag.AccessProtocalPage)" + param;
+        this.location = url;
+    }
+    
+    function loginCallback(userid) {
+        loadUserTell(userid);
+    }
+
+</script>
+<div class="reg-body">
+    <section class="reg-top">
+        <div class="main-element">
+            <div class="logotxt">报名成为品鉴师</div>
+            <div>
+                <ul class="form">
+                    <li class="li"><img src="~/Content/images/inspector/201512/user.png" class="img" alt="" /><input type="text" class="input" id="regname" placeholder="请提供您的姓名" autocomplete="off"></li>
+                    @if (isApp && !string.IsNullOrEmpty(param.RegisterResult.Mobile))
+                    {
+                        <li style="margin-top:4%;">
+                            <div class="li" style="width: 100%;margin:0;"><img src="~/Content/images/inspector/201512/tel.png" class="img" alt="" /><input type="tel" class="input" id="regtell" placeholder="您的电话号码" autocomplete="off" inputscope="Number" value="@param.RegisterResult.Mobile" readonly="readonly" /></div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li style="margin-top:4%;">
+                            <div class="li" style="float: left; width: 63%;margin:0;" id="regtel_div"><img src="~/Content/images/inspector/201512/tel.png" class="img" alt="" /><input type="tel" class="input" id="regtell" placeholder="您的电话号码" autocomplete="off" inputscope="Number" value="@param.RegisterResult.Mobile" /></div>
+                            <div style="float: right; width: 34%; text-align: right;" id="regsend_div"><button class="checkbtn">发送验证</button></div>
+                            <div class="clear"></div>
+                        </li>
+                        <li class="li" id="regcode_li"><img src="~/Content/images/inspector/201512/ccode.png" class="img" alt="" /><input type="text" class="input" id="regccode" placeholder="输入验证码" autocomplete="off"></li>
+                    }
+                </ul>
+                <button class="submit" data-userid="@param.UserId" data-isapp="@isApp">提交信息</button>
+            </div>
+            <div class="check-rule-panel">
+                <a href="javascript:;" data-checked="1" class="check-ckbox-link"><img src="~/Content/images/inspector/201512/rule-ck1.png" /></a><span>我已阅读<a href="/inspector/RulesDoc?userid=@param.UserId">品鉴师说明</a>并同意相关条款</span>
+            </div>
+        </div>
+</section>
+</div>
+<input type="hidden" id="isapptxt" value="@(isApp?"1":"0")" />
+<!--  -->
+
+@section scripts
+{
+    @Scripts.Render("~/Content/js/bootbox.js?v=" + cssVersion, "~/Content/js/inspector/inspector.js?v=" + cssVersion, "~/Content/js/inspector/register.js?v=" + cssVersion)
+}

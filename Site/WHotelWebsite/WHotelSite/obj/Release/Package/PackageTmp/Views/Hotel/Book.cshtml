@@ -1,0 +1,413 @@
+﻿@using WHotelSite
+@using WHotelSite.Params.Hotel
+
+@{
+    PackageInfoEntity package = ViewBag.package;
+    HotelPrice2 price = ViewBag.price;
+    BookParam param = ViewBag.param;
+    HotelItem3 hotel = ViewBag.hotel;
+
+    DateTime checkIn = DateTime.Parse(param.CheckIn);
+    DateTime checkOut = DateTime.Parse(param.CheckOut);
+    int nights = (checkOut - checkIn).Days;
+    ViewBag.Title = "预订" + hotel.Name + "-周末酒店";
+
+    bool isShow = !string.IsNullOrEmpty(param.ContactPhone) ? true : false;
+
+    bool isMobile = Utils.IsMobile();
+}
+
+@section breadcrumbs
+{
+    @Helpers.BreadCrumbs(Url, hotel)
+}
+
+@section scripts
+{
+    <style type="text/css">
+        .borderLess {
+            border: none;
+            padding-left: 0;
+            background-color:#ffffff;
+        }
+    </style>
+
+    <script type="text/javascript">
+        window.packagePrice = @package.Price.ToString("0");
+    </script>
+    @if(@UserState.UserID != 0){
+        <script type="text/javascript">        
+            (function(phoneNum){
+                var option = {
+                    _store: function (contactPhone) {
+                        if (window.localStorage) {
+                            localStorage.contactPhone = contactPhone;
+                        } else {
+                            var now = new Date();
+                            var expires = new Date(now.setYear(now.getFullYear() + 1));
+                            document.cookie = 'contactPhone=' + contactPhone + '; expires=' + expires.toGMTString();
+                        }
+                        return contactPhone;
+                    },
+                    _retrieve: function () {
+                        if (window.localStorage) {
+                            return localStorage.contactPhone;
+                        }
+                        return (document.cookie.match(/(^|; )contactPhone=(\d+)/) || ['', ''])[1];
+                    }
+                };
+                var isStored = option._retrieve();
+                var curPhone = $.trim(isStored);
+                if(!isStored || curPhone !== phoneNum){
+                    option._store(phoneNum);
+                }
+            }(@ViewBag.phoneNum));
+        </script>
+    }
+    @Scripts.Render("~/Content/js/hotel/book.js")
+}
+
+<!-- HotelName -->
+<div class="fullscreen">
+    <div class="container mainbody">
+        <div class="row">
+            <div class="col-md-1">
+            </div>
+
+            <div class="col-md-10">
+
+                <div class="row hidden-xs">
+                    <div class="col-md-6 hotelname">
+                        @price.Name
+                    </div>
+                    <div class="col-md-6 hotelstar">
+                        @Helpers.StarImage(Url, hotel.Star, null)
+                    </div>
+                </div>
+
+                <div class="row  mbhead hidden">
+                    <div class="col-xs-12 text-left">
+                        <button type="button" class="btn btn-default btn-sm">返回</button>
+                    </div>
+                </div>
+
+                <!-- mobile header 开始 -->
+                @*<div class="container visible-xs" style="margin-bottom:-1px;">
+                    <div class="row toolbar2 ">
+                        <div class="col-xs-3">
+                            <a href="@Url.RouteUrl("酒店套餐", new { hotel = hotel.HotelID, checkIn = param.CheckIn, checkOut = param.CheckOut })" class="btn btn-sm  btn-img01">
+                                <img src="@Url.Content("~/content/images/icon-back.png")" class="mobilepic" alt="" />
+                            </a>
+                        </div>
+                        <div class="col-xs-6 text-center listtitle">
+                            预订
+                        </div>
+                        <div class="col-sm-2 col-xs-3 text-right">
+                        </div>
+                    </div>
+                </div>*@
+                <!--  mobile header 结束 -->
+
+                <div class="row">
+                    <!-- Hotel Left -->
+                    <div class="col-md-8 zmpanel2">
+                        <div class="panel panel-default date">
+                            <div class="panel-heading hidden-xs hidden-sm">
+                                <div class="row">
+                                    <div class="title col-xs-12">
+                                        预订
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body forma">
+                                <form role="form">
+                                    <div class="row hidden-xs">
+                                        <div class="col-xs-4 col-sm-2 text-right">
+                                            到店日期：
+                                        </div>
+                                        <div class="col-xs-7 col-sm-3 form-group fontdate" id="check-in">
+                                            @param.CheckIn
+                                        </div>
+                                        <div class="col-xs-4 col-sm-2 text-right">
+                                            离店日期：
+                                        </div>
+                                        <div class="col-xs-7 col-sm-3 form-group fontdate" id="check-out">
+                                            @param.CheckOut
+                                        </div>
+                                        <div class="col-xs-12 col-sm-2 text-center number hidden-xs">
+                                            共 <b id="night-count">@nights</b> 晚
+                                        </div>
+                                    </div>
+                                    <div class="row visible-xs">
+                                        <div class="col-xs-4 text-right">
+                                            酒店名称：
+                                        </div>
+                                        <div class="col-xs-7 hotelname">
+                                            @price.Name
+                                        </div>
+                                    </div>
+                                    <div class="row visible-xs">
+                                        <div class="col-xs-4 text-right">
+                                            入住日期：
+                                        </div>
+                                        <div class="col-xs-7 form-group fontdate">
+                                            @checkIn.ToShortDateString() — @checkOut.ToShortDateString()
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-4 col-sm-2 text-right">
+                                            套餐数量：
+                                        </div>
+                                        <div class="col-xs-7 col-sm-8 form-inline packagenum" id="amount">
+                                            <button type="button" class="btn btn-default btngray">-</button>
+                                            <input type="text" class="form-control text-center" value="@param.RoomCount" style="width:20%;cursor:default" readonly />
+                                            <button type="button" class="btn btn-default btngray">+</button>
+                                        </div>
+                                        @*<div class="col-xs-7 col-sm-8 form-inline packagenum visible-xs" id="amount">
+                                            <a class="btn btn-default btngray">-</a>
+                                            <input type="text" class="form-control text-center borderLess" value="@param.RoomCount" style="width:20%;cursor:default" readonly />
+                                            <a class="btn btn-default btngray">+</a>
+                                        </div>*@
+                                        <div class="col-xs-12 col-sm-2 text-center number hidden-xs">
+                                            共 <b id="amount-label">@param.RoomCount</b> 份
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-4 col-sm-2 text-right">
+                                            总   价：
+                                        </div>
+                                        <div class="col-xs-7 col-sm-10 form-group price" style="font-size:small" id="price">
+                                            ￥<strong>@(package.Price * param.RoomCount)</strong>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default date" style="margin-bottom:4px;">
+                            <div class="panel-body forma">
+                                <form role="form" id="form">
+                                    @foreach (string contact in param.Contacts)
+                                    {
+                                        if(!isMobile){
+                                            <div class="row contact">
+                                                <div class="col-xs-4 col-sm-3 text-right">
+                                                    入住人姓名：
+                                                </div>
+                                                <div class="col-xs-7 col-sm-5 form-group">
+                                                    <div class="input-group"></div>
+                                                    <input type="text" value="@contact" class="form-control btngray" style="width:100%;">
+                                                </div>
+                                            </div>
+                                        }
+                                        else{
+                                            <div class="row contact visible-xs">
+                                                <div class="col-xs-4 col-sm-3 text-right">
+                                                    入住人姓名：
+                                                </div>
+                                                <div class="col-xs-7 col-sm-5 form-group">
+                                                    <div class="input-group"></div>
+                                                    <input type="text" value="@contact" class="form-control btngray borderLess" placeholder="姓名" style="width:100%;">
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    <div class="row mobile">
+                                        <div class="col-xs-4 col-sm-3 text-right">
+                                            手机号码：
+                                        </div>
+                                        @if(!isMobile){
+                                            <div class="col-xs-7 col-sm-5 form-group hidden-xs">
+                                                <input type="text" value="@param.ContactPhone" class="form-control btngray" style="width:100%;">
+                                            </div>
+                                        }
+                                        else{
+                                            <div class="col-xs-7 col-sm-5 form-group visible-xs">
+                                                <input type="text" value="@param.ContactPhone" class="form-control btngray borderLess" placeholder="手机号" style="width:100%;">
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="row verify">
+                                        <div class="col-xs-4 col-sm-3 text-right">
+                                            手机验证码：
+                                        </div>
+                                        <div class="col-xs-7 col-sm-5 form-group">
+                                            <table>
+                                                <tr>
+                                                    <td style="width:100%">
+                                                        @if(!isMobile){
+                                                            <input type="text" class="form-control btngray hidden-xs">
+                                                        }
+                                                        else{
+                                                            <input type="text" class="form-control btngray borderLess visible-xs" placeholder="验证码">
+                                                        }
+                                                    </td>
+                                                    <td><button type="button" class="btn btn-default" style="margin-right:-2px">获取验证码</button></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="row options">
+                                        <div class="col-xs-4 col-sm-3 text-right">
+                                            特殊要求：
+                                        </div>
+                                        <div class="col-xs-8 col-sm-8 ydform1">
+                                            @{
+                                                List<string> notes;
+                                                if (!String.IsNullOrEmpty(param.Notes[0]))
+                                                {
+                                                    notes = param.Notes.ToList();
+                                                }
+                                                else
+                                                {
+                                                    notes = package.Room.DefaultOption.Split(new char[] { ',' }).ToList();
+                                                }
+                                                int gid = 1;
+                                            }
+                                            @if(!isMobile){
+                                                <div class="row hidden-xs">
+                                                    @foreach (String str in package.Room.Options.Split(new char[] { '|' }))
+                                                    {
+                                                        foreach (string item in str.Split(new char[] { ',' }))
+                                                        {
+                                                            if (!string.IsNullOrEmpty(item))
+                                                            {
+                                                                bool on = notes.IndexOf(item) >= 0;
+                                                                if (on)
+                                                                {
+                                                                    notes.Remove(item);
+                                                                }
+                                                                <div class="col-xs-2 col-sm-2" style="margin-left:12px;margin-right:0px;">
+                                                                    <label>
+                                                                        <input name="o@(gid)" type="checkbox" value="@item" @(on ? "checked" : "")>@item
+                                                                    </label>
+                                                                </div>
+                                                            }
+                                                        }
+                                                        gid += 1;
+                                                    }
+                                                </div>
+                                            }
+                                            else{
+                                                <div class="row visible-xs">
+                                                    @foreach (String str in package.Room.Options.Split(new char[] { '|' }))
+                                                    {
+                                                        foreach (string item in str.Split(new char[] { ',' }))
+                                                        {
+                                                            if (!string.IsNullOrEmpty(item))
+                                                            {
+                                                                bool on = notes.IndexOf(item) >= 0;
+                                                                if (on)
+                                                                {
+                                                                    notes.Remove(item);
+                                                                }
+                                                                <div class="col-xs-2 col-sm-2" style="margin-left:12px;margin-right:0px;">
+                                                                    <label>
+                                                                        <input name="o@(gid)" type="checkbox" style="border-color:#000;background-color:#ffffff;" value="@item" @(on ? "checked" : "")>@item
+                                                                    </label>
+                                                                </div>
+                                                            }
+                                                        }
+                                                        gid += 1;
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-4 col-sm-3 text-right">
+                                            补充说明：
+                                        </div>
+                                        @if(!isMobile){
+                                            <div class="col-xs-7 col-sm-8 hidden-xs">
+                                                <textarea id="note" class="form-control textarea1" rows="4" placeholder="如果有其他需求请填写，酒店会尽量为您安排。">@String.Join(" ", notes)</textarea>
+                                            </div>
+                                        }
+                                        else{
+                                            <div class="col-xs-7 col-sm-8 visible-xs">
+                                                <textarea id="note" class="form-control textarea1 borderLess" rows="2" placeholder="其他需求">@String.Join(" ", notes)</textarea>
+                                            </div>
+                                        }
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="alert1 hidden-xs">
+                            酒店提示： @Helpers.ShowCancelPolicy(package.LastCancelTime) <br /><br />
+                        </div>
+
+                        <div class="text-center hidden-xs hidden-sm">
+                            @{
+                                string submitUrl = Url.Action("Submit", "Hotel", new
+                                {
+                                    hotel = hotel.HotelID,
+                                    package = package.packageBase.ID,
+                                    checkIn = param.CheckIn,
+                                    checkOut = param.CheckOut
+                                });
+                                
+                                //string submitUrl2 = Url.Action("Pay2", "Order", new
+                                //{
+                                //    hotel = hotel.HotelID,
+                                //    package = package.packageBase.ID,
+                                //    checkIn = param.CheckIn,
+                                //    checkOut = param.CheckOut
+                                //});
+                            }
+                            <button type="button" class="btn btn-03" style="width:40%;" data-submit-url="@submitUrl&amp;channel=upay">信用卡支付</button>&nbsp;&nbsp;&nbsp;
+                            <button type="button" class="btn btn-01" style="width:40%;" data-submit-url="@submitUrl&amp;channel=alipay">支付宝支付</button>
+                        </div>
+                        
+                        <div class="row visible-xs visible-sm">
+                            <div class="col-xs-1"></div>
+                            <div class="col-xs-10 text-left">
+                                <a href="javascript:;" class="btn btn-01" style="width:100%;" data-choose-url="@submitUrl">下一步</a>
+                            </div>
+                        </div>
+                        <br /><br />
+                    </div>
+                    <!-- Hotel Right -->
+                    <div class="col-md-4 visible-md visible-lg zmrightpanel">
+                        @Helpers.QRCodes(Url)
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-1">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--首先设置一个层:-->
+<div id="pop" style="display:none" class="dialog-container">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">付款确认</h4>
+            </div>
+            <div class="modal-body row">
+                <div class="col-xs-1">
+                </div>
+                <div class="col-xs-5">
+                    <div class="text-center paystatus paysuccess">
+                        <h4>已完成支付</h4>
+                        <h5><a href="javascript:;" onclick="showOrderInfo();">查看订单详情</a></h5>
+                        <input id="submitOrderValue" type="hidden" value="0" />
+                    </div>
+                </div>
+                <div class="col-xs-5">
+                    <div class="text-center paystatus payfail">
+                        <h4>支付遇到问题</h4>
+                        <h5><a href="javascript:;" id="chooseOtherPay">修改支付方式</a></h5>
+                    </div>
+                </div>
+                <div class="col-xs-1">
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

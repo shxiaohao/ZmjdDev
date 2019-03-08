@@ -1,0 +1,55 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    var userid = ViewBag.UserId;
+
+    var isInWeixin = ViewBag.isInWeixin;
+    var isApp = ViewBag.IsApp;
+    var isMobile = ViewBag.IsMobile;
+    var appType = ViewBag.AppType;
+    var appVerCode = ViewBag.AppVerCode;
+    var appBundleVer = ViewBag.AppBundleVer;
+    var appname = ViewBag.AppName;
+    
+    ViewBag.Title = "关于";
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    if (isApp)
+    {
+        ViewBag.LoadHmBaidu = false;
+    }
+}
+
+@section styles
+{
+    <link href="~/Content/css/app/aboutapp.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style type="text/css">
+    </style>
+}
+
+<div class="a-panel">
+    <div class="lg">
+        <img src="http://whfront.b0.upaiyun.com/app/img/aboutapp-logo.png" alt="" />
+    </div>
+    <div class="brief">
+        周末酒店APP致力于成为值得信赖的度假酒店及民宿导购社区，帮助你选订酒店更便捷、更放心、更省钱。
+    </div>
+    <div class="us-cts">
+        <div class="l bdr">版本号<div class="right">V@(appVerCode)@(appBundleVer > 0 ? string.Format("({0})", appBundleVer) : "")</div></div>
+        <div class="l bdr">官网<div class="right">www.zmjiudian.com</div></div>
+        <div class="l bdr">新浪微博<div class="right">weibo.com/zmjiudian</div></div>
+        <div class="l bdr">微信公众号<div class="right">zmjiudian</div></div>
+    </div>
+</div>
+<footer>
+    <div class="n">上海尚旅网络科技有限公司出品</div>
+</footer>
+
+<input type="hidden" id="userid" value="@userid" />
+<input type="hidden" id="isApp" value="@(isApp ? "1" : "0")" />
+
+@section scripts
+{
+
+}

@@ -1,0 +1,123 @@
+﻿body {
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    background:#f0f0f0;
+}
+
+
+a {
+    text-decoration:none;
+}
+
+
+/**/
+
+.main {
+    width:100%;
+    height:auto;
+    background:#fff;
+    border-bottom:1px solid #dcdcdc;
+}
+    .main .tit{
+        width:90%;
+        height:1.1em;
+        line-height:1.1em;
+        margin:0 auto 0 auto;
+        padding:2.3em 0 3.6em 0;
+        font-size:1.2em;
+        text-align:center;
+    }
+        .main .tit img{
+            width:1.3em;
+            margin:0 0 0 0;
+            vertical-align:middle;
+            margin:0 0.3em 0.3em 0;
+        }
+        .main .tit .small-tip{
+            width:100%;
+            height:auto;
+            font-size:0.8em;
+            color:#999;
+            text-align:center;
+        }
+    .main .hotel {
+        width:90%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:1.3em 0 1.3em 0;
+        border-top:1px solid #dcdcdc;
+    }
+        .main .hotel .left{
+            width:25%;
+            float:left;
+            color:#666;
+        }
+        .main .hotel .right{
+            width:auto;
+            max-width:74%;
+            float:right;
+            color:#333;
+            text-align:left;
+        }
+    .main .number {
+        width:90%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:1.2em 0 1.2em 0;
+        border-top:1px solid #dcdcdc;
+    }
+        .main .number ul{
+            width:100%;
+            padding:0;
+            margin:0;
+            list-style:none;
+        }
+            .main .number ul li{
+                width:100%;
+                height:1.5em;
+                line-height:1.5em;
+                display:inline-table;
+            }    
+            .main .number ul li .label{
+                margin-right:1em;
+                color:#666;
+            }
+            .main .number ul li .value{
+                color:#333;
+                font-family:Arial;
+            }
+.ctrl {
+    width:100%;
+    margin:1em 0 0 0;
+}
+    .ctrl .left{
+        width:50%;
+        float:left;
+    }
+        .ctrl .left .lookmineno{
+            width:90%;
+            height:2.4em;
+            line-height:2.4em;
+            margin:0 0.2em 0 auto;
+            font-size:1.2em;
+            text-align:center;
+            color:#fff;
+            background:#ff8000;
+            border-radius: 3px;
+        }
+    .ctrl .right{
+        width:50%;
+        float:right;
+    }
+        .ctrl .right .backhome{
+            width:90%;
+            height:2.4em;
+            line-height:2.4em;
+            margin:0 auto 0 0.2em;
+            font-size:1.2em;
+            text-align:center;
+            color:#fff;
+            background:#bababa;
+            border-radius: 3px;
+        }

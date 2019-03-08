@@ -1,0 +1,110 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    Layout = null;
+
+    ViewBag.Title = "商品详情";
+
+    var skuid = ViewBag.SKUID;
+    var isApp = ViewBag.IsApp;
+
+    //当前环境 (1wap/2web/3app/4weixin)
+    ProductService.Contracts.Entity.ProductServiceEnums.SceneType stype = ViewBag.SType;
+
+    var AppType = ViewBag.AppType;
+    var AppVerForIOS = ViewBag.AppVerForIOS;
+    var AppVerForAndroid = ViewBag.AppVerForAndroid;
+    var IsLatestVerApp = ViewBag.IsLatestVerApp;
+
+    //用户信息（包含会员身份）
+    UserInfoResult userInfo = ViewBag.UserInfo;
+    var userid = ViewBag.UserId;
+
+    //是否VIP
+    var isVip = ViewBag.IsVip;
+
+    SKUCouponActivityDetailModel couponSkuInfo = ViewBag.CouponSkuInfo;
+    HJD.CouponService.Contracts.Entity.CouponActivityEntity activity = couponSkuInfo.activity;
+
+    //产品图
+    var productImgFirstSrc = "http://whfront.b0.upaiyun.com/app/img/pic-null-3x2.png";
+    if (activity.PicList != null && activity.PicList.Count > 0)
+    {
+        productImgFirstSrc = activity.PicList[0].Replace("p1.test.sl.corp", "p1.zmjiudian.com");
+    }
+
+    //价格
+    var sellPrice = isVip ? couponSkuInfo.SKUInfo.SKU.VIPPrice : couponSkuInfo.SKUInfo.SKU.Price;
+
+    //查询券的状态
+    BuyCouponCheckNumResult buyResult = ViewBag.BuyResult;
+
+    //开售日
+    var selldate = activity.EffectiveTime;
+
+    //抢购结束日
+    var closedate = activity.SaleEndDate;
+
+    //购买按钮的状态
+    var canShop = true;
+    var noCanTxt = "立即购买";
+
+    //最小购买数量
+    var minBuyNum = activity.MinBuyNum;
+
+    //价格label
+    var priceLabel = activity.PriceLabel;
+
+    var now = DateTime.Now;
+
+    //页面标题
+    var pageTitle = !string.IsNullOrEmpty(activity.PageTitle) ? activity.PageTitle : "周末酒店";
+
+    //分享链接
+    var shareLink = ViewBag.ShareLink;
+
+    //分享跟踪参数的分享人对象
+    HJD.AccountServices.Entity.MemberProfileInfo shareUserInfo = ViewBag.ShareUserInfo;
+
+    //页面跟踪代码
+    var _sourcekey = ViewBag.SourceKey;
+    if (!_sourcekey.Contains("couponsales"))
+    {
+        ViewBag.LoadCNZZ = false;
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>@(pageTitle)</title>
+    <meta name="keywords" content="@ViewBag.PageKeywords" />
+    <meta name="description" content="@ViewBag.PageDescription" />
+    <meta name="copyright" content="2013, zmjiudian.com" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+
+    <link href="~/Content/css/framework/zmjd.modal.min.css" rel="stylesheet" />
+    <link href="~/Content/css/framework/zmjd.swiper.min.css" rel="stylesheet" />
+    <link href="/Content/css/framework/util.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="/content/css/coupon/couponshopforproduct.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+</head>
+<body>
+    @*<div style="margin:0 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3a%2f%2fwww.zmjd100.com%2fcoupon%2fproduct%2f4246%3fv%3d1%26v%3d1%26v%3d1">GO APP (Local) >>></a></div>*@
+    <div id="product-content">@Html.Partial("CouponShopForProductContent")</div>
+
+    @if (ViewBag.LoadCNZZ == null || ViewBag.LoadCNZZ)
+    {
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://"); document.write(unescape("%3Cspan id='cnzz_stat_icon_1275441729'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1275441729%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+    }
+</body>
+</html>

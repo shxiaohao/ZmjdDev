@@ -1,0 +1,187 @@
+body {
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    background: #fff;
+}
+
+a {
+    text-decoration: none;
+}
+
+/**/
+.top {
+    width: 100%;
+    height: auto;
+    margin: 0 auto 0 auto;
+    position: relative;
+    font-family:Arial;
+}
+
+    .top img {
+        width: 5em;
+        margin:2.6em auto 0 auto;
+        display:table;
+    }
+
+    .top .tit {
+        width: 80%;
+        height: auto;
+        margin: 0 auto 0 auto;
+        padding: 0.8em 0 0.8em 0;
+        font-size:1.3em;
+        font-weight:bold;
+        color:#2c2c2c;
+        text-align:center;
+    }
+        .top .tit .h{
+            color:#f4a950;
+        }
+
+    .top .linear {
+        width: 80%;
+        height:1px;
+        line-height:1px;
+        /*background: -webkit-radial-gradient(left, rgba(0, 0, 0, 0.02),rgba(0, 0, 0, 0.1),#FFF);*/
+        /*background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.02),rgba(0, 0, 0, 0.1),#FFF);*/
+        margin:0 auto 0 auto;
+        display:table;
+        border-bottom:1px solid #e0e0e0;
+    }
+
+    .top .brief {
+        width: 80%;
+        height: auto;
+        margin: 0 auto 0 auto;
+        padding: 1.2em 0 1.2em 0;
+        font-size:1em;
+        color:#919191;
+    }
+    .top .brief-nobr {
+        border-bottom: none;
+    }
+
+        .top .brief .sml-tip {
+            width: 100%;
+            height: auto;
+            line-height: 1.4em;
+            margin: 0 auto 0.8em auto;
+            text-align: center;
+            font-size: 0.9em;
+            color: #919191;
+        }
+
+        .top .brief .t1 {
+            width: 100%;
+            height: auto;
+            line-height: 1.6em;
+            margin: 0 auto 0 auto;
+            text-align: center;
+            font-size: 1.2em;
+            color: #000;
+        }
+
+        .top .brief .t2 {
+            width: 100%;
+            height: auto;
+            line-height: 1.5em;
+            margin: 0 auto 0 auto;
+            text-align: center;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+.ctrl {
+    width: 100%;
+    margin: 0.5em auto 2em auto;
+}
+
+    .ctrl .tip {
+        width: 100%;
+        height: 2em;
+        line-height: 1.8em;
+        text-align: center;
+        font-size: 0.9em;
+        color: #f4a650;
+    }
+
+    .ctrl .btns {
+        width: 100%;
+        height: auto;
+        text-align: center;
+    }
+
+        .ctrl .btns .magicall {
+            width: 88%;
+            height: 2.4em;
+            line-height: 2.4em;
+            margin: 0 auto 0 auto;
+            font-size: 1.2em;
+            font-family:Arial;
+            text-align: center;
+            color: #fff;
+            background: #f4a650;
+            border-radius: 8px;
+        }
+
+        .ctrl .btns .showviphotel {
+            width: 82%;
+            height: 2.8em;
+            line-height: 2.8em;
+            margin: 0.5em auto 0 auto;
+            font-family:Arial;
+            font-size: 1em;
+            text-align: center;
+            color: #fff;
+            background: #f4a650;
+            border-radius: 8px;
+        }
+
+    .ctrl .left {
+        width: 50%;
+        float: left;
+    }
+
+    .ctrl .right {
+        width: 50%;
+        float: right;
+    }
+
+.vip-answer-link {
+    width: 100%;
+    height: auto;
+    margin: 1em auto 2em auto;
+    text-align: center;
+}
+    .vip-answer-link a {
+        font-family:Arial;
+        color: #555;
+    }
+
+.vip-qrcode {
+    width: 100%;
+    height: auto;
+    margin: 0em auto 2em auto;
+    text-align: center;
+    font-family:Arial;
+}
+    .vip-qrcode .tit{
+        width: 100%;
+        height: auto;
+        margin: 0.5em auto 1em auto;
+        text-align: center;
+        font-size:0.8em;
+        color:#555;
+    }
+    .vip-qrcode .qrcode{
+        width: 100%;
+        height: auto;
+        margin: 0 auto 1em auto;
+        text-align: center;
+    }   
+        .vip-qrcode .qrcode img{
+            width: 6.5em;
+            margin:0 auto 0 auto;
+            display:table;
+        }
+

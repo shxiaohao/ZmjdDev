@@ -1,0 +1,132 @@
+﻿@model RecommendHotelResult
+@{
+    Layout = null;
+    
+    var isApp = ViewBag.IsApp;
+    var userid = ViewBag.UserId;
+    var appType = ViewBag.AppType;
+
+    var albumId = ViewBag.AlbumId;
+    
+    var listMax = 5;
+    var listCount = Model.HotelList.Count >= listMax ? listMax : Model.HotelList.Count;
+}
+
+@if (Model != null && Model.HotelList != null && Model.HotelList.Count > 0)
+{
+    <div class="home-tit home-tit-big-height home-hide">
+        @if (albumId == 1)
+        {
+            @*<div class="center">－ 其它特惠套餐 －</div>*@
+            <div class="left">其它特惠套餐</div>
+        }
+        else if (albumId == 10)
+        { 
+            @*<div class="center">－ VIP专享 －</div>*@
+            <div class="left">VIP专享</div>
+        }
+        else if (albumId == 12)
+        { 
+            @*<div class="center">－ 酒+机套餐 －</div>*@
+            <div class="left">酒+机套餐</div>
+        }
+        <div class="right">
+            @if (Model.HotelTotalCount > listMax)
+            {
+                <div class="more-link zmjd-iconfont" onclick="gourl('/App/MorePackageList?userid=@(userid)&albumId=@(albumId)&_newpage=1')">更多&#xe601;</div>
+            }
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="home-multiple home-hide" id="home-middle-banner2">
+        <div id="albnum-banner-@(albumId)" class="am-slider am-slider-default am-slider-carousel home-hlist-panel seat-banner" style="margin:0 0 0 0;">
+            <ul class="am-slides" style="border:none;">
+                @for (int i = 0; i < listCount; i++)
+                {
+                    var item = Model.HotelList[i];
+
+                    var url = string.Format("/Hotel/Package/{0}", item.PID);
+                    if (isApp)
+                    {
+                        url = string.Format("http://www.zmjiudian.com/Hotel/Package/{0}", item.PID);
+                        url += string.Format("?userid={{userid}}");
+                        url = string.Format("whotelapp://www.zmjiudian.com/gotopage?url={0}", HttpUtility.UrlEncode(url));
+                    }
+                    else
+                    {
+                        url += string.Format("?userid={0}", userid);
+                    }
+
+                    if (string.IsNullOrEmpty(item.HotelPicUrl))
+                    {
+                        item.HotelPicUrl = "http://whfront.b0.upaiyun.com/app/img/home/home-load2-16x9.png";
+                    }
+                    
+                    <li onclick="gourl('@url')">
+                        <div class="h-img">
+                            @if (i < 2)
+                            {
+                                <img src="@item.HotelPicUrl" alt="" />
+                            }
+                            else
+                            {
+                                <img data-orisrc="@item.HotelPicUrl" src="http://whfront.b0.upaiyun.com/app/img/home/home-load2-16x9.png" alt="" />
+                            }
+
+                            @if (albumId == 12)
+                            {
+                                if (item.CustomerType == 2)
+                                {
+                                    <div class="h-tit-tip-price"><span class="p-un">￥</span>@item.TotalVIPPrice</div>
+                                }
+                                else
+                                { 
+                                    <div class="h-tit-tip-price"><span class="p-un">￥</span>@item.TotalHotelPrice</div>   
+                                }
+                            }
+                            else
+                            { 
+                                <div class="h-tit-tip-price"><span class="p-un">￥</span>@item.HotelPrice</div>
+                            }
+                        </div>
+                        <div class="hname-info">
+                            <div class="hotel-name">@item.HotelName</div>
+                            <div class="hotel-packagebrief">@item.PackageBrief</div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="home-multiple-border2"></div>
+    <script>
+        $(".home-tit").show();
+        $(".home-multiple").show();
+    </script>
+    <script>
+
+        var wwidth = $(window).width();
+        var itemWidth = 363; if (wwidth < 410) itemWidth = 333; if (wwidth == 360) itemWidth = 320; if (wwidth < 350) itemWidth = 285;
+
+        //专辑套餐
+        var albnumBannerImgSwIndex@(albumId) = 2;
+        $('#albnum-banner-@(albumId)').flexslider({
+            itemWidth: itemWidth,
+            itemMargin: 6,
+            slideshow: false,
+            animationLoop: false,
+            animationSpeed: 300,
+            pauseOnAction: true,
+            controlNav: false,
+            directionNav: false,
+            after: function (slider) {
+                if (albnumBannerImgSwIndex@(albumId) < slider.slides.length) {
+                    var li = $(slider.slides[albnumBannerImgSwIndex@(albumId)]);
+                    var imgObj = li.find("img");
+                    setImgOriSrc(imgObj);
+                    albnumBannerImgSwIndex@(albumId)++;
+                }
+            }
+        });
+    </script>
+}

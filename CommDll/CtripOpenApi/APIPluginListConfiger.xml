@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<APICallPluginConfig>
+    <CtripPlugin>
+      <Hotel>Ctrip.APICall.PlugIn.SDK.Dll%Ctrip.APICall.PlugIn.SDK.HotelSDKCallPluginFactory</Hotel>
+      <Flight>Ctrip.APICall.PlugIn.SDK.Dll%Ctrip.APICall.PlugIn.SDK.FlightSDKCallPluginFactory</Flight>
+      <Group>Ctrip.APICall.PlugIn.SDK.Dll%Ctrip.APICall.PlugIn.SDK.GroupSDKCallPluginFactory</Group>
+      <Vacation>Ctrip.APICall.PlugIn.SDK.Dll%Ctrip.APICall.PlugIn.SDK.VacationSDKCallPluginFactory</Vacation>
+      <User>Ctrip.APICall.PlugIn.SDK.Dll%Ctrip.APICall.PlugIn.SDK.UserSDKCallPluginFactory</User>
+    </CtripPlugin>
+</APICallPluginConfig>

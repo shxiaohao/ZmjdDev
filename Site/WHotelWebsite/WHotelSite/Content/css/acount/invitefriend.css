@@ -1,0 +1,27 @@
+﻿@charset "UTF-8";
+html, body {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  background: #fff;
+  -webkit-user-select: none;
+  user-select: none;
+  overflow-x: hidden; 
+  font-family:Arial;
+}
+
+/*禁止长按链接与图片弹出菜单*/
+a, img {
+  -webkit-touch-callout: none; }
+
+.menu {
+    width:100%;
+    margin:0 0 1.5em 0;
+    padding:1em 0 0 0;
+}
+    .menu .item{
+        width:88%;
+        margin:0.5em auto 0 auto;
+    }
+        .menu .item img{
+            width:100%;
+        }

@@ -1,0 +1,45 @@
+﻿@model  List<HJD.HotelServices.Contracts.CanSaleHotelInfoEntity>
+@{
+    Layout = null;
+
+    var code = ViewBag.Code;
+    var appid = "wx52970d8f53c19ba1";
+    var scope = "snsapi_userinfo";
+
+    var weixinGoUrl = "";
+    if (code == "")
+    {
+        weixinGoUrl = string.Format("https://open.weixin.qq.com/connect/oauth2/authorize?appid={0}&redirect_uri={2}&response_type=code&scope={1}&state=STATE#wechat_redirect"
+        , appid, scope, HttpUtility.UrlEncode("http://www.zmjiudian.com/Active/Weixin_Xmas2015_Reg"));//
+    }
+}
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width" />
+    <title>ScopeDemo</title>
+    <script type="text/javascript">
+
+        @*var weixinGoUrl = "@weixinGoUrl";
+        if (weixinGoUrl != "") {
+            location.href = weixinGoUrl;
+        }*@
+
+        function gourl(url)
+        {
+            location.href = url;
+        }
+
+    </script>
+</head>
+<body>
+    <div class="" style="">
+        <div><a href="@weixinGoUrl">Scope!!!</a></div>
+        <div onclick="gourl('@weixinGoUrl')">Scope2222!!!</div>
+        <div>Code:@code</div>
+    </div>
+    <script src="~/Content/js/jquery-1.10.2-min.js"></script>
+</body>
+</html>

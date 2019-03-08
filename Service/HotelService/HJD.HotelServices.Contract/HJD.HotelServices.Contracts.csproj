@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C56F6F4E-023F-4A96-B570-8583C78C160D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HJD.HotelServices.Contracts</RootNamespace>
+    <AssemblyName>HJD.HotelServices.Contracts</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HJD.Framework.Entity">
+      <HintPath>..\..\..\Library\HJD.Framework.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ActiveRuleGroupEntity.cs" />
+    <Compile Include="ArguHotelComment.cs" />
+    <Compile Include="AttractionCategoryRelEntity.cs" />
+    <Compile Include="BuyMembershipSuggest.cs" />
+    <Compile Include="CanSaleHotelInfoEntity.cs" />
+    <Compile Include="CanSellCheapHotelPackageEntity.cs" />
+    <Compile Include="ChannelInfoEntity.cs" />
+    <Compile Include="ChaoZhiPriceSection.cs" />
+    <Compile Include="CheckInspectorRefHotelEx.cs" />
+    <Compile Include="HotelContactPackageEntity.cs" />
+    <Compile Include="HotelDestnInfo.cs" />
+    <Compile Include="MinPriceAndDateEntity.cs" />
+    <Compile Include="OtaRoomBedState.cs" />
+    <Compile Include="CityEntity.cs" />
+    <Compile Include="ClassBrandEntity.cs" />
+    <Compile Include="CommDictEntity.cs" />
+    <Compile Include="CommentItem.cs" />
+    <Compile Include="CommentKeyWordEntity.cs" />
+    <Compile Include="Comments\HotelTagInfoEntity.cs" />
+    <Compile Include="CommonRecord.cs" />
+    <Compile Include="CtripHotelRoomPriceNightEntity.cs" />
+    <Compile Include="DistrictAirportTrainstationEntity.cs" />
+    <Compile Include="DownLoadCtripCommentEntity.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="EvaluationerHotel.cs" />
+    <Compile Include="EvaluationHotels.cs" />
+    <Compile Include="EvaluationHotelSearchParam.cs" />
+    <Compile Include="FeaturedCommentEntity.cs" />
+    <Compile Include="HotelCommentAuditEntity.cs" />
+    <Compile Include="HotelCommentDelLogEntity.cs" />
+    <Compile Include="HotelCommentExEntity.cs" />
+    <Compile Include="HotelCommentFeedback.cs" />
+    <Compile Include="HotelCommentSummaryEntity.cs" />
+    <Compile Include="HotelCommentTop3Entity.cs" />
+    <Compile Include="HotelCommentUsefulUserEntity.cs" />
+    <Compile Include="HotelCommentWritingLog.cs" />
+    <Compile Include="HotelDistanceEntity.cs" />
+    <Compile Include="HotelFacilityEntity.cs" />
+    <Compile Include="HotelInfoChannelEntity.cs" />
+    <Compile Include="HotelInfoChannelExEntity.cs" />
+    <Compile Include="HotelClassEntity.cs" />
+    <Compile Include="HotelInfoExEntity.cs" />
+    <Compile Include="HotelItem.cs" />
+    <Compile Include="HotelListInfoEntity.cs" />
+    <Compile Include="HotelOTAEntity.cs" />
+    <Compile Include="HotelPackageRateItemEntity.cs" />
+    <Compile Include="HotelPhotoEntity.cs" />
+    <Compile Include="HotelPhotosEntity.cs" />
+    <Compile Include="HotelContacts.cs" />
+    <Compile Include="HotelPrice.cs">
+      <SubType>
+      </SubType>
+    </Compile>
+    <Compile Include="HotelRestrantEntity.cs" />
+    <Compile Include="HotelSEOKeyword.cs" />
+    <Compile Include="HotelSightEntity.cs" />
+    <Compile Include="HotelTFTRelItemEntity.cs" />
+    <Compile Include="HotelVoucherEntity.cs" />
+    <Compile Include="HotelZhongdangTag.cs" />
+    <Compile Include="HotelKeyWordEntity.cs" />
+    <Compile Include="CommentKeyWordListEntity.cs" />
+    <Compile Include="HotelKeyWordListEntity.cs" />
+    <Compile Include="HotelKeyWordWritingEntity.cs" />
+    <Compile Include="HotelReviewAddtionEntity.cs" />
+    <Compile Include="HotelReviewEntity.cs" />
+    <Compile Include="HotelReviewSaveResult.cs" />
+    <Compile Include="HotelSearchPara.cs" />
+    <Compile Include="ClassStarEntity.cs" />
+    <Compile Include="ClassZoneEntity.cs" />
+    <Compile Include="Hotel3Entity.cs" />
+    <Compile Include="IHotelService.cs" />
+    <Compile Include="HJDHotelComment.cs" />
+    <Compile Include="InterestEntity.cs" />
+    <Compile Include="InterestEntity2.cs" />
+    <Compile Include="InterestQueryEntity.cs" />
+    <Compile Include="JLHotelRoomEntity.cs" />
+    <Compile Include="JLHotelRoomPriceEntity.cs" />
+    <Compile Include="JLPackageEntity.cs" />
+    <Compile Include="ListHotelItem3.cs" />
+    <Compile Include="MoveReview17U.cs" />
+    <Compile Include="NoBedRoomEntity.cs" />
+    <Compile Include="OTACodeEntity.cs" />
+    <Compile Include="PackageCalendarPriceEntity.cs" />
+    <Compile Include="PackageEntity.cs" />
+    <Compile Include="PackageInfoEntity.cs" />
+    <Compile Include="PackageItemEntity.cs" />
+    <Compile Include="PackagePriceEntity.cs" />
+    <Compile Include="PackageRateEntity.cs" />
+    <Compile Include="PItemEntity.cs" />
+    <Compile Include="PointsConsumeEntity.cs" />
+    <Compile Include="PointsEntity.cs" />
+    <Compile Include="PointsTypeDefine.cs" />
+    <Compile Include="PointsTypeDefineEnum.cs" />
+    <Compile Include="PRateEntity.cs" />
+    <Compile Include="PRoomInfoEntity.cs" />
+    <Compile Include="PRoomOptionsEntity.cs" />
+    <Compile Include="QueryHotelResult.cs" />
+    <Compile Include="QueryHotelResult3.cs" />
+    <Compile Include="OTAPriceCtrip.cs" />
+    <Compile Include="RetailHotelEntity.cs" />
+    <Compile Include="RetailHotelInfoEntity.cs" />
+    <Compile Include="RoomInfoEntity.cs" />
+    <Compile Include="HotelTop1PackageInfoEntity.cs" />
+    <Compile Include="AlbumPackageSimpleEntity.cs" />
+    <Compile Include="SimpleHotelEntity.cs" />
+    <Compile Include="SimplePackageEntity.cs" />
+    <Compile Include="SourceIDAndObjectNameEntity.cs" />
+    <Compile Include="SpecialDealPackageEntity.cs" />
+    <Compile Include="TagEntity.cs" />
+    <Compile Include="ThemeEntity.cs" />
+    <Compile Include="TopNPackagesEntity.cs" />
+    <Compile Include="TopTownHotelPriceEntity.cs" />
+    <Compile Include="TopTownHotelRoomEntity.cs" />
+    <Compile Include="TravelPersonEntity.cs" />
+    <Compile Include="UniqueDistrictEntity.cs" />
+    <Compile Include="ValuedDistrictEntity.cs" />
+    <Compile Include="ValuedHotelEntity.cs" />
+    <Compile Include="NewestHotelCommentEntity.cs" />
+    <Compile Include="PlaceType.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RatingEntity.cs" />
+    <Compile Include="ReviewUsefulUserEntity.cs" />
+    <Compile Include="SearchHotelArgu.cs" />
+    <Compile Include="UnitInfoEntity.cs" />
+    <Compile Include="UserIdentityEntity.cs" />
+    <Compile Include="VacationSearchCondition.cs" />
+    <Compile Include="NearByHotelEntity.cs" />
+    <Compile Include="HotelRankEntity.cs" />
+    <Compile Include="TagNameEntity.cs" />
+    <Compile Include="SimpleHotelItem.cs" />
+    <Compile Include="QueryReviewResult.cs" />
+    <Compile Include="VoucherEntity.cs" />
+    <Compile Include="VRateEntity.cs" />
+    <Compile Include="WapMenuEntity.cs" />
+    <Compile Include="FilterDicEntity.cs" />
+    <Compile Include="FilterCountEntity.cs" />
+    <Compile Include="MenuEntity.cs" />
+    <Compile Include="FeaturedEntity.cs" />
+    <Compile Include="SimpleHotelRankEntity.cs" />
+    <Compile Include="FeaturedReviewEntity.cs" />
+    <Compile Include="HotelTFTReviewEntity.cs" />
+    <Compile Include="HotelInfoEditEntity.cs" />
+    <Compile Include="ListHotelItem2.cs" />
+    <Compile Include="QueryHotelResult2.cs" />
+    <Compile Include="PackageDailyEntity.cs" />
+    <Compile Include="PCountEntity.cs" />
+    <Compile Include="PDayItem.cs" />
+    <Compile Include="PDayPItem.cs" />
+    <Compile Include="HotelInterestTagEntity.cs" />
+    <Compile Include="HotelPackageRoomBedCountEntity.cs" />
+    <Compile Include="RoomSouldItemEntity.cs" />
+    <Compile Include="RoomSouldCountEntity.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy *.dll  ..\..\..\..\..\Contracts\ /s/y/f/r</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

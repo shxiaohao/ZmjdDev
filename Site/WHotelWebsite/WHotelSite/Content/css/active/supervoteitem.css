@@ -1,0 +1,790 @@
+﻿@charset "UTF-8";
+
+.main-panel .vote-item-name{
+    width:90%;
+    height:auto;
+    margin:0.4em auto 1em auto;
+    padding:0 0 0 0;
+    font-size:1.3em;
+    font-weight:bold;
+    color:#2c2c2c;
+    box-sizing:border-box;
+}
+
+.main-panel .vote-rank-info{
+    width:100%;
+    height:auto;
+    margin:1.3em auto 1em auto;
+    padding:0 0 0 0;
+    box-sizing:border-box;
+}
+    .main-panel .vote-rank-info .vote-rank-item{
+        width:calc(24% - 1px);
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0 0 0 0;
+        display:inline-block;
+        box-sizing:border-box;
+    }
+        .main-panel .vote-rank-info .vote-rank-item .tit{
+            width:90%;
+            height:auto;
+            margin:0 auto 0 auto;
+            padding:0.2em 0 0.5em 0;
+            text-align:center;
+            font-size:0.8em;
+            color:#A27855;
+        }
+        .main-panel .vote-rank-info .vote-rank-item .val{
+            width:95%;
+            height:auto;
+            margin:0 auto 0 auto;
+            padding:0 0 0 0;
+            text-align:center;
+            font-size:1.3em;
+            font-weight:bold;
+            color:#E24848;
+            box-sizing:border-box;
+            position:relative;
+        }
+            .main-panel .vote-rank-info .vote-rank-item .val img{
+                width: 1em;
+                margin:0.2em auto 0 auto;
+                display:table;
+                position:absolute;
+                left:calc(50% - 0.5em);
+                bottom:0.2em;
+            }
+    .main-panel .vote-rank-info .vote-rank-item-border-r{
+       border-right:1px solid #F3DAC2;
+    }
+
+.main-panel .tab-section {
+    width:100%;
+    margin:0 0 0 0;
+    padding:0 0 0 0;
+}
+
+.main-panel .vote-item-info {
+    width:90%;
+    height:auto;
+    margin:1.2em auto 0 auto;
+    padding:0 0 0 0;
+    box-sizing:border-box;
+}
+    .main-panel .vote-item-info .hotel-source-body {
+        width: 100%;
+        height: auto;
+        max-height: 800px;
+        overflow: hidden;
+        margin: 0 auto 0.8em auto;
+        padding: 1em 0 0 0;
+        /*display: table;*/
+    }
+    .main-panel .vote-item-info .source-more-btn {
+        width: 100%;
+        height: auto;
+        overflow: hidden;
+        margin: -4.8em auto 0 auto;
+        padding: 0 0 0 0;
+        position: relative;
+        cursor: pointer;
+    }
+        .main-panel .vote-item-info .source-more-btn .mask {
+            width: 100%;
+            height: 4em;
+            overflow: hidden;
+            margin: 0 auto 0 auto;
+            padding: 0 0 0 0;
+            background: url(http://whfront.b0.upaiyun.com/www/img/Active/supervote/img-mask-72x72.png) repeat-x top left;
+            background-size: 4em;
+        }
+        .main-panel .vote-item-info .source-more-btn .btn {
+            width: 75%;
+            height: auto;
+            overflow: hidden;
+            margin: 0 auto 0 auto;
+            padding: 0.4em 0 0.4em 0;
+            text-align: center;
+            font-size: 1em;
+            color: #977A5E;
+            border: 1px solid #977A5E;
+            border-radius: 6px;
+        }
+    .main-panel .info {
+        width:100%;
+        height:auto;
+        line-height:1.3em;
+        margin:0.5em auto 1em auto;
+        padding:0.8em 0.8em 0.8em 0.8em;
+        font-size:0.9em;
+        color: #977A5E;
+        background:#FFFCF6;
+        border-radius:4px;
+        box-sizing:border-box;
+    }
+.main-panel .vote-item-prize-info {
+    width:100%;
+    height:auto;
+    margin:1em auto 0em auto;
+    padding:0 0 0 0;
+    box-sizing:border-box;
+}
+    .main-panel .vote-item-prize-info .section-title{
+        width:90%;
+    }
+    .main-panel .vote-item-prize-info .tip{
+        width:90%;
+        margin:0.5em auto 0 auto;
+        font-size:0.7em;
+        color:#A27855;
+        text-align:center;
+    }
+    .main-panel .vote-item-prize-info .items{
+        width:100%;
+        margin:0 auto 0 auto;
+        padding:0.5em 0 0 1.6%;
+        box-sizing:border-box;
+    }
+        .main-panel .vote-item-prize-info .items .item{
+            width:49%;
+            margin:0 0 0 0;
+            padding:1em 0 0.5em 0;
+            float:left;
+        }
+            .main-panel .vote-item-prize-info .items .item .pic-info{
+                width:95%;
+                margin:0 auto 0 auto;
+                position:relative;
+                z-index:3;
+            }
+                .main-panel .vote-item-prize-info .items .item .pic-info img {
+                    width: 100%;
+                    border-radius: 4px 4px 0px 0px;
+                    /*box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.3);*/
+                }
+            .main-panel .vote-item-prize-info .items .item .level-tag{
+                width:86%;
+                height:2.8em;
+                line-height:2.4em;
+                margin:0.1em auto 0 auto;
+                padding:0 0 0 0;
+                background:url(http://whfront.b0.upaiyun.com/www/img/Active/supervote/vote-item-prize-tag-bg.png) no-repeat center center;
+                background-size:100%;
+                text-align:center;
+                font-size:0.8em;
+                font-weight:bold;
+                color:#977A5E;
+                position:relative;
+                z-index:5;
+            }
+            .main-panel .vote-item-prize-info .items .item .detail-info{
+                width:95%;
+                height:3em;
+                line-height:1.3em;
+                margin:-4.2em auto 0 auto;
+                padding:5em 0 0 0;
+                background: #FFFCF6;
+                border-radius: 4px;
+                overflow:hidden;
+				-webkit-box-orient: vertical;
+                display: -webkit-box;
+                -webkit-line-clamp: 6;
+                position:relative;
+                z-index:1;
+            }
+                .main-panel .vote-item-prize-info .items .item .detail-info .name{
+                    width:92%;
+                    height:3em;
+                    margin:0 auto 0 auto;
+                    padding:0 0 0 0;
+                    text-align:center;
+                    font-size:0.9em;
+                    font-weight:bold;
+                    color:#2c2c2c;
+                    overflow:hidden;
+				    -webkit-box-orient: vertical;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                }
+                .main-panel .vote-item-prize-info .items .item .detail-info .desc{
+                    width:92%;
+                    height:3em;
+                    margin:0 auto 0 auto;
+                    padding:0 0 0 0;
+                    text-align:center;
+                    font-size:0.8em;
+                    color:#919191;
+                    overflow:hidden;
+				    -webkit-box-orient: vertical;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                }
+.main-panel .spokesman-info {
+    width:92%;
+    height:auto;
+    margin:1em auto 0 auto;
+    padding:0 0 0 0;
+    box-sizing:border-box;
+}
+    .main-panel .spokesman-info .tip{
+        margin:0 auto 0 auto;
+        padding:0.6em 0 1.5em 0;
+        text-align:center;
+        font-size:0.7em;
+        color:#A27F61;
+    }
+    .main-panel .spokesman-info .list{
+        width:100%;
+        margin:0 auto 0 auto;
+        padding:0 0 0 0;
+    }
+        .main-panel .spokesman-info .list .nothing {
+            width: 100%;
+            margin: 0 auto 1em auto;
+            padding: 2em 0 2em 0;
+            font-size: 0.9em;
+            color: #555;
+            text-align: center;
+            background: #FFFFFF;
+            border-radius: 4px;
+        }
+        .main-panel .spokesman-info .list .item{
+            width:100%;
+            margin:0 auto 1em auto;
+            padding:1em 0 0.6em 0;
+            background: #FFFFFF;
+            border-radius: 4px;
+        }
+            .main-panel .spokesman-info .list .item .left{
+                width:8em;
+                margin:0 auto 0 auto;
+                padding:0 0 0 0;
+                float:left;
+                box-sizing:border-box;
+            }
+                .main-panel .spokesman-info .list .item .left .no{
+                    width:3.6em;
+                    margin:0 0 0 0;
+                    padding:1.2em 0 0 0;
+                    float:left;
+                    box-sizing:border-box;
+                    text-align:center;
+                }
+                    .main-panel .spokesman-info .list .item .left .no img{
+                        width:1.6em;
+                        margin:0 auto 0 auto;
+                        display:table;
+                    }
+                    .main-panel .spokesman-info .list .item .left .no .no-txt{
+                        font-size: 1.6em;
+                        font-weight:bold;
+                        color: #F85757;
+                    }
+                .main-panel .spokesman-info .list .item .left .pic{
+                    width:calc(100% - 3.6em);
+                    margin:0 0 0 0;
+                    padding:0 0 0 0;
+                    float:right;
+                    box-sizing:border-box;
+                    text-align:center;
+                }
+                    .main-panel .spokesman-info .list .item .left .pic img{
+                        width:100%;
+                        border-radius:6em;
+                    }
+            .main-panel .spokesman-info .list .item .right{
+                width:calc(100% - 9em);
+                margin:0 auto 0 auto;
+                padding:0.5em 0 0 0;
+                float:right;
+                box-sizing:border-box;
+            }
+                .main-panel .spokesman-info .list .item .right .name{
+                    width:90%;
+                    margin:0 auto 0.4em auto;
+                    padding:0 0 0 0;
+                    font-size:0.9em;
+                    font-weight:bold;
+                    color:#2c2c2c;
+                }
+                .main-panel .spokesman-info .list .item .right .txt{
+                    width:90%;
+                    margin:0 auto 0.1em auto;
+                    padding:0 0 0 0;
+                    font-size:0.8em;
+                    color:#555;
+                }
+                .main-panel .spokesman-info .list .item .right .txt2 {
+                    width: 90%;
+                    margin: 0.2em auto 0.1em auto;
+                    padding: 0 0 0 0;
+                    font-size: 0.7em;
+                    color: #919191;
+                }
+            .main-panel .spokesman-info .list .item .otherinfo {
+                width: 100%;
+                margin: 0 auto 0 auto;
+                padding: 0em 0 0 0;
+                box-sizing: border-box;
+            }
+                .main-panel .spokesman-info .list .item .otherinfo .txt2 {
+                    width: 90%;
+                    margin: 0.8em auto 0.1em auto;
+                    padding: 1em 0 0 0;
+                    font-size: 0.7em;
+                    color: #919191;
+                    text-align:center;
+                    border-top:1px dotted #e0e0e0;
+                }
+.main-panel .top-vaote-btns {
+    width: 100%;
+    margin: 0 auto 0em auto;
+    padding: 0.8em 0 0.6em 0;
+}
+    .main-panel .top-vaote-btns .go-vote-btn {
+        width: 8.2em;
+        height: 3em;
+        margin: 0 auto 0em auto;
+        padding: 0em 0 0em 0;
+        background: url(http://whfront.b0.upaiyun.com/www/img/Active/supervote/go-vote-btn-bg.png) no-repeat center center;
+        background-size: 100%;
+    }
+
+    .main-panel .top-vaote-btns .go-vote-btn-0 {
+        width: 8.2em;
+        height: 3em;
+        margin: 0 auto 0em auto;
+        padding: 0em 0 0em 0;
+        background: url(http://whfront.b0.upaiyun.com/www/img/Active/supervote/go-vote-btn-bg-0.png) no-repeat center center;
+        background-size: 100%;
+    }
+.main-panel .item-reg-tip {
+    width: 90%;
+    height: auto;
+    margin: 3em auto 2em auto;
+    padding: 0 0 0 0;
+    box-sizing: border-box;
+    position: relative;
+}
+    .main-panel .item-reg-tip .left {
+        width: calc(100% - 7em);
+        height: auto;
+        margin: 0 auto 0 auto;
+        padding: 0 0 0 0;
+        font-size: 0.9em;
+        color: #977A5E;
+        float: left;
+    }
+    .main-panel .item-reg-tip .right {
+        width: 5.8em;
+        height: auto;
+        margin: 0 auto 0 auto;
+        padding: 0 0 0 0;
+        text-align: right;
+        float: right;
+    }
+        .main-panel .item-reg-tip .right a {
+            font-size: 0.8em;
+            color: #E24848;
+            text-decoration: none;
+        }
+    .main-panel .bottom-ctrl{
+        width:100%;
+        margin:0 auto 0em auto;
+        padding:0 0 0 0;
+        position:fixed;
+        left:0;
+        bottom:0;
+        z-index:101;
+        background:#fff;
+    }
+        .main-panel .bottom-ctrl .reg-btn {
+            width: 100%;
+            height: 3em;
+            line-height: 3em;
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+            background: #F85757;
+            font-size: 0.9em;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.24);
+            display: table;
+            float: left;
+            border: none;
+        }
+        .main-panel .bottom-ctrl .reged-btn {
+            width: 100%;
+            height: 3em;
+            line-height: 3em;
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+            background: #FF900B;
+            font-size: 0.9em;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.24);
+            display: table;
+            float: left;
+            border: none;
+        }
+
+.main-panel .foot-logo {
+    width: 100%;
+    height: auto;
+    margin: 1em auto 3em auto;
+    padding: 0 0 0 0;
+    box-sizing: border-box;
+    position: relative;
+    text-align:center;
+}
+    .main-panel .foot-logo img{
+        width: 7em;
+    }
+
+
+.showPosterSection {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 210;
+}
+
+    .showPosterSection .share-info {
+        width: 100%;
+        margin: 0em auto 1em auto;
+        padding: 1em 0 1em 0;
+        background: #fff;
+    }
+
+        .showPosterSection .share-info .share-tit {
+            width: 100%;
+            font-size: 1em;
+            color: #fe8000;
+            text-align: center;
+        }
+
+        .showPosterSection .share-info .share-desc {
+            width: 88%;
+            margin: 1em auto 0 auto;
+            padding: 0 0 0 0;
+            font-size: 0.8em;
+            color: #2c2c2c;
+            text-align: center;
+        }
+
+    .showPosterSection .poster-tit {
+        width: 100%;
+        margin: 0 auto 1em auto;
+        font-size: 1em;
+        color: #fff;
+        text-align: center;
+    }
+
+    .showPosterSection .poster-img {
+        width: 80%;
+        margin: 0 auto 1em auto;
+    }
+
+        .showPosterSection .poster-img img {
+            width: 100%;
+        }
+
+    .showPosterSection .poster-result {
+        position: relative;
+    }
+
+        .showPosterSection .poster-result .poster-close {
+            width: 1.3em;
+            position: absolute;
+            top: 0.8em;
+            right: 0.8em;
+        }
+
+            .showPosterSection .poster-result .poster-close img {
+                width: 100%;
+            }
+
+    .showPosterSection .poster-loadding {
+    }
+
+        .showPosterSection .poster-loadding .loading-tip {
+            width: 100%;
+            height: auto;
+            margin: 2em 0 1em 0;
+            padding: 0 0 0 0;
+            display: table;
+            text-align: center;
+            color: #fff;
+            font-size: 1em;
+        }
+
+    .showPosterSection .mine-poster {
+        width: 88%;
+        height: auto;
+        margin: 0 auto 0 auto;
+        padding: 0 0 0em 0;
+        display: table;
+        background: #fff;
+        font-family: Arial;
+        position: relative;
+    }
+
+        .showPosterSection .mine-poster .p-img {
+            width: 100%;
+            height: 100%;
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+            display: table;
+            position: relative;
+            z-index: 5;
+        }
+
+            .showPosterSection .mine-poster .p-img img {
+                width: 100%;
+                display: block;
+            }
+
+        .showPosterSection .mine-poster .slogan-img {
+            width: 100%;
+            height: 100%;
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+            display: table;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 7;
+        }
+
+            .showPosterSection .mine-poster .slogan-img img {
+                width: 100%;
+                display: block;
+            }
+
+        .showPosterSection .mine-poster .slogan-img-bg {
+            width: 100%;
+            height: 100%;
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 6;
+            background: rgba(0, 0, 0, 0.12);
+        }
+
+        .showPosterSection .mine-poster .p-info {
+            width: 100%;
+            height: auto;
+            min-height: 5.5em;
+            margin: 0em auto 0 auto;
+            padding: 0 0 0em 0;
+            display: table;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            z-index: 10;
+        }
+
+            .showPosterSection .mine-poster .p-info .bg-img {
+                width: 100%;
+                height: auto;
+                margin: 0em auto 0em auto;
+                padding: 0 0 0 0;
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                z-index: 11;
+            }
+
+                .showPosterSection .mine-poster .p-info .bg-img img {
+                    width: 100%;
+                    display: block;
+                }
+
+            .showPosterSection .mine-poster .p-info .user-info {
+                width: 100%;
+                height: auto;
+                margin: 0em auto 0em auto;
+                padding: 0 0 0 0;
+                position: relative;
+                z-index: 12;
+            }
+
+                .showPosterSection .mine-poster .p-info .user-info .h-img {
+                    width: 100%;
+                    height: auto;
+                    margin: 0 0 0 0;
+                    padding: 0 0 0 0;
+                }
+
+                    .showPosterSection .mine-poster .p-info .user-info .h-img img {
+                        width: 3.5em;
+                        margin: 0 auto 0 auto;
+                        border-radius: 10em;
+                        border: 3px solid #fff;
+                        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
+                        display: table;
+                    }
+
+                .showPosterSection .mine-poster .p-info .user-info .u-name {
+                    width: 100%;
+                    height: auto;
+                    padding: 0em 0 0 0;
+                    float: right;
+                    text-align: center;
+                    font-size: 1em;
+                    font-weight: bold;
+                    color: #fff;
+                    box-sizing: border-box;
+                }
+
+            .showPosterSection .mine-poster .p-info .qrcode-section {
+                width: 90%;
+                height: auto;
+                margin: 0.3em auto 0 auto;
+                padding: 0 0 0.6em 0;
+                display: table;
+                position: relative;
+                z-index: 12;
+            }
+
+                .showPosterSection .mine-poster .p-info .qrcode-section .left {
+                    width: 23%;
+                    height: auto;
+                    margin: 0 0 0 0;
+                    padding: 0 0 0 0;
+                    float: left;
+                }
+
+                    .showPosterSection .mine-poster .p-info .qrcode-section .left img {
+                        width: 92%;
+                        border: 3px solid #fff;
+                    }
+
+                .showPosterSection .mine-poster .p-info .qrcode-section .right {
+                    width: calc(77% - 0.5em);
+                    height: auto;
+                    float: right;
+                }
+
+                    .showPosterSection .mine-poster .p-info .qrcode-section .right .desc-section {
+                        width: 100%;
+                        height: auto;
+                        line-height: 1.5em;
+                        margin: 0 auto 0 auto;
+                        padding: 0.4em 0 0 0;
+                        font-size: 0.8em;
+                        color: #fff;
+                        text-align: justify;
+                    }
+
+
+        .showPosterSection .mine-poster .tip {
+            width: 90%;
+            height: auto;
+            margin: 0.7em auto 0 auto;
+            padding: 0.6em 0 0 0;
+            display: table;
+            text-align: center;
+            font-size: 0.9em;
+            color: #919191;
+            border-top: 1px solid rgba(0,0,0,0.12);
+        }
+
+        .showPosterSection .mine-poster .foot {
+            width: 100%;
+            height: auto;
+            margin: 1em 0 0 0;
+            padding: 0 0 0 0;
+            display: table;
+        }
+
+            .showPosterSection .mine-poster .foot img {
+                width: 64px;
+                margin: 0 auto 0 auto;
+                display: table;
+            }
+
+    .showPosterSection .mine-poster-2 {
+        width: 88%;
+        height: auto;
+        margin: 0 auto 0 auto;
+        padding: 0 0 0 0;
+        display: table;
+        font-family: Arial;
+        position: relative;
+    }
+
+        .showPosterSection .mine-poster-2 .bg-img {
+            width: 100%;
+            height: 1em;
+            position: relative;
+            z-index: 10;
+        }
+
+            .showPosterSection .mine-poster-2 .bg-img img {
+                width: 100%;
+            }
+
+        .showPosterSection .mine-poster-2 .qrcode-section {
+            width: 26%;
+            height: auto;
+            margin: 0 auto 0 auto;
+            padding: 0 0 0 0;
+            display: table;
+            position: absolute;
+            right: 0.8em;
+            bottom: 1.6em;
+            z-index: 11;
+            text-align: center;
+        }
+
+            .showPosterSection .mine-poster-2 .qrcode-section img {
+                width: 98%;
+                background: #fff;
+            }
+
+            .showPosterSection .mine-poster-2 .qrcode-section .qrcode-tip {
+                width: 100%;
+                height: auto;
+                margin: 0 0 0 0;
+                font-size: 0.7em;
+                color: rgba(255,255,255,0.5);
+                text-align: center;
+            }
+
+.poster-bg {
+    width: 100%;
+    height: 100%;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    display: table;
+    background: rgba(0, 0, 0, 0.80);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 200;
+}
+
+.poster-tip {
+    width: 100%;
+    height: auto;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    display: table;
+    position: absolute;
+    top: 30px;
+    left: 0;
+    z-index: 200;
+    color: #fff;
+    font-size: 0.9em;
+    font-family: Arial;
+    text-align: center;
+}

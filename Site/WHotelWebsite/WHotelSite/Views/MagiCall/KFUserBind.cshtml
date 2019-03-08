@@ -1,0 +1,55 @@
+﻿@{
+    var cssVersion = "190001010000";
+    try
+    {
+        //var last = this.GetType().Assembly.Location;
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex)
+    {
+    }
+
+    ViewBag.Title = "WeiXinUserBind";
+
+    var userCode = ViewBag.UserCode;
+    var channel = ViewBag.Channel;
+    var tag = ViewBag.Tag;
+}
+<link href="~/Content/css/magicall/kfuserbind.css" rel="stylesheet" />
+<div class="reg-body">
+    <section class="reg-top">
+        <div class="main-element">
+            <div class="logotxt">用户关联</div>
+            <div>
+                <ul class="form">
+                    <li style="margin-top:4%;">
+                        <div class="li" style="float: left; width: 63%;margin:0;" id="regtel_div"><input type="tel" class="input" id="userPhone" placeholder="请录入您的手机号码" autocomplete="off" inputscope="Number" value="" /></div>
+                        <div style="float: right; width: 34%; text-align: right;" id="regsend_div"><button id="vCodeBtn" class="checkbtn">发送验证</button></div>
+                        <div class="clear"></div>
+                    </li>
+                    <li class="li" id="regcode_li" style="display:none"><input type="text" class="input" id="vCode" placeholder="请输入验证码" oninput="vCodeOnchange()" autocomplete="off"></li>
+                </ul>
+                <button class="submit" id="btnFinish" style="display:none" >完成</button>
+            </div>
+        </div>
+    </section>
+</div>
+<input type="hidden" id="userCode" value="@(userCode)" />
+<input type="hidden" id="channel" value="@(channel)" />
+<input type="hidden" id="tag" value="@(tag)" />
+@section scripts
+{
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+
+        function vCodeOnchange()
+        {
+            $("#btnFinish").show();
+        }
+    </script>
+    @Scripts.Render("~/Content/js/common.js", "~/Content/js/VerifyInput.js", "~/Content/js/bootbox.js?v=" + cssVersion, "~/Content/js/magicall/kfuserbind.js?v=" + cssVersion)
+}

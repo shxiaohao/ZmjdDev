@@ -1,0 +1,236 @@
+﻿@model BoTaoOrderEntity
+@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    var cssVersion = "190001010000";
+    try
+    {
+        //var last = this.GetType().Assembly.Location;
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex)
+    {
+    }
+
+    var orderNo = ViewBag.OrderNo;
+    var productName = ViewBag.ProductName;
+    var price = ViewBag.Price;
+    
+    ViewBag.Title = string.Format("微信支付");
+}
+@section styles
+{
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            background:#fff;
+        }
+
+        .modal-content {
+            width: 90%;
+            margin: auto;
+        }
+
+        .modal-body {
+            padding: 2.6em 0.8em 1.7em 0.8em;
+        }
+
+        .modal-footer {
+            margin-top: 0;
+            padding: 0.7em 0.9em;
+        }
+
+        .btn-default, .btn-primary {
+            width: auto;
+            min-width: 4em;
+            border: none;
+            color: #3e9ec0;
+            font-size: 1.4em;
+        }
+
+        .box-big-btn {
+            width: 96%;
+        }
+
+        .box-btn-bottomborder {
+            padding-bottom: 0.7em;
+            margin-bottom: 0.3em;
+            border-bottom: 1px solid #eeeded;
+            border-radius: 0;
+        }
+        .img-loading {
+            
+        }
+    </style>
+}
+<div class="tit-panel" style="font-size:1.5em;border-bottom:1px solid #ddd;margin:0.5em 0 1em 0;padding:0 0 0.2em 0.8em;">
+    微信支付
+</div>
+<div class="body-panel">
+    <table cellpadding="5" cellspacing="0" style="width: 100%; height: auto; font-size: 1.1em; border-bottom: 1px solid #ddd; margin: 0.5em 0 1em 0; padding: 0 0 0.2em 0.8em;">
+        <tr>
+            <td align="right" style="width:30%;">订单编号：</td>
+            <td> @(orderNo) </td>
+        </tr>
+        <tr>
+            <td align="right">商品名称：</td>
+            <td> @(productName)</td>
+        </tr>
+        <tr>
+            <td align="right">订单价格：</td>
+            <td>@(price)元</td>
+        </tr>
+        <tr>
+            <td colspan="2" ></td>
+        </tr>
+    </table>
+</div>
+
+  <div id="slider" style="margin:0 auto 0 auto; text-align:center; width:100%;position:relative;" >
+      <img src="http://whfront.b0.upaiyun.com/app/img/loading.gif" class="img-loading" alt="" />
+      <div style="width:100%;position:absolute; bottom:1em;color:#999;font-size:12px;text-align:center;">请稍后...</div>
+  </div>
+
+<div id="divReturnPay" style="display:none">
+    <a  class="btn btn-01 next" style="width:84%;margin-left:8%;" href="@ViewBag.PayOriUrl" target="_self">返&nbsp;回</a>
+</div>
+@section scripts
+{
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+    <script>
+
+        var orderid =  @(orderNo);
+
+        var PayOriUrl = "@(ViewBag.PayOriUrl)";
+
+        GetWeixinApiConfig();//注册
+        wx.ready(function (res) {
+        
+            callWeixinPay();
+        });
+        $(function () {
+            wx.checkJsApi({
+                jsApiList: ['onMenuShareTimeline', 'chooseWXPay'],
+                success: function (res) {
+                    // 以键值对的形式返回，可用的api值true，不可用为false
+                    // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+                    if (res) {
+                        //alert(res);
+                    }
+                }
+            });
+        });
+
+        function setStep( step )
+        {
+            //  $("#slider").css("width",step*20 +"%");
+            //$("#slider").append("<span> 。</span>");
+        }
+        function GetWeixinApiConfig() {
+            setStep(1);
+
+            var url = location.href.split("#")[0];
+            $.ajax({
+                url: '/Active/GetHaoYiWeixinServiceConfigInfo',
+                type: 'POST',
+                data: { url: url },
+                dataType: 'json',
+                async: false,
+                error: function () {
+                    alert("网络服务错误");
+                },
+                success: function (result) {
+                    setStep(2);
+                    if (typeof (result.Success) != undefined && result.Success == 1) {
+                        return false;
+                    }
+                    else {
+                        //得到微信config的值
+                        var array = [
+                          'checkJsApi',
+                          'onMenuShareTimeline',
+                          'onMenuShareAppMessage',
+                          'hideOptionMenu'
+                        ];
+                        if (result.jsApiList) {
+                            var jsArray = result.jsApiList.split(',');
+                            for (var key in jsArray) {
+                                array.push("" + jsArray[key]);
+                            }
+                        }
+
+                        wx.config({
+                            debug: false,
+                            appId: result.appId,
+                            timestamp: "" + result.timestamp,
+                            nonceStr: result.nonceStr,
+                            signature: result.signature,
+                            jsApiList: array
+                        });
+
+                        
+                    }
+                }
+            });
+        }
+     
+        function callWeixinPay () {
+        
+            setStep(3);
+            var dic = {};
+            $.get('/Order/WeixinPay', dic, function (result) {
+                             
+                setStep(4);
+                if (result.package != null && result.package != "" && result.package != undefined) {
+                   
+                    try {
+                        wx.chooseWXPay({
+                            timestamp: result.timeStamp,
+                            nonceStr: result.nonceStr,
+                            package: result.package,
+                            signType: result.signType,
+                            paySign: result.paySign,
+                            success: function (res) {
+                                setStep(5);    
+                                //debugger;
+                                //alert("恭喜您支付成功！");
+                                window.location = "/payment/Direct/tenpay/" + orderid ;
+                            },
+                            cancel: function () {
+                                alert("已取消微信支付！");
+                                ReturnPayPage()
+                            },
+                            fail:function(msg)
+                            {
+                                alert("微信支付出错！"  );
+                                ReturnPayPage();
+                            }
+                        });
+
+                    } catch (e) {
+                        alert("支付异常：" + e.message);
+                    }
+                }
+                else {
+                    if (result.err_code_des) {
+                        alert(result.err_code_des);
+                    }
+                    else {
+                        alert("return_msg:" + JSON.stringify( result) );
+                    }
+                }
+            });
+        }
+
+        function ReturnPayPage()
+        {
+            $("#slider").html("");
+            $("#divReturnPay").css("display","block");
+           // window.location = "/Order/ReturnPay";
+        }
+    </script>
+}

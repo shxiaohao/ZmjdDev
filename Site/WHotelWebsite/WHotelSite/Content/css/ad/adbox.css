@@ -1,0 +1,68 @@
+html, body{
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+    background:#fff;
+}
+
+.adbox-panel {
+    width:100%;
+    height:auto;
+    padding:0 0 1em 0;
+    margin:0 auto 0 auto;
+    box-sizing:border-box;
+}
+    .adbox-panel .top-img-panel{
+        width:100%;
+        height:auto;
+        line-height:0.1em;
+        margin:0 auto 0 auto;
+        box-sizing:border-box;
+    }
+        .adbox-panel .top-img-panel img{
+            width:100%;
+        }
+    .adbox-panel .bottom-link-panel{
+        width:88%;
+        height:auto;
+        margin:0 auto 0 auto;
+        text-align:center;
+        border-top:1px solid #ccc;
+    }
+        .adbox-panel .bottom-link-panel a{
+            line-height:3em;
+            font-size:1.2em;
+            color:#3e9ec0;
+        }
+
+    .adbox-panel .bottom-button-panel{
+        width:74%;
+        height:auto;
+        margin:0 auto 0em auto;
+        text-align:center;
+        color:#474747;
+        border:1px solid #474747;
+        border-radius:3px;
+    }
+        .adbox-panel .bottom-button-panel a{
+            width:100%;
+            height:2.5em;
+            line-height:2.5em;
+            text-align:center;
+            font-size:1.1em;
+            color:#474747;
+            display:table;
+        }
+    .adbox-panel .bottom-link-panel2{
+        width:88%;
+        height:auto;
+        margin:0 auto 0 auto;
+        text-align:center;
+    }
+        .adbox-panel .bottom-link-panel2 a{
+            width:100%;
+            text-align:center;
+            line-height:3em;
+            font-size:1em;
+            color:#3e9ec0;
+            display:table;
+        }

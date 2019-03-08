@@ -1,0 +1,188 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    var cssVersion = "190001010000";
+    try
+    {
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex) { }
+
+    ViewBag.Title = "周末酒店";
+
+    var userid = ViewBag.UserId;
+    
+    //本周超值精选
+    RecommendHotelResult recmHotelResult = ViewBag.RecmHotelResult;
+
+    //闪购&亲子团
+    HomePageData30 hotResult = ViewBag.HotResult;
+}
+
+@section styles
+{
+    <link href="~/Content/css/app/home.css?v=@cssVersion" rel="stylesheet" />
+    <style type="text/css">
+
+    </style>
+}
+
+@if (recmHotelResult != null && recmHotelResult.HotelList != null && recmHotelResult.HotelList.Count > 0)
+{
+    <div class="home-tit1">
+        <div class="center">超值精选</div>
+    </div>
+    <div class="home-hlist-panel">
+        @if (hotResult != null && hotResult.FlashDeals != null && hotResult.FlashDeals.Count > 0)
+        {
+            <ul>
+                @for (int i = 0; i < hotResult.FlashDeals.Count; i++)
+                {
+                    var hotItem = hotResult.FlashDeals[i];
+
+                    var discount = Convert.ToInt32((1.00 - Convert.ToDouble(hotItem.activityPrice) / Convert.ToDouble(hotItem.marketPrice > 0 ? hotItem.marketPrice : hotItem.activityPrice)) * 100.00);
+
+                    var nowTimeObj = DateTime.Now;
+                    var endTimeObj = hotItem.startSellTime;
+
+                    <li onclick="gotopage('coupon/shop/@hotItem.activityId')">
+                        <div class="h-img">
+                            <img data-original="@hotItem.hotelPicUrl" data-lazyload-id="@i" alt="">
+                            <div class="h-tit-tip">
+                                <div class="state timer-tag"
+                                     data-year0="@nowTimeObj.Year"
+                                     data-month0="@(nowTimeObj.Month-1)"
+                                     data-day0="@nowTimeObj.Day"
+                                     data-hour0="@nowTimeObj.Hour"
+                                     data-minute0="@nowTimeObj.Minute"
+                                     data-second0="@nowTimeObj.Second"
+                                     data-year1="@endTimeObj.Year"
+                                     data-month1="@(endTimeObj.Month-1)"
+                                     data-day1="@endTimeObj.Day"
+                                     data-hour1="@endTimeObj.Hour"
+                                     data-minute1="@endTimeObj.Minute"
+                                     data-second1="@endTimeObj.Second"></div>
+                            </div>
+                            <div class="h-brief-tip">
+                                <span class="name">@(hotItem.activityTitle.Length > 14 ? hotItem.activityTitle.Substring(0, 14) : hotItem.activityTitle)</span>
+                            </div>
+                        </div>
+                        <div class="h-name">
+                            <div class="left left1">
+                                <div class="hname">@hotItem.hotelName</div>
+                            </div>
+                            <div class="right right1">
+                                <div class="price2"><del><span class="pu2">￥</span><span class="p2">@hotItem.marketPrice</span></del></div>
+                            </div>
+                            <div style="clear:both;"></div>
+                            <div class="left">
+                                <div class="brief">@hotItem.packageBrief</div>
+                            </div>
+                            <div class="right">
+                                <div class="price1"><span class="discount">省@(discount)%</span><span class="pu">￥</span><span class="p1">@hotItem.activityPrice</span></div>
+                            </div>
+                            <div style="clear:both;"></div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+        @if (hotResult != null && hotResult.GroupDeals != null && hotResult.GroupDeals.Count > 0)
+        {
+            <ul>
+                @for (int i = 0; i < hotResult.GroupDeals.Count; i++)
+                {
+                    var groupItem = hotResult.GroupDeals[i];
+
+                    var discount = Convert.ToInt32((1.00 - Convert.ToDouble(groupItem.activityPrice) / Convert.ToDouble(groupItem.marketPrice > 0 ? groupItem.marketPrice : groupItem.activityPrice)) * 100.00);
+
+                    var tipImg = "";
+                    if (groupItem.labelPics != null && groupItem.labelPics.Length > 0)
+                    {
+                        tipImg = groupItem.labelPics[0];
+                    }
+
+                    var tipBgStyle = "";
+                    if (!string.IsNullOrEmpty(tipImg))
+                    {
+                        tipBgStyle = string.Format("background: url({0}) no-repeat left center;background-size: 4em;", tipImg);
+                    }
+                    
+                    <li onclick="gotopage('coupon/shop/group/@groupItem.activityId')">
+                        <div class="h-img">
+                            <img data-original="@groupItem.hotelPicUrl" data-lazyload-id="@i" alt="">
+                            <div class="h-tit-tip2" style="@(tipBgStyle)">
+                                <div class="state">仅售@(groupItem.totalNum)套</div>
+                            </div>
+                            <div class="h-brief-tip">
+                                <span class="name">@(groupItem.activityTitle.Length > 14 ? groupItem.activityTitle.Substring(0, 14) : groupItem.activityTitle)</span>
+                            </div>
+                        </div>
+                        <div class="h-name">
+                            <div class="left left1">
+                                <div class="hname">@groupItem.hotelName</div>
+                            </div>
+                            <div class="right right1">
+                                <div class="price2"><del><span class="pu2">￥</span><span class="p2">@groupItem.marketPrice</span></del></div>
+                            </div>
+                            <div style="clear:both;"></div>
+                            <div class="left">
+                                <div class="brief">@groupItem.packageBrief</div>
+                            </div>
+                            <div class="right">
+                                <div class="price1"><span class="discount">省@(discount)%</span><span class="pu">￥</span><span class="p1">@groupItem.activityPrice</span></div>
+                            </div>
+                            <div style="clear:both;"></div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+        <ul>
+            @for (int i = 0; i < recmHotelResult.HotelList.Count; i++)
+            {
+                var hotelEntity = recmHotelResult.HotelList[i];
+
+                var discount = Convert.ToInt32((1.00 - Convert.ToDouble(hotelEntity.HotelPrice) / Convert.ToDouble(hotelEntity.MarketPrice > 0 ? hotelEntity.MarketPrice : hotelEntity.HotelPrice)) * 100.00);
+
+                <li onclick="goto('hotel/@hotelEntity.HotelID')">
+                    <div class="h-img">
+                        <img data-original="@hotelEntity.HotelPicUrl" data-lazyload-id="@i" alt="">
+                        <div class="h-brief-tip">
+                            <span class="name">@(hotelEntity.ADDescription.Length > 14 ? hotelEntity.ADDescription.Substring(0, 14) : hotelEntity.ADDescription)</span>
+                        </div>
+                    </div>
+                    <div class="h-name">
+                        <div class="left left1">
+                            <div class="hname">@hotelEntity.HotelName</div>
+                        </div>
+                        <div class="right right1">
+                            <div class="price2"><del><span class="pu2">￥</span><span class="p2">@hotelEntity.MarketPrice</span></del></div>
+                        </div>
+                        <div style="clear:both;"></div>
+                        <div class="left">
+                            <div class="brief">@hotelEntity.PackageBrief</div>
+                        </div>
+                        <div class="right">
+                            <div class="price1"><span class="discount">省@(discount)%</span><span class="pu">￥</span><span class="p1">@hotelEntity.HotelPrice</span></div>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+    @*@<div style="position:fixed;top:1px;left:1px;z-index:20;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http://192.168.1.22:8081/app/home">GO APP >>></a></div>*@
+
+    @section scripts
+    {
+        <script src="~/Content/js/framework/jquery.lazyload.min.js"></script>
+        <script src="~/Content/js/app/hotpackage.js?v=@cssVersion"></script>
+        <script type="text/javascript" charset="utf-8">
+            
+        </script>
+    }

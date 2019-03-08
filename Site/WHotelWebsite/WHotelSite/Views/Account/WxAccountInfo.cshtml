@@ -1,0 +1,59 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+    
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.isInWeixin;
+    var userid = ViewBag.UserId;
+
+    var weixinAcount = ViewBag.WeixinAcount;
+    var weixinUserInfo = ViewBag.WeixinUserInfo;
+
+    ViewBag.Title = "微信用户信息读取";
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    if (isApp)
+    {
+        ViewBag.LoadHmBaidu = false;
+    }
+}
+
+@section styles
+{
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer()) " rel="stylesheet" />
+    <style>
+
+    </style>
+}
+
+<div>
+    xxxxx:xxxxx<br />
+    xxxxx:xxxxx<br />
+    xxxxx:xxxxx<br />
+    xxxxx:xxxxx<br />
+</div>
+
+
+@section scripts
+{
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script src="~/Content/js/login.js?v=@(Helpers.curAppVer())"></script>
+    <script>
+
+            //清除登录缓存
+            Store.Set("zmjd_login_cache", {'token':''});
+            var _z = Store.Get("zmjd_login_cache")
+            console.log(_z)
+
+            //清楚领取红包手机号
+            var redPhoneKey = "red_phone_key";
+            Store.Set(redPhoneKey, "");
+            var _redphone = Store.Get(redPhoneKey)
+            console.log(_redphone)
+
+        </script>
+}

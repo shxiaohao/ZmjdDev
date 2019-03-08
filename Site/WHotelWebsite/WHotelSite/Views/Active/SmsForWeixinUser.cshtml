@@ -1,0 +1,107 @@
+﻿@{
+    Layout = null;
+
+    var cssVersion = "190001010000";
+    try
+    {
+        //var last = this.GetType().Assembly.Location;
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex)
+    {
+    }
+
+    ViewBag.Title = string.Format("VIP专享顾问");
+
+    var headImg = "http://whfront.b0.upaiyun.com/www/img/Active/smsactive/weixin-kefu-003.jpg";
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <title>@(ViewBag.Title)</title>
+    <link href="~/Content/css/active/smsforweixinuser.css?v=@cssVersion" rel="stylesheet" />
+</head>
+<body>
+
+
+    <div class="one-panel">
+        <div class="head-img"><img src="@headImg" alt="" /></div>
+        <div class="nickname">小唯</div>
+        <div class="message">
+            Hi，我是小唯，你的专属度假顾问。 <br />
+            我将为你提供：<b>a.</b> 行前、行中、行后全程顾问服务；<b>b.</b> VIP优先享有的限量超值度假产品；<b>c.</b> 个性化度假定制服务。 <br />
+        </div>
+        <div class="weixinno">微信号：<span id="copy-val">shanglv003</span></div>
+        <div class="tip">请长按选择并复制微信号<br />再到微信中添加好友</div>
+    </div>
+
+    <div class="foot-txt">
+        <img src="http://whfront.b0.upaiyun.com/www/img/Active/smsactive/sms-weixinuser-foot-txt.png" alt="" />
+    </div>
+
+    <script src="~/Content/js/framework/jquery-1.10.2-min.js"></script>
+    <script src="~/Content/js/framework/jquery.zclip.min.js"></script>
+    <script src="~/Content/js/active/smsforweixinuser.js?v=@cssVersion"></script>
+    <script>
+
+        //$(function () {
+        //    $('#copy-btn').zclip({
+        //        path: 'http://whfront.b0.upaiyun.com/app/ZeroClipboard.swf',
+        //        copy: function () {
+        //            return "123";
+        //        },
+        //        afterCopy: function () {
+        //            alert("复制成功，立即前去微信查找并关注好友！");
+        //            //$("<span id='msg'/>").insertAfter($('#copy_input')).text('复制成功');
+        //        }
+        //    });
+        //});
+
+        //var copyBtn = document.querySelector('#copy-btn')
+
+        //// 点击的时候调用 copyTextToClipboard() 方法就好了.
+        //copyBtn.onclick = function () {
+        //    var _copyVal = $("#copy-val").html();
+        //    copyTextToClipboard(_copyVal)
+        //}
+
+        //function copyTextToClipboard(text) {
+        //    var textArea = document.createElement("textarea")
+
+        //    textArea.style.position = 'fixed'
+        //    textArea.style.top = 0
+        //    textArea.style.left = 012
+        //    textArea.style.width = '2em'
+        //    textArea.style.height = '2em'
+        //    textArea.style.padding = 0
+        //    textArea.style.border = 'none'
+        //    textArea.style.outline = 'none'
+        //    textArea.style.boxShadow = 'none'
+        //    textArea.style.background = 'transparent'
+        //    textArea.value = text
+
+        //    document.body.appendChild(textArea)
+
+        //    textArea.select()
+
+        //    try {
+        //        var result = document.execCommand('copy');
+        //        var msg = result ? '复制成功，立即前去微信查找并关注好友' : '若无法复制请长按微信号选择复制'
+        //        alert(msg)
+        //        console.log(msg)
+        //    } catch (err) {
+        //        alert("若无法复制请长按微信号选择复制")
+        //        console.log('若无法复制请长按微信号选择复制')
+        //    }
+
+        //    document.body.removeChild(textArea)
+        //}
+    </script>
+</body>
+</html>

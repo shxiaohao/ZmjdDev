@@ -1,0 +1,546 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    InspectorRegisterParam param = ViewBag.param;
+
+    HJD.WeixinServices.Contracts.WeixinActivityEntity weixinActiveEntity = ViewBag.WeixinActiveEntity;
+
+    var title = weixinActiveEntity.WeixinSignUpShareTitle;
+    var jsConfigApi = "/Coupon/GetWeixinConfigInfo";
+
+    if (weixinActiveEntity.WeixinAcountId == 1)
+    {
+        //title = string.Format("周末酒店");
+        jsConfigApi = "/Coupon/GetWeixinConfigInfo";
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 2)
+    {
+        //title = string.Format("周末酒店");
+        jsConfigApi = "/Coupon/GetWeixinConfigInfo";
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 3)
+    {
+        //title = string.Format("尚旅游");
+        jsConfigApi = "/Coupon/GetWeixinConfigInfoSly";
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 4)
+    {
+        //title = string.Format("尚旅游成都");
+        jsConfigApi = "/Coupon/GetWeixinConfigSlycd";
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 5)
+    {
+        //title = string.Format("美味至尚");
+        jsConfigApi = "/Coupon/GetWeixinConfigMwzs";
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 6)
+    {
+        //title = string.Format("尚旅游北京");
+        jsConfigApi = "/Coupon/GetWeixinConfigSlybj";
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 11)
+    {
+        //title = string.Format("遛娃指南服务号");
+        jsConfigApi = "/Coupon/GetWeixinConfigInfoSly";
+    }
+
+    ViewBag.Title = title;
+
+    ViewBag.BodyStyle = "overflow-x:hidden;";
+    ViewBag.BodyClass = "weixinreg_xmas_body3";
+
+    var isApp = ViewBag.IsApp;
+    var weixinUser = ViewBag.WeixinUser;
+    var weixinDraw = ViewBag.WeixinDraw;
+    var shareReadList = ViewBag.ShareReadList;
+    var luckCodeList = ViewBag.LuckCodeList;
+    var readCount = ViewBag.ReadCount;
+    var openid = ViewBag.OpenId;
+    var uid = ViewBag.Uid;
+
+    var activeid = ViewBag.ActiveId;
+    var shareTitle = ViewBag.ShareTitle;
+    var shareLink = ViewBag.ShareLink;
+    //shareLink = string.Format("http://www.zmjiudian.com/active/Weixin_SignupActive/{0}12345{1}", activeid, uid);
+    var shareImgUrl = ViewBag.ShareImgUrl;
+    var topBannerUrl = ViewBag.TopBannerUrl;
+    topBannerUrl = topBannerUrl.Replace("_jupiter", "_640x360");
+    var activeEndTime = ViewBag.ActiveEndTime;
+    var weixinSignUpResultLink = ViewBag.WeixinSignUpResultLink;
+    var havePartner = ViewBag.HavePartner;
+
+    var statResult = ViewBag.StatResult;
+
+    var subscribe = ViewBag.Subscribe;
+    var showKeyword = ViewBag.ShowKeyword;
+
+    var showFundAlter = ViewBag.ShowFundAlter;
+
+    //随机海报背景图片
+    var posterBgPic = ViewBag.PosterBgPic;
+
+    //是否弹出3倍翻倍卡
+    var showThreePosterCord = ViewBag.ShowThreePosterCord;
+
+    //翻倍卡海报文案slogan
+    var posterSloganPic = ViewBag.PosterSloganPic;
+
+    //翻倍卡是否弹出的key
+    var posterCordAlertKey = string.Format("POSTERCOEDKEY_{0}_{1}", weixinActiveEntity.ActivityID, DateTime.Now.ToString("yyyyMMddHHmmss"));
+}
+@section styles
+{
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .modal-content {
+            width: 90%;
+            margin: auto;
+        }
+
+        .modal-body {
+            padding: 2.6em 0.8em 1.7em 0.8em;
+        }
+
+        .modal-footer {
+            margin-top: 0;
+            padding: 0.7em 0.9em;
+        }
+
+        .btn-default, .btn-primary {
+            width: auto;
+            min-width: 4em;
+            border: none;
+            color: #3e9ec0;
+            font-size: 1.4em;
+        }
+
+        .box-big-btn {
+            width: 96%;
+        }
+
+        .box-btn-bottomborder {
+            padding-bottom: 0.7em;
+            margin-bottom: 0.3em;
+            border-bottom: 1px solid #eeeded;
+            border-radius: 0;
+        }
+    </style>
+    <link href="~/Content/css/active/weixinactive_luck.css?v1=@(Helpers.curAppVer())" rel="stylesheet" />
+}
+<div class="weixinreg_xmas_header">
+    <img src="@topBannerUrl" alt="" />
+    <div class="acount">
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="left"><img src="@weixinUser.Headimgurl" alt="" /></td>
+                <td class="right">
+                    @if (weixinActiveEntity.Type == 3)
+                    {
+                        <div class="name">@weixinUser.Nickname</div>
+                    }
+                    else
+                    {
+                        <div class="name">@weixinDraw.UserName</div>
+                    }
+                    <div class="phone">@weixinDraw.Phone</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="sharedone-panel">
+    <div class="modular-panel">
+        <div class="top-panel"><img src="http://whfront.b0.upaiyun.com/www/img/Active/luck/bgborder_top.png" alt="" /></div>
+
+        @*@if (weixinDraw.PartnerId == 17 || weixinDraw.PartnerId == 44 || weixinDraw.PartnerId == 18 || weixinDraw.PartnerId == 45)*@
+        @if (weixinDraw.PartnerId == 50 || weixinDraw.PartnerId == 49 || weixinDraw.PartnerId == 17 || weixinActiveEntity.WeixinAcountId == 50 || weixinActiveEntity.WeixinAcountId == 4 || weixinActiveEntity.WeixinAcountId == 5)
+        {
+            //备注： 1周末酒店 3尚旅游 4尚旅游成都 5美味至尚
+
+            //尚旅主办、iTrip主办
+            <div class="middle-panel">
+                <div class="btns">
+                    @if (activeEndTime < DateTime.Now)
+                    {
+                        if (!string.IsNullOrEmpty(weixinSignUpResultLink))
+                        {
+                            <input type="button" id="result-btn" class="result-btn" onclick="gourl('@(weixinSignUpResultLink)')" value="点击查看开奖结果" />
+                        }
+                        else
+                        {
+                            <input type="button" id="result0-btn" class="result0-btn" value="点击查看开奖结果" />
+                        }
+                    }
+                    else
+                    {
+                        if (weixinActiveEntity.IsInvite == 1)
+                        {
+                            <input type="button" id="sharefd-btn" class="sharefd-btn2" value="获取更多抽奖码" />
+                        }
+                        else
+                        {
+                            if (havePartner)
+                            {
+                                <input type="button" id="sharefd-btn" class="sharefd-btn" value="获取更多抽奖码" />
+                                <input type="button" id="partner-btn" class="partner-btn" onclick="gourl('/Active/Weixin_LuckActive_SharePartner/@(activeid)?openid=@(openid)')" value="提高中奖机会" />
+                            }
+                            else
+                            {
+                                <input type="button" id="sharefd-btn" class="sharefd-btn2" value="获取更多抽奖码" />
+                            }
+                        }
+                    }
+                </div>
+                @if (weixinActiveEntity.IsInvite == 1)
+                {
+                    <div class="tip">
+                        分享此链接给好友。每有一位好友通过您的分享链接成功参加活动，您就会额外获得一枚抽奖码。
+                    </div>
+                }
+                else
+                {
+                    if (weixinActiveEntity.NeedPaySign == 1)
+                    {
+                        <div class="tip">
+                            每3位好友阅读过您分享的链接，可获得1个众筹抽奖码。阅读的好友越多，获得的众筹抽奖码越多
+                        </div>
+                    }
+                    else
+                    {
+                        if (weixinActiveEntity.PersonMaxLucks > 0)
+                        {
+                            <div class="tip">每3位好友阅读过您分享的链接，可获得1个抽奖码。阅读的好友越多，获得的抽奖码越多！<br />（该活动每人最多获得@(weixinActiveEntity.PersonMaxLucks)个抽奖码）</div>
+                        }
+                        else
+                        {
+                            <div class="tip">每3位好友阅读过您分享的链接，可获得1个抽奖码。阅读的好友越多，获得的抽奖码越多！</div>
+                        }
+                    }
+                    @*<div class="look">
+                            <span class="h">@readCount</span>位好友已看过
+                        </div>*@
+                }
+            </div>
+            <div class="line-panel"><img src="http://whfront.b0.upaiyun.com/www/img/Active/luck/bgborder_line.png" alt="" /></div>
+        }
+        @if (activeEndTime < DateTime.Now)
+        {
+            if (!string.IsNullOrEmpty(weixinSignUpResultLink))
+            {
+                <div class="middle-panel">
+                    <div class="btns">
+                        <input type="button" id="result-btn" class="result-btn" onclick="gourl('@(weixinSignUpResultLink)')" value="点击查看开奖结果" />
+                    </div>
+                </div>
+                <div class="line-panel"><img src="http://whfront.b0.upaiyun.com/www/img/Active/luck/bgborder_line.png" alt="" /></div>
+            }
+        }
+        @if ((weixinActiveEntity.WeixinAcountId == 1 && (weixinDraw.PartnerId != 17 && weixinDraw.PartnerId != 44))
+            || (!string.IsNullOrEmpty(weixinActiveEntity.Solutions) && weixinActiveEntity.Solutions.Contains("|")))
+        {
+            var _followTxt = "中奖结果在周末酒店微信公众号<br />（微信号：zmjiudian）上公布";
+            var _followQrcodeImgUrl = "http://whfront.b0.upaiyun.com/app/img/qrcode-wx-159x159.png";
+            if (!string.IsNullOrEmpty(weixinActiveEntity.Solutions) && weixinActiveEntity.Solutions.Contains("|"))
+            {
+                _followTxt = weixinActiveEntity.Solutions.Split('|')[0];
+                _followQrcodeImgUrl = weixinActiveEntity.Solutions.Split('|')[1];
+            }
+
+            <div class="middle-panel">
+                <div class="tip2">@Html.Raw(_followTxt)</div>
+                <div class="img-div">
+                    <img src="@_followQrcodeImgUrl" alt="" />
+                </div>
+            </div>
+            <div class="line-panel"><img src="http://whfront.b0.upaiyun.com/www/img/Active/luck/bgborder_line.png" alt="" /></div>
+        }
+        <div class="middle-panel">
+            <div class="tit">我的抽奖码</div>
+            <div class="code-list">
+                <ul>
+                    @foreach (var luckCode in luckCodeList)
+                    {
+                        <li>
+                            <div class="code">@luckCode.LuckCode.ToString().PadLeft(6, '0')</div>
+                            <div class="line">&nbsp;</div>
+                            <div class="tagname">@luckCode.TagName</div>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="look">
+                <span class="h">@readCount</span>位好友已看过
+                @if (weixinActiveEntity.PersonMaxLucks > 0)
+                {
+                    <div class="_tip">（该活动每人最多获得@(weixinActiveEntity.PersonMaxLucks)个抽奖码）</div>
+                }
+            </div>
+        </div>
+        <div class="line-panel"><img src="http://whfront.b0.upaiyun.com/www/img/Active/luck/bgborder_line.png" alt="" /></div>
+        <div class="middle-panel">
+            <div class="tit">抽奖规则</div>
+            <div class="active-info">
+                <div class="t1">开奖日期</div>
+                <div class="d1">@(activeEndTime.ToString("yyyy/MM/dd"))</div>
+                @if (weixinActiveEntity.NeedPaySign == 1)
+                {
+                    <div class="t2">目前共产生<span class="b">@statResult.LuckCount</span>众筹抽奖码</div>
+                }
+                else
+                {
+                    <div class="t2">目前共产生<span class="b">@statResult.LuckCount</span>抽奖码</div>
+                }
+                <div class="d2">@(DateTime.Now > activeEndTime ? activeEndTime.ToString("yyyy/MM/dd HH:mm") : DateTime.Now.ToString("yyyy/MM/dd HH:mm"))</div>
+            </div>
+        </div>
+        <div class="bottom-panel"><img src="http://whfront.b0.upaiyun.com/www/img/Active/luck/bgborder_bottom.png" alt="" /></div>
+    </div>
+    <div class="logo">
+        @if (weixinActiveEntity.WeixinAcountId == 1)
+        {
+            <img src="http://whfront.b0.upaiyun.com/www/img/Active/luck/activity-bottom-logo.png?v=20101009" alt="" />
+        }
+        else if (weixinActiveEntity.WeixinAcountId == 2)
+        {
+            <img src="http://whfront.b0.upaiyun.com/www/img/Active/luck/activity-bottom-logo.png?v=20101009" alt="" />
+        }
+        else if (weixinActiveEntity.WeixinAcountId == 3)
+        {
+            <img src="http://whfront.b0.upaiyun.com/www/img/Active/activity-bottom-logo-sly.png" alt="" />
+        }
+        else if (weixinActiveEntity.WeixinAcountId == 4)
+        {
+            <img src="http://whfront.b0.upaiyun.com/www/img/Active/activity-bottom-logo-slycd.png" alt="" />
+        }
+        else if (weixinActiveEntity.WeixinAcountId == 5)
+        {
+            <img src="http://whfront.b0.upaiyun.com/www/img/Active/activity-bottom-logo-meiweizhishang2.png" alt="" />
+        }
+        else if (weixinActiveEntity.WeixinAcountId == 6)
+        {
+            <img src="http://whfront.b0.upaiyun.com/www/img/Active/activity-bottom-logo-slybj2.png" alt="" />
+        }
+        else if (weixinActiveEntity.WeixinAcountId == 11)
+        {
+            <img src="http://whfront.b0.upaiyun.com/www/img/Active/luck/activity-bottom-logo-liuwazhinan.png" alt="" />
+        }
+    </div>
+</div>
+
+<div class="share-poster-float">
+    <div class="s-img"><img src="@(topBannerUrl.Replace("_640x360", "_350X350"))" alt="" /></div>
+    <div class="s-tip">分享海报<br />给好友</div>
+    <div style="clear:both;"></div>
+</div>
+<div id="showPosterSection" style="display:none;"><img id="showImg" src="" alt="" /></div>
+<div class="poster-tip" style="display:none;"><div class="content">长按将图片保存到相册，发送给好友邀请参与</div></div>
+<div class="poster-tip-loading" style="display:none;">海报生成中...</div>
+<div class="poster-bg" style="display:none;"></div>
+<div class="mine-poster" style="display:none;">
+    @if (!string.IsNullOrEmpty(posterBgPic))
+    {
+        <div class="bg-img"><img src="@posterBgPic" crossorigin="anonymous" alt=""/></div>
+        <div class="qrcode-right-bottom-section"><div class="qrcode" id="poster-qrcode"></div></div>
+    }
+    else
+    {
+        <div class="stamp"><img src="http://whfront.b0.upaiyun.com/www/img/Active/luck/stamp-icon.png" crossorigin="anonymous" alt="" /></div>
+        <div class="banner"><img src="@(topBannerUrl.Replace("whphoto.b0.upaiyun.com", "p1.shang-ke.cn"))" crossorigin="anonymous" alt="" /></div>
+        <div class="tit">@(shareTitle)</div>
+        <div class="poster-qrcode-sction"><div class="poster-qrcode" id="poster-qrcode"></div></div>
+        <div class="qrcode-tip"><span class="nickname">@(weixinActiveEntity.Type == 3 ? weixinUser.Nickname : weixinDraw.UserName): </span>我觉得这个活动不错，长按二维码和我一起参与吧</div>
+    }
+</div>
+
+@if (showThreePosterCord)
+{
+    <div class="luck-cord zmjd-hide">
+        <div class="cord-close"><img src="http://whfront.b0.upaiyun.com/bg/channel/posteractive/poster-close.png" alt="关闭" /></div>
+        <div class="main-cord m-cord-1">
+            <img src="http://whfront.b0.upaiyun.com/www/img/Active/luck/main-cord-3.png?v=1" alt="翻倍卡" />
+        </div>
+        <div class="poster-cord p-cord-0" style="display:none;">
+            <div class="poster-cord-result" style="display:none;">
+                <img id="cordShowImg" src="" alt="" />
+            </div>
+            <div class="poster-cord-loadding">卡片制作中...</div>
+            <div class="poster-cord-init">
+                <div class="poster">
+                    <div class="bg-img"><img src="@(topBannerUrl.Replace("_640x360", "_640x746"))" id="poster-cord-bg-img" crossorigin="anonymous" alt="" /></div>
+                    <div class="slogan-img"><img src="@(posterSloganPic)" id="poster-cord-slogan-img" crossorigin="anonymous" alt="" /></div>
+                    <div class="slogan-img-bg"></div>
+                    <div class="logo-img"><img src="http://whfront.b0.upaiyun.com/www/img/Active/luck/luck-cord-zmjd-logo-sml.png" id="poster-cord-logo-img" crossorigin="anonymous" alt="" /></div>
+                </div>
+                <div class="bottom-section clearfloat">
+                    <div class="left">
+                        <div class="poster-cord-desc">我正在参加#年会团建赢免单#活动，长按二维码为我助力！</div>
+                    </div>
+                    <div class="right">
+                        <img src="" id="poster-cord-qrcode-img" crossorigin="anonymous" alt="" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cord-share-tip">
+            长按保存卡片，发给好友为你助力
+        </div>
+    </div>
+}
+
+<div class="sharetofriend-md" style="display:none;"></div>
+<div class="sharetofriend-panel" style="display:none;">
+    <div class="top">
+        @if (weixinActiveEntity.IsInvite == 1)
+        {
+            <div class="info">
+                点击右上角 [发送给朋友] 或 [分享到朋友圈] 邀请好友参与众筹。每有一位朋友通过您分享的链接成功参与活动，您就可以额外获得一枚抽奖码，多劳多得，赶快行动吧！
+            </div>
+        }
+        else
+        {
+            if (weixinActiveEntity.NeedPaySign == 1)
+            {
+                <div class="info">
+                    点击右上角选择 <b>[发送给朋友]</b> 邀请好友参与众筹，阅读的好友越多，获得的众筹抽奖码越多。多劳多得，没有上限，快来参与吧~
+                </div>
+            }
+            else
+            {
+                <div class="info">
+                    点击右上角选择 <b>[发送给朋友]</b> 邀请好友参与活动，阅读的好友越多，获得的抽奖码越多。多劳多得，没有上限，快来参与吧~
+                </div>
+            }
+        }
+    </div>
+    <div class="img-div">
+        @if (weixinActiveEntity.IsInvite == 1)
+        {
+            <img src="http://whfront.b0.upaiyun.com/www/img/Active/luck/active_share_double.png" alt="" />
+        }
+        else
+        {
+            <img src="http://whfront.b0.upaiyun.com/www/img/Active/luck/active_share_f1.png" alt="" />
+        }
+    </div>
+</div>
+
+<div class="mustfollow-md" style="@(subscribe == "0" ? "display:block;" : "display:none;")"></div>
+<div class="mustfollow-panel" style="@(subscribe == "0" ? "display:block;" : "display:none;")">
+    <div class="top">
+        <div class="info">长按二维码关注“周末酒店”，回复“@(showKeyword)”查看抽奖码。</div>
+    </div>
+    <div class="img-div">
+        <img src="http://whfront.b0.upaiyun.com/www/img/Active/luck/mustfollow-bg.png" alt="" />
+    </div>
+</div>
+
+<div class="fundalter-md" style="@(showFundAlter ? "display:block;" : "display:none;")"></div>
+<div class="fundalter-panel" style="@(showFundAlter  ? "display:block;" : "display:none;")">
+    <div class="ctrl"><a href="javascript:;" id="close-fundalter">X</a></div>
+    <div class="t1">成功获得住基金</div>
+    <div class="p1"><span class="p-un">￥</span>@(Convert.ToInt32(weixinActiveEntity.ReturnPrice))</div>
+    <div class="t2">可全额直接消费</div>
+    <div class="info">已发送至您的账户：@(weixinDraw.Phone) 请在周末酒店app [我的钱包] 中查看</div>
+    <div class="btns"><a href="http://app.zmjiudian.com" class="download-app">下载周末酒店app</a></div>
+</div>
+
+<input type="hidden" id="isapptxt" value="@(isApp?"1":"0")" />
+<input type="hidden" id="shareLink" value="@(shareLink)" />
+<input type="hidden" id="activeId" value="@(weixinActiveEntity.ActivityID)" />
+<input type="hidden" id="openid" value="@(openid)" />
+<input type="hidden" id="showThreePosterCord" value="@(showThreePosterCord?"1":"0")" />
+<input type="hidden" id="posterCordAlertKey" value="@(posterCordAlertKey)" />
+
+@section scripts
+{
+    <script src="~/Content/js/bootbox.js"></script>
+    <script src="~/Content/js/framework/zmjd.qrcode.min.js"></script>
+    <script src="~/Content/js/framework/html2canvas.min.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/active/weixinactive_luck.js?v1=@(Helpers.curAppVer())"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js?v=@(Helpers.curAppVer())" type="text/javascript"></script>
+    <script>
+
+        function gourl(url) {
+            location.href = url;
+        }
+
+        var shareOkGoUrl = "/Active/Weixin_LuckActive_ShareDone/@activeid?shared=1&openid=@openid";
+        var shareFriendOkGoUrl = "/Active/Weixin_LuckActive_ShareDone/@activeid?sendfriendd=1&openid=@openid";
+
+        GetWeixinApiConfig();//注册
+
+        wx.ready(function () {
+
+            wx.onMenuShareTimeline({
+                title: '@shareTitle.Replace("·", " ")',
+                link: '@shareLink',
+                imgUrl: '@shareImgUrl',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareAppMessage({
+                title: '@shareTitle.Replace("·", " ")',
+                link: '@shareLink',
+                imgUrl: '@shareImgUrl',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+        });
+
+        function GetWeixinApiConfig() {
+
+            var url = location.href.split("#")[0];
+            $.ajax({
+                url: '@(jsConfigApi)',
+                type: 'POST',
+                data: { url: url },
+                dataType: 'json',
+                async: false,
+                error: function () {
+                    console.log("网络服务错误");
+                },
+                success: function (result) {
+                    if (typeof (result.Success) != undefined && result.Success == 1) {
+                        return false;
+                    }
+                    else {
+                        //得到微信config的值
+                        var array = [
+                            'checkJsApi',
+                            'onMenuShareTimeline',
+                            'onMenuShareAppMessage',
+                            'hideOptionMenu'
+                        ];
+                        if (result.jsApiList) {
+                            var jsArray = result.jsApiList.split(',');
+                            for (var key in jsArray) {
+                                array.push("" + jsArray[key]);
+                            }
+                        }
+
+                        wx.config({
+                            debug: false,
+                            appId: result.appId,
+                            timestamp: "" + result.timestamp,
+                            nonceStr: result.nonceStr,
+                            signature: result.signature,
+                            jsApiList: array
+                        });
+                    }
+                }
+            });
+        }
+
+    </script>
+}
+

@@ -1,0 +1,36 @@
+﻿@model HomePageData30
+@{
+    Layout = null;
+
+    var isApp = ViewBag.IsApp;
+    var userid = ViewBag.UserId;
+}
+@if (Model != null && Model.GroupDeals.Count > 0)
+{
+    <ul>
+        @for (int i = 0; i < Model.GroupDeals.Count; i++)
+        {
+            var hotelEntity = Model.GroupDeals[i];
+
+            if (string.IsNullOrEmpty(hotelEntity.hotelPicUrl))
+            {
+                hotelEntity.hotelPicUrl = "http://whfront.b0.upaiyun.com/app/img/home/home-load2-3x2.png";
+            }
+            
+            <li class="li-line" onclick="gotopage('coupon/shop/group/@(hotelEntity.activityId)?_dorpdown=1')">
+                <div class="h-img">
+                    <img @(i == 0 ? string.Format(" src={0} ", hotelEntity.hotelPicUrl) : string.Format(" data-original={0} data-lazyload-id={1} ", hotelEntity.hotelPicUrl, i)) alt="">
+                    <div class="h-tit-tip-mode"></div>
+                    <div class="h-tit-tip-txt" style="left: 0.7em;top: 0.4em;">
+                        <span class="state">仅售@(hotelEntity.totalNum)套</span>
+                    </div>
+                    <div class="h-tit-tip-price"><span class="p-un">￥</span>@hotelEntity.activityPrice</div>
+                </div>
+                <div class="hname-info">
+                    <div class="hotel-name2">@hotelEntity.hotelName</div>
+                    <div class="hotel-packagebrief2">@hotelEntity.packageBrief</div>
+                </div>
+            </li>
+        }
+    </ul>
+}

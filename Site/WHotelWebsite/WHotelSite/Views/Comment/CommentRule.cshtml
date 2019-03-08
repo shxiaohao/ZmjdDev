@@ -1,0 +1,77 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    var cssVersion = "190001010000";
+    try
+    {
+        //var last = this.GetType().Assembly.Location;
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex)
+    {
+    }
+    
+    
+    ViewBag.Title = string.Format("点评规则");
+    ViewBag.Keywords = string.Format("点评规则");
+    ViewBag.Description = string.Format("点评规则");
+
+    ViewBag.BodyStyle = "overflow-x:hidden;";
+}
+@section styles
+{
+    <style>
+        html, body {
+                height: 100%;
+                margin: 0;
+            }
+    </style>
+}
+<script>
+    function gourl(url) {
+        location.href = url;
+    }
+</script>
+<link href="~/Content/css/comment/commentrules.css?v=@cssVersion" rel="stylesheet" />
+<div class="comment-rule-body">
+    <div class="comment-rule-panel">
+        <div class="comment-rule-tit">
+            为确保点评的真实有效，请仔细阅读在周末酒店平台的点评规则
+        </div>
+        <div class="comment-rule-text">
+            <p>
+                1、您承诺您所提交的点评是您本人真实入住之后的感受。
+            </p>
+            <p>
+                2、您承诺您上传的照片是您本人真实拍摄的照片。
+            </p>
+            <p>
+                3、如果您的点评出现以下内容，您的点评将被删除：
+            </p>
+            <p class="child">
+                a、仅是参观拜访餐饮，或者复制他人的点评内容或照片，将被视作无效。
+            </p>
+            <p class="child">
+                b、点评中不能出现点评人或他人的联系方式，不能发表辱骂、威胁或人身攻击的内容，不能发布带有明显商业推广意图的信息。
+            </p>
+            <p class="child">
+                c、重复内容和非文字非图片内容，将不予发布。
+            </p>
+            <p class="child">
+                d、点评文字和图片与酒店不符或无关联，将不予发布。
+            </p>
+            <p class="child">
+                e、点评涉及法律纠纷如丢失贵重物品、伤残、死亡及酒店内部重大变动、调整等内容，将不予发布。
+            </p>
+            <p>
+                4、您在“周末酒店”发表的点评仅代表您本人观点，不代表“周末酒店”赞同您观点。您发表的点评文字和图片等信息，将视作点评者默认授权并同意将其著作权无偿转让给“周末酒店”所有。
+            </p>
+            <p>
+                5、您发表的由“周末酒店”提供的免费品鉴入住的点评文字和图片等信息，将视作您默认授权并同意将您著作权无偿且独家转让给“周末酒店”所有，授予“周末酒店”将信息用作其他用途之全部权利，且不在非“周末酒店”许可的第三方平台发表。
+            </p>
+        </div>
+    </div>
+</div>

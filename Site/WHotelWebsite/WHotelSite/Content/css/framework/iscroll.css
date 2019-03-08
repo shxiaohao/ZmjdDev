@@ -1,0 +1,7 @@
+._scroller {
+    position: absolute;
+    z-index: 1;
+    width: auto;
+    height: auto;
+    display:table;
+}

@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "关于周末酒店";
+}
+
+@section header
+{
+<!-- Header -->
+<div class="container header hidden-xs">
+    <div class="row">
+        <div class="col-md-1 col-sm-12 col-xs-12"></div>
+        <div class="col-md-6 col-sm-8 col-xs-8">
+            <a style="width:224px;" href="@Url.Action("Home","Portal")">
+                <img src="@Url.Content("~/Content/images/logo.png")" style="float:left;" />
+            </a>
+            <div class="topsearch" id="topSearchDiv">
+                <input type="email" class="form-control" id="topSearchInput" placeholder="请输入酒店名称关键字">
+                <div class="searchbtn">
+                    <a href="javascript:;" id="topSearch"><img src="@Url.Content("~/Content/images/icon-topsearch.png")" alt="" /></a>
+                </div>
+            </div>
+        </div>
+        @*<div class="col-md-5 col-sm-5 col-xs-12">
+            @Helpers.BreadCrumbs(Url, ViewBag.Title)
+        </div>*@
+        <div class="col-md-5 col-sm-4 col-xs-12 headright hidden-xs">
+            @Helpers.DLLinks(Url)
+        </div>
+    </div>
+</div>
+}
+<!-- Add -->
+<div class="container mainbody hidden-xs">
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            @Helpers.BreadCrumbs(Url, ViewBag.Title)
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>
+<!-- HotelName -->
+<div class="fullscreen">
+    <div class="container mainbody">
+        <div class="row">
+            <div class="col-md-1">
+            </div>
+            <div class="col-md-10">
+
+                <div class="row mbhead hidden">
+                    <div class="col-xs-12 text-left">
+                        <button type="button" class="btn btn-default btn-sm">返回</button>
+                    </div>
+                </div>
+
+                <div class="row hidden-xs">
+                    <div class="col-md-6 articlename">
+                        关于周末酒店
+                    </div>
+                </div>
+
+                <!-- mobile header 开始 -->
+                <div class="container visible-xs" style="margin-bottom:-1px;">
+                    <div class="row toolbar2 ">
+                        <div class="col-xs-3">
+                            <button type="button" onclick="history.back()" class="btn btn-sm  btn-img01"><img src="@Url.Content("~/content/images/icon-back.png")" class="mobilepic" alt="" /></button>
+                        </div>
+                        <div class="col-xs-6 text-center listtitle">
+                            关于周末酒店
+                        </div>
+                        <div class="col-sm-2 col-xs-3 text-right">
+                        </div>
+                    </div>
+                </div>
+                <!--  mobile header 结束 -->
+
+                <div class="row">
+                    <!-- Hotel Left -->
+                    <div class="col-md-8">
+                        <div class="panel panel-default">
+                            <div class="panel-body articledetail">
+                                随着人们工作生活节奏的加快，时间越来越成为奢侈品，难得的休息时间，当然要充分利用好。 每到节假日，很多人不想再舟车劳顿，只想在附近找个环境好、舒适的度假酒店放松下。 然而，大部分的酒店预订服务商主要面向的是商旅用户，休闲度假用户想要找到合适的酒店很不方便。周末酒店正是针对这样的休闲度假需求，帮助大家便捷地发现和预订周边有特色、好口碑、价格优惠的酒店。区别于其它酒店预订服务商，我们提供以下独特的服务：
+                                <br /><br />
+                                <ul>
+                                    <li>便捷发现特色酒店 - 无论是亲子、赏花、避暑还是温泉、玩水、滑雪，总有一款适合你</li>
+                                    <li>推荐好口碑的酒店 - 源自千万条真实用户的点评，经过独特的算法过滤及筛选产生</li>
+                                    <li>全面的吃、住、玩信息 - 度假顾问精心采集整理的攻略和行程，好住、好吃、好玩不错过</li>
+                                    <li>特价优惠套餐 - 系统采集全网信息，专业挑选和采购最优惠的价格和套餐</li>
+                                </ul>
+                                我们的用户需要有品质的度假体验，同时也是聪明的消费者。 希望通过我们用心的服务，成为你最可信赖的度假顾问。
+                                <br /> <br />
+                                周末酒店是上海尚旅网络科技有限公司旗下网站及APP。
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Hotel Right -->
+                    <div class="col-md-4 visible-md visible-lg zmrightpanel">
+                        @Helpers.QRCodes(Url)
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+            </div>
+        </div>
+    </div>
+</div>

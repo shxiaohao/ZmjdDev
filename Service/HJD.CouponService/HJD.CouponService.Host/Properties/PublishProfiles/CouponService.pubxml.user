@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+您 Web 项目的发布/打包进程将使用此文件。您可以通过编辑此 MSBuild 文件
+来自定义该进程的行为。若要了解与此相关的详细信息，请访问 http://go.microsoft.com/fwlink/?LinkID=208121。
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PublishTargetUrl>\\192.168.1.113\WHAPP\Service1\CouponService</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="bin/BeITMemcached.dll">
+      <publishTime>03/09/2015 18:02:33</publishTime>
+    </File>
+    <File Include="bin/Config/CouponDB.xml">
+      <publishTime>04/11/2017 14:20:04</publishTime>
+    </File>
+    <File Include="bin/Config/Database.config">
+      <publishTime>02/04/2017 11:40:47</publishTime>
+    </File>
+    <File Include="bin/DAL/CouponDAL.cs">
+      <publishTime>04/11/2017 14:22:14</publishTime>
+    </File>
+    <File Include="bin/HJD.CouponService.Contracts.dll">
+      <publishTime>04/11/2017 15:22:10</publishTime>
+    </File>
+    <File Include="bin/HJD.CouponService.Host.dll">
+      <publishTime>04/11/2017 15:22:12</publishTime>
+    </File>
+    <File Include="bin/HJD.CouponService.Impl.dll">
+      <publishTime>04/11/2017 15:22:11</publishTime>
+    </File>
+    <File Include="bin/HJD.Framework.Cache.dll">
+      <publishTime>02/19/2016 17:36:23</publishTime>
+    </File>
+    <File Include="bin/HJD.Framework.DataAccess.dll">
+      <publishTime>03/09/2015 18:02:33</publishTime>
+    </File>
+    <File Include="bin/HJD.Framework.Entity.dll">
+      <publishTime>03/09/2015 18:02:33</publishTime>
+    </File>
+    <File Include="bin/HJD.Framework.Interface.dll">
+      <publishTime>02/19/2016 17:36:23</publishTime>
+    </File>
+    <File Include="bin/HJD.Framework.Log.dll">
+      <publishTime>03/09/2015 18:02:33</publishTime>
+    </File>
+    <File Include="bin/HJD.Framework.Utility.dll">
+      <publishTime>03/09/2015 18:02:33</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.EnterpriseLibrary.Caching.dll">
+      <publishTime>03/09/2015 18:02:34</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.EnterpriseLibrary.Common.dll">
+      <publishTime>03/09/2015 18:02:34</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.EnterpriseLibrary.Data.dll">
+      <publishTime>03/09/2015 18:02:33</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.EnterpriseLibrary.Logging.dll">
+      <publishTime>03/09/2015 18:02:34</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.ServiceLocation.dll">
+      <publishTime>03/09/2015 18:02:34</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.Unity.Configuration.dll">
+      <publishTime>03/09/2015 18:02:34</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.Unity.dll">
+      <publishTime>03/09/2015 18:02:34</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.Unity.Interception.dll">
+      <publishTime>03/09/2015 18:02:34</publishTime>
+    </File>
+    <File Include="Config/CouponDB.xml">
+      <publishTime>04/11/2017 14:20:04</publishTime>
+    </File>
+    <File Include="Config/Database.config">
+      <publishTime>02/04/2017 11:40:47</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>10/22/2015 15:38:28</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

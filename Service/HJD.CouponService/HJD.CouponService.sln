@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HJD.CouponService.Contracts", "HJD.CouponService.Contracts\HJD.CouponService.Contracts.csproj", "{018B75AE-9F83-4D87-B234-939FE3E10828}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HJD.CouponService.Host", "HJD.CouponService.Host\HJD.CouponService.Host.csproj", "{F60B1EBF-8359-4E1E-A5B3-274991D603CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HJD.CouponService.Impl", "HJD.CouponService.Impl\HJD.CouponService.Impl.csproj", "{28D10762-1A13-46A4-82D8-04D5157989F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HJD.CouponService.Test", "HJD.CouponService.Test\HJD.CouponService.Test.csproj", "{FDD30B3A-CE40-44B8-A9B7-8820A944A42A}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://192.168.1.114:8080/tfs/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = HJD.CouponService.Contracts\\HJD.CouponService.Contracts.csproj
+		SccProjectName1 = HJD.CouponService.Contracts
+		SccLocalPath1 = HJD.CouponService.Contracts
+		SccProjectUniqueName2 = HJD.CouponService.Host\\HJD.CouponService.Host.csproj
+		SccProjectName2 = HJD.CouponService.Host
+		SccLocalPath2 = HJD.CouponService.Host
+		SccProjectUniqueName3 = HJD.CouponService.Impl\\HJD.CouponService.Impl.csproj
+		SccProjectName3 = HJD.CouponService.Impl
+		SccLocalPath3 = HJD.CouponService.Impl
+		SccProjectUniqueName4 = HJD.CouponService.Test\\HJD.CouponService.Test.csproj
+		SccProjectName4 = HJD.CouponService.Test
+		SccLocalPath4 = HJD.CouponService.Test
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{018B75AE-9F83-4D87-B234-939FE3E10828}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{018B75AE-9F83-4D87-B234-939FE3E10828}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{018B75AE-9F83-4D87-B234-939FE3E10828}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{018B75AE-9F83-4D87-B234-939FE3E10828}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F60B1EBF-8359-4E1E-A5B3-274991D603CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F60B1EBF-8359-4E1E-A5B3-274991D603CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F60B1EBF-8359-4E1E-A5B3-274991D603CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F60B1EBF-8359-4E1E-A5B3-274991D603CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28D10762-1A13-46A4-82D8-04D5157989F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28D10762-1A13-46A4-82D8-04D5157989F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28D10762-1A13-46A4-82D8-04D5157989F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28D10762-1A13-46A4-82D8-04D5157989F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDD30B3A-CE40-44B8-A9B7-8820A944A42A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDD30B3A-CE40-44B8-A9B7-8820A944A42A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDD30B3A-CE40-44B8-A9B7-8820A944A42A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDD30B3A-CE40-44B8-A9B7-8820A944A42A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,245 @@
+﻿body {
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+html {
+    background: #E4D9EA;
+}
+
+a {
+    text-decoration:none;
+}
+
+.top-body {
+    width: 100%;
+    height: auto;
+    background: url(../../images/active/top20hotel/top-bg.png) no-repeat top left;
+    background-size: 100%;
+}
+
+.top-tit {
+    width:100%;
+    height:auto;
+}
+.top-tit img{
+    width:86%;
+    margin:1.5em 0 0 7%;
+}
+.list-hotel {
+}
+.ul-hotel {
+    width:100%;
+    height:auto;
+    list-style:none;
+    padding:0;
+}
+.item-hotel {
+    width:94%;
+    height:auto;
+    margin:0 auto 1em auto;
+}
+    .item-hotel .head {
+        width:100%;
+        height:auto;
+    }
+        .item-hotel .head img{
+            width:100%;
+        }
+
+    .item-hotel .body {
+        width: 100%;
+        height:auto;
+        background: url(../../images/active/top20hotel/item-mid.png) repeat top left;
+        background-size: 100%;
+        position:relative;
+        margin-top:-5px;
+        padding:0 0 0.4em 0;
+    }
+
+    .item-hotel .title {
+        width: 96%;
+        height:auto;
+        margin:0 0 1em 2%;
+    }
+        .item-hotel .title .left{
+            width:20%;
+            float:left;
+            padding:0.4em 0 0 0;
+            text-align:right;
+        }
+        .item-hotel .title .right{
+            width:74%;
+            float:right;
+            position:relative;
+            margin:-0.8em 1.5% 0 0;
+        }
+
+    .item-hotel .pic {
+        width: 94%;
+        height:auto;
+        margin:0 0 0 3%;
+    }
+        .item-hotel .pic img {
+            width: 100%;
+        }
+    .item-hotel .info {
+        width: 94%;
+        height:auto;
+        line-height:1.3em;
+        margin:0.6em 0 0 3%;
+        color:#999;
+        font-size:0.9em;
+    }
+        .item-hotel .info .tit{
+            color:#000;
+            font-size:1em;
+        }
+
+    .item-hotel .foot {
+        width:100%;
+        height:auto;
+        position:relative;
+        margin-top:-2px;
+    }
+        .item-hotel .foot img{
+            width:100%;
+        }
+
+    .item-hotel .hotel-name {
+        width:95%;
+        height:auto;
+        color:#000;
+        font-size:1.1em;
+    }
+    .item-hotel .hotel-info {
+        width:100%;
+        height:auto;
+        margin:0.4em 0 0 0;
+        padding:0.4em 0 0 0;
+        border-top:1px solid #ececec;
+    }
+    .item-hotel .hotel-package {
+        width:100%;
+        height:auto;
+        color:#999;
+        font-size:0.9em;
+    }
+    .item-hotel .hotel-price span {
+        width:100%;
+        height:auto;
+        color:#999;
+        font-size:0.9em;
+    }
+    .item-hotel .hotel-price .price{
+        color:#FD9026;
+        font-size:1.2em;
+    }
+    .item-hotel .hotel-price .price .t{
+        color:#FD9026;
+        font-size:0.6em;
+    }
+
+/* Number */
+    .item-hotel .item-no-1 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 0;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-2 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -2.4em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-3 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -4.8em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-4 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -6.8em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-5 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -9.0em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-6 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -11.1em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-7 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -13.4em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-8 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -15.5em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-9 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -17.7em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-10 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -19.9em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-11 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -22.0em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-12 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -24.4em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-13 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -26.7em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-14 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -28.7em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-15 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -31.0em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-16 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -33.0em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-17 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -35.3em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-18 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -37.4em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-19 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -39.6em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-20 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -41.9em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-21 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -44.3em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-22 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -46.6em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-23 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -48.9em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-24 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -50.9em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+    .item-hotel .item-no-25 {
+        background: url(../../images/active/top20hotel/item-no-list-25.png) no-repeat 0 -53.2em;
+        background-size: 4em; padding:0.3em 4em;
+    }
+

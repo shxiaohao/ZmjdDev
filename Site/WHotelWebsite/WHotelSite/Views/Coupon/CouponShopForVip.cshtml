@@ -1,0 +1,210 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.isInWeixin;
+    var aid = ViewBag.Aid;
+    var userid = ViewBag.UserId; //userid = "4512064";
+    var userPhone = ViewBag.UserPhone;
+
+    CouponActivityDetailModel coupondetail = ViewBag.CouponDetail;
+
+    var activity = coupondetail.activity;
+    var pItems = coupondetail.DailyItems;
+    var noticeItems = coupondetail.NoticeItems;
+
+    //开售日
+    var selldate = activity.EffectiveTime; //selldate = DateTime.Parse("2015-07-08 12:43:15");
+
+    //购买按钮的状态
+    var canShop = true;
+
+    var AppType = ViewBag.AppType;
+    var AppVerForIOS = ViewBag.AppVerForIOS;
+    var AppVerForAndroid = ViewBag.AppVerForAndroid;
+    var IsLatestVerApp = ViewBag.IsLatestVerApp;
+
+    //最小购买数量
+    var minBuyNum = activity.MinBuyNum;
+
+    //价格label
+    var priceLabel = activity.PriceLabel;
+
+    //top bg & bottom bg
+    var topBgImgSrc = "";
+    var bottomBgImgSrc = "";
+    var bottomBgImgSrc2 = "";
+    switch (activity.ID)
+    {
+        case 100250:
+        case 100399:
+            {
+                topBgImgSrc = "http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-top-bg-199.png?v=2016111801";
+                bottomBgImgSrc = "http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-bottom-bg-199-1-new.png?v=2016111801";
+                bottomBgImgSrc2 = "http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-bottom-bg-199-2.png?v=2016111801";
+                break;
+            }
+        case 100929:
+            {
+                topBgImgSrc = "http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-top-bg-199.png?v=2016111801";
+                bottomBgImgSrc = "http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-bottom-bg-199-1-new.png?v=2016111801";
+                bottomBgImgSrc2 = "http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-bottom-bg-199-2-nr.png?v=20170217";
+                break;
+            }
+        case 100398:
+            {
+                topBgImgSrc = "http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-top-bg-599.png?v=2016111801";
+                bottomBgImgSrc = "http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-bottom-bg-599-1.png?v=2016111801";
+                bottomBgImgSrc2 = "http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-bottom-bg-599-2.png?v=2017022301";
+                break;
+            }
+    }
+
+    UserInfoResult userInfo = ViewBag.UserInfo;
+    HJDAPI.Common.Helpers.Enums.CustomerType viptype = (HJDAPI.Common.Helpers.Enums.CustomerType)userInfo.CustomerType;
+
+    //是否升级599？
+    var isUpgrade = false;
+    switch (viptype)
+    {
+        case Enums.CustomerType.vip199nr:
+        case Enums.CustomerType.vip199:
+        case Enums.CustomerType.vip3M:
+        case Enums.CustomerType.vip6M:
+            {
+                //当199会员购买599会员时，显示升级操作
+                if (activity.ID == 100398)
+                {
+                    isUpgrade = true;
+                    topBgImgSrc = "http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-top-bg-599-400.jpg?v=2016122201";
+                }
+                break;
+            }
+    }
+    
+    //页面标题
+    var pageTitle = !string.IsNullOrEmpty(activity.PageTitle) ? activity.PageTitle : "周末酒店";
+    ViewBag.Title = pageTitle;
+
+    //分享跟踪参数的分享人对象
+    HJD.AccountServices.Entity.MemberProfileInfo shareUserInfo = ViewBag.ShareUserInfo;
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    if (isApp)
+    {
+        ViewBag.LoadHmBaidu = false;
+    }
+}
+
+@section styles
+{
+    <link href="/content/css/coupon/couponshopforvip.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <style type="text/css">
+    </style>
+}
+
+<div class="vip-top">
+    <img src="@topBgImgSrc" alt="" />
+</div>
+<div class="vip-phone">
+    @if (userid == "0")
+    {
+        <div class="name-line">
+            <input type="text" id="userName" class="userName" placeholder="输入姓名" />
+        </div>
+        <div class="phone-line">
+            <input type="tel" id="userPhone" class="userPhone" placeholder="输入手机号" /><button type="button" class="vCodeBtn">获取验证码</button>
+        </div>
+        <div class="vcode-line">
+            <input type="number" id="vCode" class="vCode" placeholder="输入验证码" />
+        </div>
+    }
+    else
+    {
+        if (!string.IsNullOrEmpty(userPhone))
+        {
+            <div class="name-line">
+                <input type="text" id="userName" class="userName" placeholder="输入姓名" />
+            </div>
+            <div class="phone-line onlyone-line">
+                <input type="tel" id="userPhone" class="userPhone2" placeholder="输入手机号" value="@userPhone" disabled="disabled" />
+            </div>
+        }
+        else
+        {
+            <div class="name-line onlyone-line">
+                <input type="text" id="userName" class="userName" placeholder="输入姓名" />
+            </div>
+        }
+    }
+</div>
+<div class="vip-btns">
+    <div class="submit" style="@(canShop ? "display:block" : "display:none;")">@(isUpgrade ? "升级铂金会员" : "购买")</div> 
+    <div class="submit0" style="@(!canShop ? "display:block" : "display:none;")">@(isUpgrade ? "升级铂金会员" : "购买")</div>
+</div>
+<div class="vip-bottom">
+    <img src="@bottomBgImgSrc" alt="" />
+</div>
+<div class="vip-go-link"><a href="http://www.zmjiudian.com/App/MorePackageList?albumId=10&userid=@(userid)&_newpage=1">查看VIP专享优惠酒店</a></div>
+<div class="vip-bottom">
+    <img src="@bottomBgImgSrc2" alt="" />
+</div>
+<div class="vip-answer-link"><a href="http://www.zmjiudian.com/active/activepage?pageid=43&defbg=1&_newpage=1">常见问题 ></a></div>
+@*<a href="whotelapp://www.zmjiudian.com/gotopage?url=http://www.zmjiudian.com/custom/shop/vip/100250">~~</a>*@
+@if (shareUserInfo.UserID > 0)
+{
+    <div class="share-member-panel">
+        <div class="share-member-head">
+            <div class="member-head"><img src="@(shareUserInfo.AvatarUrl)" alt="@(shareUserInfo.NickName)" /></div>
+            <div class="member-nick">@(shareUserInfo.NickName)<br />@(string.IsNullOrEmpty(shareUserInfo.NickName) ? "" : "正在用")周末酒店App</div>
+            <div class="ad-tip">邀请您</div>
+        </div>
+        <div class="share-btns">
+            <div class="join-zmjd" onclick="gourl('/Active/GenCashCouponForInvitation?sourceId=@(shareUserInfo.UserID)')" data-op="0">使用周末酒店 获得50元现金券</div>
+        </div>
+        <div class="share-bottom-logo">
+            <img src="http://whfront.b0.upaiyun.com/www/img/comment/zmjd-bottom-logo.png" alt="周末酒店" />
+        </div>
+    </div>
+}
+<footer>
+    <input type="hidden" id="aid" value="@aid" />
+    <input type="hidden" id="atype" value="@activity.Type" />
+    <input type="hidden" id="pid" value="0" />
+    <input type="hidden" id="pricetype" value="0" />
+    <input type="hidden" id="userid" value="@userid" />
+    <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+    <input type="hidden" id="cansell" value="@(canShop ? 1 : 0)" />
+    <input type="hidden" id="sellnum" value="@minBuyNum" />
+    <form style="display:none;">
+        <input type="text" id="loginput" value="0" />
+    </form>
+</footer>
+
+@section scripts
+{
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/coupon/couponshopforvip.js?v=@(Helpers.curAppVer())"></script>
+    <script>
+            window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+            window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+            window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script type="text/javascript" charset="utf-8">
+        function goto(param) {
+            var url = "@(ViewBag.AccessProtocal)" + param;
+            this.location = url;
+        }
+
+        function gourl(url) {
+            location.href = url;
+        }
+
+        function loginCallback(userid) {
+            location.replace(location.pathname + "?userid=" + userid);
+        }
+
+        var pub_userid = "@userid";
+    </script>
+}

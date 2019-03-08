@@ -1,0 +1,176 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+    
+    var isApp = ViewBag.IsApp;
+    var userid = ViewBag.UserId; //userid = 4512064;
+
+    var isMobile = ViewBag.isMobile;
+    
+    UserInfoResult userInfo = ViewBag.UserInfo;
+    HJDAPI.Common.Helpers.Enums.CustomerType viptype = (HJDAPI.Common.Helpers.Enums.CustomerType)userInfo.CustomerType;
+
+    //会员分类
+    var cartRightsLab = "金牌VIP权益";
+    var cartVipIcon = "lab-viptip-1";
+    var cartPicUrl = "http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-cart-199.png?v=2016112221";
+    switch (viptype)
+    {
+        case Enums.CustomerType.vip:
+            cartRightsLab = "终身VIP权益";
+            cartVipIcon = "lab-viptip-0";
+            cartPicUrl = "http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-cart-forever.png?v=2016112221"; 
+            break;
+        case Enums.CustomerType.vip199nr:
+        case Enums.CustomerType.vip199:
+        case Enums.CustomerType.vip3M:
+        case Enums.CustomerType.vip6M:
+            cartRightsLab = "金牌VIP权益";
+            cartVipIcon = "lab-viptip-1";
+
+            //cherry联名卡
+            if (userInfo.VIPCID == 37)
+            {
+                cartPicUrl = "http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-cart-199-cherry.png?v=2017051201";
+            }
+            else
+            {
+                cartPicUrl = "http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-cart-199.png?v=2016112221";
+            }
+            
+            break;
+        case Enums.CustomerType.vip599:
+            cartRightsLab = "铂金VIP权益";
+            cartVipIcon = "lab-viptip-2";
+
+            //cherry联名卡
+            if (userInfo.VIPCID == 37)
+            {
+                cartPicUrl = "http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-cart-599-cherry.png?v=2017051201";
+            }
+            else
+            {
+                cartPicUrl = "http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-cart-599.png?v=2016112221";
+            }
+            
+            break;
+    }
+    
+    //会员卡有效期
+    var cartTimeContent = string.Format("有效期至{0}", userInfo.EndVipTime.ToString("yyyy年M月d日"));
+    if (viptype == Enums.CustomerType.vip)
+    {
+        cartTimeContent = "终身有效";
+    }
+
+    ViewBag.Title = cartRightsLab;
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    if (isApp)
+    {
+        ViewBag.LoadHmBaidu = false;
+    }
+}
+
+@section styles
+{
+    <link href="/content/css/acount/viprights.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <style type="text/css">
+    </style>
+}
+
+<div class="cart-info">
+    <div class="pic"><img src="@cartPicUrl" alt="" /></div>
+</div>
+<div class="acount-info">
+    @if (!string.IsNullOrEmpty(userInfo.RealName))
+    {
+        <div class="name">会员名：<b>@(userInfo.RealName)</b></div>
+    }
+    <div class="carttime">@cartTimeContent</div>
+</div>
+<div class="cart-rights">
+    <div class="lab @cartVipIcon">
+        @cartRightsLab
+        @if (viptype == Enums.CustomerType.vip199nr || viptype == Enums.CustomerType.vip199 || viptype == Enums.CustomerType.vip3M || viptype == Enums.CustomerType.vip6M)
+        {
+            <div class="upgrade"><a href="/custom/shop/vip/100398?userid=@(userid)&_newpage=1" target="_blank">升级为铂金VIP会员>></a></div>
+        }
+    </div>
+    <div class="rights-border"></div>
+    <div class="list">
+        <div class="item link" onclick="gourl('http://www.zmjiudian.com/App/MorePackageList?albumId=10&userid=@(userid)&_newpage=1')">
+            <div class="t1">专享优惠价</div>
+            <div class="t2">精选高端酒店5%-50%折扣</div>
+        </div>
+        <div class="item link" onclick="gourl('@(!isApp ? string.Format("/MagiCall/MagiCallClient?userid={0}", userid) : "whotelapp://www.zmjiudian.com/MagiCall")')">
+            <div class="t1">专享顾问</div>
+            <div class="t2">贴心助手式服务</div>
+        </div>
+        @switch (viptype)
+        {
+            case Enums.CustomerType.vip:
+            case Enums.CustomerType.vip199:
+            case Enums.CustomerType.vip3M:
+            case Enums.CustomerType.vip6M:
+                <div class="item">
+                    <div class="t1">尊享1.5倍消费积分</div>
+                    <div class="t2">可兑换免费房券</div>
+                </div>
+                <div class="item">
+                    <div class="t1">可随时全额退会员费</div>
+                    <div class="t2">无风险体验，非诚勿扰</div>
+                </div>
+                break;
+            case Enums.CustomerType.vip199nr:
+                <div class="item">
+                    <div class="t1">尊享1.5倍消费积分</div>
+                    <div class="t2">可兑换免费房券</div>
+                </div>
+                break;
+            case Enums.CustomerType.vip599:
+                <div class="item">
+                    <div class="t1">尊享3倍消费积分</div>
+                    <div class="t2">可兑换免费房券</div>
+                </div>
+                <div class="item">
+                    <div class="t1">1%消费返利</div>
+                    <div class="t2">可全额抵扣平台任何产品消费</div>
+                </div>
+                <div class="item">
+                    <div class="t1">免费升级</div>
+                    <div class="t2">每年至少两次免费升级房型</div>
+                </div>
+                <div class="item">
+                    <div class="t1">私人行程免费定制</div>
+                    <div class="t2">由资深旅行专家提供服务</div>
+                </div>
+                <div class="tip-txt">*购买后不可取消</div>
+                break;
+        }
+    </div>
+</div>
+<div class="tel">客服热线：<a href="tel:4000021702" class="num">4000-021-702</a></div>
+<footer>
+    <input type="hidden" id="userid" value="@userid" />
+    <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+</footer>
+
+@section scripts
+{
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    @*<script src="~/Content/js/coupon/vipcartlist.js?v=@(Helpers.curAppVer())"></script>*@
+    <script>
+            window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+            window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+            window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script type="text/javascript" charset="utf-8">
+
+        function gourl(url) {
+            location.href = url;
+        }
+
+        var pub_userid = "@userid";
+    </script>
+}

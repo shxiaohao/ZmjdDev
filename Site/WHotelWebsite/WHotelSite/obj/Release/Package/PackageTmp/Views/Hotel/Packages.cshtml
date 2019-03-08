@@ -1,0 +1,583 @@
+﻿@using WHotelSite
+@using WHotelSite.Params.Hotel
+
+@{
+    HotelPrice2 price = Model;
+    ViewBag.Title = price.Name + (price.Packages.Count > 0 ? "预订" : "比价预订");
+    PackagesParam param = ViewBag.param;
+    HotelItem3 hotel = ViewBag.hotel;
+    List<PDayItem> calendar = ViewBag.calendar;
+
+    int firstpid = ViewBag.firstpid;
+}
+
+@section styles
+{
+    @Styles.Render("~/Content/css/calendar.css")
+}
+
+@section scripts
+{
+    @if (Utils.IsMobile()) {
+        @Scripts.Render(
+            "~/Content/js/iscroll-lite.js"
+        )
+    }
+    else 
+    {
+        @Scripts.Render(
+            "~/Content/js/ctrip_cquery.js",
+            "~/Content/js/ctrip_calendar.js",
+            "~/Content/js/bootbox.js"
+        )
+    }
+    @Helpers.CalendarOptions(Html, calendar, price.DayLimitMin, price.DayLimitMax)
+    @Scripts.Render("~/Content/js/calendar.js", "~/Content/js/hotel/packages.js")
+}
+
+@section breadcrumbs
+{
+    @Helpers.BreadCrumbs(Url, hotel)
+}
+
+<!-- HotelName -->
+<div class="fullscreen">
+    <div class="container mainbody">
+        <div class="row">
+            <div class="col-md-1">
+            </div>
+            <div class="col-md-10">
+                <div class="row hidden-xs">
+                    <div class="col-md-6 hotelname">
+                        @price.Name
+                    </div>
+                    <div class="col-md-6 hotelstar">
+                        @Helpers.StarImage(Url, hotel.Star, null)
+                    </div>
+                </div>
+                <div class="row  mbhead hidden">
+                    <div class="col-xs-12 text-left">
+                        <button type="button" class="btn btn-default btn-sm">返回</button>
+                    </div>
+                </div>
+
+                <!-- mobile header 开始 -->
+
+                <div class="container hidden" style="margin-bottom:-1px;">
+                    <div class="row toolbar2 ">
+                        <div class="col-xs-3">
+                            <a href="@Url.RouteUrl("酒店详情", new { hotel = hotel.HotelID})" class="btn btn-sm  btn-img01">
+                                <img src="@Url.Content("~/content/images/icon-back.png")" class="mobilepic" alt="" />
+                            </a>
+                        </div>
+                        <div class="col-xs-6 text-center listtitle">
+                            特惠套餐
+                        </div>
+                        <div class="col-sm-2 col-xs-3 text-right">
+                        </div>
+                    </div>
+                </div>
+                <!--  mobile header 结束 -->
+
+                @{
+                    PackageInfoEntity firstinfoEntity = firstpid > 0 ? price.Packages.Find(i => i.packageBase.ID == firstpid) : null;
+                }
+                <div class="row">
+                    <!-- Hotel Left -->
+                    <div class="col-md-8 zmpanel2">
+                        <div class="panel panel-default date hidden-xs">
+                            <div class="panel-heading hidden-xs">
+                                <div class="row">
+                                    <div class="title col-xs-3">
+                                        选择日期
+                                    </div>
+                                    <div class="remarks col-xs-9 text-right" id="remarks">
+                                        <!--* 灰色日期为不可订-->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel-body hidden-xs">
+                                <form role="form">
+                                    <table cellspacing="0" cellpadding="3" border="0" class="" width="100%">
+                                        <tr>
+                                            <td width="40%" class="text-center">
+                                                <b>入住时间</b>
+                                            </td>
+                                            <td width="40%" class="text-center">
+                                                <b>离店时间</b>
+                                            </td>
+                                            <td width="20%"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center fontdate">
+                                                <div class="form-group" align="center">
+                                                    <input type="text" id="checkIn" class="form-control text-center btngray" value="@param.CheckIn" style="width:130px;">
+                                                </div>
+                                            </td>
+                                            <td class="text-center fontdate">
+                                                <div class="form-group" align="center">
+                                                    <input type="text" id="checkOut" class="form-control text-center btngray" value="@param.CheckOut" style="width:130px;">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <button type="button" id="confirmChange" class="btn btn-primary btn-sm" style="margin-top:-15px;">确定</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default date visible-xs" style="z-index:1000;position:fixed;top:0;width:100%">
+                            <div class="panel-body visible-xs mbdate">
+                                @helper dateHelper(DateTime date)
+                                {
+                                    <strong>@date.Format("M月d日")</strong><br />
+                                    <span>@(date.Format("yy"))年，周@("日一二三四五六".Substring((int)date.DayOfWeek, 1))</span>
+                                }
+                                <form role="form">
+                                    <div class="row" id="dates">
+                                        <div class="col-xs-2 title1 text-right">
+                                            入住
+                                        </div>
+                                        <div class="col-xs-4 rightline title2">
+                                            @dateHelper(param.CheckInDate)
+                                        </div>
+                                        <div class="col-xs-2 title3">
+                                            离店
+                                        </div>
+                                        <div class="col-xs-2 title4">
+                                            @dateHelper(param.CheckOutDate)
+                                        </div>
+                                        <div class="col-xs-1 aarow">
+                                            <a href="javascript:;"><img src="@Url.Content("~/Content/images/icon-aarow1.png")" alt="" /></a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        
+                        @if (firstinfoEntity != null)
+                        {
+                            <div class="panel panel-default package hidden-xs">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-xs-6 col-sm-6 col-md-8">
+                                            <div class="row">
+                                                <div class="col-xs-12 titlesm hidden-xs">
+                                                    <span>@firstinfoEntity.packageBase.Code</span>  <div class="hidden-xs title2sm">@(firstinfoEntity.packageBase.SoldCountSum + firstinfoEntity.packageBase.StartNum)人已购买</div>
+                                                </div>
+                                                <div class="col-xs-12 titlexs visible-xs">
+                                                    <span>@firstinfoEntity.packageBase.Code</span>
+                                                </div>
+                                                <div class="col-xs-12 title2xs visible-xs">
+                                                    @(firstinfoEntity.packageBase.SoldCountSum + firstinfoEntity.packageBase.StartNum)人已购买
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-3  col-sm-4 col-md-2 text-center price">
+                                            ￥<strong @(firstinfoEntity.Rebate > 0 ? string.Empty : "style=line-height:1.8em;")>@(firstinfoEntity.Price)</strong>
+                                            @if (firstinfoEntity.Rebate > 0)
+                                            {
+                                                <br /><i>( 可返@(firstinfoEntity.Rebate) )</i>
+                                            }
+                                        </div>
+                                        <div class="col-xs-3  col-sm-2 col-md-2 text-center button">
+                                            @if (firstinfoEntity.SellState == 1)
+                                            {
+                                                object args = new { package = firstinfoEntity.packageBase.ID, checkIn = param.CheckIn, checkOut = param.CheckOut };
+                                                <a class="btn btn-01 btn-block" href="@Url.Action("Book", args)">购买</a>
+                                            }
+                                            else
+                                            {
+                                                object args = new { package = firstinfoEntity.packageBase.ID };
+                                                <a class="btn btn-01 unavailable btn-viewsale" href="javascript:;" data-calendar-options="@Url.Action("PackageCalendar", args)">查看<br />可售日</a>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    @foreach (PackageDailyEntity entity in firstinfoEntity.DailyItems)
+                                    {
+                                        @String.Format("{0}晚", Utils.ChineseNumber((int)(param.CheckOutDate - param.CheckInDate).TotalDays)) @(firstinfoEntity.Room.Description)<br />
+                                        foreach (PItemEntity item in entity.Items)
+                                        {
+                                            if (item.Type == 1)
+                                            {
+                                                @item.Description
+                                                if (item.Price > 0)
+                                                {
+                                                    <small>（值￥@(item.Price)）</small>
+                                                }
+                                                <br />
+                                            }
+                                        }
+                                        <br />
+                                        break;
+                                    }
+                                    注意事项:
+                                    <ul>
+                                        @foreach (PItemEntity item in firstinfoEntity.Items)
+                                        {
+                                            if (item.Type != 1)
+                                            {
+                                                <li>@Html.Raw(item.Description)</li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="panel panel-default package visible-xs" style="margin-top:85px;">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-xs-6 col-sm-6 col-md-8">
+                                            <div class="row">
+                                                <div class="col-xs-12 titlesm hidden-xs">
+                                                    <span>@firstinfoEntity.packageBase.Code</span>  <div class="hidden-xs title2sm">@(firstinfoEntity.packageBase.SoldCountSum + firstinfoEntity.packageBase.StartNum)人已购买</div>
+                                                </div>
+                                                <div class="col-xs-12 titlexs visible-xs">
+                                                    <span>@firstinfoEntity.packageBase.Code</span>
+                                                </div>
+                                                <div class="col-xs-12 title2xs visible-xs">
+                                                    @(firstinfoEntity.packageBase.SoldCountSum + firstinfoEntity.packageBase.StartNum)人已购买
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-3  col-sm-4 col-md-2 text-center price">
+                                            ￥<strong @(firstinfoEntity.Rebate > 0 ? string.Empty : "style=line-height:1.8em;")>@(firstinfoEntity.Price)</strong>
+                                            @if (firstinfoEntity.Rebate > 0)
+                                            {
+                                                <br /><i>( 可返@(firstinfoEntity.Rebate) )</i>
+                                            }
+                                        </div>
+                                        <div class="col-xs-3  col-sm-2 col-md-2 text-center button">
+                                            @if (firstinfoEntity.SellState == 1)
+                                            {
+                                                object args = new { package = firstinfoEntity.packageBase.ID, checkIn = param.CheckIn, checkOut = param.CheckOut };
+                                                <a class="btn btn-01 btn-block" href="@Url.Action("Book", args)">购买</a>
+                                            }
+                                            else
+                                            {
+                                                object args = new { package = firstinfoEntity.packageBase.ID };
+                                                <a class="btn btn-01 unavailable btn-viewsale" href="javascript:;" data-calendar-options="@Url.Action("PackageCalendar", args)">查看<br />可售日</a>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    @foreach (PackageDailyEntity entity in firstinfoEntity.DailyItems)
+                                    {
+                                        @String.Format("{0}晚", Utils.ChineseNumber((int)(param.CheckOutDate - param.CheckInDate).TotalDays)) @(firstinfoEntity.Room.Description)<br />
+                                        foreach (PItemEntity item in entity.Items)
+                                        {
+                                            if (item.Type == 1)
+                                            {
+                                                @item.Description
+                                                if (item.Price > 0)
+                                                {
+                                                    <small>（值￥@(item.Price)）</small>
+                                                }
+                                                <br />
+                                            }
+                                        }
+                                        <br />
+                                        break;
+                                    }
+                                    注意事项:
+                                    <ul>
+                                        @foreach (PItemEntity item in firstinfoEntity.Items)
+                                        {
+                                            if (item.Type != 1)
+                                            {
+                                                <li>@Html.Raw(item.Description)</li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        }
+
+                        @{
+                            int packageCount = 0;
+                        }
+
+                        @foreach (PackageInfoEntity package in price.Packages)
+                        {
+                            if (package.packageBase.ID != firstpid)
+                            {
+                                if (firstinfoEntity == null && packageCount == 0)
+                                {
+                                    <div class="panel panel-default package hidden-xs">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-6 col-sm-6 col-md-8">
+                                                    <div class="row">
+
+                                                        <div class="col-xs-12 titlesm hidden-xs">
+                                                            <span>@package.packageBase.Code</span>  <div class="hidden-xs title2sm">@(package.packageBase.SoldCountSum + package.packageBase.StartNum)人已购买</div>
+                                                        </div>
+                                                        <div class="col-xs-12 titlexs visible-xs">
+                                                            <span>@package.packageBase.Code</span>
+                                                        </div>
+                                                        <div class="col-xs-12 title2xs visible-xs">
+                                                            @(package.packageBase.SoldCountSum + package.packageBase.StartNum)人已购买
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3  col-sm-4 col-md-2 text-center price">
+                                                    ￥<strong @(package.Rebate > 0 ? string.Empty : "style=line-height:1.8em;")>@(package.Price)</strong>
+                                                    @if (package.Rebate > 0)
+                                                    {
+                                                        <br /><i>( 可返@(package.Rebate) )</i>
+                                                    }
+                                                </div>
+                                                <div class="col-xs-3  col-sm-2 col-md-2 text-center button">
+                                                    @if (package.SellState == 1)
+                                                    {
+                                                        object args = new { package = package.packageBase.ID, checkIn = param.CheckIn, checkOut = param.CheckOut };
+                                                        <a class="btn btn-01 btn-block" href="@Url.Action("Book", args)">购买</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        object args = new { package = package.packageBase.ID };
+                                                        <a class="btn btn-01 unavailable btn-viewsale" href="javascript:;" data-calendar-options="@Url.Action("PackageCalendar", args)">查看<br />可售日</a>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel-body">
+                                            @foreach (PackageDailyEntity entity in package.DailyItems)
+                                            {
+                                                @String.Format("{0}晚", Utils.ChineseNumber((int)(param.CheckOutDate - param.CheckInDate).TotalDays)) @(package.Room.Description)<br />
+                                                foreach (PItemEntity item in entity.Items)
+                                                {
+                                                    if (item.Type == 1)
+                                                    {
+                                                        @item.Description
+                                                        if (item.Price > 0)
+                                                        {
+                                                            <small>（值￥@(item.Price)）</small>
+                                                        }
+                                                        <br />
+                                                    }
+                                                }
+                                                <br />
+                                                break;
+                                            }
+                                            注意事项:
+                                            <ul>
+                                                @foreach (PItemEntity item in package.Items)
+                                                {
+                                                    if (item.Type != 1)
+                                                    {
+                                                        <li>@Html.Raw(item.Description)</li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>                            
+                                    
+                                    <div class="panel panel-default package visible-xs" style="margin-top:85px">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-6 col-sm-6 col-md-8">
+                                                    <div class="row">
+
+                                                        <div class="col-xs-12 titlesm hidden-xs">
+                                                            <span>@package.packageBase.Code</span>  <div class="hidden-xs title2sm">@(package.packageBase.SoldCountSum + package.packageBase.StartNum)人已购买</div>
+                                                        </div>
+                                                        <div class="col-xs-12 titlexs visible-xs">
+                                                            <span>@package.packageBase.Code</span>
+                                                        </div>
+                                                        <div class="col-xs-12 title2xs visible-xs">
+                                                            @(package.packageBase.SoldCountSum + package.packageBase.StartNum)人已购买
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3  col-sm-4 col-md-2 text-center price">
+                                                    ￥<strong @(package.Rebate > 0 ? string.Empty : "style=line-height:1.8em;")>@(package.Price)</strong>
+                                                    @if (package.Rebate > 0)
+                                                    {
+                                                        <br /><i>( 可返@(package.Rebate) )</i>
+                                                    }
+                                                </div>
+                                                <div class="col-xs-3  col-sm-2 col-md-2 text-center button">
+                                                    @if (package.SellState == 1)
+                                                    {
+                                                        object args = new { package = package.packageBase.ID, checkIn = param.CheckIn, checkOut = param.CheckOut };
+                                                        <a class="btn btn-01 btn-block" href="@Url.Action("Book", args)">购买</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        object args = new { package = package.packageBase.ID };
+                                                        <a class="btn btn-01 unavailable btn-viewsale" href="javascript:;" data-calendar-options="@Url.Action("PackageCalendar", args)">查看<br />可售日</a>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel-body">
+                                            @foreach (PackageDailyEntity entity in package.DailyItems)
+                                            {
+                                                @String.Format("{0}晚", Utils.ChineseNumber((int)(param.CheckOutDate - param.CheckInDate).TotalDays)) @(package.Room.Description)<br />
+                                                foreach (PItemEntity item in entity.Items)
+                                                {
+                                                    if (item.Type == 1)
+                                                    {
+                                                        @item.Description
+                                                        if (item.Price > 0)
+                                                        {
+                                                            <small>（值￥@(item.Price)）</small>
+                                                        }
+                                                        <br />
+                                                    }
+                                                }
+                                                <br />
+                                                break;
+                                            }
+                                            注意事项:
+                                            <ul>
+                                                @foreach (PItemEntity item in package.Items)
+                                                {
+                                                    if (item.Type != 1)
+                                                    {
+                                                        <li>@Html.Raw(item.Description)</li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                }
+                                else{
+                                    <div class="panel panel-default package">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-6 col-sm-6 col-md-8">
+                                                    <div class="row">
+
+                                                        <div class="col-xs-12 titlesm hidden-xs">
+                                                            <span>@package.packageBase.Code</span>  <div class="hidden-xs title2sm">@(package.packageBase.SoldCountSum + package.packageBase.StartNum)人已购买</div>
+                                                        </div>
+                                                        <div class="col-xs-12 titlexs visible-xs">
+                                                            <span>@package.packageBase.Code</span>
+                                                        </div>
+                                                        <div class="col-xs-12 title2xs visible-xs">
+                                                            @(package.packageBase.SoldCountSum + package.packageBase.StartNum)人已购买
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-3  col-sm-4 col-md-2 text-center price">
+                                                    ￥<strong @(package.Rebate > 0 ? string.Empty : "style=line-height:1.8em;")>@(package.Price)</strong>
+                                                    @if (package.Rebate > 0)
+                                                    {
+                                                        <br /><i>( 可返@(package.Rebate) )</i>
+                                                    }
+                                                </div>
+                                                <div class="col-xs-3  col-sm-2 col-md-2 text-center button">
+                                                    @if (package.SellState == 1)
+                                                    {
+                                                        object args = new { package = package.packageBase.ID, checkIn = param.CheckIn, checkOut = param.CheckOut };
+                                                        <a class="btn btn-01 btn-block" href="@Url.Action("Book", args)">购买</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        object args = new { package = package.packageBase.ID };
+                                                        <a class="btn btn-01 unavailable btn-viewsale" href="javascript:;" data-calendar-options="@Url.Action("PackageCalendar", args)">查看<br />可售日</a>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel-body">
+                                            @foreach (PackageDailyEntity entity in package.DailyItems)
+                                            {
+                                                @String.Format("{0}晚", Utils.ChineseNumber((int)(param.CheckOutDate - param.CheckInDate).TotalDays)) @(package.Room.Description)<br />
+                                                foreach (PItemEntity item in entity.Items)
+                                                {
+                                                    if (item.Type == 1)
+                                                    {
+                                                        @item.Description
+                                                        if (item.Price > 0)
+                                                        {
+                                                            <small>（值￥@(item.Price)）</small>
+                                                        }
+                                                        <br />
+                                                    }
+                                                }
+                                                <br />
+                                                break;
+                                            }
+                                            注意事项:
+                                            <ul>
+                                                @foreach (PItemEntity item in package.Items)
+                                                {
+                                                    if (item.Type != 1)
+                                                    {
+                                                        <li>@Html.Raw(item.Description)</li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                }
+                                packageCount++;
+                            }
+                        }
+
+                        @{
+                            int OTACount = 0;
+                        }
+                        @foreach (OTAInfo2 ota in price.OTAList)
+                        {
+                            if (OTACount == 0 && (price.Packages == null || price.Packages.Count == 0))
+                            {
+                                <div class="panel panel-default ota-panel visible-xs" style="margin-top: 85px;">
+                                    <a class="panel-body" href="@Utils.BuildOTALink(ota.AccessURL, param.CheckInDate, param.CheckOutDate)">
+                                        <div class="ota-name">
+                                            @ota.Name
+                                        </div>
+                                        <div class="ota-price">
+                                            <b>￥</b>@ota.Price.ToString("0")
+                                        </div>
+                                    </a>
+                                </div>
+                            
+                                <div class="panel panel-default ota-panel hidden-xs">
+                                    <a class="panel-body" href="@Utils.BuildOTALink(ota.AccessURL, param.CheckInDate, param.CheckOutDate)">
+                                        <div class="ota-name">
+                                            @ota.Name
+                                        </div>
+                                        <div class="ota-price">
+                                            <b>￥</b>@ota.Price.ToString("0")
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="panel panel-default ota-panel">
+                                    <a class="panel-body" href="@Utils.BuildOTALink(ota.AccessURL, param.CheckInDate, param.CheckOutDate)">
+                                        <div class="ota-name">
+                                            @ota.Name
+                                        </div>
+                                        <div class="ota-price">
+                                            <b>￥</b>@ota.Price.ToString("0")
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+                            OTACount++;
+                        }
+                    </div>
+                    <!-- Hotel Right -->
+                    <div class="col-md-4 visible-md visible-lg zmrightpanel">
+                        @Helpers.QRCodes(Url)
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+﻿ @model  List<HJD.HotelServices.Contracts.CanSaleHotelInfoEntity>
+    @{
+    Layout = null;
+    }
+    @{
+    ViewBag.Title = "元旦有房";
+    }
+
+    <!DOCTYPE HTML>
+
+    <script type="text/javascript">
+        function goto(hotelid, hotelname)
+        {
+            _hmt.push(['_trackEvent', 'SpringFestival2015', 'nav', hotelname, hotelid]);
+            var url = "@(ViewBag.AccessProtocal)" + hotelid;
+            this.location = url;
+
+        }
+    </script>
+
+    <html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>春节有房-周末有房</title>
+        <link href="/content/css/bootstrap.css" rel="stylesheet">
+        <link href="/content/css/yuandan.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row topimg">
+                <div class="col-xs-12">
+                    <img src="/content/images/chunjie.jpg" height="240" class="img-responsive" alt="" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="weeken2 col-xs-12">
+                    @Html.Raw(ViewBag.SatList)
+                </div>
+            </div>
+
+            @foreach (string city in Model.Select(h => h.DataPathName).Distinct().OrderBy(d => d.Trim('.').Split('.').Last()))
+        {
+
+            <div class="title2">  <h5> @( city.Trim('.').Split('.').Last())</h5></div>
+            <ul>
+                @foreach (HJD.HotelServices.Contracts.CanSaleHotelInfoEntity h in Model.Where(h=>h.DataPathName == city))
+            {
+                <li> <a href="javascript:;" onclick="goto(@(h.HotelId),'@( h.HotelName)')">@( h.HotelName)  ￥@((int)h.Businessprice)</a></li>
+            }
+            </ul>
+        }
+
+            <div class="row">
+                <div class="col-xs-12 ">
+                    <div class="tips2">
+                        咨询请洽：<i>4000-021-702</i>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+                <script type="text/javascript">
+                    var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+                    document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F3566e9570ddbe6722a51adedffbf065b' type='text/javascript'%3E%3C/script%3E"));
+                </script>
+</body>
+</html>

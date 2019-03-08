@@ -1,0 +1,47 @@
+﻿@model HJD.HotelManagementCenter.Domain.BusinessOperatorEntity
+@{
+    ViewBag.Title = "登录周末酒店(商户版)";
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+    var auto = ViewBag.AutoLogin;
+}
+@section styles
+{
+    <link href="~/Content/css/Shop/shoplogin.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style type="text/css">
+    </style>
+}
+
+<div id="divAlertCouponMsg" class="shoplogin-tit">
+    <div class="shoplogin-logo">
+        <div class="zmjd-iconfont logo-icon logo-iconplus">&#xe646;</div>
+        <div class="logo-words">(营销伙伴计划)</div>
+    </div>
+    <div class="shoplogin-main" align="center" valign="middle">
+        <div class="shoplogin-maindiv">
+            <div style="width: 80%;">
+                <font style="display:none;" id="nameError">账号错误</font>
+                <input class="login-input" type="text" id="OperatorName" placeholder="请输入登录名" />
+            </div>
+            <div style="width: 80%;margin:5px auto;">
+                <font style="float:left;font-size: 10px;color: red;display:none;" id="pwdError">密码错误</font>
+                <input class="login-input" type="password" id="PassWord" placeholder="请输入登录密码" />
+            </div>
+            <div class="shoplogin-checkbox">
+                <input type="checkbox" id="rememberPassWord" /><label for="rememberPassWord">记住密码</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="checkbox" id="SignIn" /><label for="SignIn">自动登录</label>
+            </div>
+            <div>
+                <input class="login-button" type="button" id="BussinessName" onclick="Login()" value="登录" />
+            </div>
+            <div style="margin:10px auto;">
+                <div class="gorget-pwd">忘记密码请致电：</div>
+                <div class="telephone"><a href="tel:400-002-1702">400-002-1702</a></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section scripts
+{
+    <script src="~/Content/js/Shop/Shop.js?v=@(Helpers.curAppVer())"></script>
+}

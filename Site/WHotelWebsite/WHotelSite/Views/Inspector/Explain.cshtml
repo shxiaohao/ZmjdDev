@@ -1,0 +1,60 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+
+    InspectorParam param = ViewBag.param;
+
+    ViewBag.Title = string.Format("成为品鉴师");
+    ViewBag.Keywords = string.Format("成为品鉴师");
+    ViewBag.Description = string.Format("成为品鉴师");
+
+    ViewBag.BodyStyle = "overflow-x:hidden;";
+    ViewBag.BodyClass = "inspectorexplainpage";
+}
+
+@section styles
+{
+    <style>
+        html, body {
+            height: 100%;margin:0;
+        }
+    </style>
+    <link href="~/Content/css/inspector/explain.css" rel="stylesheet" />
+}
+
+<div class="inspectorBg2"></div>
+<div class="explain-body">
+    <div class="explain-box">
+        <div class="tit">如果</div>
+        <div class="list">
+            <ul class="brief-ul">
+                <li class="brief-li brief-li-item1">你是酒店达人，住过各种酒店</li>
+                <li class="brief-li brief-li-item1">你喜欢写点评，分享入住体验</li>
+            </ul>
+        </div>
+    </div>
+    <div class="explain-box">
+        <div class="tit">你只需要</div>
+        <div class="list">
+            <ul class="brief-ul">
+                <li class="brief-li brief-li-item1">使用过周末酒店成功预订并完成入住</li>
+                <li class="brief-li brief-li-item1">提交5篇不同酒店的图文点评</li>
+            </ul>
+        </div>
+    </div>
+    <div class="where-box">
+        <fieldset>
+            <legend>满足以上条件</legend>
+            <div class="info">
+                成为酒店品鉴师<br />获得<a href="/inspector/hotellist?userid=@(param.UserId)&_newpage=1">免费品鉴酒店</a>的机会
+            </div>
+        </fieldset>
+    </div>
+    <button type="button" class="explain-btn-reg" data-userid="@param.UserId">我要加入</button>
+</div>
+
+@section scripts
+{
+    @Scripts.Render("~/Content/js/inspector/inspector.js")
+}

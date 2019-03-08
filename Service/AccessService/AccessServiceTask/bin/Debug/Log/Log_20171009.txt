@@ -1,0 +1,9 @@
+
+[17/10/9 18:18:23] Start Job [DownLoadWexinUserInfoJob]
+[17/10/9 18:19:02] ¡¾NextOpenid¡¿:
+[17/10/9 18:19:13] ¡¾0¡¿
+[17/10/9 18:19:14] GetAllWeixinSubscribeUser Count:8717
+[17/10/9 18:19:54] Start Job [DownLoadWexinUserInfoJob]
+[17/10/9 18:19:58] ¡¾NextOpenid¡¿:
+[17/10/9 18:19:58] ¡¾0¡¿
+[17/10/9 18:19:58] GetAllWeixinSubscribeUser Count:8717

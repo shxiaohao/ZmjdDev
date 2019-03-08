@@ -1,0 +1,8 @@
+D:\Dev\WHotelDev\Dev\Service\AccessService\HJD.AccessService.Contract\obj\Debug\HJD.AccessService.Contract.pdb
+D:\Dev\WHotelDev\Dev\Service\AccessService\HJD.AccessService.Contract\bin\Debug\HJD.AccessService.Contract.dll
+D:\Dev\WHotelDev\Dev\Service\AccessService\HJD.AccessService.Contract\bin\Debug\HJD.AccessService.Contract.pdb
+D:\Dev\WHotelDev\Dev\Service\AccessService\HJD.AccessService.Contract\bin\Debug\HJD.Framework.Entity.dll
+D:\Dev\WHotelDev\Dev\Service\AccessService\HJD.AccessService.Contract\bin\Debug\HJD.Framework.Entity.pdb
+D:\Dev\WHotelDev\Dev\Service\AccessService\HJD.AccessService.Contract\obj\Debug\HJD.AccessService.Contract.dll
+D:\Dev\WHotelDev\Dev\Service\AccessService\HJD.AccessService.Contract\obj\Debug\HJD.AccessService.Contract.csproj.CoreCompileInputs.cache
+D:\Dev\WHotelDev\Dev\Service\AccessService\HJD.AccessService.Contract\obj\Debug\HJD.AccessService.Contract.csproj.CopyComplete

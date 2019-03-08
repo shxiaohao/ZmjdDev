@@ -1,0 +1,280 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+您 Web 项目的发布/打包进程将使用此文件。您可以通过编辑此 MSBuild 文件
+来自定义该进程的行为。若要了解与此相关的详细信息，请访问 http://go.microsoft.com/fwlink/?LinkID=208121。
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>\\192.168.1.113\WHAPP\Service1\AccessService</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="bin/BeITMemcached.dll">
+      <publishTime>03/09/2015 18:02:33</publishTime>
+    </File>
+    <File Include="bin/hanlp.dll">
+      <publishTime>06/04/2015 16:55:48</publishTime>
+    </File>
+    <File Include="bin/HJD.AccessService.Contract.dll">
+      <publishTime>11/18/2015 18:44:02</publishTime>
+    </File>
+    <File Include="bin/HJD.AccessService.Contract.pdb">
+      <publishTime>11/18/2015 18:44:02</publishTime>
+    </File>
+    <File Include="bin/HJD.AccessService.Host.dll">
+      <publishTime>11/18/2015 18:44:05</publishTime>
+    </File>
+    <File Include="bin/HJD.AccessService.Host.pdb">
+      <publishTime>11/18/2015 18:44:05</publishTime>
+    </File>
+    <File Include="bin/HJD.AccessService.Implement.dll">
+      <publishTime>11/18/2015 18:44:03</publishTime>
+    </File>
+    <File Include="bin/HJD.AccessService.Implement.pdb">
+      <publishTime>11/18/2015 18:44:03</publishTime>
+    </File>
+    <File Include="bin/HJD.Framework.Cache.dll">
+      <publishTime>03/09/2015 18:02:33</publishTime>
+    </File>
+    <File Include="bin/HJD.Framework.Cache.pdb">
+      <publishTime>03/09/2015 18:02:33</publishTime>
+    </File>
+    <File Include="bin/HJD.Framework.DataAccess.dll">
+      <publishTime>03/09/2015 18:02:33</publishTime>
+    </File>
+    <File Include="bin/HJD.Framework.DataAccess.pdb">
+      <publishTime>03/09/2015 18:02:33</publishTime>
+    </File>
+    <File Include="bin/HJD.Framework.Entity.dll">
+      <publishTime>03/09/2015 18:02:33</publishTime>
+    </File>
+    <File Include="bin/HJD.Framework.Entity.pdb">
+      <publishTime>03/09/2015 18:02:33</publishTime>
+    </File>
+    <File Include="bin/HJD.Framework.Interface.dll">
+      <publishTime>03/09/2015 18:02:33</publishTime>
+    </File>
+    <File Include="bin/HJD.Framework.Interface.pdb">
+      <publishTime>03/09/2015 18:02:33</publishTime>
+    </File>
+    <File Include="bin/HJD.Framework.Log.dll">
+      <publishTime>03/09/2015 18:02:33</publishTime>
+    </File>
+    <File Include="bin/HJD.Framework.Mongodb.dll">
+      <publishTime>03/09/2015 18:02:33</publishTime>
+    </File>
+    <File Include="bin/HJD.Framework.Mongodb.pdb">
+      <publishTime>03/09/2015 18:02:33</publishTime>
+    </File>
+    <File Include="bin/HJD.Framework.Utility.dll">
+      <publishTime>03/09/2015 18:02:33</publishTime>
+    </File>
+    <File Include="bin/HJD.Framework.Utility.pdb">
+      <publishTime>03/09/2015 18:02:33</publishTime>
+    </File>
+    <File Include="bin/HJD.Framework.WCF.dll">
+      <publishTime>03/09/2015 18:02:33</publishTime>
+    </File>
+    <File Include="bin/HJD.HotelServices.Contracts.dll">
+      <publishTime>11/16/2015 15:16:54</publishTime>
+    </File>
+    <File Include="bin/HJD.HotelServices.Contracts.pdb">
+      <publishTime>03/09/2015 18:02:33</publishTime>
+    </File>
+    <File Include="bin/HJD.OtaCrawlerService.Contract.dll">
+      <publishTime>05/14/2015 11:50:28</publishTime>
+    </File>
+    <File Include="bin/HJD.OtaCrawlerService.Contract.pdb">
+      <publishTime>05/14/2015 11:50:28</publishTime>
+    </File>
+    <File Include="bin/HJD.OtaCrawlerService.Host.dll">
+      <publishTime>05/14/2015 11:50:30</publishTime>
+    </File>
+    <File Include="bin/HJD.OtaCrawlerService.Host.pdb">
+      <publishTime>05/14/2015 11:50:30</publishTime>
+    </File>
+    <File Include="bin/HJD.OtaCrawlerService.Implement.dll">
+      <publishTime>05/14/2015 11:50:29</publishTime>
+    </File>
+    <File Include="bin/HJD.OtaCrawlerService.Implement.pdb">
+      <publishTime>05/14/2015 11:50:29</publishTime>
+    </File>
+    <File Include="bin/HJD.Search.CommonLibrary.dll">
+      <publishTime>11/18/2015 18:44:02</publishTime>
+    </File>
+    <File Include="bin/HJD.Search.CommonLibrary.pdb">
+      <publishTime>11/18/2015 18:44:02</publishTime>
+    </File>
+    <File Include="bin/HJD.WeixinService.Contract.dll">
+      <publishTime>03/24/2015 17:38:52</publishTime>
+    </File>
+    <File Include="bin/HJD.WeixinService.Contract.pdb">
+      <publishTime>03/24/2015 17:38:52</publishTime>
+    </File>
+    <File Include="bin/HJD.WeixinService.Host.dll">
+      <publishTime>03/24/2015 17:38:57</publishTime>
+    </File>
+    <File Include="bin/HJD.WeixinService.Host.pdb">
+      <publishTime>03/24/2015 17:38:57</publishTime>
+    </File>
+    <File Include="bin/HJD.WeixinService.Implement.dll">
+      <publishTime>03/24/2015 17:38:52</publishTime>
+    </File>
+    <File Include="bin/HJD.WeixinService.Implement.pdb">
+      <publishTime>03/24/2015 17:38:52</publishTime>
+    </File>
+    <File Include="bin/HtmlAgilityPack.dll">
+      <publishTime>10/03/2009 13:05:38</publishTime>
+    </File>
+    <File Include="bin/HtmlAgilityPack.pdb">
+      <publishTime>03/12/2015 12:08:52</publishTime>
+    </File>
+    <File Include="bin/IKVM.AWT.WinForms.dll">
+      <publishTime>12/06/2012 09:53:16</publishTime>
+    </File>
+    <File Include="bin/IKVM.OpenJDK.Beans.dll">
+      <publishTime>12/06/2012 09:52:28</publishTime>
+    </File>
+    <File Include="bin/IKVM.OpenJDK.Charsets.dll">
+      <publishTime>12/06/2012 09:52:28</publishTime>
+    </File>
+    <File Include="bin/IKVM.OpenJDK.Corba.dll">
+      <publishTime>12/06/2012 09:52:26</publishTime>
+    </File>
+    <File Include="bin/IKVM.OpenJDK.Core.dll">
+      <publishTime>12/06/2012 09:52:26</publishTime>
+    </File>
+    <File Include="bin/IKVM.OpenJDK.Management.dll">
+      <publishTime>12/06/2012 09:52:28</publishTime>
+    </File>
+    <File Include="bin/IKVM.OpenJDK.Media.dll">
+      <publishTime>12/06/2012 09:52:28</publishTime>
+    </File>
+    <File Include="bin/IKVM.OpenJDK.Misc.dll">
+      <publishTime>12/06/2012 09:52:28</publishTime>
+    </File>
+    <File Include="bin/IKVM.OpenJDK.Naming.dll">
+      <publishTime>12/06/2012 09:52:28</publishTime>
+    </File>
+    <File Include="bin/IKVM.OpenJDK.Remoting.dll">
+      <publishTime>12/06/2012 09:52:28</publishTime>
+    </File>
+    <File Include="bin/IKVM.OpenJDK.Security.dll">
+      <publishTime>12/06/2012 09:52:28</publishTime>
+    </File>
+    <File Include="bin/IKVM.OpenJDK.SwingAWT.dll">
+      <publishTime>12/06/2012 09:52:28</publishTime>
+    </File>
+    <File Include="bin/IKVM.OpenJDK.Text.dll">
+      <publishTime>12/06/2012 09:52:28</publishTime>
+    </File>
+    <File Include="bin/IKVM.OpenJDK.Util.dll">
+      <publishTime>12/06/2012 09:52:28</publishTime>
+    </File>
+    <File Include="bin/IKVM.OpenJDK.XML.API.dll">
+      <publishTime>12/06/2012 09:52:26</publishTime>
+    </File>
+    <File Include="bin/IKVM.Runtime.dll">
+      <publishTime>12/06/2012 09:53:02</publishTime>
+    </File>
+    <File Include="bin/IKVM.Runtime.JNI.dll">
+      <publishTime>12/06/2012 09:53:00</publishTime>
+    </File>
+    <File Include="bin/Lucene.Net.dll">
+      <publishTime>07/24/2013 14:38:25</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.EnterpriseLibrary.Caching.dll">
+      <publishTime>03/09/2015 18:02:34</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.EnterpriseLibrary.Common.dll">
+      <publishTime>03/09/2015 18:02:34</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.EnterpriseLibrary.Data.dll">
+      <publishTime>03/09/2015 18:02:34</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.EnterpriseLibrary.Logging.dll">
+      <publishTime>03/09/2015 18:02:34</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.ServiceLocation.dll">
+      <publishTime>03/09/2015 18:02:34</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.Unity.Configuration.dll">
+      <publishTime>03/09/2015 18:02:34</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.Unity.dll">
+      <publishTime>03/09/2015 18:02:34</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.Unity.Interception.dll">
+      <publishTime>03/09/2015 18:02:34</publishTime>
+    </File>
+    <File Include="bin/MongoDB.Bson.dll">
+      <publishTime>03/09/2015 18:02:34</publishTime>
+    </File>
+    <File Include="bin/MongoDB.Bson.pdb">
+      <publishTime>03/09/2015 18:02:34</publishTime>
+    </File>
+    <File Include="bin/MongoDB.Driver.dll">
+      <publishTime>03/09/2015 18:02:34</publishTime>
+    </File>
+    <File Include="bin/MongoDB.Driver.pdb">
+      <publishTime>03/09/2015 18:02:34</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.dll">
+      <publishTime>04/07/2015 10:33:07</publishTime>
+    </File>
+    <File Include="bin/PanGu.dll">
+      <publishTime>03/09/2015 18:02:34</publishTime>
+    </File>
+    <File Include="bin/PanGu.HighLight.dll">
+      <publishTime>03/09/2015 18:02:34</publishTime>
+    </File>
+    <File Include="bin/RabbitMQ.Client.dll">
+      <publishTime>03/12/2015 12:08:52</publishTime>
+    </File>
+    <File Include="Config/AppSettings.config">
+      <publishTime>05/22/2015 12:23:31</publishTime>
+    </File>
+    <File Include="Config/BehaviorProfile.config">
+      <publishTime>05/26/2015 11:27:20</publishTime>
+    </File>
+    <File Include="Config/CommDB.xml">
+      <publishTime>03/24/2015 16:31:20</publishTime>
+    </File>
+    <File Include="Config/CtripDB.xml">
+      <publishTime>05/13/2015 18:34:04</publishTime>
+    </File>
+    <File Include="Config/Database.config">
+      <publishTime>05/11/2015 09:38:36</publishTime>
+    </File>
+    <File Include="Config/HotelDB.xml">
+      <publishTime>05/29/2015 14:54:20</publishTime>
+    </File>
+    <File Include="Config/Log.config">
+      <publishTime>03/09/2015 18:02:34</publishTime>
+    </File>
+    <File Include="Config/Memcache.config">
+      <publishTime>03/23/2015 18:26:33</publishTime>
+    </File>
+    <File Include="Config/MemcacheSet.config">
+      <publishTime>10/14/2015 10:26:05</publishTime>
+    </File>
+    <File Include="Config/Mongodb.config">
+      <publishTime>03/30/2015 19:09:11</publishTime>
+    </File>
+    <File Include="Config/WeixinDB.xml">
+      <publishTime>03/24/2015 10:52:07</publishTime>
+    </File>
+    <File Include="IndexSearch.aspx">
+      <publishTime>06/04/2015 09:53:11</publishTime>
+    </File>
+    <File Include="SmartSearch.aspx">
+      <publishTime>05/29/2015 14:52:35</publishTime>
+    </File>
+    <File Include="Test.aspx">
+      <publishTime>05/21/2015 12:42:35</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>11/18/2015 18:44:11</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

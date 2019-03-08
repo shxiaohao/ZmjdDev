@@ -1,0 +1,52 @@
+﻿@model List<HotelVoucherAndInspectorHotel>
+@{
+    Layout = null;
+    bool isMobile = WHotelSite.Utils.IsMobile();
+}
+
+@for (int i = 0; i < Model.Count; i++)
+{
+    var hotel = Model[i];
+    var firstPic = hotel.hotelItem != null ? hotel.hotelItem.Picture.Replace("_appdetail1s", "_640x426") : "http://whfront.b0.upaiyun.com/app/img/home/home-load2-3x2.png";
+    var hotelName = hotel.hotelItem != null ? hotel.hotelItem.Name : hotel.HotelName;
+    var applyCss = "btn-apply-normal";
+
+    //hotel.inspectorHotel.ApplicationCount     //已经申请
+    //hotel.inspectorHotel.MaxCount             //最大
+
+    //获取当前免费品鉴酒店的酒店对应的“免费品鉴”套餐
+    //HotelPrice2 price = HJDAPI.APIProxy.Price.Get4(inshotel.HotelID, "免费品鉴", WHotelSite.Utils.ClientType(),0);
+    //ViewBag.price = price;
+
+    <div class="hotelitem">
+        <a href="javascript:;" onclick="openHotel('@(hotel.HotelID)')" style="width:100%;height:100%;display:inline-table;position:absolute;z-index:1;"></a>
+        @if (i < 2)
+        {
+            <img onclick="openHotel('@(hotel.HotelID)')" src="@firstPic" alt="@hotelName" style="width:100%;" />
+        }
+        else
+        {
+            <img onclick="openHotel('@(hotel.HotelID)')" data-original="@firstPic" data-lazyload-id="@i" alt="@hotelName" style="width:100%;" />
+        }
+        <div class="info" onclick="openHotel('@(hotel.HotelID)')">
+            <table cellpadding="0" cellspacing="0" border="0" style="width:94%;margin:0 0 0 3%;">
+                <tr>
+                    <td valign="bottom" style="text-align:left;">
+                        <div class="name">
+                            @hotelName
+                        </div>
+                        <div class="name-2">
+                            @Html.Raw(hotel.Description != null ? hotel.Description : "")
+                        </div>
+                    </td>
+                    <td valign="bottom" style="width:6.5em;text-align:right;">
+                        <div style="height: auto; line-height: 1em; color: #fff; font-size: 1.2em; text-shadow: 2px 2px 3px #000; "><span style="color: #fff;">@hotel.RequiredPoint</span>积分起</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="ctrl">
+            <div class="btn-apply @applyCss" data-id="@(hotel.BS == 1 ? hotel.HVID : hotel.InspectorHotelID)" data-hotelid="@hotel.HotelID" data-bs="@hotel.BS">申请品鉴</div>
+        </div>
+    </div>
+}

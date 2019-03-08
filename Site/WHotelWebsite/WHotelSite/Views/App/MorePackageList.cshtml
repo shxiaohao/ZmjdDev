@@ -1,0 +1,549 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    var cssVersion = "190001010000";
+    try
+    {
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex) { }
+
+    var userid = ViewBag.UserId;
+    var albumId = ViewBag.AlbumId;
+    var t = ViewBag.TypeNum;
+    var userlat = ViewBag.Userlat;
+    var userlng = ViewBag.Userlng;
+    var usercity = ViewBag.UserCity;
+    var shownewvip = ViewBag.ShowNewVip;
+    var areas = ViewBag.Areas;
+    var airhoteldate = ViewBag.AirHotelDate;
+    var startdid = ViewBag.StartDistrictId;
+    var stopdid = ViewBag.StopDistrictId;
+    var grid = ViewBag.Grid;
+
+    //列表是否grid方式显示
+    var isGridStyle = ViewBag.IsGridStyle;
+
+    var isInWeixin = ViewBag.isInWeixin;
+    var isApp = ViewBag.IsApp;
+    var appType = ViewBag.AppType;
+    var isThanVer5_1 = ViewBag.IsThanVer5_1;
+    var isVip = ViewBag.IsVip;
+
+    var showTopTit = false;     //是否显示顶部title
+    var showBuyVip = false;     //是否显示VIP购买入口
+    var showShareBtn = true;    //app内是否显示右上角分享
+
+    var title = "查看更多";
+    if (albumId == 1)
+    {
+        title = "其它特惠套餐";
+    }
+    //VIP专享
+    else if (albumId == 10)
+    {
+        title = "会员专享优惠-酒店";
+
+        //showTopTit = true;
+
+        //if (!isVip)
+        //{
+        //    showBuyVip = true;
+        //}
+
+        showShareBtn = false;
+
+        //如果是标识显示新VIP专享头
+        if (shownewvip)
+        {
+            title = "成为VIP";
+
+            //不显示大标题
+            showTopTit = false;
+
+            //不显示分享
+            showShareBtn = false;
+
+            //不显示VIP购买入口
+            showBuyVip = false;
+        }
+    }
+    //酒+机套餐
+    else if (albumId == 12)
+    {
+        title = "机+酒套餐";
+    }
+    //元旦VIP专享
+    else if (albumId == 21)
+    {
+        title = "圣诞/元旦机酒专场";
+    }
+    //最新推荐
+    else if (albumId == 37)
+    {
+        title = "最新推荐";
+    }
+    //三亚5天4晚自由行
+    else if (albumId == 38)
+    {
+        title = "三亚5天4晚自由行";
+    }
+    //会员专享优惠-酒店
+    else if (albumId == 41)
+    {
+        title = "会员专享优惠-酒店";
+    }
+    //娃游记推荐-那些又美又舒服的中式酒店
+    else if (albumId == 46)
+    {
+        title = "那些又美又舒服的中式酒店";
+    }
+    //邮轮专辑
+    else if (albumId == 47)
+    {
+        title = "邮轮";
+    }
+    //小众定制
+    else if (albumId == 81)
+    {
+        title = "小众定制";
+    }
+    //闪购
+    else if (t == 1)
+    {
+        title = "限时抢购";
+    }
+    //酒机
+    else if (t == 2)
+    {
+        title = "机+酒套餐";
+    }
+    //最近浏览的酒店
+    else if (t == 3)
+    {
+        showShareBtn = false;
+
+        title = "你最近浏览过"; //"最近浏览过的酒店";
+    }
+    //朋友推荐的酒店
+    else if (t == 4)
+    {
+        title = "朋友推荐的酒店";
+    }
+    //本周特惠
+    else if (t == 5)
+    {
+        title = "本周特惠";
+    }
+    //周末好去处
+    else if (t == 6)
+    {
+        title = "周末好去处";
+    }
+    ViewBag.Title = title;
+
+    //控制产品专辑的分享配置
+    var shareTitle = string.Format("{0}-周末酒店", title);
+    var shareDesc = "";
+    var shareImgUrl = "http://whfront.b0.upaiyun.com/app/img/zmjd-logo-x167.png";
+    var shareLink = string.Format("http://www.zmjiudian.com/App/MorePackageList?albumId={0}&t={1}", albumId, t);
+
+    if (albumId == 41)
+    {
+        shareTitle = "会员专享优惠-周末酒店";
+        shareDesc = "精选300家高端度假酒店，会员专享优惠低至3折";
+        shareImgUrl = "http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/vip-area-share-card-img.jpg";
+    }
+    else if (albumId == 12)
+    {
+        shareTitle = "机+酒套餐-周末酒店";
+        shareDesc = "诸多机酒自由行产品，行程搭配优价格好，有疑问请咨询顾问";
+        shareImgUrl = "http://whphoto.b0.upaiyun.com/117MSLs0_small";
+    }
+    else if (albumId == 37)
+    {
+        shareTitle = "最新推荐-周末酒店";
+        shareDesc = "上新优惠一目了然，近期优惠酒店一手掌握";
+        shareImgUrl = "http://whfront.b0.upaiyun.com/app/img/zmjd-logo-x167.png";
+    }
+    else
+    {
+        if(shownewvip)
+        {
+            shareTitle = "高端酒店天天特价-周末酒店";
+            shareDesc = "精选高端酒店、口碑亲子酒店、小众特色酒店，尽在周末酒店APP！";
+            shareImgUrl = "http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/vip-area-share-card-img.jpg";
+        }
+    }
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    if (isApp)
+    {
+        ViewBag.LoadHmBaidu = false;
+    }
+}
+
+@section styles
+{
+    <link href="/content/css/framework/iscroll.css" rel="stylesheet">
+    <link href="~/Content/css/app/morepackagelist.css?v=@cssVersion" rel="stylesheet" />
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .login-section {
+            font-size: 0.8em;
+        }
+    </style>
+
+}
+    
+@if (!string.IsNullOrEmpty(areas))
+{
+    <div id="tabs" v-cloak class="tab-list">
+        <div class="_scroller">
+            <div class="scrollLine">
+                <div class="t-item" v-for="item in tabDetailList" id="t-item-{{item.id}}" data-relid="{{item.id}}">{{item.name}}</div>
+            </div>
+        </div>
+    </div>   
+}
+
+@if (showTopTit)
+{
+    <div class="more-top">
+        <div class="@(isApp ? "title" : "title2")">@(title)</div>
+        @if (albumId == 10 && isThanVer5_1 && userlat > 0) 
+        {
+            <div class="districtName zmjd-iconfont" onclick="showCity()">&#xe629;@(usercity)及周边</div>
+        }
+        <div class="tit-border"></div>
+    </div>
+}
+
+@if (showBuyVip)
+{
+    <div id="homeVipBanner" onclick="gourl('/Coupon/VipShopInfo?_newpage=1')"><img src="http://whfront.b0.upaiyun.com/app/img/home/home-vip-banner.png?v-20161102.1" alt="vip" /></div>
+}
+
+@if (shownewvip)
+{
+    <div class="newvip-section">
+        <div class="top"><img src="http://whfront.b0.upaiyun.com/app/img/home/home-newvip-bigbanner.png?v=20170327.1" alt="newvip" /></div>
+        <div class="info">聪明人的选择！假如你每年都有若干次度假计划，那么这可能是你更好的选择。<br />只要支付199元成为会员，就可以享受各种高端酒店深度折扣优惠，开启又好又划算的理想度假模式。</div>
+        <div class="ctrl"><a href="http://www.zmjiudian.com/Coupon/VipShopInfo?userid={userid}&_newpage=1" class="buyvip" target="_blank">购买VIP</a></div>
+    </div>
+    <div class="newvip-package-tit">会员专享优惠</div>
+}
+
+@if (albumId == 12)
+{
+    <div id="filter-section" class="filter-section" style="@(!isApp ? "padding-top:1.3em;" : "")">
+        <div class="line">
+            <div class="item start-city">出发地</div>
+            <div class="item stop-city">目的地</div>
+            @*<div class="item date">日期</div>*@
+            <div style="clear:both;"></div>
+        </div>
+    </div>   
+}
+
+@if (isGridStyle)
+{
+    <div id="dealsSection-seat" class="more-seat-slider" style="margin:1.5em 0 0 0;"><img src="~/Content/images/seat/img-viparea-seat-list.png" /></div>
+}
+else
+{ 
+    <div id="dealsSection-seat" class="more-seat-slider" style="margin:1em 0 0 0;"><img src="~/Content/images/seat/img-hotellist-seat-slider.png" alt=""></div>
+    <div id="dealsSection-seat" class="more-seat-slider"><img src="~/Content/images/seat/img-hotellist-seat-slider.png" alt=""></div>
+}
+
+@*@if (isApp)
+{
+    <div style="margin:2em 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3a%2f%2f192.168.1.22%3a8081%2fApp%2fMorePackageList%3falbumId%3d10%26geoScopeType%3d%7bselectcitytype%7d%26usercity%3d%7busercity%7d%26_newpage%3d1%26userid%3d0%26_newtitle%3d1%26_titlecolor%3d1">GO APP (Local) >>></a></div>
+}*@
+
+@if (!string.IsNullOrEmpty(areas))
+{
+    <div id="more-vue-obj" v-cloak>
+        <div v-for="listItem in tabDetailList" data-relid="{{listItem.id}}" class="scroll-div" id="scroll_{{listItem.id}}">
+            <div id="dealsSection-seat" class="more-seat-slider" style="margin:1em 0 0 0;"><img src="~/Content/images/seat/img-hotellist-seat-slider.png" alt=""></div>
+            <div id="dealsSection-seat" class="more-seat-slider"><img src="~/Content/images/seat/img-hotellist-seat-slider.png" alt=""></div>
+
+            <div id="more-packages" class="more-packages more-hlist-panel">
+                <ul>
+                    <li v-for="hotelEntity in listItem.pkList" class="li-line" onclick="gourl('{{hotelEntity.url}}')">
+                        <div class="h-p-tip-nvip" v-if="hotelEntity.ForVIPFirstBuy"><img src="http://whfront.b0.upaiyun.com/app/img/home/banners/icon-h-p-nvip.png" alt="" /></div>
+                        <div class="h-img">
+                            <img v-if="$index<2" src="{{hotelEntity.HotelPicUrl}}" alt="">
+                            <img v-else class="load-img" src="http://whfront.b0.upaiyun.com/app/img/home/home-load2-3x2.png" data-load="0" data-orisrc="{{hotelEntity.HotelPicUrl}}" alt="">
+                            <div class="h-tit-tip-price3">
+                                <div class="v-price" v-if="hotelEntity.TotalVIPPrice>0">
+                                    <span>￥</span>{{hotelEntity.TotalVIPPrice}}<span>起</span>
+                                    <div class="v-icon"><span class="zmjd-iconfont">&#xe623;</span></div>
+                                </div>
+                                <div class="d-price" v-if="hotelEntity.TotalVIPPrice>0"><span>￥</span>{{hotelEntity.TotalHotelPrice}}<span>起</span></div>
+                                <div class="d-price" v-if="hotelEntity.TotalVIPPrice<=0"><span>查询价格</span></div>
+                            </div>
+                        </div>
+                        <div class="hname-info">
+                            <div class="hotel-name2" v-if="hotelEntity.PackageName">{{hotelEntity.PackageName}}</div>
+                            <div class="hotel-name2" v-else>{{hotelEntity.PackageBrief}}</div>
+                            <div class="hotel-packagebrief2">{{hotelEntity.HotelName}}</div>
+                            @*<div class="hotel-packagebrief" v-if="hotelEntity.PackageBrief">{{hotelEntity.PackageBrief}}</div>
+                            <div class="hotel-price" v-if="hotelEntity.VIPPrice">
+                                <span class="atv-price"><span class="zmjd-iconfont p-un">&#xe623;</span> <span class="p-un">¥</span>{{hotelEntity.VIPPrice}}</span>
+                                <span class="del-price" v-if="hotelEntity.VIPPrice!=hotelEntity.HotelPrice">普通价 ¥{{hotelEntity.MinPrice}}</span>
+                            </div>*@
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="more-packages-foot" id="more-packages-foot-{{listItem.id}}"></div>
+            <div class="scrollpageloading more-hide" id="scrollpageloading-{{listItem.id}}"><img src="http://whfront.b0.upaiyun.com/app/img/loading.gif" alt="" /></div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="more-packages more-hlist-panel"></div>
+    <div class="more-packages-foot"></div>
+    <div class="scrollpageloading more-hide"><img src="http://whfront.b0.upaiyun.com/app/img/loading-changes.gif" alt="" /></div>  
+}
+
+@if (albumId == 10 && isThanVer5_1)
+{
+    //目前只有VIP专享页面，在5.1及之后的版本才会支持右上角地址筛选
+    
+    <div class="city-section-bg more-hide"></div>
+    <div class="city-section more-hide" id="city-section">
+        @if (userlat > 0)
+        {
+            <div class="top-panel">
+                <div class="single-item">
+                    <div class="item zmjd-iconfont" data-lat="@userlat" data-lng="@userlng" data-dname="@(usercity)及周边">&#xe629;@(usercity)及周边</div>
+                </div>
+            </div>
+        }
+        <div class="body-panel">
+            <div v-if="CityInfo.dicHotelDestInfoList" class="d-group" id="city-section2">
+                <div class="tit">{{CityInfo.Description}}</div>
+                <div class="list">
+                    <div v-for="disItem in CityInfo.HotelDestInfoList ">
+                        <div class="item" data-did="{{disItem.DistrictID}}" data-dname="{{disItem.DistrictName}}">{{disItem.DistrictName}}</div>
+                        <div v-if="$index+1<CityInfo.HotelDestInfoList.length" class="item-line"></div>
+                    </div>
+                </div>
+                <div class="line"></div>
+            </div>
+            <div v-if="CityInfo.dicHotelDestInfoList" class="d-group" id="city-section0">
+                <div class="tit">{{CityInfo.Description}}</div>
+                <div class="list">
+                    <div v-for="disItem in CityInfo.HotelDestInfoList ">
+                        <div class="item" data-did="{{disItem.DistrictID}}" data-dname="{{disItem.DistrictName}}">{{disItem.DistrictName}}</div>
+                        <div v-if="$index+1<CityInfo.HotelDestInfoList.length" class="item-line"></div>
+                    </div>
+                </div>
+                <div class="line"></div>
+            </div>
+            <div v-if="CityInfo.dicHotelDestInfoList" class="d-group" id="city-section1">
+                <div class="tit">{{CityInfo.Description}}</div>
+                <div class="list">
+                    <div v-for="disItem in CityInfo.HotelDestInfoList ">
+                        <div class="item" data-did="{{disItem.DistrictID}}" data-dname="{{disItem.DistrictName}}">{{disItem.DistrictName}}</div>
+                        <div v-if="$index+1<CityInfo.HotelDestInfoList.length" class="item-line"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="_selector-model" style="display:none;"></div>
+<div class="_selector" style="display:none;" id="startcity-selector">
+    <div class="_head">
+        <div class="_tit">出发地</div>
+        <div class="zmjd-iconfont _close">&#xe673;</div>
+        <div class="_clear">清空</div>
+    </div>
+    <div class="_list">
+        <div v-for="item in cityData.StartCityList" class="_item {{item.ID===cityData.startdid?'_item-seled':''}}" data-did="{{item.ID}}" data-dname="{{item.Name}}">{{item.Name}}<div class="zmjd-iconfont _icon">&#xe660;</div></div>
+    </div>
+</div>
+<div class="_selector" style="display:none;" id="stopcity-selector">
+    <div class="_head">
+        <div class="_tit">目的地</div>
+        <div class="zmjd-iconfont _close">&#xe673;</div>
+        <div class="_clear">清空</div>
+    </div>
+    <div class="_list">
+        <div v-for="item in cityData.GoToCityList " class="_item {{item.ID===cityData.stopdid?'_item-seled':''}}" data-did="{{item.ID}}" data-dname="{{item.Name}}">{{item.Name}}<div class="zmjd-iconfont _icon">&#xe660;</div></div>
+    </div>
+</div>
+
+<input type="hidden" id="userid" value="@userid" />
+<input type="hidden" id="albumId" value="@albumId" />
+<input type="hidden" id="t" value="@t" />
+<input type="hidden" id="userlat" value="@userlat" />
+<input type="hidden" id="userlng" value="@userlng" />
+<input type="hidden" id="isApp" value="@(isApp ? "1" : "0")" />
+<input type="hidden" id="areas" value="@areas" />
+<input type="hidden" id="airhoteldate" value="@airhoteldate" />
+<input type="hidden" id="startdid" value="@startdid" />
+<input type="hidden" id="stopdid" value="@stopdid" />
+<input type="hidden" id="grid" value="@grid" />
+
+@section scripts
+{
+    <script src="~/Content/js/framework/jquery.lazyload.min.js"></script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js//framework/iscroll.js"></script>
+    <script src="~/Content/js/app/morepackagelist.js?v=100@(cssVersion)"></script>
+
+    @if (isThanVer5_1 && albumId == 10 && !shownewvip && false) 
+    {
+        <script>
+            try {
+                setAppTitleMenu = function () {
+
+                        var _lab = "";
+                        var _url = "whotelapp://loadJS?url=javascript:showCity()";
+                        var _iconurl = "http://whfront.b0.upaiyun.com/app/img/home/img_filter.png";
+
+                        try { whotel.appTitleMenu(_lab, _url, _iconurl); } catch (e) { }
+                        return '{"lab":"' + _lab + '","url":"' + _url + '","iconurl":"' + _iconurl + '"}';
+                    }
+                    setAppTitleMenu();
+                } catch (e) {
+
+            }
+        </script>
+    }
+
+    @if (showShareBtn)
+    {
+        <script>
+            try {
+                onAppShareCall = function () {
+                    var title = "@(shareTitle)";
+                    var Content = "@(shareDesc)";
+                    var photoUrl = "@(shareImgUrl)";
+                    var shareLink = "@(shareLink)";
+                    try { whotel.appShareData(title, Content, photoUrl, shareLink); } catch (e) { }
+                    var returnStr = '{"title":"{0}","Content":"{1}","photoUrl":"{2}","shareLink":"{3}"}';
+                    return returnStr.format(title, Content, photoUrl, shareLink);
+                }
+                onAppShareCall();
+            }
+            catch (e) { }
+        </script>
+    }
+    
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js?v=@(Helpers.curAppVer())" type="text/javascript"></script>
+        <script>
+
+                GetWeixinApiConfig();//注册
+
+                wx.ready(function () {
+
+                    wx.onMenuShareTimeline({
+                        title: '@(shareTitle)',
+                        desc: '@(shareDesc)',
+                        link: '@(shareLink)',
+                        imgUrl: '@(shareImgUrl)',
+                        success: function (res) {
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                    wx.onMenuShareAppMessage({
+                        title: '@(shareTitle)',
+                        desc: '@(shareDesc)',
+                        link: '@(shareLink)',
+                        imgUrl: '@(shareImgUrl)',
+                        success: function (res) {
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                    wx.onMenuShareQQ({
+                        title: '@(shareTitle)',
+                        desc: '@(shareDesc)',
+                        link: '@(shareLink)',
+                        imgUrl: '@(shareImgUrl)',
+                        success: function (res) {
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                    wx.onMenuShareQZone({
+                        title: '@(shareTitle)',
+                        desc: '@(shareDesc)',
+                        link: '@(shareLink)',
+                        imgUrl: '@(shareImgUrl)',
+                        success: function (res) {
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                    });
+
+                    function GetWeixinApiConfig() {
+
+                        var url = location.href.split("#")[0];
+                        $.ajax({
+                            url: '/Coupon/GetWeixinConfigInfo',
+                            type: 'POST',
+                            data: { url: url },
+                            dataType: 'json',
+                            async: false,
+                            error: function () {
+                                console.log("网络服务错误");
+                            },
+                            success: function (result) {
+                                if (typeof (result.Success) != undefined && result.Success == 1) {
+                                    return false;
+                                }
+                                else {
+                                    //得到微信config的值
+                                    var array = [
+                                        'checkJsApi',
+                                        'onMenuShareTimeline',
+                                        'onMenuShareAppMessage',
+                                        'onMenuShareQQ',
+                                        'onMenuShareQZone',
+                                        'hideOptionMenu'
+                                    ];
+                                    if (result.jsApiList) {
+                                        var jsArray = result.jsApiList.split(',');
+                                        for (var key in jsArray) {
+                                            array.push("" + jsArray[key]);
+                                        }
+                                    }
+
+                                    wx.config({
+                                        debug: false,
+                                        appId: result.appId,
+                                        timestamp: "" + result.timestamp,
+                                        nonceStr: result.nonceStr,
+                                        signature: result.signature,
+                                        jsApiList: array
+                                    });
+                                }
+                            }
+                        });
+                    }
+
+        </script>
+    }
+}

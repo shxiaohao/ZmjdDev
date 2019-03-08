@@ -1,0 +1,62 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    var cssVersion = "190001010000";
+    try
+    {
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex) { }
+
+    ViewBag.Title = "查找";
+
+    var userid = ViewBag.UserId;
+    var isApp = ViewBag.IsApp;
+    var preData = ViewBag.PreData;
+}
+
+@section styles
+{
+    <link href="~/Content/css/app/searchhotel.css?v=@cssVersion" rel="stylesheet" />
+    <style type="text/css">
+    </style>
+}
+<div class="search-bg2"></div>
+<div class="search-head">
+    <input type="text" class="search-inp" placeholder="查找酒店" />
+    <div class="closeIcon" style="display:none;">X</div>
+</div>
+<div class="hotelquicklist" style="display:none;"></div>
+
+<div class="search-filter">
+    <div class="option-item" id="filter-item-local" data-type="local" data-saveinfo="">
+        <div class="left"><img src="http://whfront.b0.upaiyun.com/app/img/search/icon-local.png" alt="" /></div>
+        <div class="right"><span class="val">上海</span></div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="option-item" id="filter-item-date" data-type="date" data-saveinfo="">
+        <div class="left"><img src="http://whfront.b0.upaiyun.com/app/img/search/icon-date.png" alt="" /></div>
+        <div class="right"><span class="val">2016/5/21 - 2016/05/22</span></div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="option-item" id="filter-item-pricestar" data-type="pricestar" data-saveinfo="">
+        <div class="left"><img src="http://whfront.b0.upaiyun.com/app/img/search/icon-price-star.png" alt="" /></div>
+        <div class="right"><span class="val">0-不限/星级不限</span></div>
+        <div style="clear:both;"></div>
+    </div>
+</div>
+<div class="search-ctrl">
+    <button class="search">查找酒店</button>
+</div>
+<div class="foot-link">
+    <img src="http://whfront.b0.upaiyun.com/app/img/search/icon-local.png" alt="" /><a href="@(preData.SearchHotelAdv.ActionUrl)">@(preData.SearchHotelAdv.HotelName)</a>
+</div>
+@section scripts
+{
+    <script src="~/Content/js/app/searchhotel.js?v=@cssVersion"></script>
+    <script type="text/javascript" charset="utf-8">
+        
+    </script>
+}

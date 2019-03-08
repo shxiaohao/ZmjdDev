@@ -1,0 +1,719 @@
+﻿html, body {
+    height: 100%;
+    width: 100%;
+    background-color: #f0f0f0;
+    line-height: 1.5;
+    overflow-x:hidden;
+}
+
+* {
+    margin: 0px;
+}
+/*屏蔽背景层*/
+#divMsgBack {
+    display: none;
+    position: fixed;
+    _position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    background: -moz-radial-gradient(50% 50%, #555, #000);
+    background: -webkit-radial-gradient(50% 50%, #555, #000);
+    background: -webkit-gradient(radial, 0 50%, 0 50%, from(#555), to(#000));
+    opacity: 0.5;
+    filter: Alpha(opacity=50);
+    _display: block;
+    _left: -10000px;
+    z-index: 9999;
+}
+/*弹出层*/
+#divMsg {
+    display: none;
+    position: fixed;
+    background-color: white;
+    top: 40%;
+    left: 35%;
+    width: 80%;
+    margin-left: -25%;
+    margin-top: -25%;
+    padding: 1% 0% 1% 0;
+    line-height: 1.8em;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    box-shadow: 0 1px 10px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0 1px 10px rgba(0,0,0,0.3);
+    -moz-box-shadow: 0 5px 27px rgba(0,0,0,0.3);
+    _position: absolute;
+    _display: block;
+    _left: -10000px;
+    z-index: 10000;
+}
+    /*关闭按钮*/
+    #divMsg #aClose {
+        font-family: Tahoma;
+        border: solid 2px #ccc;
+        padding: 0px 5px;
+        text-decoration: none;
+        font-size: 12px;
+        color: blue;
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        line-height: 14px;
+        height: 14px;
+        width: 7px;
+        border-radius: 14px;
+        -moz-border-radius: 14px;
+        background-color: white;
+    }
+
+        #divMsg #aClose:hover {
+            border: solid 2px red;
+            color: red;
+        }
+/*设置显示*/
+#msgBody #divMsgBack {
+    display: block;
+    _left: 0px;
+}
+
+#msgBody #divMsg {
+    display: block;
+    _left: 50%;
+}
+
+#msgBody {
+    _overflow: hidden;
+}
+
+input {
+    font-size: 16px;
+    line-height: 24px;
+    font-family: sans-serif;
+    padding: 5px 10px;
+    margin: 5% 25% 10% 25%;
+    width: 50%;
+    height: 36px;
+}
+
+.notice01 {
+    font-size: 1em !important;
+    padding: 5% 5% 5% 5% !important;
+    /* width: 80%; */
+    text-align: center;
+    position: relative;
+    float: left;
+    color: #666;
+}
+
+.btn-default {
+    display: block;
+    text-align: center;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    font-size: 1em;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+    .btn-default.style-a {
+        float: left;
+        position: relative;
+        width: 96%;
+        margin: 2% 2% 2% 2%;
+        color: #333 !important;
+        background: -moz-linear-gradient( center top, #ffba43 5%, #ED8700 100% );
+    }
+
+    .btn-default a {
+        padding: 5px 60px;
+    }
+
+    .btn-default.style-a {
+        background: none;
+        color: #333;
+    }
+
+.line-b {
+    border-top: 1px solid #b5b5b5;
+    float: left;
+    width: 100%;
+}
+
+.no-list {
+    font-size: 1.2em;
+    color: rgb(171, 171, 171);
+    text-align: center;
+}
+.no-list img{
+    width:20%;
+}
+
+
+.walletTagPanel {
+    width:100%;
+    height:auto;
+    margin:0 0 0 0;
+    background:#fff;
+    border-top:1px solid #ececec;
+    border-bottom:1px solid #ececec;
+}
+.walletTagPanel ul{
+    width:100%;
+    height:auto;
+    display:table;
+}
+.walletTagPanel ul li{
+    width:83%;
+    height:4.2em;
+    line-height:4.2em;
+    float:right;
+    padding-left:2.6em;
+    font-size:1.2em;
+}
+    .walletTagPanel .tag-li-line {
+        border-bottom:1px solid #ececec;
+    }
+    .walletTagPanel .tag-li-tuijianjiangli {
+        background: url(../../images/coupon/tuijianjiangli.png?v=20160318) 0.5em 1.3em no-repeat, url(../../images/icon-aarow7.png) 97% 1.4em no-repeat;
+        background-size:1.5em,1.9em;
+    }
+    .walletTagPanel .tag-li-fanxian {
+        background: url(../../images/coupon/fanxian.png?v=20160318) 0.5em 1.3em no-repeat, url(../../images/icon-aarow7.png) 97% 1.4em no-repeat;
+        background-size:1.5em,1.9em;
+    }
+    .walletTagPanel .tag-li-xianjinquan {
+        background: url(../../images/coupon/xianjinquan.png?v=20160318) 0.5em 1.3em no-repeat, url(../../images/icon-aarow7.png) 97% 1.4em no-repeat;
+        background-size:1.5em,1.9em;
+    }
+
+    .walletTagPanel .tag-li-jifen {
+        background: url(../../images/coupon/jifen.png?v=20160318) 0.5em 1.3em no-repeat, url(../../images/icon-aarow7.png) 97% 1.4em no-repeat;
+        background-size:1.5em,1.9em;
+    }
+    .walletTagPanel .tag-li-roomcoupon {
+        background: url(../../images/coupon/roomcoupon.png?v=20160318) 0.5em 1.3em no-repeat, url(../../images/icon-aarow7.png) 97% 1.4em no-repeat;
+        background-size:1.5em,1.9em;
+    }
+/**** 我的钱包公用CSS ****/
+.wallet-tap-ul {
+    width:90%;
+    margin:0 auto 0 auto;
+}
+.wallet-tap-ul li{
+    width:50%;
+    float:left;
+}
+    .wallet-tap-ul li .wallet-bignum{
+        font-size:3.6em;
+        color:#888;
+    }
+    .wallet-tap-ul .li-select {
+        border-bottom:3px solid #3e9ec0;
+        color:#3e9ec0;
+    }
+        .wallet-tap-ul .li-select .wallet-bignum{
+            font-size:3.6em;
+            color:#f0822e;
+        }
+.wallet-detail-ul{
+    width:100%;
+    height:auto;
+    display:inline-block;
+}
+.wallet-detail-ul li{
+    width:95%;
+    float:right;
+}
+.wallet-detail-ul .li-line{
+    border-bottom:1px solid #ececec;
+}
+.wallet-detail-ul .left{
+    width:68%;
+    float:left;
+}
+.wallet-detail-ul .right{
+    width:30%;
+    float:right;
+}
+/************************/
+
+/* 返现 */
+.cash-head-panel {
+    width:100%;
+    height:auto;
+    position:fixed;top:0;left:0;z-index:10;
+    background:#fff;
+    border-bottom:1px solid #ececec;
+}
+.cash-tap-li {
+    height:6.7em;
+    text-align:center;
+    vertical-align:middle;
+}
+.cash-tap-li .tit{
+    font-size:1.2em;
+    color:#999;
+}
+.cash-tap-li .wallet-bignum{
+    position:relative;
+    top:0.2em;
+}
+.cash-tap-panel {
+    width:100%;
+    height:auto;
+    margin-top:8.2em;
+    background:#fff;
+    border-top:1px solid #ececec;
+    border-bottom:1px solid #ececec;
+}
+.cash-tap-panel .tit{
+    width:100%;
+    height:2.8em;
+    line-height:2.9em;
+    border-bottom:1px solid #ececec;
+}
+.cash-tap-panel .tit span{
+    margin-left:0.6em;
+    font-size:1.2em;
+    color:#686868;
+}
+.cash-detail-li {
+    padding:1.5em 0 1.5em 0;
+}
+.cash-detail-des {
+    font-size:1.3em;
+    color:#000;
+}
+.cash-detail-date {
+    font-size:1.1em;
+    color:#999;
+}
+.cash-btn-sub {
+    display:table;
+}
+.cash-btn-sub div {
+    width:5.4em;
+    height:2.3em;
+    line-height:2.3em;
+    font-size:1.2em;
+    color:#fff;
+    background:#FF8C01;
+    border:1px solid #FF8C01;
+    text-align:center;
+}
+.cash-btn-span {
+    display:table;
+}
+.cash-btn-span div{
+    width:5.4em;
+    height:2.3em;
+    line-height:2.3em;
+    font-size:1.2em;
+    color:#999;
+    background:#fff;
+    border:1px solid #ccc;
+    text-align:center;
+}
+/**********/
+
+/* 推荐奖励/基金 */
+
+.fund-head-panel {
+    width:100%;
+    height:auto;
+    position:fixed;top:0;left:0;z-index:10;
+    background:#fff;
+    border-bottom:1px solid #ececec;
+}
+.fund-head-info {
+    width:100%;
+    height:auto;
+    background:#FAFAFA;
+    border-bottom:1px solid #ececec;
+}
+.fund-head-info .tit{
+    width:auto;
+    height:2.6em;
+    line-height:2.6em;
+    margin-left:1.2em;
+    font-size:1.2em;
+    color:#666;
+    text-align:right;
+}
+    .fund-head-info .tit .rule{
+        color:#888;
+        margin:0 0.8em 0 0;
+    }
+.fund-head-info .value{
+    width:100%;
+    height:1.6em;
+    line-height:1.1em;
+    font-size:3.6em;
+    color:#f0822e;
+    text-align:center;
+}
+    .fund-head-info .value span{
+        font-size:0.6em;
+        padding:0 0 0 0;
+        margin:0 0 0 0;
+    }
+.fund-tap-li {
+    height:3em;
+    line-height:3em;
+    font-size:1.3em;
+    text-align:center;
+    color:#888;
+}
+.fund-tap-panel {
+    width:100%;
+    height:auto;
+    margin-top:12.8em;
+    background:#fff;
+    border-bottom:1px solid #ececec;
+}
+.fund-detail-li {
+    padding:1.6em 0 1em 0;
+}
+.fund-detail-li .tit {
+    font-size:1.3em;
+    color:#000;
+}
+.fund-detail-li .date {
+    font-size:1.1em;
+    color:#999;
+}
+.fund-detail-li .info {
+    font-size:1.1em;
+    color:#999;
+    margin-left:0.2em;
+}
+.fund-detail-li .money {
+    font-size:1.5em;
+    float:right;
+    margin-right:1.2em;
+}
+    .fund-detail-li .money span{
+        font-size:0.8em;
+        padding:0 0 0 0;
+        margin:0 0 0 0;
+    }
+/**********/
+
+
+/* 现金券 */
+
+.coupon-head-panel {
+    width:100%;
+    height:auto;
+    position:fixed;top:0;left:0;z-index:10;
+    background:#fff;
+    border-bottom:1px solid #ececec;
+}
+.coupon-head-info {
+    width:100%;
+    height:auto;
+    background:#FAFAFA;
+    border-bottom:1px solid #ececec;
+}
+.coupon-head-info .tit{
+    width:auto;
+    height:2.6em;
+    line-height:2.6em;
+    margin-left:1.2em;
+    font-size:1.2em;
+    color:#666;
+    text-align:right;
+}
+    .coupon-head-info .tit .rule{
+        color:#888;
+        margin:0 0.8em 0 0;
+    }
+.coupon-head-info .value{
+    width:100%;
+    height:1.6em;
+    line-height:1.1em;
+    font-size:3.6em;
+    color:#f0822e;
+    text-align:center;
+}
+    .coupon-head-info .value span{
+        font-size:0.6em;
+        padding:0 0 0 0;
+        margin:0 0 0 0;
+    }
+.coupon-tap-li {
+    height:3em;
+    line-height:3em;
+    font-size:1.3em;
+    text-align:center;
+    color:#888;
+}
+.coupon-tap-panel {
+    width:100%;
+    height:auto;
+    margin-top:12.8em;
+    background:#fff;
+    border-bottom:1px solid #ececec;
+}
+.coupon-detail-li {
+    padding:1.6em 0 1em 0;
+}
+.coupon-detail-li .tit {
+    font-size:1.3em;
+    color:#000;
+}
+.coupon-detail-li .date {
+    font-size:1.1em;
+    color:#999;
+}
+.coupon-detail-li .info {
+    font-size:1.1em;
+    color:#999;
+    margin-left:0.2em;
+}
+.coupon-detail-li .money {
+    font-size:1.5em;
+    float:right;
+    margin-right:1.2em;
+}
+    .coupon-detail-li .money span{
+        font-size:0.8em;
+        padding:0 0 0 0;
+        margin:0 0 0 0;
+    }
+/**********/
+
+/* 积分 */
+
+.point-head-panel {
+    width:100%;
+    height:auto;
+    position:fixed;top:0;left:0;z-index:10;
+    background:#fff;
+    border-bottom:1px solid #ececec;
+}
+.point-head-info {
+    width:100%;
+    height:auto;
+    background:#fafafa;
+    border-bottom:1px solid #ececec;
+}
+.point-head-info .tit{
+    width:auto;
+    height:2.6em;
+    line-height:2.6em;
+    margin-left:1.2em;
+    font-size:1.2em;
+    color:#666;
+}
+.point-head-info .rule{
+    width:100%;
+    height:2em;
+    line-height:2em;
+    margin:0 0 0 0;
+    font-size:1.2em;
+    color:#666;
+    text-align:right;
+}
+    .point-head-info .rule img{
+        width:0.8em;
+        margin:0 0 0 0;
+        vertical-align:middle;
+        margin:0 0.2em 0.2em 0.2em;
+    }
+    .point-head-info .rule a{
+        color:#888;
+        font-size:0.8em;
+        margin:0 0.8em 0 0; 
+    }
+.point-head-info .value{
+    width:100%;
+    height:1.2em;
+    line-height:1.2em;
+    font-size:3.6em;
+    color:#f0822e;
+    text-align:center;
+}
+.point-head-info .link{
+    width:100%;
+    height:auto;
+    text-align:center;
+    margin:0.7em auto 1.3em auto;
+}
+    .point-head-info .link a{
+        width:6.5em;
+        height:auto;
+        line-height:1em;
+        font-size:1.2em;
+        color:#FF8C01;
+        text-align:center;
+        border:1px solid #dcdcdc;
+        display:inline-table;
+        padding:0.4em 0 0.4em 0;
+        border-radius: 5px;
+    }
+.point-tap-li {
+    height:3em;
+    line-height:3em;
+    font-size:1.3em;
+    text-align:center;
+    color:#888;
+}
+
+/* 房券 */
+.roomcoupon-item {
+    width:100%;
+    margin:0 0 1em 0;
+    background:#fff;
+    position:relative;
+}
+    .roomcoupon-item a{
+        color:#000;
+    }
+    .roomcoupon-item .icon {
+        width:2em;
+        height:1.5em;
+        position:absolute;
+        margin:-3.7em 0 0 5%;
+    }
+        .roomcoupon-item .icon img{
+            width:2em;
+            position:absolute;
+        }
+    .roomcoupon-item .hotel{
+        width:80%;
+        margin:0 1em 0 auto;
+        padding:1em 0 0 0;
+    }
+        .roomcoupon-item .hotel .left{
+            width:70%;
+            float:left;
+        }
+            .roomcoupon-item .hotel .left .hotelname{ 
+                font-size:1.3em;
+            }
+            .roomcoupon-item .hotel .left .packagename{ 
+                line-height:1em;
+                font-size:1.2em;
+            }
+            .roomcoupon-item .hotel .left .timeinfo{ 
+                line-height:2.2em;
+                font-size:1.1em;
+            }
+        .roomcoupon-item .hotel .right{
+            width:30%;
+            height:3.8em;
+            line-height:3.8em;
+            float:right;
+            text-align:right;
+        }
+            .roomcoupon-item .hotel .right .price {
+                font-size:1.5em;
+                color:#666;
+            }
+                .roomcoupon-item .hotel .right .price .t{
+                    padding:0;
+                    font-size:0.6em;
+                    color:#666;
+                }
+            .roomcoupon-item .hotel .right img{
+                width:0.5em;
+                margin:0 0 0 0;
+                vertical-align:middle;
+                margin:0 0.3em 0.5em 0.2em;
+            }
+    .roomcoupon-item .hotel-bottom-line{
+        width:95%;
+        margin:0 0 0 auto;
+        padding:0.6em 0 0 0;
+        border-bottom:1px solid #dcdcdc;
+    }
+
+    .roomcoupon-item .time{
+        width:80%;
+        margin:0 1em 0 auto;
+        padding:1em 0 1em 0;
+        border-bottom:1px solid #dcdcdc;
+        color:#666;
+        font-size:1.2em;
+    }
+    .roomcoupon-item .quanlist{
+        width:100%;
+        margin:0 auto 0 auto;
+        padding:0.8em 0 0.5em 0;
+        font-size:1.2em;
+    }
+        .roomcoupon-item .quanlist ul{
+            width:83.5%;
+            padding:0 0 0 0;
+            margin:0 0 0 auto;
+            list-style:none;
+        }
+            .roomcoupon-item .quanlist ul li{
+                width:100%;
+                height:1.6em;
+                line-height:1.6em;
+                margin:0;
+                display:inline-table;
+            }
+                .roomcoupon-item .quanlist ul li .left{
+                    width:60%;
+                    float:left;
+                    padding:0;
+                }
+                    .roomcoupon-item .quanlist ul li .left .label{
+                        margin-right:0.5em;
+                        padding:0;
+                        color:#666;
+                        font-size:1em;
+                    }
+                    .roomcoupon-item .quanlist ul li .left .value{
+                        color:#333;
+                        font-size:1.1em;
+                        font-family:Arial;
+                    }
+                .roomcoupon-item .quanlist ul li .right{
+                    width:6em;
+                    float:right;
+                    text-align:center;
+                    margin-right:0.2em;
+                }
+                .roomcoupon-item .quanlist ul li .right .use0{
+                    font-size:1em;
+                    color:#0096cf;
+                }
+                .roomcoupon-item .quanlist ul li .right .use1{
+                    font-size:1em;
+                    color:#999;
+                }
+                .roomcoupon-item .quanlist ul li .right .paybtn{
+                    width:4.8em;
+                    height:2em;
+                    line-height:2.1em;
+                    margin:0 0 0 0;
+                    font-size:1em;
+                    text-align:center;
+                    color:#fff;
+                    background:#ff8000;
+                    border-radius: 3px;
+                    display:inline-table;
+                }
+                .roomcoupon-item .quanlist ul li .right .exchangebtn{
+                    width:4.8em;
+                    height:1.9em;
+                    line-height:1.9em;
+                    margin:0 0 0 0;
+                    font-size:1em;
+                    text-align:center;
+                    color:#ff8000;
+                    background:#fff;
+                    border:1px solid #ff8000;
+                    border-radius: 3px;
+                    display:inline-table;
+                }
+
+/**********/

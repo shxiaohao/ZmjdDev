@@ -1,0 +1,144 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    var userid = ViewBag.UserId;
+    var userlat = ViewBag.Userlat;
+    var userlng = ViewBag.Userlng;
+
+    var isVip = ViewBag.IsVip;
+    
+    var isInWeixin = ViewBag.isInWeixin;
+    var isApp = ViewBag.IsApp;
+    var isMobile = ViewBag.IsMobile;
+    var isThanVer46 = ViewBag.IsThanVer46;
+    var isThanVer47 = ViewBag.IsThanVer47;
+    var appType = ViewBag.AppType;
+
+    //ad box
+    PopupBoxData adbox = ViewBag.BoxData;
+    
+    ViewBag.Title = !isInWeixin ? "首页" : "逛逛";
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    ViewBag.LoadHmBaidu = false;
+}
+
+@section styles
+{
+    <link href="~/Content/css/framework/amazeui.min.css" rel="stylesheet" />
+    <link href="~/Content/css/app/home.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style type="text/css">
+    </style>
+}
+
+<div class="home-panel">
+
+    @if (isInWeixin || (!isApp && isMobile))
+    {
+        <div class="home-search">
+            <div class="h-s-left"><div class="input-div" id="h-s-inp-div">度假地、酒店</div></div>
+        </div>
+    }
+    else if (isApp && isThanVer47 && userid > 0)
+    {
+        <div style="padding: 0 0 1em 0; "></div>
+    }
+    
+    <div id="homeTopSection" class="home-hide"><img src="http://whfront.b0.upaiyun.com/app/img/home/home-load2-16x9.png" class="img-loading" alt="" /></div>
+
+    @if (!isVip)
+    {
+        <div id="homeVipBanner" onclick="gourl('/Coupon/VipShopInfo?_newpage=1')"><img src="http://whfront.b0.upaiyun.com/app/img/home/home-vip-banner.png?v-20161006.1" alt="vip" /></div>
+    }
+    
+    @*<div id="homeVipBanner" onclick="gourl('/Active/Holiday?userid=@(userid)&_newpage=1')"><img src="@(isVip ? "http://whphoto.b0.upaiyun.com/116UOHX0_jupiter?v-20160920.1" : "http://whphoto.b0.upaiyun.com/116UOHX1_jupiter?v-20160920.1")" alt="holiday" /></div>
+    <div id="homeVipBanner" onclick="gourl('/package/collection2/13?userid=@(userid)&_newpage=1')"><img src="http://whphoto.b0.upaiyun.com/116OPGS1_jupiter?v-20161006.1" alt="vip" /></div>*@
+
+    <div id="disSearchHisSection" class="section-seat home-hide"><img src="http://whfront.b0.upaiyun.com/app/img/home/home-load2-16x9.png" class="img-loading" alt="" /></div>
+
+    <div id="vipPackageSection" class="section-seat home-hide"><img src="http://whfront.b0.upaiyun.com/app/img/home/home-load2-16x9.png" class="img-loading" alt="" /></div>
+
+    <div id="flashDealsSection" class="section-seat home-hide"><img src="http://whfront.b0.upaiyun.com/app/img/home/home-load2-16x9.png" class="img-loading" alt="" /></div>
+
+    <div id="groupDealsSection" class="section-seat home-hide"><img src="http://whfront.b0.upaiyun.com/app/img/home/home-load2-16x9.png" class="img-loading" alt="" /></div>
+    
+    <div id="recentSeeSection" class="section-seat home-hide"><img src="http://whfront.b0.upaiyun.com/app/img/home/home-load2-16x9.png" class="img-loading" alt="" /></div>
+
+    <div id="friendRecSection" class="section-seat home-hide"><img src="http://whfront.b0.upaiyun.com/app/img/home/home-load2-16x9.png" class="img-loading" alt="" /></div>
+
+    <div id="weekPackageSection" class="section-seat home-hide"><img src="http://whfront.b0.upaiyun.com/app/img/home/home-load2-16x9.png" class="img-loading" alt="" /></div>
+
+    <div id="weekPackageSection2" class="home-hide">
+        <div class="home-tit home-tit-big-height home-hide">
+            @*<div class="center">－ 其它特惠套餐 －</div>*@
+            <div class="left">其它特惠套餐</div>
+            <div class="right"></div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="home-hlist-panel home-hide">
+            <div id="hotelPackageListSection"></div>
+        </div>
+    </div>
+
+    @if (isThanVer47)
+    {
+        <div id="shareFriendsSection">
+            <div class="home-tit home-tit-big-height home-hide">
+                @*<div class="center">－ 邀请朋友赢住基金 －</div>*@
+                <div class="left">邀请朋友赢住基金</div>
+                <div class="right"></div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="home-sharefriends" onclick="gourl('/Fund/UserRecommend2?userid=@(userid <= 0 ? "{userid}" : userid.ToString())&realuserid=1&_newpage=1')">
+                <img src="http://whfront.b0.upaiyun.com/app/img/home/home-sharetofriend-bg2.jpg" alt="" />
+                <div class="info">
+                    邀请好友注册成功即获50元现金券，好友在app完成预定并入住还有额外奖励哦~
+                </div>
+            </div>
+        </div>   
+    }
+    <input type="hidden" id="userid" value="@userid" />
+    <input type="hidden" id="userlat" value="@userlat" />
+    <input type="hidden" id="userlng" value="@userlng" />
+    <input type="hidden" id="isApp" value="@(isApp ? "1" : "0")" />
+    <input type="hidden" id="isThanVer46" value="@(isThanVer46 ? "1" : "0")" />
+    <input type="hidden" id="isThanVer47" value="@(isThanVer47 ? "1" : "0")" />
+    @if (userid == 88888888)
+    {
+        <div style="margin:2em 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3A%2F%2Fwww.zmjiudian.com%2Fapp%2Fhome%3Fuserid%3D%7Buserid%7D%26userlat%3D%7Buserlat%7D%26userlng%3D%7Buserlng%7D">GO APP >>></a></div>
+        <div style="margin:2em 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3A%2F%2F192.168.1.22%3A8081%2Fapp%2Fhome%3Fuserid%3D%7Buserid%7D%26userlat%3D%7Buserlat%7D%26userlng%3D%7Buserlng%7D">GO APP (Local) >>></a></div>   
+    }
+</div>
+
+@section scripts
+{
+    <script src="~/Content/js/framework/jquery.lazyload.min.js"></script>
+    <script src="~/Content/js/app/home.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/amazeui.min.js"></script>
+    @*<script src="~/Content/js/framework/amazeui.min.js"></script>*@
+    
+    <div class="home-city-section" id="cityMenuSection" style="display:none;">
+        @*@Html.Partial("CityMenu", cityListEntity)*@
+    </div>
+    <script>
+        try {
+            onAppShowAdBox = function () {
+                var boxId = "@(adbox.boxId)";
+                var frequency = "@(adbox.frequency)";
+                var isShow = "@(adbox.isShow)";
+                var lazyLoadTime = "@(adbox.lazyLoadTime)";
+                var showUrl = "@(adbox.showUrl)";
+                var widthHeightRatio = "@(adbox.widthHeightRatio)";
+                var widthRatio = "@(adbox.widthRatio)";
+
+                try { whotel.appShowAdBox(boxId, frequency, isShow, lazyLoadTime, showUrl, widthHeightRatio, widthRatio); } catch (e) { }
+                var returnStr = '{"boxId":"{0}","frequency":"{1}","isShow":"{2}","lazyLoadTime":"{3}","showUrl":"{4}","widthHeightRatio":"{5}","widthRatio":"{6}"}';
+                return returnStr.format(boxId, frequency, isShow, lazyLoadTime, showUrl, widthHeightRatio, widthRatio);
+            }
+            onAppShowAdBox();
+        }
+        catch (e) { }
+    </script>
+
+}

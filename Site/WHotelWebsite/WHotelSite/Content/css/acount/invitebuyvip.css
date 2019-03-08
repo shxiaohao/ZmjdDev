@@ -1,0 +1,111 @@
+﻿@charset "UTF-8";
+html, body {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  background: #fff;
+  -webkit-user-select: none;
+  user-select: none;
+  overflow-x: hidden; 
+  font-family:Arial;
+}
+
+/*禁止长按链接与图片弹出菜单*/
+a, img {
+  -webkit-touch-callout: none; }
+
+.rec-panel {
+    width:100%;
+    height:auto;
+    padding:1em 0 0 0;
+    font-family:Arial;
+}
+    .rec-panel .tit{
+        width:80%;
+        height:auto;
+        margin:1em auto 0.9em auto;
+        padding:0 0 0 0;
+        text-align:center;
+        font-size:1.8em;
+        color:#fff;
+        font-weight:bold;
+        text-shadow:rgba(0,0,0,.3) 1px 1px 0;
+    }
+    .rec-panel .info{
+        width:40%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0 0 0 0;
+        text-align:center;
+        display:table;
+    }
+        .rec-panel .info img{
+            width:100%;
+        }
+
+    .rec-panel .info-txt1{
+        width:60%;
+        height:auto;
+        margin:1em auto 0 auto;
+        padding:0 0 0 0;
+        font-size:1.5em;
+        font-weight:bold;
+        color:#2c2c2c;
+        text-align:center;
+    }
+    .rec-panel .info-txt2{
+        width:60%;
+        height:auto;
+        margin:0.5em auto 0 auto;
+        padding:0 0 0 0;
+        font-size:1em;
+        color:#555;
+        text-align:center;
+    }
+
+    .rec-panel .btns{
+        width:80%;
+        height:auto;
+        margin:5em auto 0 auto;
+        padding:0em 0 0 0;
+        text-align:center;
+    }
+        .rec-panel .btns .share{
+            width:100%;
+            height:2.6em;
+            line-height:2.7em;
+            margin:0 auto 0 auto;
+            font-size:1.2em;
+            text-align:center;
+            color:#fff;
+            background:#3E9EC0;
+            border-radius: 4px;
+        }
+            .rec-panel .btns .share:hover{
+                background:#2e91b5;
+            }
+        .rec-panel .btns .copy{
+            width:100%;
+            height:2.6em;
+            line-height:2.7em;
+            margin:1em auto 0 auto;
+            font-size:1.2em;
+            text-align:center;
+            color:#3E9EC0;
+            background:#fff;
+            border:1px solid #3E9EC0;
+            border-radius: 4px;
+        }
+            .rec-panel .btns .copy:hover{
+                color:#2e91b5;
+            }
+        .rec-panel .btns .link{
+            width:100%;
+            height:auto;
+            margin:1.3em auto 0 auto;
+            text-align:center;
+        }
+            .rec-panel .btns .link a{
+                color:#3E9EC0;
+                font-size:1em;
+                text-decoration:none;
+            }

@@ -1,0 +1,10 @@
+
+[2015/5/19 9:07:03] Start Job [CheckCrawlerHotelContyped]
+[2015/5/19 9:07:36] Try 1
+[2015/5/19 9:07:46] while err:缺少对象
+[2015/5/19 9:08:13] Try 1
+[2015/5/19 9:09:31] while err:缺少对象
+[2015/5/19 9:09:41] Try 1
+[2015/5/19 9:10:24] while err:缺少对象
+[2015/5/19 9:10:28] Try 1
+[2015/5/19 16:51:58] Start Job [PreProxyDataJob]

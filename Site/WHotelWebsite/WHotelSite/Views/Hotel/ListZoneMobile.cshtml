@@ -1,0 +1,163 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params.Hotel
+@{
+    var cssVersion = "190001010000";
+    try
+    {
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex) { }
+    
+    List<ListHotelItem3> hotelList = Model;
+    Dictionary<string, List<ListHotelItem3>> hotelListDic = ViewBag.HotelListDic;
+    ViewBag.BodyClass = "m-hotellistpage";
+    ViewBag.Title = "周末酒店";
+    
+    //国内海外选择列表
+    Dictionary<string, Dictionary<string, string>> inchinaDic = ViewBag.InChinaDic;
+    Dictionary<string, Dictionary<string, string>> unchinaDic = ViewBag.UnChinaDic;
+
+    //省份列表
+    Dictionary<string, string> pDic = ViewBag.PDic;
+    Dictionary<string, string> hotProvinceDic = ViewBag.HotProvinceDic;
+    
+    //inchina
+    var inchina = ViewBag.InChina;
+    var oneName = inchina == 1 ? "国内" : "海外";
+
+    //当前地区
+    var zone = ViewBag.Zone;
+
+    //当前地址
+    var cityId = ViewBag.CityId;
+    var pName = ViewBag.PName;
+}
+@section styles
+{
+    @Styles.Render("~/Content/css/zmjiudian-list.css?v=" + cssVersion)
+}
+<!-- Title -->
+<div class="m-title">
+    <div class="info">
+        <span class="one">@oneName</span><span class="two" data-op="0">@pName<img src="/Content/images/aarow.png" alt="" /></span>
+    </div>
+</div>
+<!-- HotelList -->
+<div id="hotellist">
+    @if (true)
+    {
+        <div class="m-list">
+            @Html.Partial("ListMobileContent", hotelList)
+        </div>
+    }
+    else
+    { 
+        foreach (var cityKey in hotelListDic.Keys)
+        {
+            var hlist = hotelListDic[cityKey];
+            <div class="m-city-tit">
+                <img src="/Content/images/local.png" alt="" />@cityKey
+            </div>
+            <div class="m-list">
+                @Html.Partial("ListMobileContent", hlist)
+            </div>
+        }   
+    }
+</div>
+<div class="m-district-select" style="display:none;">
+    
+    <div class="tit">当前选择</div>
+    <div class="singleitem">@pName</div>
+    @if (inchina == 1)
+    {
+        <div class="tit">热门地区</div>
+        <div class="list">
+            <ul>
+                @if (hotProvinceDic.Keys.Count > 0)
+                {
+                    for (int i = 0; i < hotProvinceDic.Keys.Count; i++)
+                    {
+                        var key = hotProvinceDic.Keys.ToArray()[i];
+                        var p = hotProvinceDic[key];
+                        <li onclick="gourl('/m/inchina@(inchina)?city=@(key)')" class="@((i+1)%3 == 0 ? "noright" : "")"><div>@p</div></li>
+                    }
+                }
+            </ul>
+        </div>
+        <div class="tit">其它地区</div>
+        <div class="list">
+            <ul>
+                @if (pDic.Keys.Count > 0)
+                {
+                    for (int i = 0; i < pDic.Keys.Count; i++)
+                    {
+                        var key = pDic.Keys.ToArray()[i];
+                        var p = pDic[key];
+                        <li onclick="gourl('/m/inchina@(inchina)?city=@(key)')" class="@((i+1)%3 == 0 ? "noright" : "")"><div>@p</div></li>
+                    }
+                }
+            </ul>
+        </div>
+    }
+    else
+    { 
+        <div class="tit">地区</div>
+        <div class="list">
+            <ul>
+                @if (pDic.Keys.Count > 0)
+                {
+                    for (int i = 0; i < pDic.Keys.Count; i++)
+                    {
+                        var key = pDic.Keys.ToArray()[i];
+                        var p = pDic[key];
+                        <li onclick="gourl('/m/inchina@(inchina)?city=@(key)')" class="@((i+1)%3 == 0 ? "noright" : "")"><div>@p</div></li>
+                    }
+                }
+            </ul>
+        </div>
+        @*<div class="tit">当前选择</div>
+        <div class="singleitem">@zone</div>
+        <div class="tit">其它地区</div>
+        <div class="list">
+            <ul>
+                @if (unchinaDic.Keys.Count > 0)
+                {
+                    for (int i = 0; i < unchinaDic.Keys.Count; i++)
+                    {
+                        var key = unchinaDic.Keys.ToArray()[i];
+                        <li onclick="gourl('/m/inchina@(inchina)?zone=@(key)')" class="@((i+1)%3 == 0 ? "noright" : "")"><div>@key</div></li>
+                    }
+                }
+            </ul>
+        </div>*@
+    }
+
+</div>
+@section scripts
+{
+    @Scripts.Render("~/Content/js/srollpage.js", "~/Content/js/hotel/list.js")
+    <script>
+        function gourl(url) {
+            location.href = url;
+        }
+
+        $(".two").click(function ()
+        {
+            var op = $(this).data("op");
+            if (op == "1") {
+                $("#hotellist").show();
+                $(".m-district-select").hide();
+                $(this).data("op", "0");
+            }
+            else {
+                $(".m-district-select").show();
+                $("#hotellist").hide();
+                $(this).data("op", "1");
+            }
+        });
+
+    </script>
+}

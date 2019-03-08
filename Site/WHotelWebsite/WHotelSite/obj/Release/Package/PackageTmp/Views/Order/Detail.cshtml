@@ -1,0 +1,354 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params.Order
+@using HJD.HotelPrice.Contract.DataContract.Order
+
+@model PackageOrderInfo20
+@{
+    ViewBag.Title = "订单详情";
+    ViewBag.BodyClass = "hotellistpage";
+    string returnUrl = Url.RouteUrl("我的订单");
+    OrderParam param = (OrderParam)ViewBag.param;
+    bool isMobile = WHotelSite.Utils.IsMobile();
+}
+
+<!-- Add -->
+<div class="container mainbody hidden-xs">
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            @Helpers.BreadCrumbs(Url, 0, 0, 1)
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>
+
+<div class="container mainbody">
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            <div class="row">
+                <!-- 订单列表 左侧导航 Left -->
+                <div class="col-md-3 col-sm-3  Screening hidden-xs">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">个人中心</h3>
+                        </div>
+                        @Helpers.InsertLeftNaviPanel(1,Url)
+                    </div>
+                    <div class="tel">
+                        客服电话:<i>4000-021-702</i>
+                    </div>
+                </div>
+                <!-- 订单列表 右侧导航 Right -->
+                <div class="col-md-9 col-sm-9">
+                    <!-- 条件选择栏 mobile 开始 -->
+                    <div class="row toolbar2 visible-xs">
+                        <div class="col-xs-3">
+                            <button type="button" onclick="history.back()" class="btn btn-sm  btn-img01"><img src="@Url.Content("~/content/images/icon-back.png")" class="mobilepic" alt="" /></button>
+                        </div>
+                        <div class="col-xs-6 text-center listtitle">
+                            我的订单
+                        </div>
+                        <div class="col-sm-2 col-xs-3 text-right">
+                        </div>
+                    </div>
+                    <!-- 条件选择栏 mobile 结束 -->
+                    <!-- 订单详细内容 pc 开始 -->
+                    <div class="row userright hidden-xs">
+                        <div class="col-sm-12 Toolbar">
+                            <button type="submit" data-return-url="@returnUrl" class="btn btn-default btngray2 btnReturnList">返回订单列表</button>
+                        </div>
+                        <div class="col-sm-12 dddetail">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <dl class="dl-horizontal ddinfo">
+                                        <dt>订单号：</dt>
+                                        <dd>@param.OrderID</dd>
+                                        <dt>预定日期：</dt>
+                                        <dd>@Model.SubmitDate.ToShortDateString()</dd>
+                                        @*@if(!string.IsNullOrEmpty(Model.PayInfo)){
+                                            <dt>支付方式：</dt>
+                                            <dd>@Model.PayInfo</dd>
+                                        }*@
+                                    </dl>
+                                </div>
+                                <div class="col-sm-4">
+                                    订单状态：@Model.StateName
+                                </div>
+                                <div class="col-sm-4 jg">
+                                    订单金额：<span class="price">￥<strong>@Math.Round(Model.Amount,0)</strong></span>
+                                </div>
+                            </div>
+                            <hr class="linedotted" />
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <dl class="dl-horizontal ddinfo">
+                                        <dt>入住酒店：</dt>
+                                        <dd><h4>@Model.HotelName</h4></dd>
+                                        <dt>入住日期：</dt>
+                                        <dd>@Model.CheckIn.ToShortDateString() —— @Model.CheckIn.AddDays(@Model.NightCount).ToShortDateString()&nbsp;&nbsp;@(Model.NightCount) 晚</dd>
+                                        <dt>房 间 数：</dt>
+                                        <dd>@(Model.RoomCount)间</dd>
+                                        <br/>
+                                        <dt>套    餐：</dt>
+                                        <dd>@Model.PackageName &nbsp; ￥@Math.Round(Model.Amount/Model.RoomCount,0) </dd>
+                                        <dt>套餐说明：</dt>
+                                        <dd>
+                                            @foreach(OrderDetailDailyEntity dailyEntity in Model.DailyItems){
+                                                foreach(OrderDetailItem packageItem in @dailyEntity.Items){
+                                                    @packageItem.Description <br />
+                                                }
+                                            }
+                                        </dd>
+                                        <br />
+                                        <dt>注意事项：</dt>
+                                        <dd>
+                                            @foreach(OrderDetailItem noticeItem in Model.Notice){
+                                                @Html.Raw(noticeItem.Description) <br />
+                                            }
+                                        </dd>
+                                        <br />
+                                        <dt>订单备注：</dt>
+                                        <dd>@Model.Note</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            <hr class="linedotted" />
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <dl class="dl-horizontal ddinfo">
+                                        <dt>入 住 人：</dt>
+                                        <dd>@Model.Contact</dd>
+                                        <dt>联 系 人：</dt>
+                                        <dd>@Model.Contact</dd>
+                                        <dt>联系电话：</dt>
+                                        <dd>@Model.ContactPhone</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                            @if (Model.InvoiceInfo != null)
+                            {
+                                <hr class="linedotted" />
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <dl class="dl-horizontal ddinfo">
+                                            <dt>发票类型：</dt>
+                                            <dd>@Model.InvoiceInfo.Type</dd>
+                                            <dt>发票抬头：</dt>
+                                            <dd>@Model.InvoiceInfo.Title</dd>
+                                            <dt>发票金额：</dt>
+                                            <dd>@(Model.InvoiceInfo.Price/100)</dd>
+                                            <dt>快递状态：</dt>
+                                            <dd>@Model.InvoiceInfo.State</dd>
+                                            <dt>收 件 人：</dt>
+                                            <dd>@Model.InvoiceInfo.Contact</dd>
+                                            <dt>寄送地址：</dt>
+                                            <dd>@Model.InvoiceInfo.Address</dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            }
+                            <hr class="linedotted" />
+                            <div class="text-center">
+                                @Helpers.BindOrderDetailOption(Url, param.OrderID, Model.HotelID, Model.PID, Model.CheckIn, Model.CheckIn.AddDays(Model.NightCount), Model.State, Model.Contact, Model.ContactPhone,Model.RoomCount,Model.Note);
+                            </div>
+                        </div>
+                    </div>                    
+                    <!-- 订单详细内容 pc 开始 -->
+                    <!-- 订单详细内容 mobile 开始 -->
+                    <div class="dddetailmobile visible-xs">
+                        <div class="row">
+                            <table cellspacing="0" cellpadding="0" border="0" class="ddtable">
+                                <tr>
+                                    <th>订单金额</th>
+                                    <td class="price alignright valignmiddle">￥<strong>@Math.Round(Model.Amount,0)</strong></td>
+                                </tr>
+                            </table>
+                            <hr class="ddtablehr" />
+                            <table cellspacing="0" cellpadding="0" border="0" class="ddtable">
+                                <tr>
+                                    <th>订单状态</th>
+                                    <td><span class="dt-confirm">@Model.StateName</span></td>
+                                </tr>
+                                <tr>
+                                    <th>订 单 号</th>
+                                    <td>@param.OrderID</td>
+                                </tr>
+                                <tr>
+                                    <th>预定日期</th>
+                                    <td>@Model.SubmitDate.ToShortDateString()</td>
+                                </tr>
+                            </table>
+                            @*@if (!string.IsNullOrEmpty(Model.PayInfo))
+                            {
+                                <hr class="ddtablehr" />
+                                <table cellspacing="0" cellpadding="0" border="0" class="ddtable">
+                                    <tr>
+                                        <th>支付方式</th>
+                                        <td>@Model.PayInfo</td>
+                                    </tr>
+                                </table>
+                            }*@
+                        </div>
+                        <div class="row">
+                            <a href="@Url.Action("Detail", "Hotel", new { hotel = @Model.HotelID })" target="_parent" class="alink01">
+                                <table cellspacing="0" cellpadding="0" border="0" class="ddtable">
+                                    <tr>
+                                        <th>入住酒店</th>
+                                        <td>@Model.HotelName</td>
+                                        <td width="20"><img src="@Url.Content("~/Content/images/icon-aarow3.png")" alt="=>" /></td>
+                                    </tr>
+                                </table>
+                            </a>
+                            <hr class="ddtablehr" />
+                            <table cellspacing="0" cellpadding="0" border="0" class="ddtable">
+                                <tr>
+                                    <th>入住日期</th>
+                                    <td>@Model.CheckIn.ToShortDateString() —— @Model.CheckIn.AddDays(@Model.NightCount).ToShortDateString() &nbsp;&nbsp;@(Model.NightCount) 晚</td>
+                                </tr>
+                                <tr>
+                                    <th>房 间 数</th>
+                                    <td>@Model.RoomCount 间</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">&nbsp; </td>
+                                </tr>
+                                <tr>
+                                    <th>套 餐</th>
+                                    <td>@Model.PackageName &nbsp; ￥@Math.Round(Model.Amount / Model.RoomCount, 0) </td>
+                                </tr>
+                                <tr>
+                                    <th>套餐说明</th>
+                                    <td>
+                                        @foreach (OrderDetailDailyEntity dailyEntity in Model.DailyItems)
+                                        {
+                                            foreach (OrderDetailItem packageItem in @dailyEntity.Items)
+                                            {
+                                                @packageItem.Description <br />
+                                            }
+                                        }
+                                    </td> 
+                                </tr>
+                            </table>
+                            <hr class="ddtablehr2" />
+                            <table cellspacing="0" cellpadding="0" border="0" class="ddtable">
+                                <tr>
+                                    <th>注意事项</th>
+                                    <td>
+                                        @foreach (OrderDetailItem noticeItem in Model.Notice)
+                                        {
+                                            @Html.Raw(noticeItem.Description) <br />
+                                        }
+                                    </td>
+                                </tr>
+                            </table>
+                            <hr class="ddtablehr2" />
+                            <table cellspacing="0" cellpadding="0" border="0" class="ddtable">
+                                <tr>
+                                    <th>订单备注</th>
+                                    <td>@Model.Note</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <table cellspacing="0" cellpadding="0" border="0" class="ddtable">
+                                <tr>
+                                    <th>入 住 人</th>
+                                    <td>@Model.Contact</td>
+                                </tr>
+                                <tr>
+                                    <th>联 系 人</th>
+                                    <td>@Model.Contact</td>
+                                </tr>
+                                <tr>
+                                    <th>联系电话</th>
+                                    <td>@Model.ContactPhone</td>
+                                </tr>
+                            </table>
+                            @if (Model.InvoiceInfo != null)
+                            {
+                                <hr class="ddtablehr2" />
+                                <table cellspacing="0" cellpadding="0" border="0" class="ddtable">
+                                    <tr>
+                                        <th>发票类型：</th>
+                                        <td>@Model.InvoiceInfo.Type</td>
+                                    </tr>
+                                    <tr>
+                                        <th>发票抬头：</th>
+                                        <td>@Model.InvoiceInfo.Title</td>
+                                    </tr>
+                                    <tr>
+                                        <th>发票金额：</th>
+                                        <td>@Model.InvoiceInfo.Price</td>
+                                    </tr>
+                                    <tr>
+                                        <th>快递状态：</th>
+                                        <td>@Model.InvoiceInfo.State</td>
+                                    </tr>
+                                    <tr>
+                                        <th>收 件 人：</th>
+                                        <td>@Model.InvoiceInfo.Contact</td>
+                                    </tr>
+                                    <tr>
+                                        <th>寄送地址：</th>
+                                        <td>@Model.InvoiceInfo.Address</td>
+                                    </tr>
+                                </table>
+                            }
+                            <hr class="ddtablehr2" />
+                            <table cellspacing="0" cellpadding="0" border="0" class="ddtable">
+                                <tr>
+                                    <td>周末酒店客服电话<br /><span class="tel"><i>4000-021-702</i></span></td>
+                                    <td width="20" class="valignmiddle"><img src="@Url.Content("~/Content/images/icon-aarow3.png")" alt="=>" /></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="text-center">
+                            @Helpers.BindOrderDetailOption(Url, param.OrderID, Model.HotelID, Model.PID, Model.CheckIn, Model.CheckIn.AddDays(Model.NightCount), Model.State, Model.Contact, Model.ContactPhone, Model.RoomCount, Model.Note);
+                        </div>
+                    </div>
+                    <!-- 订单详细内容 mobile 结束 -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>
+
+@if (!isMobile)
+{
+    <div class="modal fade paymodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true" style="margin-top:0;padding-top:80px;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">选择支付方式</h4>
+                </div>
+                <div class="modal-body row">
+                    <div class="col-xs-1">
+                    </div>
+                    <div class="col-xs-9">
+                        <ul class="list-inline">
+                            <li style="margin-right:120px">
+                                <input id="upayRadio" type="radio" name="optionsRadios" value="upay" style="margin-right:10px" checked="checked" />
+                                <a href="javascript:;" id="upayLink" style="font-size:large">银行卡支付</a>
+                            </li>
+                            <li>
+                                <input id="alipayRadio" type="radio" name="optionsRadios" value="alipay" style="margin-right:10px" />
+                                <a href="javascript:;" id="alipayLink" style="font-size:large">支付宝支付</a>
+                            </li>
+                        </ul>
+                        <button id="gotoPay" data-href="" style="margin-right: 0px; position: relative; left: 400px;" class="btn btn-01">去付款</button>
+                    </div>
+                    <div class="col-xs-1">
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+}

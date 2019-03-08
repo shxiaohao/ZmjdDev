@@ -1,0 +1,1474 @@
+﻿
+/*******报名*******/
+.weixinreg_xmas_body {
+    background:#3D3C39;
+}
+.weixinreg_xmas_body2 {
+    z-index: -1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+.weixinreg_regdone_body {
+    background:#f0f0f0;
+}
+.weixinreg_end_body {
+    background:#f0f0f0;
+}
+.reg-body {
+    width: 100%;
+    height: auto;
+    margin:0 auto 0 auto;
+}
+.reg-top {
+    width: 100%;
+    height: auto;
+    text-align:center;
+}
+    .reg-top .main-element {
+        width:100%;
+        max-width:660px;
+        height:auto;
+        margin: 0 auto 0 auto;
+        padding:1em 0 0 0;
+    }
+    .reg-top .regtitpic {
+        width:100%;
+        height:0.8em;
+        margin: 0 auto 0 auto;
+        padding:0 0 0 0;
+        display:inline-table;
+        position:relative;
+    }
+        .reg-top .regtitpic img{
+            width:100%;
+        }
+        .reg-top .header-tit{
+            width: 100%;
+            height: auto;
+            position:absolute;
+            left:0em;
+            bottom:0em;
+            padding:0 0 1.2em 0;
+            background:-webkit-gradient(linear, 18% 11%, 14% 100%,from(transparent), to(#333));
+        }
+            .reg-top .header-tit .t1{
+                width: auto;
+                height: auto;
+                font-size:2em;
+                /*font-weight:bold;*/
+                color:#fff;
+                text-shadow:rgba(0,0,0,.6) 1px 1px 1px;
+            }
+            .reg-top .header-tit .t2{
+                width: auto;
+                height: auto;
+                font-size:1.2em;
+                /*font-weight:bold;*/
+                color:#fff;
+                text-shadow:rgba(0,0,0,.6) 1px 1px 1px;
+            }
+        .reg-top .align0{
+            text-align:left;
+            padding-left:2em;
+        }
+        .reg-top .align1{
+            text-align:center;
+        }
+        .reg-top .align2{
+            text-align:right;
+            padding-right:2em;
+        }
+    .reg-top .regactivetit {
+        width:80%;
+        height:0.8em;
+        margin: 0.4em auto 0 auto;
+        padding:0 0 0 0;
+        color:#fff;
+        font-size:1.5em;
+        text-align:center;
+        display:inline-table;
+    }
+    .reg-top .regtit {
+        width:88%;
+        height:1.4em;
+        margin: 3em auto 0 auto;
+        padding:0 0 0 0;
+        border-top:1px solid rgba(255,255,255,0.3);
+    }
+        .reg-top .regtit p{
+            width:10.5em;
+            margin: 0 auto 0 auto;
+            padding:0 0 0 0;
+            background:#dd6b80;
+            color:#fff;
+            font-size:1.2em;
+            text-align:center;
+            position:relative;
+            top:-0.75em;
+        }
+    .reg-top .regform {
+        margin: 0 auto 0 auto;
+    }
+        .reg-top .regform .form {
+            width: 80%;
+            height: auto;
+            margin: 0 auto 0 auto;
+            padding: 0;
+            list-style: none;
+        }
+            .reg-top .regform .form li {
+                width: 100%;
+                padding: 0 0 0 0;
+                margin: 0 0 0 0;
+                text-align:left;
+                border-radius: 5px;
+            }
+                .reg-top .regform .form li input{
+                    width: 100%;
+                    height:auto;
+                    line-height:3.3em;
+                    padding: 0 0 0 0;
+                    margin: 0 0 0 0;
+                    background-color: #fff;
+                    border-radius: 5px;
+                    text-align:center;
+                    font-size:1.2em;
+                }
+                .reg-top .regform .form li .vcode-input{
+                    width: 63%;
+                    height:auto;
+                    line-height:3.3em;
+                    padding: 0 0 0 0;
+                    margin: 0 0 0 0;
+                    background-color: #fff;
+                    border-radius: 5px;
+                    text-align:center;
+                    font-size:1.2em;
+                }
+                .reg-top .regform .form li .vCodeBtn{
+                    width: 35%;
+                    margin: 0 auto 0 auto;
+                    padding: 0.95em 0 0.9em 0;
+                    border: none;
+                    background-color: #A4845F;
+                    border-radius: 5px;
+                    color: #fff;
+                    font-size: 1.2em;
+                }
+
+    .reg-top .checkbtn {
+        width:100%;
+        padding: 1em 0 1em 0;
+        border:none;
+        background:rgba(255,255,255,0.2);
+        color:#fff;
+        font-size: 1.2em;
+    }
+    .reg-top .submit {
+        width: 80%;
+        margin: 2em auto 0 auto;
+        padding: 0.8em 0 0.8em 0;
+        border: none;
+        background-color: #A4845F;
+        border-radius: 5px;
+        color: #fff;
+        font-size: 1.3em;
+    }
+    .reg-top .subpay {
+        width: 80%;
+        margin: 2em auto 0 auto;
+        padding: 0.8em 0 0.8em 0;
+        border: none;
+        background-color: #A4845F;
+        border-radius: 5px;
+        color: #fff;
+        font-size: 1.3em;
+    }
+    .reg-top .check-rule-panel {
+        width: 80%;
+        margin: 1.5em auto 0 auto;
+        text-align:left;
+        font-size:0.9em;
+    }
+    .reg-top .unckcss{
+        opacity: 0.5; 
+        filter: alpha(opacity=50);
+    }
+        .reg-top .check-rule-panel span{
+            font-size: 1.2em;
+            color:#fff;
+        }
+            .reg-top .check-rule-panel span a{
+                font-size: 1em;
+                color:#fff;
+                text-decoration:underline;
+                margin:0 0.2em 0 0.2em;
+            }
+        .reg-top .check-rule-panel .check-ckbox-link{
+            width:1.2em;
+            display:inline-table;
+            vertical-align:top;
+            margin:-0.1em 0.3em 0 0.2em;
+        }
+            .reg-top .check-rule-panel .check-ckbox-link img{
+                width:100%;
+            }
+    .reg-top .bottom-tip {
+        width:70%;
+        height:auto;
+        line-height:1.3em;
+        margin:1em auto 0 auto;
+        font-size:1em;
+        color:#999;
+        text-align:center;
+    }
+
+/******报名成功******/
+    .reg-top .rightarrow {
+        width:94%;
+        height:0.8em;
+        margin: 1em auto 1em auto;
+        padding:0 0 0 0;
+        display:inline-table;
+        text-align:right;
+        opacity: 0.9; 
+        filter: alpha(opacity=90);
+    }
+        .reg-top .rightarrow img{
+            height:5.2em;
+        }
+    .reg-top .regdonetit {
+        width:80%;
+        height:0.8em;
+        margin: 0 auto 0 auto;
+        padding:0 0 0.8em 0;
+        font-size:1.5em;
+        text-align:center;
+        display:inline-table;
+        border-bottom:1px solid rgba(0,0,0,0.1);
+    }
+    .reg-top .regtipinfo {
+        width:80%;
+        height:auto;
+        margin: 1em auto 0 auto;
+        line-height:1.5em;
+        font-size:1.2em;
+        text-align:left;
+    }
+    .reg-top .regsharepic {
+        width:90%;
+        height:auto;
+        margin:2em auto 0 auto;
+    }
+        .reg-top .regsharepic img{
+            width:100%;
+        }
+
+.mustfollow-md {
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.7);
+    position:fixed;
+    left:0;
+    top:0;
+    z-index:10;
+}
+.mustfollow-panel {
+    width:80%;
+    height:auto;
+    border-radius:5px;
+    position:fixed;
+    left:10%;
+    top:10em;
+    z-index:11;
+    overflow:hidden;
+}
+    .mustfollow-panel .top{
+        width:100%;
+        height:auto;
+        text-align:center;
+        background-color: #A4845F;
+        display:table;
+    }
+        .mustfollow-panel .top .info{
+            width:90%;
+            height:auto;
+            margin:1.5em auto 1.5em auto;
+            text-align:center;
+            color:#fff;
+            font-size:1.3em;
+        }
+             .mustfollow-panel .top .info b{
+                font-size:1em;
+                color:#fff;
+            }
+    .mustfollow-panel .img-div{
+        width:100%;
+        height:auto;
+        background:#fff;
+        display:table;
+        text-align:center;
+    }
+        .mustfollow-panel .img-div img{
+            width:80%;
+            margin:1em auto 1em auto;
+        }
+
+/******分享成功******/
+.weixinreg_xmas_body3 {
+    background:#3D3C39;
+}
+.weixinreg_xmas_body4 {
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 18em;
+    width: 100%;
+    background:#dd6b80;
+}
+.weixinreg_xmas_header {
+    height: auto;
+    width: 100%;
+    display:inline-table;
+    position:relative;
+}
+    .weixinreg_xmas_header img{
+        width: 100%;
+    }
+    .weixinreg_xmas_header .acount{
+        width:84%;
+        height:auto;
+        margin:-2.2em auto 2em auto;
+        padding:0 0 0 0;
+        position:relative;
+    }
+        .weixinreg_xmas_header .acount table{
+            width:100%;
+            height:auto;
+        }
+            .weixinreg_xmas_header .acount table .left{
+                width:5.5em;
+                height:auto;
+                text-align:right;
+            }
+                .weixinreg_xmas_header .acount table .left img{
+                    width:4.5em;
+                    border-radius: 5em;
+                    border:2px solid #fff;
+                    margin:0 1.5em 0 0;
+                }
+            .weixinreg_xmas_header .acount table .right{
+                height:auto;
+                text-align:left;
+            }
+                .weixinreg_xmas_header .acount table .right .name{
+                    width:auto;
+                    height:1.8em;
+                    line-height:2em;
+                    font-size:1.2em;
+                    color:#fff;
+                }
+                .weixinreg_xmas_header .acount table .right .phone{
+                    width:auto;
+                    height:1.8em;
+                    line-height:1.8em;
+                    font-size:1.2em;
+                    color:#fff;
+                }
+    .weixinreg_xmas_header .header-tit{
+        width: 100%;
+        height: auto;
+        position:absolute;
+        left:0em;
+        bottom:0em;
+        padding:0 0 1.2em 0;
+        background:-webkit-gradient(linear, 18% 11%, 14% 100%,from(transparent), to(#333));
+    }
+        .weixinreg_xmas_header .header-tit .t1{
+            width: auto;
+            height: auto;
+            font-size:2em;
+            /*font-weight:bold;*/
+            color:#fff;
+            text-shadow:rgba(0,0,0,.6) 1px 1px 1px;
+        }
+        .weixinreg_xmas_header .header-tit .t2{
+            width: auto;
+            height: auto;
+            font-size:1.2em;
+            /*font-weight:bold;*/
+            color:#fff;
+            text-shadow:rgba(0,0,0,.6) 1px 1px 1px;
+        }
+    .weixinreg_xmas_header .align0{
+        text-align:left;
+        padding-left:2em;
+    }
+    .weixinreg_xmas_header .align1{
+        text-align:center;
+    }
+    .weixinreg_xmas_header .align2{
+        text-align:right;
+        padding-right:2em;
+    }
+.sharedone-panel {
+    width:100%;
+    height:auto;
+    display:inline-table;
+}
+    /* 新版分享完成页面中间模块部分 */
+    .sharedone-panel .modular-panel {
+        width:90%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0 0 0 0;
+    }
+        .sharedone-panel .modular-panel .top-panel{
+            width:100%;
+            height:auto;
+            line-height:0.1em;
+            margin:0 0 0 0;
+            padding:0 0 0 0;
+        }
+            .sharedone-panel .modular-panel .top-panel img{
+                width:100%;
+            }
+        .sharedone-panel .modular-panel .line-panel{
+            width:100%;
+            height:auto;
+            line-height:0.1em;
+            margin:0 0 0 0;
+            padding:0 0 0 0;
+        }
+            .sharedone-panel .modular-panel .line-panel img{
+                width:100%;
+            }
+        .sharedone-panel .modular-panel .bottom-panel{
+            width:100%;
+            height:auto;
+            line-height:0.1em;
+            margin:0 0 0 0;
+            padding:0 0 0 0;
+        }
+            .sharedone-panel .modular-panel .bottom-panel img{
+                width:100%;
+            }
+        .sharedone-panel .modular-panel .middle-panel{
+            width:100%;
+            height:auto;
+            margin:0 0 0 0;
+            padding:0 0 0 0;
+            background:url(http://whfront.b0.upaiyun.com/www/img/Active/luck/bgborder_middle.png) repeat-y left top;
+            background-size:100%;
+        }
+            .sharedone-panel .modular-panel .middle-panel .btns{
+                width:90%;
+                height:auto;
+                margin:0 auto 0 auto;
+                padding:0.5em 0 0 0;
+            }
+            .sharedone-panel .modular-panel .middle-panel .tit{
+                width:90%;
+                height:1.3em;
+                line-height:1em;
+                margin:0 auto 0 auto;
+                padding:0 0 0 0;
+                color:#A4845F;
+                font-size:1.4em;
+                text-align:center;
+            }
+            .sharedone-panel .modular-panel .middle-panel .code-list{
+                width:88%;
+                height:auto;
+                margin:1em auto 0 auto;
+                padding:1em 0 0 0;
+                border-top:1px solid #ddd;
+            }
+                .sharedone-panel .modular-panel .middle-panel .code-list ul{
+                    width:100%;
+                    height:auto;
+                    margin:0 auto 0 auto;
+                    padding:0 0 0 0;
+                    list-style:none;
+                    display:inline-table;
+                }
+                    .sharedone-panel .modular-panel .middle-panel .code-list ul li{
+                        width:45%;
+                        height:auto;
+                        margin:0.8em 0 0.8em 3%;
+                        padding:0 0 0 0;
+                        float:left;
+                        border:0px solid red;
+                        text-align:center;
+                    }
+                        .sharedone-panel .modular-panel .middle-panel .code-list ul li .code{
+                            width:100%;
+                            height:auto;
+                            line-height:1em;
+                            margin:0 auto 0 auto;
+                            padding:0 0 0 0;
+                            text-align:center;
+                            font-size:1.3em;
+                            color:#333;
+                            font-family:Arial;
+                        }
+                        .sharedone-panel .modular-panel .middle-panel .code-list ul li .line{
+                            width:30%;
+                            height:auto;
+                            line-height:0.2em;
+                            margin:0.5em auto 0.3em auto;
+                            padding:0 0 0 0;
+                            border-top:1px dashed #ccc;
+                            text-align:center;
+                        }
+                        .sharedone-panel .modular-panel .middle-panel .code-list ul li .tagname{
+                            width:100%;
+                            height:auto;
+                            line-height:1em;
+                            margin:0 auto 0 auto;
+                            padding:0 0 0 0;
+                            border:0px solid red;
+                            text-align:center;
+                            font-size:1em;
+                            color:#999;
+                        }
+            .sharedone-panel .modular-panel .middle-panel .active-info{
+                width:90%;
+                height:auto;
+                margin:0 auto 0 auto;
+                padding:0 0 0.5em 0;
+            }
+                .sharedone-panel .modular-panel .middle-panel .active-info .d1{
+                    width:100%;
+                    height:auto;
+                    line-height:1em;
+                    margin:0.2em auto 0.8em auto;
+                    padding:0 0 0 0;
+                    text-align:center;
+                    font-size:2em;
+                    font-family:Arial;
+                }
+                .sharedone-panel .modular-panel .middle-panel .active-info .t1{
+                    width:100%;
+                    height:auto;
+                    line-height:1.3em;
+                    margin:0.8em auto 0 auto;
+                    padding:0 0 0 0;
+                    text-align:center;
+                    font-size:1.2em;
+                    color:#666;
+                }
+                .sharedone-panel .modular-panel .middle-panel .active-info .t2{
+                    width:100%;
+                    height:1.8em;
+                    line-height:1.8em;
+                    margin:0 auto 0 auto;
+                    padding:0 0 0 0;
+                    text-align:center;
+                    font-size:1.2em;
+                    color:#888;
+                }
+                    .sharedone-panel .modular-panel .middle-panel .active-info .t2 .b{
+                        font-size:1.1em;
+                        font-weight:bold;
+                        color:#000;
+                    }
+                .sharedone-panel .modular-panel .middle-panel .active-info .d2{
+                    width:100%;
+                    height:1.3em;
+                    line-height:1.3em;
+                    margin:0 auto 0 auto;
+                    padding:0 0 0 0;
+                    text-align:center;
+                    font-size:1.1em;
+                    color:#999;
+                }
+            .sharedone-panel .modular-panel .middle-panel .tip{
+                width:86%;
+                height:auto;
+                line-height:1.5em;
+                margin:0 auto 0 auto;
+                padding:0.8em 0 0 0;
+                font-size:1em;
+                text-align:center;
+            }
+            .sharedone-panel .modular-panel .middle-panel .tip2{
+                width:86%;
+                height:auto;
+                line-height:1.3em;
+                margin:0 auto 0 auto;
+                padding:0.8em 0 0 0;
+                font-size:1.2em;
+                color:#474747;
+                text-align:center;
+            }
+            .sharedone-panel .modular-panel .middle-panel .img-div{
+                width:100%;
+                height:auto;
+                margin:0 auto 0 auto;
+                padding:1em 0 1.5em 0;
+                text-align:center;
+            }
+                .sharedone-panel .modular-panel .middle-panel .img-div img{
+                    width:30%;
+                    margin:0 auto 0 auto;
+                }
+            .sharedone-panel .modular-panel .middle-panel .look{
+                width:100%;
+                height:auto;
+                margin:0.6em auto 0 auto;
+                text-align:center;
+                font-size:1.3em;
+                color:#999;
+            }
+                .sharedone-panel .modular-panel .middle-panel .look .h{
+                    font-size:1em;
+                    font-family:Arial;
+                    color:#999;
+                }
+                .sharedone-panel .modular-panel .middle-panel .look ._tip {
+                    margin:0.5em 0 0 0;
+                    font-size: 0.8em;
+                    font-family: Arial;
+                    color: #919191;
+                }
+.sharefd-btn {
+    width: 48%;
+    height:2.5em;
+    line-height:2.5em;
+    margin: 0 0 0 0.1em;
+    padding: 0 0 0 0;
+    background-color: #fff;
+    border:1px solid #A4845F;
+    border-radius: 5px;
+    color: #A4845F;
+    font-size: 1.4em;
+}
+.sharefd-btn2 {
+    width: 100%;
+    height:2.5em;
+    line-height:2.5em;
+    margin: 0 auto 0 auto;
+    padding: 0 0 0 0;
+    background-color: #fff;
+    border:1px solid #A4845F;
+    border-radius: 5px;
+    color: #A4845F;
+    font-size: 1.4em;
+}
+.partner-btn {
+    width: 48%;
+    height:2.5em;
+    line-height:2.5em;
+    margin: 0 0 0 0.1em;
+    padding: 0 0 0 0;
+    background-color: #A4845F;
+    border:1px solid #fff;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 1.4em;
+}
+.result-btn {
+    width: 100%;
+    height:2.5em;
+    line-height:2.5em;
+    margin: 0 auto 0 auto;
+    padding: 0 0 0 0;
+    background-color: #A4845F;
+    border:1px solid #fff;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 1.4em;
+}
+.result0-btn {
+    width: 100%;
+    height:2.5em;
+    line-height:2.5em;
+    margin: 0 auto 0 auto;
+    padding: 0 0 0 0;
+    background-color: #ccc;
+    border:1px solid #fff;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 1.4em;
+}
+
+    /* ---------------------------- */
+
+    .sharedone-panel .sendmore{
+        width:86%;
+        height:auto;
+        margin:0 auto 0 auto;
+    }
+    .sharedone-panel .date{
+        width:86%;
+        height:auto;
+        margin:3em auto 0 auto;
+        padding:0 0 0 0;
+        border:1px solid #ccc;
+        border-radius: 5px;
+    }
+        .sharedone-panel .date p{
+            width:5em;
+            margin: 0 auto 0 auto;
+            padding:0 0 0 0;
+            background:#f0f0f0;
+            font-size:1.3em;
+            text-align:center;
+            position:relative;
+            top:-0.75em;
+        }
+        .sharedone-panel .date .datepanel{
+            width:100%;
+            height:auto;
+            line-height:1em;
+            margin:0.8em auto 0.05em auto;
+            padding:0 0 0 0;
+            text-align:center;
+            font-size:1.8em;
+            font-family:Arial;
+        }
+        .sharedone-panel .date .smallpanel{
+            width:100%;
+            height:1.8em;
+            line-height:1.8em;
+            margin:0 auto 0 auto;
+            padding:0 0 0 0;
+            text-align:center;
+            font-size:1.2em;
+        }
+        .sharedone-panel .date .bigpanel{
+            font-size:1.2em;
+            font-family:Arial;
+        }
+    .sharedone-panel .logo{
+        width:86%;
+        height:auto;
+        margin:4em auto 2.5em auto;
+    }
+        .sharedone-panel .logo img{
+            width:100%;
+        }
+.sharedone-panel .sendmorebtn {
+    width: 100%;
+    margin: 0 auto 0 auto;
+    padding: 0.7em 0 0.6em 0;
+    border: none;
+    background-color: #e7874d;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 1.4em;
+}
+.sharedone-panel .sendmorebtn0 {
+    width: 100%;
+    margin: 0 auto 0 auto;
+    padding: 0.7em 0 0.6em 0;
+    border: none;
+    background-color: #c3c3c3;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 1.4em;
+}
+
+.sharetofriend-md {
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.7);
+    position:fixed;
+    left:0;
+    top:0;
+    z-index:10;
+}
+.sharetofriend-panel {
+    width:80%;
+    height:auto;
+    border-radius:5px;
+    position:fixed;
+    left:10%;
+    top:10em;
+    z-index:11;
+    overflow:hidden;
+}
+    .sharetofriend-panel .top{
+        width:100%;
+        height:auto;
+        text-align:center;
+        background-color: #A4845F;
+        display:table;
+    }
+        .sharetofriend-panel .top .info{
+            width:90%;
+            height:auto;
+            margin:1.5em auto 1.5em auto;
+            text-align:center;
+            color:#fff;
+            font-size:1.2em;
+        }
+            .sharetofriend-panel .top .info div{
+                font-size:1em;
+                color:#fff;
+            }
+             .sharetofriend-panel .top .info b{
+                font-size:1em;
+                color:#fff;
+            }
+    .sharetofriend-panel .img-div{
+        width:100%;
+        height:auto;
+    }
+        .sharetofriend-panel .img-div img{
+            width:100%;
+        }
+
+.fundalter-md {
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.7);
+    position:fixed;
+    left:0;
+    top:0;
+    z-index:10;
+}
+.fundalter-panel {
+    width:80%;
+    height:auto;
+    padding:0.5em 0 1.5em 0;
+    background:#fff;
+    border-radius:5px;
+    position:fixed;
+    left:10%;
+    top:10em;
+    z-index:11;
+    overflow:hidden;
+}
+    .fundalter-panel .ctrl{
+        width:94%;
+        height:auto;
+        margin:0 auto 0 auto;
+        text-align:right;
+    }
+        .fundalter-panel .ctrl a{
+            color:#666;
+            font-size:1.3em;
+            font-family:Arial;
+        }
+    .fundalter-panel .t1{
+        width:100%;
+        height:auto;
+        margin:0 0 0 0;
+        text-align:center;
+        font-size:1.3em;
+        color:#000;
+    }
+    .fundalter-panel .t2{
+        width:100%;
+        height:auto;
+        margin:0 0 1em 0;
+        text-align:center;
+        font-size:1.2em;
+        color:#888;
+    }
+    .fundalter-panel .p1{
+        width:100%;
+        height:auto;
+        text-align:center;
+        font-size:5em;
+        font-family:Arial;
+    }
+        .fundalter-panel .p1 .p-un{
+            font-size:0.5em;
+            font-family:Arial;
+        }
+    .fundalter-panel .info{
+        width:90%;
+        height:auto;
+        margin:0 auto 0 auto;
+        color:#666;
+        font-size:1.2em;
+        text-align:center;
+    }
+    .fundalter-panel .btns{
+        width:100%;
+        height:auto;
+        margin:0 0 0 0;
+        text-align:center;
+    }
+        .fundalter-panel .btns .download-app{
+            width: 90%;
+            margin: 2em auto 0 auto;
+            padding: 0.8em 0 0.8em 0;
+            border: none;
+            background-color: #A4845F;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 1.3em;
+            display:table;
+        }
+
+
+/*** 合作伙伴列表页 ***/
+
+.weixinreg_partner_body {
+    background:#3D3C39;
+}
+
+.weixin-partner-top {
+    width:100%;
+    height:auto;
+    margin:0 0 0 0;
+    padding:0 0 0 0;
+    display:table;
+    background:url(http://whfront.b0.upaiyun.com/www/img/Active/luck/partner-listpage-topbg.png) no-repeat left top;
+    background-size:100%;
+    /*border:1px solid red;*/
+}
+    .weixin-partner-top .t1{
+        width:80%;
+        height:auto;
+        margin:3.4em auto 0.6em auto;
+        text-align:center;
+        font-size:1.6em;
+        color:#fff;
+        font-weight:500;
+    }
+    .weixin-partner-top .t2{
+        width:84%;
+        height:auto;
+        line-height:1.3em;
+        margin:0 auto 3.2em auto;
+        text-align:center;
+        font-size:1.3em;
+        color:#fff;
+    }
+.weixin-partner-list {
+    width:100%;
+    height:auto;
+    margin:0 0 0 0;
+}
+    .weixin-partner-list .partner-item{
+        width:100%;
+        height:auto;
+        margin:0 0 0 0;
+        position:relative;
+    }
+        .weixin-partner-list .partner-item .p-img{
+            width:100%;
+            height:auto;
+            margin:0 0 0 0;
+            position:relative;
+        }
+            .weixin-partner-list .partner-item .p-img img{
+                width:100%;
+            }
+            .weixin-partner-list .partner-item .p-img .has-tip{
+                width:5em;
+                height:auto;
+                line-height:2em;
+                margin:0 0 0 0;
+                position:absolute;
+                right:1em;
+                top:1em;
+                border:1px solid rgba(255,255,255,.8);
+                background:rgba(0,0,0,.3);
+                border-radius:5em;
+                color:rgba(255,255,255,.8);
+                text-align:center;
+            }
+        .weixin-partner-list .partner-item .p-vcode{
+            width:100%;
+            height:auto;
+            margin:0 0 0 0;
+            text-align:center;
+            position:relative;
+        }
+            .weixin-partner-list .partner-item .p-vcode img{
+                width:30%;
+                margin:0 auto 0 auto;
+                border:5px solid #fff;
+            }
+        .weixin-partner-list .partner-item .p-name{
+            width:80%;
+            height:auto;
+            margin:0.6em auto 0 auto;
+            text-align:center;
+            color:#A4845F;
+            font-size:1.3em;
+            position:relative;
+        }
+            .weixin-partner-list .partner-item .p-name .has-tip{
+                font-size:1em;
+                color:#919191;
+            }
+        .weixin-partner-list .partner-item .p-line{
+            width:2.5em;
+            height:auto;
+            line-height:0.1em;
+            margin:0.1em auto 0.2em auto;
+            border-top:1px solid #b69e83;
+            position:relative;
+        }
+        .weixin-partner-list .partner-item .p-info{
+            width:86%;
+            height:auto;
+            margin:0em auto 3.5em auto;
+            text-align:center;
+            color:#ccc;
+            font-size:1.1em;
+            position:relative;
+        }
+.weixin-partner-logo{
+    width:86%;
+    height:auto;
+    margin:0 auto 0 auto;
+    display:table;
+}
+    .weixin-partner-logo img{
+        width:100%;
+        margin:4em auto 2.5em auto;
+    }
+
+/* 分享海报相关 */
+.share-poster-float {
+    width:10em;
+    height:auto;
+    position:fixed;
+    top:28%;
+    right:0;
+    background:#fff;
+    border:2px solid #fff;
+    border-radius:4em 0 0 4em;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.24);
+    overflow:hidden;
+}
+    .share-poster-float .s-img{
+        width:4em;
+        height:4em;
+        border-radius:4em;
+        overflow:hidden;
+        float:left;
+    }
+        .share-poster-float .s-img img{
+            width:100%;
+        }
+    .share-poster-float .s-tip{
+        width:5em;
+        height:4em;
+        line-height:1.6em;
+        margin: 0 0 0 0;
+        padding:0.5em 0 0 0;
+        font-size:1em;
+        color:#2c2c2c;
+        float:right;
+    }
+#showPosterSection {
+    width:82%;
+    height:auto;
+    position:fixed;
+    top:68px;
+    left:9%;
+    z-index:210;
+    background:#EA5343;
+}
+    #showPosterSection img{
+        width:100%;
+    }
+.poster-bg {
+    width:100%;
+    height:100%;
+    margin:0 0 0 0;
+    padding:0 0 0 0;
+    display:table;
+    background:rgba(0, 0, 0, 0.75);
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:200;
+}
+.poster-tip {
+    width:100%;
+    height:auto;
+    margin:0 0 0 0;
+    padding:0 0 0 0;
+    display:table;
+    position:fixed;
+    top:0px;
+    left:0%;
+    z-index:210;
+    background:#FBF4E8;
+}
+    .poster-tip .content{
+        width:90%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:1em 0 1em 0;
+        display:table;
+        color:#2c2c2c;
+        font-size:1.1em;
+        font-family:Arial;
+        text-align:center;
+    }
+        .poster-tip .content .h{
+            color:#EC6253;
+            font-weight:bold;
+        }
+.poster-close {
+    width:2em;
+    height:auto;
+    margin:0 0 0 0;
+    padding:0 0 0 0;
+    display:table;
+    position:fixed;
+    top:45px;
+    right:6%;
+    z-index:210;
+}
+    .poster-close img{
+        width:100%;
+    }
+.poster-tip-loading {
+    width:84%;
+    height:auto;
+    margin:0 0 0 0;
+    padding:7em 0 0em 0;
+    display:table;
+    position:fixed;
+    top:95px;
+    left:8%;
+    z-index:201;
+    text-align:center;
+    color:#fff;
+    font-size:1em;
+}
+.mine-poster {
+    width:82%;
+    height:auto;
+    margin:0 0 0 0;
+    padding:0 0 0em 0;
+    display:table;
+    position:fixed;
+    top:68px;
+    left:9%;
+    z-index:199;
+    background:#fff;
+    font-family:Arial;
+}
+    .mine-poster .stamp{
+        width:35%;
+        height:auto;
+        margin:0em auto 0 auto;
+        padding:0 0 0 0;
+        display:table;
+        position:absolute;
+        right:0.6em;
+        top:0.3em;
+        z-index:201;
+    }
+        .mine-poster .stamp img{
+            width:100%;
+        }
+    .mine-poster .banner{
+        width:90%;
+        height:auto;
+        margin:3.8em auto 0 auto;
+        padding:0 0 0 0;
+        display:table;
+    }
+        .mine-poster .banner img{
+            width:100%;
+        }
+    .mine-poster .tit{
+        width:90%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0.8em 0 0.8em 0;
+        display:table;
+        text-align:justify;
+        font-size:1.2em;
+        font-weight:bold;
+        color:#2c2c2c;
+    }
+    .mine-poster .poster-qrcode-sction{
+        width:80%;
+        height:auto;
+        margin:0em auto 0 auto;
+        padding:0 0 0 0;
+        display:table;
+    }
+        .mine-poster .poster-qrcode-sction .poster-qrcode{
+            width:115px;
+            height:auto;
+            margin:0em auto 0 auto;
+            padding:0 0 0 0;
+            display:table;
+            border:3px solid #fff;
+        }
+    .mine-poster .qrcode-tip{
+        width:90%;
+        height:auto;
+        margin:1.5em auto 1.1em auto;
+        padding:0.8em 1em 0.8em 1em;
+        display:table;
+        text-align:justify;
+        border:1px solid #e0e0e0;
+        font-size:1em;
+        color:#919191;
+    }
+        .mine-poster .qrcode-tip .nickname{
+            margin:0em auto 0 auto;
+            font-size:1.1em;
+            font-weight:bold;
+            color:#2c2c2c;
+        }
+
+    .mine-poster .bg-img {
+        width: 100%;
+        height: auto;
+        margin: 0em auto 0 auto;
+        padding: 0 0 0 0;
+    }
+        .mine-poster .bg-img img{
+            width: 100%;
+            display:block;
+        }
+    .mine-poster .qrcode-right-bottom-section {
+        width: auto;
+        height: auto;
+        margin: 0em auto 0 auto;
+        padding: 0 0 0 0;
+        display: table;
+        position: absolute;
+        right: 25px;
+        bottom: 25px;
+        z-index: 202;
+    }
+
+        .mine-poster .qrcode-right-bottom-section .qrcode {
+            width: 50px;
+            height: auto;
+            margin: 0em auto 0 auto;
+            padding: 0 0 0 0;
+            display: table;
+            border: 3px solid #fff;
+        }
+        .mine-poster .qrcode-right-bottom-section .qrcode img{
+            width: 50px;
+        }
+@media (min-width: 370px) {
+    .mine-poster .qrcode-right-bottom-section {
+        right: 30px;
+        bottom: 30px;
+    }
+    .mine-poster .qrcode-right-bottom-section .qrcode img {
+        width: 60px;
+    }
+}
+@media (min-width: 400px) {
+    .mine-poster .qrcode-right-bottom-section {
+        right: 30px;
+        bottom: 30px;
+    }
+    .mine-poster .qrcode-right-bottom-section .qrcode img {
+        width: 70px;
+    }
+}
+
+.luck-cord {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.80);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    -webkit-perspective: 500px;
+    transform: perspective(500);
+}
+    .luck-cord .cord-close {
+        width: 3em;
+        height: 3em;
+        position: fixed;
+        top: 1em;
+        right: 1em;
+        z-index: 10002;
+    }
+        .luck-cord .cord-close img {
+            width: 100%;
+        }
+    .luck-cord .m-cord-0 {
+        -webkit-transform: rotate3d(0,1,0,-90deg);
+    }
+    .luck-cord .m-cord-1 {
+        -webkit-transform: rotate3d(0,1,0,0deg);
+    }
+    .luck-cord .p-cord-0 {
+        -webkit-transform: rotate3d(0,1,0,89deg);
+    }
+    .luck-cord .p-cord-1 {
+        -webkit-transform: rotate3d(0,1,0,0deg);
+    }
+    .luck-cord .main-cord {
+        width: 84%;
+        height: auto;
+        position: fixed;
+        top: -100%;
+        left: 8%;
+        z-index: 10002;
+        -webkit-transition-duration: 0.35s;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+        .luck-cord .main-cord img{
+            width: 100%;
+            display:block;
+        }
+    .luck-cord .poster-cord {
+        width: 84%;
+        height: auto;
+        position: fixed;
+        top: 10%;
+        left: 8%;
+        z-index: 10001;
+        -webkit-transition-duration: 0.35s;
+        border-radius: 8px;
+        overflow:hidden;
+    }
+        .luck-cord .poster-cord .poster-cord-result {
+            width: 100%;
+            height:auto;
+        }
+            .luck-cord .poster-cord .poster-cord-result img {
+                width: 100%;
+                display: block;
+            }
+        .luck-cord .poster-cord .poster-cord-loadding {
+            width: 10em;
+            height: 6em;
+            padding: 2.3em 0 0 0;
+            text-align: center;
+            font-size: 1em;
+            color: #fff;
+            box-sizing: border-box;
+            border-radius: 1em;
+            background: rgba(0, 0, 0, 0.75);
+            position: absolute;
+            z-index: 10003;
+            left: calc(50% - 5em);
+            top: calc(50% - 5em);
+        }
+        .luck-cord .poster-cord .poster-cord-init {
+            width: 100%;
+            height: auto;
+            display:table;
+        }
+            .luck-cord .poster-cord .poster-cord-init .poster {
+                width: 100%;
+                height: auto;
+                box-sizing: border-box;
+                position: relative;
+            }
+                .luck-cord .poster-cord .poster-cord-init .poster .bg-img {
+                    width: 100%;
+                    height: auto;
+                    box-sizing: border-box;
+                }
+                    .luck-cord .poster-cord .poster-cord-init .poster .bg-img img {
+                        width: 100%;
+                        display: block;
+                    }
+                .luck-cord .poster-cord .poster-cord-init .poster .slogan-img {
+                    width: 100%;
+                    height: 100%;
+                    margin: 0 0 0 0;
+                    padding: 0 0 0 0;
+                    display: table;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    z-index: 7;
+                }
+                    .luck-cord .poster-cord .poster-cord-init .poster .slogan-img img {
+                        width: 100%;
+                        display: block;
+                    }
+                .luck-cord .poster-cord .poster-cord-init .poster .slogan-img-bg {
+                    width: 100%;
+                    height: 100%;
+                    margin: 0 0 0 0;
+                    padding: 0 0 0 0;
+                    display: block;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    z-index: 6;
+                    /*background: rgba(0, 0, 0, 0.6);*/
+                    opacity: 0.6;
+                    background-image: linear-gradient(0deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.00) 44%, rgba(0,0,0,0.80) 78%, #000000 100%);
+                }
+                .luck-cord .poster-cord .poster-cord-init .poster .logo-img {
+                    width: 6.5em;
+                    height: 100%;
+                    margin: 0 0 0 0;
+                    padding: 0 0 0 0;
+                    display: table;
+                    position: absolute;
+                    bottom: 1em;
+                    right: 1em;
+                    z-index: 7;
+                }
+                    .luck-cord .poster-cord .poster-cord-init .poster .logo-img img {
+                        width: 100%;
+                        display: block;
+                    }
+            .luck-cord .poster-cord .poster-cord-init .bottom-section {
+                width: 100%;
+                height: auto;
+                padding:0.2em 0 0.5em 0;
+                box-sizing: border-box;
+                background: #fff;
+                position:relative;
+            }
+                .luck-cord .poster-cord .poster-cord-init .bottom-section .left {
+                    width: calc(100% - 8.5em);
+                    height: auto;
+                    box-sizing: border-box;
+                    float: left;
+                }
+                    .luck-cord .poster-cord .poster-cord-init .bottom-section .left .poster-cord-desc {
+                        width: 90%;
+                        height: auto;
+                        margin: 0 0 0 auto;
+                        padding: 1.7em 0 1em 0;
+                        text-align: justify;
+                        font-size: 1.2em;
+                        font-weight: bold;
+                        color: #2c2c2c;
+                        box-sizing: border-box;
+                    }
+                .luck-cord .poster-cord .poster-cord-init .bottom-section .right {
+                    width: 8.5em;
+                    height: auto;
+                    padding: 0.2em 0 0 0.5em;
+                    box-sizing: border-box;
+                    float: right;
+                }
+                    .luck-cord .poster-cord .poster-cord-init .bottom-section .right img {
+                        width: 94%;
+                        border: 3px solid #fff;
+                        display:block;
+                    }
+    .luck-cord .cord-share-tip {
+        width:90%;
+        height:auto;
+        font-size:1.1em;
+        font-weight:bold;
+        color:#fff;
+        text-align:center;
+        position:fixed;
+        left:5%;
+        bottom:-100px;
+        z-index:10003;
+    }

@@ -1,0 +1,273 @@
+﻿@charset "utf-8";
+/* CSS Document */
+html, body {
+	background:#e6e6e6;
+	width:100%;
+}
+a:hover{text-decoration: none;}
+.container .tou{
+	width:100%;
+	background:#fff;
+	margin-top:5px;
+	}
+.container .tou .k1 {
+    width: 100%;
+/* height: 50px; */
+}
+.container .tou .k1 h5 {
+    line-height: 2em;
+    margin-left: 3%;
+    margin-right: 3%;
+    font-size: 1.5em;
+    font-weight: 200;
+    border-bottom: 1px solid #e1e1e1;
+}
+.container .tou .k2 {
+    width: 100%;
+    margin-top: 1.5em;
+}
+.container .tou .k2 p,
+.container .tou .k3 p{
+	line-height:20px;
+	margin-left:5%;
+	margin-right:5%;
+	font-size:16px;
+	color:#666;
+	
+	}
+
+
+
+
+
+
+
+.container .wei {
+   width: 100%;
+   background: #fff;
+   margin-top: .8em;
+}
+.container .wei .k1{
+	width:100%;
+	height:50px;
+	
+	
+	
+	}
+.container .wei .k1 h5 {
+   line-height: 2em;
+   margin-left: 3%;
+   margin-right: 3%;
+   font-size: 1.5em;
+   font-weight: 200;
+   border-bottom: 1px solid #e1e1e1;
+}
+.container .wei .k2 {
+width: 100%;
+/* margin-top: 1.5em; */
+}
+
+.container .wei .k2 p,
+.container .wei .k3 p{
+	line-height:20px;
+	margin-left:5%;
+	margin-right:5%;
+	font-size:16px;
+	color:#666;
+	
+	}
+.container .k3 {
+   width: 100%;
+   margin-top: 1em;
+   padding-bottom: 1em;
+}
+
+
+/*.container .tou .k1,.container .tou .k2{
+	width:50%;
+	float:left;
+	text-align:center;
+	}
+.container .tou .k1{
+	border-bottom:3px solid #ff8c01;
+	padding-bottom:10px;
+	
+	}
+.container .tou .k1 p{
+	color:#ff8c01;
+	
+	}
+.container .tou p{
+	font-size:24px;
+	color:#595959;
+	margin-top:13px;
+	
+	}
+.container .zhong {
+	width:100%;
+	background:#FFF;
+	height:90px;
+	margin-top:14px;
+
+	}
+.container .zhong .a1 {
+	margin-left:5%;
+	font-size:14px;
+	}
+.container .zhong .a1 .p1{
+	width:70%;
+	padding-top:20px;
+	color:#595959;
+	
+	
+	}
+.container .zhong .a1 .p1 span{
+	color:#ff8c01;
+	
+	}
+.container .zhong .a1 .p2 span{
+	color:#999;
+	
+	}
+.container .zhong .a1 .p1 em{
+	color:#ff8c01;
+	}
+.container .zhong .a1 .p2 em{
+	color:#999;
+	}
+.container .zhong .a1 .p2{
+	width:70%;
+	line-height:40px;
+	color:#595959;
+	
+	}
+.container .zhong .a2 p{
+	float:right;
+	margin-top:-58px;
+	margin-right:5%;
+	color:#5f81ff;
+	
+	}
+.container .zhong span{
+	font-size:22px;
+	padding-left:3%;
+	padding-right:3%;
+	}
+.container .zhong .a3{
+	width:100%;
+	background:#FFF;
+	margin-top:6px;
+	
+	}
+.container .zhong .a3 p{
+	font-size:18px;
+	margin-left:5%;
+	padding-top:15px;
+	padding-bottom:15px;
+	color:#595959;
+
+	
+	}
+
+.container .zhong .a4 {
+	margin-top:1px;
+	background:#FFF;
+	font-size:14px;
+	}
+.container .zhong .a4 .p1{
+	width:70%;
+	padding-top:20px;
+	color:#595959;
+	margin-left:5%;
+	
+	}
+.container .zhong .a4 .p1 span{
+	color:#ff8c01;
+	
+	}
+.container .zhong .a4 .p2 .pp2{
+	color:#ff8c01;
+	font-size:16px;
+	padding-right:24px;
+	
+	}
+.container .zhong .a4 .p1 em{
+	color:#ff8c01;
+	}
+.container .zhong .a4 .p2 em{
+	color:#999;
+	}
+.container .zhong .a4 .p2{
+	width:70%;
+	line-height:40px;
+	color:#595959;
+	margin-left:5%;
+	
+	}
+	
+.container .zhong .a5 p{
+	float:right;
+	margin-top:-58px;
+	margin-right:5%;
+	color:#FFF;
+	font-size:14px;
+	background:#ff8c01;
+	padding:2% 3%;
+	
+	}*/
+
+
+
+
+
+/*.container {
+	position: relative;
+}
+.container .list-box{
+	margin-top:10px;
+	width:100%;
+	background:#f9f9f9;
+}
+
+.container .list-box .listItem{
+    display: -webkit-box;
+    position: relative;
+    border-bottom: 2px solid #ebebeb;
+}
+.list-box .listItem .info-l{
+    -webkit-box-flex:1;
+}
+.list-box .listItem .info-l p{
+    height: 80px;
+    line-height: 80px;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    padding:0 20px;
+    color: #ff9924;
+    font-size: 14px;
+}
+.list-box .listItem.disabled .info-l p{
+    color: #ababab;
+}
+.list-box .listItem .info-r{
+    width: 30%;
+    text-align: center;
+    padding-top: 20px;
+}
+.list-box .listItem .info-r a{
+    display: inline-block;
+    line-height: 24px;
+    color: #fff;
+    background-color: #ff8b00;
+    width: 80%;
+}
+.list-box .listItem.disabled .info-r a{
+    background-color: #c9c9c9;
+}
+.list-box .listItem.disabled .info-r p{
+    color: #cbcbcb;
+    line-height: 30px;
+}
+*/

@@ -1,0 +1,54 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    var userid = ViewBag.UserId;
+
+    var isInWeixin = ViewBag.isInWeixin;
+    var isApp = ViewBag.IsApp;
+    var isMobile = ViewBag.IsMobile;
+    var appType = ViewBag.AppType;
+    var appVerCode = ViewBag.AppVerCode;
+    var appBundleVer = ViewBag.AppBundleVer;
+
+    //酒店订单url
+    var hotelOrderUrl = ViewBag.HotelOrderUrl;
+
+    //房券url
+    var roomCouponUrl = ViewBag.RoomCouponUrl;
+    RoomCouponResult roomcouponResult = ViewBag.RoomcouponResult;
+
+    //消费券url
+    var productCouponUrl = ViewBag.ProductCouponUrl;
+    var productCouponCount = ViewBag.ProductCouponCount;
+    
+    ViewBag.Title = "订单";
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    ViewBag.LoadHmBaidu = false;
+}
+
+@section styles
+{
+    <link href="~/Content/css/app/order.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+}
+
+<div class="order-menu">
+    <ul>
+        <li class="tag-li-line" data-tag="point" data-url="@hotelOrderUrl" onclick="gourl('@(hotelOrderUrl)')"><div class="l">酒店订单</div><div class="r"><span class="zmjd-iconfont icon-arowright">&#xe601;</span></div></li>
+        <li class="tag-li-line" data-tag="roomcoupon" data-url="@roomCouponUrl" onclick="gourl('@(roomCouponUrl)')"><div class="l">房券</div><div class="r"><span class="zmjd-iconfont icon-arowright">&#xe601;</span></div></li>
+        <li class="tag-li-line" data-tag="productcoupon" data-url="@productCouponUrl" onclick="gourl('@(productCouponUrl)')"><div class="l">消费券</div><div class="r"><span class="zmjd-iconfont icon-arowright">&#xe601;</span></div></li>
+    </ul>
+</div>
+
+<footer>
+    <input type="hidden" id="userid" value="@userid" />
+    <input type="hidden" id="isApp" value="@(isApp ? "1" : "0")" />
+</footer>
+
+@*<div style="margin:1em 0 5em 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3a%2f%2f192.168.1.22%3a8081%2fApp%2fOrder%3fuserid%3d%7buserid%7d">GO APP (Local) >>></a></div>*@
+
+@section scripts
+{
+    <script src="~/Content/js/app/order.js?v=@(Helpers.curAppVer())"></script>
+}

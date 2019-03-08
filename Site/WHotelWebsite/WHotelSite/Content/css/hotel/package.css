@@ -1,0 +1,1433 @@
+﻿body {
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    background:#fff;
+    -webkit-user-select:none; 
+    user-select: none;
+}
+
+a {
+    text-decoration:none;
+}
+
+/*禁止长按链接与图片弹出菜单*/
+a,img { -webkit-touch-callout: none }
+
+.page-head-bar {
+    width:100%;
+    height:44px;
+    line-height:48px;
+    background:#2c2c2c;
+    margin:0 auto 0 auto;
+    padding:2px 0 2px 0;
+    font-family:Arial;
+    display:table;
+    overflow:hidden;
+}
+    .page-head-bar ._logo-section{
+        width:84%;
+        height:auto;
+        margin:0 0 0 0;
+        padding:0 0 0 0;
+        text-align:left;
+        float:left;
+    }
+        .page-head-bar ._logo-section ._logo{
+            width:20%;
+            height:44px;
+            margin:0 0 0 0;
+            padding:0 0 0 0;
+            text-align:center;
+            float:left;
+        }
+            .page-head-bar ._logo-section ._logo img{
+                width:34px;
+                margin:8px 0 0 0;
+                border-radius:34px;
+            }
+        .page-head-bar ._logo-section ._name{
+            width:80%;
+            height:auto;
+            margin:0 0 0 0;
+            padding:0.05em 0 0 0;
+            text-align:left;
+            font-size:0.9em;
+            color:#fff;
+            float:right;
+        }
+    .page-head-bar ._home-section{
+        width:16%;
+        height:auto;
+        margin:0 0 0 0;
+        padding:0 0 0 0;
+        text-align:center;
+        float:right;
+    }
+        .page-head-bar ._home-section ._icon{
+            width:20%;
+            height:auto;
+            margin:0 0 0 0;
+            padding:0 0 0 0;
+            text-align:center;
+            font-size:1.3em;
+            color:#fff;
+        }
+
+/**/
+.actionsheet, .spinner {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 4;
+}
+
+.hide {
+    display:none;
+}
+
+.sml-hr {
+    width:4em;
+    margin:0 0 1.3em 0;
+    padding:1.3em 0 0 0;
+    border-bottom:1px solid #e0e0e0;
+}
+
+.photo {
+    width:100%;
+    max-width:660px;
+    margin:0 auto 0 auto;
+}
+    .photo img{
+        width:100%;
+    }
+    .photo .mode {
+        width:100%;
+        height:3em;
+        line-height:4.2em;
+        position:relative;
+        margin:-3.3em 0 0 0;
+        text-align:right;
+        background:-webkit-gradient(linear, 0% 0%, 0% 100%,from(transparent), to(#333));
+    }
+    .photo .mode span{
+        margin-right:1em;
+        font-size:0.8em;
+        color:#fff;
+    }
+
+.main {
+    width:100%;
+    max-width:660px;
+    height:auto;
+    margin:0 auto 6px auto;
+    background:#fff;
+    border-bottom:12px solid #f5f5f5;
+    font-family:Arial;
+}
+    .main .activity {
+        width:88%;
+        height:auto;
+        margin:1.2em auto 0 auto;
+    }
+        .main .activity .tit {
+            width: 100%;
+            height: auto;
+            line-height: 1.2em;
+            font-size: 1.2em;
+            font-family: Arial;
+            font-weight: bold;
+            color: #000;
+            text-align: left;
+            margin: 0 auto 0 auto;
+            -webkit-user-select: all;
+            user-select: all;
+        }
+        .main .activity .brief {
+            width: 100%;
+            height: auto;
+            margin: 0.5em auto 0 auto;
+            font-size: 1em;
+            font-family: Arial;
+            color: #555;
+            text-align: left;
+            -webkit-user-select: all;
+            user-select: all;
+        }
+        .main .activity .vippackage-tip{
+            font-size: 0.9em;
+            font-family: Arial;
+            color:#fe8000;
+            padding: 10px 0 0px 0;
+        }
+            .main .activity .vippackage-tip .a-txt{
+                margin:0 0 0 0;
+                text-decoration: underline;
+            }
+        .main .activity .package-icons{
+            margin: 0 0 0 0;
+            padding: 0.2em 0 0 0;
+        }
+            .main .activity .package-icons img{
+                height: 1em;
+                margin:0 0.2em 0 0;
+                display: inline-block;
+            }
+        .main .activity .price{
+            width:100%;
+            height:auto;
+            line-height:1.4em;
+            margin:1.8em auto 1.4em auto;
+            color:#ff8000;
+            font-size:0.8em;
+            font-family:Arial;
+            text-align:left;
+        }
+        .main .activity .nvip-price{
+            margin:1.8em auto 1.4em auto;
+        }
+            .main .activity .price .vip-icon{
+                font-size:1.5em;
+            }
+            .main .activity .price .vip-icon2{
+                margin:0 0.2em 0 0;
+                font-size:1em;
+                color:#ff8000;
+            }
+            .main .activity .price img{
+                width:1em;
+                margin:0 0.3em 0 0;
+            }
+            .main .activity .price .nvip{
+                margin:0 0 0 0.5em;
+                font-size:1em;
+                color:#999;
+                text-align:left;
+            }
+            .main .activity .price .vip{
+                margin:0 0 0 1em;
+                font-size:1em;
+                color:#999;
+                text-align:left;
+            }
+            .main .activity .price .val{
+                color:#ff8000;
+                font-size:1.8em;
+                font-family:Arial;
+            }
+        .main .activity .govip{
+            width:100%;
+            height:auto;
+            margin:0 auto 1.2em auto;
+            padding:1.2em 0 0 0;
+            font-size:0.8em;
+            font-family:Arial;
+            color:#555;
+            border-top:1px solid #e0e0e0;
+        }
+            .main .activity .govip .link{
+                font-size:1em;
+                color:#3e9ec0;
+            }
+    .main .group-package {
+        width:88%;
+        margin:auto;
+        /*margin: 1em auto 1em auto;*/
+    }
+        .main .group-package .selectgrouppackage {
+            color: #000;
+            font-size: 1em;
+            font-family: Arial;
+            font-weight: bold;
+            margin:1em 0 1em 0;
+        }
+        .main .group-package .group-package-list {
+            margin: 1em 0 1em 0;
+        }
+
+        .main .group-package .p-item {
+            position: relative;
+            border:  1px solid rgba(0,0,0,0.12);
+            padding: 0.6em 0.9em 0.6em 0.9em;
+            margin: 0.5em 0 0.5em 0;
+        }
+        .main .group-package .selecteditem {
+            border: 1px solid #3E9EC0;
+        }
+            .main .group-package .p-item .g-icon {
+                position: absolute;
+                top: 0px;
+                right: 0px;
+            }
+        .main .group-package .p-item .hideicon {
+        display:none;
+        }
+            .main .group-package .p-item .g-icon img{
+                width:18px;
+            }
+            .main .group-package .p-item .seriano {
+                font-size: 1em;
+                font-family: PingFangSC-Regular;
+                font-weight: bold;
+                color:#555555;
+            }
+                .main .group-package .p-item .selectedseriano {
+                    color: #3E9EC0;
+                }
+        .main .group-package .p-item .groupprice {
+        }
+                .main .group-package .p-item .groupprice .vipprice {
+                    font-size: 1em;
+                    font-family: Arial;
+                    font-weight: bold;
+                    color: #FF7800;
+                    display: inline;
+                    padding-right: 0.3em;
+                }
+                .main .group-package .p-item .groupprice .novipprice {
+                    font-size: 0.8em;
+                    font-family: Arial;
+                    font-weight: bold;
+                    color: #919191;
+                    display: inline;
+                }
+
+    .main .rooms {
+        width:88%;
+        height:auto;
+        margin:0.5em auto 0 auto;
+        padding:0.5em 0 0 0;
+        border-bottom:1px solid #e0e0e0;
+    }
+        .main .rooms .tit{
+            font-size:1em;
+            font-family:Arial;
+            color:#000;
+            margin:0 0 1em 0;
+            padding:0.1em 0 0 0;
+            cursor:pointer;
+        }
+        .main .rooms .tit2{
+            font-size:1em;
+            font-family:Arial;
+            color:#000;
+            margin:0 0 0em 0;
+            padding:0.1em 0 0 0;
+            cursor:pointer;
+        }
+        .main .rooms .tit-aarow-right{
+            background: url(http://whfront.b0.upaiyun.com/www/img/hotel/package/icon-aarow-right.png) no-repeat right 0.3em;
+	        background-size: 1.5em;
+        }
+        .main .rooms .tit-aarow-down{
+            background: url(http://whfront.b0.upaiyun.com/www/img/hotel/package/icon-aarow-down.png) no-repeat right 0.3em;
+	        background-size: 1.5em;
+        }
+        .main .rooms .tit-aarow-top{
+            background: url(http://whfront.b0.upaiyun.com/www/img/hotel/packages/arrow-top2@2x.png) no-repeat 98% 0.6em;
+	        background-size: 1em;
+        }
+        .main .rooms .info{
+            width:100%;
+            height:auto;
+            padding:0em 0 1em 0;
+            /*border-top:1px solid #eee;*/
+            text-align:center;
+        }
+            .main .rooms .info .room-info{
+                width:99%;
+                height:auto;
+                margin:0.1em auto 0.6em auto;
+                font-size:0.8em;
+                color:#666;
+                text-align:left;
+            }
+            .main .rooms .info .room-item{
+                width:auto;
+                height:auto;
+                margin:0.1em 0.5em 0.5em 0.05em;
+                padding:0.4em 1em 0.4em 1em;
+                border:1px solid #ddd;
+                border-radius:4px;
+                color:#999;
+                text-align:center;
+                font-size:0.9em;
+                float:left;
+            }
+            .main .rooms .info .room-item-sel{
+                border:1px solid #449cbc;
+                color:#449cbc;
+            }
+
+    .main .package {
+        width:88%;
+        height:auto;
+        margin:0.5em auto 0 auto;
+        padding:0.5em 0 1.2em 0;
+        border-bottom:1px solid #e0e0e0;
+    }
+        .main .package .tit{
+            font-size:0.9em;
+            color:#000;
+            margin:0.3em 0 0.3em 0;
+        }
+        .main .package .info{
+            width:100%;
+            height:auto;
+            /*max-height:6em;
+            overflow:hidden;*/
+            padding:0em 0 0em 0;
+        }
+            .main .package .info .packageTit {
+                width:90%;
+                height:1.5em;
+                line-height:1.5em;
+                margin:0 auto 0.2em auto;
+                font-size:1em;
+                color:#0096cf;
+            }
+            .main .package .info .packageList {
+                width: 100%;
+                height: auto;
+                margin: 0 auto 0 auto;
+                -webkit-user-select: all;
+                user-select: all;
+            }
+                .main .package .info .packageList ul{
+                    width:100%;
+                    padding:0;
+                    margin:0;
+                    list-style:none;
+                }
+                .main .package .info .packageList ul li{
+                    width:100%;
+                    height:1.3em;
+                    line-height:1.3em;
+                    font-size:0.9em;
+                    color:#555;
+                    display:inline-table;
+                }
+                .main .package .info .packageList ul li .num{
+                    margin-right:0.3em;
+                    font-size:0.9em;
+                    color:#333;
+                }
+                .main .package .info .packageList table {
+                    width: 100%;
+                    padding: 0;
+                    margin: 0;
+                    border: none !important;
+                }
+                    .main .package .info .packageList table td {
+                        padding: 0.1em 0 0.1em 0;
+                        border: none !important;
+                    }
+                    .main .package .info .packageList table .td-num{
+                        width:0.7em;
+                        text-align:left;
+                        font-size:1.1em;
+                        font-family:Arial;
+                        color:#555;
+                        padding:0 0 0 0;
+                    }
+                    .main .package .info .packageList table .td-info{
+                        line-height:1.4em;
+                        font-size:0.9em;
+                        font-family:Arial;
+                        color:#555;
+                    }
+        .main .package .package-more-btn{
+            width:100%;
+            height:auto;
+            overflow:hidden;
+            margin:-4em auto 0 auto;
+            padding:0 0 0 0;
+            position:relative;
+            cursor:pointer;
+        }
+            .main .package .package-more-btn .mask{
+                width:100%;
+                height:4em;
+                overflow:hidden;
+                margin:0 auto 0 auto;
+                padding:0 0 0 0;
+                background:url(http://whfront.b0.upaiyun.com/www/img/hotel/package/img-mask-72x72.png) repeat-x top left;
+                background-size:4em;
+            }
+            .main .package .package-more-btn .btn{
+                width:100%;
+                height:auto;
+                overflow:hidden;
+                margin:0 auto 0 auto;
+                padding:0.8em 0 1.6em 0;
+                text-align:center;
+                font-size:0.8em;
+                color:#3E9EC0;
+            }
+                .main .package .package-more-btn .btn ._icon{
+                    margin:0 0 0 0;
+                    font-size:1em;
+                    color:#3E9EC0;
+                }
+    .main .tuijian {
+        width:88%;
+        height:auto;
+        margin:1em auto 0 auto;
+        padding:0 0 1em 0;
+    }
+        .main .tuijian .tit{
+            width:100%;
+            height:auto;
+            margin:0.3em auto 0em auto;
+            font-size:1em;
+            font-weight:bold;
+            color:#000;
+            display:table;
+            text-align:center;
+        }
+        .main .tuijian .tit-border{
+            width:1.6em;
+            height:auto;
+            margin:0 auto 1em auto;
+            padding:0.3em 0 0 0;
+            text-align:center;
+            font-size:1em;
+            border-bottom:2px solid #d5d5d5;
+        }
+        .main .tuijian .info {
+            width: 100%;
+            height: auto;
+            line-height: 1.4em;
+            margin: 0.2em auto 0.5em auto;
+            font-size: 0.9em;
+            font-family: Arial;
+            color: #555;
+            display: table;
+            -webkit-user-select: all;
+            user-select: all;
+        }
+        .main .tuijian .pic{
+            width:95%;
+            height:auto;
+            line-height:1.4em;
+            margin:0.5em auto 0 auto;
+            display:table;
+        }
+            .main .tuijian .pic img{
+                width:100%;
+            }
+        .main .tuijian table {
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            font-size: 1em;
+            border: none !important;
+        }
+        .main .tuijian td {
+            padding: 0.1em 0 0.1em 0;
+            border: none !important;
+        }
+            .main .tuijian table .td-num{
+                width:0.7em;
+                text-align:left;
+                font-size:1.1em;
+                font-family:Arial;
+                color:#555;
+                padding:0 0 0 0.2em;
+            }
+            .main .tuijian table .td-info{
+                line-height:1.4em;
+                font-size:0.9em;
+                font-family:Arial;
+                color:#555;
+            }
+    .main .shopread-btn {
+        width:88%;
+        margin:1.2em auto 0 auto;
+        padding:0em 0 1.2em 0;
+    }
+        .main .shopread-btn ._btn{
+            width:7em;
+            margin:0 auto 0 auto;
+            padding:0.4em 0 0.5em 0;
+            border:1px solid #2c2c2c;
+            text-align:center;
+            font-size:0.9em;
+        }
+    .main .shopread {
+        width:88%;
+        margin:1em auto 0 auto;
+        padding:0em 0 0.5em 0;
+    }
+        .main .shopread .tit{
+            width:100%;
+            height:auto;
+            margin:0.2em auto 0em auto;
+            font-size:1em;
+            font-weight:bold;
+            color:#000;
+            cursor:pointer;
+            text-align:center;
+        }
+        .main .shopread .tit-border{
+            width:1.6em;
+            height:auto;
+            margin:0 auto 1em auto;
+            padding:0.3em 0 0 0;
+            text-align:center;
+            font-size:1em;
+            border-bottom:2px solid #d5d5d5;
+        }
+        .main .shopread .info {
+            width: 100%;
+            height: auto;
+            margin: 0 auto 0.6em auto;
+            -webkit-user-select: all;
+            user-select: all;
+        }
+        .main .shopread .info ul{
+                width:100%;
+                padding:0;
+                margin:0;
+                list-style:none;
+            }
+            .main .shopread .info ul li{
+                width:100%;
+                height:1.5em;
+                line-height:1.5em;
+                font-size:0.9em;
+                color:#999;
+                display:inline-table;
+            }
+            .main .shopread .info ul li .num{
+                margin-right:0.6em;
+                font-size:0.9em;
+                color:#999;
+            }
+        .main .shopread table {
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            font-size: 1em;
+            border: none !important;
+        }
+        .main .shopread td {
+            padding: 0.1em 0 0.1em 0;
+            border: none !important;
+        }
+            .main .shopread table .td-num{
+                width:0.7em;
+                text-align:left;
+                font-size:1.1em;
+                font-family:Arial;
+                color:#555;
+                padding:0 0 0 0;
+            }
+            .main .shopread table .td-info{
+                line-height:1.4em;
+                font-size:0.9em;
+                font-family:Arial;
+                color:#555;
+            }
+
+    .main .hotel {
+        width:88%;
+        height:auto;
+        margin:1.1em auto 0.8em auto;
+        padding:0 0 0 0;
+        display:table;
+        cursor:pointer;
+    }
+        .main .hotel .left-hotel{
+            width:83%;
+            height:auto;
+            margin:0 0 0 0;
+            padding:0 1% 0 0;
+            float:left;
+            text-align:left;
+            border-right:1px solid #e0e0e0;
+        }
+            .main .hotel .left-hotel .h-img{
+                width:25%;
+                height:auto;
+                margin:0 0 0 0;
+                padding:0 0 0 0;
+                float:left;
+                text-align:left;
+            }
+                .main .hotel .left-hotel .h-img img{
+                    width:85%;
+                }
+            .main .hotel .left-hotel .h-info{
+                width:74%;
+                height:auto;
+                margin:0 0 0 0;
+                padding:0 0 0 0;
+                float:right;
+            }
+                .main .hotel .left-hotel .h-info .hn{
+                    width:100%;
+                    height:1em;
+                    line-height:1.1em;
+                    margin:0 0 0 0;
+                    padding:0.7em 0 0 0;
+                    color:#555;
+                    font-size:0.9em;
+                    font-family:Arial;
+                    overflow:hidden;
+                }
+                .main .hotel .left-hotel .h-info .hp{
+                    width:100%;
+                    height:auto;
+                    margin:0 0 0 0;
+                    padding:0.2em 0 0 0;
+                    color:#ff8000;
+                    font-size:1.2em;
+                    font-family:Arial;
+                }
+                .main .hotel .left-hotel .h-info .hlink{
+                    width:100%;
+                    height:auto;
+                    margin:0 0 0 0;
+                    padding:0.6em 0 0 0;
+                    color:#3e9ec0;
+                    font-size:0.9em;
+                }
+        .main .hotel .right-comment{
+            width:14%;
+            height:auto;
+            margin:0 0 0 0;
+            padding:0 0 0 0;
+            float:right;
+        }
+            .main .hotel .right-comment .c-count{
+                width:100%;
+                height:auto;
+                margin:0 0 0 0;
+                padding:0.7em 0.5em 0 0;
+                color:#3e9ec0;
+                font-size:0.9em;
+                font-weight:bold;
+                text-align:right;
+            }
+            .main .hotel .right-comment .c-lab{
+                width:100%;
+                height:auto;
+                margin:0 0 0 0;
+                padding:0.2em 0 0 0;
+                color:#3e9ec0;
+                font-size:0.8em;
+                text-align:right;
+            }
+    .main .address {
+        width:100%;
+        height:auto;
+        margin:1em auto 0 auto;
+        padding:1em 0 1em 0;
+        display:table;
+        cursor:pointer;
+        font-family:Arial;
+        border-top:1px solid #e0e0e0;
+    }
+        .main .address .info{
+            width:88%;
+            height:auto;
+            margin:0 auto 0 auto;
+            padding:0 0 0 0;
+            display:table;
+            cursor:pointer;
+        }
+            .main .address .info .left{
+                width:83%;
+                height:auto;
+                margin:0 0 0 0;
+                padding:0 1% 0 0;
+                float:left;
+                font-size:0.9em;
+                color:#555;
+                border-right:1px solid #e0e0e0;
+            }
+            .main .address .info .right{
+                width:14%;
+                height:auto;
+                margin:0 0 0 0;
+                padding:0 0 0 0;
+                float:right;
+                
+                text-align:right;
+            }
+                .main .address .info .right ._icon{
+                    font-size:1.5em;
+                    color:#3e9ec0;
+                }
+    .main .comment {
+        width:88%;
+        height:auto;
+        margin:1em auto 0 auto;
+        padding:0 0 0 0;
+        display:table;
+        cursor:pointer;
+    }
+        .main .comment .tit{
+            width:100%;
+            height:auto;
+            margin:0em auto 1em auto;
+            font-size:1em;
+            font-family:Arial;
+            color:#000;
+            display:table;
+            background: url(../../images/icon-aarow7.png) no-repeat right 0.2em;
+            background-size:1.5em;
+        }
+        .main .comment .list{
+            width:100%;
+            height:auto;
+            line-height:1.4em;
+            margin:0.2em auto 1em auto;
+            font-size:0.9em;
+            color:#333;
+            display:table;
+        }
+            .main .comment .list .item{
+                width:100%;
+                height:auto;
+                margin:0em auto 0em auto;
+                padding: 0.5em 0 0.6em 0;
+                display:table;
+                border-top:1px solid #eee;
+            }
+                .main .comment .list .item{
+                    width:100%;
+                    height:auto;
+                    margin:0em auto 0em auto;
+                    display:table;
+                }
+                    .main .comment .list .item .member{
+                        width:100%;
+                        height:auto;
+                        margin:0.2em auto 0.4em auto;
+                    }
+                        .main .comment .list .item .member .left{
+                            width:12%;
+                            height:auto;
+                            margin:0em auto 0em auto;
+                            float:left;
+                            text-align:center;
+                        }
+                            .main .comment .list .item .member .left img{
+                                width:2.5em;
+                                border-radius:3em;
+                                margin:0.3em 0 0 0;
+                            }
+                        .main .comment .list .item .member .right{
+                            width:87%;
+                            height:auto;
+                            margin:0em auto 0em auto;
+                            float:right;
+                            position:relative;
+                        }
+                            .main .comment .list .item .member .right .mname{
+                                width:100%;
+                                height:auto;
+                                line-height:1.5em;
+                                margin:0em auto 0em auto;
+                                font-size:1em;
+                                color:#000;
+                            }
+                            .main .comment .list .item .member .right .mbrief{
+                                width:100%;
+                                height:auto;
+                                line-height:1.5em;
+                                margin:0em auto 0em auto;
+                                font-size:1em;
+                                color:#888;
+                            }
+                            .main .comment .list .item .member .right .comdate{
+                                width:8em;
+                                height:auto;
+                                line-height:1.5em;
+                                margin:0em auto 0em auto;
+                                font-size:0.8em;
+                                font-family:Arial;
+                                color:#999;
+                                position:absolute;
+                                right:0;
+                                top:0;
+                                text-align:right;
+                            }
+                    .main .comment .list .item .desc{
+                        width:99%;
+                        height:auto;
+                        margin:0 auto 0.2em auto;
+                    }
+    .main .def-item {
+        width:88%;
+        height:auto;
+        margin:0em auto 0em auto;
+        padding:1em 0 1em 0;
+        display:table;
+    }
+    .main .def-item-bor {
+        border-top:1px solid #e0e0e0;
+    }
+
+.hotel-source {
+    width:100%;
+    height:auto;
+    font-family:Arial;
+    /*border-top:6px solid #e0e0e0;*/
+}
+    .hotel-source .tit{
+        width:94%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0.8em 0 0 0;
+        text-align:center;
+        font-size:1em;
+        font-weight:bold;
+    }
+    .hotel-source .tit-border{
+        width:1.6em;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0.3em 0 0 0;
+        text-align:center;
+        font-size:1em;
+        border-bottom:2px solid #d5d5d5;
+    }
+    .hotel-source .body{
+        width:94%;
+        /*height:auto;*/
+        height:auto;
+        max-height:800px;
+        overflow:hidden;
+        margin:0 auto 0.8em auto;
+        padding:1em 0 0 0;
+    }
+        .hotel-source .body .loading_img{
+            width:4em;
+            margin:1em auto 1em auto;
+            display:table;
+        }
+        .hotel-source .body img{
+            width:100%;
+            margin:0 0 0 0;
+        }
+    .hotel-source .source-more-btn{
+        width:100%;
+        height:auto;
+        overflow:hidden;
+        margin:-4.8em auto 0 auto;
+        padding:0 0 0 0;
+        position:relative;
+        cursor:pointer;
+    }
+        .hotel-source .source-more-btn .mask{
+            width:100%;
+            height:4em;
+            overflow:hidden;
+            margin:0 auto 0 auto;
+            padding:0 0 0 0;
+            background:url(http://whfront.b0.upaiyun.com/www/img/hotel/package/img-mask-72x72.png) repeat-x top left;
+            background-size:4em;
+        }
+        .hotel-source .source-more-btn .btn{
+            width:100%;
+            height:auto;
+            overflow:hidden;
+            margin:0 auto 0 auto;
+            padding:0.8em 0 1.6em 0;
+            text-align:center;
+            font-size:0.8em;
+            color:#3E9EC0;
+        }
+            .hotel-source .source-more-btn .btn ._icon{
+                margin:0 0 0 0;
+                font-size:1em;
+                color:#3E9EC0;
+            }
+
+.sub {
+    width:100%;
+    height:auto;
+    margin:0 auto 0 auto;
+    position:fixed;
+    left:0;
+    bottom:0;
+    z-index: 8;
+    text-align:center;
+}
+    .sub .submit{
+        width:100%;
+        max-width:660px;
+        height:3em;
+        line-height:3em;
+        margin:0 auto 0 auto;
+        font-size:1em;
+        font-family:Arial;
+        text-align:center;
+        color:#fff;
+        background:#ff8000;
+        display:table;
+    }
+    .sub .downline{
+        width:100%;
+        max-width:660px;
+        height:3em;
+        line-height:3em;
+        margin:0 auto 0 auto;
+        font-size:1em;
+        font-family:Arial;
+        text-align:center;
+        color:#fff;
+        background:#919191;
+        display:table;
+    }
+
+.sub-go {
+    width:100%;
+    max-width:660px;
+    height:auto;
+    margin:0 auto 0 auto;
+    background:#fff;
+    border-top:1px solid #e0e0e0;
+    position:fixed;
+    left:0;
+    bottom:0;
+    z-index: 10;
+}
+    .sub-go .left{
+        width:74%;
+        height:auto;
+        margin:0 auto 0 auto;
+        float:left;
+    }
+        .sub-go .left .price-line{
+            width:92%;
+            height:2em;
+            line-height:2.3em;
+            vertical-align:bottom;
+            margin:0 auto 0 auto;
+        }
+            .sub-go .left .price-line .lab{
+                font-size:1em;
+                font-family:Arial;
+                color:#555;
+            }
+            .sub-go .left .price-line .vipprice{
+                font-size:1em;
+                font-family:Arial;
+                color:#ff8000;
+            }
+                .sub-go .left .price-line .vipprice .picon {
+                    margin:0 0.2em 0 0;
+                    font-size: 0.95em;
+                    color: #ff8000;
+                }
+                .sub-go .left .price-line .vipprice .pun {
+                    font-size: 0.9em;
+                }
+                .sub-go .left .price-line .vipprice .pval {
+                    font-size: 1.3em;
+                    font-weight:bold;
+                }
+            .sub-go .left .price-line .defprice {
+                margin:0 0 0 0.6em;
+                font-size: 0.8em;
+                font-family: Arial;
+                color: #555;
+            }
+        .sub-go .left .tip-line{
+            width:92%;
+            height:1.8em;
+            line-height:1.7em;
+            margin:0 auto 0 auto;
+            font-size:0.8em;
+            font-family:Arial;
+            color:#919191;
+        }
+    .sub-go .right{
+        width:26%;
+        height:auto;
+        margin:0 auto 0 auto;
+        float:right;
+        background:#ff8000;
+    }
+        .sub-go .right .submit-go{
+            width:100%;
+            height:auto;
+            line-height:3.6em;
+            margin:0 auto 0 auto;
+            font-size:1em;
+            font-family:Arial;
+            text-align:center;
+            color:#fff;
+            background:#ff8000;
+        }
+
+.active-section {
+    width:100%;
+    height:1.5em;
+    line-height:1.5em;
+    margin:0 auto 0 auto;
+    padding:1em 0 0.7em 0;
+    border-top:1px solid #e0e0e0;
+    display:inline-table;
+    position:relative;
+}
+    .active-section .icon{
+        width:3.2em;
+        height:auto;
+        margin:0 0.5em 0 0;
+        float:left;
+        vertical-align:top;
+    }
+        .active-section .icon img{
+            width:100%;
+        }
+    .active-section .tip{
+        width:calc(100% - 6.8em);
+        height:auto;
+        margin:0 0 0 0;
+        font-size:0.8em;
+        font-family:Arial;
+        color:#555;
+        float:left;
+    }
+    .active-section .tip-red{
+        color:#fe8000;
+    }
+    .active-section .link-icon{
+        width:1.5em;
+        height:auto;
+        margin:0 0 0 0;
+        padding:0 0 0 0;
+        font-size:1em;
+        color:#919191;
+        text-align:right;
+        position:absolute;
+        top:0.95em;
+        right:0.1em;
+    }
+
+.gift-coupon-list-model{
+    width:100%;
+    height:100%;
+    margin:0 auto 0 auto;
+    padding:0 0 0 0;
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:1000;
+    background:rgba(0, 0, 0, 0.5);
+}
+.gift-coupon-list{
+    width:84%;
+    height:auto;
+    margin:0 auto 0 auto;
+    padding:0.5em 0 0 0;
+    position:fixed;
+    top:10%;
+    left:8%;
+    z-index:1001;
+    font-family:Arial;
+    display:table;
+}
+@media (min-height: 720px) {
+    .gift-coupon-list{
+        top:12%;
+    }
+}
+        .gift-coupon-list .close{
+            width:1.5em;
+            height:auto;
+            margin:0 auto 0 auto;
+            padding:0 0 0 0;
+            position:absolute;
+            right:-0.5em;
+            top:0;
+            z-index:1002;
+        }
+            .gift-coupon-list .close img{
+                width:100%;
+            }
+        .gift-coupon-list .item{
+            width:86%;
+            height:auto;
+            margin:0 auto 0.6em auto;
+            padding:0 0 0 0;
+            /*background:#fff;*/
+            display:table;
+            /*box-shadow: 0px 4px 5px rgba(233, 221, 200, 1);*/
+        }
+        .gift-coupon-list .top-panel{
+            width:100%;
+            height:auto;
+            line-height:1px;
+            margin:0 0 0 0;
+            padding:0 0 0 0;
+        }
+            .gift-coupon-list .top-panel img{
+                width:100%;
+                border-radius:8px 8px 0 0;
+            }
+        .gift-coupon-list .middle-panel{
+            width:100%;
+            height:auto;
+            max-height:320px;
+            margin:0 0 0 0;
+            padding:0.6em 0 0 0;
+            background:#f5f5f5;
+            overflow:auto;
+            -webkit-box-sizing:border-box;
+            -webkit-overflow-scrolling:touch;
+        }
+        @media (min-width: 410px) {
+            .gift-coupon-list .middle-panel{
+                max-height:350px;
+            }
+        }
+        @media (max-height: 372px) {
+            .gift-coupon-list .middle-panel{
+                max-height:220px;
+            }
+        }
+        @media (min-height: 720px) {
+            .gift-coupon-list .middle-panel{
+                max-height:360px;
+            }
+        }
+    .gift-coupon-list .coupon-list {
+
+    }
+        .gift-coupon-list .coupon-list .item{
+            width:88%;
+            height:auto;
+            margin:0 auto 0.5em auto;
+            padding:0 0 0 0;
+            display:table;
+            position:relative;
+            cursor:pointer;
+        }
+            .gift-coupon-list .coupon-list .item .top{
+                width:100%;
+                height:auto;
+                line-height:0.1em;
+                margin:0 0 0 0;
+                padding:0 0 0 0;
+            }
+                .gift-coupon-list .coupon-list .item .top img{
+                    width:100%;
+                }
+            .gift-coupon-list .coupon-list .item .line{
+                width:100%;
+                height:auto;
+                line-height:0.1em;
+                margin:0 0 0 0;
+                padding:0 0 0 0;
+            }
+                .gift-coupon-list .coupon-list .item .line img{
+                    width:100%;
+                }
+            .gift-coupon-list .coupon-list .item .bottom{
+                width:100%;
+                height:auto;
+                line-height:0.1em;
+                margin:0 0 0 0;
+                padding:0 0 0 0;
+                background:#fff;
+            }
+                .gift-coupon-list .coupon-list .item .bottom img{
+                    width:100%;
+                }
+            .gift-coupon-list .coupon-list .item .middle{
+                width:100%;
+                height:auto;
+                margin:0 0 0 0;
+                padding:0 0 0 0;
+                background:url(http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-bg.png) repeat-y left top;
+                background-size:100%;
+            }
+                .gift-coupon-list .coupon-list .item .middle .money{
+                    width:33%;
+                    height:auto;
+                    margin:0 0 0 0;
+                    padding:1.2em 0 1em 0;
+                    float:left;
+                    text-align:center;
+                }
+                    .gift-coupon-list .coupon-list .item .middle .money .val{
+                        margin:0 0 0 0;
+                        padding:0 0 0 0;
+                        font-size:2em;
+                        color:#fe8000;
+                    }
+                    .gift-coupon-list .coupon-list .item .middle .money .val-sml{
+                        width:100%;
+                        margin:0.3em 0 0 0;
+                        padding:0 0 0 0;
+                        font-size:1.5em;
+                        color:#fe8000;
+                        display:table;
+                        text-align:center;
+                    }
+                .gift-coupon-list .coupon-list .item .middle .info{
+                    width:67%;
+                    height:auto;
+                    margin:0 0 0 0;
+                    padding:0.6em 0 0.6em 0;
+                    float:right;
+                }
+                    .gift-coupon-list .coupon-list .item .middle .info .tit{
+                        width:100%;
+                        height:auto;
+                        margin:0 auto 0 auto;
+                        padding:0 0 0 0;
+                        font-size:0.9em;
+                        font-weight:bold;
+                        color:#2c2c2c;
+                        position:relative;
+                    }
+                        .gift-coupon-list .coupon-list .item .middle .info .tit .icon{
+                            margin:0 0 0 0.3em;
+                            padding:0 0 0 0;
+                            font-size:0.9em;
+                            font-weight:normal;
+                            color:#919191;
+                        }
+                    .gift-coupon-list .coupon-list .item .middle .info .time{
+                        width:100%;
+                        height:auto;
+                        margin:0 auto 0 auto;
+                        padding:0 0 0 0;
+                        font-size:0.7em;
+                        color:#555;
+                    }
+                    .gift-coupon-list .coupon-list .item .middle .info .detail-link{
+                        width:7em;
+                        height:auto;
+                        margin:0.5em 0 0 0;
+                        padding:0 0 0 0;
+                        font-size:0.8em;
+                        color:#fe8000;
+                    }
+                    .gift-coupon-list .coupon-list .item .middle .info .detail-link-0{
+                        color:#555;
+                    }
+                .gift-coupon-list .coupon-list .item .middle .rule{
+                    width:90%;
+                    height:auto;
+                    margin:0 auto 0 auto;
+                    padding:0 0 0.2em 0;
+                    font-size:0.8em;
+                    color:#919191;
+                }
+
+                .gift-coupon-list .coupon-list .item .tag{
+                    width:8.5em;
+                    height:auto;
+                    margin:0 0 0 0;
+                    padding:0.1em 0 0.3em 0;
+                    font-size:0.7em;
+                    color:#fff;
+                    text-align:center;
+                    display:table;
+                    position:absolute;
+                    left:-4px;
+                    top:5px;
+                    background:url(http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-tag-bg.png) no-repeat left top;
+                    background-size:8.5em;
+                }
+    .gift-coupon-list .foot-panel{
+        width:100%;
+        height:auto;
+        line-height:0.1em;
+        margin:0 0 0 0;
+        padding:0 0 0.6em 0;
+        background:#f5f5f5;
+        border-radius:0px 0px 8px 8px;
+    }
+        .gift-coupon-list .foot-panel .get-ctrl{
+            width:100%;
+            height:auto;
+            margin:0 auto 0 auto;
+            padding:0 0 0 0;
+        }
+            .gift-coupon-list .foot-panel .get-ctrl img{
+                width:84%;
+                margin:0 auto 0 auto;
+                display:table;
+            }
+
+.retailer-share-section {
+    width:100%;
+    height:1.5em;
+    line-height:1.5em;
+    margin:0.2em auto 1.1em auto;
+    padding:0.7em 0 0.7em 0;
+    border:1px solid #FF6E00;
+    border-radius: 4px;
+    background: rgba(255,110,0,0.12);
+    display:table;
+    position:relative;
+}
+    .retailer-share-section .info{
+        width:calc(100% - 6.5em);
+        height:auto;
+        margin:0 0 0 1em;
+        padding:0 0 0 0;
+        float:left;
+        vertical-align:top;
+        box-sizing:border-box;
+        font-size:0.9em;
+        color:#FF7800;
+    }
+        .retailer-share-section .info .val{
+            font-size:1.2em;
+            font-weight:bold;
+        }
+        .retailer-share-section .info .teaminfo{
+            margin:0 0 0 0.6em;
+            font-size:0.8em;
+            color:#555;
+        }
+            .retailer-share-section .info .teaminfo .h{
+                margin:0 0 0 0.5em;
+                color:#fe8000;
+            }
+    .retailer-share-section .ctrl{
+        width:4.5em;
+        height:auto;
+        margin:0 0 0 0;
+        padding:0 1em 0 0;
+        float:right;
+        box-sizing:border-box;
+    }
+        .retailer-share-section .ctrl .link{
+            width:4.5em;
+            height:auto;
+            margin:0 0 0 auto;
+            padding:0.1em 0 0.1em 0;
+            font-size:0.8em;
+            color:#fff;
+            text-align:center;
+            background: #FF7800;
+            border-radius: 3px;
+            display:table;
+        }
+    .retailer-share-section .share-tag {
+        width: auto;
+        height: auto;
+        margin: 0 0 0 0;
+        padding: 0 0 0 0;
+        position: absolute;
+        right: 6px;
+        top: -8px;
+    }
+
+        .retailer-share-section .share-tag img {
+            height: 52px;
+        }

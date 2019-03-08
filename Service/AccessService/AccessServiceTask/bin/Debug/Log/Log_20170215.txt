@@ -1,0 +1,33 @@
+
+[17/2/15 15:19:23] Start Job [DownLoadWexinMaterialJob]
+[17/2/15 15:19:25] 【GetLastOffset】:1
+[17/2/15 15:19:25] 起始：Offset【1】 Count【1】
+[17/2/15 15:19:31] GetAllWeixinMaterialList Count:1
+[17/2/15 18:19:19] Start Job [DownLoadWexinMaterialJob]
+[17/2/15 18:19:19] 【GetLastOffset】:1
+[17/2/15 18:19:19] 起始：Offset【1】 Count【1】
+[17/2/15 18:21:12] GetAllWeixinMaterialList Count:1
+[17/2/15 18:40:03] Start Job [DownLoadWexinMaterialJob]
+[17/2/15 18:40:03] 【GetLastOffset】:1
+[17/2/15 18:40:03] 起始：Offset【1】 Count【1】
+[17/2/15 18:40:45] GetAllWeixinMaterialList Count:1
+[17/2/15 18:57:12] Start Job [DownLoadWexinMaterialJob]
+[17/2/15 18:57:12] 【GetLastOffset】:1
+[17/2/15 18:57:12] 起始：Offset【1】 Count【1】
+[17/2/15 18:58:04] GetAllWeixinMaterialList Count:1
+[17/2/15 18:59:00] Start Job [DownLoadWexinMaterialJob]
+[17/2/15 18:59:00] 【GetLastOffset】:1
+[17/2/15 18:59:00] 起始：Offset【1】 Count【1】
+[17/2/15 18:59:02] GetAllWeixinMaterialList Count:1
+[17/2/15 19:00:55] Start Job [DownLoadWexinMaterialJob]
+[17/2/15 19:00:55] 【GetLastOffset】:1
+[17/2/15 19:00:55] 起始：Offset【1】 Count【1】
+[17/2/15 19:00:59] GetAllWeixinMaterialList Count:1
+[17/2/15 19:13:46] Start Job [DownLoadWexinMaterialJob]
+[17/2/15 19:13:46] 【GetLastOffset】:1
+[17/2/15 19:13:46] 起始：Offset【1】 Count【1】
+[17/2/15 19:14:13] GetAllWeixinMaterialList Count:1
+[17/2/15 19:16:33] Start Job [DownLoadWexinMaterialJob]
+[17/2/15 19:16:34] 【GetLastOffset】:1
+[17/2/15 19:16:34] 起始：Offset【1】 Count【1】
+[17/2/15 19:16:58] GetAllWeixinMaterialList Count:1

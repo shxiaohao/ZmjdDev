@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<configuration>
+  <statements>
+    <select id="GetCommDictList">
+      <![CDATA[
+        select t.dicKey , t.DicValue, t.Descript from commDict t where t.Type = @type
+      ]]>
+    </select>
+  </statements>
+</configuration>

@@ -1,0 +1,128 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params.Order
+@using HJD.HotelPrice.Contract.DataContract.Order
+
+@model IEnumerable<OrderListItem>
+@{
+    ViewBag.Title = "订单列表";
+    ViewBag.BodyClass = "hotellistpage";
+    OrderParam param = ViewBag.param;
+    int totalCount = ViewBag.totalCount;
+    bool isMobile = WHotelSite.Utils.IsMobile();
+}
+
+<!-- Add -->
+<div class="container mainbody hidden-xs">
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            @Helpers.BreadCrumbs(Url, 0, 0, 1)
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>
+
+<div class="container mainbody">
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            <div class="row">
+                <!-- 订单列表 左侧导航 Left -->
+                <div class="col-md-3 col-sm-3  Screening hidden-xs">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">个人中心</h3>
+                        </div>
+                        @Helpers.InsertLeftNaviPanel(1,Url)
+                    </div>
+                    <div class="tel">
+                        客服电话:<i>4000-021-702</i>
+                    </div>
+                </div>
+                @if(@totalCount != 0){
+                    <!-- 订单列表 右侧导航 Right -->
+                    <div class="col-md-9 col-sm-9">
+                        <!-- 条件选择栏 mobile 开始 -->
+                        <div class="row toolbar2 visible-xs">
+                            <div class="col-xs-3">
+                                <button type="button" onclick="history.back()" class="btn btn-sm  btn-img01"><img src="@Url.Content("~/content/images/icon-back.png")" class="mobilepic" alt="" /></button>
+                            </div>
+                            <div class="col-xs-6 text-center listtitle">
+                                我的订单
+                            </div>
+                            <div class="col-sm-2 col-xs-3 text-right">
+                            </div>
+                        </div>
+                        <!-- 条件选择栏 mobile 结束 -->
+                        <!-- 我的订单列表 开始 -->
+                        <div class="row">
+                            <div class="col-sm-12 table-responsive ">
+                                <table cellspacing="0" cellpadding="0" border="0" class="table ddlist" width="100%">
+                                    <tr>
+                                        <th>订单信息</th>
+                                        <th>入住人</th>
+                                        <th>入住日期</th>
+                                        <th>总金额</th>
+                                        <th>订单状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    @Html.Partial("ListContent", Model)
+                                </table>
+                            </div>
+                        </div>
+                        <div class="pager1 text-right">
+                            @Helpers.Pagination(Url, param, totalCount, param.Count, param.Start)
+                        </div>
+                        <!-- 我的订单列表 结束 -->
+                    </div>
+                }
+                else
+                {
+                    <!-- 空结果提示 -->
+					<div class="nullalert text-center">	
+						<h5>您暂时没有任何订单哦</h5>
+					</div>
+                }
+            </div>
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>
+
+@if (!isMobile)
+{
+    <div class="modal fade paymodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true" style="margin-top:0;padding-top:80px;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">选择支付方式</h4>
+                </div>
+                <div class="modal-body row">
+                    <div class="col-xs-1">
+                    </div>
+                    <div class="col-xs-9">
+                        <ul class="list-inline">
+                            <li style="margin-right:120px">
+                                <input id="upayRadio" type="radio" name="optionsRadios" value="upay" style="margin-right:10px" checked="checked" />
+                                <a href="javascript:;" id="upayLink" style="font-size:large">银行卡支付</a>
+                            </li>
+                            <li>
+                                <input id="alipayRadio" type="radio" name="optionsRadios" value="alipay" style="margin-right:10px" />
+                                <a href="javascript:;" id="alipayLink" style="font-size:large">支付宝支付</a>
+                            </li>
+                        </ul>
+                        <button id="gotoPay" data-href="" style="margin-right: 0px; position: relative; left: 400px;" class="btn btn-01">去付款</button>
+                    </div>
+                    <div class="col-xs-1">
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+}

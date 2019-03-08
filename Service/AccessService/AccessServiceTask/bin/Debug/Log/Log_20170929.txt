@@ -1,0 +1,13 @@
+
+[17/9/29 22:37:56] Start Job [DownLoadWexinUserInfoJob]
+[17/9/29 22:38:02] ¡¾NextOpenid¡¿:
+[17/9/29 22:38:03] ¡¾0¡¿
+[17/9/29 22:38:03] GetAllWeixinSubscribeUser Count:8307
+[17/9/29 22:41:05] Start Job [DownLoadWexinUserInfoJob]
+[17/9/29 22:41:08] ¡¾NextOpenid¡¿:
+[17/9/29 22:41:08] ¡¾0¡¿
+[17/9/29 22:41:08] GetAllWeixinSubscribeUser Count:8310
+[17/9/29 22:44:29] Start Job [DownLoadWexinUserInfoJob]
+[17/9/29 22:44:31] ¡¾NextOpenid¡¿:
+[17/9/29 22:44:32] ¡¾0¡¿
+[17/9/29 22:44:32] GetAllWeixinSubscribeUser Count:8311

@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{018B75AE-9F83-4D87-B234-939FE3E10828}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HJD.CouponService.Contracts</RootNamespace>
+    <AssemblyName>HJD.CouponService.Contracts</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HJD.Framework.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\HJD.Framework.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Entity\AcquiredCoupon.cs" />
+    <Compile Include="Entity\BizOpLogEntity.cs" />
+    <Compile Include="Entity\BookNoUsedExchangeCouponInfoEntity.cs" />
+    <Compile Include="Entity\CashCouponStateEnum.cs" />
+    <Compile Include="Entity\CommOrderEntity.cs" />
+    <Compile Include="Entity\CouponActivityBizRelEntity.cs" />
+    <Compile Include="Entity\CouponActivityWithSKUEntity.cs" />
+    <Compile Include="Entity\CouponActivityRetailDetailEntity.cs" />
+    <Compile Include="Entity\CouponActivityRetailEntity.cs" />
+    <Compile Include="Entity\CouponOrderOperationEntity.cs" />
+    <Compile Include="Entity\OrderVoucherRequestParams.cs" />
+    <Compile Include="Entity\OrderUserCouponRequestParamsBase.cs" />
+    <Compile Include="Entity\OrderUserCouponRequestParams.cs" />
+    <Compile Include="Entity\ProductAlbumSumEntity.cs" />
+    <Compile Include="Entity\RedActivityEntity.cs" />
+    <Compile Include="Entity\RedPoolDetailEntity.cs" />
+    <Compile Include="Entity\RedPoolEntity.cs" />
+    <Compile Include="Entity\RedRecordEntity.cs" />
+    <Compile Include="Entity\RequestResultEntity.cs" />
+    <Compile Include="Entity\SKUAlbumEntity.cs" />
+    <Compile Include="Entity\UseCashCouponItem.cs" />
+    <Compile Include="Entity\UserCouponConsumeLogEntity.cs" />
+    <Compile Include="Entity\UserCouponDefineEntity.cs" />
+    <Compile Include="Entity\UserCouponItemEntity.cs" />
+    <Compile Include="Entity\UserCouponItemInfoEntity.cs" />
+    <Compile Include="Entity\UserCouponUseCondationEntity.cs" />
+    <Compile Include="Entity\WillCloseProductGroupEntity.cs" />
+    <Compile Include="Entity\ExchangeSettleModel.cs" />
+    <Compile Include="Entity\RedShareEntity.cs" />
+    <Compile Include="Entity\RetailProductEntity.cs" />
+    <Compile Include="Entity\RetailUrlEntity.cs" />
+    <Compile Include="Entity\SearchProductRequestEntity.cs" />
+    <Compile Include="Entity\SKUCouponActivityEntity.cs" />
+    <Compile Include="Entity\CouponActivitySKURelEntity.cs" />
+    <Compile Include="Entity\CouponInfoEntity.cs" />
+    <Compile Include="Entity\CouponRate.cs" />
+    <Compile Include="Entity\CouponTypeDefineEntity.cs" />
+    <Compile Include="Entity\DistrictInfoForWxappEntity.cs" />
+    <Compile Include="Entity\Enum.cs" />
+    <Compile Include="Entity\ExchangeCouponEntity.cs" />
+    <Compile Include="Entity\InspectorRewardEntity.cs" />
+    <Compile Include="Entity\OriginCoupon.cs" />
+    <Compile Include="Entity\OriginCouponResult.cs" />
+    <Compile Include="Entity\RefundCouponsEntity.cs" />
+    <Compile Include="Entity\ReturnCouponResult.cs" />
+    <Compile Include="Entity\CouponActivityEntity.cs" />
+    <Compile Include="Entity\SupplierCouponEntity.cs" />
+    <Compile Include="Entity\UseCouponRecordEntity.cs" />
+    <Compile Include="Entity\UsedConsumerCouponInfoEntity.cs" />
+    <Compile Include="Entity\UsedCouponProductEntity.cs" />
+    <Compile Include="Entity\VoucherAppFunctionRelEntity.cs" />
+    <Compile Include="Entity\VoucherChannelEntity.cs" />
+    <Compile Include="Entity\VoucherDefineEntity.cs" />
+    <Compile Include="Entity\VoucherItemsEntity.cs" />
+    <Compile Include="Entity\ExchangeCouponForSettleEntity.cs" />
+    <Compile Include="Interface\ICouponService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy *.dll  ..\..\..\..\Contracts\ /s/y/f/r</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,38 @@
+﻿@model RecommendHotelResult
+@{
+    Layout = null;
+
+    var isApp = ViewBag.IsApp;
+    var userid = ViewBag.UserId;
+}
+@if (Model != null && Model.HotelList.Count > 0)
+{
+    <ul>
+        @for (int i = 0; i < Model.HotelList.Count; i++)
+        {
+            var hotelEntity = Model.HotelList[i];
+
+            var url = string.Format("http://www.zmjiudian.com/Hotel/Package/{0}", hotelEntity.PID);
+            if (isApp)
+            {
+                url += string.Format("?userid={{userid}}");
+                url = string.Format("whotelapp://www.zmjiudian.com/gotopage?url={0}", HttpUtility.UrlEncode(url));
+            }
+            else
+            {
+                url += string.Format("?userid={0}", userid);
+            }
+
+            <li class="li-line" onclick="gourl('@url')">
+                <div class="h-img">
+                    <img @(i == 0 ? string.Format(" src={0} ", hotelEntity.HotelPicUrl) : string.Format(" data-original={0} data-lazyload-id={1} ", hotelEntity.HotelPicUrl, i)) alt="">
+                    <div class="h-tit-tip-price"><span class="p-un">￥</span>@hotelEntity.HotelPrice</div>
+                </div>
+                <div class="hname-info">
+                    <div class="hotel-name2">@hotelEntity.HotelName</div>
+                    <div class="hotel-packagebrief2">@hotelEntity.PackageBrief</div>
+                </div>
+            </li>
+        }
+    </ul>
+}

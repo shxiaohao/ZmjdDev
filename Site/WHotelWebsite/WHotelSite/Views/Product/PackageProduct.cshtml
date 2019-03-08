@@ -1,0 +1,312 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    Layout = null;
+
+    var skuid = ViewBag.SKUID;
+    var isApp = ViewBag.IsApp;
+
+    //当前环境 (1wap/2web/3app/4weixin)
+    ProductService.Contracts.Entity.ProductServiceEnums.SceneType stype = ViewBag.SType;
+
+    var AppType = ViewBag.AppType;
+    var AppVerForIOS = ViewBag.AppVerForIOS;
+    var AppVerForAndroid = ViewBag.AppVerForAndroid;
+    var IsLatestVerApp = ViewBag.IsLatestVerApp;
+
+    //用户信息（包含会员身份）
+    UserInfoResult userInfo = ViewBag.UserInfo;
+    var userid = ViewBag.UserId;
+
+    //是否VIP
+    var isVip = ViewBag.IsVip;
+
+    SKUCouponActivityDetailModel couponSkuInfo = ViewBag.CouponSkuInfo;
+    HJD.CouponService.Contracts.Entity.CouponActivityEntity activity = couponSkuInfo.activity;
+
+    //产品图
+    var productImgFirstSrc = "http://whfront.b0.upaiyun.com/app/img/pic-null-3x2.png";
+    if (activity.PicList != null && activity.PicList.Count > 0)
+    {
+        productImgFirstSrc = activity.PicList[0].Replace("p1.test.sl.corp", "p1.zmjiudian.com");
+    }
+
+    //价格
+    var sellPrice = isVip ? couponSkuInfo.SKUInfo.SKU.VIPPrice : couponSkuInfo.SKUInfo.SKU.Price;
+
+    ////查询券的状态
+    //BuyCouponCheckNumResult buyResult = ViewBag.BuyResult;
+
+    ////开售日
+    //var selldate = activity.EffectiveTime;
+
+    ////抢购结束日
+    //var closedate = activity.SaleEndDate;
+
+    //购买按钮的状态
+    var canShop = true;
+    var noCanTxt = "立即购买";
+
+    ////最小购买数量
+    //var minBuyNum = activity.MinBuyNum;
+
+    ////价格label
+    //var priceLabel = activity.PriceLabel;
+
+    var now = DateTime.Now;
+
+    //页面标题
+    var pageTitle = !string.IsNullOrEmpty(activity.PageTitle) ? activity.PageTitle : "产品详情";
+
+    //分享链接
+    var shareLink = ViewBag.ShareLink;
+
+    //分享跟踪参数的分享人对象
+    HJD.AccountServices.Entity.MemberProfileInfo shareUserInfo = ViewBag.ShareUserInfo;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>@(pageTitle)</title>
+    <meta name="keywords" content="@ViewBag.PageKeywords" />
+    <meta name="description" content="@ViewBag.PageDescription" />
+    <meta name="copyright" content="2013, zmjiudian.com" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+
+    <link href="~/Content/css/framework/zmjd.modal.min.css" rel="stylesheet" />
+    <link href="~/Content/css/framework/zmjd.swiper.min.css" rel="stylesheet" />
+    <link href="/Content/css/framework/util.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="/content/css/framework/iscroll.css" rel="stylesheet">
+    <link href="/content/css/product/packageproduct.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .login-section {
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <div id="product-detail">
+        <div class="main">
+            <div class="photo product-photo" v-if="productDetail.activity.PicList&&productDetail.activity.PicList.length>0" style="display:none;">
+                <div v-for="_loadNum in productDetail.loadNumList">
+                    <div id="product-img-list-{{_loadNum}}" class="swiper-container product-img-list" v-if="$index==productDetail.loadNum&&productDetail.activity.PicList&&productDetail.activity.PicList.length>1">
+                        <ul class="swiper-wrapper">
+                            <li class="swiper-slide product-img-item" v-for="imgsrc in productDetail.activity.PicList">
+                                <img class="product-img" data-num="{{$index}}" src='{{imgsrc.replace("_jupiter", "_640x426").replace("_theme", "_640x426").replace("_appdetail1", "_640x426")}}' data-showsrc='{{imgsrc.replace("_jupiter", "_640x426").replace("_theme", "_640x426").replace("_appdetail1", "_640x426")}}' src1="{{productDetail.productDefImg}}" alt="" />
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="pagination2 pagination-{{_loadNum}}" v-if="$index==productDetail.loadNum&&productDetail.activity.PicList&&productDetail.activity.PicList.length>1"></div>
+                </div>
+                <img class="product-single-img" v-if="productDetail.activity.PicList&&productDetail.activity.PicList.length==1" src='{{productDetail.activity.PicList[0].replace("p1.test.sl.corp", "p1.zmjiudian.com").replace("_jupiter", "_640x426").replace("_theme", "_640x426").replace("_appdetail1", "_640x426")}}' alt="" />
+                <div class="promotion-price-banner" style="display:none;">
+                    <span class="p"><span class="u">￥</span><span class="val"></span></span><span class="tag-txt"></span>
+                </div>
+            </div>
+            <div class="photo def-photo">
+                <img src="http://whfront.b0.upaiyun.com/app/img/pic-def-3x2.png" alt="" />
+            </div>
+            <div v-cloak class="activity">
+                <div class="tit">{{productDetail.activity.PageTitle}}</div>
+                <div class="brief" v-if="productDetail.activity.Tags">{{productDetail.activity.Tags}}</div>
+                <div class="sml-line"></div>
+                <div id="price-detail" class="detail" style="display:none;">
+                    <div v-if="productDetail.priceInfo.FirstVipPrice==productDetail.priceInfo.FirstPrice">
+                        <div class="price-line btom-br" v-if="productDetail.priceInfo.IsVip">
+                            <span class="zmjd-iconfont vip-icon">&#xe623;</span><span class="p-un">￥</span><span class="p-val">{{productDetail.priceInfo.FirstVipPrice}}</span>
+                            <div class="shop-info">{{productDetail.activity.SellNum}}人已购买</div>
+                        </div>
+                        <div v-else>
+                            <div class="price-line">
+                                <span class="p-un">￥</span><span class="p-val">{{productDetail.priceInfo.FirstVipPrice}}</span>
+                                <div class="shop-info">{{productDetail.activity.SellNum}}人已购买</div>
+                            </div>
+                            <div class="buy-vip" v-if="productDetail.activity.IsVipExclusive">
+                                <div class="price">付199元年费可 <a class="link2" onclick="goBuyVip()" href="javascript:;">成为VIP>></a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <div class="price-line btom-br" v-if="productDetail.priceInfo.IsVip">
+                            <span class="zmjd-iconfont vip-icon">&#xe623;</span><span class="p-un">￥</span><span class="p-val">{{productDetail.priceInfo.FirstVipPrice}}</span><span class="p-other-price">普通会员价：<span>￥</span>{{productDetail.priceInfo.FirstPrice}}</span>
+                            <div class="shop-info">{{productDetail.activity.SellNum}}人已购买</div>
+                        </div>
+                        <div v-else>
+                            <div class="price-line">
+                                <span class="p-un">￥</span><span class="p-val">{{productDetail.priceInfo.FirstPrice}}</span><span class="p-other-price"><span class="zmjd-iconfont vip-icon2">&#xe627;</span>VIP会员价<span>￥</span>{{productDetail.priceInfo.FirstVipPrice}}</span>
+                                <div class="shop-info">{{productDetail.activity.SellNum}}人已购买</div>
+                            </div>
+                            <div class="buy-vip">
+                                <div class="price">付199元年费可 <a class="link2" onclick="goBuyVip()" href="javascript:;">成为VIP>></a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="rules" v-if="productDetail.activity.ReturnPolicy==1">
+                    <a href="javascript:;" class="auto-tag"><span class="zmjd-iconfont">&#xe642;</span>到期自动退</a>
+                    </div>
+                    <div class="rules" v-if="productDetail.activity.ReturnPolicy==2">
+                        <a href="javascript:;" class="anytime-tag"><span class="zmjd-iconfont">&#xe643;</span>随时退</a>
+                        <a href="javascript:;" class="auto-tag"><span class="zmjd-iconfont">&#xe642;</span>到期自动退</a>
+                    </div>
+                    <div class="rules" v-else>
+                        <a href="javascript:;" class="not-tag"><span class="zmjd-iconfont">&#xe64e;</span>不可退</a>
+                    </div>*@
+            </div>
+
+            <div class="go-time">
+                <div class="this">
+                    已选择“6月9日 周五出发”
+                </div>
+                <div id="dateList" class="d-list">
+                    <div class="_scroller">
+                        <div class="scrollLine">
+                            <div class="d-space"></div>
+                            <div class="d-item-sel">
+                                <div class="d">06-09 周五</div>
+                                <div class="p">￥1888</div>
+                            </div>
+                            <div class="d-item">
+                                <div class="d">06-10 周六</div>
+                                <div class="p">￥1888</div>
+                            </div>
+                            <div class="d-item">
+                                <div class="d">06-11 周日</div>
+                                <div class="p">￥1688</div>
+                            </div>
+                            <div class="d-item">
+                                <div class="d">06-12 周一</div>
+                                <div class="p">￥1588</div>
+                            </div>
+                            <div class="d-item">
+                                <div class="d">06-13 周二</div>
+                                <div class="p">￥1588</div>
+                            </div>
+                            <div class="d-space2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div v-cloak class="package" v-if="productDetail.activity.PackageInfoList&&productDetail.activity.PackageInfoList.length">
+                <div class="tit">套餐内容</div>
+                <div class="info">
+                    <div class="packageList">
+                        <table border="0" cellpadding="0" cellspacing="0">
+                            <tr v-for="pitem in productDetail.activity.PackageInfoList"><td class="td-num" valign="top">&bull;</td><td class="td-info" valign="top">{{pitem}}</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div v-cloak class="tuijian" v-if="productDetail.activity.Description">
+                <div class="tit">推荐理由</div>
+                <div class="info">{{productDetail.activity.Description}}</div>
+                <div class="link" v-if="productDetail.activity.MoreDetailUrl"><a href='{{productDetail.activity.MoreDetailUrl.replace("mp.weixin.qq.com/s?", "mp.weixin.qq.com/s?_newpage=1&")}}'>查看图文详情>></a></div>
+            </div>
+            <div v-cloak class="shopread">
+                <div class="tit">购买后如何使用</div>
+                <div class="info">
+                    <table border="0" cellpadding="0" cellspacing="0">
+                        <tbody>
+                            <tr v-for="nitem in productDetail.activity.NoticeList"><td class="td-num" valign="top">&bull;</td><td class="td-info" valign="top">{{nitem}}</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div v-cloak class="other-info" v-if="productDetail.activity.DicProperties">
+                <div class="item" v-if="productDetail.activity.telObj&&productDetail.activity.telObj.lab">{{productDetail.activity.telObj.lab}}：<a href="tel:{{productDetail.activity.telObj.tel}}" class="tel">{{productDetail.activity.telObj.tel}}</a> {{productDetail.activity.telObj.telex}}</div>
+                <div v-for="item in productDetail.activity.otherObjList">
+                    <div class="item">{{item.lab}}：{{item.val}}</div>
+                </div>
+            </div>
+        </div>
+
+        @*<div style="margin:2em 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3a%2f%2f192.168.1.22%3a8081%2fcoupon%2fproduct%2f31%3fuserid%3d%7buserid%7d%26_dorpdown%3d1%26_newtitle%3d1">GO APP (Local) >>></a></div>*@
+
+        <div style="margin:0 0 4em 0;"></div>
+        <div v-cloak class="sub">
+            <div class="ctrl">
+                <div class="l">
+                    <a href="javascript:;" class="zmjd-iconfont btn0">&#xe640;</a><input class="sellnum" type="tel" v-model="productDetail.activity.MinBuyNum" /><a href="javascript:;" class="zmjd-iconfont btn1">&#xe641;</a>
+                </div>
+                <div class="r">
+                    <div class="submit" v-if="productDetail.activity.SellNum<productDetail.activity.TotalNum">￥{{(productDetail.IsVip?productDetail.SKUInfo.SKU.VIPPrice:productDetail.SKUInfo.SKU.Price)*productDetail.activity.MinBuyNum}}&nbsp;&nbsp;立即购买</div>
+                    <div class="submit0" v-else>已售完</div>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+        <div class="pubAlertTip" style="display:none;">
+            <div class="tipinfo"></div>
+        </div>
+        <footer>
+            <input type="hidden" id="skuid" value="@skuid" />
+            <input type="hidden" id="thisskuid" v-model="productDetail.SKUID" />
+            <input type="hidden" id="aid" v-model="productDetail.activity.ID" />
+            <input type="hidden" id="atype" v-model="productDetail.activity.Type" />
+            <input type="hidden" id="sellPrice" v-model="productDetail.IsVip?productDetail.SKUInfo.SKU.VIPPrice:productDetail.SKUInfo.SKU.Price" />
+            <input type="hidden" id="skuPrice" v-model="productDetail.SKUInfo.SKU.Price" />
+            <input type="hidden" id="skuVipPrice" v-model="productDetail.SKUInfo.SKU.VIPPrice" />
+            <input type="hidden" id="isNewVipProduct" v-model="productDetail.activity.PageTitle" />
+            <input type="hidden" id="_name" v-model="productDetail.activity.PageTitle" />
+
+            <input type="hidden" id="userid" value="@userid" />
+            <input type="hidden" id="customerType" value="@userInfo.CustomerType" />
+            <input type="hidden" id="isvip" value="@(isVip ? 1 : 0)" />
+            <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+            <input type="hidden" id="stype" value="@(Convert.ToInt32(stype))" />
+            <input type="hidden" id="cansell" value="@(canShop ? 1 : 0)" />
+
+            <form style="display:none;">
+                <input type="text" id="loginput" value="0" />
+            </form>
+        </footer>
+
+        <script>
+            var pub_userid = "@userid";
+
+            try {
+                onAppShareCall = function () {
+                    var title = "仅￥@(sellPrice) @(couponSkuInfo.activity.PageTitle)";
+                    var Content = "@(couponSkuInfo.SKUInfo.SKU.Name)";
+                    var photoUrl = "@(productImgFirstSrc.Replace("_jupiter", "_290x290s").Replace("_theme", "_290x290s").Replace("_appdetail1", "_290x290s"))";
+                    var shareLink = "@(shareLink)";
+                    try { whotel.appShareData(title, Content, photoUrl, shareLink); } catch (e) { }
+                    var returnStr = '{"title":"{0}","Content":"{1}","photoUrl":"{2}","shareLink":"{3}"}';
+                    return returnStr.format(title, Content, photoUrl, shareLink);
+                }
+                onAppShareCall();
+            }
+            catch (e) { }
+        </script>
+
+    </div>
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script src="~/Content/js/jquery-1.10.2-min.js"></script>
+    <script src="~/Content/js/framework/config.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/framework/zmjd.modal.min.js"></script>
+    <script src="~/Content/js/framework/zmjd.swiper.min.js"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/geetest/gt.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/login.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js//framework/iscroll.js"></script>
+    <script src="~/Content/js/product/packageproduct.js?v=@(Helpers.curAppVer())"></script>
+</body>
+</html>

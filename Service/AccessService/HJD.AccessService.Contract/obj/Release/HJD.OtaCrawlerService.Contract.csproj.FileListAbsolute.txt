@@ -1,0 +1,6 @@
+D:\Dev\WHotelDev\Dev\Service\OtaCrawlerService\HaoJiudian.OtaCrawlerService.Contract\bin\Release\HJD.OtaCrawlerService.Contract.dll
+D:\Dev\WHotelDev\Dev\Service\OtaCrawlerService\HaoJiudian.OtaCrawlerService.Contract\bin\Release\HJD.OtaCrawlerService.Contract.pdb
+D:\Dev\WHotelDev\Dev\Service\OtaCrawlerService\HaoJiudian.OtaCrawlerService.Contract\bin\Release\HJD.Framework.Entity.dll
+D:\Dev\WHotelDev\Dev\Service\OtaCrawlerService\HaoJiudian.OtaCrawlerService.Contract\bin\Release\HJD.Framework.Entity.pdb
+D:\Dev\WHotelDev\Dev\Service\OtaCrawlerService\HaoJiudian.OtaCrawlerService.Contract\obj\Release\HJD.OtaCrawlerService.Contract.dll
+D:\Dev\WHotelDev\Dev\Service\OtaCrawlerService\HaoJiudian.OtaCrawlerService.Contract\obj\Release\HJD.OtaCrawlerService.Contract.pdb

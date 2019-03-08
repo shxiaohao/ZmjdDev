@@ -1,0 +1,76 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params.Order
+
+@model CollectHotelResult
+@{
+    ViewBag.Title = "收藏列表";
+    ViewBag.BodyClass = "hotellistpage";
+    OrderParam param = ViewBag.param;
+    var totalCount = ViewBag.totalCount;
+}
+
+<!-- Add -->
+<div class="container mainbody hidden-xs">
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            @Helpers.BreadCrumbs(Url, 0, 0, 3)
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>
+
+<div class="container mainbody">
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            <div class="row">
+                <!-- 收藏列表 左侧导航 Left -->
+                <div class="col-md-3 col-sm-3  Screening hidden-xs">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">个人中心</h3>
+                        </div>
+                        @Helpers.InsertLeftNaviPanel(3,Url)
+                    </div>
+                    <div class="tel">
+                        客服电话:<i>4000-021-702</i>
+                    </div>
+                </div>
+                <!-- 收藏列表 右侧导航 Right -->
+                <div class="col-md-9 col-sm-9" id="collectList">
+                    <!-- 条件选择栏 mobile 开始 -->
+                    <div class="row toolbar2 visible-xs">
+                        <div class="col-xs-3">
+                            <button type="button" onclick="history.back()" class="btn btn-sm  btn-img01"><img src="@Url.Content("~/content/images/icon-back.png")" class="mobilepic" alt="" /></button>
+                        </div>
+                        <div class="col-xs-6 text-center listtitle">
+                            我的收藏
+                        </div>
+                        <div class="col-sm-2 col-xs-3 text-right">
+                        </div>
+                    </div>
+                    <!-- 条件选择栏 mobile 结束 -->
+                    <!-- 我的收藏列表 开始 -->                        
+                    @if(@totalCount != 0){
+                         @Html.Partial("ListContent", Model.Hotels)
+                    }
+                    else
+                    {
+                        <!-- 空结果提示 -->
+					    <div class="nullalert text-center">	
+						    <h5>您暂时没有任何收藏哦</h5>
+					    </div>
+                    }
+                    <!-- 我的收藏列表 结束 -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>

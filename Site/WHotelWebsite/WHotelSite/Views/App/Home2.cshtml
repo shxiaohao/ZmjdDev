@@ -1,0 +1,311 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    ViewBag.Title = "首页";
+
+    var userid = ViewBag.UserId;
+
+    //顶部banner
+    var adInfo = ViewBag.AdInfo;
+    List<ADItem> adList = ViewBag.AdList;
+
+    //热门网友推荐
+    RecommendCommentListModel recmComments = ViewBag.RecmComments;
+
+    //本周超值精选
+    RecommendHotelResult recmHotelResult = ViewBag.RecmHotelResult;
+
+    //闪购&亲子团
+    HomePageData30 hotResult = ViewBag.HotResult;
+    
+    //ad box
+    PopupBoxData adbox = ViewBag.BoxData;
+
+    //adbox.showUrl = "http://192.168.1.22:8081/Ad/AdBox";
+}
+
+@section styles
+{
+    <link href="~/Content/css/app/home2.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style type="text/css">
+    </style>
+}
+@if (adList != null && adList.Count > 0)
+{
+    var firstAd = adList[0];
+    if (adList.Count == 1)
+    {
+       <div class="home-banner-item">
+            <a href="@firstAd.ActionURL">
+                <img src="@firstAd.ADURL" alt="">
+            </a>
+        </div>
+    }
+    else
+    {
+        <div id="slider" class="mui-slider home-banner">
+            <div class="mui-slider-group mui-slider-loop">
+                @{
+                    var lastAd = adList[adList.Count - 1];
+                }
+                <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+                <div class="mui-slider-item mui-slider-item-duplicate item">
+                    <a href="@lastAd.ActionURL">
+                        <img src="@lastAd.ADURL" alt="">
+                    </a>
+                </div>
+                @for (int i = 0; i < adList.Count; i++)
+                {
+                    var ad = adList[i];
+                    <div class="mui-slider-item mui-active item">
+                        <a href="@ad.ActionURL">
+                            <img src="@ad.ADURL" alt="">
+                        </a>
+                    </div>
+                }
+                <!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+                <div class="mui-slider-item mui-slider-item-duplicate item">
+                    <a href="@firstAd.ActionURL">
+                        <img src="@firstAd.ADURL" alt="">
+                    </a>
+                </div>
+            </div>
+            <div class="mui-slider-indicator">
+                @for (int i = 0; i < adList.Count; i++)
+                {
+                    <div class="mui-indicator mui-indicator-ex"></div>
+                }
+            </div>
+        </div>
+    }
+}
+
+@if (recmComments != null && recmComments.CommentList != null && recmComments.CommentList.Count > 0)
+{
+    <div class="home-tit">
+        <div class="left"><span class="left-bar">&nbsp;</span>精彩点评</div>
+        <div class="right"><a href="whotelapp://gotopage?url=http://www.zmjiudian.com/app/RecComments?userid=@userid" class="arow-link">全部</a></div>
+        <div style="clear: both;"></div>
+    </div>
+    <div class="home-rem-panel">
+        <div class="items">
+            <div class="mui-slider">
+                <div class="mui-slider-group">
+                    @for (int i = 0; i < recmComments.CommentList.Count; i++)
+                    {
+                        var comEntity = recmComments.CommentList[i];
+                        <div class="mui-slider-item  item-ul">
+                            <div class="item-li" onclick="goto('personal/comments/@comEntity.CommentID')">
+                                <div class="top-img">
+                                    <div class="img" style="background:url(@comEntity.PhotoUrl) center no-repeat;background-size: cover"><img src="~/Content/images/transparency.png" /></div>
+                                    <div class="top-name">@comEntity.HotelName</div>
+                                    <div class="top-name-mode"></div>
+                                </div>
+                                <div class="top-brief">@comEntity.Title</div>
+                                <div class="top-member"><img src="@comEntity.AvatarUrl" alt="">@comEntity.NickName</div>
+                            </div>
+                            @if (i + 1 < recmComments.CommentList.Count)
+                            {
+                                i++;
+                                comEntity = recmComments.CommentList[i];
+                                <div class="item-li" onclick="goto('/personal/comments/@comEntity.CommentID')">
+                                    <div class="top-img">
+                                        <div class="img" style="background:url(@comEntity.PhotoUrl) center no-repeat;background-size: cover"><img src="~/Content/images/transparency.png" /></div>
+                                        <div class="top-name">@comEntity.HotelName</div>
+                                        <div class="top-name-mode"></div>
+                                    </div>
+                                    <div class="top-brief">@comEntity.Title</div>
+                                    <div class="top-member"><img src="@comEntity.AvatarUrl" alt="">@comEntity.NickName</div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (recmHotelResult != null && recmHotelResult.HotelList != null && recmHotelResult.HotelList.Count > 0)
+{
+    var lazyloadNum = 0;
+    
+    <div class="home-tit">
+        <div class="left"><span class="left-bar">&nbsp;</span>超值精选</div>
+        <div class="right"></div>
+        <div style="clear: both;"></div>
+    </div>
+    <div class="home-hlist-panel">
+        @if (hotResult != null && hotResult.FlashDeals != null && hotResult.FlashDeals.Count > 0)
+        {
+            <ul>
+                @for (int i = 0; i < hotResult.FlashDeals.Count; i++)
+                {
+                    lazyloadNum++;
+                    
+                    var hotItem = hotResult.FlashDeals[i];
+
+                    var discount = Convert.ToInt32((1.00 - Convert.ToDouble(hotItem.activityPrice) / Convert.ToDouble(hotItem.marketPrice > 0 ? hotItem.marketPrice : hotItem.activityPrice)) * 100.00);
+
+                    var nowTimeObj = DateTime.Now;
+                    var endTimeObj = hotItem.startSellTime;
+
+                    <li onclick="gotopage('coupon/shop/@hotItem.activityId')">
+                        <div class="h-img">
+                            <img @(i == 0 ? string.Format(" src={0} ", hotItem.hotelPicUrl) : string.Format(" data-original={0} data-lazyload-id={1} ", hotItem.hotelPicUrl, lazyloadNum)) alt="">
+                            <div class="h-tit-tip">
+                                <div class="state timer-tag"
+                                     data-year0="@nowTimeObj.Year"
+                                     data-month0="@(nowTimeObj.Month-1)"
+                                     data-day0="@nowTimeObj.Day"
+                                     data-hour0="@nowTimeObj.Hour"
+                                     data-minute0="@nowTimeObj.Minute"
+                                     data-second0="@nowTimeObj.Second"
+                                     data-year1="@endTimeObj.Year"
+                                     data-month1="@(endTimeObj.Month-1)"
+                                     data-day1="@endTimeObj.Day"
+                                     data-hour1="@endTimeObj.Hour"
+                                     data-minute1="@endTimeObj.Minute"
+                                     data-second1="@endTimeObj.Second"></div>
+                            </div>
+                            <div class="h-brief-tip">
+                                <span class="name">@(hotItem.activityTitle.Length > 14 ? hotItem.activityTitle.Substring(0, 14) : hotItem.activityTitle)</span>
+                            </div>
+                        </div>
+                        <div class="h-name">
+                            <div class="left left1">
+                                <div class="hname">@hotItem.hotelName</div>
+                            </div>
+                            <div class="right right1">
+                                <div class="price2"><del><span class="pu2">￥</span><span class="p2">@hotItem.marketPrice</span></del></div>
+                            </div>
+                            <div style="clear:both;"></div>
+                            <div class="left">
+                                <div class="brief">@hotItem.packageBrief</div>
+                            </div>
+                            <div class="right">
+                                <div class="price1"><span class="discount">省@(discount)%</span><span class="pu">￥</span><span class="p1">@hotItem.activityPrice</span></div>
+                            </div>
+                            <div style="clear:both;"></div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+        @if (hotResult != null && hotResult.GroupDeals != null && hotResult.GroupDeals.Count > 0)
+        {
+            <ul>
+                @for (int i = 0; i < hotResult.GroupDeals.Count; i++)
+                {
+                    lazyloadNum++;
+                    
+                    var groupItem = hotResult.GroupDeals[i];
+
+                    var discount = Convert.ToInt32((1.00 - Convert.ToDouble(groupItem.activityPrice) / Convert.ToDouble(groupItem.marketPrice > 0 ? groupItem.marketPrice : groupItem.activityPrice)) * 100.00);
+
+                    var tipImg = "";
+                    if (groupItem.labelPics != null && groupItem.labelPics.Length > 0)
+                    {
+                        tipImg = groupItem.labelPics[0];
+                    }
+                    
+                    var tipBgStyle = "";
+                    if (!string.IsNullOrEmpty(tipImg))
+                    {
+                        tipBgStyle = string.Format("background: url({0}) no-repeat left center;background-size: 4em;", tipImg);
+                    }
+                    
+                    <li onclick="gotopage('coupon/shop/group/@groupItem.activityId')">
+                        <div class="h-img">
+                            <img @(i == 0 ? string.Format(" src={0} ", groupItem.hotelPicUrl) : string.Format(" data-original={0} data-lazyload-id={1} ", groupItem.hotelPicUrl, lazyloadNum)) alt="">
+                            <div class="h-tit-tip2" style="@(tipBgStyle)">
+                                <div class="state">仅售@(groupItem.totalNum)套</div>
+                            </div>
+                            <div class="h-brief-tip">
+                                <span class="name">@(groupItem.activityTitle.Length > 14 ? groupItem.activityTitle.Substring(0, 14) : groupItem.activityTitle)</span>
+                            </div>
+                        </div>
+                        <div class="h-name">
+                            <div class="left left1">
+                                <div class="hname">@groupItem.hotelName</div>
+                            </div>
+                            <div class="right right1">
+                                <div class="price2"><del><span class="pu2">￥</span><span class="p2">@groupItem.marketPrice</span></del></div>
+                            </div>
+                            <div style="clear:both;"></div>
+                            <div class="left">
+                                <div class="brief">@groupItem.packageBrief</div>
+                            </div>
+                            <div class="right">
+                                <div class="price1"><span class="discount">省@(discount)%</span><span class="pu">￥</span><span class="p1">@groupItem.activityPrice</span></div>
+                            </div>
+                            <div style="clear:both;"></div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+        <ul>
+            @for (int i = 0; i < recmHotelResult.HotelList.Count; i++)
+            {
+                lazyloadNum++;
+                
+                var hotelEntity = recmHotelResult.HotelList[i];
+
+                var discount = Convert.ToInt32((1.00 - Convert.ToDouble(hotelEntity.HotelPrice) / Convert.ToDouble(hotelEntity.MarketPrice > 0 ? hotelEntity.MarketPrice : hotelEntity.HotelPrice)) * 100.00);
+
+                <li onclick="goto('hotel/@hotelEntity.HotelID')">
+                    <div class="h-img">
+                        <img @(i == 0 ? string.Format(" src={0} ", hotelEntity.HotelPicUrl) : string.Format(" data-original={0} data-lazyload-id={1} ", hotelEntity.HotelPicUrl, lazyloadNum)) alt="">
+                        <div class="h-brief-tip">
+                            <span class="name">@(hotelEntity.ADDescription.Length > 14 ? hotelEntity.ADDescription.Substring(0, 14) : hotelEntity.ADDescription)</span>
+                        </div>
+                    </div>
+                    <div class="h-name">
+                        <div class="left left1">
+                            <div class="hname">@hotelEntity.HotelName</div>
+                        </div>
+                        <div class="right right1">
+                            <div class="price2"><del><span class="pu2">￥</span><span class="p2">@hotelEntity.MarketPrice</span></del></div>
+                        </div>
+                        <div style="clear:both;"></div>
+                        <div class="left">
+                            <div class="brief">@hotelEntity.PackageBrief</div>
+                        </div>
+                        <div class="right">
+                            <div class="price1"><span class="discount">省@(discount)%</span><span class="pu">￥</span><span class="p1">@hotelEntity.HotelPrice</span></div>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+    @*<div style="position:fixed;top:1px;left:1px;z-index:20;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http://192.168.1.22:8081/app/home2">GO APP >>></a></div>*@
+
+    @section scripts
+    {
+        <script src="~/Content/js/framework/jquery.lazyload.min.js"></script>
+        <script src="~/Content/js/app/home2.js?v=@(Helpers.curAppVer())"></script>
+        <script type="text/javascript" charset="utf-8">
+            try {
+                onAppShowAdBox = function () {
+                    var boxId = "@(adbox.boxId)";
+                    var frequency = "@(adbox.frequency)";
+                    var isShow = "@(adbox.isShow)";
+                    var lazyLoadTime = "@(adbox.lazyLoadTime)";
+                    var showUrl = "@(adbox.showUrl)";
+                    var widthHeightRatio = "@(adbox.widthHeightRatio)";
+                    var widthRatio = "@(adbox.widthRatio)";
+
+                    try { whotel.appShowAdBox(boxId, frequency, isShow, lazyLoadTime, showUrl, widthHeightRatio, widthRatio); } catch (e) { }
+                    var returnStr = '{"boxId":"{0}","frequency":"{1}","isShow":"{2}","lazyLoadTime":"{3}","showUrl":"{4}","widthHeightRatio":"{5}","widthRatio":"{6}"}';
+                    return returnStr.format(boxId, frequency, isShow, lazyLoadTime, showUrl, widthHeightRatio, widthRatio);
+                }
+                onAppShowAdBox();
+            }
+            catch (e) { }
+        </script>
+    }

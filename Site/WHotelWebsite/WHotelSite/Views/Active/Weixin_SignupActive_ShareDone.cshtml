@@ -1,0 +1,279 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    var cssVersion = "190001010000";
+    try
+    {
+        //var last = this.GetType().Assembly.Location;
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex)
+    {
+    }
+
+    InspectorRegisterParam param = ViewBag.param;
+
+    HJD.WeixinServices.Contracts.WeixinActivityEntity weixinActiveEntity = ViewBag.WeixinActiveEntity;
+    //if (weixinActiveEntity.WeixinAcountId == 1)
+    //{
+    //    ViewBag.Title = string.Format("周末酒店");
+    //}
+    //else if (weixinActiveEntity.WeixinAcountId == 2)
+    //{
+    //    ViewBag.Title = string.Format("周末酒店");
+    //}
+    //else if (weixinActiveEntity.WeixinAcountId == 3)
+    //{
+    //    ViewBag.Title = string.Format("尚旅游");
+    //}
+    ViewBag.Title = weixinActiveEntity.WeixinSignUpShareTitle;
+
+    ViewBag.BodyStyle = "overflow-x:hidden;";
+    ViewBag.BodyClass = "weixinreg_xmas_body3";
+
+    var isApp = ViewBag.IsApp;
+    var weixinUser = ViewBag.WeixinUser;
+    var weixinDraw = ViewBag.WeixinDraw;
+    var shareReadList = ViewBag.ShareReadList;
+    var readCount = ViewBag.ReadCount;
+    var openid = ViewBag.OpenId;
+    var uid = ViewBag.Uid;
+
+    var activeid = ViewBag.ActiveId;
+    var shareTitle = ViewBag.ShareTitle;
+    var shareLink = ViewBag.ShareLink;
+    //shareLink = string.Format("http://www.zmjiudian.com/active/Weixin_SignupActive/{0}12345{1}", activeid, uid);
+    var shareImgUrl = ViewBag.ShareImgUrl;
+    var topBannerUrl = ViewBag.TopBannerUrl;
+    var activeEndTime = ViewBag.ActiveEndTime;
+    var weixinSignUpResultLink = ViewBag.WeixinSignUpResultLink;
+    
+    var statResult = ViewBag.StatResult;
+}
+@section styles
+{
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .modal-content {
+            width: 90%;
+            margin: auto;
+        }
+
+        .modal-body {
+            padding: 2.6em 0.8em 1.7em 0.8em;
+        }
+
+        .modal-footer {
+            margin-top: 0;
+            padding: 0.7em 0.9em;
+        }
+
+        .btn-default, .btn-primary {
+            width: auto;
+            min-width: 4em;
+            border: none;
+            color: #3e9ec0;
+            font-size: 1.4em;
+        }
+
+        .box-big-btn {
+            width: 96%;
+        }
+
+        .box-btn-bottomborder {
+            padding-bottom: 0.7em;
+            margin-bottom: 0.3em;
+            border-bottom: 1px solid #eeeded;
+            border-radius: 0;
+        }
+    </style>
+}
+<script>
+
+    function gourl(url)
+    {
+        location.href = url;
+    }
+
+</script>
+<link href="~/Content/css/active/weixinactive_signup.css?v=@cssVersion" rel="stylesheet" />
+<div class="weixinreg_xmas_header">
+    <img src="@topBannerUrl" alt="" />
+    @if (!string.IsNullOrEmpty(weixinActiveEntity.WeixinSignUpTopBannerTitle))
+    {
+        <div class="header-tit align@(weixinActiveEntity.WeixinSignUpTopBannerTitleAlign)">
+            <div class="t1">@weixinActiveEntity.WeixinSignUpTopBannerTitle</div>
+            <div class="t2">@weixinActiveEntity.WeixinSignUpTopBannerTitle2</div>
+        </div>
+    }
+</div>
+<div class="sharedone-panel">
+    <div class="acount">
+        <table border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <td class="left"><img src="@weixinUser.Headimgurl" alt="" /></td>
+                <td class="right">
+                    <div class="name">姓名：@weixinDraw.UserName</div>
+                    <div class="phone">手机：@weixinDraw.Phone</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="tip">
+        @if (activeEndTime < DateTime.Now)
+        {
+            if (!string.IsNullOrEmpty(weixinSignUpResultLink))
+            {
+                <div class="tit">本期中奖结果已揭晓，期待下次参与！</div>
+            }
+            else
+            { 
+                <div class="tit">敬请期待开奖结果，请持续关注！</div>
+            }
+        }
+        else
+        { 
+            <div class="tit">您已分享成功</div>
+            <div class="info">只要您的好友点击您所分享的文章链接，点击的人越多，您获得的抽奖码越多。</div>
+        }
+    </div>
+    <div class="look">已有 <span class="h">@readCount</span> 位好友看过</div>
+    @if (activeEndTime < DateTime.Now)
+    {
+        if (!string.IsNullOrEmpty(weixinSignUpResultLink))
+        {
+            <div class="sendmore"><input type="button" class="sendmorebtn" value="点击查看开奖结果" onclick="gourl('@(weixinSignUpResultLink)')" /></div>
+        }
+        else
+        {
+            <div class="sendmore"><input type="button" class="sendmorebtn0" value="点击查看开奖结果" /></div>
+        }
+    }
+    else
+    {
+        <div class="sendmore"><input type="button" class="sendmorebtn" value="邀请更多好友" onclick="gourl('/Active/Weixin_SignupActive_SendMoreFd/@(activeid)?openid=@openid')" /></div>   
+    }
+    <div class="code">
+        <p>抽奖码</p>
+        <div class="codelistpanel">
+            <ul>
+                @foreach (var shareRead in shareReadList)
+                {
+                    <li>
+                        @shareRead.LuckCode.ToString().PadLeft(6, '0')
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="date">
+        <p>抽奖情况</p>
+        <div class="datepanel">@(activeEndTime.ToString("yyyy/MM/dd"))</div>
+        <div class="smallpanel">沪深指数收盘时开奖</div>
+        <div class="smallpanel" style="margin:1.2em 0 1em 0;">目前共产生 <span class="bigpanel">@statResult.ReadCount</span> 抽奖码<span style="margin:0 0 0 1em;color:#888;">@(DateTime.Now > activeEndTime ? activeEndTime.ToString("yyyy/MM/dd HH:mm") : DateTime.Now.ToString("yyyy/MM/dd HH:mm"))</span></div>
+    </div>
+    <div class="logo">
+        @if (weixinActiveEntity.WeixinAcountId == 1)
+        {
+            <img src="http://whfront.b0.upaiyun.com/www/img/Active/activity-bottom-logo.png" alt="" />
+        }
+        else if (weixinActiveEntity.WeixinAcountId == 2)
+        {
+            <img src="http://whfront.b0.upaiyun.com/www/img/Active/activity-bottom-logo.png" alt="" />
+        }
+        else if (weixinActiveEntity.WeixinAcountId == 3)
+        {
+            <img src="http://whfront.b0.upaiyun.com/www/img/Active/activity-bottom-logo-sly.png" alt="" />
+        }
+    </div>
+</div>
+<input type="hidden" id="isapptxt" value="@(isApp?"1":"0")" />
+<!--  -->
+@section scripts
+{
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+    @Scripts.Render("~/Content/js/bootbox.js?v=" + cssVersion, "~/Content/js/active/weixinactive_signup.js?v=" + cssVersion)
+    <script>
+
+        var shareOkGoUrl = "/Active/Weixin_SignupActive_ShareDone/@activeid?shared=1&openid=@openid";
+        var shareFriendOkGoUrl = "/Active/Weixin_SignupActive_ShareDone/@activeid?sendfriendd=1&openid=@openid";
+
+        GetWeixinApiConfig();//注册
+
+        wx.ready(function () {
+
+            wx.onMenuShareTimeline({
+                title: '@shareTitle',
+                link: '@shareLink',
+                imgUrl: '@shareImgUrl',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareAppMessage({
+                title: '@shareTitle',
+                link: '@shareLink',
+                imgUrl: '@shareImgUrl',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+        });
+
+        function GetWeixinApiConfig() {
+
+            var url = location.href.split("#")[0];
+            $.ajax({
+                url: '/Coupon/GetWeixinConfigInfo',
+                type: 'POST',
+                data: { url: url },
+                dataType: 'json',
+                async: false,
+                error: function () {
+                    console.log("网络服务错误");
+                },
+                success: function (result) {
+                    if (typeof (result.Success) != undefined && result.Success == 1) {
+                        return false;
+                    }
+                    else {
+                        //得到微信config的值
+                        var array = [
+                          'checkJsApi',
+                          'onMenuShareTimeline',
+                          'onMenuShareAppMessage',
+                          'hideOptionMenu'
+                        ];
+                        if (result.jsApiList) {
+                            var jsArray = result.jsApiList.split(',');
+                            for (var key in jsArray) {
+                                array.push("" + jsArray[key]);
+                            }
+                        }
+
+                        wx.config({
+                            debug: false,
+                            appId: result.appId,
+                            timestamp: "" + result.timestamp,
+                            nonceStr: result.nonceStr,
+                            signature: result.signature,
+                            jsApiList: array
+                        });
+                    }
+                }
+            });
+        }
+
+    </script>
+}
+

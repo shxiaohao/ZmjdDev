@@ -1,0 +1,133 @@
+﻿@{
+    //ViewBag.Title = "发红包-活动页面";
+    Layout = null;
+    bool isMicro = ViewBag.isMicro;
+    bool isApp = ViewBag.IsApp;
+    ActivityResult result = ViewBag.share;
+    string guid = ViewBag.guid;
+    
+    string originShareUrl = ViewBag.originShareUrl;
+    string appNextUrl = ViewBag.nextUrl;
+    decimal money = (decimal)ViewBag.Money;
+    DateTime date = DateTime.Now;
+    var cssSuffix = string.Format("?suffix={0}{1}{2}{3}{4}", date.Year, date.Month, date.Day, date.Hour, date.Minute);
+}
+<head>
+    <meta charset="utf-8">
+    <title>发红包</title>
+    <link rel="stylesheet" href="~/Content/css/cash_list_reset.css" />
+    <link rel="stylesheet" href="~/Content/css/css_chaikaihongbao6.css@(cssSuffix)" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="format-detection" content="telephone=no">
+    <script src="~/Content/js/jquery-1.10.2-min.js" type="text/javascript"></script>
+    <script defer="defer" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript"></script>
+    <script defer="defer" src="~/Content/js/Coupon.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            wx.checkJsApi({
+                jsApiList: ['onMenuShareTimeline'],
+                success: function (res) {
+                    // 以键值对的形式返回，可用的api值true，不可用为false
+                    // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+                    if (res) {
+                        alert(res);
+                    }
+                }
+            });
+            GetConfig();
+
+            wx.ready(function (res) {
+                // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+                console.log("注册成功：" + JSON.stringify(res));
+            });
+
+            wx.error(function (res) {
+                // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+                console.log("注册失败：" + JSON.stringify(res));
+            });
+        });
+    </script>
+
+    <style type="text/css">
+        .brook4 {
+            border-top: 1px solid #FFFFFF;
+            position: relative;
+            display: block;
+            width: 65%;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #C32926;
+            margin: 0 auto;
+            background-image: url(/Content/images/hongbao/button02.png);
+            background-size: 100%;
+            margin-top: 1em;
+            box-shadow: 0px 4px 4px 0px #ffb500 inset;
+            border-radius: 5px;
+            box-shadow: 0px 4px 4px 0px rgba(50, 50, 50, .3);
+            text-shadow: 0 1px 1px #FFF08C;
+        }
+    </style>
+</head>
+
+@*@section scripts{
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript"></script>
+    <script src="~/Content/js/Coupon.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            wx.checkJsApi({
+                jsApiList: ['onMenuShareTimeline'],
+                success: function (res) {
+                    // 以键值对的形式返回，可用的api值true，不可用为false
+                    // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+                    if (res) {
+                        alert(res);
+                    }
+                }
+            });
+            GetConfig();
+        });
+
+        wx.ready(function (res) {
+            // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+            console.log("注册成功：" + JSON.stringify(res));
+        });
+
+        wx.error(function (res) {
+            // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+            console.log("注册失败：" + JSON.stringify(res));
+        });
+    </script>
+}*@
+
+    <div class="container hb-bg">
+        <!--<div class="hb-bg"> <img src="/Content/images/hongbao/bg.png"> </div>-->
+        <div class="content hb">
+            <img src="/Content/images/hongbao/hb01.png" width="75%" style="box-shadow: 0px 4px 4px 0px rgba(50, 50, 50, .3);">
+            <div class="brook1">
+                <span>
+                    发送此红包至朋友圈<br>
+                    您可领取 @Math.Round(money / 100, 0) 元现金
+                </span><br>
+                <br>（在APP"我的钱包"中领取）
+            </div>            
+            <div class="brook3 button01">
+                @if (!isMicro && isApp)
+                {
+                    <a class="brook4" href="whfriend://Coupon?title=@(result.title)&content=@(result.Content)&photoUrl=@(result.photoUrl)&shareLink=@(result.shareLink)&nextUrl=@(appNextUrl)&shareType=2">
+                        去发红包@*<img src="/Content/images/hongbao/button01.png" width="80%">*@
+                    </a>
+                }
+                else
+                {
+                    <a id="sendCoupon" class="brook4" onclick="shareWXTimeLine('@(result.title)','@(result.Content)','@(result.photoUrl)','@(originShareUrl)');">
+                        去发红包@*<img src="/Content/images/hongbao/button01.png" width="80%">*@ 
+                    </a>
+                }
+            </div>
+        </div>
+    </div>

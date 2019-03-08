@@ -1,0 +1,102 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    ViewBag.Title = "";
+
+    var userid = ViewBag.UserId;
+
+    /*
+     * 1：推荐朋友
+     * 2：VIP剩余2天提示
+     * 3：VIP剩余1天提示
+     * 4：VIP剩余0天提示
+     * 5：金牌VIP还有30天内到期的提示(非VIP不弹该提示)
+     * 6：铂金VIP还有30天内到期的提示(非VIP不弹该提示)
+     * 7：2018.5.1 VIP300专享红包提示
+     * 8：2018.7.6 暑期大促 送￥500 玩嗨假日
+     * 9：2019.1.8 2019春节500红包
+     */
+    var type = ViewBag.Type;
+
+    //当前系统环境（ios | android）
+    var appType = ViewBag.AppType;
+
+    var jumpUrl = ViewBag.JumpUrl;
+}
+
+@section styles
+{
+    <link href="~/Content/css/ad/adbox.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style type="text/css">
+    </style>
+}
+
+@if (type == 1)
+{
+    <div class="adbox-panel" onclick="linkClick('Fund/UserRecommend2?userid={userid}&realuserid=1')">
+        <div class="top-img-panel"><img src="http://whfront.b0.upaiyun.com/app/img/ad/adbox-recommend-banner.png" alt="" /></div>
+        <div class="bottom-link-panel"><a href="javascript:;">推荐给朋友</a></div>
+    </div>
+}
+else if (type == 4)
+{
+    <div class="adbox-panel">
+        <div class="top-img-panel"><img src="http://whfront.b0.upaiyun.com/app/img/ad/adbox-vip-over-banner.png" alt="" /></div>
+        <div class="bottom-button-panel"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http://www.zmjiudian.com/Coupon/VipShopInfo?_newpage=1">续费VIP</a></div>
+        <div class="bottom-link-panel2"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http://www.zmjiudian.com/App/MorePackageList?albumId=10&_newpage=1">查看VIP优惠</a></div>
+    </div>
+}
+else if (type == 5)
+{
+    <div class="adbox-panel" style="padding-bottom:0;" onclick="gourl('whotelapp://www.zmjiudian.com/gotopage?url=http://www.zmjiudian.com/Coupon/VipAreaInfo?_newpage=1')">
+        <div class="top-img-panel"><img src="http://whfront.b0.upaiyun.com/app/img/ad/adbox-199-over-30-banner.png?v=20180328" alt="" /></div>
+    </div>
+}
+else if (type == 6)
+{
+    <div class="adbox-panel" style="padding-bottom:0;" onclick="gourl('whotelapp://www.zmjiudian.com/gotopage?url=http://www.zmjiudian.com/Coupon/VipAreaInfo?_newpage=1')">
+        <div class="top-img-panel"><img src="http://whfront.b0.upaiyun.com/app/img/ad/adbox-599-over-30-banner.png?v=20180328" alt="" /></div>
+    </div>
+}
+else if (type == 7)
+{
+    <div class="adbox-panel" style="padding-bottom:0;" onclick="gourl('whotelapp://www.zmjiudian.com/gotopage?url=http://www.zmjiudian.com/Coupon/VipAreaInfo?_newpage=1')">
+        <div class="top-img-panel"><img src="http://whfront.b0.upaiyun.com/app/img/ad/adbox-51-300coupon-banner.png?v=20180412" alt="" /></div>
+    </div>
+}
+else if (type == 8)
+{
+    <style>
+        html, body {
+            overflow: hidden;
+        }
+    </style>
+    <div class="adbox-panel" style="padding-bottom:0;" onclick="gourl('whotelapp://www.zmjiudian.com/gotopage?url=http://www.zmjiudian.com/Coupon/ActiveCenter/1/0?albumid=32,33,34&userid={userid}&_newpage=1')">
+        <div class="top-img-panel"><img src="http://whfront.b0.upaiyun.com/app/img/ad/2018shuqi-500coupon.jpg?v=2018072601" alt="" /></div>
+    </div>
+}
+else if (type == 9)
+{
+    <style>
+        html, body {
+            overflow: hidden;
+        }
+    </style>
+    <div class="adbox-panel" style="padding-bottom:0;" onclick="gourl('whotelapp://www.zmjiudian.com/gotopage?url=http://www.zmjiudian.com/coupon/RedCashCouponList?tempdataid=3966&_newpage=1&_sourcekey=redpackage_app_home_float')">
+        <div class="top-img-panel"><img src="http://whphoto.b0.upaiyun.com/119HSB60_jupiter?v=2019010801" alt="" /></div>
+    </div>
+}
+
+<input type="hidden" id="appType" value="@(appType)" />
+<input type="hidden" id="userid" value="@(userid)" />
+<input type="hidden" id="jumpUrl" value="@(jumpUrl)" />
+@*<a href="whotelapp://www.zmjiudian.com/gotopage?url=http://192.168.1.22:8081/Ad/AdBox">GOGOGO</a>*@
+@section scripts
+{
+    <script src="~/Content/js/ad/adbox.js?v=@(Helpers.curAppVer())"></script>
+    <script type="text/javascript" charset="utf-8">
+        var gourl = function (_url) {
+            location.href = _url;
+        }
+    </script>
+}

@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "CustomerServiceHelper";
+
+    Layout = "~/Views/Shared/_Layout0.cshtml";
+}
+
+
+<button onclick="getData()">获得信息</button>
+<button onclick="writeData()">写信息</button>
+<button onclick="Test()">Test</button>
+
+<input id="msg" type="text" value="Hello from server" />
+<button onclick="sayHello()">发消息</button>
+<div id="dt"></div>
+
+
+<script src="https://www.zmjiudian.com/Content/js/jquery-1.10.2-min.js"></script>
+
+<script>
+
+
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]) + ""; return null;
+    }
+
+    function sayHello() {
+        var easemobId = getQueryString("easemobId");//.replace("zmjdappuser","")
+        var visitorImId = getQueryString("visitorImId")
+        var msg = document.getElementById("msg").value;
+        document.getElementById("dt").innerHTML = easemobId + ":" + visitorImId;
+
+        sendMsgToUser(visitorImId, msg);
+
+        //var demoE = $('#em-chat', parent.document).val();
+
+    }
+
+    function sendMsgToUser(userID, msg) {
+        userID = userID.replace("zmjdappuser", "")
+
+        $.ajax({
+            type: "POST",
+            url: "/api/MagiCallAPI/SendTxtMessageToUser",
+            data: { from: "kevincai", userID: userID, msg: msg },
+            success: function (data) {
+                document.getElementById("dt").innerHTML = data;
+            },
+            error: function (XMLHttpRequest, textStatus) {
+                alert(XMLHttpRequest.responseText);
+            },
+            cache: false
+        });
+    }
+
+
+    function Test() {
+        var easemobId = getQueryString("easemobId")
+        var visitorImId = getQueryString("visitorImId")
+        document.getElementById("dt").innerHTML = easemobId + ":" + visitorImId;
+
+        //var demoE = $('#em-chat', parent.document).val();
+
+    }
+
+
+
+
+    function getData() {
+        //var d=new Date();
+        //document.getElementById("dt").innerHTML=d;
+
+        var demoE = window.parent.document.getElementById("em-chat").innerHTML; // $('#em-chat', parent.document).val();
+        document.getElementById("dt").innerHTML = demoE
+    }
+
+
+</script>

@@ -1,0 +1,4 @@
+
+[2015/5/26 8:52:34] Start Job [GenBehaviorCsvJob]
+[2015/5/26 8:52:36] WriteBehaviorList Count:3615
+[2015/5/26 8:52:37] Stop Job [GenBehaviorCsvJob]

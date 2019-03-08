@@ -1,0 +1,15 @@
+﻿@model WHotelSite.Models.MagiCallClientViewModel
+@{
+    ViewBag.Title = "MagiCall";
+    Layout = "~/Views/Shared/_Layout0.cshtml";
+}
+<script>
+    var userHeadPhoto = "@Model.userHeadPhoto";
+    var kefuHeadPhoto = "@Model.kefuHeadPhoto";
+    var userID = @Model.userID;
+</script>
+<!--如果您需要在某些APP中直接引用环信移动客服访客端web插件，可按照如下方式配置URL即可-->
+<!--地址参数：http://XXX/h5.html?tenantId=XXXX&appkey=XXXX#XXXX&to=XXXX-->
+<!--CONFIG DEMO-->
+
+<script src="~/Content/webim436/static/js/easemob.js"></script>

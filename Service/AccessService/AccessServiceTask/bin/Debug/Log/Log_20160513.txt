@@ -1,0 +1,14 @@
+
+[16/5/13 16:37:33] Start Job [GenUserRecommendRelJob]
+[16/5/13 16:50:19] Start Job [GenUserRecommendRelJob]
+[16/5/13 17:04:06] Start Job [GenUserRecommendRelJob]
+[16/5/13 17:05:12] Job [GenUserRecommendRelJob] Error:索引(从零开始)必须大于或等于零，且小于参数列表的大小。
+[16/5/13 17:05:12] Stop Job [GenUserRecommendRelJob]
+[16/5/13 17:05:18] Start Job [GenUserRecommendRelJob]
+[16/5/13 17:05:22] Job [GenUserRecommendRelJob] Error:索引(从零开始)必须大于或等于零，且小于参数列表的大小。
+[16/5/13 17:05:22] Stop Job [GenUserRecommendRelJob]
+[16/5/13 17:05:39] Start Job [GenUserRecommendRelJob]
+[16/5/13 17:08:01] Start Job [GenUserRecommendRelJob]
+[16/5/13 17:09:19] [16/5/13 17:09:19] AddType:1  UserId:4514792
+[16/5/13 17:09:21] [16/5/13 17:09:21] AddType:2  UserId:4514792
+[16/5/13 17:40:41] Start Job [GenUserRecommendRelJob]

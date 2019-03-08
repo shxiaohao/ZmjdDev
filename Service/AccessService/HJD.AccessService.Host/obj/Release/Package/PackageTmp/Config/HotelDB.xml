@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<configuration>
+  <statements>
+    <select id="GetPRoomInfoData">
+      <![CDATA[   
+      
+select * from PRoomInfo pr where pr.isValid = 1 and (select count(1) from HotelOTA ho where ho.ChannelID = 2 and ho.IsValid = 1 and ho.HotelId = pr.HotelID) > 0
+--and hotelid = 541532
+order by pr.HotelID
+
+       ]]>
+    </select>
+    <select id="GetHotelOriIdByHotel">
+      <![CDATA[   
+      
+select HotelId,HotelOriID,IsValid,ChannelID,CanSyncPrice,isnull(CreateTime,getdate()) CreateTime
+from HotelOTA where ChannelID = 2 and IsValid = 1 and HotelId = @HotelId
+
+       ]]>
+    </select>
+    <select id="GetCtripHotelIdByHotelId">
+      <![CDATA[select top 1 HotelOriID from HotelOTA where HotelId in (@HotelID) and ChannelID = 2 and IsValid = 1]]>
+    </select>
+  </statements>
+</configuration>

@@ -1,0 +1,85 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HJD.AccessService.Contract", "HJD.AccessService.Contract\HJD.AccessService.Contract.csproj", "{C63748C9-501D-472A-AEFF-36C4C77814B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HJD.AccessService.Implement", "HJD.AccessService.Implement\HJD.AccessService.Implement.csproj", "{A79489B2-6067-4673-9CDB-332CFDAC7F48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HJD.AccessService.Host", "HJD.AccessService.Host\HJD.AccessService.Host.csproj", "{1B5627BB-1F3E-4B2C-8264-FD80189202A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HJD.AccessService.Task", "AccessServiceTask\HJD.AccessService.Task.csproj", "{D7F4862A-DB88-43C3-8C36-D21922BCE1CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HJD.Search.CommonLibrary", "HJD.Search.CommonLibrary\HJD.Search.CommonLibrary.csproj", "{7D7BA799-5F1D-4A8F-A340-F2774E1A7F1D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HJD.AccessServer.Test", "HJD.AccessServer.Test\HJD.AccessServer.Test.csproj", "{36D670DC-484F-432A-BB7B-F63472B10F65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HJD.AccessServer.DAL", "HJD.AccessServer.DAL\HJD.AccessServer.DAL.csproj", "{54237DA9-2051-4BA4-B8E5-AF3D3B1CD48B}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 8
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://192.168.1.114:8080/tfs/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = HJD.AccessService.Host\\HJD.AccessService.Host.csproj
+		SccProjectName1 = HJD.AccessService.Host
+		SccLocalPath1 = HJD.AccessService.Host
+		SccProjectUniqueName2 = HJD.AccessService.Contract\\HJD.AccessService.Contract.csproj
+		SccProjectName2 = HJD.AccessService.Contract
+		SccLocalPath2 = HJD.AccessService.Contract
+		SccProjectUniqueName3 = HJD.AccessService.Implement\\HJD.AccessService.Implement.csproj
+		SccProjectName3 = HJD.AccessService.Implement
+		SccLocalPath3 = HJD.AccessService.Implement
+		SccProjectUniqueName4 = HJD.Search.CommonLibrary\\HJD.Search.CommonLibrary.csproj
+		SccProjectName4 = HJD.Search.CommonLibrary
+		SccLocalPath4 = HJD.Search.CommonLibrary
+		SccProjectUniqueName5 = AccessServiceTask\\HJD.AccessService.Task.csproj
+		SccProjectName5 = AccessServiceTask
+		SccLocalPath5 = AccessServiceTask
+		SccProjectUniqueName6 = HJD.AccessServer.Test\\HJD.AccessServer.Test.csproj
+		SccProjectName6 = HJD.AccessServer.Test
+		SccLocalPath6 = HJD.AccessServer.Test
+		SccProjectUniqueName7 = HJD.AccessServer.DAL\\HJD.AccessServer.DAL.csproj
+		SccProjectName7 = HJD.AccessServer.DAL
+		SccLocalPath7 = HJD.AccessServer.DAL
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C63748C9-501D-472A-AEFF-36C4C77814B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C63748C9-501D-472A-AEFF-36C4C77814B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C63748C9-501D-472A-AEFF-36C4C77814B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C63748C9-501D-472A-AEFF-36C4C77814B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A79489B2-6067-4673-9CDB-332CFDAC7F48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A79489B2-6067-4673-9CDB-332CFDAC7F48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A79489B2-6067-4673-9CDB-332CFDAC7F48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A79489B2-6067-4673-9CDB-332CFDAC7F48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B5627BB-1F3E-4B2C-8264-FD80189202A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B5627BB-1F3E-4B2C-8264-FD80189202A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B5627BB-1F3E-4B2C-8264-FD80189202A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B5627BB-1F3E-4B2C-8264-FD80189202A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7F4862A-DB88-43C3-8C36-D21922BCE1CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7F4862A-DB88-43C3-8C36-D21922BCE1CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7F4862A-DB88-43C3-8C36-D21922BCE1CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7F4862A-DB88-43C3-8C36-D21922BCE1CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D7BA799-5F1D-4A8F-A340-F2774E1A7F1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D7BA799-5F1D-4A8F-A340-F2774E1A7F1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D7BA799-5F1D-4A8F-A340-F2774E1A7F1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D7BA799-5F1D-4A8F-A340-F2774E1A7F1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36D670DC-484F-432A-BB7B-F63472B10F65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36D670DC-484F-432A-BB7B-F63472B10F65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36D670DC-484F-432A-BB7B-F63472B10F65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36D670DC-484F-432A-BB7B-F63472B10F65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54237DA9-2051-4BA4-B8E5-AF3D3B1CD48B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54237DA9-2051-4BA4-B8E5-AF3D3B1CD48B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54237DA9-2051-4BA4-B8E5-AF3D3B1CD48B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54237DA9-2051-4BA4-B8E5-AF3D3B1CD48B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

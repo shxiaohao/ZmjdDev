@@ -1,0 +1,511 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    Layout = null;
+
+    var cssVersion = "190001010000";
+    try
+    {
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex) { }
+
+    ViewBag.Title = "房券兑换";
+
+    var isApp = ViewBag.IsApp;
+    var appType = ViewBag.AppType;
+
+    var userid = ViewBag.UserId;
+
+    //6.2的全部订单列表页面（包含了酒店、消费券、团购等所有品类的订单）
+    var appMyOrderUrlForApp = "http://www.zmjiudian.com/order/allorders?userid={userid}&specifyuid=1&realuserid=1&_newpage=1";
+
+    //套餐信息
+    var pid = ViewBag.Pid;
+    var couponPackage = ViewBag.CouponPackage;
+    PackageInfoEntity hotelPackage = ViewBag.PackageEntity;//hotelPackage.packageBase.DateSelectType
+    var hotelName = ViewBag.HotelName;
+    var notes = ViewBag.Notes;
+    var nightRoomCount = ViewBag.NightRoomCount;
+    var defaultRoomCount = ViewBag.DefaultRoomCount;
+
+    //hotelPackage.packageBase.DateSelectType = 3;
+
+    //日期label/姓名label
+    var dateTypeName = "入住日期";
+    var isSingleSelectDate = false;
+    var userLabel = "入住人";
+    var userPlaceholder = "填写入住人姓名";
+    switch (hotelPackage.packageBase.DateSelectType)
+    {
+        case 1: { dateTypeName = "入住日期"; userLabel = "入住人"; userPlaceholder = "填写入住人姓名"; break; }
+        case 2: { dateTypeName = "出行日期"; userLabel = "姓名"; userPlaceholder = "填写姓名"; isSingleSelectDate = true; break; }
+        case 3: { dateTypeName = "入住开始日"; userLabel = "入住人"; userPlaceholder = "填写入住人姓名"; isSingleSelectDate = true; break; }
+        case 4: { dateTypeName = "消费日期"; userLabel = "姓名"; userPlaceholder = "填写姓名"; isSingleSelectDate = true; break; }
+    }
+
+    var checkIn = ViewBag.CheckIn;
+    var checkOut = ViewBag.CheckOut;
+
+    List<PDayItem> calendar = ViewBag.calendar;
+    var dayLimitMin = ViewBag.DayLimitMin;
+    var dayLimitMax = ViewBag.DayLimitMax;
+    var displayTipTag = true;
+    if (!couponPackage.isAllowMultiRoom)
+    {
+        dayLimitMax = dayLimitMin = nightRoomCount;
+        displayTipTag = false;
+    }
+
+    //出行人信息
+    var maxPersonNum = hotelPackage.MaxHotelPeople;
+    var minPersonNum = hotelPackage.MinHotelPeople;
+    var cartTypeList = string.Join(",", hotelPackage.CardTypeList != null ? hotelPackage.CardTypeList : new List<string>());
+    var personDesc = hotelPackage.TravelPersonDescribe;
+}
+
+<!DOCTYPE html>
+
+<script type="text/javascript">
+
+    function goto(param) {
+        var url = "@(ViewBag.AccessProtocal)" + param;
+        this.location = url;
+    }
+    function openHotel(hotelid) {
+        var isapp = $("#isapp").val() == "1";
+        if (isapp) {
+            goto('hotel/' + hotelid);
+        }
+        else {
+            location.href = "http://www.zmjiudian.com/hotel/" + hotelid;
+        }
+    }
+
+    function gourl(url) {
+        location.href = url;
+    }
+
+    function loginCallback(userid) {
+        location.replace(location.pathname + "?userid=" + userid);
+    }
+
+    var pub_userid = "@userid";
+
+</script>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="format-detection" content="telephone=no">
+    <title>房券兑换</title>
+    <link href="~/Content/css/zmjiudian-ex.css" rel="stylesheet" />
+    <link href="~/Content/css/framework/zmjd.modal.min.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="/Content/css/framework/util.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    @*<link href="~/Content/css/bootstrap.min.css" rel="stylesheet" />*@
+    <link href="/content/css/coupon/couponexchange.css?v=@cssVersion" rel="stylesheet">
+    <link href="/content/css/calendar_price.css" rel="stylesheet">
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .modal {
+            top: 24%;
+        }
+
+        .modal-content {
+            width: 90%;
+            margin: auto;
+        }
+
+        .modal-body {
+            padding: 2.6em 0.8em 1.7em 0.8em;
+        }
+
+        .modal-footer {
+            margin-top: 0;
+            padding: 0.7em 0.9em;
+            text-align: center;
+        }
+
+        .btn-default, .btn-primary {
+            width: auto;
+            min-width: 4em;
+            border: none;
+            color: #3e9ec0;
+            font-size: 1.2em;
+        }
+
+        .btn-default0 {
+            color: #333;
+        }
+
+        .box-big-btn {
+            width: 96%;
+        }
+
+        .box-btn-bottomborder {
+            padding-bottom: 0.7em;
+            margin-bottom: 0.3em;
+            border-bottom: 1px solid #eeeded;
+            border-radius: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="ex-panel">
+
+        @if (couponPackage.exchangeInfo.ExchangeTargetID > 0 && couponPackage.exchangeInfo.State == 3)
+        {
+            <div class="ex-result-main">
+                <div class="tit" style="padding: 2.6em 0 3em 0;">
+                    <img src="~/Content/images/coupon/pay/yes-wire.png" alt="" />您的申请已成功&nbsp;&nbsp;&nbsp;
+                    <br /><span class="small-tip">房券兑换成功后，还需与酒店确认房态，我们将尽快为您处理订单。如果需要补汇款，请先完成补汇款操作。 </span>
+                </div>
+                <div class="hotel">
+                    <div class="left">酒店名称</div>
+                    @if (couponPackage.exchangeInfo.ActivityType == 500)
+                    {
+                        <div class="right">@hotelName</div>
+                    }
+                    else
+                    {
+                        <div class="right">@couponPackage.exchangeInfo.ObjectName</div>
+                    }
+                    <div style="clear:both;"></div>
+                </div>
+            </div>
+            if (isApp)
+            {
+                <div class="ex-result-ctrl">
+                    <div class="left">
+                        <div class="lookmineno" onclick="gourl('@(appMyOrderUrlForApp)')">查看我的订单</div>
+                    </div>
+                    <div class="right">
+                        <div class="backhome" onclick="goto('')">返回首页</div>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="ex-group-panel">
+                <div class="basic-panel top-package">
+                    @if (couponPackage.exchangeInfo.ActivityType == 500)
+                    {
+                        <div class="all-panel">
+                            <div class="top-package-hotelname">@hotelName</div>
+                            <div class="top-package-pname">@hotelPackage.packageBase.Brief</div>
+                        </div>
+                        <div style="clear:none;"></div>
+                    }
+                    else
+                    {
+                        var couponActiveUrl = string.Format("/coupon/shop/{0}?_newpage=1", couponPackage.exchangeInfo.ActivityID);
+
+                        //如果当前房券是通过SKU购买的，则通过SKU跳转明细
+                        if (couponPackage.exchangeInfo.SKUID > 0)
+                        {
+                            couponActiveUrl = string.Format("/coupon/product/{0}?_newpage=1", couponPackage.exchangeInfo.SKUID);
+                        }
+
+                        <div class="all-panel" onclick="gourl('@couponActiveUrl')">
+                            <div class="left-item">
+                                <div class="top-package-hotelname">@couponPackage.exchangeInfo.ObjectName</div>
+                                <div class="top-package-pname">@couponPackage.exchangeInfo.CouponName</div>
+                            </div>
+                            <div class="right-item">
+                                <img src="~/Content/images/coupon/icon-arrow-right.png" alt="" style="margin:1em 0 0 0;" />
+                            </div>
+                        </div>
+                        <div style="clear:none;"></div>
+                    }
+                </div>
+                <div class="basic-panel top-checktime">
+                    <div class="left-panel">
+                        <span>@(dateTypeName):</span>
+                    </div>
+                    <div class="right-panel">
+                        <div class="left-item">
+                            <div id="def-datetxt" class="top-checktime-item">点击选择日期</div>
+                            @if (isSingleSelectDate)
+                            {
+                                <div id="dates" class="top-checktime-item" style="display:none;">@(checkIn.ToString("yyyy/MM/dd"))</div>
+                            }
+                            else
+                            {
+                                <div id="dates" class="top-checktime-item" style="display:none;">@(checkIn.ToString("yyyy/MM/dd")) - @(checkOut.ToString("yyyy/MM/dd"))</div>
+                            }
+                            <input type="hidden" id="checkIn" value="@(checkIn.ToString("yyyy-MM-dd"))" />
+                            <input type="hidden" id="checkOut" value="@(checkOut.ToString("yyyy-MM-dd"))" />
+                        </div>
+                        <div class="right-item">
+                            <img src="~/Content/images/coupon/icon-arrow-right.png" alt="" />
+                        </div>
+                    </div>
+                    <div style="clear: both;"></div>
+                </div>
+                @if (couponPackage.exchangeInfo.ActivityType == 500)
+                {
+                    <div class="basic-panel top-diffprice" style="display:none;">
+                        <div class="left-panel">
+                            <span>需付款:</span>
+                        </div>
+                        <div class="right-panel">
+                            <div class="diff-price-section"><span class="lab">补差价￥</span><span class="pri">0</span></div>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                }
+            </div>
+            <div class="sel-pcount">
+                <div class="sel-pcount-left">房间数:</div>
+                <a href="javascript:;" class=" zmjd-iconfont packagereduce">&#xe640;</a>
+                <input class="exchangenum" id="exchangenum" type="tel" readonly value="@defaultRoomCount" />
+                <a href="javascript:;" class=" zmjd-iconfont packageplus">&#xe641;</a>
+            </div>
+            <div class="ex-group-panel">
+                <div class="group-tit">基本信息:</div>
+                <div id="ex-user-array">
+                    @for (int i = 0; i < defaultRoomCount; i++)
+                    {
+                        <div class="basic-panel top-users appendhtml" id="append">
+                            <div class="left-panel">
+                                <span>@(userLabel):</span>
+                            </div>
+                            <div class="right-panel">
+                                <input type="text" name="ex-checkinUser" class="top-users-input" placeholder="@(userPlaceholder)" value="" />
+                            </div>
+                            <div style="clear:none;"></div>
+                        </div>
+                        <input type="hidden" id="userLabel" value="@(userLabel)" />
+                        <input type="hidden" id="userPlaceholder" value="@(userPlaceholder)" />
+                    }
+                </div>
+                <div class="basic-panel top-phone">
+                    <div class="left-panel">
+                        <span>手机号码:</span>
+                    </div>
+                    <div class="right-panel">
+                        <input type="tel" id="ex-phone" name="ex-phone" class="top-phone-input" placeholder="在此输入手机号码" value="@couponPackage.exchangeInfo.PhoneNum" disabled="disabled" />
+                    </div>
+                    <div style="clear:none;"></div>
+                </div>
+            </div>
+            <div class="b-hide" id="person-panel">
+                <div class="b-d-row">
+                    <div class="r-left r-lab">出行人:</div>
+                    <div class="r-right r-desc">@personDesc</div>
+                    <div style="clear:both;"></div>
+                </div>
+                <div v-for="item in sels" class="b-d-row b-d-row-bder b-d-person-item">
+                    <div class="r-left"><a href="javascript:;" onclick="delSelPerson({{$index}})" title="删除"><img src="http://whfront.b0.upaiyun.com/www/img/hotel/book/icon-del.png" alt="" /></a></div>
+                    <div class="r-right">
+                        <div class="pname">{{item.TravelPersonName}}</div>
+                        <div class="pno">{{item.CardTypeName}} {{item.IDNumber2}}</div>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+                <div v-for="item in adds" class="b-d-row b-d-row-bder b-d-row-arrow-2 b-d-person-item" onclick="showSelPerson()">
+                    <div class="r-left"></div>
+                    <div class="r-right"><a href="javascript:;" class="r-link">添加出行人1</a></div>
+                    <div style="clear:both;"></div>
+                </div>
+            </div>
+            <script id="ex-user-item-template" type="text/template">
+                <div class="basic-panel top-users">
+                    <div class="left-panel">
+                        <span>@(userLabel):</span>
+                    </div>
+                    <div class="right-panel">
+                        <input type="text" name="ex-checkinUser" class="top-users-input" placeholder="@(userPlaceholder)" value="" />
+                    </div>
+                    <div style="clear:none;"></div>
+                </div>
+            </script>
+            <div class="ex-group-panel no-border">
+                <div class="group-tit">其他信息（选填）:</div>
+                <div class="basic-panel top-other">
+                    <div class="left-panel">
+                        <span>特殊要求:</span>
+                    </div>
+                    <div class="right-panel">
+                        <div id="divOptions" class="icheck-panel">
+                            @{
+                                var gid = 1;
+                                foreach (String str in hotelPackage.Room.Options.Split(new char[] { '|' }))
+                                {
+                                    foreach (string item in str.Split(new char[] { ',' }))
+                                    {
+                                        if (!string.IsNullOrEmpty(item))
+                                        {
+                                            bool on = notes.IndexOf(item) >= 0;
+                                            if (on)
+                                            {
+                                                notes.Remove(item);
+                                            }
+                                            bool ismf = item.Contains("满房");
+                                            if (!ismf)
+                                            {
+
+                                                <div class="item-div"><input name="o@(gid)" type="radio" value="@item"><label fn="o@(gid)">@item</label></div>
+                                            }
+
+                                        }
+                                    }
+                                    gid += 1;
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div style="clear:none;"></div>
+                </div>
+                <div class="basic-panel top-other2">
+                    <div class="left-panel">
+                        <span>补充说明:</span>
+                    </div>
+                    <div class="right-panel">
+                        <textarea id="ex-otherInfo" name="ex-otherInfo" class="top-info-input" rows="4" placeholder="如果有其他需求请填写，酒店会尽量为您安排。"></textarea>
+                    </div>
+                    <div style="clear:none;"></div>
+                </div>
+            </div>
+            <div style="margin:5em 0 0 0;">&nbsp;</div>
+            <div class="ex-ctrl-panel">
+                <div class="ex-exchange-btn" style="">确定兑换 </div>
+            </div>
+        }
+
+    </div>
+
+    <div class="b-d-win-model b-hide"></div>
+    <div class="b-d-win-panel b-hide">
+        <div id="ad-person">
+            <div class="w-tit"><div class="left-btn"><a href="javascript:;" id="back-selperson"><img src="http://whfront.b0.upaiyun.com/www/img/hotel/book/icon-back-blue.png" alt="" /></a></div>添加出行人</div>
+            <div>
+                <button type="button" class="add-person-btn" id="add-person-btn">+ 新增出行人</button>
+                <div class="p-list">
+                    <div v-for="item in list" class="p-item">
+                        <label for="p-ck-{{$index}}">
+                            <div class="pck">
+                                <input type="checkbox" v-if="item.select" v-model="item.ck" name="person-ck" id="p-ck-{{$index}}" data-psid="{{item.ID}}" data-psnum="{{$index}}" />
+                                <input type="checkbox" v-else name="person-ck" id="p-ck-{{$index}}" disabled="disabled" />
+                            </div>
+                            <div class="pinfo">
+                                <div class="pname">{{item.TravelPersonName}}</div>
+                                <div class="pno">{{item.CardTypeName}} {{item.IDNumber}}</div>
+                            </div>
+                            <div class="pedit"><a href="javascript:personEditType = 1;showEditPerson({{$index}});" data-psnum="{{$index}}">编辑</a></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="edit-person" style="display:none;">
+            <div class="w-tit">
+                <div class="left-btn"><a href="javascript:;" id="back-editperson"><img src="http://whfront.b0.upaiyun.com/www/img/hotel/book/icon-back-blue.png" alt="" /></a></div>
+                编辑信息
+                <div class="right-btn"><a href="javascript:;" id="save-editperson">完成</a></div>
+            </div>
+            <div class="edit-row">
+                <div class="left">姓名</div>
+                <div class="right"><input type="text" placeholder="请与证件保持一致" v-model="person.TravelPersonName" /></div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="edit-row">
+                <div class="left">证件类型</div>
+                <div class="right">
+                    <select id="idtype-select" v-model="person.IDType">
+                        <option value="1">身份证</option>
+                        <option value="2">护照</option>
+                        <option value="3">户口簿</option>
+                        <option value="4">港澳通行证</option>
+                        <option value="10">其他</option>
+                    </select>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="edit-row">
+                <div class="left">证件号码</div>
+                <div class="right"><input type="text" placeholder="请输入证件号码" v-model="person.IDNumber" /></div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="edit-row" v-show="person.IDType!=1" id="birthday-input">
+                <div class="left">出生日期</div>
+                <div class="right"><input type="date" placeholder="yyyy-mm-dd" id="brithdayTime" v-model="person.Birthday" /></div>
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <input type="hidden" id="userid" value="@userid" />
+        <input type="hidden" id="exchangeTagId" value="@couponPackage.exchangeInfo.ExchangeTargetID" />
+        <input type="hidden" id="exchangeNo" value="@couponPackage.exchangeInfo.ExchangeNo" />
+        <input type="hidden" id="oriCouponPrice" value="@couponPackage.exchangeInfo.Price" />
+        <input type="hidden" id="activityType" value="@couponPackage.exchangeInfo.ActivityType" />
+        <input type="hidden" id="hotelId" value="@hotelPackage.packageBase.HotelID" />
+        <input type="hidden" id="packageId" value="@hotelPackage.packageBase.ID" />
+        <input type="hidden" id="packageType" value="@hotelPackage.PackageType" />
+        <input type="hidden" id="isValid" value="@hotelPackage.packageBase.IsValid" />
+        <input type="hidden" id="checkIn" value="@checkIn" />
+        <input type="hidden" id="checkOut" value="@checkOut" />
+        <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+        <input type="hidden" id="nightRoomCount" value="@(nightRoomCount)" />
+        <input type="hidden" id="maxPersonNum" value="@(maxPersonNum)" />
+        <input type="hidden" id="minPersonNum" value="@(minPersonNum)" />
+        <input type="hidden" id="cartTypeList" value="@(cartTypeList)" />
+        <input type="hidden" id="travelPersonDesc" value="@(personDesc)" />
+        <input type="hidden" id="dateSelectType" value="@(hotelPackage.packageBase.DateSelectType)" />
+        <input type="hidden" id="isSingleSelectDate" value="@(isSingleSelectDate ? 1 : 0)" />
+        <input type="hidden" id="dateTypeName" value="@(dateTypeName)" />
+        <input type="hidden" id="dayLimitMin" value="@(dayLimitMin)" />
+        <input type="hidden" id="dayLimitMax" value="@(dayLimitMax)" />
+        <input type="hidden" id="userLabel" value="@(userLabel)" />
+        <input type="hidden" id="userPlaceholder" value="@(userPlaceholder)" />
+        <input type="hidden" id="hidOptions" value="@(hotelPackage.Room.Options)" />
+        <input type="hidden" id="hidNotes" value="@(ViewBag.Notes)" />
+        <input type="hidden" id="displayTipTag" value="@(displayTipTag ? 1 : 0)" />
+
+        <form style="display:none;">
+            <input type="text" id="loginput" value="0" />
+        </form>
+    </footer>
+
+    <script src="~/Content/js/jquery-1.10.2-min.js"></script>
+    <script src="~/Content/js/bootbox.js"></script>
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <script src="~/Content/js/framework/config.js"></script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/framework/zmjiudian.js"></script>
+    <script src="~/Content/js/framework/zmjd.modal.min.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/geetest/gt.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/login.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/coupon/couponexchange.js?v=@cssVersion"></script>
+    <script src="~/Content/js/calendar_price.js"></script>
+    @if (Utils.IsMobile())
+    {
+        <script src="~/Content/js/iscroll-lite.js"></script>
+    }
+    else
+    {
+        <script src="~/Content/js/ctrip_cquery.js"></script>
+        <script src="~/Content/js/ctrip_calendar.js"></script>
+    }
+    @Helpers.CalendarOptions(Html, calendar, dayLimitMin, dayLimitMax)
+
+</body>
+</html>

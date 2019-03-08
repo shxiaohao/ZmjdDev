@@ -1,0 +1,2477 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <statements>
+    
+    <select id="GetSearchRecordCount">
+      <![CDATA[
+        select
+          COUNT(1) Count
+        from
+        (select sr.ID, ROW_NUMBER() over(partition by sr.BusinessType, sr.BusinessID order by sr.ID desc) rowNo
+        from hotelbizdb..[SearchRecord] sr with(nolock)
+        where sr.OptionUser = @userID and (sr.BusinessType = @businessType OR @businessType = 0))tab where rowNo = 1
+      ]]>
+    </select>
+    
+    <select id="GetSearchRecordList">
+      <![CDATA[        
+        select
+			    tab3.*,
+			    Name = ISNULL(di.Name,''),
+			    PicUrl = ISNULL(dz.PicUrl, ''),
+	        ISNULL(di.lat,0) Lat,
+	        ISNULL(di.lon,0) Lon
+			    from
+			    (select top(@count) BusinessType, BusinessID,id
+			    from
+			    (select
+			    BusinessType, BusinessID,id,
+			    ROW_NUMBER() over(order by tab.ID desc) rowNo2
+			    from
+			    (select sr.BusinessType, sr.BusinessID, sr.ID,  ROW_NUMBER() over(partition by sr.BusinessType, sr.BusinessID order by sr.ID desc) rowNo
+			    from HotelBizDB..[SearchRecord] sr with(nolock)
+			    where sr.OptionUser = @userID and (sr.BusinessType = @businessType OR @businessType = 0))tab where rowNo = 1)tab2
+		    where tab2.rowNo2 > @start)tab3
+		    --left join hoteldb..hotel h with(nolock) on h.hotelid = tab3.BusinessID and tab3.BusinessType = 1
+		    left join destdb..DistrictInfo di with(nolock) on di.DistrictID = tab3.BusinessID --and tab3.BusinessType = 3
+		    left join destdb..DistrictZone dz with(nolock) on dz.DistrictID = di.DistrictID and dz.Type = 1
+      ]]>
+    </select>
+    
+    <select id="GetHotelBrowsingRecordCount">
+      <![CDATA[
+        select
+          COUNT(1)
+        from
+        (select br.ID browsingID,
+	        ROW_NUMBER() over(partition by h.hotelid order by br.ID desc) rowNo
+        from hotelbizdb..[BrowsingRecord] br with(nolock)
+        inner join hoteldb..Hotel h with(nolock) on h.HotelId = br.businessid
+        where br.businesstype = 2 and br.Visitor = @userId)tab where rowNo = 1
+      ]]>
+    </select>
+    
+    <select id="GetHotelBrowsingRecordList">
+      <![CDATA[
+        select top(@count) HotelId, HotelName
+        from
+        (select
+        HotelId, HotelName,
+        ROW_NUMBER() over(order by tab.browsingID desc) rowNo2
+        from
+        (select h.HotelId, h.HotelName, br.ID browsingID,
+	        ROW_NUMBER() over(partition by h.hotelid order by br.ID desc) rowNo
+        from hotelbizdb..[BrowsingRecord] br with(nolock)
+        inner join hoteldb..Hotel h with(nolock) on h.HotelId = br.businessid
+        where br.businesstype = 2 and br.Visitor = @userId)tab where rowNo = 1)tab2
+        where tab2.rowNo2 > @start
+      ]]>
+    </select>
+
+    <select id="GetBrowsingRecordList">
+      <![CDATA[
+        SELECT top(@count) * FROM 
+        (
+			      SELECT ID,BusinessID,BusinessType,Visitor,
+                   ROW_NUMBER() OVER(ORDER BY ID DESC) rowNo2
+			      FROM
+		       	(
+				          SELECT br.ID,br.BusinessID,br.BusinessType,br.Visitor,
+					               ROW_NUMBER() over(PARTITION BY br.BusinessID,br.BusinessType ORDER BY br.ID DESC) rowNo
+				          FROM  hotelbizdb..[BrowsingRecord] br(NOLOCK)
+				          WHERE (br.BusinessType = 2 or br.BusinessType = 3) AND br.Visitor = @userId
+			      )tab 
+			      WHERE tab.rowNo=1
+        )tab2
+        WHERE tab2.rowNo2 > @start  
+    ]]>
+    </select>
+    <select id="GetBrowsingRecordCount">
+      <![CDATA[
+        SELECT COUNT(1)
+			  FROM
+		    (
+				       SELECT br.ID,br.BusinessID,br.BusinessType,br.Visitor,
+				              ROW_NUMBER() over(PARTITION BY br.BusinessID,br.BusinessType ORDER BY br.ID DESC) rowNo
+				       FROM  hotelbizdb..[BrowsingRecord] br(NOLOCK)
+				       WHERE (br.BusinessType = 2 or br.BusinessType = 3) AND br.Visitor = @userId
+			  )tab 
+			  WHERE tab.rowNo=1
+      ]]>
+    </select>
+    
+    <select id="GetHotelWithIn300KMCount">
+      <![CDATA[
+  DECLARE @g geography = geography::Point(@lat, @lng, 4326)
+  select COUNT(1) from (
+       select distinct h.HotelId, h.HotelName,hc.tag,hr.Rank,ROW_NUMBER() over(Order by hr.rank asc) rn from 
+             hoteldb..HotelContacts  hc 
+             inner join 
+             (select distinct hotelid from Hoteldb.dbo.HotelState with(nolock) where state in (1,2)) hs 
+             on hc.HotelID=hs.HotelID  
+             inner join  hoteldb..hotel h with(nolock)
+             on h.HotelId=hc.HotelID
+             inner join hoteldb..HotelPlace hhp with(nolock) on hhp.hotelid = hc.hotelid
+             left join hoteldb.dbo.HotelRank hr with(nolock) on hc.HotelId=hr.HotelID
+             where hr.DistrictID = 110000 and hr.type = 5  and @g.STDistance(hhp.geo) <= 300000
+        )a  
+      ]]>
+    </select>
+    <select id="GetHotelWithIn300KMList">
+      <![CDATA[
+  DECLARE @g geography = geography::Point(@lat, @lng, 4326)
+  select top(@count) * from (
+     select * from (
+       select distinct h.HotelId, h.HotelName,hc.tag,hr.Rank,ROW_NUMBER() over(Order by hr.rank asc) rn from 
+             hoteldb..HotelContacts  hc 
+             inner join 
+             (select distinct hotelid from Hoteldb.dbo.HotelState with(nolock) where state in (1,2) ) hs 
+             on hc.HotelID=hs.HotelID  
+             inner join  hoteldb..hotel h with(nolock)
+             on h.HotelId=hc.HotelID
+             inner join hoteldb..HotelPlace hhp with(nolock) on hhp.hotelid = hc.hotelid
+             left join hoteldb.dbo.HotelRank hr with(nolock) on hc.HotelId=hr.HotelID
+             where hr.DistrictID = 110000 and hr.type = 5  and @g.STDistance(hhp.geo) <= 300000
+        )a 
+ )  B where B.rn > @start    order by b.Rank asc
+      ]]>
+    </select>
+    
+    <select id="GetPackageAlbumByGeoInfo">
+      <![CDATA[
+        IF @districtID > 0
+        BEGIN
+            select distinct
+            pa.id, pa.name, pa.icon
+            from hotelbizdb..PackageAlbums pa with(nolock)
+            inner join hotelbizdb..TopNPackages tnp with(nolock) on tnp.AlbumsID = pa.ID
+            inner join hoteldb..package p with(nolock) on p.id = tnp.pid
+            inner join hoteldb..Hotel h with(nolock) on h.HotelId = p.HotelID
+            inner join destdb..DistrictSubRel dsr with(nolock) on dsr.SubDistrictID = h.DistrictID
+            where pa.id > 1 and pa.id != 10 and pa.IsValid = 1 and dsr.DistrictID = @districtID
+        END
+        ELSE IF @lat > 0 AND @lng > 0
+        BEGIN
+            DECLARE @g geography = geography::Point(@lat, @lng, 4326)	
+            select distinct
+            pa.id, pa.name, pa.icon
+            from hotelbizdb..PackageAlbums pa with(nolock)
+            inner join hotelbizdb..TopNPackages tnp with(nolock) on tnp.AlbumsID = pa.ID
+            inner join hoteldb..package p with(nolock) on p.id = tnp.pid
+            inner join hoteldb..Hotel h with(nolock) on h.HotelId = p.HotelID
+            inner join hoteldb..HotelPlace hp with(nolock) on hp.hotelid = h.hotelid --and hp.geo is not null
+            where pa.id > 1 and pa.id != 10 and pa.IsValid = 1 and @g.STDistance(hp.geo) <= 300000
+        END
+      ]]>
+    </select>
+    
+    <select id="GetTopScoreHotelListCount">
+      <![CDATA[
+        Select count(1) from hotelbizdb..topscorehotel
+      ]]>
+    </select>
+
+    <select id="GetTopScoreHotelList">
+      <![CDATA[
+        select
+        top(@count) *
+        from (select
+	           [ID]
+            ,[HotelId]
+            ,[RankScore]
+            ,[HotelName]
+            ,[RecommendCount]
+            ,[HotelScore]
+            ,[CalcScore]
+            ,(ROW_NUMBER() over(order by rankscore desc)) rowNo
+        from hotelbizdb..topscorehotel)tab where rowNo > @start
+      ]]>
+    </select>
+    
+    <select id="GetRelPackageAlbums">
+      <![CDATA[
+        if(@hotelIds is not null)
+        begin
+          select 
+          pa.id, pa.name, tnp.hotelID, tnp.PID, tnp.ID TNPId
+          from 
+          hotelbizdb..PackageAlbums pa with(nolock)
+          inner join hotelbizdb..TopNPackages tnp with(nolock) on tnp.AlbumsID = pa.id
+          inner join hotelbizdb..fn_Split(@hotelIds,',') fs on fs.Item = tnp.hotelID
+        end
+        else if(@pIds is not null)
+        begin
+          select 
+          pa.id, pa.name, tnp.hotelID, tnp.PID, tnp.ID TNPId
+          from 
+          hotelbizdb..PackageAlbums pa with(nolock)
+          inner join hotelbizdb..TopNPackages tnp with(nolock) on tnp.AlbumsID = pa.id
+          inner join hotelbizdb..fn_Split(@pIds,',') fs on fs.Item = tnp.PID
+        end
+      ]]>
+    </select>
+    
+    <select id="GetOnePackageAlbums">
+      <![CDATA[
+        SELECT [ID]
+          ,[Name]
+          ,[SubTitle]
+          ,[IsValid]
+          ,[CoverPicSUrl]
+          ,[Date]
+          ,[Author]
+          ,[Description]
+          ,[LabelPicSUrl]
+          ,[Rank]
+          ,[Type]
+          ,[GroupNo]
+          ,[ShowSortNo]
+          ,[ICON]
+      FROM [HotelBizDB].[dbo].[PackageAlbums] with(nolock) where ID = @id
+      ]]>
+    </select>
+
+    <select id="GetPackageAlbumsListCount">
+      <![CDATA[
+      if(@GroupNo is null)
+        begin
+          SELECT COUNT(1) FROM [HotelBizDB].[dbo].[PackageAlbums] pa with(nolock) 
+          where (@IsValid is NULL OR pa.IsValid = @IsValid) AND (@Type = 0 OR pa.[Type] = @Type)
+        end
+      else
+        begin
+          SELECT COUNT(1) FROM [HotelBizDB].[dbo].[PackageAlbums] pa with(nolock) 
+          inner join fn_Split(@GroupNo,',') fs on pa.GroupNo like '%' + fs.Item + '%'
+          where (@IsValid is NULL OR pa.IsValid = @IsValid) AND (@Type = 0 OR pa.[Type] = @Type)
+        end
+      ]]>
+    </select>
+    
+    <select id="GetPackageAlbumsList">
+      <![CDATA[
+        if(@GroupNo is null)
+          begin
+            SELECT 
+	            Top(@count) *
+            From 
+              (
+                SELECT [ID]
+                    ,[Name]
+                    ,[SubTitle]
+                    ,[IsValid]
+                    ,[CoverPicSUrl]
+                    ,[Date]
+                    ,[Author]
+                    ,[Description]
+                    ,[LabelPicSUrl]
+                    ,[Rank]
+                    ,[Type]
+                    ,[GroupNo]
+                    ,[ShowSortNo]
+                    ,[ICON]
+                    ,ROW_NUMBER() over(order by Rank asc, id desc) rowNo
+                FROM [HotelBizDB].[dbo].[PackageAlbums] pa with(nolock) 
+                where (@IsValid is NULL OR pa.IsValid = @IsValid) AND (@Type = 0 OR pa.[Type] = @Type)
+              )tab
+              where rowNo > @start
+          end
+        else
+          begin          
+            SELECT 
+	              Top(@count) *
+              From 
+                (
+                  SELECT [ID]
+                      ,[Name]
+                      ,[SubTitle]
+                      ,[IsValid]
+                      ,[CoverPicSUrl]
+                      ,[Date]
+                      ,[Author]
+                      ,[Description]
+                      ,[LabelPicSUrl]
+                      ,[Rank]
+                      ,[Type]
+                      ,[GroupNo]
+                      ,[ShowSortNo]                      
+                      ,[ICON]
+                      ,ROW_NUMBER() over(order by Rank asc, id desc) rowNo
+                  FROM [HotelBizDB].[dbo].[PackageAlbums] pa with(nolock) 
+                  inner join fn_Split(@GroupNo,',') fs on  pa.GroupNo like '%' + fs.Item + '%'
+                  where (@IsValid is NULL OR pa.IsValid = @IsValid) AND (@Type = 0 OR pa.[Type] = @Type)
+                )tab
+                where rowNo > @start
+          end
+      ]]>
+    </select>
+
+    <select id="GetPackageAlbumsByGroupNo">
+      <![CDATA[
+       SELECT [ID]
+           ,[Name]
+           ,[SubTitle]
+           ,[IsValid]
+           ,[CoverPicSUrl]
+           ,[Date]
+           ,[Author]
+           ,[Description]
+           ,[LabelPicSUrl]
+           ,[Rank]
+           ,[Type]
+           ,[GroupNo]
+           ,[ShowSortNo]                      
+           ,[ICON]
+           ,ROW_NUMBER() over(order by Rank asc, id desc) rowNo
+       FROM [HotelBizDB].[dbo].[PackageAlbums] pa with(nolock) 
+       where pa.IsValid = 1 AND GroupNo = @GroupNo
+      ]]>
+    </select>
+
+    <select id="GetAllPackageAlbums">
+      <![CDATA[
+       SELECT [ID]
+           ,[Name]
+           ,[SubTitle]
+           ,[IsValid]
+           ,[CoverPicSUrl]
+           ,[Date]
+           ,[Author]
+           ,[Description]
+           ,[LabelPicSUrl]
+           ,[Rank]
+           ,[Type]
+           ,[GroupNo]
+           ,[ShowSortNo]                      
+           ,[ICON]
+           ,ROW_NUMBER() over(order by Rank asc, id desc) rowNo
+       FROM [HotelBizDB].[dbo].[PackageAlbums] pa with(nolock) 
+       where pa.IsValid = 1 
+      ]]>
+    </select>
+    
+    <select id="GetDistrictHotFilterTagList">
+      <![CDATA[
+        SELECT * FROM DistrictHotFilterTag WHERE DistrictId = @DistrictId
+      ]]>
+    </select>
+    <select id="GetNeedWriteCommentInspectorRefHotel">
+      <![CDATA[
+        SELECT irh.*, i.[MobilePhone] InspectorPhone, h.HotelName
+        from [HotelBizDB].[dbo].[InspectorRefHotel] irh with(nolock)
+        inner join [AccountDB].[dbo].[Inspector] i with(nolock) on i.UserID = irh.Inspector
+        inner join [HotelDB].[dbo].[Hotel] h with(nolock) on h.HotelID = irh.HotelID
+        WHERE irh.[CommentID] = 0 AND irh.[State] = 3 AND irh.OrderState = 1 AND irh.HasSendWriteComment = 0 AND irh.[CheckInDate] < @deadLine
+      ]]>
+    </select>
+    <select id="GetInspectorRefHotelByUserID">
+      <![CDATA[
+        SELECT irh.*, i.[MobilePhone] InspectorPhone, h.HotelName
+        from [HotelBizDB].[dbo].[InspectorRefHotel] irh with(nolock)
+        inner join [AccountDB].[dbo].[Inspector] i with(nolock) on i.UserID = irh.Inspector
+        inner join [HotelDB].[dbo].[Hotel] h with(nolock) on h.HotelID = irh.HotelID
+        WHERE irh.Inspector = @userID AND (@state = 0 OR irh.[State] = @state)
+      ]]>
+    </select>
+    <select id="GetExpiredPoints">
+      <![CDATA[
+        SELECT * from Points
+        WHERE (@typeID = 0 OR TypeID = @typeID) AND ExpiredTime <= @curDate AND LeavePoint > 0
+      ]]>
+    </select>
+
+    <select id="GetTopNPackagesEntityListCount4HotelAlbums">
+      <![CDATA[
+        select count(1) from TopNPackages tnp with(nolock)
+        inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID
+        inner join HotelDB..Hotel h with(nolock) on h.hotelid = tnp.hotelid
+        where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)             
+             AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+             AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+             AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+             AND (@NeedRankRange = 0 OR (tnp.Rank > 0))
+             AND p.isValid = 1
+      ]]>
+    </select>
+    
+    <select id="GetTopNGroupPackagesEntityListCount4HotelAlbums">
+      <![CDATA[
+ select count(1)
+ from (
+		    select 
+             tnp.[ID]
+        from TopNPackages tnp with(nolock)
+        inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID
+		LEFT JOIN DestDB..DistrictInfo di(nolock) ON di.DistrictID = p.StartDistrictId
+        inner join HotelDB..Hotel h with(nolock) on h.hotelid = tnp.hotelid
+        inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+        where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+			       AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+             AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+             AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+             AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+             AND p.isValid = 1
+			 AND (p.StartDistrictId = @StartDistrictId or 0 = @StartDistrictId)
+			 AND ISNULL(p.PackageGroupName,'')=''
+       AND (@PackageID = 0 OR tnp.pid = @PackageID)
+
+	UNION
+				SELECT 
+					 [ID]
+				FROM
+					(SELECT * FROM
+					(
+					SELECT 
+							ROW_NUMBER()OVER(PARTITION BY PackageGroupName ORDER BY  tnp.[MarketPrice] ) NUM,
+							tnp.[ID]
+						from TopNPackages tnp with(nolock)
+						inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID
+						LEFT JOIN DestDB..DistrictInfo di(nolock) ON di.DistrictID = p.StartDistrictId
+						inner join HotelDB..Hotel h with(nolock) on h.hotelid = tnp.hotelid
+						inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+						where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+									AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+								AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+								AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+								AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+								AND p.isValid = 1
+								AND (p.StartDistrictId = @StartDistrictId or 0 = @StartDistrictId)
+								AND ISNULL(p.PackageGroupName,'')!=''
+                AND (@PackageID = 0 OR tnp.pid = @PackageID)
+						) A WHERE A.NUM=1
+                    ) B
+				)t
+      ]]>
+    </select>
+    
+    <select id="GetTopNPackagesEntityList4HotelAlbums">
+      <![CDATA[
+        select*from (select row_number() over(order by tempcolumn) temprownumber,*from (
+		    select top (@end) tempcolumn=0
+            ,tnp.[ID]
+            ,tnp.[Rank]
+            ,tnp.[CalcRank]
+            ,tnp.[Creator]
+            ,tnp.[CreateTime]
+            ,tnp.[IsValid]
+            ,tnp.[Updator]
+            ,tnp.[UpdateTime]
+            ,tnp.[RecomemndWord]
+            ,tnp.[Title]
+            ,tnp.[MarketPrice]
+            ,tnp.[CoverPicSUrl]
+            ,tnp.[AlbumsID]
+            ,tnp.[RecomendPicShortNames]
+            ,case tnp.[HotelId] when 0 then h.hotelid else tnp.[HotelId] end HotelId
+            ,h.HotelName HotelName
+            ,pa.Name AlbumsName
+        from TopNPackages tnp with(nolock)
+        inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID
+        inner join HotelDB..Hotel h with(nolock) on h.hotelid = tnp.hotelid
+        inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+        where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+			       AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+             AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+             AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+             AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+             AND p.isValid = 1
+		        order by tnp.Rank asc)t)tt 
+		    where temprownumber > @start
+      ]]>
+    </select>
+    <select id="GetTopNGroupPackagesEntityList4HotelAlbums">
+      <![CDATA[
+         select top (@end) * from 
+  (
+ select row_number() over(order by tempcolumn) temprownumber,*
+ from (
+		    select 
+			      tempcolumn=0
+            ,tnp.[ID]
+            ,tnp.[Rank]
+            ,tnp.[CalcRank]
+            ,tnp.[Creator]
+            ,tnp.[CreateTime]
+            ,tnp.[IsValid]
+            ,tnp.[Updator]
+            ,tnp.[UpdateTime]
+            ,tnp.[RecomemndWord]
+            ,tnp.[Title]
+            ,tnp.[MarketPrice]
+            ,tnp.[CoverPicSUrl]
+            ,tnp.[AlbumsID]
+            ,tnp.[RecomendPicShortNames]
+            ,case tnp.[HotelId] when 0 then h.hotelid else tnp.[HotelId] end HotelId
+            ,h.HotelName HotelName
+            ,pa.Name AlbumsName
+			      ,p.StartDistrictId
+			      ,ISNULL(di.Name,'') StartDistrictName
+            ,ISNULL(p.PackageGroupName,'') AS PackageGroupName
+        from TopNPackages tnp with(nolock)
+        inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID
+		LEFT JOIN DestDB..DistrictInfo di(nolock) ON di.DistrictID = p.StartDistrictId
+        inner join HotelDB..Hotel h with(nolock) on h.hotelid = tnp.hotelid
+        inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+        where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+			       AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+             AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+             AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+             AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+             AND p.isValid = 1
+			       AND (p.StartDistrictId = @StartDistrictId or 0 = @StartDistrictId)
+			       AND ISNULL(p.PackageGroupName,'')=''
+             AND (@PackageID = 0 OR tnp.pid = @PackageID)
+
+	UNION
+				SELECT 
+					 tempcolumn=0
+					,[ID]
+					,[Rank]
+					,[CalcRank]
+					,[Creator]
+					,[CreateTime]
+					,[IsValid]
+					,[Updator]
+					,[UpdateTime]
+					,[RecomemndWord]
+					,[Title]
+					,[MarketPrice]
+					,[CoverPicSUrl]
+					,[AlbumsID]
+					,[RecomendPicShortNames]
+					,[HotelId]
+					,[HotelName]
+					,[AlbumsName]
+					,[StartDistrictId]
+					,[StartDistrictName]
+          ,[PackageGroupName]
+				FROM
+					(SELECT * FROM
+					(
+					SELECT 
+							ROW_NUMBER()OVER(PARTITION BY PackageGroupName ORDER BY  tnp.[MarketPrice] ) NUM,
+							tempcolumn=0
+							,tnp.[ID]
+							,tnp.[Rank]
+							,tnp.[CalcRank]
+							,tnp.[Creator]
+							,tnp.[CreateTime]
+							,tnp.[IsValid]
+							,tnp.[Updator]
+							,tnp.[UpdateTime]
+							,tnp.[RecomemndWord]
+							,tnp.[Title]
+							,tnp.[MarketPrice]
+							,tnp.[CoverPicSUrl]
+							,tnp.[AlbumsID]
+							,tnp.[RecomendPicShortNames]
+							,case tnp.[HotelId] when 0 then h.hotelid else tnp.[HotelId] end HotelId
+							,h.HotelName HotelName
+							,pa.Name AlbumsName
+							,p.StartDistrictId
+							,ISNULL(di.Name,'') StartDistrictName
+              ,ISNULL(p.PackageGroupName,'') AS PackageGroupName
+						from TopNPackages tnp with(nolock)
+						inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID
+						LEFT JOIN DestDB..DistrictInfo di(nolock) ON di.DistrictID = p.StartDistrictId
+						inner join HotelDB..Hotel h with(nolock) on h.hotelid = tnp.hotelid
+						inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+						where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+									AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+								AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+								AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+								AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+								AND p.isValid = 1
+								AND (p.StartDistrictId = @StartDistrictId or 0 = @StartDistrictId)
+								AND ISNULL(p.PackageGroupName,'')!=''
+                AND (@PackageID = 0 OR tnp.pid = @PackageID)
+						) A WHERE A.NUM=1
+                    ) B
+				)t
+			)tt 
+		    where temprownumber > @start  order by tt.Rank asc
+      ]]>
+    </select>
+    <select id="GetTopNPackagesEntityListCount">
+      <![CDATA[ 
+        select count(1) from TopNPackages tnp with(nolock)
+        inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID
+        inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+        inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+        where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+             AND (@PackageID = 0 OR tnp.pid = @PackageID) 
+             AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+             AND (@PackageName IS NULL OR p.Code like '%' + @PackageName + '%')
+             AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+             AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+             AND (@NeedRankRange = 0 OR (tnp.Rank > 0))
+             AND p.isValid = 1
+             AND (@VipFirstBuyPackage = 1 or p.ForVIPFirstBuy = @VipFirstBuyPackage)
+             AND (CONVERT(nvarchar(7), p.StartDate,120) <= @DateStr AND @DateStr <= CONVERT(nvarchar(7), p.EndDate,120) OR  @DateStr = '')
+             AND (h.DistrictID = @GoToDistrictID or 0 = @GoToDistrictID)
+             AND (p.StartDistrictId = @StartDistrictId or 0 = @StartDistrictId)
+      ]]>
+    </select>
+    
+    <select id="GetTopNGroupPackagesEntityListCount">
+      <![CDATA[ 
+        SELECT COUNT(1)
+           FROM   (
+                      SELECT tnp.[ID]
+                      FROM   TopNPackages tnp WITH(NOLOCK)
+                             INNER JOIN HotelDB..Package p WITH(NOLOCK)
+                                  ON  p.ID = tnp.PID
+                                  AND p.isvalid = 1
+                                  AND p.EndDate >= GETDATE()
+							               LEFT JOIN DestDB..DistrictInfo di(nolock) 
+							                    ON di.DistrictID = p.StartDistrictId
+                             INNER JOIN HotelDB..Hotel h WITH(NOLOCK)
+                                  ON  h.hotelid = p.hotelid
+                             INNER JOIN HotelBizDB..PackageAlbums pa WITH(NOLOCK)
+                                  ON  pa.ID = tnp.AlbumsID
+                             LEFT JOIN pricedb..PackagePriceCalendar ppc WITH(NOLOCK)
+                                  ON  ppc.HotelID = h.HotelId
+                                  AND ppc.PID = tnp.PID
+                                  AND ppc.DT = CONVERT(VARCHAR(100), GETDATE(), 23)
+                      WHERE  (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+                             AND (@PackageID = 0 OR tnp.pid = @PackageID)
+                             AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+                             AND (
+                                     @PackageName IS NULL
+                                     OR p.Code LIKE '%' + @PackageName + '%'
+                                 )
+                             AND (@HotelID = 0 OR h.hotelid = @HotelID)
+                             AND (
+                                     @HotelName IS NULL
+                                     OR h.HotelName LIKE '%' + @HotelName + '%'
+                                 )
+                             AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+                             AND p.isValid = 1
+                             AND (@NeedNotSale = 1 OR p.IsNotSale = 0 )
+                             AND (
+                                     @VipFirstBuyPackage = 1
+                                     OR p.ForVIPFirstBuy = @VipFirstBuyPackage
+                                 )
+                             AND (CONVERT(nvarchar(7), p.StartDate,120) <= @DateStr AND @DateStr <= CONVERT(nvarchar(7), p.EndDate,120) OR  @DateStr = '')
+                             AND (h.DistrictID = @GoToDistrictID or 0 = @GoToDistrictID)
+                             AND (p.StartDistrictId = @StartDistrictId or 0 = @StartDistrictId)
+							               AND ISNULL(p.PackageGroupName,'')=''
+				 UNION
+						SELECT  ID
+						 FROM
+						(
+            SELECT * FROM
+						(
+						SELECT 
+							  ROW_NUMBER()OVER(PARTITION BY PackageGroupName ORDER BY  ppc.Price  ) NUM,
+                             tnp.[ID]
+                      FROM   TopNPackages tnp WITH(NOLOCK)
+                             INNER JOIN HotelDB..Package p WITH(NOLOCK)
+                                  ON  p.ID = tnp.PID
+                                  AND p.isvalid = 1
+                                  AND p.EndDate >= GETDATE()
+							               LEFT JOIN DestDB..DistrictInfo di(nolock) 
+							                    ON di.DistrictID = p.StartDistrictId
+                             INNER JOIN HotelDB..Hotel h WITH(NOLOCK)
+                                  ON  h.hotelid = p.hotelid
+                             INNER JOIN HotelBizDB..PackageAlbums pa WITH(NOLOCK)
+                                  ON  pa.ID = tnp.AlbumsID
+                             LEFT JOIN pricedb..PackagePriceCalendar ppc WITH(NOLOCK)
+                                  ON  ppc.HotelID = h.HotelId
+                                  AND ppc.PID = tnp.PID
+                                  AND ppc.DT = CONVERT(VARCHAR(100), GETDATE(), 23)
+                      WHERE  (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+                             AND (@PackageID = 0 OR tnp.pid = @PackageID)
+                             AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+                             AND (
+                                     @PackageName IS NULL
+                                     OR p.Code LIKE '%' + @PackageName + '%'
+                                 )
+                             AND (@HotelID = 0 OR h.hotelid = @HotelID)
+                             AND (
+                                     @HotelName IS NULL
+                                     OR h.HotelName LIKE '%' + @HotelName + '%'
+                                 )
+                             AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+                             AND p.isValid = 1
+                             AND (@NeedNotSale = 1 OR p.IsNotSale = 0 )
+                             AND (
+                                     @VipFirstBuyPackage = 1
+                                     OR p.ForVIPFirstBuy = @VipFirstBuyPackage
+                                 )
+                             AND (CONVERT(nvarchar(7), p.StartDate,120) <= @DateStr AND @DateStr <= CONVERT(nvarchar(7), p.EndDate,120) OR  @DateStr = '')
+                             AND (h.DistrictID = @GoToDistrictID or 0 = @GoToDistrictID)
+                             AND (p.StartDistrictId = @StartDistrictId or 0 = @StartDistrictId)
+							              AND ISNULL(p.PackageGroupName,'')!=''
+						   ) A WHERE A.NUM=1
+                      ) B
+                  )t
+      ]]>
+    </select>
+    
+    <select id="GetTopNPackagesEntityList">
+      <![CDATA[ 
+SELECT *
+FROM   (
+           SELECT ROW_NUMBER() OVER(ORDER BY tempcolumn) temprownumber,
+                  *
+           FROM   (
+                      SELECT TOP(@end) tempcolumn = 0,
+                             tnp.[ID],
+                             tnp.[PID],
+                             tnp.[Rank],
+                             tnp.[CalcRank],
+                             tnp.[Creator],
+                             tnp.[CreateTime],
+                             tnp.[IsValid],
+                             tnp.[Updator],
+                             tnp.[UpdateTime],
+                             tnp.[RecomemndWord],
+                             tnp.[RecomemndWord2],
+                             tnp.[Title],
+                             tnp.[MarketPrice],
+                             tnp.[CoverPicSUrl],
+                             tnp.[AlbumsID],
+                             tnp.[RecomendPicShortNames],
+                             tnp.[RecomendPicShortNames2],
+                             CASE tnp.[HotelId]
+                                  WHEN 0 THEN h.hotelid
+                                  ELSE tnp.[HotelId]
+                             END HotelId,
+                             h.HotelName HotelName,
+                             p.Code PackageName,
+                             pa.Name AlbumsName,
+                             ppc.Price,
+                             ppc.VIPPrice,
+                             p.ForVIPFirstBuy,
+                             p.EndDate,
+                             p.Brief
+                      FROM   TopNPackages tnp WITH(NOLOCK)
+                             INNER JOIN HotelDB..Package p WITH(NOLOCK)
+                                  ON  p.ID = tnp.PID
+                                  AND p.isvalid = 1
+                                  AND p.EndDate >= GETDATE()
+                             INNER JOIN HotelDB..Hotel h WITH(NOLOCK)
+                                  ON  h.hotelid = p.hotelid
+                             INNER JOIN HotelBizDB..PackageAlbums pa WITH(NOLOCK)
+                                  ON  pa.ID = tnp.AlbumsID
+                             LEFT JOIN pricedb..PackagePriceCalendar ppc WITH(NOLOCK)
+                                  ON  ppc.HotelID = h.HotelId
+                                  AND ppc.PID = tnp.PID
+                                  AND ppc.DT = CONVERT(VARCHAR(100), GETDATE(), 23)
+                      WHERE  (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+                             AND (@PackageID = 0 OR tnp.pid = @PackageID)
+                             AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+                             AND (
+                                     @PackageName IS NULL
+                                     OR p.Code LIKE '%' + @PackageName + '%'
+                                 )
+                             AND (@HotelID = 0 OR h.hotelid = @HotelID)
+                             AND (
+                                     @HotelName IS NULL
+                                     OR h.HotelName LIKE '%' + @HotelName + '%'
+                                 )
+                             AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+                             AND p.isValid = 1
+                             AND (@NeedNotSale = 1 OR p.IsNotSale = 0 )
+                             AND (
+                                     @VipFirstBuyPackage = 1
+                                     OR p.ForVIPFirstBuy = @VipFirstBuyPackage
+                                 )
+                             AND (CONVERT(nvarchar(7), p.StartDate,120) <= @DateStr AND @DateStr <= CONVERT(nvarchar(7), p.EndDate,120) OR  @DateStr = '')
+                             AND (h.DistrictID = @GoToDistrictID or 0 = @GoToDistrictID)
+                             AND (p.StartDistrictId = @StartDistrictId or 0 = @StartDistrictId)
+                      ORDER BY
+                             tnp.Rank ASC, tnp.CalcRank ASC
+                  )t
+       )tt
+WHERE  temprownumber > @start
+      ]]>
+    </select>
+    
+      <select id="GetTopNGroupPackagesEntityList">
+      <![CDATA[ 
+SELECT TOP (@end) *
+FROM   (
+           SELECT ROW_NUMBER() OVER(ORDER BY tempcolumn) temprownumber,
+                  *
+           FROM   (
+                      SELECT 
+							              tempcolumn = 0,
+                             tnp.[ID],
+                             tnp.[PID],
+                             tnp.[Rank],
+                             tnp.[CalcRank],
+                             tnp.[Creator],
+                             tnp.[CreateTime],
+                             tnp.[IsValid],
+                             tnp.[Updator],
+                             tnp.[UpdateTime],
+                             tnp.[RecomemndWord],
+                             tnp.[RecomemndWord2],
+                             tnp.[Title],
+                             tnp.[MarketPrice],
+                             tnp.[CoverPicSUrl],
+                             tnp.[AlbumsID],
+                             tnp.[RecomendPicShortNames],
+                             tnp.[RecomendPicShortNames2],
+                             CASE tnp.[HotelId]
+                                  WHEN 0 THEN h.hotelid
+                                  ELSE tnp.[HotelId]
+                             END HotelId,
+                             h.HotelName HotelName,
+                             p.Code PackageName,
+                             pa.Name AlbumsName,
+                             ppc.Price,
+                             ppc.VIPPrice,
+                             p.ForVIPFirstBuy,
+                             p.EndDate,
+                             p.Brief,
+							               p.StartDistrictId,
+							               ISNULL(di.Name,'') StartDistrictName,
+                             ISNULL(p.PackageGroupName,'') PackageGroupName
+                      FROM   TopNPackages tnp WITH(NOLOCK)
+                             INNER JOIN HotelDB..Package p WITH(NOLOCK)
+                                  ON  p.ID = tnp.PID
+                                  AND p.isvalid = 1
+                                  AND p.EndDate >= GETDATE()
+							               LEFT JOIN DestDB..DistrictInfo di(nolock)
+							                   ON di.DistrictID = p.StartDistrictId
+                             INNER JOIN HotelDB..Hotel h WITH(NOLOCK)
+                                  ON  h.hotelid = p.hotelid
+                             INNER JOIN HotelBizDB..PackageAlbums pa WITH(NOLOCK)
+                                  ON  pa.ID = tnp.AlbumsID
+                             LEFT JOIN pricedb..PackagePriceCalendar ppc WITH(NOLOCK)
+                                  ON  ppc.HotelID = h.HotelId
+                                  AND ppc.PID = tnp.PID
+                                  AND ppc.DT = CONVERT(VARCHAR(100), GETDATE(), 23)
+                      WHERE  (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+                             AND (@PackageID = 0 OR tnp.pid = @PackageID)
+                             AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+                             AND (
+                                     @PackageName IS NULL
+                                     OR p.Code LIKE '%' + @PackageName + '%'
+                                 )
+                             AND (@HotelID = 0 OR h.hotelid = @HotelID)
+                             AND (
+                                     @HotelName IS NULL
+                                     OR h.HotelName LIKE '%' + @HotelName + '%'
+                                 )
+                             AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+                             AND p.isValid = 1
+                             AND (@NeedNotSale = 1 OR p.IsNotSale = 0 )
+                             AND (
+                                     @VipFirstBuyPackage = 1
+                                     OR p.ForVIPFirstBuy = @VipFirstBuyPackage
+                                 )
+                             AND (CONVERT(nvarchar(7), p.StartDate,120) <= @DateStr AND @DateStr <= CONVERT(nvarchar(7), p.EndDate,120) OR  @DateStr = '')
+                             AND (h.DistrictID = @GoToDistrictID or 0 = @GoToDistrictID)
+                             AND (p.StartDistrictId = @StartDistrictId or 0 = @StartDistrictId)
+						              	 AND ISNULL(p.PackageGroupName,'')=''
+							 
+							 UNION
+						SELECT 
+						                  tempcolumn = 0,
+                             [ID],
+                             [PID],
+                             [Rank],
+                             [CalcRank],
+                             [Creator],
+                             [CreateTime],
+                             [IsValid],
+                             [Updator],
+                             [UpdateTime],
+                             [RecomemndWord],
+                             [RecomemndWord2],
+                             [Title],
+                             [MarketPrice],
+                             [CoverPicSUrl],
+                             [AlbumsID],
+                             [RecomendPicShortNames],
+                             [RecomendPicShortNames2],
+                             [HotelId],
+                             HotelName,
+                             PackageName,
+                             AlbumsName,
+                             Price,
+                             VIPPrice,
+                             ForVIPFirstBuy,
+                             EndDate,
+                             Brief,
+							               StartDistrictId,
+							               StartDistrictName,
+                             PackageGroupName
+						 FROM
+						(SELECT * FROM
+						(
+						SELECT 
+							  ROW_NUMBER()OVER(PARTITION BY PackageGroupName ORDER BY  ppc.Price  ) NUM,
+							  tempcolumn = 0,
+                             tnp.[ID],
+                             tnp.[PID],
+                             tnp.[Rank],
+                             tnp.[CalcRank],
+                             tnp.[Creator],
+                             tnp.[CreateTime],
+                             tnp.[IsValid],
+                             tnp.[Updator],
+                             tnp.[UpdateTime],
+                             tnp.[RecomemndWord],
+                             tnp.[RecomemndWord2],
+                             tnp.[Title],
+                             tnp.[MarketPrice],
+                             tnp.[CoverPicSUrl],
+                             tnp.[AlbumsID],
+                             tnp.[RecomendPicShortNames],
+                             tnp.[RecomendPicShortNames2],
+                             CASE tnp.[HotelId]
+                                  WHEN 0 THEN h.hotelid
+                                  ELSE tnp.[HotelId]
+                             END HotelId,
+                             h.HotelName HotelName,
+                             p.Code PackageName,
+                             pa.Name AlbumsName,
+                             ppc.Price,
+                             ppc.VIPPrice,
+                             p.ForVIPFirstBuy,
+                             p.EndDate,
+                             p.Brief, 
+							               p.StartDistrictId,
+							               ISNULL(di.Name,'') StartDistrictName,
+                             ISNULL(p.PackageGroupName,'') PackageGroupName
+                      FROM   TopNPackages tnp WITH(NOLOCK)
+                             INNER JOIN HotelDB..Package p WITH(NOLOCK)
+                                  ON  p.ID = tnp.PID
+                                  AND p.isvalid = 1
+                                  AND p.EndDate >= GETDATE()
+							               LEFT JOIN DestDB..DistrictInfo di(nolock)
+							                   ON di.DistrictID = p.StartDistrictId
+                             INNER JOIN HotelDB..Hotel h WITH(NOLOCK)
+                                  ON  h.hotelid = p.hotelid
+                             INNER JOIN HotelBizDB..PackageAlbums pa WITH(NOLOCK)
+                                  ON  pa.ID = tnp.AlbumsID
+                             LEFT JOIN pricedb..PackagePriceCalendar ppc WITH(NOLOCK)
+                                  ON  ppc.HotelID = h.HotelId
+                                  AND ppc.PID = tnp.PID
+                                  AND ppc.DT = CONVERT(VARCHAR(100), GETDATE(), 23)
+                      WHERE  (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+                             AND (@PackageID = 0 OR tnp.pid = @PackageID)
+                             AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+                             AND (
+                                     @PackageName IS NULL
+                                     OR p.Code LIKE '%' + @PackageName + '%'
+                                 )
+                             AND (@HotelID = 0 OR h.hotelid = @HotelID)
+                             AND (
+                                     @HotelName IS NULL
+                                     OR h.HotelName LIKE '%' + @HotelName + '%'
+                                 )
+                             AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+                             AND p.isValid = 1
+                             AND (@NeedNotSale = 1 OR p.IsNotSale = 0 )
+                             AND (
+                                     @VipFirstBuyPackage = 1
+                                     OR p.ForVIPFirstBuy = @VipFirstBuyPackage
+                                 )
+                             AND (CONVERT(nvarchar(7), p.StartDate,120) <= @DateStr AND @DateStr <= CONVERT(nvarchar(7), p.EndDate,120) OR  @DateStr = '')
+                             AND (h.DistrictID = @GoToDistrictID or 0 = @GoToDistrictID)
+                             AND (p.StartDistrictId = @StartDistrictId or 0 = @StartDistrictId)
+							               AND ISNULL(p.PackageGroupName,'')!=''
+						   ) A WHERE A.NUM=1
+                      ) B
+                  )t
+       )tt
+WHERE  temprownumber > @start 
+ORDER BY tt.Rank ASC, tt.CalcRank ASC
+      ]]>
+    </select>
+    
+    <select id="GetTopNPackagesEntityList2">
+      <![CDATA[
+      
+      select op.PID, COUNT(1) c into #orderinfo
+from hoteldb.dbo.Orders o
+join hoteldb.dbo.OrderPackage op on op.ID = o.ID
+where o.State = 12 and op.CheckIn > dateadd(DAY, -61, GETDATE()) 
+group by op.PID
+order by c desc
+      
+        select*from (select row_number() over(order by tempcolumn) temprownumber,*from (
+		    select top (@end) tempcolumn=0
+            ,tnp.[ID]
+            ,tnp.[PID]
+            ,tnp.[Rank]
+            ,tnp.[CalcRank]
+            ,tnp.[Creator]
+            ,tnp.[CreateTime]
+            ,tnp.[IsValid]
+            ,tnp.[Updator]
+            ,tnp.[UpdateTime]
+            ,tnp.[RecomemndWord]
+            ,tnp.[Title]
+            ,tnp.[MarketPrice]
+            ,tnp.[CoverPicSUrl]
+            ,tnp.[AlbumsID]
+            ,tnp.[RecomendPicShortNames]
+            ,case tnp.[HotelId] when 0 then h.hotelid else tnp.[HotelId] end HotelId
+            ,h.HotelName HotelName
+            ,p.Code PackageName
+            ,pa.Name AlbumsName
+            ,ppc.Price
+            ,ppc.VIPPrice
+            ,p.EndDate
+            ,p.Brief
+            ,p.ForVIPFirstBuy
+            ,p.VIPFirstPayDiscount
+            ,p.DateSelectType
+            ,hs.ReviewScore
+            ,isnull(oinfo.c,0) OrderCount
+        from TopNPackages tnp with(nolock)
+        inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID and p.isvalid = 1 and p.EndDate >= GETDATE()
+        inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+        inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+        --left join hotelDB.dbo.HotelQuerySortNo  sn (nolock) on sn.HotelID =p.HotelID
+        left join pricedb..PackagePriceCalendar ppc with(nolock) on ppc.HotelID = h.HotelId and ppc.PID = tnp.PID and ppc.DT = CONVERT(varchar(100), GETDATE(), 23)
+        left join HotelDB..HotelStat hs(nolock) on hs.HotelID=h.HotelId
+        left join #orderinfo oinfo on oinfo.PID = p.ID
+        where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+			       AND (@PackageID = 0 OR tnp.pid = @PackageID)
+			       AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+             AND (@PackageName IS NULL OR p.Code like '%' + @PackageName + '%')
+             AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+             AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+             AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+             AND p.isValid = 1
+             AND p.IsNotSale = 0
+             --AND (ppc.Price - ppc.VIPPrice)>50
+             AND (@VipFirstBuyPackage = 1 or p.ForVIPFirstBuy = @VipFirstBuyPackage)
+		        order by p.ForVIPFirstBuy desc,tnp.Rank asc, OrderCount desc, (ppc.Price-ppc.VIPPrice) desc,hs.ReviewScore desc)t)tt  
+		    where temprownumber > @start
+        
+         drop table #orderinfo
+      ]]>
+    </select>
+
+     <select id="GetTopNGroupPackagesEntityList2">
+      <![CDATA[
+      select op.PID, COUNT(1) c into #orderinfo
+from hoteldb.dbo.Orders o
+join hoteldb.dbo.OrderPackage op on op.ID = o.ID
+where o.State = 12 and op.CheckIn > dateadd(DAY, -61, GETDATE()) 
+group by op.PID
+order by c desc
+      
+        select TOP (@end) * from 
+		(
+		select row_number() over(order by tempcolumn) temprownumber,*
+		from
+		 (
+		    select   tempcolumn=0
+            ,tnp.[ID]
+            ,tnp.[PID]
+            ,tnp.[Rank]
+            ,tnp.[CalcRank]
+            ,tnp.[Creator]
+            ,tnp.[CreateTime]
+            ,tnp.[IsValid]
+            ,tnp.[Updator]
+            ,tnp.[UpdateTime]
+            ,tnp.[RecomemndWord]
+            ,tnp.[Title]
+            ,tnp.[MarketPrice]
+            ,tnp.[CoverPicSUrl]
+            ,tnp.[AlbumsID]
+            ,tnp.[RecomendPicShortNames]
+            ,case tnp.[HotelId] when 0 then h.hotelid else tnp.[HotelId] end HotelId
+            ,h.HotelName HotelName
+            ,p.Code PackageName
+            ,pa.Name AlbumsName
+            ,ppc.Price
+            ,ppc.VIPPrice
+            ,p.EndDate
+            ,p.Brief
+            ,p.ForVIPFirstBuy
+            ,p.VIPFirstPayDiscount
+            ,p.DateSelectType
+            ,hs.ReviewScore
+            ,isnull(oinfo.c,0) OrderCount
+			      ,p.StartDistrictId
+			      ,ISNULL(di.Name,'') StartDistrictName
+            ,ISNULL(p.PackageGroupName,'') AS PackageGroupName
+        from TopNPackages tnp with(nolock)
+        inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID and p.isvalid = 1 and p.EndDate >= GETDATE()
+		LEFT JOIN DestDB..DistrictInfo di(nolock) ON di.DistrictID = p.StartDistrictId
+        inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+        inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+        --left join hotelDB.dbo.HotelQuerySortNo  sn (nolock) on sn.HotelID =p.HotelID
+        left join pricedb..PackagePriceCalendar ppc with(nolock) on ppc.HotelID = h.HotelId and ppc.PID = tnp.PID and ppc.DT = CONVERT(varchar(100), GETDATE(), 23)
+        left join HotelDB..HotelStat hs(nolock) on hs.HotelID=h.HotelId
+        left join #orderinfo oinfo on oinfo.PID = p.ID
+        where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+			       AND (@PackageID = 0 OR tnp.pid = @PackageID)
+			       AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+             AND (@PackageName IS NULL OR p.Code like '%' + @PackageName + '%')
+             AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+             AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+             AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+             AND p.isValid = 1
+             AND p.IsNotSale = 0
+             --AND (ppc.Price - ppc.VIPPrice)>50
+             AND (@VipFirstBuyPackage = 1 or p.ForVIPFirstBuy = @VipFirstBuyPackage)
+			 AND (p.StartDistrictId = @StartDistrictId or 0 = @StartDistrictId)
+			 AND ISNULL(p.PackageGroupName,'')=''
+	 UNION
+		  SELECT 
+			 tempcolumn = 0
+			      ,[ID]
+            ,[PID]
+            ,[Rank]
+            ,[CalcRank]
+            ,[Creator]
+            ,[CreateTime]
+            ,[IsValid]
+            ,[Updator]
+            ,[UpdateTime]
+            ,[RecomemndWord]
+            ,[Title]
+            ,[MarketPrice]
+            ,[CoverPicSUrl]
+            ,[AlbumsID]
+            ,[RecomendPicShortNames]
+            ,[HotelId]
+            ,[HotelName]
+            ,[PackageName]
+            ,[AlbumsName]
+            ,[Price]
+            ,[VIPPrice]
+            ,[EndDate]
+            ,[Brief]
+            ,[ForVIPFirstBuy]
+            ,[VIPFirstPayDiscount]
+            ,[DateSelectType]
+            ,[ReviewScore]
+            ,[OrderCount]
+			      ,[StartDistrictId]
+			      ,[StartDistrictName]
+            ,[PackageGroupName]
+		  FROM
+			(SELECT * FROM
+					(
+					SELECT 
+							ROW_NUMBER()OVER(PARTITION BY PackageGroupName ORDER BY  ppc.Price  ) NUM
+							,tnp.[ID]
+							,tnp.[PID]
+							,tnp.[Rank]
+							,tnp.[CalcRank]
+							,tnp.[Creator]
+							,tnp.[CreateTime]
+							,tnp.[IsValid]
+							,tnp.[Updator]
+							,tnp.[UpdateTime]
+							,tnp.[RecomemndWord]
+							,tnp.[Title]
+							,tnp.[MarketPrice]
+							,tnp.[CoverPicSUrl]
+							,tnp.[AlbumsID]
+							,tnp.[RecomendPicShortNames]
+							,case tnp.[HotelId] when 0 then h.hotelid else tnp.[HotelId] end HotelId
+							,h.HotelName HotelName
+							,p.Code PackageName
+							,pa.Name AlbumsName
+							,ppc.Price
+							,ppc.VIPPrice
+							,p.EndDate
+							,p.Brief
+							,p.ForVIPFirstBuy
+							,p.VIPFirstPayDiscount
+							,p.DateSelectType
+							,hs.ReviewScore
+							,isnull(oinfo.c,0) OrderCount
+							,p.StartDistrictId
+							,ISNULL(di.Name,'') StartDistrictName
+              ,ISNULL(p.PackageGroupName,'') AS PackageGroupName
+					from TopNPackages tnp with(nolock)
+					inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID and p.isvalid = 1 and p.EndDate >= GETDATE()
+					LEFT JOIN DestDB..DistrictInfo di(nolock) ON di.DistrictID = p.StartDistrictId
+					inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+					inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+					--left join hotelDB.dbo.HotelQuerySortNo  sn (nolock) on sn.HotelID =p.HotelID
+					left join pricedb..PackagePriceCalendar ppc with(nolock) on ppc.HotelID = h.HotelId and ppc.PID = tnp.PID and ppc.DT = CONVERT(varchar(100), GETDATE(), 23)
+					left join HotelDB..HotelStat hs(nolock) on hs.HotelID=h.HotelId
+					left join #orderinfo oinfo on oinfo.PID = p.ID
+					where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+							   AND (@PackageID = 0 OR tnp.pid = @PackageID)
+							   AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+						 AND (@PackageName IS NULL OR p.Code like '%' + @PackageName + '%')
+						 AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+						 AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+						 AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+						 AND p.isValid = 1
+						 AND p.IsNotSale = 0
+						 --AND (ppc.Price - ppc.VIPPrice)>50
+						 AND (@VipFirstBuyPackage = 1 or p.ForVIPFirstBuy = @VipFirstBuyPackage)
+						 AND (p.StartDistrictId = @StartDistrictId or 0 = @StartDistrictId)
+						 AND ISNULL(p.PackageGroupName,'')!=''
+						) A WHERE A.NUM=1
+					) B
+
+				)t
+			)tt  
+		    where temprownumber > @start order by tt.ForVIPFirstBuy desc,tt.Rank asc, OrderCount desc, (tt.Price-tt.VIPPrice) desc,tt.ReviewScore desc
+        
+         drop table #orderinfo
+      ]]>
+    </select>
+    
+    <select id="GetTopNPackageScreenList">
+      <![CDATA[
+      SELECT distinct p.StartDate,p.EndDate,h.HotelId,h.DistrictID,di.Name DistrictName ,ISNULL(dif.Name,'') StartDistrictName,p.StartDistrictId
+      FROM hotelbizdb..TopNPackages tp(nolock)
+      INNER JOIN hoteldb..Package p(nolock)
+              ON tp.PID= p.ID and p.isValid =1 and p.isNotSale=0 AND p.EndDate >= GETDATE()
+      INNER JOIN hoteldb..Hotel h(nolock)
+              ON p.HotelID = h.HotelId
+      INNER JOIN HotelBizDB..PackageAlbums pa WITH(NOLOCK)
+              ON  pa.ID = tp.AlbumsID
+      INNER JOIN destdb..DistrictInfo di(nolock)
+              ON di.DistrictID = h.DistrictID
+      LEFT JOIN destdb..DistrictInfo dif(nolock)
+              ON dif.DistrictID = p.StartDistrictId
+      LEFT JOIN pricedb..PackagePriceCalendar ppc WITH(NOLOCK)
+              ON  ppc.HotelID = h.HotelId AND ppc.PID = tp.PID AND ppc.DT = CONVERT(VARCHAR(100), GETDATE(), 23)
+      where tp.AlbumsID = @AlbumsID and tp.IsValid = 1
+      ]]>
+    </select>
+
+
+    <select id="GetTopNPackagesEntityListByDistrictIdsCount">
+      <![CDATA[ 
+        select count(1) from TopNPackages tnp with(nolock)
+        inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID
+        inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+        inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+        inner join DestDB.dbo.DistrictDirectory dd (nolock) on dd.DistrictID = h.DistrictID
+        inner join fn_Split(@DistrictIds,',') ids on ids.Item = dd.Root
+        where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+             AND (@PackageID = 0 OR tnp.pid = @PackageID) 
+             AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+             AND (@PackageName IS NULL OR p.Code like '%' + @PackageName + '%')
+             AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+             AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+             AND (@NeedRankRange = 0 OR (tnp.Rank > 0))
+             AND p.isValid = 1
+             AND (@VipFirstBuyPackage = 1 or p.ForVIPFirstBuy = @VipFirstBuyPackage)
+      ]]>
+    </select>
+    <select id="GetTopNGroupPackagesEntityListByDistrictIdsCount">
+      <![CDATA[ 
+        
+select count(1) from 
+(
+			select 
+			 tempcolumn=0
+            ,tnp.[ID]
+            ,tnp.[PID]
+            ,tnp.[Rank]
+            ,tnp.[CalcRank]
+            ,tnp.[Creator]
+            ,tnp.[CreateTime]
+            ,tnp.[IsValid]
+            ,tnp.[Updator]
+            ,tnp.[UpdateTime]
+            ,tnp.[RecomemndWord]
+            ,tnp.[RecomemndWord2]
+            ,tnp.[Title]
+            ,tnp.[MarketPrice]
+            ,tnp.[CoverPicSUrl]
+            ,tnp.[AlbumsID]
+            ,tnp.[RecomendPicShortNames]
+            ,tnp.[RecomendPicShortNames2]
+            ,case tnp.[HotelId] when 0 then h.hotelid else tnp.[HotelId] end HotelId
+            ,h.HotelName HotelName
+            ,p.Code PackageName
+            ,pa.Name AlbumsName
+            ,ppc.Price
+            ,ppc.VIPPrice
+            ,p.ForVIPFirstBuy
+            ,p.EndDate
+            ,p.Brief
+			,p.StartDistrictId
+			,ISNULL(di.Name,'') StartDistrictName
+        from TopNPackages tnp with(nolock)
+        inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID and p.isvalid = 1 and p.EndDate >= GETDATE()
+		LEFT JOIN DestDB..DistrictInfo di(nolock) ON di.DistrictID = p.StartDistrictId
+        inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+        inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+        inner join DestDB.dbo.DistrictDirectory dd (nolock) on dd.DistrictID = h.DistrictID
+        inner join fn_Split(@DistrictIds,',') ids on ids.Item = dd.DistrictID
+        left join pricedb..PackagePriceCalendar ppc with(nolock) on ppc.HotelID = h.HotelId and ppc.PID = tnp.PID and ppc.DT = CONVERT(varchar(100), GETDATE(), 23)
+        where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+			       AND (@PackageID = 0 OR tnp.pid = @PackageID)
+			       AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+             AND (@PackageName IS NULL OR p.Code like '%' + @PackageName + '%')
+             AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+             AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+             AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+             AND p.isValid = 1
+			 AND (p.StartDistrictId = @StartDistrictId or 0 = @StartDistrictId)
+			 AND ISNULL(p.PackageGroupName,'')=''
+
+			 UNION
+				SELECT 
+					tempcolumn=0
+					,[ID]
+					,[PID]
+					,[Rank]
+					,[CalcRank]
+					,[Creator]
+					,[CreateTime]
+					,[IsValid]
+					,[Updator]
+					,[UpdateTime]
+					,[RecomemndWord]
+					,[RecomemndWord2]
+					,[Title]
+					,[MarketPrice]
+					,[CoverPicSUrl]
+					,[AlbumsID]
+					,[RecomendPicShortNames]
+					,[RecomendPicShortNames2]
+					,[HotelId]
+					,[HotelName]
+					,[PackageName]
+					,[AlbumsName]
+					,[Price]
+					,[VIPPrice]
+					,[ForVIPFirstBuy]
+					,[EndDate]
+					,[Brief]
+					,[StartDistrictId]
+					,[StartDistrictName]
+			FROM
+				(SELECT * FROM
+			(
+			SELECT 
+				ROW_NUMBER()OVER(PARTITION BY PackageGroupName ORDER BY  ppc.Price  ) NUM
+				,tempcolumn=0
+				,tnp.[ID]
+				,tnp.[PID]
+				,tnp.[Rank]
+				,tnp.[CalcRank]
+				,tnp.[Creator]
+				,tnp.[CreateTime]
+				,tnp.[IsValid]
+				,tnp.[Updator]
+				,tnp.[UpdateTime]
+				,tnp.[RecomemndWord]
+				,tnp.[RecomemndWord2]
+				,tnp.[Title]
+				,tnp.[MarketPrice]
+				,tnp.[CoverPicSUrl]
+				,tnp.[AlbumsID]
+				,tnp.[RecomendPicShortNames]
+				,tnp.[RecomendPicShortNames2]
+				,case tnp.[HotelId] when 0 then h.hotelid else tnp.[HotelId] end HotelId
+				,h.HotelName HotelName
+				,p.Code PackageName
+				,pa.Name AlbumsName
+				,ppc.Price
+				,ppc.VIPPrice
+				,p.ForVIPFirstBuy
+				,p.EndDate
+				,p.Brief
+				,p.StartDistrictId
+				,ISNULL(di.Name,'') StartDistrictName
+			from TopNPackages tnp with(nolock)
+			inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID and p.isvalid = 1 and p.EndDate >= GETDATE()
+			LEFT JOIN DestDB..DistrictInfo di(nolock) ON di.DistrictID = p.StartDistrictId
+			inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+			inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+			inner join DestDB.dbo.DistrictDirectory dd (nolock) on dd.DistrictID = h.DistrictID
+			inner join fn_Split(@DistrictIds,',') ids on ids.Item = dd.DistrictID
+			left join pricedb..PackagePriceCalendar ppc with(nolock) on ppc.HotelID = h.HotelId and ppc.PID = tnp.PID and ppc.DT = CONVERT(varchar(100), GETDATE(), 23)
+			where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+						AND (@PackageID = 0 OR tnp.pid = @PackageID)
+						AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+					AND (@PackageName IS NULL OR p.Code like '%' + @PackageName + '%')
+					AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+					AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+					AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+					AND p.isValid = 1
+					AND (p.StartDistrictId = @StartDistrictId or 0 = @StartDistrictId)
+					AND ISNULL(p.PackageGroupName,'')!=''
+				) A WHERE A.NUM=1
+               ) B
+			) t
+      ]]>
+    </select>
+    <select id="GetTopNPackagesEntityListByDistrictIds">
+      <![CDATA[
+      ---港澳  特殊处理
+      IF @DistrictIds = '47720,35447'
+      BEGIN
+      select*from (select row_number() over(order by tempcolumn) temprownumber,*from (
+		    select top (@end) tempcolumn=0
+            ,tnp.[ID]
+            ,tnp.[PID]
+            ,tnp.[Rank]
+            ,tnp.[CalcRank]
+            ,tnp.[Creator]
+            ,tnp.[CreateTime]
+            ,tnp.[IsValid]
+            ,tnp.[Updator]
+            ,tnp.[UpdateTime]
+            ,tnp.[RecomemndWord]
+            ,tnp.[RecomemndWord2]
+            ,tnp.[Title]
+            ,tnp.[MarketPrice]
+            ,tnp.[CoverPicSUrl]
+            ,tnp.[AlbumsID]
+            ,tnp.[RecomendPicShortNames]
+            ,tnp.[RecomendPicShortNames2]
+            ,case tnp.[HotelId] when 0 then h.hotelid else tnp.[HotelId] end HotelId
+            ,h.HotelName HotelName
+            ,p.Code PackageName
+            ,pa.Name AlbumsName
+            ,ppc.Price
+            ,ppc.VIPPrice
+            ,p.ForVIPFirstBuy
+            ,p.EndDate
+            ,p.Brief
+        from TopNPackages tnp with(nolock)
+        inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID and p.isvalid = 1 and p.EndDate >= GETDATE()
+        inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+        inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+        inner join DestDB.dbo.DistrictDirectory dd (nolock) on dd.DistrictID = h.DistrictID
+        inner join fn_Split(@DistrictIds,',') ids on ids.Item = dd.DistrictID
+        left join pricedb..PackagePriceCalendar ppc with(nolock) on ppc.HotelID = h.HotelId and ppc.PID = tnp.PID and ppc.DT = CONVERT(varchar(100), GETDATE(), 23)
+        where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+			       AND (@PackageID = 0 OR tnp.pid = @PackageID)
+			       AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+             AND (@PackageName IS NULL OR p.Code like '%' + @PackageName + '%')
+             AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+             AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+             AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+             AND p.isValid = 1
+		        order by tnp.Rank asc)t)tt 
+		    where temprownumber > @start
+      END
+      ELSE
+      BEGIN
+      select*from (select row_number() over(order by tempcolumn) temprownumber,*from (
+		    select top (@end) tempcolumn=0
+            ,tnp.[ID]
+            ,tnp.[PID]
+            ,tnp.[Rank]
+            ,tnp.[CalcRank]
+            ,tnp.[Creator]
+            ,tnp.[CreateTime]
+            ,tnp.[IsValid]
+            ,tnp.[Updator]
+            ,tnp.[UpdateTime]
+            ,tnp.[RecomemndWord]
+            ,tnp.[RecomemndWord2]
+            ,tnp.[Title]
+            ,tnp.[MarketPrice]
+            ,tnp.[CoverPicSUrl]
+            ,tnp.[AlbumsID]
+            ,tnp.[RecomendPicShortNames]
+            ,tnp.[RecomendPicShortNames2]
+            ,case tnp.[HotelId] when 0 then h.hotelid else tnp.[HotelId] end HotelId
+            ,h.HotelName HotelName
+            ,p.Code PackageName
+            ,pa.Name AlbumsName
+            ,ppc.Price
+            ,ppc.VIPPrice
+            ,p.ForVIPFirstBuy
+            ,p.EndDate
+            ,p.Brief
+        from TopNPackages tnp with(nolock)
+        inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID and p.isvalid = 1 and p.EndDate >= GETDATE()
+        inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+        inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+        inner join DestDB.dbo.DistrictDirectory dd (nolock) on dd.DistrictID = h.DistrictID
+        inner join fn_Split(@DistrictIds,',') ids on ids.Item = dd.Root
+        left join pricedb..PackagePriceCalendar ppc with(nolock) on ppc.HotelID = h.HotelId and ppc.PID = tnp.PID and ppc.DT = CONVERT(varchar(100), GETDATE(), 23)
+        where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+			       AND (@PackageID = 0 OR tnp.pid = @PackageID)
+			       AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+             AND (@PackageName IS NULL OR p.Code like '%' + @PackageName + '%')
+             AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+             AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+             AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+             AND p.isValid = 1
+		        order by tnp.Rank asc)t)tt 
+		    where temprownumber > @start
+        END
+      ]]>
+    </select>
+
+    <select id="GetTopNGroupPackagesEntityListByDistrictIds">
+      <![CDATA[
+      ---港澳  特殊处理
+      IF @DistrictIds = '47720,35447'
+      BEGIN
+      select top (@end)  * from (select row_number() over(order by tempcolumn) temprownumber,*from (
+		    select 
+			 tempcolumn=0
+            ,tnp.[ID]
+            ,tnp.[PID]
+            ,tnp.[Rank]
+            ,tnp.[CalcRank]
+            ,tnp.[Creator]
+            ,tnp.[CreateTime]
+            ,tnp.[IsValid]
+            ,tnp.[Updator]
+            ,tnp.[UpdateTime]
+            ,tnp.[RecomemndWord]
+            ,tnp.[RecomemndWord2]
+            ,tnp.[Title]
+            ,tnp.[MarketPrice]
+            ,tnp.[CoverPicSUrl]
+            ,tnp.[AlbumsID]
+            ,tnp.[RecomendPicShortNames]
+            ,tnp.[RecomendPicShortNames2]
+            ,case tnp.[HotelId] when 0 then h.hotelid else tnp.[HotelId] end HotelId
+            ,h.HotelName HotelName
+            ,p.Code PackageName
+            ,pa.Name AlbumsName
+            ,ppc.Price
+            ,ppc.VIPPrice
+            ,p.ForVIPFirstBuy
+            ,p.EndDate
+            ,p.Brief
+			,p.StartDistrictId
+			,ISNULL(di.Name,'') StartDistrictName
+        from TopNPackages tnp with(nolock)
+        inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID and p.isvalid = 1 and p.EndDate >= GETDATE()
+		LEFT JOIN DestDB..DistrictInfo di(nolock) ON di.DistrictID = p.StartDistrictId
+        inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+        inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+        inner join DestDB.dbo.DistrictDirectory dd (nolock) on dd.DistrictID = h.DistrictID
+        inner join fn_Split(@DistrictIds,',') ids on ids.Item = dd.DistrictID
+        left join pricedb..PackagePriceCalendar ppc with(nolock) on ppc.HotelID = h.HotelId and ppc.PID = tnp.PID and ppc.DT = CONVERT(varchar(100), GETDATE(), 23)
+        where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+			       AND (@PackageID = 0 OR tnp.pid = @PackageID)
+			       AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+             AND (@PackageName IS NULL OR p.Code like '%' + @PackageName + '%')
+             AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+             AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+             AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+             AND p.isValid = 1
+			 AND (p.StartDistrictId = @StartDistrictId or 0 = @StartDistrictId)
+			 AND ISNULL(p.PackageGroupName,'')=''
+
+			 UNION
+						SELECT 
+						     tempcolumn=0
+							,[ID]
+							,[PID]
+							,[Rank]
+							,[CalcRank]
+							,[Creator]
+							,[CreateTime]
+							,[IsValid]
+							,[Updator]
+							,[UpdateTime]
+							,[RecomemndWord]
+							,[RecomemndWord2]
+							,[Title]
+							,[MarketPrice]
+							,[CoverPicSUrl]
+							,[AlbumsID]
+							,[RecomendPicShortNames]
+							,[RecomendPicShortNames2]
+							,[HotelId]
+							,[HotelName]
+							,[PackageName]
+							,[AlbumsName]
+							,[Price]
+							,[VIPPrice]
+							,[ForVIPFirstBuy]
+							,[EndDate]
+							,[Brief]
+							,[StartDistrictId]
+							,[StartDistrictName]
+						FROM
+						 (SELECT * FROM
+						(
+						SELECT 
+							ROW_NUMBER()OVER(PARTITION BY PackageGroupName ORDER BY  ppc.Price  ) NUM
+							,tempcolumn=0
+							,tnp.[ID]
+							,tnp.[PID]
+							,tnp.[Rank]
+							,tnp.[CalcRank]
+							,tnp.[Creator]
+							,tnp.[CreateTime]
+							,tnp.[IsValid]
+							,tnp.[Updator]
+							,tnp.[UpdateTime]
+							,tnp.[RecomemndWord]
+							,tnp.[RecomemndWord2]
+							,tnp.[Title]
+							,tnp.[MarketPrice]
+							,tnp.[CoverPicSUrl]
+							,tnp.[AlbumsID]
+							,tnp.[RecomendPicShortNames]
+							,tnp.[RecomendPicShortNames2]
+							,case tnp.[HotelId] when 0 then h.hotelid else tnp.[HotelId] end HotelId
+							,h.HotelName HotelName
+							,p.Code PackageName
+							,pa.Name AlbumsName
+							,ppc.Price
+							,ppc.VIPPrice
+							,p.ForVIPFirstBuy
+							,p.EndDate
+							,p.Brief
+							,p.StartDistrictId
+							,ISNULL(di.Name,'') StartDistrictName
+					    from TopNPackages tnp with(nolock)
+						inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID and p.isvalid = 1 and p.EndDate >= GETDATE()
+						LEFT JOIN DestDB..DistrictInfo di(nolock) ON di.DistrictID = p.StartDistrictId
+						inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+						inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+						inner join DestDB.dbo.DistrictDirectory dd (nolock) on dd.DistrictID = h.DistrictID
+						inner join fn_Split(@DistrictIds,',') ids on ids.Item = dd.DistrictID
+						left join pricedb..PackagePriceCalendar ppc with(nolock) on ppc.HotelID = h.HotelId and ppc.PID = tnp.PID and ppc.DT = CONVERT(varchar(100), GETDATE(), 23)
+						where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+								   AND (@PackageID = 0 OR tnp.pid = @PackageID)
+								   AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+							 AND (@PackageName IS NULL OR p.Code like '%' + @PackageName + '%')
+							 AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+							 AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+							 AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+							 AND p.isValid = 1
+							 AND (p.StartDistrictId = @StartDistrictId or 0 = @StartDistrictId)
+							 AND ISNULL(p.PackageGroupName,'')!=''
+						   ) A WHERE A.NUM=1
+                      ) B
+			)t
+		)tt 
+	 where temprownumber > @start  order by tt.Rank asc
+      END
+      ELSE
+      BEGIN
+      select top (@end)  *from (select row_number() over(order by tempcolumn) temprownumber,*from (
+		    select 
+			tempcolumn=0
+            ,tnp.[ID]
+            ,tnp.[PID]
+            ,tnp.[Rank]
+            ,tnp.[CalcRank]
+            ,tnp.[Creator]
+            ,tnp.[CreateTime]
+            ,tnp.[IsValid]
+            ,tnp.[Updator]
+            ,tnp.[UpdateTime]
+            ,tnp.[RecomemndWord]
+            ,tnp.[RecomemndWord2]
+            ,tnp.[Title]
+            ,tnp.[MarketPrice]
+            ,tnp.[CoverPicSUrl]
+            ,tnp.[AlbumsID]
+            ,tnp.[RecomendPicShortNames]
+            ,tnp.[RecomendPicShortNames2]
+            ,case tnp.[HotelId] when 0 then h.hotelid else tnp.[HotelId] end HotelId
+            ,h.HotelName HotelName
+            ,p.Code PackageName
+            ,pa.Name AlbumsName
+            ,ppc.Price
+            ,ppc.VIPPrice
+            ,p.ForVIPFirstBuy
+            ,p.EndDate
+            ,p.Brief
+			,p.StartDistrictId
+			,ISNULL(di.Name,'') StartDistrictName
+        from TopNPackages tnp with(nolock)
+        inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID and p.isvalid = 1 and p.EndDate >= GETDATE()
+		LEFT JOIN DestDB..DistrictInfo di(nolock)ON di.DistrictID = p.StartDistrictId
+        inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+        inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+        inner join DestDB.dbo.DistrictDirectory dd (nolock) on dd.DistrictID = h.DistrictID
+        inner join fn_Split(@DistrictIds,',') ids on ids.Item = dd.Root
+        left join pricedb..PackagePriceCalendar ppc with(nolock) on ppc.HotelID = h.HotelId and ppc.PID = tnp.PID and ppc.DT = CONVERT(varchar(100), GETDATE(), 23)
+        where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+			 AND (@PackageID = 0 OR tnp.pid = @PackageID)
+			 AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+             AND (@PackageName IS NULL OR p.Code like '%' + @PackageName + '%')
+             AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+             AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+             AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+             AND p.isValid = 1
+			 AND (p.StartDistrictId = @StartDistrictId or 0 = @StartDistrictId)
+			 AND ISNULL(p.PackageGroupName,'')=''
+			 
+			 UNION
+					SELECT 
+						    tempcolumn=0
+						,[ID]
+						,[PID]
+						,[Rank]
+						,[CalcRank]
+						,[Creator]
+						,[CreateTime]
+						,[IsValid]
+						,[Updator]
+						,[UpdateTime]
+						,[RecomemndWord]
+						,[RecomemndWord2]
+						,[Title]
+						,[MarketPrice]
+						,[CoverPicSUrl]
+						,[AlbumsID]
+						,[RecomendPicShortNames]
+						,[RecomendPicShortNames2]
+						,[HotelId]
+						,[HotelName]
+						,[PackageName]
+						,[AlbumsName]
+						,[Price]
+						,[VIPPrice]
+						,[ForVIPFirstBuy]
+						,[EndDate]
+						,[Brief]
+						,[StartDistrictId]
+						,[StartDistrictName]
+						FROM
+						 (SELECT * FROM
+						(
+						SELECT 
+							ROW_NUMBER()OVER(PARTITION BY PackageGroupName ORDER BY  ppc.Price  ) NUM
+							,tempcolumn=0
+							,tnp.[ID]
+							,tnp.[PID]
+							,tnp.[Rank]
+							,tnp.[CalcRank]
+							,tnp.[Creator]
+							,tnp.[CreateTime]
+							,tnp.[IsValid]
+							,tnp.[Updator]
+							,tnp.[UpdateTime]
+							,tnp.[RecomemndWord]
+							,tnp.[RecomemndWord2]
+							,tnp.[Title]
+							,tnp.[MarketPrice]
+							,tnp.[CoverPicSUrl]
+							,tnp.[AlbumsID]
+							,tnp.[RecomendPicShortNames]
+							,tnp.[RecomendPicShortNames2]
+							,case tnp.[HotelId] when 0 then h.hotelid else tnp.[HotelId] end HotelId
+							,h.HotelName HotelName
+							,p.Code PackageName
+							,pa.Name AlbumsName
+							,ppc.Price
+							,ppc.VIPPrice
+							,p.ForVIPFirstBuy
+							,p.EndDate
+							,p.Brief
+							,p.StartDistrictId
+							,ISNULL(di.Name,'') StartDistrictName
+					    from TopNPackages tnp with(nolock)
+						inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID and p.isvalid = 1 and p.EndDate >= GETDATE()
+						LEFT JOIN DestDB..DistrictInfo di(nolock)ON di.DistrictID = p.StartDistrictId
+						inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+						inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+						inner join DestDB.dbo.DistrictDirectory dd (nolock) on dd.DistrictID = h.DistrictID
+						inner join fn_Split(@DistrictIds,',') ids on ids.Item = dd.Root
+						left join pricedb..PackagePriceCalendar ppc with(nolock) on ppc.HotelID = h.HotelId and ppc.PID = tnp.PID and ppc.DT = CONVERT(varchar(100), GETDATE(), 23)
+						where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+							 AND (@PackageID = 0 OR tnp.pid = @PackageID)
+							 AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+							 AND (@PackageName IS NULL OR p.Code like '%' + @PackageName + '%')
+							 AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+							 AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+							 AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+							 AND p.isValid = 1
+							 AND (p.StartDistrictId = @StartDistrictId or 0 = @StartDistrictId)
+							 AND ISNULL(p.PackageGroupName,'')!=''
+						   ) A WHERE A.NUM=1
+                      ) B
+	   	)t
+	)tt 
+		    where temprownumber > @start order by tt.Rank asc
+        END
+      ]]>
+    </select>
+    
+    <select id="GetTopNPackagesEntityListWithInCount">
+      <![CDATA[ 
+      
+      IF @geoScopeType = 0 
+      BEGIN
+          select count(1) from TopNPackages tnp with(nolock)
+          inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID
+          inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+          inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+          where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+               AND (@PackageID = 0 OR tnp.pid = @PackageID) 
+               AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+               AND (@PackageName IS NULL OR p.Code like '%' + @PackageName + '%')
+               AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+               AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+               AND (@NeedRankRange = 0 OR (tnp.Rank > 0))
+               AND p.isValid = 1
+               AND (h.DistrictID = @districtID OR @districtID = 0)
+               AND (@VipFirstBuyPackage = 1 or p.ForVIPFirstBuy = @VipFirstBuyPackage)
+      END
+      ELSE IF  @geoScopeType = 3
+      BEGIN
+          DECLARE @g geography = geography::Point(@lat, @lng, 4326)	
+          select count(1) from TopNPackages tnp with(nolock)
+          inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID
+          inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+          inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+          inner join hoteldb..HotelPlace hhp with(nolock) on hhp.hotelid = h.hotelid
+          where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+               AND (@PackageID = 0 OR tnp.pid = @PackageID) 
+               AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+               AND (@PackageName IS NULL OR p.Code like '%' + @PackageName + '%')
+               AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+               AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+               AND (@NeedRankRange = 0 OR (tnp.Rank > 0))
+               AND p.isValid = 1
+               AND (@VipFirstBuyPackage = 1 or p.ForVIPFirstBuy = @VipFirstBuyPackage)
+               AND @g.STDistance(hhp.geo) <= 300000
+      END
+        
+      ]]>
+    </select>
+    <select id="GetTopNPackagesEntityWithInList">
+      <![CDATA[
+      IF @geoScopeType = 0 
+        BEGIN
+             select*from (select row_number() over(order by tempcolumn) temprownumber,*from (
+		         select top (@end) tempcolumn=0
+                 ,tnp.[ID]
+                 ,tnp.[PID]
+                 ,tnp.[Rank]
+                 ,tnp.[CalcRank]
+                 ,tnp.[Creator]
+                 ,tnp.[CreateTime]
+                 ,tnp.[IsValid]
+                 ,tnp.[Updator]
+                 ,tnp.[UpdateTime]
+                 ,tnp.[RecomemndWord]
+                 ,tnp.[RecomemndWord2]
+                 ,tnp.[Title]
+                 ,tnp.[MarketPrice]
+                 ,tnp.[CoverPicSUrl]
+                 ,tnp.[AlbumsID]
+                 ,tnp.[RecomendPicShortNames]
+                 ,tnp.[RecomendPicShortNames2]
+                 ,case tnp.[HotelId] when 0 then h.hotelid else tnp.[HotelId] end HotelId
+                 ,h.HotelName HotelName
+                 ,p.Code PackageName
+                 ,pa.Name AlbumsName
+                 ,ppc.Price
+                 ,ppc.VIPPrice
+                 ,p.EndDate
+                 ,p.Brief
+             from TopNPackages tnp with(nolock)
+             inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID and p.isvalid = 1 and p.EndDate >= GETDATE()
+             inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+             inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+             left join pricedb..PackagePriceCalendar ppc with(nolock) on ppc.HotelID = h.HotelId and ppc.PID = tnp.PID and ppc.DT = CONVERT(varchar(100), GETDATE(), 23)
+             where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+			            AND (@PackageID = 0 OR tnp.pid = @PackageID)
+			            AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+                  AND (@PackageName IS NULL OR p.Code like '%' + @PackageName + '%')
+                  AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+                  AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+                  AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+                  AND p.isValid = 1
+                  AND (h.DistrictID = @districtID OR @districtID = 0)
+		             order by tnp.Rank asc)t)tt 
+		         where temprownumber > @start
+        END
+        ELSE IF  @geoScopeType = 3
+        BEGIN
+            DECLARE @g geography = geography::Point(@lat, @lng, 4326)	
+            select*from (select row_number() over(order by tempcolumn) temprownumber,*from (
+            select top (@end) tempcolumn=0
+                 ,tnp.[ID]
+                 ,tnp.[PID]
+                 ,tnp.[Rank]
+                 ,tnp.[CalcRank]
+                 ,tnp.[Creator]
+                 ,tnp.[CreateTime]
+                 ,tnp.[IsValid]
+                 ,tnp.[Updator]
+                 ,tnp.[UpdateTime]
+                 ,tnp.[RecomemndWord]
+                 ,tnp.[RecomemndWord2]
+                 ,tnp.[Title]
+                 ,tnp.[MarketPrice]
+                 ,tnp.[CoverPicSUrl]
+                 ,tnp.[AlbumsID]
+                 ,tnp.[RecomendPicShortNames]
+                 ,tnp.[RecomendPicShortNames2]
+                 ,case tnp.[HotelId] when 0 then h.hotelid else tnp.[HotelId] end HotelId
+                 ,h.HotelName HotelName
+                 ,p.Code PackageName
+                 ,pa.Name AlbumsName
+                 ,ppc.Price
+                 ,ppc.VIPPrice
+                 ,p.EndDate
+                 ,p.Brief
+             from TopNPackages tnp with(nolock)
+             inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID and p.isvalid = 1 and p.EndDate >= GETDATE()
+             inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+             inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+             inner join hoteldb..HotelPlace hhp with(nolock) on hhp.hotelid = h.hotelid
+             left join pricedb..PackagePriceCalendar ppc with(nolock) on ppc.HotelID = h.HotelId and ppc.PID = tnp.PID and ppc.DT = CONVERT(varchar(100), GETDATE(), 23)
+             where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+			            AND (@PackageID = 0 OR tnp.pid = @PackageID)
+			            AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+                  AND (@PackageName IS NULL OR p.Code like '%' + @PackageName + '%')
+                  AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+                  AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+                  AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+                  AND p.isValid = 1
+                  AND @g.STDistance(hhp.geo) <= 300000
+		             order by tnp.Rank asc)t)tt 
+		         where temprownumber > @start
+        END
+        --ELSE
+        --BEGIN
+        --     select*from (select row_number() over(order by tempcolumn) temprownumber,*from (
+		    --     select top (@end) tempcolumn=0
+        --         ,tnp.[ID]
+        --         ,tnp.[PID]
+        --         ,tnp.[Rank]
+        --         ,tnp.[CalcRank]
+        --         ,tnp.[Creator]
+        --         ,tnp.[CreateTime]
+        --         ,tnp.[IsValid]
+        --         ,tnp.[Updator]
+        --         ,tnp.[UpdateTime]
+        --         ,tnp.[RecomemndWord]
+        --         ,tnp.[RecomemndWord2]
+        --         ,tnp.[Title]
+        --         ,tnp.[MarketPrice]
+        --         ,tnp.[CoverPicSUrl]
+        --         ,tnp.[AlbumsID]
+        --         ,tnp.[RecomendPicShortNames]
+        --         ,tnp.[RecomendPicShortNames2]
+        --         ,case tnp.[HotelId] when 0 then h.hotelid else tnp.[HotelId] end HotelId
+        --         ,h.HotelName HotelName
+        --         ,p.Code PackageName
+        --         ,pa.Name AlbumsName
+        --         ,ppc.Price
+        --         ,ppc.VIPPrice
+        --         ,p.EndDate
+        --         ,p.Brief
+        --     from TopNPackages tnp with(nolock)
+        --     inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID and p.isvalid = 1 and p.EndDate >= GETDATE()
+        --     inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+        --     inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+        --     left join pricedb..PackagePriceCalendar ppc with(nolock) on ppc.HotelID = h.HotelId and ppc.PID = tnp.PID and ppc.DT = CONVERT(varchar(100), GETDATE(), 23)
+        --     where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+			  --          AND (@PackageID = 0 OR tnp.pid = @PackageID)
+			  --          AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+        --          AND (@PackageName IS NULL OR p.Code like '%' + @PackageName + '%')
+        --          AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+        --          AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+        --          AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+        --          AND p.isValid = 1
+		    --         order by tnp.Rank asc)t)tt 
+		    --     where temprownumber > @start
+        --END
+        
+      ]]>
+    </select>
+    <select id="GetTopNPackagesEntityWithInList2">
+      <![CDATA[
+      
+      select op.PID, COUNT(1) c into #orderinfo
+      from hoteldb.dbo.Orders o
+      join hoteldb.dbo.OrderPackage op on op.ID = o.ID
+      where o.State = 12 and op.CheckIn > dateadd(DAY, -61, GETDATE()) 
+      group by op.PID
+      order by c desc
+
+       IF @geoScopeType = 0
+        BEGIN
+             select*from (select row_number() over(order by tempcolumn) temprownumber,*from (
+		         select top (@end) tempcolumn=0
+                 ,tnp.[ID]
+                 ,tnp.[PID]
+                 ,tnp.[Rank]
+                 ,tnp.[CalcRank]
+                 ,tnp.[Creator]
+                 ,tnp.[CreateTime]
+                 ,tnp.[IsValid]
+                 ,tnp.[Updator]
+                 ,tnp.[UpdateTime]
+                 ,tnp.[RecomemndWord]
+                 ,tnp.[Title]
+                 ,tnp.[MarketPrice]
+                 ,tnp.[CoverPicSUrl]
+                 ,tnp.[AlbumsID]
+                 ,tnp.[RecomendPicShortNames]
+                 ,case tnp.[HotelId] when 0 then h.hotelid else tnp.[HotelId] end HotelId
+                 ,h.HotelName HotelName
+                 ,p.Code PackageName
+                 ,pa.Name AlbumsName
+                 ,ppc.Price
+                 ,ppc.VIPPrice
+                 ,p.EndDate
+                 ,p.Brief
+                 ,p.ForVIPFirstBuy
+                 ,p.VIPFirstPayDiscount
+                 ,p.DateSelectType
+                 ,hs.ReviewScore
+                 ,isnull(oinfo.c,0) OrderCount
+             from TopNPackages tnp with(nolock)
+             inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID and p.isvalid = 1 and p.EndDate >= GETDATE()
+             inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+             inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+             --left join hotelDB.dbo.HotelQuerySortNo  sn (nolock) on sn.HotelID =p.HotelID
+             left join pricedb..PackagePriceCalendar ppc with(nolock) on ppc.HotelID = h.HotelId and ppc.PID = tnp.PID and ppc.DT = CONVERT(varchar(100), GETDATE(), 23)
+             left join HotelDB..HotelStat hs(nolock) on hs.HotelID=h.HotelId
+             left join #orderinfo oinfo on oinfo.PID = p.ID
+             where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+			            AND (@PackageID = 0 OR tnp.pid = @PackageID)
+			            AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+                  AND (@PackageName IS NULL OR p.Code like '%' + @PackageName + '%')
+                  AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+                  AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+                  AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+                  AND p.isValid = 1
+                  AND (h.DistrictID = @districtID OR @districtID = 0)
+                  AND (@VipFirstBuyPackage = 1 or p.ForVIPFirstBuy = @VipFirstBuyPackage)
+                 -- AND  (ppc.Price - ppc.VIPPrice) > 50
+		             order by  p.ForVIPFirstBuy desc, tnp.Rank asc,OrderCount desc, (ppc.Price-ppc.VIPPrice) desc,hs.ReviewScore desc)t)tt 
+		         where temprownumber > @start
+        END
+        ELSE IF  @geoScopeType = 3
+        BEGIN
+            DECLARE @g geography = geography::Point(@lat, @lng, 4326)	
+            select*from (select row_number() over(order by tempcolumn) temprownumber,*from (
+		        select top (@end) tempcolumn=0
+                ,tnp.[ID]
+                ,tnp.[PID]
+                ,tnp.[Rank]
+                ,tnp.[CalcRank]
+                ,tnp.[Creator]
+                ,tnp.[CreateTime]
+                ,tnp.[IsValid]
+                ,tnp.[Updator]
+                ,tnp.[UpdateTime]
+                ,tnp.[RecomemndWord]
+                ,tnp.[Title]
+                ,tnp.[MarketPrice]
+                ,tnp.[CoverPicSUrl]
+                ,tnp.[AlbumsID]
+                ,tnp.[RecomendPicShortNames]
+                ,case tnp.[HotelId] when 0 then h.hotelid else tnp.[HotelId] end HotelId
+                ,h.HotelName HotelName
+                ,p.Code PackageName
+                ,pa.Name AlbumsName
+                ,ppc.Price
+                ,ppc.VIPPrice
+                ,p.EndDate
+                ,p.Brief
+                ,p.ForVIPFirstBuy
+                ,p.VIPFirstPayDiscount
+                ,p.DateSelectType
+                ,hs.ReviewScore
+                ,isnull(oinfo.c,0) OrderCount
+            from TopNPackages tnp with(nolock)
+            inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID and p.isvalid = 1 and p.EndDate >= GETDATE()
+            inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+            inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+            inner join hoteldb..HotelPlace hhp with(nolock) on hhp.hotelid = h.hotelid
+            --left join hotelDB.dbo.HotelQuerySortNo  sn (nolock) on sn.HotelID =p.HotelID
+            left join pricedb..PackagePriceCalendar ppc with(nolock) on ppc.HotelID = h.HotelId and ppc.PID = tnp.PID and ppc.DT = CONVERT(varchar(100), GETDATE(), 23)
+            left join HotelDB..HotelStat hs(nolock) on hs.HotelID=h.HotelId
+            left join #orderinfo oinfo on oinfo.PID = p.ID
+            where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+			           AND (@PackageID = 0 OR tnp.pid = @PackageID)
+			           AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+                 AND (@PackageName IS NULL OR p.Code like '%' + @PackageName + '%')
+                 AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+                 AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+                 AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+                 AND p.isValid = 1
+                 AND  (@VipFirstBuyPackage = 1 or p.ForVIPFirstBuy = @VipFirstBuyPackage)
+                 --AND  (ppc.Price - ppc.VIPPrice) > 50
+                 AND @g.STDistance(hhp.geo) <= 300000
+		            order by p.ForVIPFirstBuy desc, tnp.Rank asc,OrderCount desc, (ppc.Price-ppc.VIPPrice) desc,hs.ReviewScore desc)t)tt 
+		        where temprownumber > @start
+        END
+        
+        drop table #orderinfo
+        --ELSE
+        --BEGIN
+        --    select*from (select row_number() over(order by tempcolumn) temprownumber,*from (
+		    --    select top (@end) tempcolumn=0
+        --        ,tnp.[ID]
+        --        ,tnp.[PID]
+        --        ,tnp.[Rank]
+        --        ,tnp.[CalcRank]
+        --        ,tnp.[Creator]
+        --        ,tnp.[CreateTime]
+        --        ,tnp.[IsValid]
+        --        ,tnp.[Updator]
+        --        ,tnp.[UpdateTime]
+        --        ,tnp.[RecomemndWord]
+        --        ,tnp.[Title]
+        --        ,tnp.[MarketPrice]
+        --        ,tnp.[CoverPicSUrl]
+        --        ,tnp.[AlbumsID]
+        --        ,tnp.[RecomendPicShortNames]
+        --        ,case tnp.[HotelId] when 0 then h.hotelid else tnp.[HotelId] end HotelId
+        --        ,h.HotelName HotelName
+        --        ,p.Code PackageName
+        --        ,pa.Name AlbumsName
+        --        ,ppc.Price
+        --        ,ppc.VIPPrice
+        --        ,p.EndDate
+        --        ,p.Brief
+        --    from TopNPackages tnp with(nolock)
+        --    inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID and p.isvalid = 1 and p.EndDate >= GETDATE()
+        --    inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+        --    inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+        --    left join pricedb..PackagePriceCalendar ppc with(nolock) on ppc.HotelID = h.HotelId and ppc.PID = tnp.PID and ppc.DT = CONVERT(varchar(100), GETDATE(), 23)
+        --    where (@AlbumsID = 0 OR tnp.AlbumsID = @AlbumsID)
+			  --         AND (@PackageID = 0 OR tnp.pid = @PackageID)
+			  --         AND (@IsValid IS NULL OR tnp.IsValid = @IsValid)
+        --         AND (@PackageName IS NULL OR p.Code like '%' + @PackageName + '%')
+        --         AND (@HotelID = 0 OR h.hotelid = @HotelID) 
+        --         AND (@HotelName IS NULL OR h.HotelName like '%' + @HotelName + '%')
+        --         AND (@NeedRankRange = 0 OR tnp.Rank > 0)
+        --         AND p.isValid = 1
+		    --        order by (Price-VIPPrice) desc)t)tt 
+		    --    where temprownumber > @start
+        --END
+      
+        
+      ]]>
+    </select>
+    
+    <select id="GetHotelDestnInfo">
+      <![CDATA[
+        select di.Name DistrictName ,di.DistrictID,lat,lon,dd.InChina   from 
+        DestDB..DistrictInfo di(nolock)
+        inner join  DestDB.dbo.DistrictDirectory dd(nolock) on dd.DistrictID=di.DistrictID
+        where  di.DistrictID in(
+           select h.DistrictID
+           from TopNPackages tnp with(nolock)
+               inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID and p.isvalid = 1 and p.EndDate >= GETDATE()
+               inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+               inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+               left join pricedb..PackagePriceCalendar ppc with(nolock) on ppc.HotelID = h.HotelId and ppc.PID = tnp.PID and ppc.DT = CONVERT(varchar(100), GETDATE(), 23)
+               where (0 = @AlbumsID OR tnp.AlbumsID = @AlbumsID) 
+                    AND p.isValid = 1  
+                    group by h.DistrictID 
+                    )  order by DistrictName asc  
+        
+      ]]>
+    </select>
+    
+    <select id="GetHotelDestnInfoWithIn">
+      <![CDATA[
+        DECLARE @g geography = geography::Point(@lat, @lng, 4326)	
+        select di.Name DistrictName ,di.DistrictID,lat,lon   from 
+        DestDB..DistrictInfo di(nolock)
+        where  di.DistrictID in( 	            
+            select h.DistrictID
+            from TopNPackages tnp with(nolock)
+            inner join HotelDB..Package p with(nolock) on p.ID = tnp.PID and p.isvalid = 1 and p.EndDate >= GETDATE()
+            inner join HotelDB..Hotel h with(nolock) on h.hotelid = p.hotelid
+            inner join HotelBizDB..PackageAlbums pa with(nolock) on pa.ID = tnp.AlbumsID
+            inner join hoteldb..HotelPlace hhp with(nolock) on hhp.hotelid = h.hotelid
+            inner join DestDB..DistrictInfo di(nolock)
+            on di.DistrictID=h.DistrictID
+            left join pricedb..PackagePriceCalendar ppc with(nolock) on ppc.HotelID = h.HotelId and ppc.PID = tnp.PID and ppc.DT = CONVERT(varchar(100), GETDATE(), 23)
+            where (0 =  @AlbumsID OR tnp.AlbumsID = @AlbumsID)
+                 AND p.isValid = 1
+                 AND @g.STDistance(hhp.geo) <= 300000
+                  group by  h.DistrictID )   order by DistrictName asc  
+      ]]>
+    </select>
+    
+    
+      
+    <select id="GetInspectorRefHotelList">
+      <![CDATA[
+       SELECT irh.*, h.HotelName,uie.RealName,ui.NickName,ui.MobileAccount FROM InspectorRefHotel irh(nolock)
+       inner join HotelDB..Hotel h (nolock) on h.HotelId = irh.HotelID
+       inner join AccountDB..User_Info ui (nolock) on irh.Inspector=ui.UserID
+       inner join AccountDB..User_Info_Ex uie (nolock) on irh.Inspector=uie.UserID
+       where (@evahotelid = 0 or irh.InspectorHotel = @evahotelid) AND (@userid = 0 or irh.Inspector = @userid) AND (@HVID = 0 or irh.HVID = @HVID)
+      ]]>
+    </select>
+    <select id="GetUseVoucherList">
+      <![CDATA[
+      select v.* from Voucher v
+      where UserId = @UserId AND (0 = @HVID or HVID = @HVID) AND v.state !=-1
+            ]]>
+    </select>
+    <select id="GetUseHotelVoucher">
+      <![CDATA[
+      select h.HotelName,pr.RoomCode,hv.* 
+      , usedCount = ISNULL(uc.usedCount, 0)
+      from hotelVoucher hv (nolock)
+      left join ( select HVID, usedCount = COUNT(1) from Voucher
+      where State = 0
+      group by HVID  ) uc on uc.HVID = hv.ID 
+      left join [HotelDB].dbo.Hotel  (nolock) h on hv.hotelid=h.HotelId
+      left join [hotelDB].[dbo].PRoomInfo pr  (nolock) on pr.ID=hv.roomid 
+      where hv.isshow = 1 and uc.usedCount>0 and hv.EndDate > @EndDate
+            ]]>
+    </select>
+    <select id="GetUseHotelVoucherCount">
+      <![CDATA[
+      select count(1)
+      from hotelVoucher hv (nolock)
+      left join ( select HVID, usedCount = COUNT(1) from Voucher
+      where State = 0
+      group by HVID  ) uc on uc.HVID = hv.ID 
+      where uc.usedCount>0 and hv.EndDate > @EndDate
+            ]]>
+    </select>
+    <select id="GetInspectorRefHotelListByHVID">
+      <![CDATA[
+       SELECT irh.*, h.HotelName FROM InspectorRefHotel irh
+       inner join HotelDB..Hotel h on h.HotelId = irh.HotelID
+       where  (@userid = 0 or irh.Inspector = @userid) AND (@HVID = 0 or irh.HVID = @HVID)
+      ]]>
+    </select>
+    <select id="GetHotelVoucherById">
+      <![CDATA[      
+       select hv.*,vr.Integral,vr.Date from [HotelBizDB].[dbo].HotelVoucher hv(nolock)
+       inner join [HotelBizDB].[dbo].[VRate] vr (nolock) on vr.HVID=hv.ID
+       where hv.ID=@ID
+      ]]>
+    </select>
+    <select id="GetVRateByStr">
+      <![CDATA[      
+       select * from VRate vr
+       where vr.HVID = @HVID and ( @DATE = 0 or vr.[DATE] = @DATE ) and ( @TYPE = 0 and vr.[TYPE] = @TYPE )
+      ]]>
+    </select>
+    <select id="GetVRateByHVID">
+      <![CDATA[      
+       select * from VRate vr
+       where vr.HVID = @HVID order by  Integral asc
+      ]]>
+    </select>
+    <select id="GetInspectorHotelOrderList">
+      <![CDATA[
+     SELECT top(@pageSize) irh.*, h.HotelName 
+FROM InspectorRefHotel irh
+inner join HotelDB..Hotel h on h.HotelId = irh.HotelID
+where  irh.[State] = 3 and OrderState = @OrderState  and irh.ID < @lastID
+order by irh.ID desc 
+      ]]>
+    </select>
+    <select id="GetInspectorHotelList">
+      <![CDATA[
+        select*from (select row_number() over(order by tempcolumn) temprownumber,*from (
+		    select top (@end) tempcolumn=0,* from InspectorHotel
+		    where (@IsValid IS NULL OR [IsValid] = @IsValid) 
+		    AND (@IsExpired IS NULL OR [IsExpired] = @IsExpired) 
+		    AND (@MaxLimitTime IS NULL OR CreateTime >= @MaxLimitTime)
+		    order by ID desc)t )tt where temprownumber > @start
+      ]]>
+    </select>
+    <select id="GetInspectorHotelListOrderByRank">
+      <![CDATA[
+        select*from (select row_number() over(order by tempcolumn) temprownumber,*from (
+		    select top (@end) tempcolumn=0,* from InspectorHotel
+		    where (@IsValid IS NULL OR [IsValid] = @IsValid) 
+		    AND (@IsExpired IS NULL OR [IsExpired] = @IsExpired) 
+		    AND (@MaxLimitTime IS NULL OR CreateTime >= @MaxLimitTime)
+		    order by Rank asc)t )tt where temprownumber > @start
+      ]]>
+    </select>
+    <select id="GetInspectorHotelCount">
+      <![CDATA[
+        SELECT count(1) from InspectorHotel 
+        WHERE 1 = 1 
+	           AND (@IsValid IS NULL OR [IsValid] = @IsValid)
+	           AND (@IsExpired IS NULL OR [IsExpired] = @IsExpired)
+             AND (@MaxLimitTime IS NULL OR CreateTime >= @MaxLimitTime)
+      ]]>
+    </select>
+    <select id="GetInspectorHotelById">
+      <![CDATA[
+        SELECT ih.*, h.HotelName from InspectorHotel ih
+        inner join HotelDB..Hotel h on h.HotelId = ih.HotelID
+        WHERE ih.ID = @id
+      ]]>
+    </select>
+    <select id="GetInspectorRefHotelById">
+      <![CDATA[
+        SELECT irh.*, h.HotelName from InspectorRefHotel irh
+        inner join HotelDB..Hotel h on h.HotelId = irh.HotelID
+        WHERE irh.ID = @id
+      ]]>
+    </select>
+    <select id="GetInspectorHotelByHotelId">
+      <![CDATA[
+        SELECT ih.*, h.HotelName from InspectorHotel ih
+        inner join HotelDB..Hotel h on h.HotelId = ih.HotelID        
+        WHERE ih.HotelID = @HotelId
+      ]]>
+    </select>
+    <select id="GetPointsEntity">
+      <![CDATA[
+        SELECT p.*, ptd.Title as TypeName, ptd.Code as TypeCode 
+        from Points p
+        inner join PointsTypeDefine ptd on ptd.Type = p.TypeID
+        WHERE p.UserID = @userid
+      ]]>
+    </select>
+    <select id="GetExpirePointsEntity">
+      <![CDATA[
+      select  p.UserID,ui.MobileAccount PhoneNo,SUM(p.LeavePoint) LeavePoint from HotelBizDB..Points p(nolock)
+      inner join AccountDB..User_Info ui(nolock)
+      on p.UserID = ui.UserID
+      where p.ExpiredTime > @StartTime and p.ExpiredTime < @EndTime
+      group by p.UserID,ui.MobileAccount  having SUM(p.LeavePoint)>0
+      ]]>
+    </select>
+    <select id="GetExpirePointsByUserIds">
+      <![CDATA[
+      select  p.UserID,ui.MobileAccount PhoneNo,SUM(p.LeavePoint) LeavePoint from HotelBizDB..Points p(nolock)
+      inner join AccountDB..User_Info ui(nolock)
+              on p.UserID = ui.UserID
+      inner join fn_Split(@UserIds,',') fn
+              on fn.Item = p.UserID
+      where p.ExpiredTime > @StartTime and p.ExpiredTime < @EndTime
+      group by p.UserID,ui.MobileAccount  having SUM(p.LeavePoint)>0
+      ]]>
+    </select>
+    <select id="GetPointListByTypeIDAndUserID">
+      <![CDATA[
+        SELECT p.*, ptd.Title as TypeName, ptd.Code as TypeCode 
+        from [HotelBizDB].[dbo].[points] p
+        inner join [HotelBizDB].[dbo].[PointsTypeDefine] ptd on ptd.Type = p.TypeID  
+        inner join fn_split(@items,',') fs on fs.Item = p.UserId
+        WHERE p.TypeID = @TypeID 
+      ]]>
+    </select>
+    <select id="GetPointListByTypeIDAndBusinessID">
+      <![CDATA[
+        SELECT p.*, ptd.Title as TypeName, ptd.Code as TypeCode 
+        from [HotelBizDB].[dbo].[points] p
+        inner join [HotelBizDB].[dbo].[PointsTypeDefine] ptd on ptd.Type = p.TypeID  
+        inner join fn_split(@items,',') fs on fs.Item = p.BusinessID 
+        WHERE p.TypeID = @TypeID 
+      ]]>
+    </select>
+    
+    <select id="GetPointsEntityByToDayAndTypeId">
+      <![CDATA[
+        SELECT p.*, ptd.Title as TypeName, ptd.Code as TypeCode ,h.HotelName as BusinessName
+        from Points p(nolock) 
+        inner join PointsTypeDefine ptd(nolock)  on ptd.Type = p.TypeID
+        left join HotelDB..hotel h(nolock) on p.BusinessID=h.HotelId
+        WHERE p.TypeID = @TypeID and DateDiff(dd,p.CreateTime,getdate())=0 
+      ]]>
+    </select>
+    <select id="GetPointsConsumeEntity">
+      <![CDATA[
+        SELECT pc.*, ptd.Title as TypeName, ptd.Code as TypeCode 
+        from PointsConsume pc
+        inner join PointsTypeDefine ptd on ptd.Type = pc.TypeID
+        WHERE pc.UserID = @userid
+      ]]>
+    </select>
+    <select id="GetPointsConsumeByID">
+      <![CDATA[
+        SELECT * from PointsConsume
+        WHERE ID = @id
+      ]]>
+    </select>
+    <select id="GetPointsConsumeByTypeIDAndBusinessID">
+      <![CDATA[
+        SELECT * from PointsConsume
+        WHERE TypeID = @typeID AND BusinessID = @businessID AND (@state = 0 OR State = @state)
+        order by CreateTime desc
+      ]]>
+    </select>
+    <select id="GetPointsByID">
+      <![CDATA[
+        SELECT * from Points
+        WHERE ID = @id
+      ]]>
+    </select>
+    <select id="GetPointsByTypeIDAndBusinessID">
+      <![CDATA[
+        SELECT * from Points
+        WHERE TypeID = @typeID AND BusinessID = @businessID
+      ]]>
+    </select>
+    <select id="GetPointslistNumByUserIdAndTypeId">
+      <![CDATA[
+        SELECT * from Points
+        WHERE TypeID = @typeID AND UserId = @userId
+      ]]>
+    </select>
+    <select id="GetPointsTypeDefine">
+      <![CDATA[
+        SELECT * from PointsTypeDefine
+        WHERE (@code is NULL OR Code = @code) AND (@type = 0 OR Type = @type)
+      ]]>
+    </select>
+    <select id="GetTravelPersonById">
+      <![CDATA[
+        SELECT * from TravelPerson
+        WHERE UserID=@id AND state=1
+      ]]>
+    </select>
+    
+    <select id="GetTravelPersonByUserId">
+      <![CDATA[
+        SELECT * from TravelPerson
+        WHERE UserID=@userId AND state=1
+      ]]>
+    </select>
+
+    <select id="GetTravelPersonByIds">
+      <![CDATA[        
+      SELECT * from hotelbizdb..TravelPerson t
+      inner join fn_Split(@Ids,',') item 
+              on t.ID = item.Item
+      ]]>
+    </select>
+    <select id="GetBookUserDateInfoByExchangCouponId">
+      <![CDATA[
+         select * from HotelBizDB..TravelPerson tp inner join
+	     fn_Split((select TraveIDs from CouponDB..ExchangeCoupon bi where ID=@ExchangCouponId),',') fn
+	     on tp.ID=fn.Item
+      ]]>
+    </select>
+  
+  <select id="GetTopNPackagesListByAlbumIdOrPID">
+      <![CDATA[ 
+       SELECT 
+           tnp.[ID],
+           tnp.[PID],
+           tnp.[Rank],
+           tnp.[CalcRank],
+           tnp.[Creator],
+           tnp.[CreateTime],
+           tnp.[IsValid],
+           tnp.[Updator],
+           tnp.[UpdateTime],
+           tnp.[RecomemndWord],
+           tnp.[RecomemndWord2],
+           tnp.[Title],
+           tnp.[MarketPrice],
+           tnp.[CoverPicSUrl],
+           tnp.[AlbumsID],
+           tnp.[RecomendPicShortNames],
+           tnp.[RecomendPicShortNames2]
+         FROM   TopNPackages tnp WITH(NOLOCK)
+         WHERE  (@AlbumID = 0 OR tnp.AlbumsID = @AlbumID)
+           AND (@PID = 0 OR tnp.pid = @PID)
+                        
+      ]]>
+    </select>
+  </statements>
+</configuration>

@@ -1,0 +1,76 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    var cssVersion = "190001010000";
+    try
+    {
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex) { }
+    
+    ViewBag.Title = "全部 本周网友推荐";
+
+    var userid = ViewBag.UserId;
+
+    var isApp = ViewBag.IsApp;
+    
+    //热门网友推荐
+    RecommendCommentListModel recmComments = ViewBag.RecmComments;
+}
+
+@section styles
+{
+    <link href="~/Content/css/app/reccomments.css?v=@cssVersion" rel="stylesheet" />
+    <style type="text/css">
+
+    </style>
+}
+
+@if (recmComments != null && recmComments.CommentList != null && recmComments.CommentList.Count > 0)
+{
+    <div class="rec-comments-panel mui-scroll-wrapper">
+        <div class="items">
+            <div class="item-ul">
+                @for (int i = 0; i < recmComments.CommentList.Count; i++)
+                {
+                    var comEntity = recmComments.CommentList[i];
+
+                    <div class="item-li" data-cid="@comEntity.CommentID" style="@(i%2==0?"clear:both;":"")">
+                        <div class="top-img">
+                            <div class="img" style="background:url(@comEntity.PhotoUrl) center no-repeat;background-size: cover"><img src="~/Content/images/transparency.png" /></div>
+                            <div class="top-name">@comEntity.HotelName</div>
+                            <div class="top-name-mode"></div>
+                        </div>
+                        <div class="top-brief">@comEntity.Title</div>
+                        <div class="top-member"><img src="@comEntity.AvatarUrl" alt="">@comEntity.NickName</div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+<input type="hidden" id="userid" value="@userid" />
+<input type="hidden" id="isApp" value="@(isApp ? "1" : "0")" />
+
+<script type="text/template" id="comobj-template">
+    <div class="item-li" data-cid="{CommentID}" style="{Clear}">
+        <div class="top-img">
+            <div class="img" style="background:url({PhotoUrl}) center no-repeat;background-size: cover"><img src="/Content/images/transparency.png" /></div>
+            <div class="top-name">{HotelName}</div>
+            <div class="top-name-mode"></div>
+        </div>
+        <div class="top-brief">{Title}</div>
+        <div class="top-member"><img src="{AvatarUrl}" alt="">{NickName}</div>
+    </div>
+</script>
+
+@section scripts
+{
+    <script src="~/Content/js/app/reccomments.js?v=@cssVersion"></script>
+    <script type="text/javascript" charset="utf-8">
+
+    </script>
+}

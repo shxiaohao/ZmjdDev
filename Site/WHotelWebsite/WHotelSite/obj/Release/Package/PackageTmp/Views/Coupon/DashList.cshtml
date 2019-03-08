@@ -1,0 +1,71 @@
+﻿@using HJD.CouponService.Contracts.Entity
+@model List<OriginCoupon>
+@{
+    ViewBag.Title = "DashList";
+    Layout = null;
+    DateTime date = DateTime.Now;
+    var cssSuffix = string.Format("?suffix={0}{1}{2}{3}{4}", date.Year, date.Month, date.Day, date.Hour, date.Minute);
+}
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>我的红包</title>
+    <link href="/content/css/css_cash_list_5.css@(cssSuffix)" rel="stylesheet">
+    <link href="/content/css/cash_list_reset.css" rel="stylesheet">
+    <script type="text/javascript">
+        function cash(guid) {
+            var address = "/Coupon/Detail?key=";
+            window.location.href = address + guid;
+        }
+        function time2Date(timeString) {
+            return timeString.split(" ")[0];
+        }
+        function start() {
+            var ps = $(".time2Date");
+            for (var i = 0 ; i < ps.length; i++) {
+                $(ps[i]).text($(ps[i]).text().split(" ")[0]);
+            }
+        }
+        // $(document).ready(start());
+    </script>
+</head>
+
+<body onload="start()">
+    <div class="container">
+        <div class="content">
+            @if (Model != null && Model.Count != 0)
+            {
+                <div class="list-box">
+                    @foreach (OriginCoupon temp in Model)
+                    {
+                        if (temp.State == 0)
+                        {
+                            <li class="listItem">
+                                <div class="info-l"><p>您有一个<span class="notice01"> @Math.Round(temp.CashMoney / 100, 0) 元 </span>的红包尚未领取</p></div>
+                                <div class="info-r">
+                                    <a href="javascript:cash('@(temp.GUID)')">领取</a>
+                                    <!-- <a href="window.location.href='/Coupon/Detail?key=@(temp.GUID)'"></a>
+                                        -->
+                                </div>
+                            </li>
+                        }
+                        else if (temp.State == 1)
+                        {
+                            <li class="listItem disabled">
+                                <div class="info-l"><p>您已经领取了一个 <span class="notice01">@Math.Round(temp.CashMoney/100,0) 元 </span>的红包</p></div>
+                                <div class="info-r">
+                                    已领取
+                                    <p class="time2Date">@(((DateTime)temp.CreateTime).ToString("yyyy-MM-dd"))</p>
+                                </div>
+                            </li>
+                        }
+                    }
+                </div>
+            }
+            else
+            {
+                <p style="text-align:center;font-size:larger">您暂时还没有可领取的红包哦</p>
+            }
+        </div>
+    </div>
+</body>

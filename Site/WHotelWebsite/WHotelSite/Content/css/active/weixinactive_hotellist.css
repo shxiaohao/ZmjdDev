@@ -1,0 +1,153 @@
+﻿body {
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    background:#fff;
+    -webkit-user-select:none; 
+    user-select: none;
+}
+
+a {
+    text-decoration:none;
+}
+
+/*禁止长按链接与图片弹出菜单*/
+a,img { -webkit-touch-callout: none }
+
+.top {
+    width:100%;
+    margin:0 auto 0 auto;
+    padding:0 0 2.3em 0;
+    border-bottom:1px solid #e0e0e0;
+    background:#fff;
+}
+    .top .pic{
+        width:100%;
+    }
+        .top .pic img{
+            width:100%;
+        }
+    .top .d2{
+        width:88%;
+        margin:0 auto 0 auto;
+    }
+    .top .t1{
+        padding:1em 0 0.5em 0;
+        font-size:1.8em;
+        font-weight:bold;
+        color:#474747;
+    }
+    .top .line{
+        width:4.5em;
+        margin:0 0 0 0;
+        border-bottom:1px solid #e0e0e0;
+    }
+    .top .t2{
+        line-height:1.2em;
+        padding:0.8em 0 0.6em 0;
+        font-size:2.5em;
+        font-weight:bold;
+        color:#474747;
+    }
+    .top .desc{
+        font-size:1.3em;
+        color:#474747;
+    }
+        .top .desc{
+            font-size:1.3em;
+            color:#474747;
+        }
+
+.list {
+    width:88%;
+    margin:0 auto 5em auto;
+    background:#fff;
+}
+    .list .null{
+        padding:3em 0 2em 0;
+        text-align:center;
+        font-size:1.2em;
+        color:#919191;
+    }
+    .list .item{
+        padding:1.5em 0 2.3em 0;
+        border-bottom:1px solid #e0e0e0;
+    }
+        .list .item .ht1{
+            line-height:1.3em;
+            padding:0.5em 0 0.2em 0;
+            font-size:1.8em;
+            font-weight:bold;
+            color:#474747;
+        }
+        .list .item .ht2{
+            font-size:1.4em;
+            color:#474747;
+        }
+        .list .item .img{
+            margin:1.6em 0 1.6em 0;
+        }
+            .list .item .img img{
+                width:100%;
+            }
+        .list .item .roominfo{
+            font-size:1.4em;
+            color:#474747;
+        }
+            .list .item .roominfo b{
+                font-size:1em;
+            }
+        .list .item .content{
+            margin:1em 0 1.5em 0;
+            font-size:1.3em;
+            color:#474747;
+        }
+        .list .item .ctrl{
+            text-align:center;
+        }
+            .list .item .ctrl a{
+                width:12em;
+                margin:0 auto 0 auto;
+                padding:0.6em 0 0.6em 0;
+                text-align:center;
+                display:table;
+                font-size:1.3em;
+                color:#3e9ec0;
+                border:1px solid #3e9ec0;
+                border-radius:5px;
+            }
+
+.menu {
+    width:100%;
+    height:auto;
+    position:fixed;
+    bottom:0;
+    left:0;
+    z-index:10;
+    background:#fff;
+    border-top:1px solid #ddd;
+    display:table;
+}
+    .menu .left{
+        width:50%;
+        padding:0.8em 0 0.8em 0;
+        float:left;
+        border-right:1px solid #ddd;
+        text-align:center;
+        font-size:1.2em;
+        font-family:Arial;
+        cursor:pointer;
+    }
+    .menu .right{
+        width:50%;
+        padding:0.8em 0 0.8em 0;
+        float:left;
+        text-align:center;
+        font-size:1.2em;
+        font-family:Arial;
+        cursor:pointer;
+    }
+    .menu .selected{
+        background:#3e9ec0;
+        color:#fff;
+    }

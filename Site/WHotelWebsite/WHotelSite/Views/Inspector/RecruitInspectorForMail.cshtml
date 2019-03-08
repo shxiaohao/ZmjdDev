@@ -1,0 +1,93 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    
+    Layout = null;
+
+    InspectorParam param = ViewBag.param;
+
+    ViewBag.Title = string.Format("招募品鉴师");
+    ViewBag.Keywords = string.Format("招募品鉴师");
+    ViewBag.Description = string.Format("招募品鉴师");
+
+    ViewBag.BodyStyle = "overflow-x:hidden;";
+
+    var isApp = ViewBag.IsApp;
+    var verIsOk = ViewBag.VersionIsOk;
+    var apptype = ViewBag.AppType;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>免费品鉴</title>
+</head>
+<body style="padding: 0; margin: 0; overflow-x: hidden; background: #f8f8f8; ">
+
+    <style type="text/css">
+        body {
+            padding: 0;
+            margin: 0;
+            overflow-x: hidden;
+            background:#f8f8f8;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+
+    <div style="width: 100%;height: auto;text-align:center;">
+        <div style="width: 100%;height:auto;margin:1.5em 0 0.2em 0;text-align:center;">
+            <div style="width: 70%; max-width: 660px; height: auto;margin:0 auto 0 auto; text-align: center; *width: 660px;">
+                <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+                    <tr>
+                        <td valign="middle" align="center"><img src="http://www.zmjiudian.com/Content/images/inspector/Concise/logotxt.png" style="width: 8em; margin: 0 0 0 0; " alt="" /></td>
+                    </tr>
+                    <tr>
+                        <td valign="middle" align="center" style="line-height:1.4em;font-size:0.9em;color:#888;padding:0.5em 0 1em 0;">专业提供有特色、好口碑、高性价比的度假酒店及民宿</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div style="width: 100%;height:auto;text-align:center;">
+            <center>
+                <div style="width: 92%; max-width: 660px; height: auto; padding: 0; margin: 0 auto 0 auto; *width: 660px;text-align:center;">
+                    <img src="http://www.zmjiudian.com/Content/images/inspector/Concise/ins-huodong-banner.jpg" alt="" style="width:100%;" />
+                </div>
+                <div style="width: 90%; max-width: 660px; height: auto; padding: 0; margin: 1.5em auto 1em auto; *width: 660px; ">
+                    <div style="width: 100%; height: auto; text-align: left;">
+                        <div style="line-height: 1.5em; color: #bd8664; font-size: 0.9em; margin:0 0 0.3em 0;">周末酒店APP年度超给力活动来袭！</div>
+                        <div style="line-height: 1.5em; color: #bd8664; font-size: 0.9em; margin: 0 0 0.3em 0;">我们为你精选了全国Top50亲子酒店，并邀请你一起体验。从即日起，下载周末酒店APP，写一条用心的点评，既有机会免费体验全国Top50亲子酒店中的任意一家。</div>
+                        <div style="line-height: 1.5em; color: #bd8664; font-size: 0.9em; margin: 0 0 0 0; ">这个秋天和我们一起出发，带上宝贝，来一次惬意的亲子之旅！</div>
+                    </div>
+                </div>
+                <div style="width: 90%;max-width:350px; height: auto; padding: 0; margin: 2.5em auto 10px auto; *width: 300px; "><a href="http://www.zmjiudian.com/inspector/hotellist" style="display: inline-table; width: 100%; height: 50px; line-height: 50px; font-size: 1.2em; text-align: center; color: #bd8664; border: 1px solid #e9dcd4; border-radius: 0px; text-decoration: none; ">查看Top50亲子酒店名单</a></div><div style="width: 90%; max-width: 350px; height: auto; padding: 0; margin: 0 auto 50px auto; *width: 300px; "><a href="http://www.zmjiudian.com/inspector/register" style="display: inline-table; width: 100%; height: 50px; line-height: 50px; font-size: 1.2em; text-align: center; color: #fff; background: #bd8664; border: 1px solid #bd8664; border-radius: 0px; text-decoration: none; ">报名成为品鉴师</a></div>
+            </center>
+        </div>
+        <div style="width: 100%;height:auto;text-align:center;">
+            <center>
+                <div style="width: 90%; max-width: 660px; height: auto; padding: 1.5em 0 0 0; margin: 0 auto 0 auto; *width: 660px;border-top:1px solid #ddd;">
+                    <div style="width: 100%; height: auto; text-align: left;">
+                        <div style="line-height: 1.8em; color: #888; font-size: 0.9em; text-align: left;">参与方式：<br />1、报名成为品鉴师<br />2、提交1-3篇海内外酒店点评及照片<br />3、我们会从提交点评的用户中按点评质量挑选100名用户，成为品鉴师，免费入住Top50家亲子酒店中的任意一家</div>
+                    </div>
+                    <div style="width: 100%; height: auto; text-align: left;margin:2em 0 0 0;">
+                        <div style="line-height: 1.8em; color: #888; font-size: 0.9em; text-align: left; ">活动注意事项：<br />1、活动报名和提交点评从即日起至 10/22 结束<br />2、点评提交越多，内容越生动，图片越丰富，越有机会被选中成为品鉴师<br />3、名单上每家酒店的入住时间会有所限制，具体点击“申请品鉴”查询<br />4、由于每家酒店的品鉴名额有限，我们会按先预约先得的原则分配<br />5、免费品鉴酒店时，必须是本人入住，不可转让给他人<br />6、活动细节的解释权归主办方上海尚旅网络科技有限公司所有</div>
+                    </div>
+                </div>
+            </center>
+        </div>
+        <div style="width: 100%; line-height: 1.3em; text-align: center; color: #333;margin:2.5em 0 0.2em 0;">
+            更多特价优惠<br />下载周末酒店app
+        </div>
+        <div style="width:12.5em;height:auto;margin:0 auto 0 auto;"><img src="http://www.zmjiudian.com/Content/images/qrcode-wx-big-4.0.jpg" style="width:100%;" alt="" /></div>
+        <div style="width: 12em; height: auto; margin: 0.3em auto 2em auto;">
+            <div style="float: left; width: 50%; text-align: left;"><a href="http://www.zmjiudian.com/aboutus" style="color: #999; text-decoration: underline;">关于周末酒店</a></div>
+            <div style="float: right; width: 50%; text-align: right;"><a href="http://www.zmjiudian.com/mail/EUserManager?idx={IDX}&state={STATE}" style="color: #999; text-decoration: underline; ">取消订阅</a></div>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+</body>
+</html>

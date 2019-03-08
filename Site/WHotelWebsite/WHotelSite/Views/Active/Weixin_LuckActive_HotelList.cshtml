@@ -1,0 +1,224 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    var cssVersion = "190001010000";
+    try
+    {
+        //var last = this.GetType().Assembly.Location;
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex)
+    {
+    }
+
+    var isApp = ViewBag.IsApp;
+    var openid = ViewBag.Openid;
+
+    var groupid = ViewBag.GroupId;
+    var partnerid = ViewBag.PartnerId;
+
+    ActiveRuleGroupEntity groupInfo = ViewBag.GroupInfo;
+    List<ActiveRuleExEntity> list0 = ViewBag.List0;
+    List<ActiveRuleExEntity> list1 = ViewBag.List1;
+
+    var shareTitle = ViewBag.ShareTitle;
+    var shareLink = ViewBag.ShareLink;
+    var shareImgUrl = ViewBag.ShareImgUrl;
+    
+    ViewBag.Title = string.Format("{0}", groupInfo.SubTitle);
+}
+@section styles
+{
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .modal-content {
+            width: 90%;
+            margin: auto;
+        }
+
+        .modal-body {
+            padding: 2.6em 0.8em 1.7em 0.8em;
+        }
+
+        .modal-footer {
+            margin-top: 0;
+            padding: 0.7em 0.9em;
+        }
+
+        .btn-default, .btn-primary {
+            width: auto;
+            min-width: 4em;
+            border: none;
+            color: #3e9ec0;
+            font-size: 1.4em;
+        }
+
+        .box-big-btn {
+            width: 96%;
+        }
+
+        .box-btn-bottomborder {
+            padding-bottom: 0.7em;
+            margin-bottom: 0.3em;
+            border-bottom: 1px solid #eeeded;
+            border-radius: 0;
+        }
+    </style>
+}
+<link href="~/Content/css/active/weixinactive_hotellist.css?v=@cssVersion" rel="stylesheet" />
+
+@if (groupInfo != null)
+{
+    <div class="top">
+        <div class="pic"><img src="@(groupInfo.PicUrl.Replace("_jupiter", "_640x360"))" alt="" /></div>
+        <div class="d2">
+            <div class="t2">@groupInfo.SubTitle</div>
+            <div class="desc">@Html.Raw(groupInfo.Description.Replace("\n", "<br />"))</div>
+        </div>
+    </div>
+    <div class="list" id="list0">
+        @if (list0 != null && list0.Count > 0)
+        {
+            var exlist = list0;
+            for (int i = 0; i < exlist.Count; i++)
+            {
+                var obj = exlist[i];
+                obj.PicUrl = obj.PicUrl.Replace("_jupiter", "_640x360").Replace("_theme", "_640x360");
+                <div class="item">
+                    <div class="ht1">@obj.Title</div>
+                    <div class="ht2">@obj.SubTitle</div>
+                    <div class="img"><img @(i < 2 ? string.Format(" src={0} ", obj.PicUrl) : string.Format(" data-original={0} data-lazyload-id={1} ", obj.PicUrl, i)) alt="" /></div>
+                    <div class="roominfo"><b>免费房型：</b>@obj.RoomInfo</div>
+                    <div class="roominfo"><b>活动名额：</b>@(obj.OfferCount)名</div>
+                    <div class="content">@Html.Raw(obj.Description.Replace("\n", "<br />"))</div>
+                    <div class="ctrl"><a href="http://www.zmjiudian.com/wx/active/reg/@(partnerid)/@(obj.ActiveId)" target="_blank">我要报名</a></div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="null">好棒！您参加了所有的活动哦：）</div>
+        }
+    </div>
+    <div class="list" id="list1" style="display:none;">
+        @if (list1 != null && list1.Count > 0)
+        {
+            var exlist = list1;
+            for (int i = 0; i < exlist.Count; i++)
+            {
+                var obj = exlist[i];
+                obj.PicUrl = obj.PicUrl.Replace("_jupiter", "_640x360").Replace("_theme", "_640x360");
+                <div class="item">
+                    <div class="ht1">@obj.Title</div>
+                    <div class="ht2">@obj.SubTitle</div>
+                    <div class="img"><img @(i < 2 ? string.Format(" src={0} ", obj.PicUrl) : string.Format(" data-original={0} data-lazyload-id={1} ", obj.PicUrl, i)) alt="" /></div>
+                    <div class="roominfo"><b>免费房型：</b>@obj.RoomInfo</div>
+                    <div class="roominfo"><b>活动名额：</b>@(obj.OfferCount)名</div>
+                    <div class="content">@Html.Raw(obj.Description.Replace("\n", "<br />"))</div>
+                    <div class="ctrl"><a href="http://www.zmjiudian.com/wx/active/reg/@(partnerid)/@(obj.ActiveId)" target="_blank">查看抽奖码</a></div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="null">您还没有参与任何活动哦：）</div>
+        }
+    </div>
+}
+<div style="margin-bottom:5em;">&nbsp;</div>
+<div class="menu">
+    <div class="left selected" data-s="1">未参与（@(list0.Count)）</div>
+    <div class="right" data-s="0">已参与（@(list1.Count)）</div>
+    <div style="clear: both;"></div>
+</div>
+
+<input type="hidden" id="isapptxt" value="@(isApp?"1":"0")" />
+<!--  -->
+@section scripts
+{
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/jquery.lazyload.min.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+    <script src="~/Content/js/bootbox.js?v=@(cssVersion)" type="text/javascript"></script>
+    <script src="~/Content/js/active/weixinactive_hotellist.js?v=@(cssVersion)"></script>
+    <script>
+
+        GetWeixinApiConfig();//注册
+
+        wx.ready(function () {
+
+            wx.onMenuShareTimeline({
+                title: '@shareTitle',
+                link: '@shareLink',
+                imgUrl: '@shareImgUrl',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareAppMessage({
+                title: '@shareTitle',
+                link: '@shareLink',
+                imgUrl: '@shareImgUrl',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+        });
+
+        function GetWeixinApiConfig() {
+
+            var url = location.href.split("#")[0];
+            $.ajax({
+                url: '/Coupon/GetWeixinConfigInfo',
+                type: 'POST',
+                data: { url: url },
+                dataType: 'json',
+                async: false,
+                error: function () {
+                    console.log("网络服务错误");
+                },
+                success: function (result) {
+                    if (typeof (result.Success) != undefined && result.Success == 1) {
+                        return false;
+                    }
+                    else {
+                        //得到微信config的值
+                        var array = [
+                            'checkJsApi',
+                            'onMenuShareTimeline',
+                            'onMenuShareAppMessage',
+                            'hideOptionMenu'
+                        ];
+                        if (result.jsApiList) {
+                            var jsArray = result.jsApiList.split(',');
+                            for (var key in jsArray) {
+                                array.push("" + jsArray[key]);
+                            }
+                        }
+
+                        wx.config({
+                            debug: false,
+                            appId: result.appId,
+                            timestamp: "" + result.timestamp,
+                            nonceStr: result.nonceStr,
+                            signature: result.signature,
+                            jsApiList: array
+                        });
+                    }
+                }
+            });
+        }
+
+    </script>
+}

@@ -1,0 +1,154 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params.Order
+@model UserCommentListModel
+@{
+    ViewBag.Title = "我的点评";
+    ViewBag.BodyClass = "hotellistpage";
+    OrderParam param = ViewBag.param;
+    var totalCount = param.IsUncomment ? Model.NoCommentList.Count : Model.CommentList.Count;
+}
+
+@section scripts
+{
+    <script>
+        window._bd_share_config = {
+            common : {
+                bdUrl: '',
+                onBeforeClick: function (cmd, config) {
+                    var bdUrl = $.trim($("#shareUrl").val());
+                    if (cmd === "weixin") {
+                        return { bdUrl: bdUrl };
+                    }
+                    else if(cmd === "tsina") {
+                        var arr = bdUrl.split("|");
+                        return {
+                            bdText: arr[0],
+                            bdDesc: arr[1],
+                            bdUrl: arr[2],
+                            bdPic: arr[3]
+                        }
+                    }
+                }
+		    },
+            share: [{
+                "bdSize": 24
+            }]
+        }
+        with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion=' + ~(-new Date() / 36e5)];
+    </script>
+}
+
+<!-- Add -->
+<div class="container mainbody hidden-xs">
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            @Helpers.BreadCrumbs(Url, 0, 0, 2)
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>
+
+<div class="container mainbody">
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            <div class="row">
+                <!-- 订单列表 左侧导航 Left -->
+                <div class="col-md-3 col-sm-3  Screening hidden-xs">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">个人中心</h3>
+                        </div>
+                        @Helpers.InsertLeftNaviPanel(2, Url)
+                    </div>
+                    <div class="tel">
+                        客服电话:<i>4000-021-702</i>
+                    </div>
+                </div>
+               <!-- 点评列表 右侧导航 Right -->
+                <div class="col-md-9 col-sm-9" id="collectList">
+                    <!-- 条件选择栏 mobile 开始 -->
+                    <div class="row toolbar2 visible-xs">
+                        <div class="col-xs-3">
+                            <button type="button" onclick="history.back()" class="btn btn-sm  btn-img01"><img src="@Url.Content("~/Content/images/icon-back.png")" class="mobilepic" alt="" /></button>
+                        </div>
+                        <div class="col-xs-6 text-center listtitle">
+                            我的点评
+                        </div>
+                        <div class="col-sm-2 col-xs-3 text-right">
+                        </div>
+                    </div>
+                    <!-- 条件选择栏 mobile 结束 -->
+                    <!-- 我的点评列表 开始 -->
+                    <div class="row">
+					    <div class="col-sm-12 dpmenu" id="tagdpMenu">
+					        <a href="@Url.RouteUrl("我的点评", new { isuncomment = true, start = 0})" class="cur" target="_self" id="undonecomment">待点评订单</a>
+                            <a href="@Url.RouteUrl("我的点评", new { isuncomment = false, start = 0})" target="_self" id="donecomment">已点评订单</a>
+					    </div>
+					    <div class="col-sm-12 table-responsive">
+                                @if (param.IsUncomment)
+                                {
+                                    if (Model.OrderList != null && Model.OrderList.Count > 0)
+                                    {                                        
+					                    <table cellspacing="0" cellpadding="0" border="0" class="table ddlist" width="100%">
+					                        <tr>
+						                        <th>订单信息</th>
+						                        <th>入住人</th>
+						                        <th>入住日期</th>
+						                        <th>总金额</th>
+						                        <th>订单状态</th>
+						                        <th>操作</th>
+					                        </tr>
+                                            @Html.Partial("UndoneListContent", Model.OrderList)
+                                        </table>
+                                    }
+                                    else
+                                    {
+                                        <!-- 空结果提示 -->
+					                    <div class="nullalert text-center">	
+						                    <h5>您还没有可点评订单</h5>@*ToDo加动画 去尝试*@
+					                    </div>
+                                    }
+                                }
+                                else{
+                                    <input type="hidden" id="shareUrl" value="" />
+                                    if(Model.CommentDteailList != null && Model.CommentDteailList.Count > 0)
+                                    {
+					                    <table cellspacing="0" cellpadding="0" border="0" class="table ddlist" width="100%">
+					                        <tr>
+						                        <th>订单信息</th>
+						                        <th>入住房型</th>
+						                        <th>入住日期</th>
+						                        <th>入住日期</th>
+						                        <th>是否推荐</th>
+						                        <th>操作</th>
+					                        </tr>
+                                            @Html.Partial("DoneListContent", Model.CommentDteailList)
+                                        </table>
+                                    }
+                                    else
+                                    {
+                                        <!-- 空结果提示 -->
+					                    <div class="nullalert text-center">
+						                    <h5>你还没有完成点评的订单</h5>@*ToDo加动画 去尝试*@
+					                    </div>
+                                    }
+                                }
+					    </div>						   
+					</div>
+                    <div class="pager1 text-right">
+                        @Helpers.Pagination(Url, param, totalCount, param.Count, param.Start)
+                    </div>
+                    <!-- 我的点评列表 结束 -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>

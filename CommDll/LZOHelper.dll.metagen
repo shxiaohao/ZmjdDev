@@ -1,0 +1,26 @@
+ImageRuntimeVersion: v4.0.30319
+Assembly LZOHelper, Version=1.0.*, Culture=固定语言(固定国家/地区): 
+	hash=SHA1, flags=PublicKey
+Assembly mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Class LZOHelper.LZOCompressor: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Methods:
+    Decompress(Byte[]): PrivateScope, Public, Static, HideBySig
+    Compress(Byte[], CompressionAlgorithm): PrivateScope, Public, Static, HideBySig
+    Compress(Byte[]): PrivateScope, Public, Static, HideBySig
+Struct LZOHelper.CompressionAlgorithm: AutoLayout, AnsiClass, Class, Public, Sealed, BeforeFieldInit
+  :System.Enum
+  Fields:
+    Int32 value__ : Public, SpecialName, RTSpecialName
+    LZOHelper.CompressionAlgorithm LZO1X = 100 : Public, Static, Literal, HasDefault
+    LZOHelper.CompressionAlgorithm LZO1X11 = 110 : Public, Static, Literal, HasDefault
+    LZOHelper.CompressionAlgorithm LZO1X12 = 120 : Public, Static, Literal, HasDefault
+    LZOHelper.CompressionAlgorithm LZO1X15 = 150 : Public, Static, Literal, HasDefault
+    LZOHelper.CompressionAlgorithm LZO1X999 = 199 : Public, Static, Literal, HasDefault

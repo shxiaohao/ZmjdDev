@@ -1,0 +1,44 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+    ViewBag.Title = "机酒度假";
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+
+    ViewBag.LoadHmBaidu = false;
+}
+
+@section styles
+{
+    <link href="/content/css/framework/iscroll.css" rel="stylesheet">
+    <link href="~/Content/css/app/AlbumGroup.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+}
+<div class="div-body">
+    <div id="tabbur" v-cloak class="tablist">
+        <div class="_scroller">
+            <div class="scrollLine">
+                <div v-for="item in tabDetailList" class="t-item {{$index==0?'scroll-seled':''}}" data-sel="{{$index==0?'1':'0'}}" data-groupno="{{item.groupNo}}">{{item.name}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="albumlist" id="album">
+        <div class="albumitem" v-for="album in albumDataList" onclick="gourl('{{album.actionUrl}}')">
+            <img v-if="$index<7" src="{{album.CompleteCoverPicSUrl}}" alt="" />
+            <img v-else data-original="{{album.CompleteCoverPicSUrl}}" data-lazyload-id={{$index}} alt="" />
+        </div>
+        <div class="scrollpageloading"><img src="http://whfront.b0.upaiyun.com/app/img/loading-changes.gif" alt="" /></div>
+    </div>
+</div>
+
+<input type="hidden" id="grounpnos" value="@ViewBag.GroupNos" />
+@*<div style="margin: 2em 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http://www.zmjd100.com/App/AlbumGroup">GO APP (Local) >>></a></div>*@
+
+@section scripts{
+    <script src="~/Content/js/framework/vue.min.js"></script>
+<script src="~/Content/js/framework/jquery.lazyload.min.js"></script>
+    <script src="~/Content/js/app/AlbumGroup.js?v=@(Helpers.curAppVer())"></script>
+}

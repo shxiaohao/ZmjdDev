@@ -1,0 +1,82 @@
+﻿@charset "UTF-8";
+html, body {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  background: #fff;
+  -webkit-user-select: none;
+  user-select: none;
+  overflow-x: hidden; }
+
+/*禁止长按链接与图片弹出菜单*/
+a, img {
+  -webkit-touch-callout: none; }
+
+.top {
+    width:88%;
+    margin:1em auto 1em auto;
+    padding:0 0 0 0;
+}
+    .top img{
+        width:100%;
+    }
+.form {
+    width:100%;
+    margin:0 auto 0 auto;
+    padding:0 0 0 0;
+}
+    .form .row{
+        width:88%;
+        margin:0 auto 0 auto;
+        padding:1em 0 1em 0;
+        border-bottom:1px solid #e0e0e0;
+    }
+        .form .row .l{
+            width:25%;
+            margin:0 0 0 0;
+            padding:0 0 0 0;
+            text-align:left;
+            float:left;
+            font-size:1em;
+            font-family:Arial;
+            color:#919191;
+        }
+        .form .row .r{
+            width:75%;
+            margin:0 0 0 0;
+            padding:0 0 0 0;
+            text-align:left;
+            float:right;
+        }
+            .form .row .r .inp{
+                width:100%;
+                height:auto;
+                margin:0 0 0 0;
+                padding:0 0 0 0;
+                text-align:left;
+                border:none;
+                font-size:1em;
+                font-family:Arial;
+                color:#474747;
+                outline:none;
+            }
+    .form .sub-section{
+        width:88%;
+        margin:3em auto 1em auto;
+        padding:0 0 0 0;
+    }
+        .form .sub-section .sub{
+            width:100%;
+            margin:0 auto 0 auto;
+            padding:0.6em 0 0.6em 0;
+            background: #3E9EC0;
+            border-radius: 4px;
+            font-size:1.2em;
+            color:#fff;
+            text-align:center;
+            text-decoration:none;
+            display:table;
+        }
+        .form .sub-section .sub0{
+            background: #919191;
+            color:#fff;
+        }

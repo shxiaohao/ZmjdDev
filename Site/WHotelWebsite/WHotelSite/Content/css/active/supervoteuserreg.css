@@ -1,0 +1,462 @@
+﻿@charset "UTF-8";
+
+.main-panel .reg-info{
+    width:88%;
+    height:auto;
+    margin:1em auto 0 auto;
+    padding:0 0 0 0;
+    box-sizing:border-box;
+}
+    .main-panel .reg-info .reg-inp {
+        width: 100%;
+        height: auto;
+        margin: 0 auto 0 auto;
+        padding: 1.2em 0.5em 1.3em 1em;
+        font-size: 0.8em;
+        /*background: rgba(255,255,255,0.48);*/
+        background: #fff;
+        border-radius: 4px;
+        outline: none;
+        border: none;
+        box-sizing: border-box;
+    }
+    .main-panel .reg-info .reg-tip{
+        width:100%;
+        height:auto;
+        margin:0.5em 0 0 0;
+        padding:0 0 0 0;
+        font-size:0.8em;
+        color:#977A5E;
+    }
+
+.main-panel .reg-ctrl{
+    width:88%;
+    height:auto;
+    margin:1.5em auto 0 auto;
+    padding:0 0 0 0;
+    box-sizing:border-box;
+}
+    .main-panel .reg-ctrl .reg-btn{
+        width:100%;
+        height:auto;
+        margin:0 0 0 0;
+        padding:1em 0 1em 0;
+        font-size:1em;
+        color:#fff;
+        text-align:center;
+        text-decoration:none;
+        background: #E24848;
+        border-radius: 4px;
+        box-sizing:border-box;
+        float:left;
+    }
+
+.main-panel .head-section{
+    width:70%;
+    height:auto;
+    margin:0em auto 0 auto;
+    padding:2.5em 0 0 0;
+    box-sizing:border-box;
+}
+    .main-panel .head-section .icon{
+        margin:0 0 0 0;
+        text-align:center;
+        font-size:4em;
+        color:#35C962;
+    }
+    .main-panel .head-section .title{
+        margin:0.4em 0 0 0;
+        text-align:center;
+        font-size:1.2em;
+        font-weight:bold;
+        color:#2c2c2c;
+    }
+    .main-panel .head-section .tip{
+        margin:0.5em 0 0 0;
+        text-align:center;
+        font-size:0.7em;
+        color:#2c2c2c;
+    }
+    .main-panel .head-section .btns{
+        width:100%;
+        margin:2em 0 0 0;
+        padding:0 0 0 0;
+    }
+        .main-panel .head-section .btns .get-poster-btn{
+            width:90%;
+            height:auto;
+            margin:0 auto 0 auto;
+            padding:1em 0 1em 0;
+            font-size:0.8em;
+            color:#fff;
+            text-align:center;
+            text-decoration:none;
+            background: #FEB257;
+            border-radius: 4px;
+            box-sizing:border-box;
+            display:table;
+        }
+.main-panel .mine-tip{
+    width:90%;
+    height:auto;
+    margin:1em auto 0 auto;
+    padding:0 0 0 0;
+    box-sizing:border-box;
+}
+    .main-panel .mine-tip .qrcode-info{ 
+        width:7em;
+        height:auto;
+        margin:0em auto 0 auto;
+        padding:0 0 0 0;
+        box-sizing:border-box;
+    }
+        .main-panel .mine-tip .qrcode-info img{
+            width:100%;
+        }
+    .main-panel .mine-tip .qrcode-tip{
+        width:70%;
+        margin:0.5em auto 0 auto;
+        text-align:center;
+        font-size:0.9em;
+        color:#2c2c2c;
+    }
+
+.showPosterSection {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 210;
+}
+
+    .showPosterSection .share-info {
+        width: 100%;
+        margin: 0em auto 1em auto;
+        padding: 1em 0 1em 0;
+        background: #fff;
+    }
+
+        .showPosterSection .share-info .share-tit {
+            width: 100%;
+            font-size: 1em;
+            color: #fe8000;
+            text-align: center;
+        }
+
+        .showPosterSection .share-info .share-desc {
+            width: 88%;
+            margin: 1em auto 0 auto;
+            padding: 0 0 0 0;
+            font-size: 0.8em;
+            color: #2c2c2c;
+            text-align: center;
+        }
+
+    .showPosterSection .poster-tit {
+        width: 100%;
+        margin: 0 auto 1em auto;
+        font-size: 1em;
+        color: #fff;
+        text-align: center;
+    }
+
+    .showPosterSection .poster-img {
+        width: 80%;
+        margin: 0 auto 1em auto;
+    }
+
+        .showPosterSection .poster-img img {
+            width: 100%;
+        }
+
+    .showPosterSection .poster-result {
+        position: relative;
+    }
+
+        .showPosterSection .poster-result .poster-close {
+            width: 1.3em;
+            position: absolute;
+            top: 0.8em;
+            right: 0.8em;
+        }
+
+            .showPosterSection .poster-result .poster-close img {
+                width: 100%;
+            }
+
+    .showPosterSection .poster-loadding {
+    }
+
+        .showPosterSection .poster-loadding .loading-tip {
+            width: 100%;
+            height: auto;
+            margin: 2em 0 1em 0;
+            padding: 0 0 0 0;
+            display: table;
+            text-align: center;
+            color: #fff;
+            font-size: 1em;
+        }
+
+    .showPosterSection .mine-poster {
+        width: 88%;
+        height: auto;
+        margin: 0 auto 0 auto;
+        padding: 0 0 0em 0;
+        display: table;
+        background: #fff;
+        font-family: Arial;
+        position: relative;
+    }
+
+        .showPosterSection .mine-poster .p-img {
+            width: 100%;
+            height: 100%;
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+            display: table;
+            position: relative;
+            z-index: 5;
+        }
+
+            .showPosterSection .mine-poster .p-img img {
+                width: 100%;
+                display: block;
+            }
+
+        .showPosterSection .mine-poster .slogan-img {
+            width: 100%;
+            height: 100%;
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+            display: table;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 7;
+        }
+
+            .showPosterSection .mine-poster .slogan-img img {
+                width: 100%;
+                display: block;
+            }
+
+        .showPosterSection .mine-poster .slogan-img-bg {
+            width: 100%;
+            height: 100%;
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 6;
+            background: rgba(0, 0, 0, 0.12);
+        }
+
+        .showPosterSection .mine-poster .p-info {
+            width: 100%;
+            height: auto;
+            min-height: 5.5em;
+            margin: 0em auto 0 auto;
+            padding: 0 0 0em 0;
+            display: table;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            z-index: 10;
+        }
+            .showPosterSection .mine-poster .p-info .bg-img {
+                width: 100%;
+                height: auto;
+                margin: 0em auto 0em auto;
+                padding: 0 0 0 0;
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                z-index: 11;
+            }
+                .showPosterSection .mine-poster .p-info .bg-img img{
+                    width: 100%;
+                    display:block;
+                }
+            .showPosterSection .mine-poster .p-info .user-info {
+                width: 100%;
+                height: auto;
+                margin: 0em auto 0em auto;
+                padding: 0 0 0 0;
+                position: relative;
+                z-index:12;
+            }
+
+                .showPosterSection .mine-poster .p-info .user-info .h-img {
+                    width: 100%;
+                    height: auto;
+                    margin: 0 0 0 0;
+                    padding: 0 0 0 0;
+                }
+
+                    .showPosterSection .mine-poster .p-info .user-info .h-img img {
+                        width: 3.5em;
+                        margin: 0 auto 0 auto;
+                        border-radius: 10em;
+                        border: 3px solid #fff;
+                        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
+                        display: table;
+                    }
+
+                .showPosterSection .mine-poster .p-info .user-info .u-name {
+                    width: 100%;
+                    height: auto;
+                    padding: 0em 0 0 0;
+                    float: right;
+                    text-align: center;
+                    font-size: 1em;
+                    font-weight: bold;
+                    color: #fff;
+                    box-sizing: border-box;
+                }
+
+            .showPosterSection .mine-poster .p-info .qrcode-section {
+                width: 90%;
+                height: auto;
+                margin: 0.3em auto 0 auto;
+                padding: 0 0 0.6em 0;
+                display: table;
+                position: relative;
+                z-index: 12;
+            }
+
+                .showPosterSection .mine-poster .p-info .qrcode-section .left {
+                    width: 23%;
+                    height: auto;
+                    margin: 0 0 0 0;
+                    padding: 0 0 0 0;
+                    float: left;
+                }
+
+                    .showPosterSection .mine-poster .p-info .qrcode-section .left img {
+                        width: 92%;
+                        border: 3px solid #fff;
+                    }
+
+                .showPosterSection .mine-poster .p-info .qrcode-section .right {
+                    width: calc(77% - 0.5em);
+                    height: auto;
+                    float: right;
+                }
+
+                    .showPosterSection .mine-poster .p-info .qrcode-section .right .desc-section {
+                        width: 100%;
+                        height: auto;
+                        line-height: 1.5em;
+                        margin: 0 auto 0 auto;
+                        padding: 0.4em 0 0 0;
+                        font-size: 0.8em;
+                        color: #fff;
+                        text-align: justify;
+                    }
+
+
+        .showPosterSection .mine-poster .tip {
+            width: 90%;
+            height: auto;
+            margin: 0.7em auto 0 auto;
+            padding: 0.6em 0 0 0;
+            display: table;
+            text-align: center;
+            font-size: 0.9em;
+            color: #919191;
+            border-top: 1px solid rgba(0,0,0,0.12);
+        }
+
+        .showPosterSection .mine-poster .foot {
+            width: 100%;
+            height: auto;
+            margin: 1em 0 0 0;
+            padding: 0 0 0 0;
+            display: table;
+        }
+
+            .showPosterSection .mine-poster .foot img {
+                width: 64px;
+                margin: 0 auto 0 auto;
+                display: table;
+            }
+
+    .showPosterSection .mine-poster-2 {
+        width: 88%;
+        height: auto;
+        margin: 0 auto 0 auto;
+        padding: 0 0 0 0;
+        display: table;
+        font-family: Arial;
+        position: relative;
+    }
+
+        .showPosterSection .mine-poster-2 .bg-img {
+            width: 100%;
+            height: 1em;
+            position: relative;
+            z-index: 10;
+        }
+
+            .showPosterSection .mine-poster-2 .bg-img img {
+                width: 100%;
+            }
+
+        .showPosterSection .mine-poster-2 .qrcode-section {
+            width: 26%;
+            height: auto;
+            margin: 0 auto 0 auto;
+            padding: 0 0 0 0;
+            display: table;
+            position: absolute;
+            right: 0.8em;
+            bottom: 1.6em;
+            z-index: 11;
+            text-align: center;
+        }
+
+            .showPosterSection .mine-poster-2 .qrcode-section img {
+                width: 98%;
+                background: #fff;
+            }
+
+            .showPosterSection .mine-poster-2 .qrcode-section .qrcode-tip {
+                width: 100%;
+                height: auto;
+                margin: 0 0 0 0;
+                font-size: 0.7em;
+                color: rgba(255,255,255,0.5);
+                text-align: center;
+            }
+
+.poster-bg {
+    width: 100%;
+    height: 100%;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    display: table;
+    background: rgba(0, 0, 0, 0.80);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 200;
+}
+
+.poster-tip {
+    width: 100%;
+    height: auto;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    display: table;
+    position: absolute;
+    top: 30px;
+    left: 0;
+    z-index: 200;
+    color: #fff;
+    font-size: 0.9em;
+    font-family: Arial;
+    text-align: center;
+}

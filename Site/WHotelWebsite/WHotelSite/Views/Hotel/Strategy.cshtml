@@ -1,0 +1,109 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params.Hotel
+@{
+    Layout = null;
+
+    ViewBag.Title = string.Format("酒店住宿攻略");
+    ViewBag.Description = string.Format("酒店住宿攻略");
+
+    var cssVersion = "190001010000";
+    try
+    {
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex) { }
+
+    var districtList = ViewBag.DistrictList;
+    var districtId = ViewBag.DistrictId;
+
+    var isApp = ViewBag.IsApp;
+    var apptype = ViewBag.AppType;
+
+    var title = "酒店住宿攻略";
+    if (districtList != null && districtList.Count > 0)
+    {
+        title = districtList[0].Name + "酒店攻略";
+    } 
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <title>@title</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="~/Content/css/strategy.css?v=@cssVersion" />
+    <link href="~/Content/css/photoswipe.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="strategy-panel">
+        @if (districtList != null && districtList.Count > 0)
+        {
+            for (int dnum = 0; dnum < districtList.Count; dnum++)
+            {
+                var d_obj = districtList[dnum];
+                <div class="strategy-item">
+                    @if (d_obj.Type == 1)
+                    {
+                        <div class="tit1" style="height:1em;line-height:1em;"></div>
+                    }
+                    else
+                    {
+                        <div class="tit2">@d_obj.Name</div>
+                    }
+                    <div class="content">@Html.Raw(d_obj.Description)</div>
+                    @if (!string.IsNullOrEmpty(d_obj.PicUrl))
+                    {
+                        if (d_obj.Type == 1)
+                        {
+                            <div class="pic"><img alt="@d_obj.Name" src="@d_obj.PicUrl" /></div>   
+                        }
+                        else
+                        { 
+                            <div class="pic"><a class="pic-link" href="@d_obj.PicUrl"><img alt="@d_obj.Name" src="@d_obj.PicUrl" /></a></div>
+                        }
+                    }
+                    @if (d_obj.HotelCount > 0)
+                    {
+                        var urlTit = string.Format("&title={0}", d_obj.Name);
+                        //if (isApp && apptype == "iosapp")
+                        //{
+                        //    urlTit = string.Format("&title={0}", "");
+                        //}
+
+                        var href = string.Format("whotelapp://www.zmjiudian.com/strategy/place?zoneId={0}{1}", d_obj.ID, urlTit);
+                        if (d_obj.Type == 1)
+                        {
+                            href = string.Format("whotelapp://www.zmjiudian.com/strategy/place?districtid={0}{1}", districtId, urlTit);
+                        }
+                        <div class="link"><img alt="" src="/Content/images/hotel/arrow-circle.png" /><a href="@href">查看这里的<span style="font-family:Arial;">@(d_obj.HotelCount)</span>家酒店</a></div>
+                    }
+                </div>
+            }
+        }
+        else
+        { 
+            <div>酒店住宿攻略</div>
+        }
+    </div>
+
+</body>
+</html>
+<script src="~/Content/js/jquery-1.10.2-min.js" type="text/javascript"></script>
+<script src="~/Content/js/klass.min.js"></script>
+<script src="~/Content/js/photoswipe.js"></script>
+<script>
+    $(document).ready(function () {
+        // 此处的对象，就是PhotoSwipe实例，可以使用相应的方法,例如 show(0),hide()等.  
+        var myPhotoSwipe = $(".strategy-panel .pic-link").photoSwipe({ enableMouseWheel: false, enableKeyboard: false });
+    });
+</script>

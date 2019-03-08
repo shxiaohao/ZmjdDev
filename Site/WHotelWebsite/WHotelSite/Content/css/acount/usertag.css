@@ -1,0 +1,181 @@
+﻿html, body {
+    margin:0;
+    padding:0;
+}
+.option-panel {
+    width:100%;
+    height:auto;
+    margin:2em auto 0 auto;
+    padding: 0 0 0 0;
+}
+    .option-panel .option-item{
+        width:87%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:1.9em 1.3em 1.8em 0;
+        border-bottom:1px solid #cdcdcd;
+        background: url(../../images/icon-aarow7.png) no-repeat right 2.1em;
+        background-size:2em;
+    }
+    .option-panel .option-item:hover{
+        background-color:#f0f0f0;
+    }
+    .option-panel .option-item:active{
+        background-color:#f0f0f0;
+    }
+        .option-panel .option-item .left{
+            width:21%;
+            min-width:5em;
+            height:auto;
+            float:left;
+            text-align:right;
+        }
+            .option-panel .option-item .left .lab{
+                font-size:1.2em;
+                color:#666;
+            }
+        .option-panel .option-item .right{
+            width:73%;
+            height:auto;
+            float:right;
+            text-align:left;
+        }
+            .option-panel .option-item .right .val{
+                width:10em;
+                overflow:hidden;
+                font-size:1.2em;
+                color:#999;
+            }
+            .option-panel .option-item .right .val-ok{
+                color:#000;
+            }
+    .option-panel .option-item-noborder{
+        border:none;
+    }
+
+.select-panel-model {
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.4);
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:2;
+}
+.select-panel {
+    width:90%;
+    height:auto;
+    background:#fff;
+    border:1px solid #fff;
+    border-radius: 5px;
+    position:absolute;
+    top:1em;
+    left:5%;
+    z-index:3;
+}
+    .select-panel .tit {
+        width:90%;
+        height:auto;
+        line-height:20px;
+        margin:20px auto 10px auto;
+        padding:0 0 0 0;
+        text-align:center;
+        font-size:1.3em;
+        overflow:auto;
+    }
+    .select-panel .options {
+        width:90%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0 0 1.5em 0;
+        text-align:center;
+        overflow:auto;
+    }
+        .select-panel .options .item{
+            width:auto;
+            height:auto;
+            line-height:2.3em;
+            margin:1.1em 0.4em 0 0.4em;
+            padding:0 1.3em 0 1.3em;
+            background:#fff;
+            border:1px solid #ddd;
+            border-radius: 20px;
+            font-size:1.2em;
+            overflow:hidden;
+            display:inline-table;
+        }
+        .select-panel .options .item-long{
+            width:90%;
+            height:auto;
+            line-height:2.3em;
+            margin:1em auto 0 auto;
+            padding:0 0 0.8em 0;
+            background:#fff;
+            border-top:none !important;
+            border-left:none !important;
+            border-right:none !important;
+            border-bottom:1px solid #ddd !important;
+            border-radius: 0;
+            font-size:1.2em;
+            /*display:table;*/
+        }
+        .select-panel .options .custom-item{
+            margin:1.1em 0 0 0;
+            padding:0 0 0 0;
+        }
+            .select-panel .options .item input{
+                width:8em;
+                height:auto;
+                margin:0 0 0 0;
+                padding:0 0 0 0;
+                background:#fff;
+                border:none;
+                font-size:1em;
+                text-align:center;
+            }
+        .select-panel .options .item-sel{
+            border:1px solid #0995dc;
+            color:#0995dc;
+        }
+            .select-panel .options .item-sel input{
+                color:#0995dc;
+            }
+    .select-panel .btns {
+        width:100%;
+        height:auto;
+        margin:0 auto 0 auto;
+        text-align:center;
+        border-top:1px solid #ddd;
+    }
+        .select-panel .btns .ok{
+            width: 100%;
+            height:50px;
+            line-height:5px;
+            margin:0 auto 0 auto;
+            border: none;
+            background-color: #fff;
+            border-radius: 3px;
+            color: #0995dc;
+            font-size: 1.5em;
+        }
+
+.sub-panel {
+    width:100%;
+    height:auto;
+    margin:0 auto 0 auto;
+    position:fixed;
+    bottom:2em;
+    left:0;
+    z-index:1;
+}
+    .sub-panel .sub{
+        width: 88%;
+        height:2.8em;
+        line-height:2.7em;
+        margin: 1em 0 0 6%;
+        border: none;
+        background-color: #3cc8c4;
+        border-radius: 5px;
+        color: #fff;
+        font-size: 1.5em;
+    }

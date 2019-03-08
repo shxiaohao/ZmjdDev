@@ -1,0 +1,11 @@
+﻿@model IEnumerable<CommentItem>
+@{
+    Layout = null;
+}
+
+@foreach (CommentItem t in Model)
+{
+    <dt>@(t.ChannelName)住店用户 @t.Author</dt>
+    <dd>@Html.Raw(t.Text)</dd>
+    <dd class="text-right date">@t.Time</dd>
+}

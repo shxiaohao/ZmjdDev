@@ -1,0 +1,493 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params.Hotel
+@using HJD.CommentService.Contract
+@model CommentInfoModel3
+@{
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.isInWeixin;
+    var cmid = ViewBag.CmId;
+    CommentInfoModel3 commentInfo = ViewBag.CommentInfo;
+
+    ViewBag.Title = string.Format("{0}玩点介绍_优惠价格_用户评价-{0}附近好玩_好吃美食-周末酒店", commentInfo.hotelName);
+    ViewBag.Keywords = string.Format("{0}{1}{2}点击查看更多{3}网友点评、玩点，特色、优惠价格，发现更适合你的酒店。", commentInfo.minPrice > 0 ? "参考价格￥" + commentInfo.minPrice.ToString("0") + "起，" : string.Empty, commentInfo.hotelScore > 0 ? "平均点评分" + commentInfo.hotelScore.ToString("0.0") + "分（总分5分），" : string.Empty, string.Empty, commentInfo.hotelName);
+    ViewBag.Description = string.Format("{0}玩点介绍_优惠价格_用户评价-{0}附近好玩_好吃美食", commentInfo.hotelName);
+    ViewBag.BodyClass = "hoteldetailpage";
+
+    bool isShowWrite = UserState.UserID != 0 ? true : false;
+
+    var score = (commentInfo.commentScore == 0 ? 5 : commentInfo.commentScore);
+    string scoreStar = "~/Content/images/star2-" + score + ".png";
+
+    var hotelScore = (int)commentInfo.hotelScore;
+    string hotelScoreStar = hotelScore > 0 ? "~/Content/images/star2-" + hotelScore + ".png" : "";
+
+    //commentInfo.commentTitle = "酒店个性化服务很好";// 酒店个性化服务很好 酒店个性化服务很好 酒店个性化服务很好";
+
+    //分享者信息
+    HJD.AccountServices.Entity.MemberProfileInfo shareUserInfo = ViewBag.ShareUserInfo;
+}
+@section styles {
+    @Styles.Render("~/Content/css/comment/commentdetail.css?v=" + (Helpers.curAppVer()))
+    @Styles.Render("~/Content/css/swiper.css")
+    <style>
+        html, body {
+            overflow-x: hidden;
+        }
+
+        .download-footbanner {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            margin: auto;
+            padding: 0;
+            vertical-align: bottom;
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index:2;
+        }
+
+            .download-footbanner img {
+                width: 100%;
+                vertical-align: bottom;
+            }
+    </style>
+}
+@section scripts
+{
+    <script src="~/Content/js/swipe.js"></script>
+    <script src="~/Content/js/comment/commentdetail.js"></script>
+    <script>
+
+        function goto(param) {
+            var url = "@(ViewBag.AccessProtocal)" + param;
+            this.location = url;
+        }
+        function openHotel(hotelid) {
+            var isapp = $("#isapp").val() == "1";
+            if (isapp) {
+                goto('hotel/' + hotelid);
+            }
+            else {
+                location.href = "http://www.zmjiudian.com/hotel/" + hotelid;
+            }
+        }
+
+        function gourl(url) {
+            location.href = url;
+        }
+
+        function testClickFun(type) {
+            switch (type) {
+                case 1:
+                    {
+                        _hmt.push(['_trackEvent', 'CommentDetail', 'downloadzmjd', "@commentInfo.hotelName" + "_CommId", "@cmid"]);
+                        gourl('/Inspector/Jump?jumpurl=whotelapp://www.zmjiudian.com/personal/comments/@cmid');
+                        break;
+                    }
+                case 2:
+                    {
+                        var sourceId = $("#shareuserid").val();
+
+                        //debugger;
+                        _hmt.push(['_trackEvent', 'CommentDetail', 'joinzmjd', "@commentInfo.hotelName" + "_CommId", "@cmid"]);
+                        gourl('/Active/GenCashCouponForInvitation?sourceId=' + sourceId);
+                        break;
+                    }
+            }
+        }
+
+        $(document).ready(function () {
+
+        });
+    </script>
+    @if (isInWeixin && commentInfo.shareModel != null)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+        <script>
+
+        GetWeixinApiConfig();//注册
+
+        wx.ready(function () {
+
+            wx.onMenuShareTimeline({
+                title: '@commentInfo.shareModel.title',
+                desc: '@commentInfo.shareModel.Content',
+                link: '@commentInfo.shareModel.shareLink',
+                imgUrl: '@(commentInfo.shareModel.photoUrl)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareAppMessage({
+                title: '@commentInfo.shareModel.title',
+                desc: '@commentInfo.shareModel.Content',
+                link: '@commentInfo.shareModel.shareLink',
+                imgUrl: '@(commentInfo.shareModel.photoUrl)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareQQ({
+                title: '@commentInfo.shareModel.title',
+                desc: '@commentInfo.shareModel.Content',
+                link: '@commentInfo.shareModel.shareLink',
+                imgUrl: '@(commentInfo.shareModel.photoUrl)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareQZone({
+                title: '@commentInfo.shareModel.title',
+                desc: '@commentInfo.shareModel.Content',
+                link: '@commentInfo.shareModel.shareLink',
+                imgUrl: '@(commentInfo.shareModel.photoUrl)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+        });
+
+        function GetWeixinApiConfig() {
+
+            var url = location.href.split("#")[0];
+            $.ajax({
+                url: '/Coupon/GetWeixinConfigInfo',
+                type: 'POST',
+                data: { url: url },
+                dataType: 'json',
+                async: false,
+                error: function () {
+                    console.log("网络服务错误");
+                },
+                success: function (result) {
+                    if (typeof (result.Success) != undefined && result.Success == 1) {
+                        return false;
+                    }
+                    else {
+                        //得到微信config的值
+                        var array = [
+                            'checkJsApi',
+                            'onMenuShareTimeline',
+                            'onMenuShareAppMessage',
+                            'onMenuShareQQ',
+                            'onMenuShareQZone',
+                            'hideOptionMenu'
+                        ];
+                        if (result.jsApiList) {
+                            var jsArray = result.jsApiList.split(',');
+                            for (var key in jsArray) {
+                                array.push("" + jsArray[key]);
+                            }
+                        }
+
+                        wx.config({
+                            debug: false,
+                            appId: result.appId,
+                            timestamp: "" + result.timestamp,
+                            nonceStr: result.nonceStr,
+                            signature: result.signature,
+                            jsApiList: array
+                        });
+                    }
+                }
+            });
+        }
+
+        </script>
+    }
+}
+
+@helper CategoryPhotolist(CommentInfoModel3 commentInfo)
+{
+    var pUrls = commentInfo.commentPics;
+    var pUrls2 = commentInfo.bigCommentPics; //bigCommentPics
+    <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+            @for (int i = 0; i < pUrls.Count; i++)
+            {
+                var url = pUrls[i];
+                var url2 = pUrls2.Count > i ? pUrls2[i] : url;
+                var addCss = "pic-item-not"; if (i == 0) { addCss = ""; }
+                <td><div class="pic-item @addCss" id="pic-item-@i" data-index="@i" style="background:url(@Url.Content(url)) center no-repeat;background-size: cover"><img src="~/Content/images/transparency.png" /></div></td>
+            }
+        </tr>
+    </table>
+}
+@helper CommentPhotolist(CommentInfoModel3 commentInfo)
+{
+    var pUrls = commentInfo.commentPics;
+    var pUrls2 = commentInfo.bigCommentPics;
+    <header class="swiper-header">
+        <div id="slider" class="swipe" style="visibility: visible;">
+            <div class="swipe-wrap">
+                @for (int i = 0; i < pUrls.Count; i++)
+                {
+                    var url = pUrls[i];
+                    var url2 = pUrls2.Count > i ? pUrls2[i] : url;
+                    @*<li><a href="@url2" style="background: url(@Url.Content(url)) no-repeat top center; background-size: 100%;" data-index="@i"><img src="~/Content/images/transparency.png" /></a></li>*@
+                    <figure>
+                        <div class="wrap">
+                            <div class="image" style="background:url(@url2) center no-repeat;background-size: cover"> </div>
+                        </div>
+                    </figure>
+                }
+            </div>
+        </div>
+    </header>
+}
+<div id="showPicList-div" class="comment-detail-showpic" style="display:none;"></div>
+<div id="showPicList-div-close" class="comment-detail-showpic-close" style="display:none;"></div>
+<!-- HotelName -->
+<div class="container mainbody">
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            <div class="row hidden-xs hidden-sm">
+                <div class="col-md-6 hotelname">
+                    @commentInfo.hotelName
+                </div>
+                <div class="col-md-6 hotelstar">
+                    @Helpers.StarImage(Url, (int)commentInfo.hotelScore, null)
+                </div>
+                <div style="float:right">
+                    <div class="bdsharebuttonbox" data-tag="share_1">
+                        <a class="bds_weixin" data-cmd="weixin"></a>
+                        <a class="bds_tsina" data-cmd="tsina"></a>
+                        @*<wb:share-button addition="number" type="icon" count="y" url="@Request.Url.AbsoluteUri" size="small" pic="@newPicUrl" language="zh_cn" appkey="2410638867" title="@zmjdWB @Model.ShareDesc"></wb:share-button>*@
+                    </div>
+                </div>
+                <div style="clear:none;"></div>
+            </div>
+            <div class="row">
+                <!-- Hotel Left -->
+                <div class="col-md-8 zmpanel">
+                    <div class="panel panel-default page-swipe">
+                        <div class="comment-detail-member">
+                            <table cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <td style="width:4.3em;" valign="middle">
+                                        <img src="@(commentInfo.avatar)" alt="@(commentInfo.nickName)" class="member-img" />
+                                    </td>
+                                    <td valign="bottom">
+                                        <div class="member-info">@(commentInfo.nickName)</div>
+                                    </td>
+                                    <td style="width:6em;text-align:right;" valign="middle">
+                                        <a class="member-comment-follow" href="/Inspector/Jump?jumpurl=whotelapp://www.zmjiudian.com/personal/comments/@cmid">关注</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="comment-detail-title">
+                            <div class="hotel-name">
+                                @commentInfo.commentTitle
+                            </div>
+                            <div class="hotel-brief">
+                                <img src="/Content/images/comment/local.png" class="local-icon" alt="" />@commentInfo.hotelName
+                            </div>
+                        </div>
+                        @if (commentInfo.addSections == null || commentInfo.addSections.Count <= 0) 
+                        {
+                            <div class="comment-detail-pic">
+                                @if (commentInfo.commentPics != null && commentInfo.commentPics.Count > 0)
+                                {
+                                    <div>@Html.Raw(CommentPhotolist(commentInfo))</div>
+                                }
+                            </div>
+                            <div class="comment-detail-pic2">
+                                @if (commentInfo.commentPics != null && commentInfo.commentPics.Count > 0)
+                                {
+                                    <div class="pic-window">
+                                        <div id="moveid" class="pic-dragme">
+                                            @Html.Raw(CategoryPhotolist(commentInfo))
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        <div class="comment-detail-brief">
+                            <div class="star">
+                                <img src="@Url.Content(scoreStar)" class="starimg" alt="" /><span class="cdate">@(commentInfo.writeTime.ToString("yyyy.MM.dd"))</span>
+                            </div>
+                            <div class="brief">
+                                入住@(commentInfo.roomType)
+                                @if (!string.IsNullOrEmpty(commentInfo.tripType))
+                                {<span style="font-size:1em;color:#ccc;">|</span> @commentInfo.tripType}
+                                @if (commentInfo.isRecommend)
+                                {<span style="font-size:1em;color:#ccc;">|</span> <span class="h">推荐</span><img src="/Content/images/comment/good2.png" class="goodimg" alt="" />}
+                            </div>
+                        </div>
+                        <div class="comment-detail-info">
+                            @if (!string.IsNullOrEmpty(commentInfo.commentContent))
+                            {
+                                //commentInfo.additionalContent = "这是补充点评吧啦吧啦吧啦吧啦吧啦...!";
+                                <section class="some">
+                                    <dl>
+                                        @if (!string.IsNullOrEmpty(commentInfo.commentContent))
+                                        {
+                                            <dd>@Html.Raw(commentInfo.commentContent)</dd>
+                                        }
+                                    </dl>
+                                </section>
+                            }
+                        </div>
+                        @if (commentInfo.addSections != null && commentInfo.addSections.Count > 0)
+                        {
+                            <div class="comment-content">
+                                @foreach (var item in commentInfo.addSections)
+	                            {
+		                            <div class="item">
+                                        <div class="cp"><img src="@item.PicUrl" alt="" /><div class="arrow-up"> </div></div>
+                                        <div class="ci">@Html.Raw(item.Brief)</div>
+                                    </div>
+	                            }
+                            </div>   
+                        }
+                        <div class="comment-detail-info">
+                            @if (!string.IsNullOrEmpty(commentInfo.commentContent))
+                            {
+                                if (!string.IsNullOrEmpty(commentInfo.additionalContent))
+                                {
+                                    <div class="additionalContent">
+                                        <div class="at">补充点评：</div>
+                                        <div class="ai">@commentInfo.additionalContent</div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                    
+                        <div class="panel panel-default comment-comments-panel">
+                            <div class="comment-clickitems">
+                                <div class="comment-date">
+                                    <div class="left">
+                                        <span class="visit" style="display:none;"><img src="http://whfront.b0.upaiyun.com/www/img/comment/reader.png" class="visitimg" alt="" />阅读 @commentInfo.visitCount</span>
+                                    </div>
+                                    <div class="right">
+                                        <span class="yes @(commentInfo.usefulCount == 0 ? "nonecolor" : "")" onclick="gourl('/Inspector/Jump?jumpurl=whotelapp://www.zmjiudian.com/personal/comments/@cmid')"><img src="/Content/images/comment/love@2x.png" class="loveimg" alt="" />有用 @commentInfo.usefulCount</span>
+                                        <span class="write"><a href="javascript:;" onclick="gourl('/Inspector/Jump?jumpurl=whotelapp://www.zmjiudian.com/personal/comments/@cmid')"><img src="/Content/images/comment/pen.png" class="goodimg" alt="" />写评论</a></span>
+                                    </div>
+                                    <div style="clear:none;"></div>
+                                </div>
+                                @if (commentInfo.clickUsefulList != null && commentInfo.clickUsefulList.Count > 0)
+                                {
+                                    <div class="comment-clickusers">
+                                        <ul>
+                                            @for (int i = 0; i < commentInfo.clickUsefulList.Count; i++)
+                                            {
+                                                var clickUser = commentInfo.clickUsefulList[i];
+                                                var userName = clickUser.NickName;
+                                                if (i + 1 < commentInfo.clickUsefulList.Count)
+                                                {
+                                                    userName += ",";
+                                                }
+                                                if (i == 0)
+                                                {
+                                                    <li style="margin:0 0 0 1.2em;"><img src="http://whfront.b0.upaiyun.com/www/img/comment/lovestar.png" class="haveimg" alt="" /></li>
+                                                }
+                                                <li>@userName</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+                            </div>
+                            @if (commentInfo.reviewCount > 0)
+                            {
+                                <div class="comment-comments-title">&nbsp;评论 (@commentInfo.reviewCount)</div>
+                                <div class="comment-comments-list">
+                                    <ul>
+                                        @for (int i = 0; i < commentInfo.reviewItems.Count; i++)
+                                        {
+                                            var reviewItem = commentInfo.reviewItems[i];
+                                            <li>
+                                                <div class="review-pic">
+                                                    <img src="@(reviewItem.AvatarUrl)" alt="@(reviewItem.NickName)" />
+                                                </div>
+                                                <div class="review-info">
+                                                    <div class="review-t">@reviewItem.NickName</div>
+                                                    <div class="review-c">@reviewItem.Content</div>
+                                                    <div class="review-d">@reviewItem.TimeDesc</div>
+                                                    @if (reviewItem.subItems != null && reviewItem.subItems.Count > 0)
+                                                    {
+                                                        for (int subNum = 0; subNum < reviewItem.subItems.Count; subNum++)
+                                                        {
+                                                            var subReviewItem = reviewItem.subItems[subNum];
+                                                            <div class="sub-list">
+                                                                <div class="review-t">@subReviewItem.NickName</div>
+                                                                <div class="review-c">@subReviewItem.Content</div>
+                                                                <div class="review-d">@subReviewItem.TimeDesc</div>
+                                                            </div>
+                                                        }
+                                                    }
+                                                </div>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                                <div style="clear:none;"></div>
+                            }
+                        </div>
+                    
+                    @if (commentInfo.hotelID > 0)
+                    {
+                        <div class="panel panel-default">
+                            <div class="comment-detail-hoteltitle">
+                                更多了解这家酒店
+                            </div>
+                            <div class="comment-detail-hotelinfo" onclick="openHotel('@(commentInfo.hotelID.ToString())')">
+                                <div style="width: 65%; float: left;cursor:pointer;">
+                                    <div class="name">@commentInfo.hotelName</div>
+                                    @if (!string.IsNullOrEmpty(hotelScoreStar))
+                                    {
+                                        <div class="starpanel">
+                                            <img src="@Url.Content(hotelScoreStar)" class="starimg" alt="" />
+                                            <span class="h">@(hotelScore)</span>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="price" style="width:auto; float: right;">
+                                    <a href="javascript:;">
+                                        ￥@commentInfo.minPrice.ToString("0")<img src="@Url.Content("~/Content/Images/icon-aarow1.png")" class="aarow" alt="" />
+                                    </a>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                    }
+                    <div class="panel panel-default">
+                        <div class="share-member-head">
+                            <div class="member-head"><img src="@(shareUserInfo.AvatarUrl)" alt="@(shareUserInfo.NickName)" /></div>
+                            <div class="member-nick">@(shareUserInfo.NickName)<br />@(string.IsNullOrEmpty(shareUserInfo.NickName) ? "" : "正在用")周末酒店App</div>
+                            <div class="ad-tip">邀请您</div>
+                        </div>
+                        <div class="share-btns">
+                            <div class="join-zmjd" onclick="testClickFun(2)" data-op="0">使用周末酒店 获得50元现金券</div>
+                        </div>
+                        <div class="share-bottom-logo">
+                            <img src="http://whfront.b0.upaiyun.com/www/img/comment/zmjd-bottom-logo.png" alt="周末酒店" />
+                        </div>
+                    </div>
+                </div>
+                <!-- Hotel Right -->
+                <div class="col-md-4 visible-md visible-lg zmrightpanel">
+                    @Helpers.QRCodes(Url)
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>
+<input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+<input type="hidden" id="shareuserid" value="@(shareUserInfo.UserID)" />

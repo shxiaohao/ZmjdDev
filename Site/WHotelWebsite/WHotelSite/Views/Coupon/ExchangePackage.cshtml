@@ -1,0 +1,67 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    Layout = null;
+
+    var recmHotelResult = ViewBag.RecmHotelResult;
+    RecommendPackageDetailResult packageEntity = ViewBag.PackageEntity;
+    SameSerialPackageItem thisPackageRoomInfo = ViewBag.ThisPackageRoomInfo;
+    
+    var isApp = ViewBag.IsApp;
+    var pid = ViewBag.Pid;
+    var userid = ViewBag.UserId;
+    var albumid = ViewBag.AlbumId;
+    
+    var AppType = ViewBag.AppType;
+    var AppVerForIOS = ViewBag.AppVerForIOS;
+    var AppVerForAndroid = ViewBag.AppVerForAndroid;
+    var IsLatestVerApp = ViewBag.IsLatestVerApp;
+
+    var pageTitle = "周末酒店";
+}
+
+<!DOCTYPE html>
+<script type="text/javascript">
+
+    function goto(param) {
+        var isapp = $("#isapp").val() == "1";
+        var url = "whotelapp://www.zmjiudian.com/" + param;
+        if (!isapp) {
+            url = "http://www.zmjiudian.com/" + param;
+        }
+
+        this.location = url;
+    }
+
+    function gourl(url) {
+        location.href = url;
+    }
+    
+    function loginCallback(userid) {
+        location.replace(location.pathname + "?userid=" + userid);
+    }
+
+    var pub_userid = "@userid";
+</script>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>@pageTitle</title>
+    <link href="~/Content/css/framework/util.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="/content/css/coupon/exchangepackage.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <link href="/content/css/calendar_price.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+</head>
+<body>
+    <div id="package-content">@Html.Partial("ExchangePackageContent")</div>
+</body>
+</html>

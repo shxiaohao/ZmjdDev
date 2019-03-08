@@ -1,0 +1,64 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+
+    InspectorRegisterParam param = ViewBag.param;
+
+    ViewBag.Title = string.Format("品鉴师注册-周末酒店");
+    ViewBag.Keywords = string.Format("品鉴师，品鉴师注册，注册，报名");
+    ViewBag.Description = string.Format("品鉴师注册");
+
+    ViewBag.BodyStyle = "overflow-x:hidden;";
+    ViewBag.BodyClass = "inspectorregpage";
+}
+@section styles
+{
+    <style>
+        html, body {
+                height: 100%;
+                margin: 0;
+            }
+        .btn-default, .btn-primary {
+            width: 48%;
+            border: none;
+            color: #6294D1;
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+        .box-big-btn {
+            width:90%;
+        }
+    </style>
+}
+<script>
+    function goto(param) {
+        var url = "@(ViewBag.AccessProtocal)" + param;
+        this.location = url;
+    }
+
+    function gotopage(param) {
+        var url = "@(ViewBag.AccessProtocalPage)" + param;
+        this.location = url;
+    }
+</script>
+<div class="reg-body">
+    <section class="reg-top">
+        <div class="logobgcolor"></div>
+        <img class="logotxt" src="~/Content/images/inspector/brown/text03.png"><br />
+        <img class="logoimg" src="~/Content/images/inspector/brown/bed.png"><br />
+        <ul class="form">
+            <li><img src="~/Content/images/inspector/brown/user.png" class="img"><input type="text" class="input" id="regname" placeholder="输入您的姓名" autocomplete="off"></li>
+            <li><img src="~/Content/images/inspector/brown/tel.png" class="img"><input type="number" class="input" id="regtell" placeholder="您的电话号码" autocomplete="off" inputscope="Number" value="@param.RegisterResult.Mobile"></li>
+            <li><img src="~/Content/images/inspector/brown/mail.png" class="img"><input type="text" class="input" id="regmail" placeholder="邮箱地址" autocomplete="off"></li>
+        </ul>
+        <button class="submit" data-userid="@param.UserId">提交信息</button>
+    </section>
+    <footer class="reg-foot"><img src="~/Content/images/inspector/brown/bottom2.png"></footer>
+</div>
+<!--  -->
+
+@section scripts
+{
+    @Scripts.Render("~/Content/js/bootbox.js", "~/Content/js/inspector/inspector.js")
+}

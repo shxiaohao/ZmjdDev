@@ -1,0 +1,34 @@
+
+[17/9/28 15:54:31] Start Job [DownLoadWexinUserInfoJob]
+[17/9/28 15:55:15] ¡¾NextOpenid¡¿:oUyJ9uNrcO3gZNPWyUTtp2ZOg1Ro
+[17/9/28 15:55:45] Start Job [DownLoadWexinUserInfoJob]
+[17/9/28 15:55:47] ¡¾NextOpenid¡¿:oUyJ9uNrcO3gZNPWyUTtp2ZOg1Ro
+[17/9/28 15:55:50] GetAllWeixinSubscribeUser is null:nextOpenid:oUyJ9uNrcO3gZNPWyUTtp2ZOg1Ro
+[17/9/28 15:55:53] Stop Job [DownLoadWexinUserInfoJob]
+[17/9/28 15:56:00] Start Job [DownLoadWexinUserInfoJob]
+[17/9/28 15:56:04] ¡¾NextOpenid¡¿:oUyJ9uNrcO3gZNPWyUTtp2ZOg1Ro
+[17/9/28 15:57:26] ¡¾0¡¿
+[17/9/28 15:57:27] GetAllWeixinSubscribeUser Count:8011
+[17/9/28 18:12:17] Start Job [DownLoadWexinUserInfoJob]
+[17/9/28 18:12:21] ¡¾NextOpenid¡¿:oUyJ9uNrcO3gZNPWyUTtp2ZOg1Ro
+[17/9/28 18:14:33] Start Job [DownLoadWexinUserInfoJob]
+[17/9/28 18:14:40] ¡¾NextOpenid¡¿:
+[17/9/28 18:14:42] ¡¾0¡¿
+[17/9/28 18:14:43] GetAllWeixinSubscribeUser Count:8019
+[17/9/28 18:25:35] Start Job [DownLoadWexinUserInfoJob]
+[17/9/28 18:25:37] ¡¾NextOpenid¡¿:
+[17/9/28 18:25:40] ¡¾0¡¿
+[17/9/28 18:25:40] GetAllWeixinSubscribeUser Count:8019
+[17/9/28 18:32:03] Start Job [DownLoadWexinUserInfoJob]
+[17/9/28 18:32:06] ¡¾NextOpenid¡¿:
+[17/9/28 18:32:07] ¡¾0¡¿
+[17/9/28 18:32:07] GetAllWeixinSubscribeUser Count:8019
+[17/9/28 18:33:55] Start Job [DownLoadWexinUserInfoJob]
+[17/9/28 18:33:59] ¡¾NextOpenid¡¿:
+[17/9/28 18:34:01] ¡¾0¡¿
+[17/9/28 18:34:01] GetAllWeixinSubscribeUser Count:8019
+[17/9/28 18:40:53] Start Job [DownLoadWexinUserInfoJob]
+[17/9/28 18:40:56] ¡¾NextOpenid¡¿:
+[17/9/28 18:40:59] ¡¾0¡¿
+[17/9/28 18:41:00] GetAllWeixinSubscribeUser Count:8019
+[17/9/28 18:41:18] ÕËºÅ£ºoHGzlw9M1p-A8Rh1eiCNcnP2cwZM ½á¹û£º{"errcode":0,"errmsg":"ok","msgid":459557869}

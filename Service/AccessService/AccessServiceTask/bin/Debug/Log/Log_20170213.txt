@@ -1,0 +1,9 @@
+
+[17/2/13 17:53:36] Start Job [DownLoadWexinMaterialJob]
+[17/2/13 17:53:37] ¡¾GetLastOffset¡¿:1
+[17/2/13 18:01:46] Start Job [DownLoadWexinMaterialJob]
+[17/2/13 18:01:47] ¡¾GetLastOffset¡¿:1
+[17/2/13 18:02:53] ¡¾0¡¿
+[17/2/13 18:02:53] GetAllWeixinMaterialList Count:1
+[17/2/13 18:15:22] Start Job [DownLoadWexinMaterialJob]
+[17/2/13 18:15:22] ¡¾GetLastOffset¡¿:1

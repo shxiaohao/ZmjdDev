@@ -1,0 +1,17 @@
+D:\Dev\WHotelDev\Dev\Service\WeixinService\HaoJiudian.WeixinService.Implement\obj\Debug\HJD.WeixinService.Implement.csprojResolveAssemblyReference.cache
+D:\Dev\WHotelDev\Dev\Service\WeixinService\HaoJiudian.WeixinService.Implement\bin\Debug\HJD.WeixinService.Implement.dll
+D:\Dev\WHotelDev\Dev\Service\WeixinService\HaoJiudian.WeixinService.Implement\bin\Debug\HJD.WeixinService.Implement.pdb
+D:\Dev\WHotelDev\Dev\Service\WeixinService\HaoJiudian.WeixinService.Implement\bin\Debug\HJD.Framework.Interface.dll
+D:\Dev\WHotelDev\Dev\Service\WeixinService\HaoJiudian.WeixinService.Implement\bin\Debug\HJD.WeixinService.Contract.dll
+D:\Dev\WHotelDev\Dev\Service\WeixinService\HaoJiudian.WeixinService.Implement\bin\Debug\Microsoft.Practices.Unity.dll
+D:\Dev\WHotelDev\Dev\Service\WeixinService\HaoJiudian.WeixinService.Implement\bin\Debug\HJD.Framework.Utility.dll
+D:\Dev\WHotelDev\Dev\Service\WeixinService\HaoJiudian.WeixinService.Implement\bin\Debug\Microsoft.Practices.Unity.Configuration.dll
+D:\Dev\WHotelDev\Dev\Service\WeixinService\HaoJiudian.WeixinService.Implement\bin\Debug\Microsoft.Practices.ServiceLocation.dll
+D:\Dev\WHotelDev\Dev\Service\WeixinService\HaoJiudian.WeixinService.Implement\bin\Debug\HJD.WeixinService.Contract.pdb
+D:\Dev\WHotelDev\Dev\Service\WeixinService\HaoJiudian.WeixinService.Implement\bin\Debug\HJD.Framework.Interface.pdb
+D:\Dev\WHotelDev\Dev\Service\WeixinService\HaoJiudian.WeixinService.Implement\bin\Debug\HJD.Framework.Interface.xml
+D:\Dev\WHotelDev\Dev\Service\WeixinService\HaoJiudian.WeixinService.Implement\bin\Debug\HJD.Framework.Utility.pdb
+D:\Dev\WHotelDev\Dev\Service\WeixinService\HaoJiudian.WeixinService.Implement\obj\Debug\HJD.WeixinService.Implement.dll
+D:\Dev\WHotelDev\Dev\Service\WeixinService\HaoJiudian.WeixinService.Implement\obj\Debug\HJD.WeixinService.Implement.pdb
+D:\Dev\WHotelDev\Dev\Service\WeixinService\HaoJiudian.WeixinService.Implement\bin\Debug\HJD.Framework.Entity.dll
+D:\Dev\WHotelDev\Dev\Service\WeixinService\HaoJiudian.WeixinService.Implement\bin\Debug\HJD.Framework.Entity.pdb

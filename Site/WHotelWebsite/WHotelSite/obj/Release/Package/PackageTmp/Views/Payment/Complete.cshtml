@@ -1,0 +1,163 @@
+﻿@using WHotelSite
+@using WHotelSite.Params.Hotel
+@using WHotelSite.Params.Payment
+
+@{
+    ViewBag.Title = "Complete";
+
+    PackageOrderInfo20 order = ViewBag.order;
+    HotelItem3 hotel = ViewBag.hotel;
+    GeneralParam param = ViewBag.param;
+    
+    string checkIn = Utils.FormatDate(order.CheckIn);
+    string checkOut = Utils.FormatDate(order.CheckIn.AddDays(order.NightCount));
+}
+
+@section breadcrumbs
+{
+    @Helpers.BreadCrumbs(Url, hotel)
+}
+
+<!-- HotelName -->
+<div class="fullscreen">
+    <div class="container mainbody">
+        <div class="row">
+            <div class="col-md-1">
+            </div>
+            <div class="col-md-10">
+                <div class="row hidden-xs">
+                    <div class="col-md-6 hotelname">
+                        @order.HotelName
+                    </div>
+                    <div class="col-md-6 hotelstar">
+                        @Helpers.StarImage(Url, hotel.Star, null)
+                    </div>
+                </div>
+
+                <div class="row mbhead hidden">
+                    <div class="col-xs-12 text-left">
+                        <button type="button" class="btn btn-default btn-sm">返回</button>
+                    </div>
+                </div>
+
+                <div class="container visible-xs" style="margin-bottom:-1px;">
+                    <div class="row toolbar2 ">
+                        <div class="col-xs-3">
+                            <button type="button" onclick="history.back()" class="btn btn-sm  btn-img01"><img src="@Url.Content("~/content/images/icon-back.png")" class="mobilepic" alt="" /></button>
+                        </div>
+                        <div class="col-xs-6 text-center listtitle">
+                            预订
+                        </div>
+                        <div class="col-sm-2 col-xs-3 text-right">
+                        </div>
+                    </div>
+                </div>
+                <!--  mobile header 结束 -->
+                <!--
+                    <h6>地址: 上海佘山大道1000号  &nbsp;&nbsp;  电话: 021-54334333<h6>
+                -->
+                <div class="row">
+                    <!-- Hotel Left -->
+                    <div class="col-md-8 zmpanel2">
+
+                        <div class="panel panel-default date">
+                            <div class="panel-heading hidden-xs">
+                                <div class="row">
+                                    <div class="title col-xs-12">
+                                        预订
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body forma">
+                                <div class="ddalert text-center row">
+                                    <div class="col-xs-12">
+                                        <img src="@Url.Content("~/Content/images/ddsuccess.png")" alt="" />
+                                    </div>
+                                </div>
+                                <form role="form">
+                                    <div class="row">
+                                        <div class="col-xs-6 col-sm-3 text-right">
+                                            订单状态：
+                                        </div>
+                                        <div class="col-xs-6 col-sm-8 form-group State1">
+                                            等待确认
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-6 col-sm-3 text-right">
+                                            订单号：
+                                        </div>
+                                        <div class="col-xs-6 col-sm-8 form-group">
+                                            @param.OrderId
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-6 col-sm-3 text-right">
+                                            总价：
+                                        </div>
+                                        <div class="col-xs-6 col-sm-8 form-group price">
+                                            ￥<strong>@order.Amount.ToString("0")</strong>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="ddinfo">
+
+                            <h5>@order.HotelName</h5>
+                            <dl class="dl-horizontal dingdandetail">
+                                <dt>套餐 </dt>
+                                <dd>@order.PackageName</dd>
+                                <dt>入住日期 </dt>
+                                <dd>@checkIn - @checkOut</dd>
+                                <dt>房间数 </dt>
+                                <dd>@(order.RoomCount)间</dd>
+                            </dl>
+                        </div>
+
+                            @foreach (OrderDetailDailyEntity entity in order.DailyItems)
+                            {
+                                <h5>@Utils.ChineseNumber(order.NightCount)晚 @order.RoomDescription</h5>
+                                <dl>
+                                    @foreach (OrderDetailItem item in entity.Items)
+                                    {
+                                        if (item.Type == 1)
+                                        {
+                                            <dd>
+                                                @item.Description
+                                                @if (item.Price > 0)
+                                                {
+                                                    <small>（值￥@(item.Price)）</small>
+                                                }
+                                            </dd>
+                                        }
+                                    }
+                                </dl>
+                                    break;
+                            }
+
+                            <h5>注意事项</h5>
+                            <dl>
+                                @foreach (OrderDetailItem item in order.Notice)
+                                {
+                                    if (item.Type != 1)
+                                    {
+                                        <dd>@Html.Raw(item.Description.Replace("&gt;", ">").Replace("&lt;", "<").Replace("&quot;", "\""))</dd>
+                                    }
+                                }
+                            </dl>
+
+                        </div>
+
+                    <!-- Hotel Right -->
+                    <div class="col-md-4 visible-md visible-lg zmrightpanel">
+                        @Helpers.QRCodes(Url)
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+            </div>
+        </div>
+    </div>
+</div>

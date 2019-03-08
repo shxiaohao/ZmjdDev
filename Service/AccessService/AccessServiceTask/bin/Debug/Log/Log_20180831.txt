@@ -1,0 +1,13 @@
+
+[18/8/31 12:26:51] Start Job [SendServiceTemplateMsgLiuwaWX_Job]
+[18/8/31 12:27:28] 指定了测试Openid：oh_y70R5LYS3kRc4JElY3r0FbsKU
+[18/8/31 14:56:55] Start Job [SendServiceTemplateMsgLiuwaWX_Job]
+[18/8/31 14:59:20] 指定了测试Openid：oh_y70R5LYS3kRc4JElY3r0FbsKU
+[18/8/31 15:11:46] Start Job [SendServiceTemplateMsgLiuwaWX_Job]
+[18/8/31 15:11:58] 指定了测试Openid：oh_y70R5LYS3kRc4JElY3r0FbsKU
+[18/8/31 18:21:09] Start Job [SendServiceTemplateMsgLiuwaWX_Job]
+[18/8/31 18:21:17] 指定了测试Openid：oh_y70R5LYS3kRc4JElY3r0FbsKU
+[18/8/31 18:23:17] Start Job [SendServiceTemplateMsgLiuwaWX_Job]
+[18/8/31 18:23:28] 指定了测试Openid：oh_y70R5LYS3kRc4JElY3r0FbsKU
+[18/8/31 18:25:46] Start Job [SendServiceTemplateMsgLiuwaWX_Job]
+[18/8/31 18:25:51] 指定了测试Openid：oh_y70R5LYS3kRc4JElY3r0FbsKU

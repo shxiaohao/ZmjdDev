@@ -1,0 +1,50 @@
+﻿@{
+    Layout = null;
+    
+    var isInWeixin = ViewBag.isInWeixin;
+    var isApp = ViewBag.IsApp;
+    var isThanVer46 = ViewBag.IsThanVer46;
+    var appType = ViewBag.AppType;
+
+    CanSellDistrictHotelResult result = ViewBag.Result;
+}
+
+@if (result != null && result.data != null)
+{
+    <div class="group">
+    @foreach (var pItemKey in result.data.Keys)
+    {
+        <div class="t1">
+            <div>@pItemKey</div>
+        </div>
+        var cDic = result.data[pItemKey];
+        if (cDic != null)
+        {
+            var cNum = 0;
+            foreach (var cItemKey in cDic.Keys)
+            {
+                <div class="t2">@cItemKey</div>
+                <div class="list @(cNum + 1 < cDic.Keys.Count ? "list-line" : "")">
+                    @{
+                        var hList = cDic[cItemKey];
+                        if (hList != null && hList.Count > 0)
+                        {
+                            for (int i = 0; i < hList.Count; i++)
+                            {
+                                var hItem = hList[i];
+                                <div class="item @(i + 1 < hList.Count ? "item-line" : "")" onclick="goto('hotel/@(hItem.HotelId)')">
+                                    <div class="r1">
+                                        <div class="t">@(hItem.HotelName)<span>￥@(hItem.Businessprice)</span></div>
+                                    </div>
+                                    <div class="r2">@(hItem.PackageBrief)</div>
+                                </div>
+                            }
+                        }   
+                    }
+                </div>
+                cNum++;
+            }
+        }
+    }
+    </div>
+}

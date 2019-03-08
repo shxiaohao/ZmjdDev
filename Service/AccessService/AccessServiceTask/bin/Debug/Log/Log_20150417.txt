@@ -1,0 +1,7 @@
+
+[2015/4/17 16:27:48] Start Job [HotelRoomMatchingJob]
+[2015/4/17 16:29:46] Start Job [HotelRoomMatchingJob]
+[2015/4/17 16:30:05] Job [HotelRoomMatchingJob] Error:远程服务器返回错误: (500) 内部服务器错误。
+[2015/4/17 16:46:09] Start Job [HotelRoomMatchingJob]
+[2015/4/17 16:51:05] Start Job [HotelRoomMatchingJob]
+[2015/4/17 17:16:48] Start Job [HotelRoomMatchingJob]

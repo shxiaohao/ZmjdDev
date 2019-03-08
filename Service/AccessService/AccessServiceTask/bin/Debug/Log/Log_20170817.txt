@@ -1,0 +1,5 @@
+
+[17/8/17 18:07:42] Start Job [DownLoadWexinMaterialJob]
+[17/8/17 18:10:35] LastOffset已经存储至本地！1
+[17/8/17 18:10:36] 起始：Offset【1】 Count【10】
+[17/8/17 18:12:37] GetAllWeixinMaterialList Count:10

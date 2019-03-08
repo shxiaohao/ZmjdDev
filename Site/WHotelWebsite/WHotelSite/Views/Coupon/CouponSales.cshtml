@@ -1,0 +1,556 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    var isInWeixin = ViewBag.isInWeixin;
+    var isApp = ViewBag.IsApp;
+    var appType = ViewBag.AppType;
+    var isThanVer5_1 = ViewBag.IsThanVer5_1;
+    var isVip = ViewBag.IsVip;
+    var userid = ViewBag.UserId;
+    string albumId = ViewBag.AlbumId;
+    var topId = ViewBag.TopId;
+    int districtId = ViewBag.DistrictId;
+    string districtName = ViewBag.DistrictName;
+    var tagId = ViewBag.TagId;
+    var tagName = ViewBag.TagName;
+    int geoScopeType = ViewBag.GeoScopeType;
+    var isgrid = ViewBag.IsGrid;
+
+    //是否双十一专辑
+    var _isDouble11 = true;
+
+    //控制产品专辑的分享配置
+    var shareTitle = "今日特价";
+    if (isApp)
+    {
+        shareTitle = "今日特价";
+    }
+
+    var shareDesc = "住得好、价格好、度假才好";
+    var shareImgUrl = "http://whfront.b0.upaiyun.com/app/img/zmjd-logo-x167.png";   //"http://whphoto.b0.upaiyun.com/118TSPP0_350X350";
+    var shareLink = string.Format("http://www.zmjiudian.com/Coupon/CouponSales?albumId={0}&topId={1}&isgrid={2}", albumId, topId, (isgrid ? "1" : "0"));
+    var shareLinkForApp = shareLink;
+    if (isApp)
+    {
+        shareLinkForApp = Server.UrlEncode(shareLinkForApp);
+    }
+
+    var _pageTitle = "今日特价";
+    ViewBag.Title = _pageTitle;
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    if (isApp)
+    {
+        ViewBag.LoadHmBaidu = false;
+    }
+
+    //双11活动页下的特殊处理
+    var _tabAddCss = "";
+    var _tabAddStyle = "";
+    if (_isDouble11)
+    {
+        _tabAddStyle = "position:fixed;left:0;top:0;z-index:1001;display:none;";
+        _tabAddCss = "tab-list-active";
+    }
+
+    //特殊处理 是否显示banner
+    var showBanner = true;
+    if (DateTime.Now >= DateTime.Parse("2018-11-30 23:59:59"))
+    {
+        showBanner = false;
+    }
+
+    //特殊处理 默认显示列表/阵列
+    if (DateTime.Now >= DateTime.Parse("2018-12-04 23:59:59"))
+    {
+        isgrid = false;
+    }
+
+    //特殊处理 是否使用省份级联的城市筛选
+    var useSubCityFilter = false;
+    if (DateTime.Now >= DateTime.Parse("2018-12-06 23:59:59"))
+    //if (DateTime.Now >= DateTime.Parse("2018-12-06 13:59:59"))
+    {
+        useSubCityFilter = true;
+    }
+
+    //是否显示“热门度假地”模块（并切换城市的排列为矩阵排列）
+    var showHotCity = false;
+    if (DateTime.Now >= DateTime.Parse("2018-12-19 23:59:59"))
+    {
+        showHotCity = true;
+    }
+
+}
+
+@section styles
+{
+    <link href="~/Content/css/framework/zmjd.swiper.min.css" rel="stylesheet" />
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="/content/css/framework/iscroll.css" rel="stylesheet">
+    <link href="~/Content/css/coupon/couponsales.css?v1=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .login-section {
+            font-size: 0.8em;
+        }
+    </style>
+}
+
+<div id="tabs" v-cloak class="tab-list @_tabAddCss" style="@_tabAddStyle">
+    <div class="_scroller">
+        <div class="scrollLine">
+            <div class="t-item" v-for="item in tabDetailList" id="t-item-{{item.id}}" data-relid="{{item.id}}" data-reltype="{{item.type}}">{{item.name}}</div>
+        </div>
+    </div>
+</div>
+
+<div id="more-vue-obj" v-cloak>
+    <div v-for="listItem in tabDetailList" data-relid="{{listItem.id}}" data-reltype="{{listItem.type}}" class="scroll-div" id="scroll_{{listItem.id}}">
+
+        @if (showBanner)
+        {
+            <div id="banner-section" class="banner-section" v-if="topInfo">
+                <div class="seat"><img src="~/Content/images/seat/img-home-seat-banner2.png" /></div>
+                <div v-if="topInfo.SKUCouponList&&topInfo.SKUCouponList.length&&topInfo.SKUCouponList.length==1">
+                    <div class="banner-img" v-for="skuEntity in topInfo.SKUCouponList" onclick="gourl('{{skuEntity.url}}')">
+                        <img class="show-img" :src="skuEntity.PicUrl" alt="" />
+                        <div class="p-info-bg"></div>
+                        <div class="p-info-section">
+                            <div class="p-name">{{skuEntity.PageTitle}}</div>
+                            <div class="p-timer">
+                                <span class="price"><span class="pun">¥</span>{{skuEntity.SKUVipPrice}}</span>
+                                <span class="icon zmjd-iconfont">&#xe689;</span><span class="state timer-tag-top"
+                                                                                      data-year0="{{skuEntity.y0}}"
+                                                                                      data-month0="{{skuEntity.mo0}}"
+                                                                                      data-day0="{{skuEntity.d0}}"
+                                                                                      data-hour0="{{skuEntity.h0}}"
+                                                                                      data-minute0="{{skuEntity.mi0}}"
+                                                                                      data-second0="{{skuEntity.s0}}"
+                                                                                      data-year1="{{skuEntity.y1}}"
+                                                                                      data-month1="{{skuEntity.mo1}}"
+                                                                                      data-day1="{{skuEntity.d1}}"
+                                                                                      data-hour1="{{skuEntity.h1}}"
+                                                                                      data-minute1="{{skuEntity.mi1}}"
+                                                                                      data-second1="{{skuEntity.s1}}"
+                                                                                      data-year2="{{skuEntity.y2}}"
+                                                                                      data-month2="{{skuEntity.mo2}}"
+                                                                                      data-day2="{{skuEntity.d2}}"
+                                                                                      data-hour2="{{skuEntity.h2}}"
+                                                                                      data-minute2="{{skuEntity.mi2}}"
+                                                                                      data-second2="{{skuEntity.s2}}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-else>
+                    <div v-cloak class="swiper-container home-hlist-panel" v-if="topInfo.SKUCouponList&&topInfo.SKUCouponList.length">
+                        <ul class="swiper-wrapper">
+                            <li class="swiper-slide" v-for="skuEntity in topInfo.SKUCouponList" onclick="gourl('{{skuEntity.url}}')">
+                                <div class="item">
+                                    <div class="h-img">
+                                        <img class="show-img" v-if="$index<3" :src="skuEntity.PicUrl" alt="" />
+                                        <img class="show-img" v-else data-orisrc="{{skuEntity.PicUrl}}" src="~/Content/images/seat/img-viparea-item-3x2.png" alt="" />
+                                        <div class="p-info-bg"></div>
+                                        <div class="p-info-section">
+                                            <div class="p-name"><span class="price"><span class="pun">¥</span>{{skuEntity.SKUVipPrice}}</span>{{skuEntity.PageTitle}}</div>
+                                            <div class="p-timer">
+                                                <span class="icon zmjd-iconfont">&#xe689;</span><span class="state timer-tag-top"
+                                                                                                      data-year0="{{skuEntity.y0}}"
+                                                                                                      data-month0="{{skuEntity.mo0}}"
+                                                                                                      data-day0="{{skuEntity.d0}}"
+                                                                                                      data-hour0="{{skuEntity.h0}}"
+                                                                                                      data-minute0="{{skuEntity.mi0}}"
+                                                                                                      data-second0="{{skuEntity.s0}}"
+                                                                                                      data-year1="{{skuEntity.y1}}"
+                                                                                                      data-month1="{{skuEntity.mo1}}"
+                                                                                                      data-day1="{{skuEntity.d1}}"
+                                                                                                      data-hour1="{{skuEntity.h1}}"
+                                                                                                      data-minute1="{{skuEntity.mi1}}"
+                                                                                                      data-second1="{{skuEntity.s1}}"
+                                                                                                      data-year2="{{skuEntity.y2}}"
+                                                                                                      data-month2="{{skuEntity.mo2}}"
+                                                                                                      data-day2="{{skuEntity.d2}}"
+                                                                                                      data-hour2="{{skuEntity.h2}}"
+                                                                                                      data-minute2="{{skuEntity.mi2}}"
+                                                                                                      data-second2="{{skuEntity.s2}}"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="filter-base">
+            <div id="filter-section" class="filter-section">
+                <div class="line clearfloat">
+                    @*@if (isgrid)
+                        {
+                            <div class="left-item showchange"><span class='_icon zmjd-iconfont'>&#xe68c;</span><span class='list-style-txt' style="@(showBanner?"display:none;":"")"> 列表浏览</span></div>
+                        }
+                        else
+                        {
+                            <div class="left-item showchange"><span class='_icon zmjd-iconfont'>&#xe68b;</span><span class='list-style-txt' style="@(showBanner?"display:none;":"")"> 阵列浏览</span></div>
+                        }*@
+                    @*<div class="left-item">
+                            <span class="_txt-icon zmjd-iconfont">&#xe693;</span><span class="tag-filter-txt">特色</span><span class="_icon-hot zmjd-iconfont">&#xe690;</span>
+                        </div>*@
+                    <div class="tit"></div>
+                    <div class="right-item clearfloat">
+                        <div class="_item _item-line tag-filter">
+                            <span class="_txt-icon zmjd-iconfont">&#xe693;</span><span class="tag-filter-txt">特色</span><span class="_icon-hot zmjd-iconfont">&#xe690;</span>
+                        </div>
+                        <div class="_item city" style="@(showBanner?"display:none;":"")">
+                            <span class="_txt-icon zmjd-iconfont">&#xe692;</span><span class="city-filter-txt">度假地</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*<div id="dealsSection-seat-{{listItem.id}}" class="more-seat-slider" style="margin:1.5em 0 0 0;"><img src="~/Content/images/seat/seat-def-slide.png" /></div>*@
+        <div id="more-packages" class="more-packages more-hlist-panel">
+            <div class="b-list clearfloat">
+                <div v-if="listItem.listStyle=='grid'" v-for="skuEntity in listItem.skuList" class="b-item {{$index%2==0?'':'b-item-r'}}">
+                    <div class="i-img" onclick="gourl('{{skuEntity.url}}')">
+                        <img :src="skuEntity.PicUrl" alt="" />
+                        <div class="p-info-bg"></div>
+                    </div>
+                    <div class="timer-section">
+                        <span class="icon zmjd-iconfont">&#xe689;</span><span class="state timer-tag-flash"
+                                                                              data-year0="{{skuEntity.y0}}"
+                                                                              data-month0="{{skuEntity.mo0}}"
+                                                                              data-day0="{{skuEntity.d0}}"
+                                                                              data-hour0="{{skuEntity.h0}}"
+                                                                              data-minute0="{{skuEntity.mi0}}"
+                                                                              data-second0="{{skuEntity.s0}}"
+                                                                              data-year1="{{skuEntity.y1}}"
+                                                                              data-month1="{{skuEntity.mo1}}"
+                                                                              data-day1="{{skuEntity.d1}}"
+                                                                              data-hour1="{{skuEntity.h1}}"
+                                                                              data-minute1="{{skuEntity.mi1}}"
+                                                                              data-second1="{{skuEntity.s1}}"
+                                                                              data-year2="{{skuEntity.y2}}"
+                                                                              data-month2="{{skuEntity.mo2}}"
+                                                                              data-day2="{{skuEntity.d2}}"
+                                                                              data-hour2="{{skuEntity.h2}}"
+                                                                              data-minute2="{{skuEntity.mi2}}"
+                                                                              data-second2="{{skuEntity.s2}}">进行中</span>
+                    </div>
+                    <div class="p-info-section">
+                        <div class="p-price"><span class="pun">¥</span>{{skuEntity.SKUVipPrice}}</div>
+                        <div class="p-name">{{skuEntity.PageTitle}}</div>
+                    </div>
+                </div>
+                <div v-if="listItem.listStyle=='list'" v-for="skuEntity in listItem.skuList" class="b-long-item">
+                    <div class="i-img" onclick="gourl('{{skuEntity.url}}')">
+                        <img :src="skuEntity.PicUrl.replace('_w320h230', '_640x320')" alt="" />
+                        <div class="p-info-bg"></div>
+                    </div>
+                    <div class="timer-will-section" v-if="skuEntity.SellNum+skuEntity.ManuSellNum>=skuEntity.TotalNum">
+                        <span class="state">已售完</span>
+                        <img class="marker-icon" src="http://whfront.b0.upaiyun.com/app/img/coupon/couponsales/time-bg-marker.png" alt="" />
+                    </div>
+                    <div class="timer-section" v-if="skuEntity.SellNum+skuEntity.ManuSellNum<skuEntity.TotalNum" style="display:none;" id="list-timer-section_{{$index}}">
+                        <span class="icon zmjd-iconfont">&#xe689;</span><span class="state timer-tag-flash"
+                                                                              data-timerid="list-timer-section_{{$index}}"
+                                                                              data-willtimerid="list-timer-will-section_{{$index}}"
+                                                                              data-year0="{{skuEntity.y0}}"
+                                                                              data-month0="{{skuEntity.mo0}}"
+                                                                              data-day0="{{skuEntity.d0}}"
+                                                                              data-hour0="{{skuEntity.h0}}"
+                                                                              data-minute0="{{skuEntity.mi0}}"
+                                                                              data-second0="{{skuEntity.s0}}"
+                                                                              data-year1="{{skuEntity.y1}}"
+                                                                              data-month1="{{skuEntity.mo1}}"
+                                                                              data-day1="{{skuEntity.d1}}"
+                                                                              data-hour1="{{skuEntity.h1}}"
+                                                                              data-minute1="{{skuEntity.mi1}}"
+                                                                              data-second1="{{skuEntity.s1}}"
+                                                                              data-year2="{{skuEntity.y2}}"
+                                                                              data-month2="{{skuEntity.mo2}}"
+                                                                              data-day2="{{skuEntity.d2}}"
+                                                                              data-hour2="{{skuEntity.h2}}"
+                                                                              data-minute2="{{skuEntity.mi2}}"
+                                                                              data-second2="{{skuEntity.s2}}">进行中</span>
+                    </div>
+                    <div class="timer-will-section" v-if="skuEntity.SellNum+skuEntity.ManuSellNum<skuEntity.TotalNum" style="display:none;" id="list-timer-will-section_{{$index}}">
+                        <span class="icon zmjd-iconfont">&#xe689;</span><span class="state timer-tag-flash"
+                                                                              data-timerid="list-timer-section_{{$index}}"
+                                                                              data-willtimerid="list-timer-will-section_{{$index}}"
+                                                                              data-year0="{{skuEntity.y0}}"
+                                                                              data-month0="{{skuEntity.mo0}}"
+                                                                              data-day0="{{skuEntity.d0}}"
+                                                                              data-hour0="{{skuEntity.h0}}"
+                                                                              data-minute0="{{skuEntity.mi0}}"
+                                                                              data-second0="{{skuEntity.s0}}"
+                                                                              data-year1="{{skuEntity.y1}}"
+                                                                              data-month1="{{skuEntity.mo1}}"
+                                                                              data-day1="{{skuEntity.d1}}"
+                                                                              data-hour1="{{skuEntity.h1}}"
+                                                                              data-minute1="{{skuEntity.mi1}}"
+                                                                              data-second1="{{skuEntity.s1}}"
+                                                                              data-year2="{{skuEntity.y2}}"
+                                                                              data-month2="{{skuEntity.mo2}}"
+                                                                              data-day2="{{skuEntity.d2}}"
+                                                                              data-hour2="{{skuEntity.h2}}"
+                                                                              data-minute2="{{skuEntity.mi2}}"
+                                                                              data-second2="{{skuEntity.s2}}">进行中</span>
+                        <img class="marker-icon" src="http://whfront.b0.upaiyun.com/app/img/coupon/couponsales/time-bg-marker.png" alt="" />
+                    </div>
+                    <div class="p-info-section clearfloat">
+                        <div class="p-name">
+                            <div class="_name">{{skuEntity.PageTitle}}</div>
+                            <div class="_tag">{{skuEntity.Tags}}</div>
+                        </div>
+                        <div class="p-price"><span class="pun">¥</span>{{skuEntity.SKUVipPrice}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="more-packages-foot" id="more-packages-foot-{{listItem.id}}"></div>
+        <div class="scrollpageloading more-hide" id="scrollpageloading-{{listItem.id}}"><img src="http://whfront.b0.upaiyun.com/app/img/loading-changes.gif" alt="" /></div>
+        <div class="nothing-section" id="nothing-section" style="display:none;">
+            <div class="icon"><img src="http://whfront.b0.upaiyun.com/app/img/nothing-pic-2.png" alt="" /></div>
+            <div class="tip">
+                抱歉，没有找到匹配的产品<br />
+                更改筛选条件试试吧～
+            </div>
+        </div>
+
+        <div style="margin:1em 0 0 0;"></div>
+
+    </div>
+</div>
+
+<div class="_selector-model" style="display:none;"></div>
+<div class="_selector" style="display:none;" id="city-selector">
+    <div class="_head">
+        <div class="_line">
+            <div class="_tit">选度假地</div>
+            <div class="zmjd-iconfont _close">&#xe673;</div>
+            <div class="_clear">清空</div>
+        </div>
+    </div>
+    <div class="_list">
+
+        @if (showHotCity)
+        {
+            <div class="parent-item parent-item-br" v-if="hotCityData">
+                <div class="option option-space" data-subid="-1" data-hot="1">热门度假地</div>
+                <div class="sub-items clearfloat _item-nobr" style="padding-bottom:.5em;" data-hot="1">
+                    <div v-for="item in hotCityData.ContentList" class="sub-item-col {{item.Code==cityData.districtId?'_item-col-seled':''}}" data-did="{{item.Code}}" data-dname="{{item.Name}}">{{item.Name}}</div>
+                </div>
+            </div>
+        }
+
+        @if (useSubCityFilter)
+        {
+            if (showHotCity)
+            {
+                <div class="parent-item parent-item-br" v-for="item in cityData.DestinationList">
+                    <div class="option option-space" data-subid="{{$index}}">{{item.RootName}}<div class="zmjd-iconfont _icon _right_icon" style="{{$index>-1?'':'display:none;'}}">&#xe648;</div><div class="zmjd-iconfont _icon _up_icon" style="{{$index>-1?'display:none;':''}}">&#xe64f;</div></div>
+                    <div class="sub-items clearfloat _item-nobr sub-items-{{$index}}" v-if="item.DestinationList&&item.DestinationList.length" data-open="{{$index>-1?0:1}}" style="padding-bottom:.5em;{{$index>-1?'display:none;':''}}">
+                        <div v-for="subitem in item.DestinationList" class="sub-item-col {{subitem.Values==cityData.districtId?'_item-col-seled':''}} {{$index+1==item.DestinationList.length?'_item-nobr':''}}" data-did="{{subitem.Values}}" data-dname="{{subitem.Name}}">{{subitem.Name}}</div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="parent-item" v-for="item in cityData.DestinationList">
+                    <div class="option" data-subid="{{$index}}">{{item.RootName}}<div class="zmjd-iconfont _icon _right_icon" style="{{$index>-1?'':'display:none;'}}">&#xe648;</div><div class="zmjd-iconfont _icon _up_icon" style="{{$index>-1?'display:none;':''}}">&#xe64f;</div></div>
+                    <div class="sub-items sub-items-{{$index}} {{$index+1==item.DestinationList.length?'_item-nobr':''}}" v-if="item.DestinationList&&item.DestinationList.length" data-open="{{$index>-1?0:1}}" style="{{$index>-1?'display:none;':''}}">
+                        <div v-for="subitem in item.DestinationList" class="sub-item {{subitem.Values==cityData.districtId?'_item-seled':''}} {{$index+1==item.DestinationList.length?'_item-nobr':''}}" data-did="{{subitem.Values}}" data-dname="{{subitem.Name}}">{{subitem.Name}}<div class="zmjd-iconfont _icon">&#xe660;</div></div>
+                    </div>
+                </div>
+            }
+
+        }
+        else
+        {
+            <div v-for="item in cityData.DestinationList" class="_item {{item.Values===cityData.districtId?'_item-seled':''}}" data-did="{{item.Values}}" data-dname="{{item.Name}}">{{item.Name}}<div class="zmjd-iconfont _icon">&#xe660;</div></div>
+        }
+
+    </div>
+</div>
+
+<div class="_selector" style="display:none;" id="tag-selector">
+    <div class="_head">
+        <div class="_line">
+            <div class="_tit">特色</div>
+            <div class="zmjd-iconfont _close">&#xe673;</div>
+            <div class="_clear">清空</div>
+        </div>
+    </div>
+    <div class="_list" style="min-height: 120px;">
+
+        <div class="parent-item">
+            <div class="sub-items clearfloat _item-nobr" style="padding-top:1em;padding-bottom:.5em;">
+                <div v-for="item in tagData.tags" class="sub-item-col {{item.ID==tagData.tagId?'_item-col-seled':''}}" data-tid="{{item.ID}}" data-tname="{{item.Name}}">{{item.Name}}</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<input type="hidden" id="userid" value="@userid" />
+<input type="hidden" id="albumId" value="@albumId" />
+<input type="hidden" id="topId" value="@topId" />
+<input type="hidden" id="isApp" value="@(isApp ? "1" : "0")" />
+<input type="hidden" id="isInWeixin" value="@(isInWeixin ? "1" : "0")" />
+<input type="hidden" id="isDouble11" value="@(_isDouble11 ? "1" : "0")" />
+<input type="hidden" id="showBanner" value="@(showBanner ? "1" : "0")" />
+<input type="hidden" id="useSubCityFilter" value="@(useSubCityFilter ? "1" : "0")" />
+<input type="hidden" id="showHotCity" value="@(showHotCity ? "1" : "0")" />
+<input type="hidden" id="isgrid" value="@(isgrid ? "1" : "0")" />
+<input type="hidden" id="listStyle" value="@(isgrid ? "grid" : "list")" />
+<input type="hidden" id="tagId" value="@tagId" />
+<input type="hidden" id="shareTitle" value="@shareTitle" />
+<input type="hidden" id="shareDesc" value="@shareDesc" />
+<input type="hidden" id="shareLink" value="@shareLink" />
+<input type="hidden" id="shareImgUrl" value="@shareImgUrl" />
+
+@section scripts
+{
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script src="~/Content/js/framework/jquery.lazyload.min.js"></script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js//framework/iscroll.js"></script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjd.swiper.min.js"></script>
+    <script src="~/Content/js/login.js?v=@(Helpers.curAppVer())"></script>
+
+    <script>
+        try {
+            onAppShareCall = function () {
+                var title = "@(shareTitle)";
+                var Content = "@(shareDesc)";
+                var photoUrl = "@(shareImgUrl)";
+                var shareLink = "@(shareLinkForApp)";
+                try { whotel.appShareData(title, Content, photoUrl, shareLink); } catch (e) { }
+                var returnStr = '{"title":"{0}","Content":"{1}","photoUrl":"{2}","shareLink":"{3}"}';
+                return returnStr.format(title, Content, photoUrl, shareLink);
+            }
+            onAppShareCall();
+        }
+        catch (e) { }
+    </script>
+
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js?v=@(Helpers.curAppVer())" type="text/javascript"></script>
+        <script>
+
+            var loadWechat = function (_shareTitle, _shareDesc, _shareLink, _shareImgUrl, _shareSucessFunc) {
+                GetWeixinApiConfig();//注册
+                wx.ready(function () {
+                    wx.onMenuShareTimeline({
+                        title: _shareTitle,
+                        desc: _shareDesc,
+                        link: _shareLink + "&_sourcekey=couponsales_wx_line",
+                        imgUrl: _shareImgUrl,
+                        success: function (res) {
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                    wx.onMenuShareAppMessage({
+                        title: _shareTitle,
+                        desc: _shareDesc,
+                        link: _shareLink + "&_sourcekey=couponsales_wx_friend",
+                        imgUrl: _shareImgUrl,
+                        success: function (res) {
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                    wx.onMenuShareQQ({
+                        title: _shareTitle,
+                        desc: _shareDesc,
+                        link: _shareLink + "&_sourcekey=couponsales_wx_qq",
+                        imgUrl: _shareImgUrl,
+                        success: function (res) {
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                    wx.onMenuShareQZone({
+                        title: _shareTitle,
+                        desc: _shareDesc,
+                        link: _shareLink + "&_sourcekey=couponsales_wx_qzone",
+                        imgUrl: _shareImgUrl,
+                        success: function (res) {
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                });
+
+                function GetWeixinApiConfig() {
+
+                    var url = location.href.split("#")[0];
+                    $.ajax({
+                        url: '/Coupon/GetWeixinConfigInfo',
+                        type: 'POST',
+                        data: { url: url },
+                        dataType: 'json',
+                        //async: false,
+                        error: function () {
+                            console.log("网络服务错误");
+                        },
+                        success: function (result) {
+                            if (typeof (result.Success) != undefined && result.Success == 1) {
+                                return false;
+                            }
+                            else {
+                                //得到微信config的值
+                                var array = [
+                                    'checkJsApi',
+                                    'onMenuShareTimeline',
+                                    'onMenuShareAppMessage',
+                                    'onMenuShareQQ',
+                                    'onMenuShareQZone',
+                                    'hideOptionMenu'
+                                ];
+                                if (result.jsApiList) {
+                                    var jsArray = result.jsApiList.split(',');
+                                    for (var key in jsArray) {
+                                        array.push("" + jsArray[key]);
+                                    }
+                                }
+
+                                wx.config({
+                                    debug: false,
+                                    appId: result.appId,
+                                    timestamp: "" + result.timestamp,
+                                    nonceStr: result.nonceStr,
+                                    signature: result.signature,
+                                    jsApiList: array
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+            //loadWechat('@shareTitle','@shareDesc','@shareLink','@shareImgUrl', function(){});
+        </script>
+    }
+    <script src="~/Content/js/coupon/couponsales.js?v=@(Helpers.curAppVer())"></script>
+}

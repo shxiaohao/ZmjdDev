@@ -1,0 +1,839 @@
+﻿@using WHotelSite
+@using WHotelSite.Params.Hotel
+@using HJD.CouponService.Contracts.Entity
+@using HJD.HotelManagementCenter.Domain.Fund
+@{
+    PackageInfoEntity package = ViewBag.package;
+    package.PayChannels = package.PayChannels ?? new List<string>();
+    
+    int maxCanSellPackageCount = 0;
+    if (package.packageBase.PackageCount.HasValue)
+    {
+        maxCanSellPackageCount = (int)package.packageBase.PackageCount;
+        maxCanSellPackageCount = maxCanSellPackageCount == 0 ? 100 : maxCanSellPackageCount;//无限制最多100,有限制最多packageCount
+    }
+
+    HotelPrice2 price = ViewBag.price;
+    BookParam param = ViewBag.param;
+    HotelItem3 hotel = ViewBag.hotel;
+
+    int userCouponAmount = ViewBag.UserCouponAmount;
+    int canUseCashCoupon = ViewBag.CanUseCashCoupon;
+    UserFundEntity userFundInfo = ViewBag.UserFundInfo;
+
+    DateTime checkIn = DateTime.Parse(param.CheckIn);
+    DateTime checkOut = DateTime.Parse(param.CheckOut);
+    int nights = (checkOut - checkIn).Days;
+
+    bool isShow = !string.IsNullOrEmpty(param.ContactPhone) ? true : false; isShow = true;
+
+    var userid = ViewBag.UserId;
+    var isVip = ViewBag.IsVip;
+    bool isMobile = Utils.IsMobile();
+    var isInWeixin = ViewBag.IsInWeixin;
+    var isApp = ViewBag.IsApp;
+
+    var maxPersonNum = package.MaxHotelPeople;
+    var minPersonNum = package.MinHotelPeople;
+    var cartTypeList = string.Join(",", package.CardTypeList != null ? package.CardTypeList : new List<string>());
+    var personDesc = package.TravelPersonDescribe ?? "";
+    if (string.IsNullOrEmpty(personDesc.Trim()))
+    {
+        personDesc = "需添加出行人信息";
+    }
+
+    var bodyMarginTop = isApp || isInWeixin ? 0 : 40;
+    ViewBag.Title = "预订" + hotel.Name + (isApp ? "" : "-周末酒店");
+}
+
+@section breadcrumbs
+{
+    @Helpers.BreadCrumbs(Url, hotel)
+}
+@section styles
+{
+    <style type="text/css">
+        [v-cloak] {
+            display: none;
+        }
+
+        .panel-default {
+            border-color: #EDECEC;
+        }
+
+        .btn-vcode {
+            height: 2.3em;
+            line-height: 2.3em;
+            margin: 0;
+            padding: 0 0.8em;
+            border: 1px solid #ececec;
+            background-color: #f3f3f3;
+            font-size: 1.2em;
+        }
+
+        .other-tit {
+            padding: 0 0 0.2em 1em !important;
+            font-size: 1.2em;
+        }
+
+        .other-textarea {
+            width: 100%;
+            margin: 0;
+            padding: 0.6em 1em;
+            font-size: 1.2em;
+        }
+    </style>
+    @Styles.Render("~/Content/css/hotel/book.css?v=" + Helpers.curAppVer())
+    <link href="~/Content/css/framework/zmjd.modal.min.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+}
+@section scripts
+{
+    <script type="text/javascript">
+    window.packagePrice = @package.Price.ToString("0");
+    window.packageNoVipPrice = @package.NotVIPPrice.ToString("0");
+    window.packageVipPrice = @package.VIPPrice.ToString("0");
+    window.userCashAmount = @userCouponAmount.ToString("0");
+    window.canUseCashAmount = @canUseCashCoupon.ToString("0");
+    window.canSellPackageCount = @maxCanSellPackageCount;
+    </script>
+    @if (!string.IsNullOrWhiteSpace(ViewBag.phoneNum))
+    {
+        <script type="text/javascript">
+
+            (function(phoneNum){
+                var option = {
+                    _store: function (contactPhone) {
+                        if (window.localStorage) {
+                            localStorage.contactPhone = contactPhone;
+                        } else {
+                            var now = new Date();
+                            var expires = new Date(now.setYear(now.getFullYear() + 1));
+                            document.cookie = 'contactPhone=' + contactPhone + '; expires=' + expires.toGMTString();
+                        }
+                        return contactPhone;
+                    },
+                    _retrieve: function () {
+                        if (window.localStorage) {
+                            return localStorage.contactPhone;
+                        }
+                        return (document.cookie.match(/(^|; )contactPhone=(\d+)/) || ['', ''])[1];
+                    }
+                };
+                var isStored = option._retrieve();
+                var curPhone = $.trim(isStored);
+                if(!isStored || curPhone !== phoneNum){
+
+                    option._store(phoneNum);
+                }
+            }(@ViewBag.phoneNum));
+        </script>
+    }
+
+    <script src="~/Content/js/framework/zmjd.modal.min.js"></script>
+    <script src="~/Content/js/geetest/gt.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/login.js?v=@(Helpers.curAppVer())"></script>
+    @Scripts.Render("~/Content/js/bootbox.js", "~/Content/js/framework/vue.min.js", "~/Content/js/hotel/book.js?v=" + (Helpers.curAppVer()))
+}
+
+<!-- HotelName -->
+<div class="fullscreen">
+    <div class="container mainbody">
+        <div class="row">
+            <div class="col-md-1">
+            </div>
+
+            <div class="col-md-10">
+
+                <div class="row hidden-xs">
+                    <div class="col-md-6 hotelname">
+                        @price.Name
+                    </div>
+                    <div class="col-md-6 hotelstar">
+                        @Helpers.StarImage(Url, hotel.Star, null)
+                    </div>
+                </div>
+
+                <div class="row  mbhead hidden">
+                    <div class="col-xs-12 text-left">
+                        <button type="button" class="btn btn-default btn-sm">返回</button>
+                    </div>
+                </div>
+
+                <div class="panel panel-default date visible-xs @(isInWeixin || isApp ? " hidden" : "")" style="position:fixed;top:0;width:100%;z-index:1;">
+                    <div class="panel-body visible-xs mbdate">
+                        <header class="hotel-head">
+                            <div class="left">
+                                <a href="javascript:window.history.back();"><img src="~/content/images/icon-back-blue.png" alt="" /></a>
+                            </div>
+                            <div class="text">预订</div>
+                            <div class="right"></div>
+                        </header>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: @(bodyMarginTop)px;">
+                    <!-- Hotel Left -->
+                    <div class="col-md-8 zmpanel2">
+                        <div class="panel panel-default date">
+                            <div class="panel-heading hidden-xs hidden-sm">
+                                <div class="row">
+                                    <div class="title col-xs-12">
+                                        预订
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body forma">
+                                <form role="form">
+                                    <div class="row hidden-xs">
+                                        <div class="col-xs-4 col-sm-2 text-right">
+                                            到店日期：
+                                        </div>
+                                        <div class="col-xs-7 col-sm-3 form-group fontdate" id="check-in">
+                                            @param.CheckIn
+                                        </div>
+                                        <div class="col-xs-4 col-sm-2 text-right">
+                                            离店日期：
+                                        </div>
+                                        <div class="col-xs-7 col-sm-3 form-group fontdate" id="check-out">
+                                            @param.CheckOut
+                                        </div>
+                                        <div class="col-xs-12 col-sm-2 text-center number hidden-xs">
+                                            共 <b id="night-count">@nights</b> 晚
+                                        </div>
+                                    </div>
+                                    @*<div class="row visible-xs">
+                                            <div class="col-xs-4 text-left left-padding">
+                                                酒店名
+                                            </div>
+                                            <div class="col-xs-7 hotelname">
+                                                @price.Name
+                                            </div>
+                                        </div>
+                                        <div class="row visible-xs">
+                                            <div class="col-xs-4 text-left left-padding">
+                                                入住日期
+                                            </div>
+                                            <div class="col-xs-7 form-group fontdate">
+                                                @checkIn.ToShortDateString() — @checkOut.ToShortDateString()
+                                            </div>
+                                        </div>*@
+                                    <div class="row visible-xs">
+                                        <div class="package-head">
+                                            @if (package.PackageType == 1 || package.PackageType == 2)
+                                            {
+                                                <div class="h-name">@package.packageBase.Code</div>
+                                                <div class="p-name">@package.packageBase.Brief</div>
+                                            }
+                                            else
+                                            {
+                                                <div class="h-name">@price.Name</div>
+                                                <div class="p-name">@package.packageBase.Brief</div>
+                                            }
+                                            @switch (package.packageBase.DateSelectType)
+                                            {
+                                                case 0:
+                                                case 1:
+                                                case 3:
+                                                case 4:
+                                                    {
+                                                        <div class="check-date">@(string.Format("{0}入住，{1}离店", checkIn.ToString("yyyy/MM/dd"), checkOut.ToString("yyyy/MM/dd")))</div>
+                                                        break;
+                                                    }
+                                                case 2:
+                                                    {
+                                                        <div class="check-date">@(string.Format("{0}出发", checkIn.ToString("yyyy年MM月dd日")))</div>
+                                                        break;
+                                                    }
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-4 col-sm-2 text-left left-padding visible-xs">
+                                            套餐数
+                                        </div>
+                                        <div class="col-xs-4 col-sm-2 text-right hidden-xs">
+                                            套餐数量：
+                                        </div>
+                                        <div class="col-xs-7 col-sm-8 form-inline packagenum" id="amount">
+                                            <button type="button" class="btn btn-default btngray">-</button>
+                                            <input type="text" class="form-control  @(isMobile ? "borderNoShadow" : "") text-center" value="@param.RoomCount" style="width:5em;cursor:default;" />
+                                            <button type="button" class="btn btn-default btngray">+</button>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-2 text-center number hidden-xs">
+                                            共 <b id="amount-label">@param.RoomCount</b> 份
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-4 col-sm-2 text-left left-padding visible-xs">
+                                            总价
+                                        </div>
+                                        <div class="col-xs-4 col-sm-2 text-right hidden-xs">
+                                            总价：
+                                        </div>
+                                        <div class="col-xs-7 col-sm-10 form-group price" style="font-size: small;" id="price">
+                                            ¥<strong style="font-size:1.3em;color: #ff8c01;">@(package.Price * param.RoomCount)</strong>
+                                        </div>
+                                    </div>
+                                    @if (canUseCashCoupon > 0)
+                                    {
+                                        var cashCouponVal = canUseCashCoupon * param.RoomCount;
+                                        var subPrice = (package.Price * param.RoomCount) - cashCouponVal;
+
+                                        <div class="row useCashCoupon-item-sel" id="useCashCoupon-item" data-sel="1">
+                                            <div class="col-xs-4 col-sm-2 text-left left-padding visible-xs">
+                                                可抵
+                                            </div>
+                                            <div class="col-xs-4 col-sm-2 text-right hidden-xs">
+                                                可抵：
+                                            </div>
+                                            <div class="col-xs-7 col-sm-10 form-group price coupon-price" style="font-size: small;" id="useCashCounpon">
+                                                ¥<strong style="font-size: 1.3em; color: #ff8c01;">@(cashCouponVal)</strong>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-4 col-sm-2 text-left left-padding visible-xs">
+                                                合计
+                                            </div>
+                                            <div class="col-xs-4 col-sm-2 text-right hidden-xs">
+                                                合计：
+                                            </div>
+                                            <div class="col-xs-7 col-sm-10 form-group price" style="font-size: small;" id="subPrice">
+                                                ¥<strong style="font-size: 1.3em; color: #ff8c01; ">@(subPrice)</strong>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <div v-cloak class="row" id="cash-couopon-section">
+                                        <div class="col-xs-4 col-sm-2 text-left left-padding visible-xs">
+                                            现金券
+                                        </div>
+                                        <div class="col-xs-4 col-sm-2 text-right hidden-xs">
+                                            现金券：
+                                        </div>
+                                        <div class="col-xs-7 col-sm-10 form-group price-ctrl sel-cash">
+                                            <div v-if="baseCashCouponInfo.CashCouponInfo">
+                                                <div v-if="baseCashCouponInfo.CashCouponInfo.IDX>=0">
+                                                    <div v-if="baseCashCouponInfo.CashCouponInfo.IDX">
+                                                        <div class="ctrl">
+                                                            <span class="desc">{{baseCashCouponInfo.CashCouponShowName}}</span>
+                                                        </div>
+                                                        <div class="val">
+                                                            <span class="discount">-¥{{baseCashCouponInfo.OrderCanDiscountAmount}}</span><span class="zmjd-iconfont icon-arrow-right">&#xe648;</span>
+                                                        </div>
+                                                        <div style="clear:both;"></div>
+                                                    </div>
+                                                    <div v-else>
+                                                        <div class="ctrl">
+                                                            <span class="desc-0">没有可用现金券</span>
+                                                        </div>
+                                                        <div class="val">
+                                                            <span class="zmjd-iconfont icon-arrow-right">&#xe648;</span>
+                                                        </div>
+                                                        <div style="clear:both;"></div>
+                                                    </div>
+                                                </div>
+                                                <div v-else>
+                                                    <div class="ctrl">
+                                                        <span class="desc-0">请选择现金券</span>
+                                                    </div>
+                                                    <div class="val">
+                                                        <span class="zmjd-iconfont icon-arrow-right">&#xe648;</span>
+                                                    </div>
+                                                    <div style="clear:both;"></div>
+                                                </div>
+                                            </div>
+                                            <div v-else>
+                                                <div class="ctrl">
+                                                    <span class="desc-0">没有可用现金券</span>
+                                                </div>
+                                                <div class="val">
+                                                    <span class="zmjd-iconfont icon-arrow-right">&#xe648;</span>
+                                                </div>
+                                                <div style="clear:both;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @if (userFundInfo != null && userFundInfo.TotalFund > 0)
+                                    {
+                                        <div v-cloak class="row" id="user-fund-section">
+                                            <div class="col-xs-4 col-sm-2 text-left left-padding visible-xs">
+                                                住基金
+                                            </div>
+                                            <div class="col-xs-4 col-sm-2 text-right hidden-xs">
+                                                住基金：
+                                            </div>
+                                            <div class="col-xs-7 col-sm-10 form-group price-ctrl" id="fund-radio-btn" onclick="fundSelectEvent()">
+                                                <div v-if="fundInfo.userFundAmount">
+                                                    <div class="ctrl">
+                                                        <span class="desc fund-desc">可抵扣¥{{fundInfo.canUseFund}}</span>
+                                                    </div>
+                                                    <div class="val">
+                                                        <span v-if="fundInfo.sel">
+                                                            <span class="discount fund-discount">-¥{{fundInfo.canUseFund}}</span>
+                                                            <span class="radio-btn radio-sel" data-total="{{fundInfo.userFundAmount}}"><span class="ball"></span></span>
+                                                        </span>
+                                                        <span v-else>
+                                                            <span class="radio-btn" data-total="{{fundInfo.userFundAmount}}"><span class="ball"></span></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div v-else>
+                                                    <div class="ctrl">
+                                                        <span class="desc-0">无可用住基金</span>
+                                                    </div>
+                                                    <div class="val">
+                                                        <span class="radio-btn" data-total="0"><span class="ball"></span></span>
+                                                    </div>
+                                                </div>
+                                                <div style="clear:both;"></div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                </form>
+                            </div>
+                        </div>
+                        @{
+                            List<string> notes;
+                            if (!String.IsNullOrEmpty(param.Notes[0]))
+                            {
+                                notes = param.Notes.ToList();
+                            }
+                            else
+                            {
+                                notes = package.Room.DefaultOption.Split(new char[] { ',' }).ToList();
+                            }
+                        }
+                        <form role="form" id="form">
+                            @if (!isVip)
+                            {
+                                <div v-cloak class="panel panel-default b-hide visible-xs" id="vip-tip-section">
+                                    <div class="vip-tip-section" onclick="goBuyVip()">
+                                        @*<div class="text">付¥199<span class="link">成为VIP</span>立减<span class="m">¥230</span>，并享万元福利优惠</div>*@
+                                        <div class="text">{{{vipTipInfo.Description}}}</div>
+                                        <div class="arrow"><span class="zmjd-iconfont icon-right">&#xe648;</span></div>
+                                        <div style="clear:both;"></div>
+                                    </div>
+                                </div>
+                            }
+                            <div class="panel panel-default b-hide" id="air-person-panel">
+                                <div class="b-d-row">
+                                    <div class="r-lab">出行人信息</div>
+                                    <div class="r-desc">需添加{{minPersonNum}}名出行人，支付后请到周末酒店APP补填证件信息</div>
+                                    <div style="clear:both;"></div>
+                                </div>
+                                <div class="b-d-row">
+                                    <div class="person-item clearfloat" v-for="item in persons">
+                                        <div class="_lab">出行人{{$index+1}}</div>
+                                        <div class="_ctrl"><input type="text" class="_inp form-control btngray borderLess borderNoShadow" placeholder="输入姓名" v-model="item.CName" /></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default b-hide" id="person-panel">
+                                <div class="b-d-row">
+                                    <div class="r-lab">出行人信息</div>
+                                    <div class="r-desc">@personDesc</div>
+                                    <div style="clear:both;"></div>
+                                </div>
+                                <div v-for="item in sels" class="b-d-row b-d-row-bder b-d-person-item">
+                                    <div class="r-left"><a href="javascript:;" onclick="delSelPerson({{$index}})" title="删除"><img src="http://whfront.b0.upaiyun.com/www/img/hotel/book/icon-del.png" alt="" /></a></div>
+                                    <div class="r-right">
+                                        <div class="pname">{{item.TravelPersonName}}</div>
+                                        <div class="pno">{{item.CardTypeName}} {{item.IDNumber2}}</div>
+                                    </div>
+                                    <div style="clear:both;"></div>
+                                </div>
+                                <div v-for="item in adds" class="b-d-row b-d-row-bder b-d-row-arrow-2 b-d-person-item" onclick="showSelPerson()">
+                                    <div class="r-left"></div>
+                                    <div class="r-right"><a href="javascript:;" class="r-link">添加出行人1</a></div>
+                                    <div style="clear:both;"></div>
+                                </div>
+                            </div>
+                            @if (package.InChina)
+                            {
+                                <div class="panel panel-default">
+                                    <div class="panel-body forma">
+                                        @for (int pnum = 0; pnum < param.Contacts.Length; pnum++)
+                                        {
+                                            var contact = param.Contacts[pnum];
+
+                                            <div class="row contact">
+                                                <div class="col-xs-4 col-sm-3 forma-label-align left-padding">@(pnum > 0 ? "" : "入住人姓名")</div>
+                                                <div class="col-xs-7 col-sm-5 form-group">
+                                                    <div class="input-group"></div>
+                                                    <input type="text" value="@contact" class="form-control btngray borderLess borderNoShadow" placeholder="输入姓名" style="width:100%;">
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="panel panel-default">
+                                    <div class="b-d-row">
+                                        <div class="r-lab">入住人信息</div>
+                                        <div class="r-desc">需输入姓名的拼音，不要输入汉字</div>
+                                        <div style="clear:both;"></div>
+                                    </div>
+                                    <div class="panel-body b-d-row">
+                                        @for (int pnum = 0; pnum < param.Contacts.Length; pnum++)
+                                        {
+                                            var contact = param.Contacts[pnum];
+
+                                            <div class="contact book-contact clearfloat">
+                                                <div class="_contact_xing"><input type="text" value="@contact" class="form-control btngray borderLess borderNoShadow" placeholder="拼音姓 例ZHANG" onkeyup1="value=value.replace(/[^a-zA-Z]/g,'')" onchange="value=value.replace(/[^a-zA-Z]/g,'').toUpperCase()"></div>
+                                                <div class="_contact_ming"><input type="text" value="@contact" class="form-control btngray borderLess borderNoShadow" placeholder="拼音名 例SHUAI" onkeyup1="value=value.replace(/[^a-zA-Z]/g,'')" onchange="value=value.replace(/[^a-zA-Z]/g,'').toUpperCase()"></div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            
+                            <div class="panel panel-default date">
+                                <div class="panel-body forma">
+                                    <div class="row mobile">
+                                        <div class="col-xs-4 col-sm-3 forma-label-align left-padding">手机号</div>
+                                        <div class="col-xs-7 col-sm-5 form-group">
+                                            <input type="tel" value="@ViewBag.phoneNum" class="form-control btngray borderLess borderNoShadow" placeholder="请输入11位手机号" style="width:100%;" @(((bool)ViewBag.isbotaomeb || isApp) ? "readonly" : "")>
+                                        </div>
+                                    </div>
+                                    @*<div class="row imgcode">
+                    <div class="col-xs-4 col-sm-3 forma-label-align left-padding">图形验证码</div>
+                    <div class="col-xs-8 col-sm-9 form-group">
+                        <table>
+                            <tr>
+                                <td style="width:35%">
+                                    <input type="text" class="form-control btngray borderLess borderNoShadow" placeholder="输入图中内容">
+                                </td>
+                                <td>
+                                    <img src="@ViewBag.imgcode" style="width:90%;" />
+                                </td>
+                                <td><a class="btn btn-imgcode">换一张</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>*@
+                                    <div class="row verify">
+                                        <div class="col-xs-4 col-sm-3 forma-label-align left-padding">短信验证码</div>
+                                        <div class="col-xs-7 col-sm-5 form-group">
+                                            <table>
+                                                <tr>
+                                                    <td style="width:100%">
+                                                        <input type="text" class="form-control btngray borderLess borderNoShadow" placeholder="验证码">
+                                                    </td>
+                                                    <td><button type="button" class="btn-vcode">获取验证码</button></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="row options">
+                                        <div class="col-xs-4 col-sm-3 forma-label-align left-padding">特殊要求</div>
+                                        <div class="col-xs-8 col-sm-8 ydform1">
+                                            <div class="row icheck-panel">
+                                                @{
+                                                    var gid = 1;
+                                                    foreach (String str in package.Room.Options.Split(new char[] { '|' }))
+                                                    {
+                                                        foreach (string item in str.Split(new char[] { ',' }))
+                                                        {
+                                                            if (!string.IsNullOrEmpty(item))
+                                                            {
+                                                                bool on = notes.IndexOf(item) >= 0;
+                                                                if (on)
+                                                                {
+                                                                    notes.Remove(item);
+                                                                }
+                                                                <div style="float:left;"><input name="o@(gid)" type="checkbox" value="@item" @(on ? " checked" : "")><label fn="o@(gid)">@item</label></div>
+                                                            }
+                                                        }
+                                                        gid += 1;
+                                                    }
+                                                }
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    @if (!isMobile)
+                                    {
+                                        <div class="row">
+                                            <div class="col-xs-4 col-sm-3 forma-label-align left-padding">补充说明</div>
+                                            <div class="col-xs-7 col-sm-8">
+                                                <textarea id="note" class="form-control textarea1 borderLess borderNoShadow" rows="4" placeholder="如果有其他需求请填写，酒店会尽量为您安排。">@String.Join(" ", notes)</textarea>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            @if (isMobile)
+                            {
+                                <div class="other-tit">补充说明</div>
+                                <div class="panel panel-default">
+                                    <div class="panel-body forma">
+                                        <div class="row" style="padding:0;">
+                                            <textarea id="note" class="form-control textarea1 borderLess borderNoShadow other-textarea" rows="3" placeholder="如果有其他需求请填写，酒店会尽量为您安排">@String.Join(" ", notes)</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </form>
+
+
+
+                        <div id="order-pay-money">
+
+                            <div class="text-center hidden-xs hidden-sm">
+
+                                <div class="bottom-ctrl bottom-ctrl-pc text-left">
+                                    <div v-cloak class="money">
+                                        <span class="l" style="padding-left:2em;color:#555;">小计：</span>
+                                        <span class="v">¥{{priceInfo.payPrice}}</span>
+                                        <span class="discount" id="order-discount" v-if="priceInfo.discount">已优惠¥{{priceInfo.discount}}</span>
+                                    </div>
+                                    <div class="ctrl">
+
+                                    </div>
+                                    <div style="clear:both;"></div>
+                                </div>
+
+                                <div class="alert1 text-left hidden-xs">
+                                    酒店提示： @Helpers.ShowCancelPolicy(package.LastCancelTime) <br /><br />
+                                </div>
+
+                                @{
+                                    string submitUrl = Url.Action("Submit", "Hotel", new
+                                    {
+                                        hotel = hotel.HotelID,
+                                        package = package.packageBase.ID,
+                                        checkIn = param.CheckIn,
+                                        checkOut = param.CheckOut,
+                                        userid = userid
+                                    });
+
+                                    //string submitUrl2 = Url.Action("Pay2", "Order", new
+                                    //{
+                                    //    hotel = hotel.HotelID,
+                                    //    package = package.packageBase.ID,
+                                    //    checkIn = param.CheckIn,
+                                    //    checkOut = param.CheckOut
+                                    //});
+                                }
+
+                                @if (package.PayChannels.Count > 0)
+                                {
+                                    for (int i = 0; i < package.PayChannels.Count; i++)
+                                    {
+                                        var pChannel = package.PayChannels[i];
+                                        switch (pChannel)
+                                        {
+                                            case "alipay":
+                                                {
+                                                    //支付宝支付
+                                                    <button type="button" class="btn btn-01" style="width:40%;margin:0 0 0 0.8em;" data-submit-url="@submitUrl&amp;channel=alipay">支付宝支付</button>
+                                                    break;
+                                                }
+                                            case "upay":
+                                                {
+                                                    //信用卡支付
+                                                    <button type="button" class="btn btn-03" style="width:40%;" data-submit-url="@submitUrl&amp;channel=upay">信用卡支付</button>
+                                                    break;
+                                                }
+                                            case "tenpay":
+                                                {
+                                                    //微信支付
+
+                                                    break;
+                                                }
+                                            case "botao":
+                                                {
+                                                    //botao支付
+                                                    <button type="button" class="btn btn-01" style="width:40%;" data-submit-url="@submitUrl">提交订单</button>
+                                                    break;
+                                                }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    //直接提交订单（如现付）
+                                    <button type="button" class="btn btn-01" style="width:40%;" data-submit-url="@submitUrl">提交订单</button>
+                                }
+                            </div>
+
+                            <div class="row visible-xs visible-sm">
+
+                                <div class="bottom-ctrl">
+                                    <div v-cloak class="money">
+                                        <span class="l">小计：</span>
+                                        <span class="v">¥{{priceInfo.payPrice}}</span>
+                                        <span class="discount" id="order-discount" v-if="priceInfo.discount">已优惠¥{{priceInfo.discount}}</span>
+                                    </div>
+                                    <div class="ctrl">
+                                        <div class="gopay" id="m-gopay" data-choose-url="@submitUrl">支付</div>
+                                    </div>
+                                    <div style="clear:both;"></div>
+                                </div>
+
+                                <div style="display:none;">
+                                    @if (package.PayChannels.Count > 0 && !package.PayChannels.Contains("botao"))
+                                    {
+                                        <a href="javascript:;" class="btn btn-01 next" style="width:84%;margin-left:8%;" data-choose-url="@submitUrl">下一步1</a>
+                                        @*for (int i = 0; i < package.PayChannels.Count; i++)
+                                            {
+                                                var pChannel = package.PayChannels[i];
+                                                switch (pChannel)
+                                                {
+                                                    case "alipay":
+                                                    case "upay":
+                                                    case "tenpay":
+                                                        {
+                                                            <a href="javascript:;" class="btn btn-01 next" style="width:84%;margin-left:8%;" data-choose-url="@submitUrl">下一步</a>
+                                                            break;
+                                                        }
+                                                }
+                                            }*@
+                                    }
+                                    else
+                                    {
+                                        //直接提交订单（如现付 botao）
+                                        <a href="javascript:;" class="btn btn-01 next" style="width:84%;margin-left:8%;" data-submit-url="@submitUrl">提交订单</a>
+                                    }
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <br /><br />
+                    </div>
+                    <!-- Hotel Right -->
+                    <div class="col-md-4 visible-md visible-lg zmrightpanel">
+                        @Helpers.QRCodes(Url)
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-1">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="cash-coupon-section" id="cash-coupon-section" style="display:none;"></div>
+<div class="cash-coupon-base-bg" id="cash-coupon-base-bg" style="display:none;"></div>
+
+<!--首先设置一个层:-->
+<div id="pop" style="display:none" class="dialog-container">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">付款确认</h4>
+            </div>
+            <div class="modal-body row">
+                <div class="col-xs-1">
+                </div>
+                <div class="col-xs-5">
+                    <div class="text-center paystatus paysuccess">
+                        <h4>已完成支付</h4>
+                        <h5><a href="javascript:;" onclick="showOrderInfo();">查看订单详情</a></h5>
+                        <input id="submitOrderValue" type="hidden" value="0" />
+                    </div>
+                </div>
+                <div class="col-xs-5">
+                    <div class="text-center paystatus payfail">
+                        <h4>支付遇到问题</h4>
+                        <h5><a href="javascript:;" id="chooseOtherPay">修改支付方式</a></h5>
+                    </div>
+                </div>
+                <div class="col-xs-1">
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="b-d-win-model b-hide"></div>
+<div class="b-d-win-panel b-hide">
+    <div id="ad-person">
+        <div class="w-tit"><div class="left-btn"><a href="javascript:;" id="back-selperson"><img src="http://whfront.b0.upaiyun.com/www/img/hotel/book/icon-back-blue.png" alt="" /></a></div>添加出行人</div>
+        <div>
+            <button type="button" class="add-person-btn" id="add-person-btn">+ 新增出行人</button>
+            <div class="p-list">
+                <div v-for="item in list" class="p-item">
+                    <label for="p-ck-{{$index}}">
+                        <div class="pck">
+                            <input type="checkbox" v-if="item.select" v-model="item.ck" name="person-ck" id="p-ck-{{$index}}" data-psid="{{item.ID}}" data-psnum="{{$index}}" />
+                            <input type="checkbox" v-else name="person-ck" id="p-ck-{{$index}}" disabled="disabled" />
+                        </div>
+                        <div class="pinfo">
+                            <div class="pname">{{item.TravelPersonName}}</div>
+                            <div class="pno">{{item.CardTypeName}} {{item.IDNumber}}</div>
+                        </div>
+                        <div class="pedit"><a href="javascript:personEditType = 1;showEditPerson({{$index}});" data-psnum="{{$index}}">编辑</a></div>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="edit-person" style="display:none;">
+        <div class="w-tit">
+            <div class="left-btn"><a href="javascript:;" id="back-editperson"><img src="http://whfront.b0.upaiyun.com/www/img/hotel/book/icon-back-blue.png" alt="" /></a></div>
+            编辑信息
+            <div class="right-btn"><a href="javascript:;" id="save-editperson">完成</a></div>
+        </div>
+        <div class="edit-row">
+            <div class="left">姓名</div>
+            <div class="right"><input type="text" placeholder="请与证件保持一致" v-model="person.TravelPersonName" /></div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="edit-row">
+            <div class="left">证件类型</div>
+            <div class="right">
+                <select id="idtype-select" v-model="person.IDType">
+                    <option value="1">身份证</option>
+                    <option value="2">护照</option>
+                    <option value="3">户口簿</option>
+                    <option value="4">港澳通行证</option>
+                    <option value="5">台胞证</option>
+                    <option value="10">其他</option>
+                </select>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="edit-row">
+            <div class="left">证件号码</div>
+            <div class="right"><input type="text" placeholder="请输入证件号码" v-model="person.IDNumber" /></div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="edit-row" v-show="person.IDType!=1" id="birthday-input">
+            <div class="left">出生日期</div>
+            <div class="right"><input type="date" placeholder="yyyy-mm-dd" id="brithdayTime" v-model="person.Birthday" /></div>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <input type="hidden" id="canUseCashCoupon" value="@(canUseCashCoupon > 0 ? "1" : "0")" />
+    <input type="hidden" id="userCashAmount" value="@(userCouponAmount)" />
+    <input type="hidden" id="canUseCashAmount" value="@(canUseCashCoupon)" />
+    <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+    <input type="hidden" id="isInWeixin" value="@(isInWeixin ? 1 : 0)" />
+    <input type="hidden" id="userid" value="@(ViewBag.UserId)" />
+    <input type="hidden" id="isVip" value="@(isVip ? 1 : 0)" />
+    <input type="hidden" id="maxPersonNum" value="@(maxPersonNum)" />
+    <input type="hidden" id="minPersonNum" value="@(minPersonNum)" />
+    <input type="hidden" id="cartTypeList" value="@(cartTypeList)" />
+    <input type="hidden" id="travelPersonDesc" value="@(personDesc)" />
+    <input type="hidden" id="pid" value="@(package.packageBase.ID)" />
+    <input type="hidden" id="checkIn" value="@(param.CheckIn)" />
+    <input type="hidden" id="checkOut" value="@(param.CheckOut)" />
+    <input type="hidden" id="canUseCoupon" value="@(package.CanUseCoupon ? 1 : 0)" />
+    <input type="hidden" id="userFundAmount" value="@(userFundInfo != null ? userFundInfo.TotalFund : 0)" />
+    <input type="hidden" id="_name" value="@(string.Format("是否继续购买{0}", price.Name))" />
+    <input type="hidden" id="packageInChina" value="@(package.InChina ? 1 : 0)" />
+    <input type="hidden" id="isNeedDocInfo" value="@(package.IsNeedDocumentInformation ? 1 : 0)" />
+</footer>

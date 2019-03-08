@@ -1,0 +1,79 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2041
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HJDAPI", "HJDAPI\HJDAPI.csproj", "{069DB028-ECEC-426D-A0F0-300B0E4AABF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HJDAPI.Tests", "HJDAPI.Tests\HJDAPI.Tests.csproj", "{D2ED428D-E597-4298-9BD4-5D51EC55E983}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HJDAPI.Controllers", "HJDAPI.Controllers\HJDAPI.Controllers.csproj", "{6143C4F3-A45D-4746-88A7-B8A14CBBB8A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HJDAPI.Models", "HJDAPI.Models\HJDAPI.Models.csproj", "{6ECD133E-440C-4751-896D-975902DA1AC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HJDAPI.Common", "HJDAPI.Common\HJDAPI.Common.csproj", "{D48F6732-7A6F-43DD-9593-191289C021BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HJDAPI.APIProxy", "HJDAPI.APIProxy\HJDAPI.APIProxy.csproj", "{914C1E3B-6509-4B5F-A6E8-900F9D377325}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{069DB028-ECEC-426D-A0F0-300B0E4AABF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{069DB028-ECEC-426D-A0F0-300B0E4AABF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{069DB028-ECEC-426D-A0F0-300B0E4AABF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{069DB028-ECEC-426D-A0F0-300B0E4AABF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2ED428D-E597-4298-9BD4-5D51EC55E983}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2ED428D-E597-4298-9BD4-5D51EC55E983}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2ED428D-E597-4298-9BD4-5D51EC55E983}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2ED428D-E597-4298-9BD4-5D51EC55E983}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6143C4F3-A45D-4746-88A7-B8A14CBBB8A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6143C4F3-A45D-4746-88A7-B8A14CBBB8A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6143C4F3-A45D-4746-88A7-B8A14CBBB8A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6143C4F3-A45D-4746-88A7-B8A14CBBB8A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6ECD133E-440C-4751-896D-975902DA1AC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ECD133E-440C-4751-896D-975902DA1AC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ECD133E-440C-4751-896D-975902DA1AC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ECD133E-440C-4751-896D-975902DA1AC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D48F6732-7A6F-43DD-9593-191289C021BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D48F6732-7A6F-43DD-9593-191289C021BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D48F6732-7A6F-43DD-9593-191289C021BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D48F6732-7A6F-43DD-9593-191289C021BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{914C1E3B-6509-4B5F-A6E8-900F9D377325}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{914C1E3B-6509-4B5F-A6E8-900F9D377325}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{914C1E3B-6509-4B5F-A6E8-900F9D377325}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{914C1E3B-6509-4B5F-A6E8-900F9D377325}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B097C8AA-5D0C-43C6-A105-A4EE9CCA79F7}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 7
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://192.168.1.114:8080/tfs/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = HJDAPI.Common\\HJDAPI.Common.csproj
+		SccProjectName1 = HJDAPI.Common
+		SccLocalPath1 = HJDAPI.Common
+		SccProjectUniqueName2 = HJDAPI.Models\\HJDAPI.Models.csproj
+		SccProjectName2 = HJDAPI.Models
+		SccLocalPath2 = HJDAPI.Models
+		SccProjectUniqueName3 = HJDAPI.Controllers\\HJDAPI.Controllers.csproj
+		SccProjectName3 = HJDAPI.Controllers
+		SccLocalPath3 = HJDAPI.Controllers
+		SccProjectUniqueName4 = HJDAPI\\HJDAPI.csproj
+		SccProjectName4 = HJDAPI
+		SccLocalPath4 = HJDAPI
+		SccProjectUniqueName5 = HJDAPI.Tests\\HJDAPI.Tests.csproj
+		SccProjectName5 = HJDAPI.Tests
+		SccLocalPath5 = HJDAPI.Tests
+		SccProjectUniqueName6 = HJDAPI.APIProxy\\HJDAPI.APIProxy.csproj
+		SccProjectName6 = HJDAPI.APIProxy
+		SccLocalPath6 = HJDAPI.APIProxy
+	EndGlobalSection
+EndGlobal

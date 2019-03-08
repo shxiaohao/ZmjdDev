@@ -1,0 +1,281 @@
+html, body {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  background: #f0f0f0; }
+
+.home-banner {
+  width: 100%; }
+
+.home-banner .mui-indicator-ex {
+  -webkit-box-shadow: 0 0 0 0 rgba(130, 130, 130, 0.7);
+  margin: 1px 3px 1px 3px; }
+
+.home-tit {
+  width: 100%;
+  height: auto;
+  margin: 0 auto 0.8em auto;
+  padding: 0 0 0 0;
+  font-size: 1em; }
+
+.home-tit .center {
+  width: 100%;
+  height: auto;
+  line-height: 1em;
+  margin: 0 0 0 0;
+  padding: 1em 0 0.9em 0;
+  text-align: center;
+  font-size: 1em;
+  color: #000;
+  background: #fff; }
+
+.home-rem-panel {
+  width: 100%;
+  height: auto; }
+
+.home-rem-panel .items {
+  width: 98%;
+  height: auto;
+  margin: 0 auto 0 auto; }
+
+.home-rem-panel .items .item-ul {
+  width: 100%;
+  height: auto;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  display: inline-table; }
+
+.home-rem-panel .items .item-ul .item-li {
+  width: 48% !important;
+  height: auto;
+  margin: 0 0 0 1.5%;
+  background: #fff !important;
+  float: left;
+  border-radius: 5px; }
+
+.home-rem-panel .items .item-ul .item-li .top-img {
+  width: 92%;
+  height: auto;
+  margin: 0.5em auto 0 auto;
+  position: relative; }
+
+.home-rem-panel .items .item-ul .item-li .top-img .img {
+  width: 100%;
+  height: 8em;
+  border: none;
+  border-radius: 5px; }
+
+.home-rem-panel .items .item-ul .item-li .top-img img {
+  width: 100%;
+  border-radius: 5px; }
+
+.home-rem-panel .items .item-ul .item-li .top-img .top-name {
+  width: 94%;
+  height: 2.5em;
+  line-height: 2.5em;
+  margin: 0 0 0 0;
+  padding: 0 0 0 1em;
+  position: absolute;
+  left: 3%;
+  bottom: 0px;
+  z-index: 5;
+  color: #fff;
+  font-size: 1em;
+  background: url(http://whfront.b0.upaiyun.com/app/img/home/h-local.png) no-repeat left 0.85em;
+  background-size: 0.9em;
+  overflow: hidden; }
+
+.home-rem-panel .items .item-ul .item-li .top-img .top-name-mode {
+  width: 100%;
+  height: 4em;
+  line-height: 4em;
+  margin: 0 0 0 0;
+  padding: 0 0 0 1.1em;
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  z-index: 4;
+  font-size: 0.8em;
+  background: -webkit-gradient(linear, 40% 40%, 40% 100%, from(transparent), to(#333));
+  border-radius: 5px; }
+
+.home-rem-panel .items .item-ul .item-li .top-brief {
+  width: 88%;
+  height: 3.5em;
+  line-height: 1.2em;
+  margin: 0 0 0 6%;
+  padding: 0.5em 0 0 0;
+  color: #666;
+  font-size: 0.9em;
+  overflow: hidden;
+  border-bottom: 1px solid #eee;
+  display: inline-table; }
+
+.home-rem-panel .items .item-ul .item-li .top-member {
+  width: 85%;
+  height: auto;
+  margin: 0em auto 0 auto;
+  padding: 0.5em 0 0.5em 0;
+  color: #888;
+  font-size: 0.9em; }
+
+.home-rem-panel .items .item-ul .item-li .top-member img {
+  width: 2em;
+  margin: 0 0.6em 0 0;
+  border-radius: 2em;
+  vertical-align: middle; }
+
+.home-hlist-panel {
+  width: 100%;
+  height: auto; }
+
+.home-hlist-panel ul {
+  width: 100%;
+  height: auto;
+  margin: 0 auto 0 auto;
+  padding: 0 0 0 0;
+  display: inline-table;
+  list-style: none; }
+
+.home-hlist-panel ul li {
+  width: 94%;
+  height: auto;
+  margin: 0 0 0.5em 3%;
+  background: #fff;
+  overflow: hidden;
+  border-radius: 10px; }
+
+.home-hlist-panel ul li .h-img {
+  width: 100%;
+  height: auto;
+  margin: 0 0 0 0;
+  position: relative; }
+
+.home-hlist-panel ul li .h-img img {
+  width: 100%; }
+
+.home-hlist-panel ul li .h-img .h-tip {
+  width: 100%;
+  height: auto;
+  margin: 0 0 0 0;
+  padding: 0.8em 0 0.8em 0;
+  text-align: center;
+  position: absolute;
+  left: 0;
+  top: 4.5em;
+  background: url(http://whfront.b0.upaiyun.com/app/img/home/h-tip-bg.png) no-repeat center center;
+  background-size: 14em; }
+
+.home-hlist-panel ul li .h-img .h-tip .tip {
+  width: auto;
+  height: auto;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  font-size: 1em; }
+
+.home-hlist-panel ul li .h-img .h-tip .tip img {
+  width: 4em; }
+
+.home-hlist-panel ul li .h-img .h-tip .tip2 {
+  width: auto;
+  height: auto;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  font-size: 1em; }
+
+.home-hlist-panel ul li .h-img .h-tip .tip2 img {
+  width: 5.5em; }
+
+.home-hlist-panel ul li .h-img .h-tip .state {
+  width: auto;
+  height: auto;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.8em; }
+
+.home-hlist-panel ul li .h-name {
+  width: 92%;
+  height: auto;
+  margin: 0 auto 0 auto;
+  padding: 0.1em 0 0.7em 0; }
+
+.home-hlist-panel ul li .h-name .left {
+  width: 66%;
+  height: auto;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  float: left; }
+
+.home-hlist-panel ul li .h-name .left .hname {
+  width: 100%;
+  height: auto;
+  line-height: 1em;
+  margin: 0.4em 0 0 0;
+  font-size: 1em;
+  color: #333; }
+
+.home-hlist-panel ul li .h-name .left .brief {
+  width: 100%;
+  height: auto;
+  line-height: 1.3em;
+  margin: 0.3em 0 0 0;
+  font-size: 0.8em;
+  color: #888; }
+
+.home-hlist-panel ul li .h-name .right {
+  width: 34%;
+  height: auto;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  float: right;
+  text-align: right; }
+
+.home-hlist-panel ul li .h-name .right .price2 {
+  width: 100%;
+  height: auto;
+  line-height: 0.8em;
+  margin: 0.6em 0 0 0; }
+
+.home-hlist-panel ul li .h-name .right .price2 del {
+  color: #ccc; }
+
+.home-hlist-panel ul li .h-name .right .price2 .pu2 {
+  color: #ccc;
+  font-size: 0.7em;
+  font-family: arial; }
+
+.home-hlist-panel ul li .h-name .right .price2 .p2 {
+  color: #ccc;
+  font-size: 0.8em;
+  font-family: arial; }
+
+.home-hlist-panel ul li .h-name .right .price1 {
+  width: 100%;
+  height: auto; }
+
+.home-hlist-panel ul li .h-name .right .price1 .discount {
+  color: #f07c0a;
+  font-size: 0.8em;
+  font-family: arial;
+  margin: 0 0.2em 0 0; }
+
+.home-hlist-panel ul li .h-name .right .price1 .pu {
+  color: #f07c0a;
+  font-size: 0.7em;
+  font-family: arial;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0; }
+
+.home-hlist-panel ul li .h-name .right .price1 .p1 {
+  color: #f07c0a;
+  font-size: 1.3em;
+  font-family: arial;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0; }
+
+.home-hlist-panel ul li .h-name .left1 {
+  width: 82%;
+  margin: 0.2em 0 0 0; }
+
+.home-hlist-panel ul li .h-name .right1 {
+  width: 18%; }

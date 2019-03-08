@@ -1,0 +1,7 @@
+D:\Dev\WHotelDev\Dev\Service\OtaCrawlerService\HaoJiudian.OtaCrawlerService.Contract\bin\Debug\HJD.OtaCrawlerService.Contract.dll
+D:\Dev\WHotelDev\Dev\Service\OtaCrawlerService\HaoJiudian.OtaCrawlerService.Contract\bin\Debug\HJD.OtaCrawlerService.Contract.pdb
+D:\Dev\WHotelDev\Dev\Service\OtaCrawlerService\HaoJiudian.OtaCrawlerService.Contract\bin\Debug\HJD.Framework.Entity.dll
+D:\Dev\WHotelDev\Dev\Service\OtaCrawlerService\HaoJiudian.OtaCrawlerService.Contract\bin\Debug\HJD.Framework.Entity.pdb
+D:\Dev\WHotelDev\Dev\Service\OtaCrawlerService\HaoJiudian.OtaCrawlerService.Contract\obj\Debug\HJD.OtaCrawlerService.Contract.dll
+D:\Dev\WHotelDev\Dev\Service\OtaCrawlerService\HaoJiudian.OtaCrawlerService.Contract\obj\Debug\HJD.OtaCrawlerService.Contract.pdb
+D:\Dev\WHotelDev\Dev\Service\OtaCrawlerService\HaoJiudian.OtaCrawlerService.Contract\obj\Debug\HJD.OtaCrawlerService.Contract.csprojResolveAssemblyReference.cache

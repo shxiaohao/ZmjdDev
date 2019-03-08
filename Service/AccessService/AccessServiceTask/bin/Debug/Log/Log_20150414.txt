@@ -1,0 +1,23 @@
+
+[2015/4/14 10:29:04] Start Job [PreProxyDataJob]
+[2015/4/14 10:29:37] Ip Count:100
+[2015/4/14 10:29:57] Stop Job [PreProxyDataJob]
+[2015/4/14 10:36:14] Start Job [PreProxyDataJob]
+[2015/4/14 10:36:19] Ip Count:100
+[2015/4/14 10:36:20] Stop Job [PreProxyDataJob]
+[2015/4/14 11:12:16] Start Job [PreProxyDataJob]
+[2015/4/14 11:12:20] Ip Count:81
+[2015/4/14 11:12:25] Stop Job [PreProxyDataJob]
+[2015/4/14 11:14:17] Start Job [PreProxyDataJob]
+[2015/4/14 11:14:29] Start Job [PreProxyDataJob]
+[2015/4/14 11:14:35] Ip Count:7
+[2015/4/14 11:14:35] Stop Job [PreProxyDataJob]
+[2015/4/14 11:15:32] Start Job [PreProxyDataJob]
+[2015/4/14 11:18:48] Start Job [CheckRealHotelJob]
+[2015/4/14 11:18:58] GetUnCheckHotelBase Count:1859
+[2015/4/14 11:20:19] Start Job [CheckRealHotelJob]
+[2015/4/14 11:20:20] GetUnCheckHotelBase Count:1859
+[2015/4/14 11:38:16] Start Job [PreProxyDataJob]
+[2015/4/14 11:38:20] Ip Count:81
+[2015/4/14 11:38:21] Stop Job [PreProxyDataJob]
+[2015/4/14 15:36:33] Start Job [CtripHotelSingleCrawlerJob]

@@ -1,0 +1,63 @@
+﻿@model SKUCouponActivityAlbumEntity
+@{
+    Layout = null;
+
+    var isApp = ViewBag.IsApp;
+    var userid = ViewBag.UserId;
+    var albumId = ViewBag.AlbumId;
+}
+@if (Model != null && Model.SKUCouponList.Count > 0)
+{
+    <ul>
+        @for (int i = 0; i < Model.SKUCouponList.Count; i++)
+        {
+            var skuEntity = Model.SKUCouponList[i];
+
+            if (string.IsNullOrEmpty(skuEntity.PicPath))
+            {
+                skuEntity.PicPath = "http://whfront.b0.upaiyun.com/app/img/home/home-load2-3x2.png";
+            }
+
+            var url = string.Format("/coupon/product/{0}", skuEntity.SKUID);
+            if (isApp)
+            {
+                url += string.Format("?userid={{userid}}&_newpage=1&_newtitle=1");
+            }
+            else
+            {
+                url += string.Format("?userid={0}", userid);
+            }
+
+            <li class="li-line" onclick="gourl('@url')">
+                @if (skuEntity.ForVIPFirstBuy)
+                {
+                    <div class="h-p-tip-nvip"><img src="http://whfront.b0.upaiyun.com/app/img/home/banners/icon-h-p-nvip.png" alt="" /></div>   
+                }
+                <div class="h-img">
+                    <img @(i == 0 ? string.Format(" src={0} ", skuEntity.PicPath) : string.Format(" data-original={0} data-lazyload-id={1} ", skuEntity.PicPath, i)) alt="">
+                    <div class="h-tit-tip-price3">
+                        @if (skuEntity.SKUVipPrice > 0)
+                        {
+                            <div class="v-price">
+                                <span>￥</span>@skuEntity.SKUVipPrice<span>起</span>
+                                <div class="v-icon"><span class="zmjd-iconfont">&#xe623;</span></div>
+                            </div>
+                            if (skuEntity.SKUVipPrice != skuEntity.SKUPrice)
+                            {
+                                <div class="d-price"><span>￥</span>@skuEntity.SKUPrice<span>起</span></div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="d-price"><span>查询价格</span></div>
+                        }
+                    </div>
+                </div>
+                <div class="hname-info">
+                    <div class="hotel-name2">@skuEntity.PageTitle</div>
+                    <div class="hotel-packagebrief2">@skuEntity.Tags</div>
+                </div>
+            </li>
+        }
+    </ul>
+}

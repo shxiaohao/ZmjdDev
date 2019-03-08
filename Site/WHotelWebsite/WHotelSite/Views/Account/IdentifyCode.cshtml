@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "验证码";
+}
+
+@section styles
+{
+    <link href="~/Content/css/acount/IdentifyCode.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+}
+<div class="code-body">
+    <div>
+        <div class="div-code">
+            <input id="identifyCode" value="" class="input-code" placeholder="请输入验证码" />
+            <img src="/Account/GetIdentifyCode" id="verifyCode" onclick="refreshVerifyCode()" />
+            <input type="hidden" id="acUrl" value="@ViewBag.AcUrl" />
+        </div>
+        <div class="submitbtn" onclick="submitCode()">验证</div>
+    </div>
+</div>
+@section scripts
+{
+    <script src="~/Content/js/acount/IdentifyCode.js?v=@(Helpers.curAppVer())"></script>
+
+}

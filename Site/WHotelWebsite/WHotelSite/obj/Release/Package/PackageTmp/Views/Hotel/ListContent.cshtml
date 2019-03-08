@@ -1,0 +1,73 @@
+﻿@model IEnumerable<ListHotelItem3>
+@{
+    Layout = null;
+    bool isMobile = WHotelSite.Utils.IsMobile();
+}
+
+@foreach (ListHotelItem3 hotel in Model)
+{
+    string firstHotel = hotel.PictureList != null && hotel.PictureList.Count != 0 ? hotel.PictureList[0]:"";
+    <a href="@Url.Action("Detail", new { hotel = hotel.Id })" target="_self">
+        <div class="row hotellist">
+            <div class="col-sm-5 hotelpic">
+                <img src="@firstHotel" class="img-responsive" alt="" />
+                @if (hotel.PriceType == 2)
+                {
+                    <div class="tehui visible-xs">特惠·专享</div>
+                }
+                else if (hotel.PriceType == 3)
+                {
+                    <div class="tehui visible-xs">特惠·套餐</div>
+                }
+            </div>
+            <div class="col-sm-7 col-xs-12 hotelinfo">
+                <div class="titlehead hidden-xs"></div>
+                <h2>
+                    @hotel.Name
+                    @if (hotel.MinPrice == 0)
+                    {
+                        <span class="price price2 visible-xs">
+                            暂无价格
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="price price2 visible-xs">
+                            ￥<strong>@( (int)hotel.MinPrice)</strong><i>起</i>
+                        </span>
+                    }
+                </h2>
+                @*<h6 class="hidden-xs">@(hotel.Score.ToString("0.0"))分 | @(hotel.ReviewCount)条点评</h6>
+                <h6 class="hidden-xs">
+                    @foreach (FeaturedEntity t in hotel.FeaturedList)
+                    {
+                        @t.Name@:&nbsp;&nbsp;
+                    }
+                </h6>*@
+                <h5>
+                    @hotel.InterestComment
+                </h5>
+                @if (hotel.PriceType == 2)
+                {
+                    <div class="tehui hidden-xs">特惠·专享</div>
+                }
+                else if (hotel.PriceType == 3)
+                {
+                    <div class="tehui hidden-xs">特惠·套餐</div>
+                }
+            </div>
+            @if (hotel.MinPrice == 0)
+            {
+                <div class="price hidden-xs">
+                    暂无价格
+                </div>
+            }
+            else
+            {
+                <div class="price hidden-xs">
+                    ￥<strong>@( (int)hotel.MinPrice)</strong><i>起</i>
+                </div>
+            }
+        </div>
+    </a>
+}

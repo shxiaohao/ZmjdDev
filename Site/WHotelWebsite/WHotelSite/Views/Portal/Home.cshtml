@@ -1,0 +1,316 @@
+﻿@using WHotelSite.App_Code
+@model HomeViewModel
+@{
+    ViewBag.Title = "周末酒店-发现和预订周边有特色、好口碑，价格优惠的度假酒店及民宿";
+    ViewBag.Keywords = "周末酒店预订，周末度假酒店，周末周边酒店";
+    ViewBag.Description = "提供各大城市周边适合周末度假的酒店和民宿信息，帮助你快速发现并预订周边有特色、好口碑、价格优惠的酒店，享受惬意周末生活。";
+
+    var targetDistrict = Model.Districts.Find(p => p.DistrictId == Model.DistrictId);
+    var districtName = targetDistrict != null ? targetDistrict.Name.Replace("及周边", string.Empty) : string.Empty;
+    ViewBag.BodyStyle = "overflow-x:hidden;";
+
+    var isLogin = WHotelSite.UserState.IsLogin;
+
+    ViewBag.BodyClass = "hotellistpage";
+
+    InterestModel3 homeData30 = ViewBag.HotelData30;
+}
+
+@section header {
+    <div id="page">
+        <!-- mobile Header -->
+        <div class="container">
+            <div class="row visible-xs toolbar2">
+                <div class="col-xs-3">
+                    <a href="javascript:;"><img src="@Url.Content("~/Content/images/icon-menu.png")" class="mobilepic" alt="" style="width:26px;margin-left:10px;margin-top:3px;"></a>
+                </div>
+                <div class="col-xs-6 text-center listtitle">
+                    @districtName<a href="javascript:;" class="selectcityicon"><img src="@Url.Content("~/Content/images/icon-aarow4.png")" style="width:28px;" alt=""></a>
+                </div>
+                <div class="col-xs-3 text-right">
+                    <button type="button" class="btn btn-sm  btn-img01"><img src="@Url.Content("~/Content/images/icon-search.png")" class="mobilepic" alt=""></button>
+                </div>
+            </div>            
+        </div>
+    </div>
+    <!-- Header -->
+    <div class="container header hidden-xs">
+        <div class="row">
+            <div class="col-md-1 col-sm-12 col-xs-12"></div>
+            <div class="col-md-6 col-sm-8 col-xs-8">
+                <a style="width:224px;" href="@Url.Action("Home","Portal")">
+                    <img src="@Url.Content("~/Content/images/logo.png")" style="float:left;" alt="周末酒店" />
+                </a>
+                <div class="topsearch" id="topSearchDiv">
+                    <input type="email" class="form-control" id="topSearchInput" placeholder="请输入酒店名称关键字">
+                    <div class="searchbtn">
+                        <a href="javascript:;" id="topSearch"><img src="@Url.Content("~/Content/images/icon-topsearch.png")" alt="" /></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 col-sm-4 col-xs-12 headright hidden-xs">
+                @Helpers.DLLinks(Url)
+            </div>
+        </div>
+    </div>
+}
+
+<!-- 大图 -->
+<div class="container indexpic hidden-xs">
+    <div class="row">
+        <div class="col-xs-12">
+            @if (@Model.TopHotPackage != null)
+            {
+                <img src="@WHotelSite.Utils.GetFitPicUrl(Model.TopHotPackage.PicUrl)" alt="@(Model.TopHotPackage.HotelName)" style="width:100%;" />
+                <div class="hotelsum row">
+                    <div class="col-xs-9">
+                        <h3>@(Model.TopHotPackage.HotelName)</h3>
+                        <h5>@(Model.TopHotPackage.ReviewScore.ToString("0.0"))/5分 @(Model.TopHotPackage.ReviewCount)条点评</h5>
+                        <h4>@(Model.TopHotPackage.Brief) 仅 <span class="price">￥ <i>@(Model.TopHotPackage.MinPrice)</i></span>起 </h4>
+                    </div>
+                    <div class="col-xs-3 hotelsumlink text-center">
+                        <a href="@Url.Action("Detail", "Hotel", new { hotel = Model.TopHotPackage.HotelId })"><img src="@Url.Content("~/Content/images/hotelsumlink.png")" alt="" /></a>
+                    </div>
+                </div>
+            }
+            <div class="selecthotel">
+                <div class="space hidden-xs">
+                </div>
+                <div class="row">
+                    <div class="col-sm-1">
+                    </div>
+                    <div class="col-sm-10 ">
+                        <h1>周末去哪儿</h1>
+                        <table cellspacing="0" cellpadding="0" border="0" class="" width="100%">
+                            <tr>
+                                <td align="center">
+                                    <form class="form-inline selectform" role="form" style="width:619px; text-align:center;">
+                                        <input id="citySuggestControl1" type="text" value="上海" data-districtid="2" style="width: 260px; margin-bottom: 6px;" class="form-control citySuggestControl" />
+                                        <input type="text" value="全部主题、景区" readonly="readonly" style="background: white; width: 260px; margin-bottom: 6px; cursor: pointer" class="form-control interestSuggestControl" />
+                                        <button id="search" type="button" class="btn btn-primary" data-districtid="@Model.DistrictId" data-interestid="0" data-sctype="1" data-type="theme">查找酒店</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-sm-1">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 特惠标题 -->
+<div class="titlebig hidden-xs text-center">
+    本周特惠
+</div>
+<!-- 特惠 -->
+<div class="container contehui hidden-xs">
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10 col-sm-12">
+            <div class="row">
+                @foreach (var info in Model.HotPackages)
+                {
+                    <div class="col-sm-6">
+                        <div class="tehui">
+                            <a href="@Url.Action("Detail", "Hotel", new { hotel = info.HotelId })"><img src="@WHotelSite.Utils.GetFitPicUrl(info.PicUrl)" class="tehuipic" alt="@info.HotelName" /></a>
+                            <div class="hotelsum2 row">
+                                <div class="col-xs-10">
+                                    <h3>@info.HotelName</h3>
+                                    <h5>@(info.ReviewScore.ToString("0.0"))/5分 @(info.ReviewCount)条点评</h5>
+                                    <h4>@info.Brief 仅 <span class="price">￥ <i>@info.MinPrice</i></span>起 </h4>
+                                </div>
+                                <div class="col-xs-2 hotelsumlink">
+                                    <a href="@Url.Action("Detail", "Hotel", new { hotel = info.HotelId })"><img src="@Url.Content("~/content/images/hotelsumlink.png")" alt="" /></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>
+
+<!-- 仅手机显示主题和景区开始 -->
+<div class="visible-xs">
+
+    <!-- 主题列表开始 -->
+    <div class="mobileztlist container">
+        <div class="row row1">
+            @Html.Partial("MobileThemeList", new InterestListViewModel
+            {
+                Interests = Model.Themes,
+                ThemeInterestList = homeData30.ThemeInterestList,
+                DistrictId = Model.DistrictId,
+                Type = "theme"
+            })
+        </div>
+    </div>
+    <!-- 主题列表结束 -->
+
+</div>
+<!-- 仅手机显示主题和景区结束 -->
+
+<!-- 周边主题酒店开始 -->
+<div class="container zbzt hidden-xs">
+    <!-- 手机以上屏幕显示标题 -->
+    <div class="row hidden-xs">
+        <div class="titlebig col-sm-6 text-right">主题酒店</div>
+        <div class="col-sm-2 text-left titlebigsl">
+            <input id="citySuggestControl2" type="text" value="上海" data-districtid="2" style="width: 100px; margin-bottom: 6px;" class="form-control citySuggestControl" />
+        </div>
+    </div>
+    @Html.Partial("InterestList", new InterestListViewModel
+    {
+        Interests = Model.Themes,
+        ThemeInterestList = homeData30.ThemeInterestList,
+        DistrictId = Model.DistrictId,
+        Type = "theme"
+    })
+</div>
+<!-- 周边主题酒店结束 -->
+
+<!-- 手机检索酒店 -->
+<div class="mobilesearchhotel" style="display:none">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-9">
+                <input type="text" class="form-control btngray  input01" id="inputhotelname1" placeholder="请输入酒店名称" style="width: 100%; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QsPDhss3LcOZQAAAU5JREFUOMvdkzFLA0EQhd/bO7iIYmklaCUopLAQA6KNaawt9BeIgnUwLHPJRchfEBR7CyGWgiDY2SlIQBT/gDaCoGDudiy8SLwkBiwz1c7y+GZ25i0wnFEqlSZFZKGdi8iiiOR7aU32QkR2c7ncPcljAARAkgckb8IwrGf1fg/oJ8lRAHkR2VDVmOQ8AKjqY1bMHgCGYXhFchnAg6omJGcBXEZRtNoXYK2dMsaMt1qtD9/3p40x5yS9tHICYF1Vn0mOxXH8Uq/Xb389wff9PQDbQRB0t/QNOiPZ1h4B2MoO0fxnYz8dOOcOVbWhqq8kJzzPa3RAXZIkawCenHMjJN/+GiIqlcoFgKKq3pEMAMwAuCa5VK1W3SAfbAIopum+cy5KzwXn3M5AI6XVYlVt1mq1U8/zTlS1CeC9j2+6o1wuz1lrVzpWXLDWTg3pz/0CQnd2Jos49xUAAAAASUVORK5CYII=); background-attachment: scroll; background-position: 100% 50%; background-repeat: no-repeat;" autocomplete="off">
+
+            </div>
+            <div class="col-xs-3">
+                <button type="button" class="btn btn-default btn01" style="width:100%;">搜索</button>
+            </div>
+        </div>
+
+        <div class="quicklist">
+
+        </div>
+    </div>
+
+</div>
+
+<!-- 城市选择 -->
+<div class="selectcity" style="display:none">
+
+</div>
+
+<!-- pc检索酒店快速结果 -->
+@*<div class="pcsearchhotel hidden">
+    <div class="quicklist2 col-sm-12">
+        <h5>若需缩小范围，请输入更多关键字</h5>
+        <button type="button" class="close">&times;</button>        
+    </div>
+</div>*@
+
+<div class="city-suggest suggest"></div>
+<div class="interest-suggest suggest"></div>
+<ul class="dropdown-menu custom-dropdown-menu"></ul>
+<!-- 景区酒店结束 -->
+@section scripts{
+    @Scripts.Render("~/Content/js/jquery.scrollstop.min.js", "~/Content/js/jquery.lazyload.min.js", "~/Content/js/home.js")
+        <script id="interest-suggest-template" type="text/template">
+            <div class="interest-suggest-bd">
+                <a class="close" href="javascript:;">x</a>
+                <ul class="tab clearfix">
+                    <li class="active">主题</li>
+                    <li>景区</li>
+                </ul>
+                <div class="item active clearfix">
+                    <ul>
+                        <li style="margin-right:250px" data-interestid="0">全部</li>
+                        <%_.each(interestSuggest.Themes,function(o){%>
+                        <li data-type="theme" data-interestid="<%=o.Id%>"><%=o.Name%></li>
+                        <%})%>
+                    </ul>
+                </div>
+                <div class="item clearfix">
+                    <ul>
+                        <li style="margin-right: 250px" data-interestid="0">全部</li>
+                        <%_.each(interestSuggest.Sights,function(o){%>
+                        <li data-type="sight" data-interestid="<%=o.Id%>"><%=o.Name%></li>
+                        <%})%>
+                    </ul>
+                </div>
+            </div>
+        </script>
+        <script id="city-suggest-template" type="text/template">
+            <div class="city-suggest-hd clearfix">
+                <a class="close" href="javascript:;">x</a>
+                <span class="title">支持中文/拼音/简拼输入</span>
+            </div>
+            <div class="city-suggest-bd">
+                @*<ul class="nearby clearfix">
+                    <%_.each(_.find(citySuggest,function(i){return i.Group == '热门';}).List,function(o){%>
+                    <li data-districtid="<%=o.DistrictId%>" data-lat="<%=o.Lat%>" data-lng="<%=o.Lng%>" data-sctype="2"><%=o.Name%>及周边</li>
+                    <%})%>
+                </ul>*@
+                <ul class="tab clearfix">
+                    <%_.each(citySuggest,function(i){%>
+                    <li<%=(i.Group=='热门'?' class="active"':'')%>><%=i.Group%></li>
+                    <%})%>
+                </ul>
+                <%_.each(citySuggest,function(i){%>
+                <%if(i.Group=='热门'){%>
+                <div class="item active clearfix">
+                    <ul>
+                        <%_.each(i.List,function(el,index){%>
+                        <li data-districtid="<%=el.DistrictId%>" data-lat="<%=el.Lat%>" data-lng="<%=el.Lng%>" data-sctype="1" title="<%=el.Name%>"><%=el.Name%></li>
+                        <%})%>
+                    </ul>
+                </div>
+                <%} else {%>
+                <div class="item clearfix">
+                    <%_.each(_.groupBy(i.List,'FirstLetter'),function(arr,key){%>
+                    <div class="letter"><%=key%></div>
+                    <ul>
+                        <%_.each(arr,function(el,index){%>
+                        <li data-districtid="<%=el.DistrictId%>" data-lat="<%=el.Lat%>" data-lng="<%=el.Lng%>" data-sctype="1" title="<%=el.Name%>"><%=el.Name%></li>
+                        <%})%>
+                    </ul>
+                    <%})%>
+                </div>
+                <%}%>
+                <%})%>
+            </div>
+        </script>
+        <script id="drop-suggest-template" type="text/template">
+            <%_.each(items,function(el){%>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:;" data-districtid="<%=el.DistrictId%>" data-lat="<%=el.Lat%>" data-lng="<%=el.Lng%>" data-sctype="1"><%=el.Name%></a></li>
+            <%})%>
+        </script>
+        <script id="mobile-city-template" type="text/template">
+            <div class="title">
+                热门城市
+            </div>
+
+            <div class="list l2">
+                <ul class="list-inline">
+                    <%_.each(_.find(citySuggest,function(i){return i.Group == '热门';}).List,function(o){%>
+                    <li><a href="/HomeCity<%=o.DistrictId%>/1"><%=o.Name%></a></li>
+                    <%})%>
+                </ul>
+            </div>
+
+            <%_.each(_.groupBy(_.reduce(citySuggest.slice(1),function(memo, i){return memo.concat(i.List)},[]),'FirstLetter'),function(arr,key){%>
+            <a href="javacript:;" class="titlelink">
+                <div class="title">
+                    <%=key%>
+                    <span class=""><img src="@Url.Content("~/Content/images/icon-aarow6.png")" alt=""></span>
+                </div>
+            </a>
+            <div class="list l3" style="display:none">
+                <ul>
+                    <%_.each(arr,function(o,index){%>
+                    <li><a href="/HomeCity<%=o.DistrictId%>/1"><%=o.Name%></a></li>
+                    <%})%>
+                </ul>
+            </div>
+            <%})%>
+        </script>
+}

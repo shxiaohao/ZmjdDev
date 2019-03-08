@@ -1,0 +1,278 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@using HJDAPI.APIProxy;
+@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    ViewBag.Title = "度假伙伴";
+
+    var requestCID = ViewBag.RequestCID;
+    var isMobile = ViewBag.IsMobile;
+    var isInWeixin = ViewBag.isInWeixin;
+    var isApp = ViewBag.IsApp;
+    var userId = ViewBag.UserId;
+    var isVip = ViewBag.IsVip;
+    HJD.HotelManagementCenter.Domain.RetailerInvateEntity partnerResult = ViewBag.PartnerResult;
+    HJD.HotelManagementCenter.Domain.RetailerInvateState partnerState = (HJD.HotelManagementCenter.Domain.RetailerInvateState)partnerResult.State;
+
+    //管理店铺 链接
+    var shopLink = "http://partner.zmjiudian.com/channel/mlogin";
+
+    //分享信息
+    var shareTitle = "成为周末酒店度假伙伴，一起赚佣金，体验品质生活";
+    var shareDesc = "分享赚佣金，还能免费体验酒店和亲子玩乐场所";
+    var shareLink = "http://www.zmjiudian.com/channel/partners";
+    if (userId > 0 && partnerResult.CanDevTeam)
+    {
+        shareLink += ("?CID=" + userId);
+    }
+    else if (requestCID > 0)
+    {
+        shareLink += ("?CID=" + requestCID);
+    }
+    var shareImgUrl = "http://whfront.b0.upaiyun.com/app/img/channel/channel-partner-share-img.png";
+
+    //原生分享链接
+    var _goShareLink = new Access().GenShortUrl(-2, shareLink);
+    var _shareLink = "whfriend://comment?title={0}&photoUrl={1}&shareLink={2}&nextUrl={3}&content={4}&shareType={5}";
+    _shareLink = string.Format(_shareLink, HttpUtility.UrlEncode(shareTitle), HttpUtility.UrlEncode(shareImgUrl), _goShareLink, "", HttpUtility.UrlEncode(shareDesc), "{0}");
+    var appShareLink = string.Format(_shareLink, 0);
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    ViewBag.LoadHmBaidu = false;
+}
+
+@section styles
+{
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/Content/css/framework/zmjd.modal.min.css" rel="stylesheet" />
+    <link href="/content/css/channel/partners.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .login-section {
+            font-size: 0.8em;
+        }
+    </style>
+}
+
+<div class="top-banner">
+    @if (partnerState == HJD.HotelManagementCenter.Domain.RetailerInvateState.Pass)
+    {
+        <img class="goshop" src="http://whfront.b0.upaiyun.com/app/img/channel/partner-info-goshop.png" alt="" />
+    }
+    else
+    {
+        <img src="http://whfront.b0.upaiyun.com/app/img/channel/partner-banner-top-0.png" alt="" />
+    }
+</div>
+<div class="top-section">
+    <img src="http://whfront.b0.upaiyun.com/app/img/channel/partner-info-what.png?v=@(Helpers.curAppVer())" alt="" />
+</div>
+<div class="info-section">
+    <img src="http://whfront.b0.upaiyun.com/app/img/channel/partner-info-why.png?v=@(Helpers.curAppVer())" alt="" />
+</div>
+<div class="info-section">
+    <img src="http://whfront.b0.upaiyun.com/app/img/channel/partner-info-who.png?v=@(Helpers.curAppVer())" alt="" />
+</div>
+<div class="full-info-section">
+    <img src="http://whfront.b0.upaiyun.com/app/img/channel/partner-info-how.png?v=@(Helpers.curAppVer())" alt="" />
+</div>
+@if (partnerState == HJD.HotelManagementCenter.Domain.RetailerInvateState.Pass)
+{
+    <div class="info-section partner-sub-section">
+        <img src="http://whfront.b0.upaiyun.com/app/img/channel/partner-info-subs.png?v=@(Helpers.curAppVer())" alt="" />
+    </div>
+}
+<div class="rules" id="partner-rules">
+    <div class="tit"><img src="http://whfront.b0.upaiyun.com/app/img/channel/partner-rules-tit.png?v=@(Helpers.curAppVer())" alt="" /></div>
+    <div class="list">
+        <div class="item" v-for="ad in ListData.AD.ADList" onclick="gourl('{{ad.ADURL}}')">
+            <div class="l">{{ad.ADTitle}}</div>
+            <div class="r">点击查看</div>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+</div>
+<div class="ctrl">
+    @switch (partnerState)
+    {
+        case HJD.HotelManagementCenter.Domain.RetailerInvateState.Auditing:
+            <div class="btn sub-ing">审核中</div>
+            break;
+        case HJD.HotelManagementCenter.Domain.RetailerInvateState.NoLog:
+            <div class="btn sub-btn">申请</div>
+            break;
+        case HJD.HotelManagementCenter.Domain.RetailerInvateState.Pass:
+            if (partnerResult.CanDevTeam)
+            {
+                <div class="tip">达标啦！快去邀请好友开拓团队~</div>
+                <div class="btn sub-share">去开拓我的团队</div>
+            }
+            else
+            {
+                <div class="tip">暂未达标，继续加油哦~</div>
+                <div class="btn sub-share-0">去开拓我的团队</div>
+            }
+            break;
+        case HJD.HotelManagementCenter.Domain.RetailerInvateState.Reject:
+            <div class="btn sub-fail">审核失败</div>
+            break;
+    }
+</div>
+<div class="wx-share-tip" style="display:none;">
+    <img data-orisrc="http://whfront.b0.upaiyun.com/app/img/channel/wx-share-tip.png" src="" alt="点击右上角分享哦" />
+</div>
+
+<div style="margin:1em 0 5em 0;display:none;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3a%2f%2fwww.zmjiudian.com%2fchannel%2fpartners%3fuserid%3d%7buserid%7d">GO APP (Local) >>></a></div>
+<div class="space-bottom"></div>
+
+<footer>
+    <input type="hidden" id="isMobile" value="@(isMobile ? "1" : "0")" />
+    <input type="hidden" id="isInWeixin" value="@(isInWeixin ? "1" : "0")" />
+    <input type="hidden" id="isApp" value="@(isApp ? "1" : "0")" />
+    <input type="hidden" id="isVip" value="@(isVip ? "1" : "0")" />
+    <input type="hidden" id="userId" value="@(userId)" />
+    <input type="hidden" id="cid" value="@(requestCID)" />
+    <input type="hidden" id="appShareLink" value="@(appShareLink)" />
+    <input type="hidden" id="_name" value="成为度假伙伴" />
+</footer>
+
+@section scripts
+{
+    <script>
+            window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+            window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+            window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/framework/config.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/login.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjd.modal.min.js"></script>
+    <script src="~/Content/js/channel/partners.js?v=@(Helpers.curAppVer())"></script>
+    <script>
+        try {
+            onAppShareCall = function () {
+                var title = "@(shareTitle)";
+                var Content = "@(shareDesc)";
+                var photoUrl = "@(shareImgUrl)";
+                var shareLink = "@(shareLink)";
+                try { whotel.appShareData(title, Content, photoUrl, shareLink); } catch (e) { }
+                var returnStr = '{"title":"{0}","Content":"{1}","photoUrl":"{2}","shareLink":"{3}"}';
+                return returnStr.format(title, Content, photoUrl, shareLink);
+            }
+            onAppShareCall();
+        }
+        catch (e) { }
+    </script>
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js?v=@(Helpers.curAppVer())" type="text/javascript"></script>
+        <script>
+
+        GetWeixinApiConfig();//注册
+
+        wx.ready(function () {
+
+            wx.onMenuShareTimeline({
+                title: '@(shareTitle)',
+                desc: '@(shareDesc)',
+                link: '@(shareLink)',
+                imgUrl: '@(shareImgUrl)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareAppMessage({
+                title: '@(shareTitle)',
+                desc: '@(shareDesc)',
+                link: '@(shareLink)',
+                imgUrl: '@(shareImgUrl)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareQQ({
+                title: '@(shareTitle)',
+                desc: '@(shareDesc)',
+                link: '@(shareLink)',
+                imgUrl: '@(shareImgUrl)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareQZone({
+                title: '@(shareTitle)',
+                desc: '@(shareDesc)',
+                link: '@(shareLink)',
+                imgUrl: '@(shareImgUrl)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            });
+
+            function GetWeixinApiConfig() {
+
+                var url = location.href.split("#")[0];
+                $.ajax({
+                    url: '/Coupon/GetWeixinConfigInfo',
+                    type: 'POST',
+                    data: { url: url },
+                    dataType: 'json',
+                    async: false,
+                    error: function () {
+                        console.log("网络服务错误");
+                    },
+                    success: function (result) {
+                        if (typeof (result.Success) != undefined && result.Success == 1) {
+                            return false;
+                        }
+                        else {
+                            //得到微信config的值
+                            var array = [
+                                'checkJsApi',
+                                'onMenuShareTimeline',
+                                'onMenuShareAppMessage',
+                                'onMenuShareQQ',
+                                'onMenuShareQZone',
+                                'hideOptionMenu'
+                            ];
+                            if (result.jsApiList) {
+                                var jsArray = result.jsApiList.split(',');
+                                for (var key in jsArray) {
+                                    array.push("" + jsArray[key]);
+                                }
+                            }
+
+                            wx.config({
+                                debug: false,
+                                appId: result.appId,
+                                timestamp: "" + result.timestamp,
+                                nonceStr: result.nonceStr,
+                                signature: result.signature,
+                                jsApiList: array
+                            });
+                        }
+                    }
+                });
+            }
+
+        </script>
+    }
+}

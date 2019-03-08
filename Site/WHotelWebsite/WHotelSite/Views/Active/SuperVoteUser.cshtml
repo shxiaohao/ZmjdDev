@@ -1,0 +1,403 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    ViewBag.Title = "个人主页";
+
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.isInWeixin;
+    var userid = ViewBag.UserId;
+    var activeId = ViewBag.ActiveId;
+
+    HJD.WeixinServices.Contracts.ActiveWeixinDraw weixinDraw = ViewBag.WeixinDraw;
+    WHotelSite.Models.WeixinUserInfo weixinUserInfo = ViewBag.WeixinUser;
+    var openid = ViewBag.Openid;
+    var unionid = ViewBag.Unionid;
+    var wxuid = ViewBag.WeixinUid;
+    var posterSloganPic = ViewBag.PosterSloganPic;
+    var ruleExId = ViewBag.RuleExId;
+
+    if (string.IsNullOrEmpty(weixinDraw.HeadImgUrl))
+    {
+        if (!string.IsNullOrEmpty(weixinUserInfo.Headimgurl))
+        {
+            weixinDraw.HeadImgUrl = weixinUserInfo.Headimgurl;
+        }
+        else
+        {
+            weixinDraw.HeadImgUrl = "/Content/images/default-avatar2.png";
+        }
+    }
+
+    //海报中的头像使用的图片地址
+    var posterHeadImgUrl = weixinDraw.HeadImgUrl;
+    if (posterHeadImgUrl.ToLower().Contains("http:"))
+    {
+        posterHeadImgUrl = string.Format("http://api.zmjiudian.com/api/photo/GetZmjdImgByUrl?url={0}", weixinDraw.HeadImgUrl);
+    }
+
+    if (string.IsNullOrEmpty(weixinDraw.UserName))
+    {
+        weixinDraw.UserName = "亲子大使";
+    }
+
+    var urlfrommine = new Random().Next(1, 999);
+
+    //多少票抽一次(目前定68票可抽一次奖)
+    var luckdrawForVoteCount = 36;
+
+    //最多可投票数
+    var maxGoVoteCount = 5;
+
+    //当前时间
+    var now = DateTime.Now;
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+}
+
+@section styles
+{
+    <link href="~/Content/css/framework/zmjd.modal.min.css" rel="stylesheet" />
+    <link href="~/Content/css/active/supervote.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/Content/css/active/supervoteuser.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .login-section {
+            font-size: 0.8em;
+        }
+    </style>
+}
+
+<div v-cloak class="main-panel" id="active-obj">
+
+    <div class="back-home-section"><a href="/wx/active/supervote/@(activeId)/@(urlfrommine)">返回主场>></a></div>
+    <div class="active-rule-section"><a href="http://www.zmjiudian.com/active/activepage?pageid=135">规则</a></div>
+
+    <div class="user-info">
+        <div class="head"><img src="@(weixinDraw.HeadImgUrl)" alt="" /></div>
+        <div class="username">@(weixinDraw.UserName)</div>
+        @*<div class="today-vote">当前总票数：{{voteInfo.totalVoteCount}}</div>*@
+    </div>
+
+    <div v-cloak class="vote-status vote-status-novote" v-if="voteInfo.todayIsLuckOk">今天壕礼已送达，快试试手气～</div>
+    <div v-cloak class="vote-status vote-status-ing" v-if="!voteInfo.todayIsLuckOk&&!voteInfo.todayLuckOver&&voteInfo.diffVoteCount">还差{{voteInfo.diffVoteCount}}票就能抽奖，要加油哦~</div>
+    <div class="vote-status-space" style="display:none;" v-if="(voteInfo.todayIsLuckOk)||(!voteInfo.todayIsLuckOk&&!voteInfo.todayLuckOver&&voteInfo.diffVoteCount)"></div>
+
+    <div v-cloak class="vote-status-space" v-if="voteInfo.todayLuckOver"></div>
+
+    <div class="rank-info">
+        <div class="rank-tab clearfloat">
+            <div class="tab-item tab-item-daiyan seled">我代言的酒店</div>
+            <div class="tab-item right-item tab-item-luckdraw" style="color:red !important;">天天抽奖</div>
+        </div>
+    </div>
+
+    <div id="daiyan-table">
+
+        <div class="user-vote-info clearfloat">
+            <div class="voteinfo-item item-50 voteinfo-item-border-r">
+                <div class="tit">当前代言酒店数</div>
+                <div class="val"><span class="h">{{mineRuleExList.length}}</span></div>
+            </div>
+            <div class="voteinfo-item item-50">
+                <div class="tit">当前最高排行</div>
+                <div class="val"><span class="h">{{voteInfo.maxRankNo}}</span></div>
+            </div>
+        </div>
+
+        <div class="rank-info">
+            <div class="section-title">我代言的酒店</div>
+            <div class="rank-list">
+                <div class="list">
+                    <div class="_item" v-for="item in mineRuleExList">
+                        <div class="info clearfloat" onclick="gourl('/wx/active/supervoteitem/@(activeId)/{{item.ID}}/0/@(urlfrommine)')">
+                            <div class="pic-info">
+                                <img :src="item.PicUrl" alt="" />
+                            </div>
+                            <div class="name-info">
+                                <div class="tit">{{item.Title}}</div>
+                                <div class="val-info clearfloat">
+                                    <div class="val2">我的票数：<b>{{item.VoteCount}}</b></div>
+                                    <div class="val2" v-if="item.VoteCount">我的排名：<span class="h">{{item.RankNo}}</span></div>
+                                    <div class="val2" v-else>我的排名：无</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ctrl clearfloat">
+                            <a href="javascript:;" class="reged-btn"
+                               data-id="{{item.ID}}"
+                               data-producturl="{{item.ProductUrl}}"
+                               data-bannerurl="{{item.PicUrl}}"
+                               data-headimgurl="@(weixinDraw.HeadImgUrl)"
+                               data-username="@(weixinDraw.UserName)"
+                               data-posterdesc="{{item.PosterDesc}}"
+                               data-tipimgurl="http://whfront.b0.upaiyun.com/www/img/Active/supervote/vote-poster-tip-pic.png">去拉票</a>
+
+                            <a href="/wx/active/supervoteitem/@(activeId)/{{item.ID}}/0/@(urlfrommine)" class="vote-btn" v-if="!item.TodayVoteState">投一票</a>
+                            <a href="javascript:;" class="voted-btn" v-else>今日已投</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="rank-link">
+                <a href="/wx/active/supervote/@(activeId)/@(urlfrommine)" class="go-index-link">去主会场，查看所有酒店>></a>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="luckdraw-table" class="zmjd-hide">
+
+        <div class="user-vote-info item-25 clearfloat">
+            <div class="voteinfo-item voteinfo-item-border-r">
+                <div class="tit">累计票数</div>
+                <div class="val"><span class="h">{{voteInfo.totalVoteCount}}</span></div>
+            </div>
+            <div class="voteinfo-item item-25 voteinfo-item-border-r">
+                <div class="tit">已抽奖</div>
+                <div class="val"><span class="h">{{luckRecordList.length}}</span>次</div>
+            </div>
+            <div class="voteinfo-item item-25 voteinfo-item-border-r">
+                <div class="tit">剩余票数</div>
+                <div class="val"><span class="h">{{voteInfo.trueVoteCount}}</span></div>
+            </div>
+            <div class="voteinfo-item item-25">
+                <div class="tit">今日可抽奖</div>
+                <div class="val"><span class="h">{{voteInfo.trueLuckCount}}</span>次</div>
+            </div>
+            @*<div class="voteinfo-item item-25">
+                    <div class="tit">今日可投票</div>
+                    <div class="val"><span class="h">{{voteInfo.trueGoVoteCount}}</span>次</div>
+                </div>*@
+        </div>
+
+        <div class="luck-info">
+            <div class="luck-top clearfloat">
+                <div class="_left">每@(luckdrawForVoteCount)票可抽奖一次，每日限抽1次</div>
+                <div class="_right"><a href="/wx/active/supervoteluckrecord/@(activeId)" class="link">抽奖历史>></a></div>
+            </div>
+            <div class="luck-banner" id="open-luckdraw-banner">
+                <img src="http://whphoto.b0.upaiyun.com/118NTGA0_jupiter" alt="" />
+            </div>
+        </div>
+
+        <div class="luck-rule">
+            <div class="tit">抽奖规则:</div>
+            <div class="info">
+                <div class="item">
+                    1、抽奖时间：2018年11月12日至12月10日
+                </div>
+                <div class="item">
+                    2、每获得@(luckdrawForVoteCount)票，可获得1次抽奖机会。每日限抽奖1次。
+                </div>
+                <div class="item">
+                    3、微信红包，将在24小时内通过【周末酒店服务号】发送。发送后用户的领取有效期为24小时，超时未领取将自动退回，不予补发。*必须实名认证。*由于微信平台的安全验证机制，针对有安全风险或者异常的微信账号，会发送失败。
+                </div>
+                <div class="item">
+                    4、奖品仅限本人使用，不可转售倒卖。
+                </div>
+                <div class="item">
+                    5、活动期间，如用户存在违规行为（包括但不限于作弊、刷票、转售倒卖奖品），平台将取消违规用户的投票资格，并收回奖励。
+                </div>
+                <div class="item">
+                    6、奖品使用规则以奖品实际提供方/券面规定为准。
+                </div>
+                <div class="item">
+                    7、如出现不可抗力或情势变更（包括但不限于活动受到严重网络攻击或因系统故障需暂停等），平台可依据相关法律法规主张免责。
+                </div>
+                <div class="item">
+                    *本活动解释权在法律法规允许范围内归周末酒店APP所有。*
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="luckdraw-bg zmjd-hide"></div>
+    <div class="luckdraw-section zmjd-hide">
+        <div class="close"><span class="icon zmjd-iconfont">&#xe647;</span></div>
+        <div class="win-prize">
+            <div class="open-section">
+                <div class="bg">
+                    <img src="http://whfront.b0.upaiyun.com/www/img/Active/supervote/pic-gift-closed-bg.png" alt="" />
+                </div>
+                <div class="tip">今日份礼包已送达，快看看有什么惊喜吧～</div>
+                <div class="btns">
+                    <a href="javascript:;" class="open-btn go-luckdraw-btn">立即打开</a>
+                </div>
+            </div>
+            <div class="opened-section zmjd-hide">
+                <div class="bg">
+                    <img src="http://whfront.b0.upaiyun.com/www/img/Active/supervote/pic-gift-opened-bg.png" alt="" />
+                    <div class="tip1"><span class="un">¥</span>{{luckDrawResult.Price}}</div>
+                    <div class="tip2">{{luckDrawResult.TagName}}</div>
+                </div>
+                <div class="tip">{{luckDrawResult.Description}}</div>
+                <div class="btns">
+                    <a href="javascript:;" class="look-luck-btn">去看看</a>
+                </div>
+            </div>
+        </div>
+        <div class="fail-prize zmjd-hide">
+            <div class="bg">
+                <img src="http://whfront.b0.upaiyun.com/www/img/Active/supervote/pic-gift-opened-bg-0.png" alt="" />
+                <div class="tip1">抱歉，没有中奖</div>
+                <div class="tip2">明天再来哦~</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="showPosterSection" class="showPosterSection zmjd-hide">
+    <div class="poster-result zmjd-hide">
+        <div class="share-info">
+            <div class="share-tit">－长按可以分享海报哦－</div>
+            @*<div class="share-desc">(PS:将海报保存在本地更方便分享哦~)</div>*@
+        </div>
+        @*<div class="poster-tit">－长按海报保存到本地－</div>*@
+        <div class="poster-img"><img id="showImg" src="" alt="" /></div>
+        <div class="poster-close"><img src="http://whfront.b0.upaiyun.com/bg/channel/posteractive/poster-close.png" alt="关闭" /></div>
+    </div>
+    <div class="poster-loadding">
+        <div class="loading-tip">海报生成中...</div>
+        <div class="mine-poster">
+            <div class="p-img"><img src="http://whphoto.b0.upaiyun.com/118YLPO1_640x920" id="item-banner-img" crossorigin="anonymous" alt="" /></div>
+            <div class="slogan-img"><img src="@(posterSloganPic)" crossorigin="anonymous" alt="" /></div>
+            <div class="slogan-img-bg"></div>
+            <div class="p-info">
+                <div class="user-info">
+                    <div class="h-img"><img src="@(posterHeadImgUrl)" id="user-head-img" crossorigin="anonymous" alt="" /></div>
+                </div>
+                <div class="qrcode-section clearfloat">
+                    <div class="left"><img src="" id="goget-qrcode-img" crossorigin="anonymous" alt="" /></div>
+                    <div class="right">
+                        <div class="desc-section" id="poster-desc">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-img">
+                    <img src="http://whphoto.b0.upaiyun.com/118IKKk0_jupiter" crossorigin="anonymous" alt="" />
+                </div>
+            </div>
+        </div>
+        @*<div class="mine-poster">
+                <div class="p-img"><img src="http://whphoto.b0.upaiyun.com/118YLPO1_640x640" id="item-banner-img" crossorigin="anonymous" alt="" /></div>
+                <div class="p-info-bg-div"></div>
+                <div class="p-info">
+                    <div class="user-info clearfloat">
+                        <div class="h-img"><img src="@(weixinDraw.HeadImgUrl)" id="user-head-img" crossorigin="anonymous" alt="" /></div>
+                        <div class="u-name">我是小豪</div>
+                    </div>
+                    <div class="desc-section">
+                        我正在参加周末酒店“我为酒店代言”活动，我代言了XXXXXXXXXX酒店，识别下方二维码助我获得XXXXX大奖吧。
+                    </div>
+                    <div class="qrcode-section clearfloat">
+                        <div class="left"><img src="http://whfront.b0.upaiyun.com/www/img/Active/supervote/vote-poster-tip-pic.png" crossorigin="anonymous" alt="" /></div>
+                        <div class="right"><img src="http://www.zmjiudian.com/Content/images/qrcode-app.png" id="goget-qrcode-img" crossorigin="anonymous" alt="" /></div>
+                    </div>
+                </div>
+            </div>*@
+    </div>
+</div>
+<div class="poster-bg" style="display:none;"></div>
+<div id="productQrcode" style="display:none;"></div>
+
+<footer>
+    <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+    <input type="hidden" id="isInWeixin" value="@(isInWeixin ? 1 : 0)" />
+    <input type="hidden" id="userId" value="@(userid)" />
+    <input type="hidden" id="activeId" value="@(activeId)" />
+    <input type="hidden" id="openid" value="@(openid)" />
+    <input type="hidden" id="unionid" value="@(unionid)" />
+    <input type="hidden" id="wxuid" value="@(wxuid)" />
+    <input type="hidden" id="nickName" value="@(weixinDraw.UserName)" />
+    <input type="hidden" id="activeDrawId" value="@(weixinDraw.ID)" />
+    <input type="hidden" id="luckdrawForVoteCount" value="@(luckdrawForVoteCount)" />
+    <input type="hidden" id="maxGoVoteCount" value="@(maxGoVoteCount)" />
+    <input type="hidden" id="ruleExId" value="@(ruleExId)" />
+
+    <input type="hidden" id="year0" value="@now.Year" />
+    <input type="hidden" id="month0" value="@(now.Month)" />
+    <input type="hidden" id="day0" value="@now.Day" />
+    <input type="hidden" id="hour0" value="@now.Hour" />
+    <input type="hidden" id="minute0" value="@now.Minute" />
+    <input type="hidden" id="second0" value="@now.Second" />
+</footer>
+
+@section scripts
+{
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/framework/zmjd.modal.min.js"></script>
+    <script src="~/Content/js/framework/config.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjd.qrcode.min.js"></script>
+    <script src="~/Content/js/framework/html2canvas.min.js"></script>
+    <script src="~/Content/js/active/supervoteuser.js?v=@(Helpers.curAppVer())"></script>
+
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+        <script>
+
+            GetWeixinApiConfig();//注册
+
+            wx.ready(function () {
+
+                wx.hideMenuItems({
+                    menuList: ["menuItem:share:timeline", "menuItem:copyUrl", "menuItem:share:appMessage", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:QZone", "menuItem:openWithSafari", "menuItem:openWithQQBrowser", "menuItem:share:brand", "menuItem:share:email"]
+                });
+
+            });
+
+            function GetWeixinApiConfig() {
+
+                var url = location.href.split("#")[0];
+                $.ajax({
+                    url: '/Coupon/GetWeixinConfigInfo',
+                    type: 'POST',
+                    data: { url: url },
+                    dataType: 'json',
+                    error: function () {
+                        console.log("网络服务错误");
+                    },
+                    success: function (result) {
+                        if (typeof (result.Success) != undefined && result.Success == 1) {
+                            return false;
+                        }
+                        else {
+                            //得到微信config的值
+                            var array = [
+                                'checkJsApi',
+                                'onMenuShareTimeline',
+                                'onMenuShareAppMessage',
+                                'hideOptionMenu',
+                                'hideMenuItems'
+                            ];
+                            if (result.jsApiList) {
+                                var jsArray = result.jsApiList.split(',');
+                                for (var key in jsArray) {
+                                    array.push("" + jsArray[key]);
+                                }
+                            }
+
+                            wx.config({
+                                debug: false,
+                                appId: result.appId,
+                                timestamp: "" + result.timestamp,
+                                nonceStr: result.nonceStr,
+                                signature: result.signature,
+                                jsApiList: array
+                            });
+                        }
+                    }
+                });
+            }
+
+        </script>
+    }
+}

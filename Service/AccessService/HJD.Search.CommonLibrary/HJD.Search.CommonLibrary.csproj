@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7D7BA799-5F1D-4A8F-A340-F2774E1A7F1D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HJD.Search.CommonLibrary</RootNamespace>
+    <AssemblyName>HJD.Search.CommonLibrary</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="hanlp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Contracts\hanlp.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.Cache">
+      <HintPath>..\..\..\Library\HJD.Framework.Cache.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.Interface">
+      <HintPath>..\..\..\Library\HJD.Framework.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.WCF">
+      <HintPath>..\..\..\Contracts\HJD.Framework.WCF.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.OpenJDK.Core, Version=7.2.4630.5, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Contracts\IKVM.OpenJDK.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.Runtime, Version=7.2.4630.5, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Contracts\IKVM.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="IKVM.Runtime.JNI, Version=7.2.4630.5, Culture=neutral, PublicKeyToken=13235d27fcbfff58, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Contracts\IKVM.Runtime.JNI.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net">
+      <HintPath>..\..\..\CommDll\Pangu\Lucene.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PanGu">
+      <HintPath>..\..\..\Library\PanGu.dll</HintPath>
+    </Reference>
+    <Reference Include="PanGu.HighLight">
+      <HintPath>..\..\..\Library\PanGu.HighLight.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Algorithms\ACKeywordsMatchAlgorithms.cs" />
+    <Compile Include="Algorithms\IKeywordsMatchAlgorithms.cs" />
+    <Compile Include="Algorithms\KeywordsMatchResult.cs" />
+    <Compile Include="Config\IndexConfig.cs" />
+    <Compile Include="Engine\MagiCallEngine.cs" />
+    <Compile Include="Engine\ParseEngine.cs" />
+    <Compile Include="Engine\QaSearchEngine.cs" />
+    <Compile Include="Helper\LogHelper.cs" />
+    <Compile Include="LuceneFactory.cs" />
+    <Compile Include="Engine\PanGuSegment.cs" />
+    <Compile Include="Engine\NLPEngine.cs" />
+    <Compile Include="Engine\HotelEngine.cs" />
+    <Compile Include="Engine\IndexEngine.cs" />
+    <Compile Include="Engine\SearchEngine.cs" />
+    <Compile Include="Helper\HmmHelper.cs" />
+    <Compile Include="Helper\SearchHelper.cs" />
+    <Compile Include="Helper\SqlHelper.cs" />
+    <Compile Include="Model\BaseSearchResult.cs" />
+    <Compile Include="Model\DocumentData.cs" />
+    <Compile Include="Model\HotelIndexResultEntity.cs" />
+    <Compile Include="Model\HotelIndexResult.cs" />
+    <Compile Include="Model\SearchData.cs" />
+    <Compile Include="Model\HotelSearchResult.cs" />
+    <Compile Include="Model\Enum.cs" />
+    <Compile Include="Parses\CityParse.cs" />
+    <Compile Include="Parses\DateParse.cs" />
+    <Compile Include="Parses\MoneyParse.cs" />
+    <Compile Include="Parses\ParseBase.cs" />
+    <Compile Include="Parses\UserNumParse.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Params\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HJD.AccessServer.DAL\HJD.AccessServer.DAL.csproj">
+      <Project>{54237da9-2051-4ba4-b8e5-af3d3b1cd48b}</Project>
+      <Name>HJD.AccessServer.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HJD.AccessService.Contract\HJD.AccessService.Contract.csproj">
+      <Project>{c63748c9-501d-472a-aeff-36c4c77814b6}</Project>
+      <Name>HJD.AccessService.Contract</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy *.dll  ..\..\..\..\..\Contracts /s/y/f/r</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,751 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    Layout = null;
+
+    ViewBag.Title = "限时抢购";
+
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.IsInWeixin;
+    var cid = ViewBag.CID;
+    var aid = ViewBag.Aid;
+    var userid = ViewBag.UserId;
+
+    CouponActivityDetailModel coupondetail = ViewBag.CouponDetail;
+
+    var activity = coupondetail.activity;
+    var package = coupondetail.package;
+    var pItems = coupondetail.DailyItems;
+    var noticeItems = coupondetail.NoticeItems;
+
+    //房券缺省图
+    if (string.IsNullOrEmpty(activity.PicPath))
+    {
+        activity.PicPath = "http://whfront.b0.upaiyun.com/app/img/pic-null-3x2.png";
+    }
+
+    //平日价
+    var priceType = "平日券";
+    var sellPrice = 0;
+
+    var pingri = coupondetail.package.PackagePrice.First(_ => _.Price > 0);
+    if (pingri != null && pingri.PID > 0)
+    {
+        priceType = pingri.TypeName;
+        sellPrice = pingri.Price;
+    }
+
+    //var pingri = coupondetail.package.PackagePrice.Find(p => p.Type == 0);
+    //if (pingri != null && pingri.Price > 0)
+    //{
+    //    priceLabel = "平日";
+    //    sellPrice = pingri.Price;
+    //}
+    //else
+    //{
+    //    //当平日价找不到或者价格为0时，去查询非平日价（周末价）
+    //    pingri = coupondetail.package.PackagePrice.Find(p => p.Type != 0);
+    //    if (pingri != null && pingri.Price > 0)
+    //    {
+    //        priceLabel = "周末";
+    //        sellPrice = pingri.Price;
+    //    }
+    //}
+
+    //查询券的状态
+    BuyCouponCheckNumResult buyResult = ViewBag.BuyResult;
+
+    //开售日
+    var selldate = activity.EffectiveTime; //selldate = DateTime.Parse("2015-07-08 12:43:15");
+
+    //抢购结束日
+    var closedate = activity.SaleEndDate;
+
+    //购买按钮的状态
+    var canShop = true;
+    var noCanTxt = "立即购买";
+
+    var AppType = ViewBag.AppType;
+    var AppVerForIOS = ViewBag.AppVerForIOS;
+    var AppVerForAndroid = ViewBag.AppVerForAndroid;
+    var IsLatestVerApp = ViewBag.IsLatestVerApp;
+
+    //最小购买数量
+    var minBuyNum = activity.MinBuyNum;
+
+    //页面标题
+    var pageTitle = !string.IsNullOrEmpty(activity.PageTitle) ? activity.PageTitle.Replace("·", " ") : "限时抢购";
+
+    //价格label
+    var priceLabel = activity.PriceLabel;// = "定金";
+
+    var now = DateTime.Now;
+
+    //是否弹出去微信报名的提示
+    var showSignWeixin = ViewBag.ShowSignWeixin;
+    var isFirstWxsign = ViewBag.IsFirstWxsign;
+
+    //是否VIP
+    var isVip = ViewBag.IsVip;
+
+    //是否弹出购买VIP的相关提示
+    var showVipAlert = ViewBag.ShowVipAlert;
+
+    //关联的微信报名活动
+    var weixinActiveEntity = ViewBag.WeixinActiveEntity;
+
+    //分享标题
+    var shareTitle = string.Format("抢！仅￥{0} {1}", sellPrice, package.HotelName);
+    shareTitle = shareTitle.Replace("·", " ");
+        
+    //分享内容
+    var shareDesc = activity.Description;
+
+    //分享链接
+    var shareLink = ViewBag.ShareLink;
+
+    //分享小图
+    var shareImgUrl = activity.PicPath.Replace("_jupiter", "_290x290s").Replace("_theme", "_290x290s").Replace("_appdetail1s", "_290x290s");
+
+    //分享跟踪参数的分享人对象
+    HJD.AccountServices.Entity.MemberProfileInfo shareUserInfo = ViewBag.ShareUserInfo;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>@pageTitle</title>
+    <link href="~/Content/css/framework/zmjd.swiper.min.css" rel="stylesheet" />
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/Content/css/coupon/couponshop.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+</head>
+<body>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .login-section {
+            font-size: 0.8em;
+        }
+    </style>
+
+    @if (activity.GroupCount > 0)
+    {
+        //统计成团的百分比
+        var _groupStatus = "";
+        var _groupStatusNum = 0;
+        //activity.SellNum = 19;
+        //还没有卖出
+        if (activity.SellNum == 0)
+        {
+            _groupStatus = "0%";
+            _groupStatusNum = 0;
+        }
+        ////成团100%
+        //else if (activity.SellNum >= activity.GroupCount)
+        //{
+        //    _groupStatus = "100%";
+        //    _groupStatusNum = 100;
+        //}
+        else
+        {
+            var _n = (Convert.ToDouble(activity.SellNum) / Convert.ToDouble(activity.GroupCount)) * 100;
+            _groupStatus = string.Format("{0}%", Convert.ToInt32(_n));
+
+            if (_n > 100) { _groupStatusNum = 100; } else { _groupStatusNum = (int)_n; }
+        }
+
+        <div class="main">
+            <div class="photo" onclick="goto('hotel/@(package.HotelID)')">
+                @if (activity.PicList != null && activity.PicList.Count > 1)
+                {
+                    <div id="product-img-list-0" class="swiper-container product-img-list">
+                        <ul class="swiper-wrapper">
+                            @for (int _inum = 0; _inum < activity.PicList.Count; _inum++)
+                            {
+                                var _imgsrc = activity.PicList[_inum];
+                                _imgsrc = _imgsrc.Replace("_jupiter", "_640x426").Replace("_theme", "_640x426").Replace("_appdetail1", "_640x426");
+                                <li class="swiper-slide product-img-item">
+                                    @if (_inum < 2)
+                                    {
+                                        <img class="product-img" data-num="@_inum" src='@_imgsrc' data-showsrc='@_imgsrc' alt="" />
+                                    }
+                                    else
+                                    {
+                                        <img class="_img show-img" data-orisrc="@_imgsrc" data-load="0" src="http://whfront.b0.upaiyun.com/app/img/home/home-load2-3x2.png" alt="" />
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="pagination2 pagination-0"></div>
+                    <div class="mode"><span>@string.Format("已售 {0} 套", activity.SellNum)</span></div>
+                }
+                else
+                {
+                    <img src="@activity.PicPath" alt="" />
+                    <div class="mode"><span>@string.Format("已售 {0} 套", activity.SellNum)</span></div>
+                }
+            </div>
+            <div class="photo def-photo">
+                <img src="http://whfront.b0.upaiyun.com/app/img/pic-def-3x2.png" alt="" />
+            </div>
+            <div class="activity">
+                <div class="tit">@package.HotelName</div>
+                <div class="brief">@string.Format("{0} 共{1}套", package.PackageName, activity.TotalNum)</div>
+                <div class="status-line">
+                    <div class="status"><div class="tag">@(_groupStatus)</div></div>
+                </div>
+                <style>
+                .main .activity .status-line .status {
+                    width: @(_groupStatusNum)% !important;
+                }
+                </style>
+                @if (_groupStatusNum == 0)
+                {
+                    <style>
+                        .main .activity .status-line .status .tag {
+                            right: -3em;
+                        }
+                    </style>
+                }
+                else if (_groupStatusNum <= 10)
+                {
+                    <style>
+                        .main .activity .status-line .status .tag {
+                            right: -1.5em;
+                        }
+                    </style>
+                }
+                else if (_groupStatusNum == 100)
+                {
+                    <style>
+                        .main .activity .status-line .status .tag {
+                            right: -0em;
+                        }
+                    </style>
+                }
+                <div class="group-timer-line" id="shop-tag-left">
+                    <div class="left">
+                        @(activity.GroupCount)套成团 已售@(activity.SellNum)套
+                    </div>
+                    <div class="right">
+                        @{
+                            //首先检查当前券是否已经售完
+                            if (buyResult.ActivityState == 0)
+                            {
+                                canShop = false;
+                                noCanTxt = "已售完";
+                                <span>已售完</span>
+                            }
+                            else if (buyResult.ActivityState == 2)
+                            {
+                                canShop = false;
+                                noCanTxt = "抢购已结束";
+                                <span>已结束</span>
+                            }
+                            //可售
+                            else
+                            {
+                                //如果还没有到开售日不能购买。
+                                canShop = false;
+                                noCanTxt = "活动尚未开始";
+
+                                //显示倒计时
+                                <span class="timer-tag" id="daojishi"
+                                      data-year0="@now.Year"
+                                      data-month0="@(now.Month - 1)"
+                                      data-day0="@now.Day"
+                                      data-hour0="@now.Hour"
+                                      data-minute0="@now.Minute"
+                                      data-second0="@now.Second"
+                                      data-year1="@selldate.Year"
+                                      data-month1="@(selldate.Month - 1)"
+                                      data-day1="@selldate.Day"
+                                      data-hour1="@selldate.Hour"
+                                      data-minute1="@selldate.Minute"
+                                      data-second1="@selldate.Second"
+                                      data-year2="@closedate.Year"
+                                      data-month2="@(closedate.Month - 1)"
+                                      data-day2="@closedate.Day"
+                                      data-hour2="@closedate.Hour"
+                                      data-minute2="@closedate.Minute"
+                                      data-second2="@closedate.Second">进行中</span>
+                            }
+                        }
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+
+                <div class="detail">
+                    <div class="price-line">
+                        @if (!string.IsNullOrEmpty(priceLabel))
+                        {
+                            <span class="p-lab">@priceLabel</span>
+                        }
+                        else
+                        {
+                            <span class="p-lab">团购价</span>
+                        }
+                        <span class="p-un">￥</span><span class="p-val">@sellPrice</span><span class="p-other-price">市场价 <span>￥</span>@(coupondetail.activity.MarketPrice)</span>
+                    </div>
+                    @if (buyResult.ActivityState == 0 || buyResult.ActivityState == 2)
+                    {
+                        //活动结束后，如果成团，则显示团购成功
+                        if (_groupStatusNum >= 100)
+                        {
+                            <div class="group-pic-tag">
+                                <img src="http://whfront.b0.upaiyun.com/app/img/coupon/group-tag-success.png" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="group-pic-tag">
+                                <img src="http://whfront.b0.upaiyun.com/app/img/coupon/group-tag-lose.png" />
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="main">
+            <div class="photo p-photo" onclick="goto('hotel/@(package.HotelID)')" style="display:none;">
+
+                @if (activity.PicList != null && activity.PicList.Count > 1)
+                {
+                    <div id="product-img-list-0" class="swiper-container product-img-list">
+                        <ul class="swiper-wrapper">
+                            @for (int _inum = 0; _inum < activity.PicList.Count; _inum++)
+                            {
+                                var _imgsrc = activity.PicList[_inum];
+                                _imgsrc = _imgsrc.Replace("_jupiter", "_640x426").Replace("_theme", "_640x426").Replace("_appdetail1", "_640x426");
+                                <li class="swiper-slide product-img-item">
+                                    @if (_inum < 2)
+                                    {
+                                        <img class="product-img" data-num="@_inum" src='@_imgsrc' data-showsrc='@_imgsrc' alt="" />
+                                    }
+                                    else
+                                    {
+                                        <img class="_img show-img" data-orisrc="@_imgsrc" data-load="0" src="http://whfront.b0.upaiyun.com/app/img/home/home-load2-3x2.png" alt="" />
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="pagination2 pagination-0"></div>
+                    <div class="mode"><span>@string.Format("已售 {0} 套", activity.SellNum)</span></div>
+                }
+                else
+                {
+                    <img src="@activity.PicPath" alt="" />
+                    <div class="mode"><span>@string.Format("已售 {0} 套", activity.SellNum)</span></div>
+                }
+
+            </div>
+            <div class="photo def-photo">
+                <img src="http://whfront.b0.upaiyun.com/app/img/pic-def-3x2.png" alt="" />
+            </div>
+            <div class="activity">
+                <div class="tit">@package.HotelName</div>
+                <div class="brief">@string.Format("限售{0}套 {1}开始", activity.TotalNum, selldate.ToString("M月d日HH:mm"))</div>
+                <div class="detail">
+                    <div class="price-line">
+                        @if (!string.IsNullOrEmpty(priceLabel))
+                        {
+                            <span class="p-lab">@priceLabel</span>
+                        }
+                        else
+                        {
+                            <span class="p-lab">闪购价</span>
+                        }
+                        <span class="p-un">￥</span><span class="p-val">@sellPrice</span><span class="p-other-price">市场价 <span>￥</span>@(coupondetail.activity.MarketPrice)</span>
+                    </div>
+                    <div class="timer-line" id="shop-tag-left">
+                        @*进行中*@
+                        @{
+                            //首先检查当前券是否已经售完
+                            if (buyResult.ActivityState == 0)
+                            {
+                                canShop = false;
+                                noCanTxt = "已售完";
+                                <span>已售完</span>
+                            }
+                            else if (buyResult.ActivityState == 2)
+                            {
+                                canShop = false;
+                                noCanTxt = "抢购已结束";
+                                <span>已结束</span>
+                            }
+                            //可售
+                            else
+                            {
+                                //如果还没有到开售日不能购买。
+                                canShop = false;
+                                noCanTxt = "活动尚未开始";
+
+                                //显示倒计时
+                                <span class="timer-tag" id="daojishi"
+                                      data-year0="@now.Year"
+                                      data-month0="@(now.Month - 1)"
+                                      data-day0="@now.Day"
+                                      data-hour0="@now.Hour"
+                                      data-minute0="@now.Minute"
+                                      data-second0="@now.Second"
+                                      data-year1="@selldate.Year"
+                                      data-month1="@(selldate.Month - 1)"
+                                      data-day1="@selldate.Day"
+                                      data-hour1="@selldate.Hour"
+                                      data-minute1="@selldate.Minute"
+                                      data-second1="@selldate.Second"
+                                      data-year2="@closedate.Year"
+                                      data-month2="@(closedate.Month - 1)"
+                                      data-day2="@closedate.Day"
+                                      data-hour2="@closedate.Hour"
+                                      data-minute2="@closedate.Minute"
+                                      data-second2="@closedate.Second">进行中</span>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (showVipAlert)
+    {
+        <div class="main" onclick="goBuyVip()">
+            <div class="vip">
+                <div class="tit">立即成为VIP参与抢购</div>
+            </div>
+        </div>
+        @*<div class="buyvip-md"></div>
+            <div class="buyvip-alert">
+                <div class="info">本闪购仅对VIP会员开放<br />如果您还不是VIP会员，请点击下方“成为VIP”按钮。</div>
+                <div class="gobuyvip" onclick="gourl('/Coupon/VipShopInfo?_newpage=1')">成为VIP</div>
+                <div class="iamvip">我已购买VIP</div>
+            </div>*@
+    }
+
+    @if (showSignWeixin && weixinActiveEntity != null && weixinActiveEntity.ActiveEndTime > DateTime.Now)
+    {
+        <div class="wxsignalert">
+            <div class="a-tit">您还没有预约</div>
+            <div class="a-info">
+                1.关注“周末酒店”公众号(微信号:zmjiudian)<br />
+                2.回复关键词“@(weixinActiveEntity.ActivityKeyWord)”并通过手机号进行预约，您将获得抢购资格
+            </div>
+            <div class="iknow">我知道了</div>
+        </div>
+    }
+
+    @if (isFirstWxsign)
+    {
+        <div class="wxSignOk">
+            <div class="tip-img"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/img_chenggong.png" alt="" /></div>
+            <div class="tip">您已成功预约</div>
+            <div class="goshop">立即进入抢购</div>
+            <div class="goshop-timer" data-count="3">3s后将自动跳转</div>
+        </div>
+    }
+
+    <div class="main">
+        <div class="package">
+            @if (userid == "88888888")
+            {
+                <div style="margin:2em 0 0 0;"><a href="weixin://dl/">GO Weixin >>></a></div>
+                <div style="margin:2em 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http://www.zmjiudian.com/coupon/shop/100430?_dorpdown=1&userid={userid}">GO APP (Local) >>></a></div>
+            }
+            <div class="tit">套餐内容</div>
+            <div class="info">
+                <div class="packageList">
+                    <table border="0" cellpadding="0" cellspacing="0">
+                        @for (int i = 0; i < pItems.Count; i++)
+                        {
+                            var pitem = pItems[i];
+
+                            <tr><td class="td-num" valign="top">&bull;</td><td class="td-info" valign="top">@pitem.Description</td></tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="tuijian">
+            <div class="tit">推荐理由</div>
+            <div class="info">@activity.Description</div>
+            @if (!string.IsNullOrEmpty(activity.MoreDetailUrl))
+            {
+                activity.MoreDetailUrl = activity.MoreDetailUrl.Replace("mp.weixin.qq.com/s?", "mp.weixin.qq.com/s?_newpage=1&");
+                <div class="link"><a href='@activity.MoreDetailUrl'>查看图文详情>></a></div>
+            }
+        </div>
+        <div class="shopread">
+            <div class="tit" data-open="1">购买须知<img class="openimg" style="display:none;" src="~/Content/images/icon-aarow7.png" alt="" /><img class="closeimg" style="display:block;" src="~/Content/images/icon-aarow6.png" alt="" /></div>
+            <div class="info" style="display:block;">
+                <table border="0" cellpadding="0" cellspacing="0">
+                    @for (int i = 0; i < noticeItems.Count; i++)
+                    {
+                        var notice = noticeItems[i];
+                        <tr><td class="td-num" valign="top">&bull;</td><td class="td-info" valign="top">@notice.Description</td></tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="main" onclick="goto('hotel/@(package.HotelID)')">
+        <div class="hotel">
+            <div class="tit">查看酒店详情</div>
+        </div>
+    </div>
+
+    @if (false && userid == "0")
+    {
+        <div class="phonePanel">
+            <div class="rowPanel">
+                <div class="left">手机号</div>
+                <div class="right">
+                    <input type="text" id="userPhone" class="userPhone" placeholder="请输入11位手机号" />
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="rowPanel noBottomLine">
+                <div class="left">短信验证码</div>
+                <div class="right">
+                    <input type="text" id="vCode" class="vCode" placeholder="验证码" />
+                    <button type="button" class="vCodeBtn">获取验证码</button>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+    }
+
+    <div class="price">
+        <div class="pingri">
+            <div class="left">
+                <div>@priceType<span class="price"><span class="t">￥</span>@sellPrice</span></div>
+                <div class="tipinfo">@pingri.AddInfo</div>
+            </div>
+            <div class="right">
+                <span style="border: 1px solid #dcdcdc; background: #f8f8f8; padding: 0.6em 0 0.3em 0;"><span class="btn0">-</span><input class="sellnum borderNoShadow" type="tel" data-minbuy="@minBuyNum" data-minbuymsg="该房券 @(minBuyNum) 张起售" value="@minBuyNum" /><span class="btn1">+</span></span>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="xiaoji" data-sum="@(sellPrice * minBuyNum)">
+            <div class="left">小计</div>
+            <div class="right"><span class="t">￥</span><span class="price">@(sellPrice * minBuyNum)</span></div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="priceAlertTip" style="display:none;">
+            <div class="tipinfo"></div>
+        </div>
+    </div>
+    <div class="pubAlertTip" style="display:none;">
+        <div class="tipinfo"></div>
+    </div>
+
+    @if (shareUserInfo.UserID > 0)
+    {
+        <div class="share-member-panel">
+            <div class="share-member-head">
+                <div class="member-head"><img src="@(shareUserInfo.AvatarUrl)" alt="@(shareUserInfo.NickName)" /></div>
+                <div class="member-nick">@(shareUserInfo.NickName)<br />@(string.IsNullOrEmpty(shareUserInfo.NickName) ? "" : "正在用")周末酒店App</div>
+                <div class="ad-tip">邀请您</div>
+            </div>
+            <div class="share-btns">
+                <div class="join-zmjd" onclick="gourl('/Active/GenCashCouponForInvitation?sourceId=@(shareUserInfo.UserID)')" data-op="0">使用周末酒店 获得50元现金券</div>
+            </div>
+            <div class="share-bottom-logo">
+                <img src="http://whfront.b0.upaiyun.com/www/img/comment/zmjd-bottom-logo.png" alt="周末酒店" />
+            </div>
+        </div>
+    }
+
+    <div style="margin:0 0 4em 0;"></div>
+    <div class="sub">
+        @if (showSignWeixin)
+        {
+            if (weixinActiveEntity != null && weixinActiveEntity.ActiveEndTime < DateTime.Now)
+            {
+                <div class="wxSign0">预约结束<br /><span>预约截止时间:@(weixinActiveEntity.ActiveEndTime.ToString("yyyy.MM.dd hh:mm"))</span></div>
+            }
+            else
+            {
+                <div class="wxSign">立即预约<br /><span>预约截止时间:@(weixinActiveEntity.ActiveEndTime.ToString("yyyy.MM.dd hh:mm"))</span></div>
+            }
+        }
+        else
+        {
+            <div class="submit" style="@(canShop ? "display:block" : "display:none;")">￥@(sellPrice)&nbsp;&nbsp;立即抢购</div>
+            <div class="submit0" style="@(!canShop ? "display:block" : "display:none;")">@noCanTxt</div>
+        }
+    </div>
+
+    @if (!isApp && cid <= 0)
+    {
+        <div class="download-topbanner" onclick="gourl('/Inspector/Jump?jumpurl=whotelapp://www.zmjiudian.com/gotopage?url=http://www.zmjiudian.com/coupon/shop/@(aid)?realuserid=1&_newpage=1&_dorpdown=1')"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/banner_downloadapp.png" alt="" /></div>
+    }
+
+    <footer>
+        <input type="hidden" id="aid" value="@aid" />
+        <input type="hidden" id="atype" value="@activity.Type" />
+        <input type="hidden" id="pid" value="@package.PackageID" />
+        <input type="hidden" id="pricetype" value="@pingri.Type" />
+        <input type="hidden" id="hidCurUserCID" value="@(ViewBag.CID)" />
+        <input type="hidden" id="userid" value="@userid" />
+        <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+        <input type="hidden" id="apptype" value="@(AppType)" />
+        <input type="hidden" id="pingriPrice" value="@sellPrice" />
+        <input type="hidden" id="cansell" value="@(canShop ? 1 : 0)" />
+        <input type="hidden" id="_name" value="@string.Format("{0} 抢购", package.HotelName)" />
+        <form style="display:none;">
+            <input type="text" id="loginput" value="0" />
+        </form>
+    </footer>
+
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script src="~/Content/js/jquery-1.10.2-min.js"></script>
+    <script src="~/Content/js/framework/config.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjd.swiper.min.js"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/geetest/gt.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/login.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/coupon/couponshop.js?v=@(Helpers.curAppVer())"></script>
+    <script>
+        var pub_userid = "@userid";
+
+        try {
+            onAppShareCall = function () {
+                var title = "@(shareTitle)";
+                var Content = "@(shareDesc)";
+                var photoUrl = "@(shareImgUrl)";
+                var shareLink = "@(shareLink)";
+                try { whotel.appShareData(title, Content, photoUrl, shareLink); } catch (e) { }
+                var returnStr = '{"title":"{0}","Content":"{1}","photoUrl":"{2}","shareLink":"{3}"}';
+                return returnStr.format(title, Content, photoUrl, shareLink);
+            }
+            onAppShareCall();
+        }
+        catch (e) { }
+    </script>
+    <script type="text/javascript">
+        var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+        document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F3566e9570ddbe6722a51adedffbf065b' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js?v=@(Helpers.curAppVer())" type="text/javascript"></script>
+        <script>
+
+        GetWeixinApiConfig();//注册
+
+        wx.ready(function () {
+
+            wx.onMenuShareTimeline({
+                title: '@(shareTitle)',
+                desc: '@(shareDesc)',
+                link: '@(shareLink)',
+                imgUrl: '@(shareImgUrl)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareAppMessage({
+                title: '@(shareTitle)',
+                desc: '@(shareDesc)',
+                link: '@(shareLink)',
+                imgUrl: '@(shareImgUrl)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareQQ({
+                title: '@(shareTitle)',
+                desc: '@(shareDesc)',
+                link: '@(shareLink)',
+                imgUrl: '@(shareImgUrl)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareQZone({
+                title: '@(shareTitle)',
+                desc: '@(shareDesc)',
+                link: '@(shareLink)',
+                imgUrl: '@(shareImgUrl)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            });
+
+            function GetWeixinApiConfig() {
+
+                var url = location.href.split("#")[0];
+                $.ajax({
+                    url: '/Coupon/GetWeixinConfigInfo',
+                    type: 'POST',
+                    data: { url: url },
+                    dataType: 'json',
+                    async: false,
+                    error: function () {
+                        console.log("网络服务错误");
+                    },
+                    success: function (result) {
+                        if (typeof (result.Success) != undefined && result.Success == 1) {
+                            return false;
+                        }
+                        else {
+                            //得到微信config的值
+                            var array = [
+                                'checkJsApi',
+                                'onMenuShareTimeline',
+                                'onMenuShareAppMessage',
+                                'onMenuShareQQ',
+                                'onMenuShareQZone',
+                                'hideOptionMenu'
+                            ];
+                            if (result.jsApiList) {
+                                var jsArray = result.jsApiList.split(',');
+                                for (var key in jsArray) {
+                                    array.push("" + jsArray[key]);
+                                }
+                            }
+
+                            wx.config({
+                                debug: false,
+                                appId: result.appId,
+                                timestamp: "" + result.timestamp,
+                                nonceStr: result.nonceStr,
+                                signature: result.signature,
+                                jsApiList: array
+                            });
+                        }
+                    }
+                });
+            }
+
+        </script>
+    }
+</body>
+</html>

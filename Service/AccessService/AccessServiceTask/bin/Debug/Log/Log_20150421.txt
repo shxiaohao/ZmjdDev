@@ -1,0 +1,267 @@
+
+[2015/4/21 16:49:39] Start Job [HotelPackageMatchingJob]
+[2015/4/21 16:49:40] MatchDate Count:1
+[2015/4/21 16:49:50] RoomMatch Count:179
+[2015/4/21 16:49:51] Start Date:2015/4/24 0:00:00
+[2015/4/21 16:49:51] Start HotelId:5425 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:49:54] Price Package Count:0
+[2015/4/21 16:49:54] Start HotelId:7615 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:49:55] Price Package Count:0
+[2015/4/21 16:49:55] Start HotelId:11740 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:49:56] Price Package Count:4
+[2015/4/21 16:49:56] Package MatchRoom Is Null
+[2015/4/21 16:49:56] Insert PackageMatch OK!
+[2015/4/21 16:49:56] Package MatchRoom Is Null
+[2015/4/21 16:49:56] Insert PackageMatch OK!
+[2015/4/21 16:49:56] Start HotelId:29225 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:49:56] Price Package Count:2
+[2015/4/21 16:49:56] Insert PackageMatch OK!
+[2015/4/21 16:49:57] Insert PackageMatch OK!
+[2015/4/21 16:49:57] Start HotelId:35459 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:49:57] Price Package Count:2
+[2015/4/21 16:49:57] Insert PackageMatch OK!
+[2015/4/21 16:49:57] Insert PackageMatch OK!
+[2015/4/21 16:49:57] Start HotelId:59866 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:49:57] Price Package Count:3
+[2015/4/21 16:49:57] Insert PackageMatch OK!
+[2015/4/21 16:49:57] Can't Find MatchPriceRate, BaseRoomID:149241 Night:2015/4/24 0:00:00
+[2015/4/21 16:49:57] Package MatchRoom Is Null
+[2015/4/21 16:49:57] Start HotelId:105194 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:49:57] Price Package Count:2
+[2015/4/21 16:49:57] Package MatchRoom Is Null
+[2015/4/21 16:49:57] Package MatchRoom Is Null
+[2015/4/21 16:49:57] Start HotelId:106480 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:49:58] Price Package Count:2
+[2015/4/21 16:49:58] Can't Find MatchPriceRate, BaseRoomID:54764 Night:2015/4/24 0:00:00
+[2015/4/21 16:49:58] Can't Find MatchPriceRate, BaseRoomID:54764 Night:2015/4/24 0:00:00
+[2015/4/21 16:49:58] Start HotelId:110355 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:49:58] Price Package Count:4
+[2015/4/21 16:49:58] Insert PackageMatch OK!
+[2015/4/21 16:49:58] Insert PackageMatch OK!
+[2015/4/21 16:49:58] Insert PackageMatch OK!
+[2015/4/21 16:49:58] Can't Find MatchPriceRate, BaseRoomID:2416154 Night:2015/4/24 0:00:00
+[2015/4/21 16:49:58] Start HotelId:120230 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:49:58] Price Package Count:2
+[2015/4/21 16:49:58] Package MatchRoom Is Null
+[2015/4/21 16:49:58] Package MatchRoom Is Null
+[2015/4/21 16:49:58] Start HotelId:126911 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:02] Price Package Count:0
+[2015/4/21 16:50:02] Start HotelId:132447 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:03] Price Package Count:0
+[2015/4/21 16:50:03] Start HotelId:138138 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:03] Price Package Count:2
+[2015/4/21 16:50:03] Insert PackageMatch OK!
+[2015/4/21 16:50:03] Insert PackageMatch OK!
+[2015/4/21 16:50:03] Start HotelId:138236 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:06] Price Package Count:0
+[2015/4/21 16:50:06] Start HotelId:144109 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:06] Price Package Count:8
+[2015/4/21 16:50:06] Insert PackageMatch OK!
+[2015/4/21 16:50:06] Insert PackageMatch OK!
+[2015/4/21 16:50:06] Insert PackageMatch OK!
+[2015/4/21 16:50:06] Insert PackageMatch OK!
+[2015/4/21 16:50:06] Insert PackageMatch OK!
+[2015/4/21 16:50:06] Insert PackageMatch OK!
+[2015/4/21 16:50:06] Insert PackageMatch OK!
+[2015/4/21 16:50:06] Insert PackageMatch OK!
+[2015/4/21 16:50:06] Start HotelId:153172 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:10] Price Package Count:0
+[2015/4/21 16:50:10] Start HotelId:155494 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:10] Price Package Count:1
+[2015/4/21 16:50:10] Insert PackageMatch OK!
+[2015/4/21 16:50:10] Start HotelId:157260 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:10] Price Package Count:3
+[2015/4/21 16:50:10] Package MatchRoom Is Null
+[2015/4/21 16:50:10] Can't Find MatchPriceRate, BaseRoomID:14302 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:10] Can't Find MatchPriceRate, BaseRoomID:2137444 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:10] Start HotelId:163344 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:10] Price Package Count:3
+[2015/4/21 16:50:10] Can't Find MatchPriceRate, BaseRoomID:21947 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:10] Insert PackageMatch OK!
+[2015/4/21 16:50:10] Can't Find MatchPriceRate, BaseRoomID:21952 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:10] Start HotelId:167714 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:11] Price Package Count:0
+[2015/4/21 16:50:11] Start HotelId:199962 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:13] Price Package Count:0
+[2015/4/21 16:50:13] Start HotelId:206056 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:13] Price Package Count:3
+[2015/4/21 16:50:13] Insert PackageMatch OK!
+[2015/4/21 16:50:13] Insert PackageMatch OK!
+[2015/4/21 16:50:13] Can't Find MatchPriceRate, BaseRoomID:2531280 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:13] Start HotelId:213676 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:15] Price Package Count:0
+[2015/4/21 16:50:15] Start HotelId:233770 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:17] Price Package Count:0
+[2015/4/21 16:50:17] Start HotelId:236124 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:17] Price Package Count:2
+[2015/4/21 16:50:17] Insert PackageMatch OK!
+[2015/4/21 16:50:17] Package MatchRoom Is Null
+[2015/4/21 16:50:17] Start HotelId:243594 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:17] Price Package Count:2
+[2015/4/21 16:50:17] Insert PackageMatch OK!
+[2015/4/21 16:50:18] Insert PackageMatch OK!
+[2015/4/21 16:50:18] Start HotelId:280610 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:19] Price Package Count:0
+[2015/4/21 16:50:19] Start HotelId:320020 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:19] Price Package Count:2
+[2015/4/21 16:50:19] Package MatchRoom Is Null
+[2015/4/21 16:50:19] Insert PackageMatch OK!
+[2015/4/21 16:50:19] Start HotelId:324571 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:22] Price Package Count:0
+[2015/4/21 16:50:22] Start HotelId:342744 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:22] Price Package Count:1
+[2015/4/21 16:50:22] Can't Find MatchPriceRate, BaseRoomID:4764674 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:22] Start HotelId:385153 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:22] Price Package Count:2
+[2015/4/21 16:50:22] Insert PackageMatch OK!
+[2015/4/21 16:50:22] Insert PackageMatch OK!
+[2015/4/21 16:50:22] Start HotelId:402984 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:22] Price Package Count:9
+[2015/4/21 16:50:22] Can't Find MatchPriceRate, BaseRoomID:63452 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:22] Can't Find MatchPriceRate, BaseRoomID:2727963 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:22] Can't Find MatchPriceRate, BaseRoomID:63452 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:22] Can't Find MatchPriceRate, BaseRoomID:63452 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:22] Can't Find MatchPriceRate, BaseRoomID:2727963 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:22] Can't Find MatchPriceRate, BaseRoomID:2727986 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:22] Can't Find MatchPriceRate, BaseRoomID:2727986 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:22] Can't Find MatchPriceRate, BaseRoomID:2727963 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:22] Can't Find MatchPriceRate, BaseRoomID:2727986 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:22] Start HotelId:406314 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:23] Price Package Count:2
+[2015/4/21 16:50:23] Insert PackageMatch OK!
+[2015/4/21 16:50:23] Insert PackageMatch OK!
+[2015/4/21 16:50:23] Start HotelId:457490 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:23] Price Package Count:6
+[2015/4/21 16:50:23] Can't Find MatchPriceRate, BaseRoomID:2546574 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:23] Can't Find MatchPriceRate, BaseRoomID:2546574 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:23] Can't Find MatchPriceRate, BaseRoomID:820776 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:23] Can't Find MatchPriceRate, BaseRoomID:2546574 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:23] Can't Find MatchPriceRate, BaseRoomID:2546574 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:23] Can't Find MatchPriceRate, BaseRoomID:2546574 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:23] Start HotelId:460241 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:24] Price Package Count:0
+[2015/4/21 16:50:24] Start HotelId:467955 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:24] Price Package Count:3
+[2015/4/21 16:50:24] Insert PackageMatch OK!
+[2015/4/21 16:50:24] Insert PackageMatch OK!
+[2015/4/21 16:50:24] Package MatchRoom Is Null
+[2015/4/21 16:50:24] Start HotelId:495803 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:28] Price Package Count:0
+[2015/4/21 16:50:28] Start HotelId:498513 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:29] Price Package Count:1
+[2015/4/21 16:50:29] Insert PackageMatch OK!
+[2015/4/21 16:50:29] Start HotelId:505891 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:29] Price Package Count:3
+[2015/4/21 16:50:29] Package MatchRoom Is Null
+[2015/4/21 16:50:29] Package MatchRoom Is Null
+[2015/4/21 16:50:29] Insert PackageMatch OK!
+[2015/4/21 16:50:29] Start HotelId:510644 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:32] Price Package Count:0
+[2015/4/21 16:50:32] Start HotelId:514613 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:32] Price Package Count:6
+[2015/4/21 16:50:32] Package MatchRoom Is Null
+[2015/4/21 16:50:32] Package MatchRoom Is Null
+[2015/4/21 16:50:32] Insert PackageMatch OK!
+[2015/4/21 16:50:32] Package MatchRoom Is Null
+[2015/4/21 16:50:32] Package MatchRoom Is Null
+[2015/4/21 16:50:32] Insert PackageMatch OK!
+[2015/4/21 16:50:32] Start HotelId:519324 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:34] Price Package Count:0
+[2015/4/21 16:50:34] Start HotelId:524028 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:34] Price Package Count:3
+[2015/4/21 16:50:34] Insert PackageMatch OK!
+[2015/4/21 16:50:34] Package MatchRoom Is Null
+[2015/4/21 16:50:34] Insert PackageMatch OK!
+[2015/4/21 16:50:34] Start HotelId:532443 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:35] Price Package Count:0
+[2015/4/21 16:50:35] Start HotelId:541532 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:36] Price Package Count:3
+[2015/4/21 16:50:36] Can't Find MatchPriceRate, BaseRoomID:5505099 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:36] Can't Find MatchPriceRate, BaseRoomID:5505105 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:36] Can't Find MatchPriceRate, BaseRoomID:5505104 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:36] Start HotelId:575761 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:36] Price Package Count:1
+[2015/4/21 16:50:36] Insert PackageMatch OK!
+[2015/4/21 16:50:36] Start HotelId:597432 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:36] Price Package Count:0
+[2015/4/21 16:50:36] Start HotelId:597435 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:36] Price Package Count:3
+[2015/4/21 16:50:36] Package MatchRoom Is Null
+[2015/4/21 16:50:36] Insert PackageMatch OK!
+[2015/4/21 16:50:36] Insert PackageMatch OK!
+[2015/4/21 16:50:36] Start HotelId:597449 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:37] Price Package Count:0
+[2015/4/21 16:50:37] Start HotelId:597451 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:37] Price Package Count:0
+[2015/4/21 16:50:37] Start HotelId:597454 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:38] Price Package Count:8
+[2015/4/21 16:50:38] Insert PackageMatch OK!
+[2015/4/21 16:50:38] Insert PackageMatch OK!
+[2015/4/21 16:50:38] Insert PackageMatch OK!
+[2015/4/21 16:50:38] Insert PackageMatch OK!
+[2015/4/21 16:50:38] Insert PackageMatch OK!
+[2015/4/21 16:50:38] Insert PackageMatch OK!
+[2015/4/21 16:50:38] Insert PackageMatch OK!
+[2015/4/21 16:50:38] Insert PackageMatch OK!
+[2015/4/21 16:50:38] Start HotelId:597455 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:38] Price Package Count:3
+[2015/4/21 16:50:38] Package MatchRoom Is Null
+[2015/4/21 16:50:38] Package MatchRoom Is Null
+[2015/4/21 16:50:38] Can't Find MatchPriceRate, BaseRoomID:889582 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:38] Start HotelId:597456 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:38] Price Package Count:4
+[2015/4/21 16:50:38] Package MatchRoom Is Null
+[2015/4/21 16:50:38] Package MatchRoom Is Null
+[2015/4/21 16:50:38] Package MatchRoom Is Null
+[2015/4/21 16:50:38] Package MatchRoom Is Null
+[2015/4/21 16:50:38] Start HotelId:597462 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:38] Price Package Count:3
+[2015/4/21 16:50:39] Insert PackageMatch OK!
+[2015/4/21 16:50:39] Insert PackageMatch OK!
+[2015/4/21 16:50:39] Insert PackageMatch OK!
+[2015/4/21 16:50:39] Start HotelId:597467 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:39] Price Package Count:2
+[2015/4/21 16:50:39] Package MatchRoom Is Null
+[2015/4/21 16:50:39] Package MatchRoom Is Null
+[2015/4/21 16:50:39] Start HotelId:597475 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:39] Price Package Count:10
+[2015/4/21 16:50:39] Package MatchRoom Is Null
+[2015/4/21 16:50:39] Package MatchRoom Is Null
+[2015/4/21 16:50:39] Can't Find MatchPriceRate, BaseRoomID:5505462 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:39] Package MatchRoom Is Null
+[2015/4/21 16:50:39] Package MatchRoom Is Null
+[2015/4/21 16:50:39] Can't Find MatchPriceRate, BaseRoomID:5505462 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:39] Package MatchRoom Is Null
+[2015/4/21 16:50:39] Package MatchRoom Is Null
+[2015/4/21 16:50:39] Package MatchRoom Is Null
+[2015/4/21 16:50:39] Package MatchRoom Is Null
+[2015/4/21 16:50:39] Start HotelId:597580 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:39] Price Package Count:3
+[2015/4/21 16:50:39] Can't Find MatchPriceRate, BaseRoomID:5489727 Night:2015/4/24 0:00:00
+[2015/4/21 16:50:39] Insert PackageMatch OK!
+[2015/4/21 16:50:39] Insert PackageMatch OK!
+[2015/4/21 16:50:39] Start HotelId:597581 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:39] Price Package Count:0
+[2015/4/21 16:50:39] Start HotelId:597594 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:41] Price Package Count:0
+[2015/4/21 16:50:41] Start HotelId:597613 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:41] Price Package Count:5
+[2015/4/21 16:50:41] Insert PackageMatch OK!
+[2015/4/21 16:50:41] Package MatchRoom Is Null
+[2015/4/21 16:50:41] Insert PackageMatch OK!
+[2015/4/21 16:50:41] Insert PackageMatch OK!
+[2015/4/21 16:50:41] Insert PackageMatch OK!
+[2015/4/21 16:50:41] Start HotelId:597614 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:41] Price Package Count:2
+[2015/4/21 16:50:41] Package MatchRoom Is Null
+[2015/4/21 16:50:41] Insert PackageMatch OK!
+[2015/4/21 16:50:41] Start HotelId:597623 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:41] Price Package Count:5
+[2015/4/21 16:50:41] Package MatchRoom Is Null
+[2015/4/21 16:50:41] Package MatchRoom Is Null
+[2015/4/21 16:50:41] Insert PackageMatch OK!
+[2015/4/21 16:50:41] Insert PackageMatch OK!
+[2015/4/21 16:50:41] Insert PackageMatch OK!
+[2015/4/21 16:50:41] Start HotelId:597638 CheckIn:2015/4/24 0:00:00 CheckOut:2015/4/25 0:00:00
+[2015/4/21 16:50:44] Job [HotelPackageMatchingJob] Error:远程服务器返回错误: (500) 内部服务器错误。
+[2015/4/21 16:50:44] Stop Job [HotelPackageMatchingJob]

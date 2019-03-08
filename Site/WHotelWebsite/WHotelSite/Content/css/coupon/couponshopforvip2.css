@@ -1,0 +1,164 @@
+@charset "UTF-8";
+body {
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden; }
+
+.vip-top {
+  width: 100%;
+  height: auto;
+  line-height: 0.1em;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0; }
+
+.vip-top img {
+  width: 100%; }
+
+.vip-info {
+  width: 88%;
+  height: auto;
+  margin: 3em auto 0 auto; }
+
+.vip-info fieldset {
+  padding: 0 0 0 0;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 10px; }
+
+.vip-info fieldset legend {
+  width: 8em;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  text-align: center;
+  font-size: 0.9em;
+  color: rgba(0, 0, 0, 0.6);
+  border: none; }
+
+.vip-info fieldset .info {
+  line-height: 1.8em;
+  margin: 0.5em 0 1em 0;
+  padding: 0 0 0 0;
+  text-align: center;
+  font-size: 1.2em;
+  color: rgba(0, 0, 0, 0.6); }
+
+.vip-phone {
+  width: 88%;
+  height: auto;
+  margin: 1em auto 0 auto;
+  padding: 0.8em 0 0.8em 0;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 10px; }
+
+.vip-phone .phone-line {
+  width: 95%;
+  height: auto;
+  margin: 0 auto 0 auto;
+  padding: 0 0 0.3em 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3); }
+
+.vip-phone .phone-line .userPhone {
+  width: 64%;
+  height: 1.8em;
+  margin: 0 0.2em 0.3em 0em;
+  padding: 0 0 0 0.1em;
+  background-color: transparent;
+  border: none;
+  border-radius: 0px;
+  font-size: 1em;
+  text-align: left;
+  vertical-align: top; }
+
+.vip-phone .phone-line .vCodeBtn {
+  width: 33%;
+  height: 2.2em;
+  line-height: 2.1em;
+  margin: 0;
+  padding: 0 0.3em;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  font-size: 0.9em;
+  border-radius: 2px; }
+
+.vip-phone .vcode-line {
+  width: 95%;
+  height: auto;
+  margin: 0 auto 0 auto; }
+
+.vip-phone .vcode-line .vCode {
+  width: 99%;
+  height: 1.8em;
+  margin: 0.5em 0.2em 0 0em;
+  padding: 0 0 0 0.1em;
+  background-color: transparent;
+  border: none;
+  border-radius: 0px;
+  font-size: 1em;
+  text-align: left;
+  vertical-align: top; }
+
+.vip-btns {
+  width: 88%;
+  height: auto;
+  margin: 1em auto 2em auto; }
+
+.vip-btns .submit {
+  width: 100%;
+  height: 2.4em;
+  line-height: 2.4em;
+  margin: 0 auto 0 auto;
+  font-size: 1.2em;
+  text-align: center;
+  color: #fff;
+  background: #f4a650;
+  border-radius: 5px; }
+
+.vip-btns .submit0 {
+  width: 100%;
+  height: 2.4em;
+  line-height: 2.4em;
+  margin: 0 auto 0 auto;
+  font-size: 1.2em;
+  text-align: center;
+  color: #fff;
+  background: #bababa;
+  border-radius: 5px; }
+
+/* 预约完成 */
+.vip-top2 {
+  width: 100%;
+  height: auto;
+  line-height: 0.1em;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0; }
+
+.vip-top2 img {
+  width: 100%; }
+
+.vip-bottom2 {
+  width: 88%;
+  height: auto;
+  margin: 0 auto 0 auto;
+  position: fixed;
+  left: 6%;
+  bottom: 1em; }
+
+.vip-bottom2 .download {
+  width: 100%;
+  height: 2.4em;
+  line-height: 2.4em;
+  margin: 0 auto 0 auto;
+  font-size: 1.2em;
+  text-align: center;
+  color: #fff;
+  background: #f4a650;
+  border-radius: 5px; }
+
+.vip-bottom2 .tip {
+  width: 100%;
+  height: auto;
+  line-height: 2.5em;
+  margin: 0 auto 0 auto;
+  text-align: center;
+  font-size: 0.9em;
+  color: #888; }

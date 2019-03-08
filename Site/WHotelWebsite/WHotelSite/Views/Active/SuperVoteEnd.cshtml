@@ -1,0 +1,52 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    ViewBag.Title = "活动结束";
+
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.isInWeixin;
+
+    //是否非法访问
+    var err = ViewBag.Err;
+    var isErr = err > 0;
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+}
+
+@section styles
+{
+    <link href="~/Content/css/active/supervote.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .login-section {
+            font-size: 0.8em;
+        }
+    </style>
+}
+
+    <div class="main-panel">
+
+        @if (isErr)
+        {
+            <div class="err-section">不好意思，你好像迷路了~</div>
+        }
+        else
+        {
+            <div class="err-section">活动已经结束了哦~</div>
+        }
+
+    </div>
+
+<footer>
+    <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+    <input type="hidden" id="isInWeixin" value="@(isInWeixin ? 1 : 0)" />
+</footer>
+
+@section scripts
+{
+    @*<script src="~/Content/js/active/supervoteend.js?v=@(Helpers.curAppVer())"></script>*@
+}

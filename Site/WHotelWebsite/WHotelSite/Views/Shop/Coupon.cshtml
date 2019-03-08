@@ -1,0 +1,218 @@
+﻿@model List<HJD.CouponService.Contracts.Entity.UsedCouponProductEntity>
+@{
+    var exno = ViewBag.Exno;
+    var operatorID = ViewBag.OperatorID;
+
+    ViewBag.Title = "周末酒店(商户版)";
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+}
+@section styles
+{
+    <link href="~/Content/css/Shop/coupon.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/Content/js/framework/picker/dist/css/mui.picker.min.css" rel="stylesheet" />
+    <style type="text/css">
+    </style>
+}
+<div class="coupon-tit">
+    <div class="coupon-body">
+        <div class="body-check">
+            <div class="body-inline">
+                <div class="body-logo">
+                    <div class="zmjd-iconfont logo-icon" style="color:#fff;font-size:2em;float: left;">&#xe646;</div>
+                    <div class="body-t">&nbsp;&nbsp;&nbsp;(商户版)</div>
+                </div>
+                <div class="name-out">
+                    <div class="name"> <nobr><span>@ViewBag.ShowName</span></nobr></div>
+                    <div class="signout" onclick="signOut()"> <span>注销登录</span></div>
+                </div>
+                <div style="clear:both"></div>
+            </div>
+            <div class="body-input">
+                <input id="exchangeNo" type="tel" placeholder="请输入用户的消费验证码" value="@(exno)" />
+                <button id="search" type="button" class="btn btn-primary" onclick="checkExchangeNo()">验证</button>
+            </div>
+        </div>
+        <div class="coupon-tab">
+            <div class="coupon-tab-1 zmjd-iconfont logo-icon @(ViewBag.Type == 1 ? "sel" : "")"><span onclick="CouponList(1)">&#xe644; 交易记录</span></div>
+            <div class="coupon-tab-2 zmjd-iconfont logo-icon @((ViewBag.Type == 2 || ViewBag.Type == 3) ? "sel" : "")"><span onclick="CouponList(2)">&#xe645; 经营数据</span></div>
+        </div>
+        @if (ViewBag.Type == 1)
+        {
+            <div id="couponDiv" style="display:block;">
+                @if (Model.Count > 0)
+                {
+                    <table cellspacing="0" cellpadding="0" border="0" class="" width="100%">
+                        @foreach (var item in Model)
+                        {
+                            <tr onclick="checkExchangeNo('@item.ExchangeNo')">
+                                <td align="right" style="padding:12px 10px;border-right:1px solid #ddd;width:28%;"><font color="#919191" size="2">@(item.CreateTime.ToShortTimeString())<br />@(item.CreateTime.ToString("yyyy-MM-dd"))</font></td>
+                                <td style="padding: 12px 10px; cursor: pointer;">
+                                    @item.SkuName<br /><font color="#919191" size="2">验证码：@item.ExchangeNo </font>
+                                </td>
+                                <td class="zmjd-iconfont logo-icon" style="color: #919191;padding-right: 5px;">&#xe648;</td>
+                            </tr>
+                        }
+                    </table>
+                }
+                else
+                {
+                    <div style="width:80%;margin: auto;">
+                        <div class="zmjd-iconfont logo-icon logo-plus">&#xe644;</div>
+                        <div class="coupon-nodata">当前暂无记录</div>
+                    </div>
+
+                }
+            </div>
+        }
+        else
+        {
+            <div id="usedCouponDiv" class="usedCouponDiv">
+                <div class="coupon-childtab">
+                    <div class="coupon-childtab-1  @(ViewBag.Type == 2 ? "selectedbgcolor" : "")"><span onclick="CouponList(2)">已验证</span></div>
+                    <div class="coupon-childtab-2  @(ViewBag.Type == 3 ? "selectedbgcolor" : "")"><span onclick="CouponList(3)">已预约</span></div>
+                </div>
+                <div class="coupon-used-total">
+                    <div class="total-starttime total-time" id="startTime" onclick="startTime()">@ViewBag.StartTime</div>
+                    <div style="float:left;padding:0.5em 0.5em 0 0.5em;">至</div>
+                    <div class="total-endtime total-time" id="endTime" onclick="endTime()">@ViewBag.EndTime</div>
+                    <input class="btn btn-primary btn-search" type="button" onclick="SearchCoupon(@ViewBag.Type)" value="筛选" />
+                </div>
+                @if (ViewBag.Type == 2)
+                {
+                    if (ViewBag.SumCoupon.TotalCount > 0)
+                    {
+                        <div style="margin:1.3em 0 1.5em 0;">
+                            <div class="total-usedcoupon-count">
+                                <div> <h1><font color="#FE8000">@ViewBag.SumCoupon.TotalCount</font> </h1></div>
+                                <div class="total-words">当前验券量</div>
+                            </div>
+                            <div class="total-usedcoupon-amount">
+                                <div><h1><font color="#FE8000">@ViewBag.SumCoupon.TotalAmount</font></h1></div>
+                                <div class="total-words">当前交易金额</div>
+                            </div>
+                            <div style="clear:both;"></div>
+                        </div>
+                        foreach (UsedDetailProductCouponEntity item in ViewBag.SumCoupon.usedDetailProductCoupon)
+                        {
+                            <div class="coupon-useddetail-total">
+                                <div style="margin: 18px 10px -5px 20px;"><b>@item.SKUName</b></div>
+                                <ul>
+                                    <li>验券量：<font color="#FE8000">@item.Count</font></li>
+                                    <li>交易金额：<font color="#FE8000">@item.Amount</font></li>
+                                </ul>
+                            </div>
+                        }
+
+                        <div class="footer">
+                            <input class="btn btn-primary btn-search" type="button" onclick="Export()" value="导出" />
+                        </div>
+                    }
+                    else
+                    {
+                        <div style="width:80%;margin: auto;">
+                            <div class="zmjd-iconfont logo-icon logo-plus">&#xe644;</div>
+                            <div class="coupon-nodata">当前暂无记录</div>
+                        </div>
+                    }
+                }
+                @if (ViewBag.Type == 3)
+                {
+                    if (true)
+                    {
+                        <div style="margin:1.3em 0 1.5em 0;">
+                            <div class="total-nousedcoupon-count">
+                                <div> <h1><font color="#FE8000">@ViewBag.BookNoUsedCoupon.TotalCount</font> </h1></div>
+                                <div class="total-words">已预约数量</div>
+                            </div>
+                            <div style="clear:both;"></div>
+                        </div>
+                        foreach (BookNoUsedExchangeCouponDetailEntity item in ViewBag.BookNoUsedCoupon.BookNoUsedList)
+                        {
+                            <div class="coupon-useddetail-total">
+                                @*<div style="margin: 18px 10px -5px 20px;"><b>@item.SKUName</b></div>*@
+                                <ul>
+                                    <li><font color="#FE8000">@item.BookDetailName</font></li>
+                                    <li>预约数量：<font color="#FE8000">@item.PeopleCount</font></li>
+                                </ul>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div style="width:80%;margin: auto;">
+                            <div class="zmjd-iconfont logo-icon logo-plus">&#xe644;</div>
+                            <div class="coupon-nodata">当前暂无记录</div>
+                        </div>
+                    }
+                }
+
+            </div>
+        }
+
+    </div>
+</div>
+
+<div id="divAlertCouponMsgBg" class="coupon-alert coupon-hide" onclick="closeDiv()"></div>
+<div id="divAlertAvatarBg" class="coupon-Avatar coupon-hide" onclick="closeDivAvatar()"></div>
+<div id="divAlertCouponMsg" class="coupon-alert-content coupon-hide">
+    <div class="coupon-alert-close" onclick="closeDiv()"><span class="zmjd-iconfont">&#xe647;</span></div>
+    <div class="coupon-alert-deatil">
+        <table>
+            <tr>
+                <td class="lab-td">商户</td>
+                <td class="val-td"><span id="spshopName"></span></td>
+            </tr>
+            <tr>
+                <td class="lab-td" valign="top">产品名称</td>
+                <td class="val-td" valign="top"><span id="spskuName"></span></td>
+            </tr>
+            <tr id="ShowPrice">
+                <td class="lab-td" valign="top">售卖价</td>
+                <td class="val-td" valign="top"><span id="spprice" style="color:#FE8000;"></span></td>
+            </tr>
+            <tr id="TradingTime">
+                <td class="lab-td">交易时间</td>
+                <td class="val-td"><span id="sptime"></span></td>
+            </tr>
+            <tr>
+                <td class="lab-td">券码状态</td>
+                <td class="val-td"><span id="exchangeState"></span></td>
+            </tr>
+        </table>
+        <div class="coupon-alert-exchangeNo">
+            <b><font>验证码：<span id="CheckExchangeNo"></span></font></b><span id="couponNote"></span>
+        </div>
+        <div class="coupon-alert-checkbutton">
+            <input id="UseCoupon" type="button" class="btn btn-primary" value="核销" onclick="UpdateCouponState()" />
+        </div>
+        @*<div class="coupon-usedbutton">
+                <input id="UsedCoupon" type="button" class="btn-hide" value="已核销" />
+            </div>*@
+        <div id="lookAvatar" class="avatarbtn coupon-hide" onclick="lookAvatar()">查看照片</div>
+        <div id="reUploadPhoto" class="reupload-btn coupon-hide" onclick="uploadPhotoState()">重新上传</div>
+        <div class="top"></div>
+
+        <div style="font-size:1em;margin:1em 0 0 5%;"><b>套餐内容</b></div>
+        <div id="productInfo" class="product-info">
+        </div>
+
+    </div>
+</div>
+<div id="divAlertAvatar" class="Avatar-alert coupon-hide">
+    <img id="avatarShow" src="" />
+</div>
+<div hidden="hidden">
+    <input type="hidden" id="setUserId" value="" />
+    <input type="hidden" id="exchangeid" value="" />
+    <input type="hidden" id="OperationState" value="" />
+    <input type="hidden" id="operatorID" value="@operatorID" />
+</div>
+@*<a href="#" onclick="LogOut()">注销</a>*@
+@section scripts
+{
+    <script src="~/Content/js/framework/mui.min.js"></script>
+    <script src="~/Content/js/framework/picker/js/mui.picker.js"></script>
+    <script src="~/Content/js/framework/picker/js/mui.dtpicker.js"></script>
+    <script src="~/Content/js/Shop/Coupon.js?v=@(Helpers.curAppVer())"></script>
+}
+

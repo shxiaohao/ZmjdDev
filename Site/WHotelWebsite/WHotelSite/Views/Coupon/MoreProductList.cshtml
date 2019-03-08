@@ -1,0 +1,553 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    var isInWeixin = ViewBag.isInWeixin;
+    var isApp = ViewBag.IsApp;
+    var appType = ViewBag.AppType;
+    var isThanVer5_1 = ViewBag.IsThanVer5_1;
+    var isVip = ViewBag.IsVip;
+    var userid = ViewBag.UserId;
+    string albumId = ViewBag.AlbumId;
+    int categoryId = ViewBag.CategoryId;
+    int districtId = ViewBag.DistrictId;
+    string districtName = ViewBag.DistrictName;
+    int geoScopeType = ViewBag.GeoScopeType;
+
+    bool isChild = ViewBag.IsChild;
+
+    //列表是否grid方式显示
+    var isGridStyle = ViewBag.IsGridStyle;
+
+    //是否双十一专辑
+    var _isDouble11 = ViewBag.IsDouble11;
+
+    var _pageTitle = "";
+    if (!string.IsNullOrEmpty(albumId) && albumId != "0")
+    {
+        var _ids = albumId.Split(',');
+        if (_ids != null && _ids.Length > 0)
+        {
+            for (var _idnum = 0; _idnum < _ids.Length; _idnum++)
+            {
+                var _id = Convert.ToInt32(_ids[_idnum]);
+                switch (_id)
+                {
+                    case 1: { var _n = "专辑"; if (!string.IsNullOrEmpty(_pageTitle)) { _pageTitle += "&"; } _pageTitle += _n; break; }
+                    case 2: { var _n = "美食精选"; if (!string.IsNullOrEmpty(_pageTitle)) { _pageTitle += "&"; } _pageTitle += _n; break; }
+                    case 3: { var _n = "玩乐精选"; if (!string.IsNullOrEmpty(_pageTitle)) { _pageTitle += "&"; } _pageTitle += _n; break; }
+                    case 4: { var _n = "每日闪购"; if (!string.IsNullOrEmpty(_pageTitle)) { _pageTitle += "&"; } _pageTitle += _n; break; }
+                    case 5: { var _n = "超值团"; if (!string.IsNullOrEmpty(_pageTitle)) { _pageTitle += "&"; } _pageTitle += _n; break; }
+                    case 6: { var _n = "苏州乐园现场活动"; if (!string.IsNullOrEmpty(_pageTitle)) { _pageTitle += "&"; } _pageTitle += _n; break; }
+                    case 9: { var _n = "会员免费福利"; if (!string.IsNullOrEmpty(_pageTitle)) { _pageTitle += "&"; } _pageTitle += _n; break; }
+                }
+            }
+        }
+    }
+
+    //控制产品专辑的分享配置
+    var shareTitle = "发现更多优惠产品-周末酒店";
+    var shareDesc = "精选好口碑产品！";
+    var shareImgUrl = "http://whfront.b0.upaiyun.com/app/img/zmjd-logo-x167.png";
+    var shareLink = string.Format("http://www.zmjiudian.com/Coupon/MoreList/{1}/{2}/0?albumId={0}", albumId, (isGridStyle ? 1 : 0), (_isDouble11 ? 1 : 0));
+
+    if (isChild)
+    {
+        switch (categoryId)
+        {
+            case 1: { var _n = "乐园"; if (!string.IsNullOrEmpty(_pageTitle)) { _pageTitle += "&"; } _pageTitle += _n; break; }
+            case 2: { var _n = "亲子剧"; if (!string.IsNullOrEmpty(_pageTitle)) { _pageTitle += "&"; } _pageTitle += _n; break; }
+            case 3: { var _n = "亲子美食"; if (!string.IsNullOrEmpty(_pageTitle)) { _pageTitle += "&"; } _pageTitle += _n; break; }
+            case 4: { var _n = "景区"; if (!string.IsNullOrEmpty(_pageTitle)) { _pageTitle += "&"; } _pageTitle += _n; break; }
+            case 5: { var _n = "亲近自然"; if (!string.IsNullOrEmpty(_pageTitle)) { _pageTitle += "&"; } _pageTitle += _n; break; }
+            case 6: { var _n = "寓教于乐"; if (!string.IsNullOrEmpty(_pageTitle)) { _pageTitle += "&"; } _pageTitle += _n; break; }
+            case 7: { var _n = "玩具"; if (!string.IsNullOrEmpty(_pageTitle)) { _pageTitle += "&"; } _pageTitle += _n; break; }
+            case 8: { var _n = "绘本"; if (!string.IsNullOrEmpty(_pageTitle)) { _pageTitle += "&"; } _pageTitle += _n; break; }
+        }
+
+        shareTitle = string.Format("{0}专栏-周末酒店", _pageTitle);
+        shareDesc = "挑选高品质亲子玩乐项目，优惠低价呈现";
+        shareImgUrl = "http://whphoto.b0.upaiyun.com/117MRjG1_small";
+    }
+    //分类查询
+    if (categoryId > 0)
+    {
+        shareLink = string.Format("http://www.zmjiudian.com/Coupon/MoreList/{1}/{2}/0?category={0}&ischild={6}&districtId={3}&districtName={4}&geoScopeType={5}", categoryId, (isGridStyle ? 1 : 0), (_isDouble11 ? 1 : 0), districtId, districtName, geoScopeType, isChild);
+
+        switch (categoryId)
+        {
+            case 14:
+                {
+                    isGridStyle = true;
+
+                    shareTitle = "美食专栏-周末酒店";
+                    shareDesc = "精选口碑好，品质好，性价比高的酒店餐饮美食限量抢购";
+                    shareImgUrl = "http://whphoto.b0.upaiyun.com/117MRjG0_small";
+                    break;
+                }
+            case 20:
+                {
+                    isGridStyle = true;
+
+                    shareTitle = "玩乐专栏-周末酒店";
+                    shareDesc = "挑选高品质亲子玩乐项目，优惠低价呈现";
+                    shareImgUrl = "http://whphoto.b0.upaiyun.com/117MRjG1_small";
+                    break;
+                }
+        }
+
+        if (isApp)
+        {
+            shareLink = Server.UrlEncode(shareLink);
+        }
+    }
+    else
+    {
+        if (_isDouble11)
+        {
+            shareLink = string.Format("http://www.zmjiudian.com/Coupon/MoreList/{1}/{2}/{3}?albumId={0}", albumId, (isGridStyle ? 1 : 0), (_isDouble11 ? 1 : 0), userid);
+        }
+
+        if (isApp)
+        {
+            shareLink = Server.UrlEncode(shareLink);
+        }
+
+        //不是分类，一般是产品专辑
+        switch (albumId)
+        {
+            case "2":
+                {
+                    isGridStyle = true;
+
+                    shareTitle = "美食专栏-周末酒店";
+                    shareDesc = "精选口碑好，品质好，性价比高的酒店餐饮美食限量抢购";
+                    shareImgUrl = "http://whphoto.b0.upaiyun.com/117MRjG0_small";
+                    break;
+                }
+            case "3":
+                {
+                    isGridStyle = true;
+
+                    shareTitle = "玩乐专栏-周末酒店";
+                    shareDesc = "挑选高品质亲子玩乐项目，优惠低价呈现";
+                    shareImgUrl = "http://whphoto.b0.upaiyun.com/117MRjG1_small";
+                    break;
+                }
+            case "4":
+                {
+                    shareTitle = "每日闪购-周末酒店";
+                    shareDesc = "每日上新超低价的精选好酒店，限时抢购！";
+                    shareImgUrl = "http://whfront.b0.upaiyun.com/app/img/zmjd-logo-x167.png";
+                    break;
+                }
+            case "5":
+                {
+                    shareTitle = "超值团-周末酒店";
+                    shareDesc = "邀好友一起来拼团，优惠更多！";
+                    shareImgUrl = "http://whfront.b0.upaiyun.com/app/img/zmjd-logo-x167.png";
+                    break;
+                }
+            case "9":
+                {
+                    shareTitle = "会员免费福利-周末酒店";
+                    shareDesc = "全场50+项免费项目，会员专享，周周有新增";
+                    shareImgUrl = "http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/vip-area-share-card-img.jpg";
+                    break;
+                }
+        }
+
+        if (string.IsNullOrEmpty(_pageTitle))
+        {
+            _pageTitle = "查看更多";
+        }
+    }
+
+    //默认朋友圈分享=好友等分享
+    var shareTitle_Timeline = shareTitle;
+    var shareDesc_Timeline = shareDesc;
+
+    //双十一活动分享配置
+    if (_isDouble11)
+    {
+        _pageTitle = "双十一专场";
+        shareTitle = "买50送100，买到即赚到";
+        shareDesc = "周末酒店双十一专场补贴千万，等你来拿！";
+        shareTitle_Timeline = "买50送100，周末酒店双11专场补贴千万等你拿！";
+        shareDesc_Timeline = "";
+        shareImgUrl = "http://whfront.b0.upaiyun.com/app/img/coupon/morelist/2017double11-share-img.png?v=2017110202";
+    }
+
+    ViewBag.Title = _pageTitle;
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    if (isApp)
+    {
+        ViewBag.LoadHmBaidu = false;
+    }
+
+    //双11活动页下的特殊处理
+    var _tabAddCss = "";
+    var _tabAddStyle = "";
+    if (_isDouble11)
+    {
+        _tabAddStyle = "position:fixed;left:0;top:0;z-index:1001;display:none;";
+        _tabAddCss = "tab-list-active";
+    }
+
+    shareLink = System.Web.HttpUtility.UrlEncode(shareLink);
+}
+
+@section styles
+{
+    <link href="~/Content/css/framework/zmjd.swiper.min.css" rel="stylesheet" />
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="/content/css/framework/iscroll.css" rel="stylesheet">
+    <link href="~/Content/css/coupon/moreproductlist.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .login-section {
+            font-size: 0.8em;
+        }
+    </style>
+}
+
+<div id="tabs" v-cloak class="tab-list @_tabAddCss" style="@_tabAddStyle">
+    <div class="_scroller">
+        <div class="scrollLine">
+            <div class="t-item" v-for="item in tabDetailList" id="t-item-{{item.id}}" data-relid="{{item.id}}" data-reltype="{{item.type}}">{{item.name}}</div>
+        </div>
+    </div>
+</div>
+
+<div id="more-vue-obj" v-cloak>
+    <div v-for="listItem in tabDetailList" data-relid="{{listItem.id}}" data-reltype="{{listItem.type}}" class="scroll-div" id="scroll_{{listItem.id}}">
+
+        @if (_isDouble11)
+        {
+            //12&13为2017双11专区的专辑，分别是代金券和双11产品列表
+
+            //显示大banner
+            <div class="active-banner">
+                <img id="double11-banner1" src="http://whfront.b0.upaiyun.com/app/img/coupon/morelist/2017double11-banner-1.png?v=2017110202" alt="" />
+                <img src="http://whfront.b0.upaiyun.com/app/img/coupon/morelist/2017double11-banner-flow.png?v=2017110201" alt="" />
+                <div class="rule-link" style="display:none;" data-op="0">▼活动规则▼</div>
+                <div class="rule-desc"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/morelist/double11-2017-rule-desc.png?v=2017110201" alt="" /></div>
+            </div>
+            <div id="tabs-active" v-cloak class="tab-list @_tabAddCss">
+                <div class="_scroller">
+                    <div class="scrollLine">
+                        <div class="t-item" v-for="item in tabDetailList" id="t-item-{{item.id}}" data-relid="{{item.id}}" data-reltype="{{item.type}}">{{item.name}}</div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (categoryId > 0)
+        {
+            <div class="filter-base">
+                <div id="filter-section" class="filter-section" style="@(!isApp ? "padding-top:1.3em;" : "")">
+                    <div class="line">
+                        <div class="item city">全部城市</div>
+                        <div class="item sort">排序</div>
+                        <div style="clear:both;"></div>
+                    </div>
+                </div>
+            </div>
+            if (isChild == false)
+            {
+                <div id="banner-section" class="banner-section">
+                    <div class="seat"><img src="~/Content/images/seat/img-home-seat-banner2.png" /></div>
+                    <div v-if="listItem.AdData.AD.ADList&&listItem.AdData.AD.ADList.length&&listItem.AdData.AD.ADList.length==1">
+                        <div class="banner-img" v-for="ad in listItem.AdData.AD.ADList" onclick="gourl('{{ad.ActionURL}}')">
+                            <img class="show-img" src="{{ad.ADURL}}" alt="" />
+                        </div>
+                    </div>
+                    <div v-else>
+                        <div v-cloak class="swiper-container home-hlist-panel" v-if="listItem.AdData.AD.ADList&&listItem.AdData.AD.ADList.length">
+                            <ul class="swiper-wrapper">
+                                <li class="swiper-slide" v-for="ad in listItem.AdData.AD.ADList" onclick="gourl('{{ad.ActionURL}}')">
+                                    <div class="item">
+                                        <div class="h-img">
+                                            <img class="show-img" v-if="$index<3" src="{{ad.ADURL}}" alt="" />
+                                            <img class="show-img" v-else data-orisrc="{{ad.ADURL}}" src="~/Content/images/seat/img-viparea-item-3x2.png" alt="" />
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
+        @if (isGridStyle)
+        {
+            <div id="dealsSection-seat-{{listItem.id}}" class="more-seat-slider" style="margin:1.5em 0 0 0;"><img src="~/Content/images/seat/seat-double-table.png" /></div>
+            <div id="more-packages" class="more-packages more-hlist-panel">
+                <div class="b-list">
+                    <div v-for="skuEntity in listItem.skuList" class="b-item {{$index%2==0?'':'b-item-r'}}">
+                        @if (_isDouble11)
+                        {
+                            <div v-if="$index>1" class="top-br"></div>
+                            <div class="i-img" onclick="gourl('{{skuEntity.url}}')">
+                                <img src="{{skuEntity.PicUrl.replace('theme', '320x213')}}" alt="" />
+                            </div>
+                            <div class="i-name" onclick="gourl('{{skuEntity.url}}')">{{skuEntity.PageTitle}}</div>
+                            <div class="i-tag" v-if="skuEntity.Tags" onclick="gourl('{{skuEntity.url}}')">{{skuEntity.Tags}}</div>
+                            <div class="i-price1 active-price">双11价 ¥<span class="p">{{skuEntity.SKUVipPrice}}</span></div>
+                            <div class="i-price2">原价 ¥{{skuEntity.SKUMarketPrice}}</div>
+                            if (DateTime.Now.Date == DateTime.Parse("2017-11-11").Date)
+                            {
+                                <div class="i-buy-btn">
+                                    <a class="btn" href="javascript:;" onclick="gourl('{{skuEntity.url}}')">立即购买</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="i-look-btn">
+                                    <a class="btn" href="javascript:;" onclick="gourl('{{skuEntity.url}}')">查看产品详情</a>
+                                </div>
+                                <div class="i-buy-btn" v-if="skuEntity.UserCouponDefine&&skuEntity.UserCouponDefine.PromotionSKUID">
+                                    <a class="btn" href="javascript:;" onclick="submitFun({{skuEntity.UserCouponDefine.PromotionSKUID}})">购券 {{skuEntity.UserCouponDefine.PromotionSKUName}}</a>
+                                </div>
+                            }
+                            <div class="i-coupon-buyed" style="{{$index>1?'top:1.07em;':''}}" v-if="skuEntity.UserCouponDefine&&skuEntity.UserCouponDefine.UserBuyState"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/morelist/icon-coupon-buyed.png" alt="" /></div>
+                        }
+                        else
+                        {
+                            <div v-if="$index>1" class="top-br"></div>
+                            <div class="i-img" onclick="gourl('{{skuEntity.url}}')">
+                                <img src="{{skuEntity.PicUrl.replace('theme', '350X350')}}" alt="" />
+                                @if (isApp)
+                                {
+                                    <div class="distance" v-if="skuEntity.Distance">{{skuEntity.DistrictName}}·{{skuEntity.Distance}}km</div>
+                                }
+                            </div>
+                            <div class="i-name" onclick="gourl('{{skuEntity.url}}')">{{skuEntity.PageTitle}}</div>
+                            <div class="i-tag" v-if="skuEntity.Tags" onclick="gourl('{{skuEntity.url}}')">{{skuEntity.Tags}}</div>
+                            <div v-if="!skuEntity.SKUVipPrice&&!skuEntity.Points">
+                                <div class="i-price1">免费</div>
+                                <div class="i-price2" v-if="skuEntity.SKUMarketPrice>0">市场价:¥{{skuEntity.SKUMarketPrice}}起</div>
+                            </div>
+                            <div v-if="skuEntity.SKUVipPrice">
+                                <div class="i-price1"><span class="zmjd-iconfont _vip">&#xe623;</span>¥{{skuEntity.SKUVipPrice}}起</div>
+                                <div class="i-price2">普通价:¥{{skuEntity.SKUPrice}}起</div>
+                            </div>
+                            <div v-if="skuEntity.Points">
+                                <div class="i-price1">{{skuEntity.Points}}积分</div>
+                                <div class="i-price2" v-if="skuEntity.SKUMarketPrice>0">市场价:¥{{skuEntity.SKUMarketPrice}}起</div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="more-packages-foot" id="more-packages-foot-{{listItem.id}}"></div>
+            <div class="scrollpageloading more-hide" id="scrollpageloading-{{listItem.id}}"><img src="http://whfront.b0.upaiyun.com/app/img/loading-changes.gif" alt="" /></div>
+        }
+        else
+        {
+            <div id="dealsSection-seat-{{listItem.id}}" class="more-seat-slider" style="margin:1em 0 0 0;"><img src="~/Content/images/seat/seat-double-table.png" alt=""></div>
+            <div id="dealsSection-seat2-{{listItem.id}}" class="more-seat-slider"><img src="~/Content/images/seat/seat-double-table.png" alt=""></div>
+            <div id="more-packages" class="more-packages more-hlist-panel">
+                <ul>
+                    <li v-for="skuEntity in listItem.skuList" class="li-line" onclick="gourl('{{skuEntity.url}}')">
+                        <div class="h-p-tip-nvip" v-if="skuEntity.ForVIPFirstBuy"><img src="http://whfront.b0.upaiyun.com/app/img/home/banners/icon-h-p-nvip.png" alt="" /></div>
+                        <div class="h-img">
+                            <img v-if="$index<2" src="{{skuEntity.PicUrl.replace('_350X350','_640x360')}}" alt="">
+                            <img v-else class="load-img" src="http://whfront.b0.upaiyun.com/app/img/home/home-load2-3x2.png" data-load="0" data-orisrc="{{skuEntity.PicUrl.replace('_350X350','_640x360')}}" alt="">
+                            <div class="h-tit-tip-price3">
+                                <div class="v-price" v-if="skuEntity.SKUVipPrice>0">
+                                    <span>￥</span>{{skuEntity.SKUVipPrice}}<span>起</span>
+                                    <div class="v-icon"><span class="zmjd-iconfont">&#xe623;</span></div>
+                                </div>
+                                <div class="d-price" v-if="skuEntity.SKUVipPrice>0&&skuEntity.SKUVipPrice!=skuEntity.SKUPrice"><span>￥</span>{{skuEntity.SKUPrice}}<span>起</span></div>
+                                <div class="d-price" v-if="skuEntity.SKUVipPrice<=0"><span>查询价格</span></div>
+                            </div>
+                        </div>
+                        <div class="hname-info">
+                            <div class="hotel-name2">{{skuEntity.PageTitle}}</div>
+                            <div class="hotel-packagebrief2" v-if="skuEntity.Tags">{{skuEntity.Tags}}</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="more-packages-foot" id="more-packages-foot-{{listItem.id}}"></div>
+            <div class="scrollpageloading more-hide" id="scrollpageloading-{{listItem.id}}"><img src="http://whfront.b0.upaiyun.com/app/img/loading-changes.gif" alt="" /></div>
+        }
+
+        <div style="margin:1em 0 0 0;"></div>
+
+    </div>
+</div>
+
+<div class="_selector-model" style="display:none;"></div>
+<div class="_selector" style="display:none;" id="sort-selector">
+    <div class="_head">
+        <div class="_tit">排序</div>
+        <div class="zmjd-iconfont _close">&#xe673;</div>
+        <div class="_clear">清空</div>
+    </div>
+    <div class="_list">
+        <div v-for="item in sortData.SearchSort" class="_item {{item.Values===sortData.productSort?'_item-seled':''}}" data-sort="{{item.Values}}" data-sortname="{{item.Name}}">{{item.Name}}<div class="zmjd-iconfont _icon">&#xe660;</div></div>
+    </div>
+</div>
+<div class="_selector" style="display:none;" id="city-selector">
+    <div class="_head">
+        <div class="_tit">全部城市</div>
+        <div class="zmjd-iconfont _close">&#xe673;</div>
+        <div class="_clear">清空</div>
+    </div>
+    <div class="_list">
+        <div v-for="item in cityData.DestinationList" class="_item {{item.Values===cityData.districtId?'_item-seled':''}}" data-did="{{item.Values}}" data-dname="{{item.Name}}">{{item.Name}}<div class="zmjd-iconfont _icon">&#xe660;</div></div>
+    </div>
+</div>
+
+<input type="hidden" id="userid" value="@userid" />
+<input type="hidden" id="albumId" value="@albumId" />
+<input type="hidden" id="categoryId" value="@categoryId" />
+<input type="hidden" id="isApp" value="@(isApp ? "1" : "0")" />
+<input type="hidden" id="isDouble11" value="@(_isDouble11 ? "1" : "0")" />
+<input type="hidden" id="ischildcategory" value="@(isChild ? "1" : "0")" />
+
+@section scripts
+{
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script src="~/Content/js/framework/jquery.lazyload.min.js"></script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js//framework/iscroll.js"></script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjd.swiper.min.js"></script>
+    <script src="~/Content/js/login.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/coupon/moreproductlist.js?v22=@(Helpers.curAppVer())"></script>
+
+    <script>
+        try {
+            onAppShareCall = function () {
+                var title = "@(shareTitle_Timeline)";
+                var Content = "@(shareDesc)";
+                var photoUrl = "@(shareImgUrl)";
+                var shareLink = "@(shareLink)";
+                try { whotel.appShareData(title, Content, photoUrl, shareLink); } catch (e) { }
+                var returnStr = '{"title":"{0}","Content":"{1}","photoUrl":"{2}","shareLink":"{3}"}';
+                return returnStr.format(title, Content, photoUrl, shareLink);
+            }
+            onAppShareCall();
+        }
+        catch (e) { }
+    </script>
+
+    @if (isInWeixin || true)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js?v=@(Helpers.curAppVer())" type="text/javascript"></script>
+        <script>
+
+            var link = encodeURI(decodeURIComponent("@(shareLink)"));
+
+            var loadWechat = function(_shareTitle,_shareDesc,_shareLink,_shareImgUrl, _shareSucessFunc){
+                GetWeixinApiConfig();//注册
+                wx.ready(function () {
+                    wx.onMenuShareTimeline({
+                        title: _shareTitle,
+                        desc: _shareDesc,
+                        link: _shareLink,
+                        imgUrl: _shareImgUrl,
+                        success: function (res) {
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                    wx.onMenuShareAppMessage({
+                        title: _shareTitle,
+                        desc: _shareDesc,
+                        link: _shareLink,
+                        imgUrl: _shareImgUrl,
+                        success: function (res) {
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                    wx.onMenuShareQQ({
+                        title: _shareTitle,
+                        desc: _shareDesc,
+                        link: _shareLink,
+                        imgUrl: _shareImgUrl,
+                        success: function (res) {
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                    wx.onMenuShareQZone({
+                        title: _shareTitle,
+                        desc: _shareDesc,
+                        link: _shareLink,
+                        imgUrl:_shareImgUrl,
+                        success: function (res) {
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                });
+
+                function GetWeixinApiConfig() {
+
+                    var url = location.href.split("#")[0];
+                    $.ajax({
+                        url: '/Coupon/GetWeixinConfigInfo',
+                        type: 'POST',
+                        data: { url: url },
+                        dataType: 'json',
+                        //async: false,
+                        error: function () {
+                            console.log("网络服务错误");
+                        },
+                        success: function (result) {
+                            if (typeof (result.Success) != undefined && result.Success == 1) {
+                                return false;
+                            }
+                            else {
+                                //得到微信config的值
+                                var array = [
+                                    'checkJsApi',
+                                    'onMenuShareTimeline',
+                                    'onMenuShareAppMessage',
+                                    'onMenuShareQQ',
+                                    'onMenuShareQZone',
+                                    'hideOptionMenu'
+                                ];
+                                if (result.jsApiList) {
+                                    var jsArray = result.jsApiList.split(',');
+                                    for (var key in jsArray) {
+                                        array.push("" + jsArray[key]);
+                                    }
+                                }
+
+                                wx.config({
+                                    debug: false,
+                                    appId: result.appId,
+                                    timestamp: "" + result.timestamp,
+                                    nonceStr: result.nonceStr,
+                                    signature: result.signature,
+                                    jsApiList: array
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+            loadWechat('@shareTitle','@shareDesc',link,'@shareImgUrl', function(){});
+        </script>
+    }
+}

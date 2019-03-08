@@ -1,0 +1,24 @@
+.WebimUserHeadPhoto {
+    float:right;
+    height:40px;
+    width:40px;
+}
+
+.WebimUserHeadPhoto img{
+    width:100%;
+    border-radius:40px;
+}
+
+
+
+.WebimKeFuHeadPhoto {
+    float:left;
+    height:40px;
+    width:40px;
+}
+
+.WebimKeFuHeadPhoto img{ 
+    width:100%;
+    border-radius:40px;
+}
+

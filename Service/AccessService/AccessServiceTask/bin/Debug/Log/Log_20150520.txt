@@ -1,0 +1,4 @@
+
+[2015/5/20 9:18:37] Start Job [LuceneDemoJob]
+[2015/5/20 13:15:50] Start Job [LuceneDemoJob]
+[2015/5/20 13:17:22] Start Job [LuceneDemoJob]

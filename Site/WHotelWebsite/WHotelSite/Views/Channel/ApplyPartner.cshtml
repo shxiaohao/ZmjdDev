@@ -1,0 +1,126 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    ViewBag.Title = "申请度假伙伴";
+
+    var requestCID = ViewBag.RequestCID;
+    var isMobile = ViewBag.IsMobile;
+    var isInWeixin = ViewBag.isInWeixin;
+    var isApp = ViewBag.IsApp;
+    var userId = ViewBag.UserId;
+    HJD.HotelManagementCenter.Domain.RetailerInvateEntity partnerResult = ViewBag.PartnerResult;
+    HJD.HotelManagementCenter.Domain.RetailerInvateState partnerState = (HJD.HotelManagementCenter.Domain.RetailerInvateState)partnerResult.State;
+
+    //用户的汇总信息
+    UserInfoResult userInfo = ViewBag.UserInfo;
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    ViewBag.LoadHmBaidu = false;
+}
+
+@section styles
+{
+    <link href="~/Content/css/framework/zmjd.modal.min.css" rel="stylesheet" />
+    <link href="/content/css/channel/applypartner.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+}
+
+<div id="partner-info" style="@(partnerState == HJD.HotelManagementCenter.Domain.RetailerInvateState.NoLog ? "":"display:none;")">
+    <div class="top-space"></div>
+    <div class="form-item">
+        <div class="lab">姓名：</div>
+        <div class="inp"><input type="text" id="username" v-model="partnerData.Name" onkeyup="changeName()" placeholder="请填写你的真实姓名" /></div>
+    </div>
+    <div class="form-item">
+        <div class="lab">常住城市：<span class="select_city">{{partnerData.OftenCityName}}</span><span class="zmjd-iconfont icon-arowright">&#xe601;</span></div>
+
+        @*<div class="inp"><input type="text" id="usercity" v-model="partnerData.OftenCityName" placeholder="例：上海市" /></div>*@
+    </div>
+    <div class="ctrl">
+        <div class="btn">提交</div>
+    </div>
+</div>
+
+<div class="selector_cover" style="display:none;"></div>
+<div v-cloak class="selector_city" style="display:none;" id="hotcities">
+    <div class="search_city"><input class="input_city zmjd-iconfont" placeholder="&#xe65e; 没有你的城市？在这里输入吧" v-on:click="openSearch()" /><span class="cancel">取消</span></div>
+
+    <div class="hot_cities">
+        <div class="sub-items clearfloat _item-nobr" style="padding-bottom:0.5em;">
+            <div v-for="item in hotCityData.ContentList" class="sub-item-col" data-did="{{item.Code}}" data-dname="{{item.Name}}">{{item.Name}}</div>
+        </div>
+    </div>
+</div>
+
+<div v-cloak class="searchbody" id="searchCities" style="display:none">
+    <div class="search_city">
+        <span class="zmjd-iconfont search_icon">&#xe65e; </span><input class="input_city_search " placeholder="没有你的城市？在这里输入吧" />
+        <span class="cancel">取消</span>
+    </div>
+
+    <div class="searchcities">
+        <div class="sub-items clearfloat _item-nobr" style="padding-bottom:0.5em;">
+            <div class="sub-item-col sub_search_item" v-for="item in searchCitiesData" data-did="{{item.Id}}" data-dname="{{item.Name}}">{{item.Name}}</div>
+        </div>
+    </div>
+</div>
+
+<div class="sub-complate" style="@(partnerState == HJD.HotelManagementCenter.Domain.RetailerInvateState.NoLog ? "display:none;" : "")">
+    <div class="zmjd-iconfont state-icon">&#xe62f;</div>
+    <div class="state-tip">恭喜你成为度假伙伴</div>
+    <div class="sub-remark">
+        识别下方二维码添加“尚旅周末”微信公众号开启你的分销之旅吧
+    </div>
+    <div class="remark-qrcode">
+        <img src="http://whfront.b0.upaiyun.com/app/img/channel/wxgzh-shanglvzhoumo-qrcode.jpg" alt="" />
+    </div>
+</div>
+
+@*<div class="sub-complate" style="@(partnerState == HJD.HotelManagementCenter.Domain.RetailerInvateState.NoLog ? "display:none;" : "")">
+        <div class="zmjd-iconfont state-icon">&#xe62f;</div>
+        <div class="state-tip">已提交申请，还差一步</div>
+        <div class="sub-remark">
+            微信添加度假伙伴管理员<br />
+            “副班长”（微信号：fadacai-6666）发送：<br />
+            <b>度假伙伴+手机号码</b><br />
+            按提示操作，完成申请审核
+        </div>
+        <div class="remark-qrcode">
+            <img src="http://whphoto.b0.upaiyun.com/119LJ1D0_jupiter" alt="" />
+        </div>
+        <div class="wx-no">doudou_luo1</div>
+        @if (isApp)
+        {
+            <a class="copy-wxno-link" href="javascript:;" data-wxno="zmjiudianxj">复制微信号</a>
+        }
+        else
+        {
+            <div class="copy-wxno-link">长按复制微信号</div>
+        }
+    </div>*@
+
+<footer>
+    <input type="hidden" id="isMobile" value="@(isMobile ? "1" : "0")" />
+    <input type="hidden" id="isInWeixin" value="@(isInWeixin ? "1" : "0")" />
+    <input type="hidden" id="isApp" value="@(isApp ? "1" : "0")" />
+    <input type="hidden" id="userId" value="@(userId)" />
+    <input type="hidden" id="phone" value="@(userInfo.Mobile)" />
+    <input type="hidden" id="cid" value="@(requestCID)" />
+</footer>
+
+@section scripts
+{
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/framework/config.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjd.modal.min.js"></script>
+    <script src="~/Content/js/channel/applypartner.js?v=@(Helpers.curAppVer())"></script>
+}

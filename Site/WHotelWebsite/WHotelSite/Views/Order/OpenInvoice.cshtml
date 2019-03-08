@@ -1,0 +1,136 @@
+﻿@{
+    ViewBag.Title = "开发票";
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+}
+
+@*<h2>OpenInvoice</h2>*@
+@section styles
+{
+    <link href="~/Content/css/framework/zmjd.modal.min.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/Content/css/order/openinvoice.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+}
+<div class="divbody" id="vuedata">
+    <div class="invoice">
+
+        <div class="invoice-desc-url" onclick="gourl('{{DescriptionURL}}')">
+            <span class="zmjd-iconfont">&#xe67c;</span>
+            <span class="invoice-desc">{{Description}}</span>
+            <span class="zmjd-iconfont icon-arrow-right">&#xe648;</span>
+        </div>
+
+        <div class="fn"></div>
+
+        <div class="invoice-content">
+            <div class="invoice-type">
+                <div class="invoice-type-left" v-bind:class="{'invoice-type-select':AddInvoiceModel.invoice.TicketOpeningType==1}" v-on:click="selectTickeOpenType(1)">企业</div>
+                <div class="invoice-type-right" v-bind:class="{'invoice-type-select':AddInvoiceModel.invoice.TicketOpeningType==0}" v-on:click="selectTickeOpenType(0)">个人</div>
+                <div class="clear"></div>
+            </div>
+            <div class="invoice-item" v-on:click="selectTit()">
+                <span class="span-tit">发票抬头</span>
+                <span class="span-mid" id="tit-selected">{{AddInvoiceModel.invoice.Title}}</span>
+                <span class="zmjd-iconfont icon-arrow-right">&#xe648;</span>
+            </div>
+            <hr />
+            <div class="invoice-item" v-if="AddInvoiceModel.invoice.TicketOpeningType==1">
+                <span class="span-tit">税号</span>
+                <input placeholder="请输入正确的税务代码" value="" id="taxnumber" class="taxnumber" v-model="AddInvoiceModel.invoice.TaxNumber" />
+            </div>
+            <hr v-if="AddInvoiceModel.invoice.TicketOpeningType==1" />
+            <div class="invoice-item" v-on:click="selectContent()">
+                <span class="span-tit">发票内容</span>
+                <span class="span-mid" id="con-selected">{{AddInvoiceModel.invoice.TypeName}}</span>
+                <span class="zmjd-iconfont icon-arrow-right">&#xe648;</span>
+            </div>
+            <hr />
+            <div class="invoice-item">
+                <div>
+                    <span class="span-tit">发票类型</span>
+                    <span class="span-mid">增值税普通发票</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="fn"></div>
+        <div class="invoice-content">
+            <div class="invoice-item">
+                <span class="span-tit span-invoiceform">发票形式</span>
+                <div class="invoice-form">
+                    <div class="invoice-ele">
+                        <div class="invoice-form-tit for-tit-selected">电子发票</div>
+                        <div class="invoice-form-desc">免费</div>
+                    </div>
+                    <div class="invoice-paper" v-on:click="openPaper()">
+                        <div class="invoice-form-tit">纸质发票</div>
+                        <div class="invoice-form-desc">需支付￥10快递费</div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <hr />
+            <div class="invoice-item">
+                <span class="span-tit">邮箱</span>
+                <input placeholder="请输入可用邮箱" v-model="AddInvoiceModel.invoice.Email" id="email" class="email" />
+            </div>
+        </div>
+    </div>
+    <div class="div-tips">
+        <span class="tip1">
+            提示：发票金额不包括住基金和现金券抵扣部分
+        </span>
+        <span>
+            按照国税总局公告，自2017年7月1日起，企业索取的增值税普通发票需要填写纳税人识别号，不符合规定的发票，不得作为合法税收凭证。
+        </span>
+    </div>
+    <div class="div-btn">
+        <button class="btn " v-if="AddInvoiceModel.invoice.Email.length==0 || AddInvoiceModel.invoice.Title.length==0 || (AddInvoiceModel.invoice.TaxNumber.length==0 && AddInvoiceModel.invoice.TicketOpeningType==1)">确定</button>
+        <button class="btn btncanbg" v-else v-on:click="submitInvoice()">确定</button>
+    </div>
+    <!------------------选择发票层----------------->
+    <div class="_selector-model" style="display:none;" v-on:click="hideInvoiceContentSelected"></div>
+    <div class="_selector" style="display:none;" id="startcity-selector">
+        <div class="_head">
+            <div class="_tit">发票内容</div>
+            <div class="zmjd-iconfont _close" v-on:click="hideInvoiceContentSelected">&#xe673;</div>
+            @*<div class="_clear" onclick="selectedCity(@cid,0,@showType)">清空</div>*@
+        </div>
+        <div class="_list">
+            <div class="_item" v-bind:class="{'_item-seled':item.TypeId == AddInvoiceModel.invoice.Type}" v-for="item in InvoiceType" v-on:click="selecedContent(item.TypeId,item.TypeName)">
+                {{item.TypeName}}
+                <div class="zmjd-iconfont _icon">&#xe660;</div>
+            </div>
+        </div>
+    </div>
+    <!------------------选择添加标题----------------->
+
+    <div class="_selectorTitel-model" style="display:none;">
+        <div class="_head">
+            <div class="_tit">发票抬头</div>
+            <div class="zmjd-iconfont _close" v-on:click="hidepage">&#xe66b;</div>
+        </div>
+        <div class="_list">
+            <div class="_item" v-bind:class="{'_item-seled':item._item == AddInvoiceModel.invoice.Title}" v-for="item in Titels" v-on:click="selectedtit(item)">
+                {{item}}
+                <div class="zmjd-iconfont _icon">&#xe660;</div>
+            </div>
+        </div>
+        <div class="_addtit">
+            <input class="invoicetit" placeholder="请输入发票抬头" value="" />
+            <button class="btnaddtit" v-on:click="add_tit">确定</button>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="phone" value="@ViewBag.Phone" />
+<input type="hidden" id="hotelId" value="@ViewBag.HotelID" />
+<input type="hidden" id="pid" value="@ViewBag.Pid"  />
+<input type="hidden" id="userID" value="@ViewBag.UserID"/>
+<input type="hidden" id="packageType" value="@ViewBag.PackageType" />
+<input type="hidden" id="orderID" value="@ViewBag.OrderID" />
+@section scripts
+{
+    <script src="~/Content/js/framework/zmjd.modal.min.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/order/openinvoice.js?v=@(Helpers.curAppVer())"></script>
+}
+

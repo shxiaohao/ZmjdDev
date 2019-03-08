@@ -1,0 +1,78 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params.Hotel
+@using HJD.CommentService.Contract
+@model CommentInfoModel3
+@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    ViewBag.Title = "邀请成为VIP";
+
+    var isApp = ViewBag.IsApp;
+
+    var sourceId = ViewBag.SourceId;
+
+    //分享者信息
+    var shareUserInfo = ViewBag.ShareUserInfo;
+    
+    //分享者的扩展信息
+    UserInfoResult shareUserInfoEx = ViewBag.ShareUserInfoEx;
+}
+
+@section styles 
+{
+    <link href="~/Content/css/framework/zmjd.swiper.min.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css/active/genvipforinvitation.css?v=" + (Helpers.curAppVer()))
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .login-section {
+            font-size: 0.8em;
+        }
+    </style>
+
+}
+
+<div id="page2">
+    <div class="main-panel" id="onestep">
+        <div class="top">
+            <img src="http://whfront.b0.upaiyun.com/app/img/fund/invitation-top-bigpic.png" alt="" />
+        </div>
+        <div class="middle">
+            <div class="shareuser">
+                @if (!string.IsNullOrEmpty(shareUserInfo.NickName))
+                {
+                    <div class="tip2">你的朋友@(shareUserInfo.NickName)<br />邀请你成为周末酒店VIP会员</div>   
+                }
+                else
+                { 
+                    <div class="tip2">邀请你成为周末酒店VIP会员</div>   
+                }
+            </div>
+            <div class="center-line"></div>
+            <div class="btn">
+                <a href="/Coupon/VipShopInfo?_newpage=1" class="go-getcash-btn">成为VIP</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+<input type="hidden" id="sourceId" value="@(sourceId)" />
+<input type="hidden" id="userId" value="@(shareUserInfo.UserID)" />
+<input type="hidden" id="nickName" value="@(shareUserInfo.NickName)" />
+<input type="hidden" id="invitationCode" value="@(shareUserInfoEx.InvitationCode)" />
+@section scripts
+{
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/active/genvipforinvitation.js?v=@(Helpers.curAppVer())"></script>
+    <script>
+
+        function gourl(url) {
+            location.href = url;
+        }
+
+    </script>
+}

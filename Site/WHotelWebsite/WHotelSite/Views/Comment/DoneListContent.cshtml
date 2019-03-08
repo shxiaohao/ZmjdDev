@@ -1,0 +1,65 @@
+﻿@using HJD.CommentService.Contract
+@using WHotelSite
+@model List<CommentInfoModel>
+
+@foreach (CommentInfoModel entity in Model)
+{
+    CommentInfoEntity info = entity.commentInfo;
+    string hotelRate = ViewReturnValueHelper.CommentInfoConcat(1, 1, info);
+    string roomRate = ViewReturnValueHelper.CommentInfoConcat(3, 2, info);
+    string playRate = ViewReturnValueHelper.CommentInfoConcat(4, 3, info);
+    string eatRate = ViewReturnValueHelper.CommentInfoConcat(5, 4, info);
+    
+    string scoreStar = "~/Content/images/star2-" + entity.commentInfo.Comment.Score.ToString() + ".png";
+    
+    string roomType = entity.commentInfo.RoomInfo != null && entity.commentInfo.RoomInfo.Count != 0 ?entity.commentInfo.RoomInfo[0].TagName:"";
+    
+    string zmjdWB = "@周末酒店";
+    
+    <tr class="dplist1">
+	    <td>
+		    <h4>@entity.commentItem.Hotelname</h4>
+	    </td>
+	    <td>
+		    @roomType
+	    </td>
+	    <td>
+		   @entity.commentItem.Checkin.ToShortDateString()
+	    </td>
+	    <td>
+		    @(entity.commentInfo.Comment.Recommned?'是':'否')
+	    </td>
+	    <td><span class="price">￥@Math.Round(entity.commentItem.Amount,0)</span></td>
+	    <td>
+            @if(entity.commentItem.OrderID != 0){
+		        <a href="@Url.RouteUrl("订单详情", new { order = entity.commentItem.OrderID })" target="_self">查看订单详情</a>
+            }
+            <div class="bdsharebuttonbox" data-tag="share_1">
+	            <a class="bds_weixin" data-cmd="weixin" data-tag="@entity.shareModel.shareLink"></a>
+	            <a class="bds_tsina" data-cmd="tsina" data-tag="@entity.shareModel.Content|@entity.shareModel.title|@entity.shareModel.shareLink|@entity.shareModel.photoUrl"></a>
+            </div>
+	    </td>
+    </tr>
+    
+    <tr class="dplist2">
+	    <td colspan="6">
+		    <p>总体印象： <img src="@Url.Content(@scoreStar)" class="dpstar"  alt="" /></p>
+		    <div class="photolist">
+                @foreach (string url in @entity.photoInfo)
+                {                
+		            <a href="javascript:;"><img src="@Url.Content(url)" class="dpphoto"  alt="" /></a>
+                }
+		    </div>
+		    <dl class="dl-horizontal detailinfo3">
+			    <dt>综合评价：</dt>
+			    <dd>@hotelRate</dd>
+			    <dt>房间的设施：</dt>
+			    <dd>@roomRate</dd>
+			    <dt>玩点：</dt>
+			    <dd>@playRate </dd>
+			    <dt>美食：</dt>
+			    <dd>@eatRate</dd>
+		    </dl>
+	    </td>
+    </tr>
+}

@@ -1,0 +1,9 @@
+
+[17/2/14 10:53:07] Start Job [DownLoadWexinMaterialJob]
+[17/2/14 10:53:08] 【GetLastOffset】:1
+[17/2/14 10:53:08] 起始：Offset【1】 Count【1】
+[17/2/14 10:53:29] GetAllWeixinMaterialList Count:1
+[17/2/14 11:23:22] Start Job [DownLoadWexinMaterialJob]
+[17/2/14 11:23:22] 【GetLastOffset】:1
+[17/2/14 11:23:22] 起始：Offset【1】 Count【1】
+[17/2/14 11:23:35] GetAllWeixinMaterialList Count:1

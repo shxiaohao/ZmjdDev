@@ -1,0 +1,5 @@
+
+[18/12/28 18:52:20] Start Job [DownLoadWexinUserInfoJob]
+[18/12/28 18:54:38] 指定了测试Openid：oh_y70R5LYS3kRc4JElY3r0FbsKU
+[18/12/28 18:56:37] Start Job [DownLoadWexinUserInfoJob]
+[18/12/28 18:56:49] 指定了测试Openid：oHGzlw-sdix9G__-S4IzfTsYRqC8

@@ -1,0 +1,44 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    ViewBag.Title = "好友推荐";
+
+    var userid = ViewBag.UserId;
+
+    //分享链接
+    var shareLink = ViewBag.ShareLink;
+}
+
+@section styles
+{
+    <link href="~/Content/css/fund/userrecommend.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style type="text/css">
+    </style>
+}
+
+<div class="rec-panel">
+    <div class="tit">
+        <div class="img"><img src="http://whfront.b0.upaiyun.com/app/img/fund/yao_icon.png" /></div>
+        推荐给好友 奖励住基金
+    </div>
+    <div class="info">
+        <div class="r">您的好友将获得 50 元现金券</div>
+        您将在您朋友每次预订并入住完成后<br />获得其订单金额1%的奖励基金
+    </div>
+    <div class="btns">
+        <div class="share" onclick="gourl('@shareLink')">分享给好友</div>
+        @*<a href="whotelapp://www.zmjiudian.com/gotopage?url=http://192.168.1.22:8081/Fund/UserRecommend?userid=0">go app</a>*@
+    </div>
+</div>
+
+@section scripts
+{
+    <script src="~/Content/js/framework/jquery.lazyload.min.js"></script>
+    <script src="~/Content/js/fund/userrecommend.js?v=@(Helpers.curAppVer())"></script>
+    <script type="text/javascript" charset="utf-8">
+        function gourl(url)
+        {
+            location.href = url;
+        }
+    </script>
+}

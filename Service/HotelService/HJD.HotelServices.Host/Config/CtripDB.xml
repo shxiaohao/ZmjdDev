@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<configuration>
+  <statements>
+    <select id="GetBaseRoomInfo">
+      <![CDATA[   
+select * from Room WITH(NOLOCK) order by HotelID
+       ]]>
+    </select>
+    <select id="GetBaseRoomByHotel">
+      <![CDATA[   
+select * from Room WITH(NOLOCK) Where HotelID = @HotelID 
+       ]]>
+    </select>
+    <select id="GetPriceRateByRoom">
+      <![CDATA[   
+Select * From PriceRate WITH(NOLOCK) 
+Where BaseRoomID = @BaseRoomID And Night = @Night 
+And CanSell = 1 And PayType = '预付' And Breakfast <> '无早' and Breakfast <> '单早' And [TimeStamp] > CONVERT(varchar(100), getdate(), 23) Order By Price
+       ]]>
+    </select>
+    
+     <select id="GetPriceRateByHotel">
+      <![CDATA[   
+select pr.*,rm.HotelID,rm.Name Name2,rm.BedType BedType2,rm.Area,Convert(int,pr.price) SumPrice 
+from PriceRate pr WITH(NOLOCK)
+inner join Room rm WITH(NOLOCK) on pr.BaseRoomID = rm.BaseRoomID
+where rm.HotelID = @HotelID
+and pr.Night >= @CheckIn and pr.Night < @CheckOut And CanSell = 1 --And pr.[TimeStamp] > CONVERT(varchar(100), getdate(), 23)
+order by BaseRoomID,RoomID
+       ]]>
+    </select>
+    
+    <select id="GetPriceRateNightByHotel">
+      <![CDATA[   
+select distinct convert(bigint,0) ID,Night 
+from PriceRate pr WITH(NOLOCK) 
+inner join Room rm WITH(NOLOCK) on rm.BaseRoomID = pr.BaseRoomID
+where rm.HotelID = @HotelID And pr.CanSell = 1 --And pr.[TimeStamp] > CONVERT(varchar(100), getdate(), 23)
+order by Night
+       ]]>
+    </select>
+    <select id="GetPriceRateNightByHotel2">
+      <![CDATA[   
+select distinct convert(bigint,0) ID,Night 
+from PriceRate pr WITH(NOLOCK) 
+inner join Room rm WITH(NOLOCK) on rm.BaseRoomID = pr.BaseRoomID
+where rm.HotelID = @HotelID And pr.CanSell = 1 and pr.PayType = '预付' --And pr.[TimeStamp] > CONVERT(varchar(100), getdate(), 23)
+order by Night
+       ]]>
+    </select>
+    <select id="GetPriceRateNightByHotelAndId">
+      <![CDATA[   
+select distinct pr.ID,pr.Night 
+from PriceRate pr WITH(NOLOCK) 
+inner join Room rm WITH(NOLOCK) on rm.BaseRoomID = pr.BaseRoomID
+where rm.HotelID = @HotelID And pr.CanSell = 1 --And pr.[TimeStamp] > CONVERT(varchar(100), getdate(), 23) 
+And pr.ID = @PID
+order by Night
+       ]]>
+    </select>
+    <select id="GetCtripHotelIdByHotelId">
+      <![CDATA[
+            select top 1 RealHotelID from CtripDB.dbo.HotelBase where HotelID = @HotelOriID
+      ]]>
+    </select>
+  </statements>
+</configuration>

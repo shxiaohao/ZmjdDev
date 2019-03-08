@@ -1,0 +1,243 @@
+﻿@using HJDAPI.APIProxy;
+@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    var pageTitle = "活动主页";
+    ViewBag.Title = pageTitle;
+
+    var tempDataId = ViewBag.TempDataId;
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.IsInWeixin;
+
+    //控制分享配置
+    var shareTitle = pageTitle;
+    var shareDesc = "";
+    var shareImgUrl = "http://whfront.b0.upaiyun.com/app/img/coupon/redcashcouponlist/img-38-share-pic.png";
+    var shareLink = string.Format("http://www.zmjiudian.com/coupon/RedCashCouponList?tempdataid={0}", tempDataId);
+
+    if (tempDataId == 4268)
+    {
+        shareTitle = "送你500元女王节福袋，即领即用！";
+        shareDesc = "2000家五星酒店、室内外亲子乐园任你选！";
+        shareImgUrl = "http://whfront.b0.upaiyun.com/app/img/coupon/redcashcouponlist/img-38-share-pic.png";
+        shareLink = "http://www.zmjiudian.com/coupon/redCashCouponList?tempdataid=4268&v=1";//"http://www.zmjiudian.com/Account/WxMenuTransfer?menu=7";
+    }
+
+    //打开原生分享bar
+    var _goShareLink = new Access().GenShortUrl(-2, shareLink);
+    var shareResultUrl = "";
+    var shareLink_Native = "whfriend://comment?title={0}&photoUrl={1}&shareLink={2}&nextUrl={3}&content={4}&shareType={5}";
+    shareLink_Native = string.Format(shareLink_Native, HttpUtility.UrlEncode(shareTitle), HttpUtility.UrlEncode(shareImgUrl), _goShareLink, HttpUtility.UrlEncode(shareResultUrl), HttpUtility.UrlEncode(shareDesc), "0");
+}
+
+@*<h2>RedCashCouponList</h2>*@
+@section styles
+{
+    <link href="~/Content/css/framework/zmjd.modal.min.css" rel="stylesheet" />
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/Content/css/coupon/redcashcouponlist.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .login-section {
+            font-size: 0.8em;
+        }
+    </style>
+
+}
+
+<div id="redcashcoupon" v-cloak>
+    <div v-if="template.isexpire==true" class="expiretip">
+        <span class="zmjd-iconfont expireicon">&#xe685;</span><span class="expiredesc">活动已结束，请持续关注我们了解活动信息</span>
+    </div>
+    <div class="topbanner">
+        <img src="{{template.topbanner.banner}}" />
+        @*<img src="http://whfront.b0.upaiyun.com/app/img/coupon/redcashcouponlist/img-banner.png" />*@
+    </div>
+    @*<div style="margin:0 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3a%2f%2fwww.zmjiudian.com%2fcoupon%2fRedCashCouponList%3ftempdataid%3d3966%26_newpage%3d1">GO APP (Local) >>></a></div>*@
+    <div class="coupon-list">
+        <div class="item" v-for="item in template.cashcouponlist">
+            <div class="top"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-top.png" alt="" /></div>
+            <div class="middle">
+                <div class="money"><span class="val-sml  " v-bind:class="{getredcolor:received==true,nogetredcolor:received==false}">¥{{item.DiscountAmount}}</span></div>
+                <div class="info">
+                    <div class="yilingtag" v-if="received==true"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/redcashcouponlist/img-coupon-geted-icon.png" /></div>
+                    <div class="tit" v-bind:class="{getredcolor:received==true,nogetredcolortit:received==false}">{{item.Name}}</div>
+                    <div class="time" v-if="item.ExpirationType==1">{{item.StartDate}}至{{item.ExpiredDate}}可用</div>
+                    <div class="time" v-if="item.ExpirationType==0">有效期{{item.ExpirationDay}}天</div>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="line"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-line.png" alt="" /></div>
+            <div class="middle">
+                <div class="rule">{{item.Description}}</div>
+            </div>
+            <div class="bottom"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-bottom.png" alt="" /></div>
+        </div>
+    </div>
+    <div class="bottombtn">
+        <div v-if="received==false && template.isexpire==false" v-on:click="vueReceiveRedCashCoupon">
+            <img src="{{template.getbtn.getbtn}}" />
+        </div>
+        <div v-if="received==true">
+            <a href="{{template.gobtn.actionurl}}"><img src="{{template.gobtn.gouseingbtn}}" /></a>
+        </div>
+        @*<img src="http://whfront.b0.upaiyun.com/app/img/coupon/redcashcouponlist/img-lingqu-btn.png" v-if="received==false" />*@
+    </div>
+    <div class="weixin-share-tip" style="display:none" v-on:click="vueHideWXTip">
+        <img data-orisrc="http://whfront.b0.upaiyun.com/www/img/Active/productalbumactive/weixin-share-tip-img.png" src="http://whfront.b0.upaiyun.com/www/img/Active/productalbumactive/weixin-share-tip-img.png" alt="点击右上角分享哦" />
+    </div>
+</div>
+
+<input type="hidden" id="tempdataid" value="@(ViewBag.TempDataId)" />
+<input type="hidden" id="userid" value="@(ViewBag.UserId)" />
+<input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+<input type="hidden" id="isInWeixin" value="@(isInWeixin ? 1 : 0)" />
+<input type="hidden" id="shareNativeLink" value="@(shareLink_Native)" />
+
+@section scripts
+{
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script src="~/Content/js/framework/zmjd.modal.min.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/login.js?v=@(Helpers.curAppVer())"></script>
+
+    @if (isApp)
+    {
+        <script>
+            try {
+                onAppShareCall = function () {
+                    var title = '@(shareTitle)';
+                    var Content = '@(shareDesc)';
+                    var photoUrl = '@(shareImgUrl)';
+                    var shareLink = '@HttpUtility.UrlEncode(shareLink)';
+                    try { whotel.appShareData(title, Content, photoUrl, shareLink); } catch (e) { }
+                    var returnStr = '{"title":"{0}","Content":"{1}","photoUrl":"{2}","shareLink":"{3}"}';
+                    return returnStr.format(title, Content, photoUrl, shareLink);
+                }
+            }
+            catch (e) { }
+            onAppShareCall();
+        </script>
+    }
+
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js?v=@(Helpers.curAppVer())" type="text/javascript"></script>
+        <script>
+            var loadWechat = function (_shareTitle, _shareDesc, _shareLink, _shareImgUrl, _shareSucessFunc) {
+
+                GetWeixinApiConfig();//注册
+
+                wx.ready(function () {
+
+                    wx.onMenuShareTimeline({
+                        title: _shareTitle,
+                        desc: _shareDesc,
+                        link: _shareLink,
+                        imgUrl: _shareImgUrl,
+                        success: function (res) {
+                            _shareSucessFunc(res)
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                    wx.onMenuShareAppMessage({
+                        title: _shareTitle,
+                        desc: _shareDesc,
+                        link: _shareLink,
+                        imgUrl: _shareImgUrl,
+                        success: function (res) {
+                            _shareSucessFunc(res)
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                    wx.onMenuShareQQ({
+                        title: _shareTitle,
+                        desc: _shareDesc,
+                        link: _shareLink,
+                        imgUrl: _shareImgUrl,
+                        success: function (res) {
+                            _shareSucessFunc(res)
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                    wx.onMenuShareQZone({
+                        title: _shareTitle,
+                        desc: _shareDesc,
+                        link: _shareLink,
+                        imgUrl: _shareImgUrl,
+                        success: function (res) {
+                            _shareSucessFunc(res)
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                });
+
+                function GetWeixinApiConfig() {
+
+                    var url = location.href.split("#")[0];
+                    $.ajax({
+                        url: '/Coupon/GetWeixinConfigInfo',
+                        type: 'POST',
+                        data: { url: url },
+                        dataType: 'json',
+                        async: false,
+                        error: function () {
+                            console.log("网络服务错误");
+                        },
+                        success: function (result) {
+                            if (typeof (result.Success) != undefined && result.Success == 1) {
+                                return false;
+                            }
+                            else {
+                                //得到微信config的值
+                                var array = [
+                                    'checkJsApi',
+                                    'onMenuShareTimeline',
+                                    'onMenuShareAppMessage',
+                                    'onMenuShareQQ',
+                                    'onMenuShareQZone',
+                                    'hideOptionMenu'
+                                ];
+                                if (result.jsApiList) {
+                                    var jsArray = result.jsApiList.split(',');
+                                    for (var key in jsArray) {
+                                        array.push("" + jsArray[key]);
+                                    }
+                                }
+
+                                wx.config({
+                                    debug: false,
+                                    appId: result.appId,
+                                    timestamp: "" + result.timestamp,
+                                    nonceStr: result.nonceStr,
+                                    signature: result.signature,
+                                    jsApiList: array
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        </script>
+    }
+    <script src="~/Content/js/coupon/redcashcouponlist.js?v=@(Helpers.curAppVer())"></script>
+}
+

@@ -1,0 +1,70 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@using HJD.HotelManagementCenter.Domain.QRCode
+@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    ViewBag.Title = "周末酒店";
+
+    var isMobile = ViewBag.IsMobile;
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.isInWeixin;
+    var pid = ViewBag.PID;
+    QRCodeEntity qrcodeInfo = ViewBag.QRCodeInfo;
+    
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    ViewBag.LoadHmBaidu = false;
+}
+
+@section styles
+{
+    <link href="/content/css/qrcode/entrance.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+        .error-info {
+            width:90%;
+            height:auto;
+            margin:5em auto 0 auto;
+            padding:0 0 0 0;
+            font-size:0.9em;
+            color:#555;
+            text-align:center;
+        }
+    </style>
+}
+
+@if (qrcodeInfo != null)
+{
+    if (qrcodeInfo.ExpiryTime < DateTime.Now)
+    {
+        <div class="error-info">二维码已过期或失效：）</div>
+    }
+    else if (string.IsNullOrEmpty(qrcodeInfo.BusinessUrl))
+    {
+        <div class="error-info">二维码无效：）</div>
+    }
+    else
+    {
+        <div class="error-info"><b>跳转中..</b></div>
+    }
+}
+else
+{ 
+    <div class="error-info">二维码读取失败</div>
+}
+
+<footer>
+    <input type="hidden" id="isMobile" value="@(isMobile ? "1" : "0")" />
+    <input type="hidden" id="cid" value="@(pid)" />
+</footer>
+
+@section scripts
+{
+    <script src="~/Content/js/framework/config.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/qrcode/entrance.js?v=@(Helpers.curAppVer())"></script>
+}

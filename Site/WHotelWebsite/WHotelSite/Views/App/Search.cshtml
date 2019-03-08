@@ -1,0 +1,211 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    //当前系统环境（ios | android）
+    var appType = ViewBag.AppType;
+    var isApp = ViewBag.IsApp;
+    bool isMobile = WHotelSite.Utils.IsMobile();
+    var isInWeixin = ViewBag.isInWeixin;
+    
+    //userid
+    var userid = ViewBag.UserId; //userid = 4512064;
+
+    ViewBag.Title = "搜索酒店";
+    
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    if (isApp)
+    {
+        ViewBag.LoadHmBaidu = false;
+    }
+}
+
+@section styles
+{
+    <link href="~/Content/css/app/search.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style type="text/css">
+    </style>
+}
+
+<div class="search-input">
+    <input type="text" class='zmjd-iconfont _input_search' placeholder='搜索酒店、美食、玩乐' id="_search" /><a href="javascript:;" class="zmjd-iconfont clear-inp" style="display:none;">&#xe615;</a>
+</div>
+<div class="top-placeholder">&nbsp;</div>
+<div id="search-section" class="search-section" style="display:none;">
+    <div class="search-result">
+        <div class="tit" v-if="searchResult&&searchResult.length>0">建议</div>
+        <div class="result" v-if="searchResult&&searchResult.length>0">
+            <div v-for="searchItem in searchResult">
+                <div class="item" v-if="searchItem.Type=='D'" data-did="{{searchItem.Id}}" data-dname="{{searchItem.Name}}" data-gtype="" onclick="openHotelList(this)"><div class="icon"><img src="{{searchItem.Icon}}" alt="" /></div><div class="name">{{{searchItem.ShowName}}}</div><div style="clear:both;"></div></div>
+                <div class="item" v-if="searchItem.Type=='H'" data-hid="{{searchItem.Id}}" onclick="openHotelDetail(this)"><div class="icon"><img src="{{searchItem.Icon}}" alt="" /></div><div class="name">{{{searchItem.ShowName}}}</div><div style="clear:both;"></div></div>
+                <div class="item" v-if="searchItem.Type=='P'" data-pid="{{searchItem.Id}}" onclick="openProductDetail(this)"><div class="icon"><img src="{{searchItem.Icon}}" alt="" /></div><div class="name">{{{searchItem.ShowName}}}</div><div style="clear:both;"></div></div>
+                <div class="item" v-if="searchItem.Type=='F'" data-pid="{{searchItem.Id}}" onclick="openProductDetail(this)"><div class="icon"><img src="{{searchItem.Icon}}" alt="" /></div><div class="name">{{{searchItem.ShowName}}}</div><div style="clear:both;"></div></div>
+                <div v-if="$index+1<searchResult.length" class="item-line"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="search-section-null" class="d-group search-hide">
+    @*<div class="tit2">抱歉，没有搜到相关内容</div>*@
+    <div class="null">
+            <div class="img"><img src="http://whfront.b0.upaiyun.com/app/img/search/img_nothing.png" alt="" /></div>
+            <div class="txt">没有东西～</div>
+        </div>
+    <div class="line"></div>
+</div>
+<div class="d-group search-hide" id="search-history">
+    <div class="tit">历史记录 </div>
+    <div class="list">
+        <div v-for="disItem in hisDistrict">
+            <div class="item" data-did="{{disItem.DistrictId}}" data-dname="{{disItem.DistrictName}}" data-gtype="{{disItem.geoScopeType}}" onclick="openHotelList(this)">
+                <div class="icon"><img src="http://whfront.b0.upaiyun.com/www/img/search/img_old.png" alt="" /></div><div class="name">{{{disItem.DistrictName}}}</div><div style="clear:both;"></div>
+            </div>
+            <div v-if="$index+1<hisDistrict.length" class="item-line"></div>
+        </div>
+    </div>
+    <div class="line"></div>
+</div>
+<div id="around-city-section" class="search-hide">
+    <div class="d-group" v-for="data in aroundCityData.AroundCityList" v-if="data.cityList&&data.cityList.length>0">
+        <div class="tit">{{data.currentCityName}}</div>
+        <div class="list" v-for="city in data.cityList">
+            <div v-if="!data.cityList||data.cityList.length<=0" class="loading">加载中..</div>
+            <div>
+                <div class="item" data-did="{{city.DistrictID}}" data-dname="{{city.DistrictName}}" data-gtype="{{city.geoScopeType}}" onclick="openHotelList(this)">
+                    <div class="icon"><img src="http://whfront.b0.upaiyun.com/www/img/search/img_lab.png" alt="" /></div><div class="name">{{{city.DistrictName}}}</div><div style="clear:both;"></div>
+                </div>
+                <div wx:if="{{$index+1<data.cityList.length}}" class="item-line"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="display:none;">
+    <input type="hidden" id="_appType" value="@(appType)" />
+    <input type="hidden" id="_isApp" value="@(isApp ? "1" : "0")" />
+    <input type="hidden" id="_userid" value="@(userid)" />
+</div>
+
+@section scripts
+{
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/app/search.js?v=@(Helpers.curAppVer())"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+    <script>
+
+        var _Config = new Config();
+
+        var defLat = 31.234935;
+        var defLon = 121.387157;
+
+        //获取及周边&更多度假地
+        var aroundCityData = {};
+        aroundCityData = new Vue({
+            el: '#around-city-section',
+            data: { "aroundCityData": {} }
+        })
+        var loadAroundCity = function (lat, lon) {
+            var _aroundDic = { lat: lat, lon: lon };
+            $.get(_Config.APIUrl + "/api/hotel/GetBoutiqueAndAroundCityList", _aroundDic, function (_data) {
+                if (_data) {
+                    //console.log(_data);
+                    aroundCityData.aroundCityData = _data;
+                    $("#around-city-section").show();
+                }
+            });
+        }
+        loadAroundCity(defLat, defLon);
+
+    </script>
+    @if (isInWeixin)
+    {
+        <script>
+            GetWeixinApiConfig();//注册
+            function GetWeixinApiConfig() {
+                var url = location.href.split("#")[0];
+                $.ajax({
+                    url: '/Coupon/GetWeixinConfigInfo',
+                    type: 'POST',
+                    data: { url: url },
+                    dataType: 'json',
+                    async: false,
+                    error: function () {
+                        console.log("网络服务错误");
+                    },
+                    success: function (result) {
+                        if (typeof (result.Success) != undefined && result.Success == 1) {
+                            return false;
+                        }
+                        else {
+                            //得到微信config的值
+                            var array = [
+                                'checkJsApi',
+                                'openLocation',
+                                'getLocation'
+                            ];
+                            if (result.jsApiList) {
+                                var jsArray = result.jsApiList.split(',');
+                                for (var key in jsArray) {
+                                    array.push("" + jsArray[key]);
+                                }
+                            }
+
+                            wx.config({
+                                debug: false,
+                                appId: result.appId,
+                                timestamp: "" + result.timestamp,
+                                nonceStr: result.nonceStr,
+                                signature: result.signature,
+                                jsApiList: array
+                            });
+                        }
+                    }
+                });
+            }
+
+            try {
+                wx.ready(function () {
+                    wx.getLocation({
+                        type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                        success: function (res) {
+                            var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+                            var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+                            var speed = res.speed; // 速度，以米/每秒计
+                            var accuracy = res.accuracy; // 位置精度
+
+                            loadAroundCity(latitude, longitude);
+                        }
+                    });
+                });
+            } catch (e) {
+                loadAroundCity(defLat, defLon);
+            }
+        </script>
+    }
+    else
+    {
+        <script>
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (p) {
+                    var latitude = p.coords.latitude//纬度
+                    var longitude = p.coords.longitude;
+                    console.log(latitude);
+
+                    loadAroundCity(latitude, longitude);
+
+                }, function (e) {//错误信息
+                    var aa = e.code + "\n" + e.message;
+                    console.log(aa);
+
+                    loadAroundCity(defLat, defLon);
+                }
+                );
+            }
+            else {
+                loadAroundCity(defLat, defLon);
+            }
+
+        </script>
+    }
+}

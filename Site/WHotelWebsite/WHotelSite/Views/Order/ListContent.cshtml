@@ -1,0 +1,132 @@
+﻿@using HJD.HotelPrice.Contract.DataContract.Order
+
+@model IEnumerable<OrderListItem>
+@{
+    Layout = null;
+    bool isMobile = WHotelSite.Utils.IsMobile();
+}
+
+@helper InsertOrderItemTR(OrderListItem order)
+{
+    var stateClass = "dt-finish";
+    if(@order.State == 12 || @order.State == 31 || @order.State == 32 || @order.State == 10)
+    {
+        stateClass = "dt-confirm";
+    }
+    if (@order.State == 1 || @order.State == 101)
+    {
+        stateClass = "dt-sq";
+    }
+    <tr>
+        <td>
+            <h4>@order.HotelName</h4>
+            订单号：<i>@order.Orderid</i><br />
+            @*预定日期：@order.SubmitDate<br />
+            套餐：@order.PackageName  ￥@order.Amount<br />
+            支付方式：无<br />*@
+        </td>
+        <td>
+            @order.Contact
+        </td>
+        <td>
+            @order.CheckIn.ToShortDateString() <br />
+            @(order.NightCount)晚 ，@(order.RoomCount)间
+        </td>
+        <td><span class="price">￥@Math.Round(order.Amount,0)</span></td>
+        <td><span class="@stateClass">@order.StateName</span></td>
+        <td>
+            <a href="@Url.RouteUrl("订单详情", new { order = order.Orderid })" target="_self">查看</a><br />
+            @*已提交未支付*@
+            @if (@order.State == 1)
+            {
+                bool isMobile = WHotelSite.Utils.IsMobile();
+                if (!isMobile)
+                {
+                    <a data-toggle="modal" data-target="#myModal" href="javascript:;" onclick="bindPayOrderId(event,@order.Orderid);">支付</a><br />
+                }
+                else
+                {
+                    <a href="javascript:;" onclick="gotoPayUrl(event,@order.Orderid);">支付</a><br />
+                }
+                //href="@Url.Action("Pay", new { order = order.Orderid })" 
+                <a href="javascript:;" data-cancel-url="@Url.Action("CancelAuthOrder", "Order", new {order = @order.Orderid})">取消</a><br />
+            }
+            @*已授权待确认*@
+            else if (@order.State == 101)
+            {
+                <a href="javascript:;" data-cancel-url="@Url.Action("CancelAuthOrder", "Order", new {order = @order.Orderid})">取消</a><br />
+            }
+            @*已支付待确认*@
+            else if (@order.State == 10)
+            {
+            }
+            @*已确认*@
+            else if (@order.State == 12)
+            {
+                <a href="@Url.Action("Section", "Comment", new { section = 0, hotel = order.HotelId, order = order.Orderid })" target="_self">写点评</a><br />
+            }
+            @*已修改待确认*@
+            else if (@order.State == 31 || @order.State == 32)
+            {
+            }
+            @*已取消*@
+            else if (@order.State == 5)
+            {
+            }
+            @*已完成*@
+            else if (@order.State == 2)
+            {
+                <a href="@Url.Action("Section", "Comment", new { section = 0, hotel = order.HotelId, order = order.Orderid })" target="_self">写点评</a><br />
+            }
+            @*<a href="javascript:;" class="order-del-link" data-deleteurl="@Url.Action("DeleteOrder", "Order", new { order = @order.Orderid })">删除</a><br />*@
+        </td>
+    </tr>
+}
+
+
+@helper InsertOrderItemForMobile(OrderListItem order)
+{
+    var stateClass = "dt-finish";
+    if (@order.State == 12 || @order.State == 31 || @order.State == 32 || @order.State == 10)
+    {
+        stateClass = "dt-confirm";
+    }
+    if (@order.State == 1 || @order.State == 101)
+    {
+        stateClass = "dt-sq";
+    }
+
+    <a href="@Url.RouteUrl("订单详情", new { order = order.Orderid })" target="_blank">
+        <div class="order-item">
+            <div class="top">
+                <div class="l">入住时间：@order.CheckIn.ToString("yyyy-MM-dd")</div>
+                <div class="r">@order.StateName</div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="h-info">
+                <div class="l">@order.HotelName</div>
+                <div class="r">￥@Math.Round(order.Amount, 0)</div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="o-info">订单号：@order.Orderid</div>
+            @if (@order.State == 1)
+            { 
+                <div class="sub-info">
+                    <a href="javascript:;" onclick="gotoPayUrl2(@order.Orderid)">支付</a><br />
+                </div>
+            }
+        </div>
+    </a>
+}
+
+@foreach (OrderListItem order in Model)
+{
+    if (isMobile)
+    {
+        @InsertOrderItemForMobile(order)
+    }
+    else
+    { 
+        @InsertOrderItemTR(order)
+    }
+}

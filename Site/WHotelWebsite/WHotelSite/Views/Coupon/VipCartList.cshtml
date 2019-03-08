@@ -1,0 +1,69 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+    
+    var isApp = ViewBag.IsApp;
+    var userid = ViewBag.UserId; //userid = 4512064;
+
+    ViewBag.Title = "VIP会员";
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    if (isApp)
+    {
+        ViewBag.LoadHmBaidu = false;
+    }
+}
+
+@section styles
+{
+    <link href="/content/css/coupon/vipcartlist.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <style type="text/css">
+    </style>
+}
+
+<div class="vip-list">
+    <ul>
+        <li>
+            <div class="cart-item" onclick="gourl('/custom/shop/vip/100929?userid=@(userid)&_newpage=1')">
+                <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-cart-199.png" alt="vip 199" />
+            </div>
+        </li>
+        <li>
+            <div class="cart-item" onclick="gourl('/custom/shop/vip/100398?userid=@(userid)&_newpage = 1')">
+                <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-cart-599.png" alt="vip 599" />
+            </div>
+        </li>
+    </ul>
+</div>
+
+<footer>
+    <input type="hidden" id="userid" value="@userid" />
+    <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+</footer>
+
+@section scripts
+{
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    @*<script src="~/Content/js/coupon/vipcartlist.js?v=@(Helpers.curAppVer())"></script>*@
+    <script>
+            window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+            window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+            window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script type="text/javascript" charset="utf-8">
+        function goto(param) {
+            var url = "@(ViewBag.AccessProtocal)" + param;
+            this.location = url;
+        }
+
+        function gourl(url) {
+            location.href = url;
+        }
+
+        function loginCallback(userid) {
+            location.replace(location.pathname + "?userid=" + userid);
+        }
+
+        var pub_userid = "@userid";
+    </script>
+}

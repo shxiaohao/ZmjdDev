@@ -1,0 +1,75 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params.Order
+@model CommentViewModel
+@{
+    ViewBag.BodyClass = "hotellistpage";
+    int commentID = ViewBag.CommentID;
+    CommentShareModel shareInfo = ViewBag.CommentShareModel;
+    string zmjiudian = "@周末酒店";
+}
+
+<!-- Add -->
+<div class="container mainbody hidden-xs">
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            @Helpers.BreadCrumbs(Url, 0, 0, 2)
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>
+
+<div class="container mainbody">
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            <div class="row">
+                <!-- 订单列表 左侧导航 Left -->
+                <div class="col-md-3 col-sm-3  Screening hidden-xs">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">个人中心</h3>
+                        </div>
+                        @Helpers.InsertLeftNaviPanel(2, Url)
+                    </div>
+                    <div class="tel">
+                        客服电话:<i>4000-021-702</i>
+                    </div>
+                </div>
+               <!-- 点评列表 右侧导航 Right -->
+                <div class="col-md-9 col-sm-9" id="collectList">
+                    <!-- 条件选择栏 mobile 开始 -->
+                    <div class="row toolbar2 visible-xs">
+                        <div class="col-xs-3">
+                            <button type="button" onclick="history.back()" class="btn btn-sm  btn-img01"><img src="@Url.Content("~/Content/images/icon-back.png")" class="mobilepic" alt="" /></button>
+                        </div>
+                        <div class="col-xs-6 text-center listtitle">
+                            我的点评
+                        </div>
+                        <div class="col-sm-2 col-xs-3 text-right">
+                        </div>
+                    </div>
+                    <!-- 条件选择栏 mobile 结束 -->
+                    <div class="row userright">
+						<div class="col-sm-12 Toolbar">
+						    <button type="submit" class="btn btn-default btngray2" id="btnReturnCommentList">返回列表</button>
+                            @*<button type="button" id="wb_share" ></button>*@
+                            <a href="" id="shareLink" target="_self">分享到微博</a>
+                            <a href="@Url.Action("List", "Comment",new { CommentID = @commentID, isuncomment = false })" target="_self">查看点评</a><br />
+                            <a href="@Url.Action("List", "Comment",new { CommentID = @commentID, isuncomment = true })" target="_self">继续点评</a><br />
+                        </div>
+                        <div>
+                            <wb:share-button id="wb_share" addition="number" type="button" count="y" type="icon" size="small" pic="@shareInfo.photoUrl" language="zh_cn" appkey="2410638867" title="@zmjiudian @shareInfo.title @shareInfo.Content" ></wb:share-button>
+						</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+            </div>
+        </div>
+    </div>
+</div>

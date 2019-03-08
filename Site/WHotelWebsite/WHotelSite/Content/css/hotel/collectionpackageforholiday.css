@@ -1,0 +1,187 @@
+﻿body {
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    background:#f0f0f0;
+    -webkit-user-select:none; 
+    user-select: none;
+}
+
+a {
+    text-decoration:none;
+}
+
+/*禁止长按链接与图片弹出菜单*/
+a,img { -webkit-touch-callout: none }
+
+/**/
+
+.collection-panel {
+    width:100%;
+    max-width:600px;
+    height:auto;
+    margin:0 auto 0 auto;
+    padding:0 0 1em 0;
+    background:#fff;
+}
+    .collection-panel .pic{
+        width:100%;
+        height:auto;
+    }
+        .collection-panel .pic img{
+            width:100%;
+        }
+    .collection-panel .tit{
+        width:95%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0.4em 0 0.5em 0;
+        text-align:center;
+        font-size:1.2em;
+        color:#2c2c2c;
+    }
+    .collection-panel .tit2{
+        width:95%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0 0 1em 0;
+        text-align:center;
+        font-size:0.9em;
+        font-family:Arial;
+        color:#555555;
+    }
+    .collection-panel .desc{
+        width:95%;
+        height:auto;
+        line-height:1.4em;
+        margin:0 auto 0 auto;
+        font-size:0.9em;
+        color:#555;
+    }
+
+.group {
+    width:100%;
+    height:auto;
+    background:#fff;
+    display:table;
+    border-bottom:6px solid #eee;
+}
+    .group .tit{
+        width:100%;
+        height:auto;
+        display:table;
+    }
+        .group .tit .tit-item{
+            width:auto;
+            height:auto;
+            margin:0 0 1em 4%;
+            padding:0.8em 1em 0.4em 0;
+            border-bottom:1px solid #d5d5d5;
+            font-size:1.4em;
+            display:table;
+        }
+        .group .tit .tit-close{
+            margin:0 0 0 4%;
+            padding:0.8em 1em 0.8em 0;
+            border-bottom:none;
+        }
+
+.list-panel {
+    width:100%;
+    max-width:600px;
+    height:auto;
+    background:#fff;
+    margin:0 auto 0 auto;
+}
+    .list-panel .list{
+        width:100%;
+        height:auto;
+    }
+        .list-panel .list .item{
+            width:100%;
+            height:auto;
+            margin:0 0 0.5em 0;
+            padding:0 0 0.5em 0;
+        }
+            .list-panel .list .item .info{
+                width:92%;
+                height:auto;
+                margin:0 auto 0 auto;
+                padding:0 0 0.8em 0;
+                border-bottom:1px solid #eee;
+            }
+                .list-panel .list .item .info .t1{
+                    width:100%;
+                    height:auto;
+                    margin:0 0 0 0;
+                    font-size:1.1em;
+                    color:#000;
+                }
+                .list-panel .list .item .info .t2{
+                    width: 100%;
+                    height: 1.08em;
+                    line-height: 1.2em;
+                    margin: 0.4em 0 0.1em 0;
+                    font-size: 0.8em;
+                    color: #888;
+                    overflow: hidden;
+                }
+            .list-panel .list .item .price{
+                width:92%;
+                height:auto;
+                margin:0 auto 0 auto;
+                padding:0 0 0 0;
+            }
+                .list-panel .list .item .price .left{
+                    width:55%;
+                    height:auto;
+                    margin:0 auto 0 auto;
+                    padding:0.95em 0 0.7em 0;
+                    float:left;
+                    position:relative;
+                }
+                    .list-panel .list .item .price .left .p-vip{
+                        width:100%;
+                        height:auto;
+                        line-height:1.2em;
+                        padding:0 0 0.2em 0;
+                        font-size:1.1em;
+                        font-family:Arial;
+                        color:#ff8000;
+                    }
+                    .list-panel .list .item .price .left .p-def{
+                        width:100%;
+                        height:auto;
+                        line-height:1.2em;
+                        padding:0 0 0 0;
+                        font-size:0.8em;
+                        font-family:Arial;
+                        color:#888;
+                    }
+                .list-panel .list .item .price .right{
+                    width:44%;
+                    height:auto;
+                    margin:0 auto 0 auto;
+                    padding:0.8em 0.1em 0 0;
+                    float:right;
+                    text-align:right;
+                    font-size:1.2em;
+                    position:relative;
+                }
+                    .list-panel .list .item .price .right .p-btn{
+                        width:6.5em;
+                        margin:0 0 0 auto;
+                        padding:0.3em 0 0.3em 0;
+                        background:#ff8000;
+                        border:1px solid #ff8000;
+                        border-radius:2px;
+                        font-size: 0.9em;
+                        font-family:Arial;
+                        color:#fff;
+                        text-align:center;
+                    }
+        .list-panel .list .item-space-line{
+            margin:0 0 1.5em 0;
+            padding:0 0 1em 0;
+            border-bottom:1px solid #d5d5d5;
+        }

@@ -1,0 +1,48 @@
+﻿body {
+    background:#888;
+    margin:0;
+    padding:0;
+    font-size:0.9em;
+}
+.ota-transfer-list{
+    width:100%;
+    height:auto;
+    margin:0;
+    padding:0;
+}
+.ota-transfer-load{
+    width:18em;
+    height:auto;
+    margin:7em auto 0 auto;
+    padding:0;
+    background:#fff;
+    border:1px solid #888;
+    border-radius: 8px;
+}
+    .ota-transfer-load .info {
+        width:100%;
+        height:auto;
+        line-height:1.5em;
+        margin:1.5em 0 0 0;
+        text-align:center;
+        color:#666;
+    }
+    .ota-transfer-load .logo {
+        width:6em;
+        height:auto;
+        text-align:center;
+        margin:0.7em auto 0 auto;
+    }
+        .ota-transfer-load .logo img{
+            width:100%;
+        }
+    .ota-transfer-load .load {
+        width:4em;
+        height:auto;
+        margin:0 auto 1.1em auto;
+    }
+        .ota-transfer-load .load img{
+            width:100%;
+            margin:0 auto 0 auto;
+        }
+

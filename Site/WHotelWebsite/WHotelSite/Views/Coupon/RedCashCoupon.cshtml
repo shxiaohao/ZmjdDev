@@ -1,0 +1,267 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params.Hotel
+@using HJD.CouponService.Contracts.Entity;
+@model HJD.CouponService.Contracts.Entity.RedShareEntity
+@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    ViewBag.Title = "领取红包";
+
+    var curUserID = ViewBag.UserId;
+    var key = ViewBag.Key;
+
+    //微信用户信息
+    WHotelSite.Models.WeixinUserInfo weixinUserInfo = ViewBag.WeixinUserInfo;
+    //weixinUserInfo.Openid = "oHGzlw-sdix9G__-S4IzfTsYRqC8";
+
+    //指定领取记录ID
+    var redRecordId = ViewBag.RedRecordId;
+
+    //指定领取记录
+    RedRecordEntity redRecordInfo = ViewBag.RedRecordInfo;
+
+    var s_poto_url = "http://whfront.b0.upaiyun.com/app/img/coupon/redcoupon/redcoupon-share-icon.png";
+    var s_url = string.Format("http://www.zmjiudian.com/Coupon/RedCashCoupon?key={0}", key);
+    var s_title = "周末酒店APP送你一个大礼包";
+    var s_content = "度假休闲，又好又划算！";
+}
+
+@section styles
+{
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+    <link href="~/Content/css/framework/zmjd.modal.min.css" rel="stylesheet" />
+    <link href="~/Content/css/coupon/redcashcoupon.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+}
+
+@if(redRecordId > 0)
+{
+    <div class="red-top">
+        <div class="banner-section">
+            <img src="http://whfront.b0.upaiyun.com/app/img/coupon/redcoupon/red-bg-banner-new.png" alt="" />
+        </div>
+        <div class="form-section">
+            <div class="bg"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/redcoupon/red-form-bg-big.png" alt="" /></div>
+            <div class="form">
+                <div class="tit-2">我的红包</div>
+                @*<div class="gift"><div class="cash-coupon">@(redRecordInfo.CouponTypeName)</div></div>*@
+                <div class="gift">
+                    @if (redRecordInfo.BizType != 0 && redRecordInfo.BizType != 1)
+                    {
+                        <div class="cash-coupon">@redRecordInfo.CouponTypeName</div>
+                        <div class="cash-coupon-tip"></div>
+                    }
+                    else
+                    { 
+                        <div class="cash-coupon">¥@((int)redRecordInfo.DiscountAmount)</div>
+                        if (redRecordInfo.BizType==0)
+                        {
+                            <div class="cash-coupon-tip">@(redRecordInfo.CouponTypeName)</div>    
+                        }
+                        else if (redRecordInfo.BizType == 1)
+                        {
+                            <div class="cash-coupon-tip">立减金</div>   
+                        }
+                    }
+                </div>
+                <div class="tip">红包已领取，请到“我的”-“ 钱包”-“现金券”里查看已获得的奖品</div>
+            </div>
+        </div>
+    </div>
+    <div class="margin-space"></div>
+    <div class="red-rule"><a href="/active/activepage?pageid=87&defbg=1&_newpage=1" target="_blank">活动说明>></a></div>
+}
+else
+{
+    <div id="get-step" style="display:none;">
+        <div class="red-top">
+            <div class="banner-section">
+                <img src="http://whfront.b0.upaiyun.com/app/img/coupon/redcoupon/red-bg-banner-new.png" alt="" />
+            </div>
+            <div class="form-section form-section">
+                <div class="bg"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/redcoupon/red-form-bg-big.png" alt="" /></div>
+                <div class="form">
+                    <div class="tit">恭喜你获得一个大红包</div>
+                    <div class="tip">在下方输入手机号后即可领取</div>
+                    <div class="inp">
+                        <input type="tel" id="phone" placeholder="输入手机号" />
+                    </div>
+                    <div class="btn">
+                        <a href="javascript:;" data-guid="@ViewBag.guid" class="get-coupon">领取红包</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="result-step" style="display:none;">
+        <div class="red-top">
+            <div class="banner-section">
+                <img src="http://whfront.b0.upaiyun.com/app/img/coupon/redcoupon/red-bg-banner-new.png" alt="" />
+            </div>
+            <div v-cloak class="form-section" id="get-red-info">
+                <div class="bg"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/redcoupon/red-form-bg-big.png" alt="" /></div>
+                <div class="form" id="red-info" style="display:none;">
+                    <div class="tit-2">我的红包</div>
+                    <div class="gift">
+                        <div v-if="getData.BizType!=0&&getData.BizType!=1">
+                            <div class="cash-coupon">{{getData.CouponTypeName}}</div>
+                            <div class="cash-coupon-tip"></div>
+                        </div>
+                        <div v-else>
+                            <div class="cash-coupon">¥{{getData.DiscountAmount}}</div>
+                            <div class="cash-coupon-tip" v-if="getData.BizType==0">{{getData.CouponTypeName}}</div>
+                            <div class="cash-coupon-tip" v-if="getData.BizType==1">立减金</div>
+                        </div>
+                    </div>
+                    <div class="tip">红包已放入账户 {{getData.PhoneNum}}</div>
+                    <div class="btn">
+                        <a href="javascript:;" class="download-app" onclick="gourl('http://app.zmjiudian.com')">下载APP</a>
+                        <a href="javascript:;" class="open-coupon">查看我的奖品</a>
+                    </div>
+                </div>
+                <div class="form" id="red-null" style="display:none;">
+                    <div class="tit-2">sorry，你来晚了</div>
+                    <div class="gift"><div class="cash-coupon">红包已领完</div></div>
+                    <div class="tip"></div>
+                    <div class="btn"><a href="javascript:;" class="download-app2" onclick="gourl('http://app.zmjiudian.com')">下载APP</a></div>
+                </div>
+                <div class="form" id="red-late" style="display:none;">
+                    <div class="tit-2">sorry，你来晚了</div>
+                    <div class="gift"><div class="cash-coupon">红包已领完</div></div>
+                    <div class="tip"></div>
+                    <div class="btn"><a href="javascript:;" class="download-app2" onclick="gourl('http://app.zmjiudian.com')">下载APP</a></div>
+                </div>
+            </div>
+        </div>
+        <div class="margin-space"></div>
+        <div class="red-rule"><a href="/active/activepage?pageid=87&defbg=1&_newpage=1" target="_blank">活动说明>></a></div>
+        <div v-cloak class="gift-list" id="gift-list">
+            <div class="tit" v-if="listData.RedRecordList&&listData.RedRecordList.length"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/redcoupon/gift-list-tit.png" alt="" /></div>
+            <div class="list" v-if="listData.RedRecordList&&listData.RedRecordList.length">
+                <div class="item" v-for="item in listData.RedRecordList">
+                    <div class="l">
+                        <div class="h-img"><img src="{{item.AvatarUrl.replace('p1.test.sl.corp','p1.zmjiudian.com')}}" alt="" /></div>
+                        <div class="name">
+                            <div class="nickname">{{item.NickName.replace('周末酒店APP','')}}</div>
+                            <div class="time">{{item.CreateTime}}</div>
+                            <div style="clear:both;"></div>
+                        </div>
+                    </div>
+                    <div class="r">
+                        <div class="gift-name">{{item.CouponTypeName}}</div>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+            </div>
+            <div class="more-gift-list">点击查看更多</div>
+        </div>
+        <div class="vip-section">
+            <div class="banner" onclick="gourl('http://www.zmjiudian.com/Coupon/VipAreaInfo?_newpage=1')">
+                <img src="http://whfront.b0.upaiyun.com/app/img/coupon/redcoupon/red-vip-banner.png" alt="" />
+            </div>
+        </div>
+
+        <div id="get-coupon-info-template" style="display:none;">
+            <div class="get-coupon-info">
+                <div class="img"><img src="http://whfront.b0.upaiyun.com/app/img/qrcode-wx-zmjdservice-346x346.png" alt="" /></div>
+                <div class="txt">长按识别二维码，关注“周末酒店服务号”在“我的-我的券”里查看你的奖品</div>
+            </div>
+        </div>
+    </div>
+}
+
+<footer>
+    <input type="hidden" id="userId" value="@curUserID" />
+    <input type="hidden" id="key" value="@key" />
+    <input type="hidden" id="openid" value="@(weixinUserInfo != null ? weixinUserInfo.Openid : "")" />
+    <input type="hidden" id="redRecordId" value="@redRecordId" />
+</footer>
+
+@section scripts
+{
+    <script src="~/Content/js/framework/zmjd.modal.min.js"></script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/coupon/redcashcoupon.js?v=@(Helpers.curAppVer())"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+    <script>
+
+        GetWeixinApiConfig();//注册
+
+        wx.ready(function () {
+
+            wx.onMenuShareTimeline({
+                title: '@s_title',
+                desc: '@s_content',
+                link: '@s_url',
+                imgUrl: '@(s_poto_url)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareAppMessage({
+                title: '@s_title',
+                desc: '@s_content',
+                link: '@s_url',
+                imgUrl: '@(s_poto_url)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+        });
+
+        function GetWeixinApiConfig() {
+
+            var url = location.href.split("#")[0];
+            $.ajax({
+                url: '/Coupon/GetWeixinConfigInfo',
+                type: 'POST',
+                data: { url: url },
+                dataType: 'json',
+                async: false,
+                error: function () {
+                    console.log("网络服务错误");
+                },
+                success: function (result) {
+                    if (typeof (result.Success) != undefined && result.Success == 1) {
+                        return false;
+                    }
+                    else {
+                        //得到微信config的值
+                        var array = [
+                            'checkJsApi',
+                            'onMenuShareTimeline',
+                            'onMenuShareAppMessage',
+                            'hideOptionMenu'
+                        ];
+                        if (result.jsApiList) {
+                            var jsArray = result.jsApiList.split(',');
+                            for (var key in jsArray) {
+                                array.push("" + jsArray[key]);
+                            }
+                        }
+
+                        wx.config({
+                            debug: false,
+                            appId: result.appId,
+                            timestamp: "" + result.timestamp,
+                            nonceStr: result.nonceStr,
+                            signature: result.signature,
+                            jsApiList: array
+                        });
+                    }
+                }
+            });
+        }
+
+    </script>
+}
+
+

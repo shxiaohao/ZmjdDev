@@ -1,0 +1,757 @@
+﻿@charset "UTF-8";
+
+.main-panel .user-info{
+    width:100%;
+    height:auto;
+    margin:0 auto 0 auto;
+    padding:0 0 0 0;
+    text-align:center;
+}
+    .main-panel .user-info .head{
+        width:4em;
+        height:auto;
+        margin:1em auto 0 auto;
+        padding:0 0 0 0;
+    }
+        .main-panel .user-info .head img{
+            width:100%;
+            border-radius:4em;
+        }
+    .main-panel .user-info .username{
+        width:100%;
+        margin:0.5em auto 0 auto;
+        padding:0 0 0 0;
+        font-size:1.1em;
+        font-weight:bold;
+        color:#A27855;
+    }
+    .main-panel .user-info .today-vote{
+        width:100%;
+        margin:0.3em auto 0 auto;
+        padding:0 0 0 0;
+        font-size:0.7em;
+        color:#A27855;
+    }
+
+.main-panel .vote-status{
+    width:auto;
+    height:3.1em;
+    line-height:2.2em;
+    margin:1em auto 0 auto;
+    padding:0 1em 0 1em;
+    text-align:center;
+    border-radius:4px;
+    border:1px solid #fe8000;
+    font-size:0.7em;
+    display:table;
+}
+.main-panel .vote-status-space {
+    width: auto;
+    height: auto;
+    margin: 1em auto 0 auto;
+    display: table;
+}
+.main-panel .vote-status-novote {
+    background: url(http://whfront.b0.upaiyun.com/www/img/Active/supervote/user-luck-status-tip-bg.png) no-repeat center center;
+    background-size: 100%;
+    border: none;
+    color: #fff;
+}
+.main-panel .vote-status-ing {
+    background: url(http://whfront.b0.upaiyun.com/www/img/Active/supervote/user-luck-status-tip-bg.png) no-repeat center center;
+    background-size: 100%;
+    border: none;
+    color: #fff;
+}
+
+.main-panel .user-vote-info{
+    width:100%;
+    height:auto;
+    margin:1.3em auto 1em auto;
+    padding:0 0 0 1%;
+    box-sizing:border-box;
+}
+    .main-panel .user-vote-info .voteinfo-item{
+        width:23.5%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0 0 0 0;
+        display:inline-block;
+        box-sizing:border-box;
+    }
+        .main-panel .user-vote-info .voteinfo-item .tit{
+            width:100%;
+            height:auto;
+            margin:0 auto 0 auto;
+            padding:0.2em 0 0.5em 0;
+            text-align:center;
+            font-size:0.7em;
+            color:#A27855;
+        }
+        .main-panel .user-vote-info .voteinfo-item .val{
+            width:100%;
+            height:auto;
+            margin:0 auto 0 auto;
+            padding:0 0 0 0;
+            text-align:center;
+            font-size:1em;
+            color:#A27855;
+        }
+            .main-panel .user-vote-info .voteinfo-item .val .h{
+                font-size:1.4em;
+                font-weight:bold;
+                color:#A27855;
+            }
+    .main-panel .user-vote-info .item-50 {
+        width: 49%;
+    }
+    .main-panel .user-vote-info .item-25 {
+        width: 24%;
+    }
+    .main-panel .user-vote-info .voteinfo-item-border-r{
+       border-right:1px solid #F3DAC2;
+    }
+
+.main-panel .vote-status {
+    
+}
+
+.main-panel .luck-info{
+    width:90%;
+    height:auto;
+    margin:1.8em auto 1em auto;
+    padding:0 0 0 0;
+}
+    .main-panel .luck-info .luck-banner{
+        width:100%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0 0 0 0;
+    }
+        .main-panel .luck-info .luck-banner img{
+            width:100%;
+            border-radius:4px;
+        }
+    .main-panel .luck-info .luck-top {
+        width: 100%;
+        height: auto;
+        margin: 0em auto 0.5em auto;
+        padding: 0 0 0 0;
+        box-sizing: border-box;
+    }
+        .main-panel .luck-info .luck-top ._left {
+            width: calc(92% - 5em);
+            height: auto;
+            margin: 0 auto 0 auto;
+            padding: 0 0 0 0;
+            float: left;
+            font-size: 0.8em;
+            color: #A27855;
+        }
+        .main-panel .luck-info .luck-top ._right {
+            width: 5em;
+            height: auto;
+            margin: 0 auto 0 auto;
+            padding: 0 0 0 0;
+            text-align: right;
+            float: right;
+        }
+            .main-panel .luck-info .luck-top ._right .link {
+                text-decoration: none;
+                font-size: 0.8em;
+                color: #A27855;
+            }
+
+.main-panel .luck-rule {
+    width: 90%;
+    height: auto;
+    margin: 1em auto 1em auto;
+    padding: 0 0 0 0;
+}
+
+    .main-panel .luck-rule .tit {
+        width: 100%;
+        height: auto;
+        margin: 0 auto 0.5em auto;
+        padding: 0 0 0 0;
+        font-size: 1em;
+        font-weight:bold;
+        color: #A27855;
+    }
+    .main-panel .luck-rule .info {
+        width: 100%;
+        height: auto;
+        margin: 0 auto 0 auto;
+        padding: 0.3em 0 0 0;
+    }
+        .main-panel .luck-rule .info .item {
+            width: 100%;
+            height: auto;
+            margin: 0 auto 0 auto;
+            padding: 0 0 0.5em 0;
+            font-size: 0.8em;
+            color: #A27855;
+            text-align: justify;
+        }
+
+.main-panel .luckdraw-bg {
+    width: 100%;
+    height: 100%;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 200;
+    background: rgba(0,0,0,0.60);
+}
+.main-panel .luckdraw-section {
+    width:100%;
+    height:auto;
+    margin:0 0 0 0;
+    padding:0 0 0 0;
+    position:fixed;
+    left:0%;
+    top:14%;
+    z-index:201;
+}
+    .main-panel .luckdraw-section .close{
+        width: 2.5em;
+        height: 2.5em;
+        margin: 0 0 0 0;
+        padding: 0 0 0 0;
+        position: absolute;
+        top: 0;
+        right: 10%;
+        z-index: 202;
+    }
+        .main-panel .luckdraw-section .close .icon{
+            font-size:2.5em;
+            color:#fff;
+            cursor:pointer;
+        }
+    .main-panel .luckdraw-section .win-prize {
+        width: 72%;
+        height: auto;
+        margin: 0 auto 0 auto;
+        padding: 0 0 0 0;
+    }
+        .main-panel .luckdraw-section .win-prize .open-section{
+            width: 100%;
+            height: auto;
+            margin: 0 auto 0 0;
+            padding: 0 0 0 0;
+        }
+            .main-panel .luckdraw-section .win-prize .open-section .bg{
+                width: 100%;
+                height: auto;
+                margin: 0 auto 0 0;
+                padding: 0 0 0 0;
+            }
+                .main-panel .luckdraw-section .win-prize .open-section .bg img{
+                    width: 100%;
+                }
+            .main-panel .luckdraw-section .win-prize .open-section .tip {
+                width: 100%;
+                height: auto;
+                margin: 0 auto 0 0;
+                padding: 0 0 0 0;
+                font-size:1em;
+                font-weight:bold;
+                color:#fff;
+                text-align:center;
+            }
+        .main-panel .luckdraw-section .win-prize .open-section .btns{
+            width: 100%;
+            height: auto;
+            margin: 1.6em auto 0 0;
+            padding: 0 0 0 0;
+        }
+            .main-panel .luckdraw-section .win-prize .open-section .btns .open-btn {
+                width: 100%;
+                height: auto;
+                margin: 0 auto 0 auto;
+                padding: 1em 0 1em 0;
+                font-size: 0.8em;
+                color: #fff;
+                text-decoration: none;
+                text-align:center;
+                background: #F85757;
+                border-radius: 8px;
+                display:inline-table;
+            }
+        .main-panel .luckdraw-section .win-prize .opened-section {
+            width: 100%;
+            height: auto;
+            margin: 0 auto 0 0;
+            padding: 0 0 0 0;
+        }
+
+            .main-panel .luckdraw-section .win-prize .opened-section .bg {
+                width: 100%;
+                height: auto;
+                margin: 0 auto 0 0;
+                padding: 0 0 0 0;
+                position:relative;
+            }
+
+                .main-panel .luckdraw-section .win-prize .opened-section .bg img {
+                    width: 100%;
+                    height: auto;
+                    margin: 0 auto 0 auto;
+                    padding: 0 0 0 0;
+                }
+
+                .main-panel .luckdraw-section .win-prize .opened-section .bg .tip1 {
+                    width: 100%;
+                    height: auto;
+                    margin: 0 auto 0 auto;
+                    padding: 0 0 0 0;
+                    position: absolute;
+                    top: 38%;
+                    left: 0;
+                    z-index: 203;
+                    font-size: 2.8rem;
+                    font-weight: bold;
+                    color: #E24848;
+                    text-align: center;
+                }
+                    .main-panel .luckdraw-section .win-prize .opened-section .bg .tip1 .un {
+                        font-size: 1.5rem;
+                        font-weight: normal;
+                    }
+
+                .main-panel .luckdraw-section .win-prize .opened-section .bg .tip2 {
+                    width: 100%;
+                    height: auto;
+                    margin: 0 auto 0 auto;
+                    padding: 0 0 0 0;
+                    position: absolute;
+                    top: 56%;
+                    left: 0;
+                    z-index: 203;
+                    font-size: 0.8em;
+                    /*font-weight: bold;*/
+                    color: #E24848;
+                    text-align: center;
+                }
+
+            .main-panel .luckdraw-section .win-prize .opened-section .tip {
+                width: 100%;
+                height: auto;
+                margin: 0.5em auto 0 0;
+                padding: 0 0 0 0;
+                font-size: 0.8em;
+                color: #fff;
+                text-align: center;
+            }
+
+            .main-panel .luckdraw-section .win-prize .opened-section .btns {
+                width: 100%;
+                height: auto;
+                margin: 1.8em auto 0 0;
+                padding: 0 0 0 0;
+            }
+
+                .main-panel .luckdraw-section .win-prize .opened-section .btns .look-luck-btn {
+                    width: 100%;
+                    height: auto;
+                    margin: 0 auto 0 auto;
+                    padding: 1em 0 1em 0;
+                    font-size: 0.8em;
+                    color: #fff;
+                    text-decoration: none;
+                    text-align: center;
+                    background: #FEB257;
+                    border-radius: 8px;
+                    display: inline-table;
+                }
+    .main-panel .luckdraw-section .fail-prize {
+        width: 72%;
+        height: auto;
+        margin: 0 auto 0 auto;
+        padding: 0 0 0 0;
+    }
+        .main-panel .luckdraw-section .fail-prize .bg{
+            width: 100%;
+            height: auto;
+            margin: 0 auto 0 auto;
+            padding: 0 0 0 0;
+            position:relative;
+        }
+            .main-panel .luckdraw-section .fail-prize .bg img{
+                width: 100%;
+                height: auto;
+                margin: 0 auto 0 auto;
+                padding: 0 0 0 0;
+                position:absolute;
+                top:0;
+                left:0;
+                z-index:202;
+            }
+            .main-panel .luckdraw-section .fail-prize .bg .tip1 {
+                width: 100%;
+                height: auto;
+                margin: 0 auto 0 auto;
+                padding: 0 0 0 0;
+                position: absolute;
+                top: 5em;
+                left: 0;
+                z-index: 203;
+                font-size: 1.3em;
+                font-weight: bold;
+                color: #E24848;
+                text-align:center;
+            }
+            .main-panel .luckdraw-section .fail-prize .bg .tip2 {
+                width: 100%;
+                height: auto;
+                margin: 0 auto 0 auto;
+                padding: 0 0 0 0;
+                position: absolute;
+                top: 8.8em;
+                left: 0;
+                z-index: 203;
+                font-size: 1em;
+                /*font-weight: bold;*/
+                color: #E24848;
+                text-align: center;
+            }
+
+.showPosterSection {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 210;
+}
+
+    .showPosterSection .share-info {
+        width: 100%;
+        margin: 0em auto 1em auto;
+        padding: 1em 0 1em 0;
+        background: #fff;
+    }
+
+        .showPosterSection .share-info .share-tit {
+            width: 100%;
+            font-size: 1em;
+            color: #fe8000;
+            text-align: center;
+        }
+
+        .showPosterSection .share-info .share-desc {
+            width: 88%;
+            margin: 1em auto 0 auto;
+            padding: 0 0 0 0;
+            font-size: 0.8em;
+            color: #2c2c2c;
+            text-align: center;
+        }
+
+    .showPosterSection .poster-tit {
+        width: 100%;
+        margin: 0 auto 1em auto;
+        font-size: 1em;
+        color: #fff;
+        text-align: center;
+    }
+
+    .showPosterSection .poster-img {
+        width: 80%;
+        margin: 0 auto 1em auto;
+    }
+
+        .showPosterSection .poster-img img {
+            width: 100%;
+        }
+
+    .showPosterSection .poster-result {
+        position: relative;
+    }
+
+        .showPosterSection .poster-result .poster-close {
+            width: 1.3em;
+            position: absolute;
+            top: 0.8em;
+            right: 0.8em;
+        }
+
+            .showPosterSection .poster-result .poster-close img {
+                width: 100%;
+            }
+
+    .showPosterSection .poster-loadding {
+    }
+
+        .showPosterSection .poster-loadding .loading-tip {
+            width: 100%;
+            height: auto;
+            margin: 2em 0 1em 0;
+            padding: 0 0 0 0;
+            display: table;
+            text-align: center;
+            color: #fff;
+            font-size: 1em;
+        }
+
+    .showPosterSection .mine-poster {
+        width: 88%;
+        height: auto;
+        margin: 0 auto 0 auto;
+        padding: 0 0 0em 0;
+        display: table;
+        background: #fff;
+        font-family: Arial;
+        position:relative;
+    }
+
+        .showPosterSection .mine-poster .p-img {
+            width: 100%;
+            height: 100%;
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+            display: table;
+            position: relative;
+            z-index: 5;
+        }
+
+            .showPosterSection .mine-poster .p-img img {
+                width: 100%;
+                display: block;
+            }
+        .showPosterSection .mine-poster .slogan-img {
+            width: 100%;
+            height: 100%;
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+            display: table;
+            position: absolute;
+            top:0;
+            left:0;
+            z-index: 7;
+        }
+
+            .showPosterSection .mine-poster .slogan-img img {
+                width: 100%;
+                display: block;
+            }
+        .showPosterSection .mine-poster .slogan-img-bg {
+            width: 100%;
+            height: 100%;
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 6;
+            background: rgba(0, 0, 0, 0.12);
+        }
+
+        .showPosterSection .mine-poster .p-info {
+            width: 100%;
+            height: auto;
+            min-height: 5.5em;
+            margin: 0em auto 0 auto;
+            padding: 0 0 0em 0;
+            display: table;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            z-index: 10;
+        }
+
+            .showPosterSection .mine-poster .p-info .bg-img {
+                width: 100%;
+                height: auto;
+                margin: 0em auto 0em auto;
+                padding: 0 0 0 0;
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                z-index: 11;
+                /*border:1px solid red;*/
+            }
+
+                .showPosterSection .mine-poster .p-info .bg-img img {
+                    width: 100%;
+                    display:block;
+                }
+
+            .showPosterSection .mine-poster .p-info .user-info {
+                width: 100%;
+                height: auto;
+                margin: 0em auto 0em auto;
+                padding: 0 0 0 0;
+                position: relative;
+                z-index:12;
+            }
+
+                .showPosterSection .mine-poster .p-info .user-info .h-img {
+                    width: 100%;
+                    height: auto;
+                    margin: 0 0 0 0;
+                    padding: 0 0 0 0;
+                }
+
+                    .showPosterSection .mine-poster .p-info .user-info .h-img img {
+                        width: 3.5em;
+                        margin:0 auto 0 auto;
+                        border-radius: 10em;
+                        border: 3px solid #fff;
+                        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
+                        display:table;
+                    }
+
+                .showPosterSection .mine-poster .p-info .user-info .u-name {
+                    width: 100%;
+                    height: auto;
+                    padding: 0em 0 0 0;
+                    float: right;
+                    text-align: center;
+                    font-size: 1em;
+                    font-weight: bold;
+                    color: #fff;
+                    box-sizing: border-box;
+                }
+
+            .showPosterSection .mine-poster .p-info .qrcode-section {
+                width: 90%;
+                height: auto;
+                margin: 0.3em auto 0 auto;
+                padding: 0 0 0.6em 0;
+                display: table;
+                position: relative;
+                z-index: 12;
+            }
+                .showPosterSection .mine-poster .p-info .qrcode-section .left {
+                    width: 23%;
+                    height: auto;
+                    margin: 0 0 0 0;
+                    padding: 0 0 0 0;
+                    float: left;
+                }
+                    .showPosterSection .mine-poster .p-info .qrcode-section .left img{
+                        width: 92%;
+                        border:3px solid #fff;
+                    }
+                .showPosterSection .mine-poster .p-info .qrcode-section .right {
+                    width: calc(77% - 0.5em);
+                    height: auto;
+                    float: right;
+                }
+                    .showPosterSection .mine-poster .p-info .qrcode-section .right .desc-section {
+                        width: 100%;
+                        height: auto;
+                        line-height:1.5em;
+                        margin:0 auto 0 auto;
+                        padding:0.4em 0 0 0;
+                        font-size:0.8em;
+                        color:#fff;
+                        text-align:justify;
+                    }
+                    
+
+        .showPosterSection .mine-poster .tip {
+            width: 90%;
+            height: auto;
+            margin: 0.7em auto 0 auto;
+            padding: 0.6em 0 0 0;
+            display: table;
+            text-align: center;
+            font-size: 0.9em;
+            color: #919191;
+            border-top: 1px solid rgba(0,0,0,0.12);
+        }
+
+        .showPosterSection .mine-poster .foot {
+            width: 100%;
+            height: auto;
+            margin: 1em 0 0 0;
+            padding: 0 0 0 0;
+            display: table;
+        }
+
+            .showPosterSection .mine-poster .foot img {
+                width: 64px;
+                margin: 0 auto 0 auto;
+                display: table;
+            }
+
+    .showPosterSection .mine-poster-2 {
+        width: 88%;
+        height: auto;
+        margin: 0 auto 0 auto;
+        padding: 0 0 0 0;
+        display: table;
+        font-family: Arial;
+        position: relative;
+    }
+
+        .showPosterSection .mine-poster-2 .bg-img {
+            width: 100%;
+            height: 1em;
+            position: relative;
+            z-index: 10;
+        }
+
+            .showPosterSection .mine-poster-2 .bg-img img {
+                width: 100%;
+            }
+
+        .showPosterSection .mine-poster-2 .qrcode-section {
+            width: 26%;
+            height: auto;
+            margin: 0 auto 0 auto;
+            padding: 0 0 0 0;
+            display: table;
+            position: absolute;
+            right: 0.8em;
+            bottom: 1.6em;
+            z-index: 11;
+            text-align: center;
+        }
+
+            .showPosterSection .mine-poster-2 .qrcode-section img {
+                width: 98%;
+                background: #fff;
+            }
+
+            .showPosterSection .mine-poster-2 .qrcode-section .qrcode-tip {
+                width: 100%;
+                height: auto;
+                margin: 0 0 0 0;
+                font-size: 0.7em;
+                color: rgba(255,255,255,0.5);
+                text-align: center;
+            }
+
+.poster-bg {
+    width: 100%;
+    height: 100%;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    display: table;
+    background: rgba(0, 0, 0, 0.80);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 200;
+}
+
+.poster-tip {
+    width: 100%;
+    height: auto;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    display: table;
+    position: absolute;
+    top: 30px;
+    left: 0;
+    z-index: 200;
+    color: #fff;
+    font-size: 0.9em;
+    font-family: Arial;
+    text-align: center;
+}

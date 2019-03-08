@@ -1,0 +1,13 @@
+
+[17/3/28 11:44:54] Start Job [DownLoadWexinMaterialJob]
+[17/3/28 11:45:32] LastOffset已经存储至本地！1
+[17/3/28 11:45:33] 起始：Offset【1】 Count【10】
+[17/3/28 11:45:48] GetAllWeixinMaterialList Count:10
+[17/3/28 12:03:48] Start Job [DownLoadWexinMaterialJob]
+[17/3/28 12:04:36] 【GetLastOffset】:1
+[17/3/28 12:04:36] 起始：Offset【1】 Count【10】
+[17/3/28 12:04:41] GetAllWeixinMaterialList Count:10
+[17/3/28 12:05:25] Start Job [DownLoadWexinMaterialJob]
+[17/3/28 12:05:26] LastOffset已经存储至本地！1
+[17/3/28 12:05:26] 起始：Offset【1】 Count【10】
+[17/3/28 12:05:30] GetAllWeixinMaterialList Count:10

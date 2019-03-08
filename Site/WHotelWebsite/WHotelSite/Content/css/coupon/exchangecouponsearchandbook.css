@@ -1,0 +1,164 @@
+﻿body {
+    top: 0;
+    left: 0;
+    margin: 0;
+    background-color: #EEEEEE;
+}
+
+.div-head {
+}
+
+    .div-head .head-img-txt {
+        position: relative;
+    }
+
+        .div-head .head-img-txt img {
+            width: 100%;
+            height: auto;
+        }
+
+        .div-head .head-img-txt .head-txt {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            top: 1em;
+        }
+
+            .div-head .head-img-txt .head-txt .tit {
+                color: white;
+                font-size: 1.2em;
+                margin: 0.2em 0 0.2em 0;
+            }
+
+            .div-head .head-img-txt .head-txt .desc {
+                color: white;
+                font-size: 0.9em;
+            }
+
+.div-search {
+    width: 85%;
+    position: absolute;
+    text-align: center;
+    margin: -1.5em 0 0px 5%;
+}
+
+    .div-search span {
+        border: 1px solid #e0e0e0;
+        height: 30px;
+        border-left: 0;
+        margin: 0px -13px 0 0;
+    }
+
+    .div-search .exchangeno {
+        width: 70%;
+        height: 22px;
+        margin: 0px -15px 0 3px;
+        border-width: 0;
+        padding: 10px;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+        outline: none;
+        font-size: 1em;
+    }
+
+    .div-search .searchbtn {
+        border-width: 0;
+        coupondetail margin: 0 7px 0 0;
+        border-radius: 0;
+        height: 42px;
+        color: #3e9ec0;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        background-color: white;
+        line-height: 42px;
+        outline: none;
+        padding: 0 1em;
+        font-weight: bold;
+        float: right;
+    }
+
+.coupon {
+    width: 90%;
+    margin: 2em auto auto auto;
+}
+
+    .coupon .coupon-border {
+        width: 100%;
+        background-color: white;
+        border-radius: 4px;
+        border: 1px solid #e0e0e0;
+    }
+
+        .coupon .coupon-border .coupondetail {
+            width: 88%;
+            margin: 0 auto 0 auto;
+            padding: 1em 0 1em 0;
+        }
+
+            .coupon .coupon-border .coupondetail .detail-tit {
+                color: #2c2c2c;
+                font-size: 1em;
+                margin: 0.5em 0 1em 0;
+                font-weight: bold;
+            }
+
+            .coupon .coupon-border .coupondetail .detail-desc {
+                margin: 0.5em auto;
+                color: #555555;
+            }
+
+            .coupon .coupon-border .coupondetail .detail-expiretime {
+                font-size: 0.9em;
+                color: #919191;
+            }
+
+            .coupon .coupon-border .coupondetail .detail-bookinfo {
+                margin: 1em auto 0 auto;
+                color: #FE8000;
+            }
+
+            .coupon .coupon-border .coupondetail .detail-button {
+                margin: 1em auto 0 auto;
+                width: 100%;
+            }
+
+                .coupon .coupon-border .coupondetail .detail-button input {
+                    width: 100%;
+                }
+
+                .coupon .coupon-border .coupondetail .detail-button .btngobook {
+                    background-color: #3e9ec0;
+                    color: white;
+                    height: 40px;
+                    border: 0;
+                    border-radius: 4px;
+                    outline: none;
+                    display: block;
+                    text-align: center;
+                    line-height: 40px;
+                }
+
+                .coupon .coupon-border .coupondetail .detail-button .btncancelbook {
+                    /*background-color: white;
+                color: #3e9ec0;
+                height: 3em;
+                border: 1px solid #3e9ec0;
+                border-radius: 4px;
+                outline: none;*/
+                    background-color: white;
+                    color: #3e9ec0;
+                    height: 40px;
+                    border: 1px solid #3e9ec0;
+                    border-radius: 4px;
+                    outline: none;
+                    display: block;
+                    text-align: center;
+                    line-height: 40px;
+                }
+
+    .coupon .no_exchangeno {
+        text-align: center;
+        margin: 4em auto;
+        color: #919191;
+        background-color: #EEEEEE;
+    }

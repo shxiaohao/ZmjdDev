@@ -1,0 +1,100 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+
+    InspectorHotelParam param = ViewBag.param;
+
+    List<PDayItem> calendar = ViewBag.calendar;
+    HJD.HotelServices.Contracts.HotelVoucherEntity hotel = ViewBag.Hotel;
+    var bs = ViewBag.BS;
+
+    var houseCount = hotel.HouseCount;
+    var nightCount = hotel.LongLIve;
+    
+    var firstinfoEntity = ViewBag.firstinfoEntity;
+    var dayLimitMin = 0;
+    var dayLimitMax = 0;
+    dayLimitMin = 0;
+    dayLimitMax = 0;
+    
+    ViewBag.Title = string.Format("选择入住日期");
+    ViewBag.Keywords = string.Format("选择入住日期，免费品鉴酒店，品鉴酒店入住");
+    ViewBag.Description = string.Format("选择入住日期");
+
+    ViewBag.BodyStyle = "overflow-x:hidden;";
+    ViewBag.BodyClass = "inspectorhotelpage";
+}
+@section styles
+{
+    @Styles.Render("~/Content/css/calendar.css", "~/Content/css/inspector/hotel.css")
+}
+
+@section scripts
+{
+    @if (Utils.IsMobile())
+    {
+        @Scripts.Render(
+            "~/Content/js/iscroll-lite.js"
+        )
+    }
+    else
+    {
+        @Scripts.Render(
+            "~/Content/js/ctrip_cquery.js",
+            "~/Content/js/ctrip_calendar.js"
+        )
+    }
+    @Helpers.CalendarOptions(Html, calendar, dayLimitMin, dayLimitMax)
+    @Scripts.Render("~/Content/js/calendar.js", "~/Content/js/bootbox.js", "~/Content/js/inspector/hotel.js")
+}
+<script>
+    function goto(param) {
+        var url = "@(ViewBag.AccessProtocal)" + param;
+        this.location = url;
+    }
+</script>
+<header class="inspectorhotel-dates hidden">
+    @helper dateHelper(DateTime date)
+    {
+        <strong>@date.Format("yyyy-MM-dd") 周@("日一二三四五六".Substring((int)date.DayOfWeek, 1))</strong>
+    }
+    <form role="form">
+        <div id="dates" class="panel-date">
+            <div class="panel-checkin">
+                <span class="tit">入住日期</span> @dateHelper(param.CheckInDate)
+            </div>
+            <div class="panel-checkout">
+                <span class="tit">离店日期</span> @dateHelper(param.CheckOutDate)
+            </div>
+            <div class="panel-arrow"><img src="~/Content/images/icon-aarow1.png" alt="" /></div>
+            <input type="hidden" id="checkIn" value="@param.CheckIn" />
+            <input type="hidden" id="checkOut" value="@param.CheckOut" />
+        </div>
+    </form>
+
+</header>
+<section class="inspectorhotel-body">
+    @*<article class="description">
+        @(firstinfoEntity.Room.Description)<br />
+        @foreach (PItemEntity entity in pitemList)
+        {
+            if (entity.Type == 2)
+            {
+                break;
+            }
+            @entity.Description
+            <br />
+        }
+    </article>
+    <article class="description hidden">@Html.Raw(hotel.Description)</article>
+    <div class="note" style="display:none;">
+        <div class="tit">注意事项:</div>
+        <div class="info">@hotel.Note</div>
+    </div>*@
+</section>
+<input type="hidden" id="bs" value="@(bs)" />
+<input type="hidden" id="houseCount" value="@(houseCount)" />
+<input type="hidden" id="nightCount" value="@(nightCount)" />
+<footer class="inspectorhotel-ctrl hidden"><button id="subbookin" data-user="@param.UserId" data-id="@hotel.ID" data-hotelid="@hotel.HotelID">确认提交</button></footer>
+<!--  -->

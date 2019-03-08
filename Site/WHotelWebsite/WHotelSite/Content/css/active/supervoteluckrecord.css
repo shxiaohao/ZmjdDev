@@ -1,0 +1,79 @@
+﻿@charset "UTF-8";
+html, body {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  background: #fff;
+  -webkit-user-select: none;
+  user-select: none;
+  font-family:Arial;
+}
+
+.main-panel .record-info{
+    width:100%;
+    height:auto;
+    margin:1em auto 0 auto;
+    padding:0 0 0 0;
+}
+    .main-panel .record-info .list{
+        width:92%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0 0 0 0;
+    }
+        .main-panel .record-info .list .item{
+            width:100%;
+            height:auto;
+            margin:0 auto 0 auto;
+            padding:0 0 1em 0;
+            border-bottom:1px solid #d5d5d5;
+        }
+        .main-panel .record-info .list .item .basic{
+            width:100%;
+            height:auto;
+            margin:0 auto 0 auto;
+            padding:0.8em 0 0.5em 0;
+        }
+            .main-panel .record-info .list .item .basic .price-info {
+                width: calc(100% - 5.4em);
+                height: auto;
+                margin: 0 auto 0 auto;
+                padding: 0 0 0 0;
+                font-size: 1em;
+                font-weight:bold;
+                color: #E24848;
+                text-align: left;
+                float: left;
+            }
+            .main-panel .record-info .list .item .basic .date-info {
+                width: 5.3em;
+                height: auto;
+                margin: 0 auto 0 auto;
+                padding: 0.2em 0 0 0;
+                font-size: 1em;
+                color: #2c2c2c;
+                float: right;
+                text-align:right;
+            }
+            
+        .main-panel .record-info .list .item .desc{
+            width:100%;
+            height:auto;
+            margin:0 auto 0 auto;
+            padding:0 0 0 0;
+            font-size:0.8em;
+            color:#919191;
+        }
+        .main-panel .record-info .list .item .link {
+            width: 100%;
+            height: auto;
+            margin: 0 auto 0 auto;
+            padding: 0.8em 0 0em 0;
+            text-align:right;
+        }
+            .main-panel .record-info .list .item .link .a-link {
+                font-size:0.7em;
+                color: #FFAF3F;
+                text-decoration:none;
+            }
+
+    

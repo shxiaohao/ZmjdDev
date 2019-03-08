@@ -1,0 +1,803 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@using ProductService.Contracts.Entity
+@using HJDAPI.APIProxy;
+@{
+    Layout = null;
+
+    var userid = ViewBag.UserId;
+    var skuid = ViewBag.SKUID;
+    var groupid = ViewBag.GroupId;
+    var orderid = ViewBag.OrderId;
+
+    var nowTimeStamp = ViewBag.NowTimeStamp;
+    var _t = ViewBag.TimeStamp;
+    var _difTotalSeconds = ViewBag.DifTotalSeconds;
+
+    var isApp = ViewBag.IsApp;
+    var channel = ViewBag.Channel;
+    var isInWeixin = ViewBag.isInWeixin;
+
+    //当前用户的openid和wxuid
+    var openid = ViewBag.Openid;
+    var wxuid = ViewBag.WeixinUid;
+
+    RoomCouponOrderEntity couponOrder = ViewBag.CouponOrder;
+    SKUCouponActivityDetailModel couponSkuInfos = ViewBag.CouponSkuInfo;
+    HJD.CouponService.Contracts.Entity.CouponActivityEntity activity = couponSkuInfos.activity;
+
+
+    //var keName = ViewBag.couponKeName;//活动标题
+    //var keSPUName = ViewBag.couponKeSPUName;//可产品名称
+
+    SKUEntity singleBuySKU = ViewBag.SingleBuySKU;
+    SKUEntity groupBuySKU = ViewBag.GroupBuySKU;
+
+    //当前产品是否需要预约
+    var haveReserve = false;
+
+    //当前购买是否包含强制关注
+    var haveExchangeMethod_6 = couponOrder.ExchangeCouponList.Exists(_ => _.ExchangeMethod == 6);
+
+    //是否积攒团
+    var isLikeGroup = ViewBag.IsLikeGroup;
+
+    //是否全员分销
+    var isRetail = ViewBag.IsRetail;
+    var retailAmount = 0;
+
+    //是否可以发红包
+    var canShareRedCoupon = ViewBag.CanShareRedCoupon;
+
+    //发红包配置对象
+    RedOrderInfoEntity shareRedEntity = ViewBag.ShareRedEntity;
+
+    //产品图
+    var productImgFirstSrc = "http://whfront.b0.upaiyun.com/app/img/pic-null-3x2.png";
+    if (activity != null && activity.PicList != null && activity.PicList.Count > 0)
+    {
+        productImgFirstSrc = activity.PicList[0].Replace("p1.test.sl.corp", "p1.zmjiudian.com");
+    }
+
+    //微信环境下，提供关注的公众号信息（公众号名称、二维码等）
+    var wxAccountName = ViewBag.WXAccountName;
+    var wxAccountQrcodeImg = ViewBag.WXAccountQrcodeImg;
+
+    //原生分享配置
+    var groupSharePrice = groupBuySKU.VIPPrice;
+    if (groupSharePrice <= 0 && couponSkuInfos != null && couponSkuInfos.SKUInfo != null && couponSkuInfos.SKUInfo.SKUList != null && couponSkuInfos.SKUInfo.SKUList.Count > 0)
+    {
+        groupSharePrice = couponSkuInfos.SKUInfo.SKUList.Min(_ => _.VIPPrice);
+    }
+    var s_title = string.Format("我￥{0}拼了{1}，快加入我吧。", groupSharePrice, (activity != null ? activity.PageTitle : couponOrder.HotelName));
+    var s_poto_url = productImgFirstSrc.Replace("_jupiter", "_290x290s").Replace("_theme", "_290x290s").Replace("_appdetail1", "_290x290s");
+    var s_url = string.Format("http://www.zmjiudian.com/coupon/group/product/{0}/{1}", skuid, groupid);
+    var s_content = "这个拼团超值！现在约半价就到手，快跟我一起拼团吧。";
+    var shareCallBackUrl = "";
+    var shareCallBackUrlForApp = "";
+
+    //积攒拼团的配置
+    if (isLikeGroup)
+    {
+        s_url = string.Format("http://www.zmjiudian.com/coupon/group/tree/{0}/{1}", skuid, groupid);
+        s_title = (activity != null ? "帮我助力！" + activity.PageTitle : "嗨！帮我助力拼团哦，就差你了！");
+        s_content = "快戳这里，帮我助力＞＞";
+    }
+
+    //默认朋友圈分享=好友等分享
+    var shareTitle_Timeline = s_title;
+    var shareDesc_Timeline = s_content;
+
+    //如果 Category.ID == 25 ，说明当前是“双11代金券”产品，那么购买完成后需要弹出邀请分享的提示
+    if (couponSkuInfos.SKUInfo.Category.ID == 25)
+    {
+        //s_url = string.Format("http://www.zmjiudian.com/coupon/product/{0}?CID={1}", skuid, userid);
+        //s_title = string.Format("仅￥{0} 抢{1}", couponSkuInfos.SKUInfo.SKU.VIPPrice, couponSkuInfos.activity.PageTitle.Replace("·", " "));
+        //s_content = couponSkuInfos.SKUInfo.SKU.Name;
+
+        s_poto_url = "http://whfront.b0.upaiyun.com/app/img/coupon/morelist/2017double11-share-img.png?v=2017110202";
+        s_url = string.Format("http://www.zmjiudian.com/Coupon/MoreList/1/1/{0}?albumId=13,14,15", userid);
+        s_title = "买50送100，买到即赚到";
+        s_content = "周末酒店双十一专场补贴千万，等你来拿！";
+        shareTitle_Timeline = "买50送100，周末酒店双11专场补贴千万等你拿！";
+        shareDesc_Timeline = "";
+    }
+    else
+    {
+        //红包分享链接
+        if (canShareRedCoupon)
+        {
+            //s_poto_url = "http://whfront.b0.upaiyun.com/app/img/coupon/redcoupon/redcoupon-share-icon.png";
+            //s_url = shareRedCouponUrl;
+            //s_title = "恭喜你获得一个大红包";
+            //s_content = "度假选酒店，红包送不停！";
+            //shareTitle_Timeline = "度假选酒店，红包送不停！";
+            //shareDesc_Timeline = "";
+
+            s_poto_url = shareRedEntity.RedShare.photoUrl;
+            s_url = shareRedEntity.RedShare.shareLink;
+            s_title = shareRedEntity.RedShare.title;
+            s_content = shareRedEntity.RedShare.Content;
+            shareTitle_Timeline = shareRedEntity.RedShare.Content;
+            shareDesc_Timeline = "";
+
+            shareCallBackUrl = shareRedEntity.RedShare.returnApiUrl;
+            shareCallBackUrlForApp = shareRedEntity.RedShare.returnUrl;
+
+            //微信环境修改红包领取提示
+            if (isInWeixin)
+            {
+                shareRedEntity.Description = "分享成功后在“我的”-“我的券”里查看已获得的红包";
+            }
+        }
+        else
+        {
+            if (isRetail)
+            {
+                s_title = string.Format("仅￥{0} {1}", groupSharePrice, (activity != null ? activity.PageTitle : couponOrder.HotelName));
+                s_poto_url = productImgFirstSrc.Replace("_jupiter", "_290x290s").Replace("_theme", "_290x290s").Replace("_appdetail1", "_290x290s");
+                s_url = string.Format("http://www.zmjiudian.com/coupon/product/{0}?fromwxuid={1}", skuid, wxuid);
+                s_content = "";
+
+                shareTitle_Timeline = s_title;
+                shareDesc_Timeline = s_content;
+
+                //拿出全员分销佣金
+                if (couponSkuInfos != null && couponSkuInfos.SKUInfo != null && couponSkuInfos.SKUInfo.SKU != null && couponSkuInfos.SKUInfo.SKU.ManualCommission > 0)
+                {
+                    retailAmount = (int)(couponSkuInfos.SKUInfo.SKU.ManualCommission);
+                }
+            }
+        }
+    }
+
+    //原生分享链接
+    var _goShareLink = new Access().GenShortUrl(-2, s_url);
+    var _shareLink = "whfriend://comment?title={0}&photoUrl={1}&shareLink={2}&nextUrl={3}&content={4}&shareType={5}";
+    _shareLink = string.Format(_shareLink, HttpUtility.UrlEncode(s_title), HttpUtility.UrlEncode(s_poto_url), _goShareLink, HttpUtility.UrlEncode(shareCallBackUrlForApp), HttpUtility.UrlEncode(s_content), "{0}");
+    var appShareLink = string.Format(_shareLink, 0);
+
+    //钱包url
+    var walletUrl = ViewBag.WalletUrl;
+
+    //房券url
+    var roomCouponUrl = ViewBag.RoomCouponUrl;
+
+    //消费券url
+    var productCouponUrl = ViewBag.ProductCouponUrl;
+
+    //app我的订单页面（5.8.1版本以后）
+    var appMyOrderUrl = "http://www.zmjiudian.com/app/order?userid={userid}&specifyuid=1&realuserid=1&_newpage=1";
+
+    //6.2的全部订单列表页面（包含了酒店、消费券、团购等所有品类的订单）
+    appMyOrderUrl = "http://www.zmjiudian.com/order/allorders?userid={userid}&specifyuid=1&realuserid=1&_newpage=1";
+
+    var pageTitle = "支付完成";
+    if (couponOrder.TotalPrice > 0)
+    {
+        pageTitle = "购买成功";
+    }
+    else if (couponOrder.TotalPrice == 0 && couponOrder.TotalPoints > 0)
+    {
+        pageTitle = "兑换成功";
+    }
+    else if (couponOrder.TotalPrice == 0 && couponOrder.TotalPoints == 0)
+    {
+        pageTitle = "领取成功";
+    }
+
+    //判断是否为大团购定金产品
+    var isDepositSKU = (couponSkuInfos != null && couponSkuInfos.SKUInfo != null && couponSkuInfos.SKUInfo.SKU != null && couponSkuInfos.SKUInfo.SKU.IsDepositSKU);
+    if (isDepositSKU)
+    {
+        pageTitle = "定金支付成功";
+    }
+
+    ViewBag.Title = pageTitle;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@pageTitle</title>
+    <link href="/Content/css/framework/util.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/Content/css/framework/zmjd.modal.min.css" rel="stylesheet" />
+    <link href="/content/css/coupon/paycomplete.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+</head>
+<body>
+    @if (couponOrder.State == 2 || _difTotalSeconds < (60 * 10))
+    {
+        //手拉手产品支付成功
+        if (groupid > 0)
+        {
+            var groupDetailUrl = string.Format("{0}?userid={1}&_newpage=1", s_url, userid);
+
+            <style>
+                body {
+                    background: #fff;
+                }
+            </style>
+
+            <div id="showPosterSection" style="display:none;"><img id="showImg" src="" alt="" /></div>
+            <div class="poster-bg" style="display:none;"></div>
+
+            <div class="main">
+                <div class="tit">
+                    <div class="icon zmjd-iconfont">&#xe62f;</div>
+                    <div class="t1">支付成功</div>
+                    @if (couponOrder.GroupPurchase != null && couponOrder.GroupPurchase.GroupPeople != null && couponOrder.GroupPurchase.GroupPeople.Exists(_ => _.UserId == userid))
+                    {
+                        if (couponOrder.GroupPurchase.GroupPeople.Exists(_ => _.UserId == userid && _.IsSponsor))
+                        {
+                            if (isLikeGroup)
+                            {
+                                <div class="t3">您已成功发起助力，快邀请朋友助力吧!</div>
+                            }
+                            else
+                            {
+                                <div class="t3">您已开团，快邀请朋友一起拼团吧!</div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="t3">您已参团，快邀请朋友一起助力吧!</div>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="group-ctrl">
+                <div class="group-share"><span class="zmjd-iconfont _icon">&#xe62c;</span>邀请好友</div>
+                @if (isInWeixin)
+                {
+                    <div class="wxqrcode-section">
+                        <div class="_tip">长按二维码关注<span class="_h1">“@(wxAccountName)”</span><br />点击<span class="_h2">“我的->我的订单”</span>查看并跟踪拼团进度</div>
+                        <div class="_qrcode">
+                            <img src="@(wxAccountQrcodeImg)" alt="" />
+                        </div>
+                    </div>
+                    <div class="download-app" onclick="gourl('http://app.zmjiudian.com')">下载周末酒店APP</div>
+                }
+                else
+                {
+                    <div class="look-group" onclick="gourl('@groupDetailUrl')">查看拼团详情</div>
+                }
+            </div>
+            <div class="foot-section">
+                <a href="tel:4000021702" class="tel">客服电话：4000-021-702</a>
+            </div>
+
+            <div class="poster-tip" style="display:none;">长按图片保存到相册，发送给好友邀请助力</div>
+            <div class="mine-poster" style="display:none;">
+
+                <div class="p-img"><img src="" crossorigin="anonymous" alt="" /></div>
+                <div class="p-info">
+                    <div class="desc-section">
+                        <div class="txt">@(couponSkuInfos.activity.PageTitle)</div>
+                        <div class="price"><span class="p1">¥<span class="h">@(groupBuySKU.VIPPrice)</span></span><span class="p2">市场价@(groupBuySKU.MarketPrice)</span></div>
+                    </div>
+                    <div class="qrcode-section">
+                        <img src="" crossorigin="anonymous" alt="" />
+                    </div>
+                    <div class="qrcode-section-bg">
+                        <img src="http://whfront.b0.upaiyun.com/bg/channel/posteractive/poster-qrcode-bg-1.png" crossorigin="anonymous" alt="" />
+                    </div>
+                </div>
+                <div class="tip">长按二维码和我一起领取吧</div>
+
+                @*<div class="p-img"><img src="" crossorigin="anonymous" alt="" /></div>
+                    <div class="p-info">
+                        <div class="qrcode-img"><img src="" crossorigin="anonymous" alt="" /></div>
+                        <div class="pname">@(couponSkuInfos.activity.PageTitle)</div>
+                        <div class="pprice">
+                            <span class="p1">¥<span class="h">@(groupBuySKU.VIPPrice)</span></span>
+                            <span class="p2">市场价¥@(groupBuySKU.MarketPrice)</span>
+                        </div>
+                    </div>
+                    <div class="tip">长按二维码和我一起领取吧</div>*@
+            </div>
+            <script src="~/Content/js/framework/html2canvas.min.js"></script>
+        }
+        //常规消费券和房券的购买成功
+        else
+        {
+            //大团购定金产品
+            if (isDepositSKU)
+            {
+                <div class="main">
+                    <div class="tit">
+                        <div class="icon zmjd-iconfont">&#xe62f;</div>
+                        <div class="t1">@(pageTitle)</div>
+                    </div>
+                    <div class="stepgroup-tip1">你已成功支付定金，请在规定时间内补缴尾款</div>
+                    @if (couponSkuInfos.SKUInfo != null && couponSkuInfos.SKUInfo.StepGroup != null)
+                    {
+                        <div class="stepgroup-tip2">
+                            尾款支付时间：
+                            <div class="h">@(string.Format("{0}－{1}", couponSkuInfos.SKUInfo.StepGroup.TailMoneyStartTime.ToString("MM月dd日 hh:mm:ss"), couponSkuInfos.SKUInfo.StepGroup.TailMoneyEndTime.ToString("MM月dd日 hh:mm:ss")))</div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="main">
+                    @if (couponOrder.ActivityType == 500 || couponOrder.ActivityType == 600)
+                    {
+                        <div class="tit">
+                            <div class="icon zmjd-iconfont">&#xe62f;</div>
+                            <div class="t1">@(pageTitle)</div>
+                            @if (isApp)
+                            {
+                                @*<div class="t2">请到我的->订单->消费券中查看并使用</div>*@
+                                <div class="t2">请到我的->订单中查看并使用</div>
+                            }
+                            else
+                            {
+                                if (isInWeixin)
+                                {
+                                    @*<div class="t2">请到我的消费券中查看并使用</div>*@
+                                }
+                                else
+                                {
+                                    @*<div class="t2">请到周末酒店APP->我的->钱包->消费券中查看并使用</div>*@
+                                    <div class="t2">请到周末酒店APP->我的->订单中查看并使用</div>
+                                }
+                            }
+                        </div>
+                        <div class="hotel">
+                            <div class="left">已购商品</div>
+                            <div class="right">@string.Format("{0}-{1}", couponSkuInfos.activity.PageTitle, couponSkuInfos.SKUInfo.SKU.Name)</div>
+                            <div style="clear:both;"></div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="tit">
+                            <div class="icon zmjd-iconfont">&#xe62f;</div>
+                            <div class="t1">@(pageTitle)</div>
+                            @if (isApp)
+                            {
+                                @*<div class="t2">请到我的->钱包->房券中查看并使用</div>*@
+                                <div class="t2">请到我的->订单->房券中查看并使用</div>
+                            }
+                            else
+                            {
+                                if (isInWeixin)
+                                {
+                                    @*<div class="t2">请到我的消费券中查看并使用</div>*@
+                                }
+                                else
+                                {
+                                    @*<div class="t2">请到周末酒店APP->我的->钱包->房券中查看并使用</div>*@
+                                    <div class="t2">请到周末酒店APP->我的->订单->房券中查看并使用</div>
+                                }
+                            }
+                        </div>
+                        <div class="hotel">
+                            <div class="left">已购商品</div>
+                            <div class="right">@couponOrder.HotelName</div>
+                            <div style="clear:both;"></div>
+                        </div>
+                    }
+
+                    @if (couponOrder.ExchangeCouponList.Exists(_ => _.ActivityType != 400 && (_.ExchangeMethod != 6 || (_.ExchangeMethod == 6 && _.CID > 0))))
+                    {
+                        <div class="number">
+                            <ul>
+                                @foreach (var excoupon in couponOrder.ExchangeCouponList.Where(_ => _.ActivityType != 400))
+                                {
+
+                                    if (excoupon.IsBook)
+                                    {
+                                        haveReserve = true;
+                                    }
+
+                                    //当不是“商户核销(强制关注)”类型 并且CID>0的时候，才会显示券码项
+                                    if (excoupon.ExchangeMethod != 6|| (excoupon.ExchangeMethod == 6 && excoupon.CID > 0))
+                                    {
+                                        //每四位一个空格隔开
+                                        var exno = excoupon.ExchangeNo != null ? System.Text.RegularExpressions.Regex.Replace(excoupon.ExchangeNo, @"(\w{4})", "$1 ").Trim('-') : "";
+                                        if (!string.IsNullOrEmpty(exno))
+                                        {
+                                            //券如果是 在第三方手动下单、通过API第三方下单，券码显示为业务人员维护的一句话
+                                            if (excoupon.ExchangeNoType == 2 || excoupon.ExchangeNoType == 3)
+                                            {
+                                                exno = excoupon.ExchangeTipsName;
+                                            }
+
+                                            //至商家扫码核销类型的券，券码自定义
+                                            if (excoupon.ExchangeMethod == 5)
+                                            {
+                                                exno = "请在使用当日现场微信扫码入场";
+                                            }
+
+                                            <li>
+                                                <div class="label">券码</div>
+                                                <div class="value">@exno</div>
+                                                <div style="clear:both;"></div>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li>
+                                                <div class="label">券码</div>
+                                                <div class="value" style="color:#919191;">生成中，请至我的->订单中查看</div>
+                                                <div style="clear:both;"></div>
+                                            </li>
+                                        }
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="line"></div>
+                    }
+                </div>
+            }
+            <div class="ctrl">
+
+                @{
+                    //是否显示立即预约模块
+                    var haveGoExchange = false;
+
+                    //立即预约地址
+                    var goExchangeUrl = "";
+
+                    //activity.MerchantCode = "retailer";
+
+                    //目前条件：首先是分销产品
+                    //if (!isApp && !string.IsNullOrEmpty(activity.MerchantCode) && activity.MerchantCode.ToLower().Trim().Contains("retailer"))
+                    if (!isApp)
+                    {
+                        //房券或者需要预约的消费券
+                        if (couponOrder.ActivityType == 600)
+                        {
+                            //需要预约并且是预约后置的，提示立即预约
+                            if (haveReserve && couponSkuInfos.SKUInfo.SKU.BookPosition == 2)
+                            {
+                                //goExchangeUrl = string.Format("/Coupon/CouponReserve?skuid={0}&exid=@(reserveExId)&userid=@(userid)&_newpage=1", skuid);
+                                haveGoExchange = true;
+                            }
+                        }
+                        else
+                        {
+                            //房券（非强制关注：!haveExchangeMethod_6）
+                            if ((couponOrder.ActivityType == 200 || couponOrder.ActivityType == 500) && !haveExchangeMethod_6)
+                            {
+                                haveGoExchange = true;
+                            }
+                            //goExchangeUrl = "/Coupon/CouponReserve?skuid=@(entity.SkuID)&exid=@(reserveExId)&userid=@(userid)&_newpage=1";
+                            //haveGoExchange = true;
+                        }
+                    }
+                    else
+                    {
+                        ////房券（非强制关注：!haveExchangeMethod_6）
+                        //if ((couponOrder.ActivityType == 200 || couponOrder.ActivityType == 500) && !haveExchangeMethod_6)
+                        //{
+                        //    haveGoExchange = true;
+                        //}
+                    }
+                }
+
+                @if (haveGoExchange)
+                {
+                    @*<div class="lookmineno" onclick="gourl('@(couponOrder.ActivityType == 600 ? productCouponUrl : (couponOrder.ActivityType == 200 ? roomCouponUrl : walletUrl))')">立即预约</div>*@
+                    <div class="lookmineno" onclick="gourl('@(appMyOrderUrl)')">立即预约</div>
+                    <div class="backhome after-exchange">稍后预约</div>
+                    <div class="after-exchange-panel" style="display:none;">
+                        <div class="tit"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/paycomplate/coupon-paycomplate-after-tit.png" alt="" /></div>
+                        <div class="wxqrcode-section">
+                            <div class="_tip"><span class="_h2">方法一：</span>你可通过拨打下方周末酒店客服电话进行预约</div>
+                            <div class="_btns">
+                                <div class="tel-btn" onclick="gourl('tel:4000021702')">客服电话：4000-021-702</div>
+                            </div>
+                        </div>
+                        @if (isInWeixin)
+                        {
+                            <div class="wxqrcode-section">
+                                <div class="_tip"><span class="_h2">方法二：</span>长按二维码关注“@(wxAccountName)”<br />点击“我的->我的订单”查看并预约使用</div>
+                                <div class="_qrcode">
+                                    <img src="@(wxAccountQrcodeImg)" alt="" />
+                                </div>
+                                <div class="_tip">提示：提前关注服务号，后期预约更方便哦</div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="wxqrcode-section">
+                                <div class="_tip"><span class="_h2">方法二：</span>下载“周末酒店APP”，在“我的”-“订单”里查看并预约使用</div>
+                                <div class="_btns">
+                                    <div class="download-btn" onclick="gourl('http://app.zmjiudian.com')">下载周末酒店APP</div>
+                                </div>
+                                <div class="_tip">提示：提前下载APP，后期预约更方便哦</div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    if (isInWeixin)
+                    {
+                        <div class="wxqrcode-section">
+                            <div class="_tip">长按二维码关注<span class="_h1">“@(wxAccountName)”</span><br />点击<span>“我的->我的订单”</span>查看并使用</div>
+                            <div class="_qrcode">
+                                <img src="@(wxAccountQrcodeImg)" alt="" />
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        if (couponOrder.ActivityType == 500 || couponOrder.ActivityType == 600)
+                        {
+                            <div class="lookmineno" onclick="gourl('@appMyOrderUrl')">@(isDepositSKU ? "查看团购详情" : "查看消费券")</div>
+                        }
+                        else
+                        {
+                            <div class="lookmineno" onclick="gourl('@appMyOrderUrl')">@(isDepositSKU ? "查看团购详情" : "查看我的房券")</div>
+                        }
+                    }
+
+                    if (isApp)
+                    {
+                        <div class="backhome" onclick="gourl('whotelapp://www.zmjiudian.com')">返回首页</div>
+                    }
+                    else
+                    {
+                        <div class="downapp" onclick="gourl('http://app.zmjiudian.com')">下载周末酒店APP</div>
+                    }
+                }
+
+            </div>
+            <div class="foot-section">
+                <a href="tel:4000021702" class="tel">客服电话：4000-021-702</a>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="main">
+            <div class="tit">
+                <img src="~/Content/images/coupon/pay/icon-warning.png" alt="" />支付超时 房券购买失败
+                <br /><span class="small-tip">退款将在1-5个工作日返回您的支付账户</span>
+            </div>
+            <div class="hotel">
+                <div class="left">酒店名称</div>
+                <div class="right">@couponOrder.HotelName</div>
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+        <div class="ctrl">
+            <div class="left">
+                <div class="lookmineno" onclick="gourl('/coupon/shop/@couponOrder.ExchangeCouponList[0].ActivityID?userid=@userid')">重新购买</div>
+            </div>
+            <div class="right">
+                <div class="backhome" onclick="goto('')">返回首页</div>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+    }
+
+    @if (couponSkuInfos.SKUInfo.Category.ID == 25)
+    {
+        <div class="group-share-tip" style="display:none;">
+            <img data-orisrc="http://whfront.b0.upaiyun.com/www/img/Active/vipactive/genvip-share-tip.png?v=2017103101" src="" alt="点击右上角分享哦" />
+        </div>
+    }
+    else
+    {
+        if (isLikeGroup)
+        {
+            <div class="group-share-tip" style="display:none;">
+                <img data-orisrc="http://whfront.b0.upaiyun.com/app/img/coupon/groupproductfortree/group-tree-weixin-sharetip.png?v=2017092201" src="" alt="点击右上角分享哦" />
+            </div>
+        }
+        else
+        {
+            <div class="group-share-tip" style="display:none;">
+                <img data-orisrc="http://whfront.b0.upaiyun.com/www/img/Active/vipactive/genvip-share-tip.png?v=2017103101" src="" alt="点击右上角分享哦" />
+            </div>
+        }
+    }
+
+    @*<div style="margin:2em 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http://192.168.1.22:8081/coupon/paycomplete/all/263341/8884712416">GO APP (Local) >>></a></div>*@
+
+    @if (canShareRedCoupon && shareRedEntity != null)
+    {
+        <div id="send-red-coupon-template" style="display:none;">
+            <div class="get-coupon-info">
+                <div class="img"><img src="@(shareRedEntity.BigPicture)" alt="" /></div>
+                <div class="txt">@(shareRedEntity.ResultTitle)</div>
+                <div class="txt2">@(shareRedEntity.Description)</div>
+            </div>
+        </div>
+        <div class="send-red-coupon-float" style="display:none;">
+            <img src="@(shareRedEntity.SmallPicture)" alt="" />
+        </div>
+    }
+    else
+    {
+        <div id="send-red-coupon-template" style="display:none;">
+            <div class="get-coupon-info">
+                <div class="img"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/redcoupon/red-coupon-big.png" alt="" /></div>
+                <div class="txt">恭喜你获得一个大红包</div>
+                <div class="txt2">分享给好友立即领取</div>
+            </div>
+        </div>
+        <div class="send-red-coupon-float" style="display:none;">
+            <img src="http://whfront.b0.upaiyun.com/app/img/coupon/redcoupon/red-coupon-sml.png" alt="" />
+        </div>
+    }
+    <footer>
+        <input type="hidden" id="userid" value="@(userid)" />
+        <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+        <input type="hidden" id="isInWeixin" value="@(isInWeixin ? 1 : 0)" />
+        <input type="hidden" id="canShareRedCoupon" value="@(canShareRedCoupon ? 1 : 0)" />
+        <input type="hidden" id="appShareLink" value="@(appShareLink)" />
+        <input type="hidden" id="shareCallBack" value="@(shareCallBackUrl)" />
+        <input type="hidden" id="orderId" value="@(orderid)" />
+        <input type="hidden" id="categoryId" value="@(couponSkuInfos.SKUInfo.Category.ID)" />
+        <input type="hidden" id="groupId" value="@(groupid)" />
+        <input type="hidden" id="totalPrice" value="@(couponOrder.TotalPrice)" />
+        <input type="hidden" id="isRetail" value="@(isRetail ? 1 : 0)" />
+        <input type="hidden" id="retailAmount" value="@(retailAmount)" />
+        <input type="hidden" id="groupId" value="@(groupid)" />
+        <input type="hidden" id="thisSkuid" value="@(skuid)" />
+        @if (groupid > 0)
+        {
+            <input type="hidden" id="isLikeGroup" value="@(isLikeGroup ? 1 : 0)" />
+            <input type="hidden" id="groupProductImg" value="@(couponSkuInfos.activity.PicList.Count > 0 ? couponSkuInfos.activity.PicList[0].Replace("_appdetail1", "_640x426") : productImgFirstSrc)" />
+            <input type="hidden" id="groupSkuId" value="@(groupBuySKU.ID)" />
+            <input type="hidden" id="groupAid" value="@(couponSkuInfos.activity.ID)" />
+            <input type="hidden" id="groupCount" value="@(couponSkuInfos.activity.GroupCount)" />
+            <input type="hidden" id="weixinAcountId" value="@(couponSkuInfos.activity.WeixinAcountId)" />
+        }
+    </footer>
+    <script src="~/Content/js/jquery-1.10.2-min.js"></script>
+    <script>
+        //声明_czc对象:
+        var _czc = _czc || [];
+        try {
+
+            //绑定siteid
+            _czc.push(["_setAccount", "1275441729"]);
+
+        } catch (e) {
+
+        }
+    </script>
+    <script type="text/javascript">
+
+        function goto(param) {
+            var url = "@(ViewBag.AccessProtocal)" + param;
+            this.location = url;
+        }
+
+        function openHotel(hotelid) {
+            var isapp = $("#isapp").val() == "1";
+            if (isapp) {
+                goto('hotel/' + hotelid);
+            }
+            else {
+                location.href = "http://www.zmjiudian.com/hotel/" + hotelid;
+            }
+        }
+
+        function gourl(url) {
+            location.href = url;
+        }
+
+        var appShareLink = $("#appShareLink").val();
+
+    </script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/framework/config.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjd.modal.min.js"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjd.statistic.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/coupon/paycomplete.js?v=@(Helpers.curAppVer())"></script>
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+        <script>
+
+            GetWeixinApiConfig();//注册
+
+            wx.ready(function () {
+
+                var _shareCallBack = '@(shareCallBackUrl)';
+
+                wx.onMenuShareTimeline({
+                    title: '@shareTitle_Timeline',
+                    desc: '@(shareDesc_Timeline)',
+                    link: '@(s_url)',
+                    imgUrl: '@(s_poto_url)',
+                    success: function (res) {
+                        if (_shareCallBack) {
+                            $.get(_shareCallBack, {}, function (_data) {
+
+                            });
+                        }
+                    },
+                    cancel: function (res) {
+
+                    }
+                });
+
+                wx.onMenuShareAppMessage({
+                    title: '@s_title',
+                    desc: '@(s_content)',
+                    link: '@(s_url)',
+                    imgUrl: '@(s_poto_url)',
+                    success: function (res) {
+                        if (_shareCallBack) {
+                            $.get(_shareCallBack, {}, function (_data) {
+
+                            });
+                        }
+                    },
+                    cancel: function (res) {
+
+                    }
+                });
+
+            });
+
+            function GetWeixinApiConfig() {
+
+                var url = location.href.split("#")[0];
+                $.ajax({
+                    url: '/Coupon/GetWeixinConfigInfo',
+                    type: 'POST',
+                    data: { url: url },
+                    dataType: 'json',
+                    async: false,
+                    error: function () {
+                        console.log("网络服务错误");
+                    },
+                    success: function (result) {
+                        if (typeof (result.Success) != undefined && result.Success == 1) {
+                            return false;
+                        }
+                        else {
+                            //得到微信config的值
+                            var array = [
+                                'checkJsApi',
+                                'onMenuShareTimeline',
+                                'onMenuShareAppMessage',
+                                'onMenuShareQQ',
+                                'onMenuShareQZone',
+                                'hideOptionMenu'
+                            ];
+                            if (result.jsApiList) {
+                                var jsArray = result.jsApiList.split(',');
+                                for (var key in jsArray) {
+                                    array.push("" + jsArray[key]);
+                                }
+                            }
+
+                            wx.config({
+                                debug: false,
+                                appId: result.appId,
+                                timestamp: "" + result.timestamp,
+                                nonceStr: result.nonceStr,
+                                signature: result.signature,
+                                jsApiList: array
+                            });
+                        }
+                    }
+                });
+            }
+
+        </script>
+    }
+    @if (ViewBag.LoadCNZZ == null || ViewBag.LoadCNZZ)
+    {
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://"); document.write(unescape("%3Cspan id='cnzz_stat_icon_1275441729'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1275441729%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+    }
+</body>
+</html>

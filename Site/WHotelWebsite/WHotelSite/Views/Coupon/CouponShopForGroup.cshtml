@@ -1,0 +1,515 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    Layout = null;
+    
+    ViewBag.Title = "周末酒店";
+    
+    var isApp = ViewBag.IsApp;
+    var cid = ViewBag.CID;
+    var aid = ViewBag.Aid;
+    var userid = ViewBag.UserId;
+    
+    CouponActivityDetailModel coupondetail = ViewBag.CouponDetail;
+    var hasBoughtItems = ViewBag.HasBoughtItems;
+    
+    var activity = coupondetail.activity;
+    var package = coupondetail.package;
+    var pItems = coupondetail.DailyItems;
+    var noticeItems = coupondetail.NoticeItems;
+    
+    //平日价
+    var priceType = "平日券";
+    var sellPrice = 0;
+
+    var pingri = coupondetail.package.PackagePrice.First(_ => _.Price > 0);
+    if (pingri != null && pingri.PID > 0)
+    {
+        priceType = pingri.TypeName;
+        sellPrice = pingri.Price;
+    }
+    
+    //var pingri = coupondetail.package.PackagePrice.Find(p => p.Type == 0);    
+    //if (pingri != null && pingri.Price > 0)
+    //{
+    //    priceLabel = "平日";
+    //    sellPrice = pingri.Price; 
+    //}
+    //else
+    //{
+    //    //当平日价找不到或者价格为0时，去查询非平日价（周末价）
+    //    pingri = coupondetail.package.PackagePrice.Find(p => p.Type != 0);
+    //    if (pingri != null && pingri.Price > 0)
+    //    {
+    //        priceLabel = "周末";
+    //        sellPrice = pingri.Price;
+    //    }
+    //}
+
+    //查询券的状态
+    BuyCouponCheckNumResult buyResult = ViewBag.BuyResult;
+    
+    //开售日
+    var selldate = activity.EffectiveTime; //selldate = DateTime.Parse("2015-07-08 12:43:15");
+    
+    //购买按钮的状态
+    var canShop = true;
+
+    var AppType = ViewBag.AppType;
+    var AppVerForIOS = ViewBag.AppVerForIOS;
+    var AppVerForAndroid = ViewBag.AppVerForAndroid;
+    var IsLatestVerApp = ViewBag.IsLatestVerApp;
+    
+    //最小购买数量
+    var minBuyNum = activity.MinBuyNum;
+
+    //页面标题
+    var pageTitle = !string.IsNullOrEmpty(activity.PageTitle) ? activity.PageTitle : "限时抢购";
+    
+    //价格label
+    var priceLabel = activity.PriceLabel;
+
+    //分享链接
+    var shareLink = ViewBag.ShareLink;
+
+    //分享跟踪参数的分享人对象
+    HJD.AccountServices.Entity.MemberProfileInfo shareUserInfo = ViewBag.ShareUserInfo;
+}
+
+<!DOCTYPE html>
+
+<script type="text/javascript">
+    function goto(param) {
+        var isapp = $("#isapp").val() == "1";
+        var url = "whotelapp://www.zmjiudian.com/" + param;
+        if (!isapp) {
+            url = "http://www.zmjiudian.com/" + param;
+        }
+
+        this.location = url;
+    }
+
+    function gourl(url) {
+        location.href = url;
+    }
+
+    function loginCallback(userid) {
+        location.replace(location.pathname + "?userid=" + userid);
+    }
+
+    var pub_userid = "@userid";
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>@pageTitle</title>
+    <link href="/content/css/coupon/couponshopforgroup.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+</head>
+<body>
+    <div class="main">
+        <div class="photo" onclick="goto('hotel/@(package.HotelID)')">
+            <img src="@activity.PicPath" alt="" />
+            <div class="mode"><span>@string.Format("已售 {0} 套", activity.SellNum)</span></div>
+        </div>
+        <div class="activity">
+            <div class="tit">@package.HotelName</div>
+            <div class="brief">@string.Format("限售{0}套 {1}开始", activity.TotalNum, selldate.ToString("M月d日HH:mm"))</div>
+            <div class="price">
+                <div class="left">
+                    @if (!string.IsNullOrEmpty(priceLabel))
+                    { 
+                        <table cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td valign="middle" style="font-size: 0.7em; text-align: right; ">@priceLabel</td>
+                                <td valign="middle" style="font-size: 0.7em;width:0.9em; text-align: right;">￥</td>
+                                <td valign="middle" style="font-size:1.3em;text-align:left;">@sellPrice</td>
+                            </tr>
+                        </table>
+                    }
+                    else
+                    { 
+                        <span class="t">￥</span><span style="font-size: 1.3em;">@sellPrice</span>
+                    }
+                </div>
+                <div class="right" id="shop-tag-right">
+                    @*进行中*@
+                    @{
+                        var now = DateTime.Now;
+
+                        if (selldate > now)
+                        {
+                            //如果还没有到开售日不能购买。
+                            canShop = false;
+
+                            //显示倒计时
+                            <span class="daojishi" id="daojishi">开售倒计时 <span class='bignum'>00</span>时 <span class='bignum'>00</span>分</span>
+                            <script>
+                                
+                                var timer = null;
+
+                                var year0 = parseInt(@(selldate.Year));
+                                var month0 = parseInt(@(selldate.Month - 1));
+                                var day0 = parseInt(@(selldate.Day));
+                                var hour0 = parseInt(@(selldate.Hour));
+                                var minute0 = parseInt(@(selldate.Minute));
+                                var second0 = parseInt(@(selldate.Second));
+                                var endDate = new Date(year0, month0, day0, hour0, minute0, second0);
+
+                                var year_now = parseInt(@(now.Year));
+                                var month_now = parseInt(@(now.Month - 1));
+                                var day_now = parseInt(@(now.Day));
+                                var hour_now = parseInt(@(now.Hour));
+                                var minute_now = parseInt(@(now.Minute));
+                                var second_now = parseInt(@(now.Second));
+                                var nowTime = new Date(year_now, month_now, day_now, hour_now, minute_now, second_now);
+                                var nowTimes = nowTime.getTime();
+
+                                function startTimer() {
+
+                                    //nowTime = new Date();
+
+                                    var t = endDate.getTime() - nowTimes;
+                                    /*var d=Math.floor(t/1000/60/60/24);
+                                    t-=d*(1000*60*60*24);
+                                    var h=Math.floor(t/1000/60/60);
+                                    t-=h*60*60*1000;
+                                    var m=Math.floor(t/1000/60);
+                                    t-=m*60*1000;
+                                    var s=Math.floor(t/1000);*/
+                                    var d = Math.floor(t / (1000 * 60 * 60 * 24));
+                                    var h = Math.floor(t / 1000 / 60 / 60 % 24) + (d * 24);
+                                    var m = Math.floor(t / 1000 / 60 % 60);
+                                    var s = Math.floor(t / 1000 % 60);
+
+                                    var timehtml = h <= 0 ?
+                                        "开售倒计时 <span class='bignum'>" + m + "</span>分 <span class='bignum'>" + s + "</span>秒" :
+                                        "开售倒计时 <span class='bignum'>" + h + "</span>时 <span class='bignum'>" + m + "</span>分";
+                                    document.getElementById("daojishi").innerHTML = timehtml;
+
+                                    try {
+
+                                        if (d < 0 || (d <= 0 && h <= 0 && m <= 0 && s <= 0)) {
+                                            clearInterval(timer);
+                                            openshop();
+                                        }
+
+                                    } catch (e) {}
+
+                                    nowTimes = nowTimes + 1000;
+                                }
+                                startTimer();
+                                timer = setInterval("startTimer()", 1000);
+
+                                function openshop()
+                                {
+                                    $("#cansell").val("1");
+
+                                    $(".submit").css("display", "block");
+                                    $(".submit0").css("display", "none");
+
+                                    $("#shop-tag-right").html("<span>进行中</span>");
+                                }
+
+                            </script>
+                        }
+                        //首先检查当前券是否已经售完
+                        else if (buyResult.ActivityState == 0)
+                        {
+                            canShop = false;
+                            <span>已售完</span>
+                        }
+                        else if (buyResult.ActivityState == 2)
+                        {
+                            canShop = false;
+                            <span>已结束</span>
+                        }
+                        //可售
+                        else
+                        {
+                            <span>进行中</span>
+                        }
+                    }
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+        <div class="package">
+            <div class="tit">套餐内容</div>
+            <div class="info">
+                <div class="packageTit">@package.PackageName</div>
+                <div class="packageList">
+                    <table border="0" cellpadding="0" cellspacing="0">
+                        @for (int i = 0; i < pItems.Count; i++)
+                        {
+                            var pitem = pItems[i];
+                            
+                            <tr><td class="td-num" valign="top">&bull;</td><td class="td-info" valign="top">@pitem.Description</td></tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="tuijian">
+            <div class="tit">推荐理由</div>
+            <div class="info">@activity.Description</div>
+        </div>
+        <div class="shopread">
+            <div class="tit" data-open="1">购买须知<img class="openimg" style="display:none;" src="~/Content/images/icon-aarow7.png" alt="" /><img class="closeimg" style="display:block;" src="~/Content/images/icon-aarow6.png" alt="" /></div>
+            <div class="info" style="display:block;">
+                <table border="0" cellpadding="0" cellspacing="0">
+                    @for (int i = 0; i < noticeItems.Count; i++)
+                    {
+                        var notice = noticeItems[i];
+                        <tr><td class="td-num" valign="top">&bull;</td><td class="td-info" valign="top">@notice.Description</td></tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="main" onclick="goto('hotel/@(package.HotelID)')">
+        <div class="hotel">
+            <div class="tit">查看酒店详情</div>
+        </div>
+    </div>
+
+    <div class="price">
+        <div class="pingri">
+            <div class="left">
+                <div>@priceType<span class="price"><span class="t">￥</span>@sellPrice</span></div>
+                <div class="tipinfo">@pingri.AddInfo</div>
+            </div>
+            <div class="right">
+                <span style="border: 1px solid #dcdcdc; background: #f8f8f8; padding: 0.6em 0 0.3em 0;"><span class="btn0">-</span><input class="sellnum borderNoShadow" type="tel" data-minbuy="@minBuyNum" data-minbuymsg="该房券 @(minBuyNum) 张起售" value="@minBuyNum" /><span class="btn1">+</span></span>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="xiaoji" data-sum="@(sellPrice * minBuyNum)">
+            <div class="left">小计</div>
+            <div class="right"><span class="t">￥</span><span class="price">@(sellPrice * minBuyNum)</span></div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="priceAlertTip" style="display:none;">
+            <div class="tipinfo"></div>
+        </div>
+    </div>
+
+    <div class="personnel">
+        <div class="rowPanel">
+            <div class="left">
+                姓名
+            </div>
+            <div class="right">
+                <input type="text" id="tureName" class="tureName" placeholder="入住人姓名" />
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="rowPanel">
+            <div class="left">
+                大人
+            </div>
+            <div class="right">
+                <span style="border: 1px solid #dcdcdc; background: #f8f8f8; padding: 0.6em 0 0.3em 0;"><span class="daren-btn0">-</span><input class="darenNum borderNoShadow" type="tel" value="1" /><span class="daren-btn1">+</span></span>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="rowPanel">
+            <div class="left">
+                小孩
+            </div>
+            <div class="right">
+                <span style="border: 1px solid #dcdcdc; background: #f8f8f8; padding: 0.6em 0 0.3em 0;"><span class="child-btn0">-</span><input class="childNum borderNoShadow" type="tel" value="1" /><span class="child-btn1">+</span></span>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+        <div id="childOldPanel">
+            <div class="rowPanel noBottomLine">
+                <div class="left">
+                    小孩年龄信息
+                </div>
+                <div class="right">
+                    <input type="text" class="childOldtxt" placeholder="小孩1年龄" /> 岁
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+    </div>
+
+    @if (userid == "0")
+    {
+        <div class="phonePanel">
+            <div class="rowPanel">
+                <div class="left">手机号</div>
+                <div class="right">
+                    <input type="text" id="userPhone" class="userPhone" placeholder="请输入11位手机号" />
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="rowPanel noBottomLine">
+                <div class="left">短信验证码</div>
+                <div class="right">
+                    <input type="text" id="vCode" class="vCode" placeholder="验证码" />
+                    <button type="button" class="vCodeBtn">获取验证码</button>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+    }
+
+    <script id="childold-def-template" type="text/template">
+        <div class="rowPanel {NOBOTTOMLINE}">
+            <div class="left">
+                小孩年龄信息
+            </div>
+            <div class="right">
+                <input type="text" class="childOldtxt" placeholder="小孩{CHILDNUMBER}年龄" /> 岁
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+    </script>
+    <script id="childold-nolabel-template" type="text/template">
+        <div class="rowPanel {NOBOTTOMLINE}">
+            <div class="left">
+
+            </div>
+            <div class="right">
+                <input type="text" class="childOldtxt" placeholder="小孩{CHILDNUMBER}年龄" /> 岁
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+    </script>
+
+    @if (hasBoughtItems != null && hasBoughtItems.Count > 0)
+    {
+        var itemCount = hasBoughtItems.Count;
+        <div class="buyUsersPanel">
+            <div class="tit">已购买用户</div>
+            <div class="list @(itemCount > 5 ? "hiddenList" : "")" id="buyUserList">
+                <table cellpadding="0" cellspacing="0" border="0">
+                    @for (int i = 0; i < itemCount; i++)
+                    {
+                        var bought = hasBoughtItems[i];
+
+                        //姓名
+                        var trueName = WHotelSite.Common.ClientHelper.GetUnfullName(bought.TrueName);
+
+                        //人员结构
+                        var personnelInfo = bought.PersonnelStructure ?? "";
+                        var personList = personnelInfo.Split(',');
+                        personnelInfo = string.Format("{0}大", personList[0]);
+                        try
+                        {
+                            if (personList.Length > 1 && Convert.ToInt32(personList[1]) > 0) { personnelInfo += string.Format("{0}小", personList[1]); }
+                        }
+                        catch (Exception ex) { }
+
+                        //小孩年龄
+                        var childrenAge = bought.ChildrenAge ?? "";
+                        if (!string.IsNullOrEmpty(childrenAge))
+                        {
+                            var childOldList = childrenAge.Split(',');
+                            childrenAge = "";
+                            foreach (var item in childOldList)
+                            {
+                                if (!string.IsNullOrEmpty(childrenAge)) { childrenAge += "<span class='split'> / </span>"; }
+                                childrenAge += string.Format("{0}岁", item);
+                            }
+                        }
+                        <tr>
+                            <td class="t1" valign="top">@trueName</td>
+                            <td class="t2" valign="top">@personnelInfo</td>
+                            <td class="t3" valign="top">@Html.Raw(childrenAge)</td>
+                            <td class="t4" valign="top"><span class="buyed">已购买</span></td>
+                        </tr>
+                        @*<li>@trueName <span class="split">/</span> @personnelInfo@Html.Raw(childrenAge)<span class="buyed">已购买</span></li>*@
+                    }
+                </table>
+            </div>
+            @if (itemCount > 5)
+            {
+                <div class="openMoreBuyList" data-opened="0">查看更多<span class="arrow">&or;</span></div>   
+            }
+        </div>
+    }
+    <div class="pubAlertTip" style="display:none;">
+        <div class="tipinfo"></div>
+    </div>
+    <div class="sub" style="@(shareUserInfo.UserID > 0 || isApp ? "" : "margin-bottom:9em;")">
+        <div class="submit" style="@(canShop ? "display:block" : "display:none;")">购买</div>   
+        <div class="submit0" style="@(!canShop ? "display:block" : "display:none;")">购买</div>
+    </div>
+    @if (shareUserInfo.UserID > 0)
+    {
+        <div class="share-member-panel">
+            <div class="share-member-head">
+                <div class="member-head"><img src="@(shareUserInfo.AvatarUrl)" alt="@(shareUserInfo.NickName)" /></div>
+                <div class="member-nick">@(shareUserInfo.NickName)<br />@(string.IsNullOrEmpty(shareUserInfo.NickName) ? "" : "正在用")周末酒店App</div>
+                <div class="ad-tip">邀请您</div>
+            </div>
+            <div class="share-btns">
+                <div class="join-zmjd" onclick="gourl('/Active/GenCashCouponForInvitation?sourceId=@(shareUserInfo.UserID)')" data-op="0">使用周末酒店 获得50元现金券</div>
+            </div>
+            <div class="share-bottom-logo">
+                <img src="http://whfront.b0.upaiyun.com/www/img/comment/zmjd-bottom-logo.png" alt="周末酒店" />
+            </div>
+        </div>
+    }
+    else
+    {
+        if (!isApp && cid <= 0)
+        {
+            @*<iframe id="jumpiframe" src="whotelapp://www.zmjiudian.com/gotopage?url=http://www.zmjiudian.com/coupon/shopList" style="display:none;"></iframe>*@
+            <div class="download-footbanner" onclick="gourl('/Inspector/Jump?jumpurl=whotelapp://www.zmjiudian.com/')"><img src="/Content/images/download-footbanner_201511.png" alt="下载周末酒店" /></div>
+        }
+    }
+    <div style="display:none;margin-bottom: 8em;font-size:9pt;">
+        AppType:@AppType <br />
+        AppVerForIOS:@AppVerForIOS <br />
+        AppVerForAndroid:@AppVerForAndroid <br />
+        IsLatestVerApp:@IsLatestVerApp <br />
+    </div>
+    <footer>
+        <input type="hidden" id="aid" value="@aid" />
+        <input type="hidden" id="atype" value="@activity.Type" />
+        <input type="hidden" id="pid" value="@package.PackageID" />
+        <input type="hidden" id="pricetype" value="@pingri.Type" />
+        <input type="hidden" id="userid" value="@userid" />
+        <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+        <input type="hidden" id="pingriPrice" value="@sellPrice" />
+        <input type="hidden" id="cansell" value="@(canShop ? 1 : 0)" />
+        <form style="display:none;">
+            <input type="text" id="loginput" value="0" />
+        </form>
+    </footer>
+
+    <script src="~/Content/js/jquery-1.10.2-min.js"></script>
+    <script src="~/Content/js/framework/config.js"></script>
+    <script src="~/Content/js/framework/zmjiudian.js"></script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/coupon/couponshopforgroup.js?v=@(Helpers.curAppVer())"></script>
+    <script>
+        try {
+            onAppShareCall = function () {
+                var title = "@(pageTitle)";
+                var Content = "仅￥@(sellPrice) @(package.HotelName)";
+                var photoUrl = "@(activity.PicPath.Replace("_jupiter", "_290x290s").Replace("_theme", "_290x290s").Replace("_appdetail1s", "_290x290s"))";
+                var shareLink = "@(shareLink)";
+                try { whotel.appShareData(title, Content, photoUrl, shareLink); } catch (e) { }
+                var returnStr = '{"title":"{0}","Content":"{1}","photoUrl":"{2}","shareLink":"{3}"}';
+                return returnStr.format(title, Content, photoUrl, shareLink);
+            }
+            onAppShareCall();
+        }
+        catch (e) { }
+    </script>
+</body>
+</html>

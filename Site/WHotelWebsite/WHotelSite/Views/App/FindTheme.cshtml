@@ -1,0 +1,54 @@
+﻿@{
+    Layout = null;
+
+    var userid = ViewBag.UserId;
+    var districtId = ViewBag.DistrictId;
+    var districtName = ViewBag.DistrictName;
+    var userlat = ViewBag.Userlat;
+    var userlng = ViewBag.Userlng;
+    var geoScopeType = ViewBag.GeoScopeType;
+
+    //专题列表
+    InterestModel3 themeList = ViewBag.ThemeList;
+    
+    var isInWeixin = ViewBag.isInWeixin;
+    var isApp = ViewBag.IsApp;
+    var appType = ViewBag.AppType;
+}
+    
+@if (themeList.ICONList != null && themeList.ICONList.Count > 0)
+{
+    var themeAllCount = themeList.TotalICONNum;
+    var themeShowCount = themeList.ICONList.Count;
+    
+    <div class="find-themes">
+        <ul>
+            @for (int tnum = 0; tnum < themeShowCount; tnum++)
+            {
+                var iconEntity = themeList.ICONList[tnum];
+                iconEntity.ImageUrl = !string.IsNullOrEmpty(iconEntity.ImageUrl) ? iconEntity.ImageUrl : iconEntity.LogoURL;
+                if (string.IsNullOrEmpty(iconEntity.ImageUrl))
+                {
+                    iconEntity.ImageUrl = "http://whfront.b0.upaiyun.com/app/img/home/home-load-1x1.png";
+                }
+
+                var imgSrc = iconEntity.ImageUrl.Replace("_290x290", "_240x240").Replace("_jupiter", "_290x290");
+                var goUrl = iconEntity.ActionUrl;
+                var showName = iconEntity.Name;
+                if (tnum == 5 && themeAllCount > 6)
+                {
+                    goUrl = string.Format("/App/ThemeList?userid={0}&districtId={1}&districtName={2}&lat={3}&lng={4}&geoScopeType={5}&_newpage=1",
+                        userid, districtId, districtName, userlat, userlng, geoScopeType);
+                    showName = "更多";
+                }
+                
+                <li>
+                    <div class="t-item" onclick="gourl('@(goUrl)')">
+                        <img src="@(imgSrc)" alt="" />
+                        <div class="tname">@(showName)</div>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+}

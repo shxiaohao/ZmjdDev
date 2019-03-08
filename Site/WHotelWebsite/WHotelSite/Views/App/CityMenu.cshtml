@@ -1,0 +1,221 @@
+﻿@model WHotelSite.Models.CityListEntity
+@{
+    var cssVersion = "190001010000";
+    try
+    {
+        //var last = this.GetType().Assembly.Location;
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex)
+    {
+    }
+    
+    Layout = null;
+    bool isMobile = WHotelSite.Utils.IsMobile();
+
+    //当前系统环境（ios | android）
+    var appType = ViewBag.AppType;
+}
+
+<link href="~/Content/css/app/citymenu.css?v=@cssVersion" rel="stylesheet" />
+
+<div class="city-section-panel">
+    @if (Model.IsApp)
+    {
+        <div class="city-topbar">
+            <div class="t-left" id="c-s-back">@*<img src="http://whfront.b0.upaiyun.com/app/img/home/icon-aarow-left-32x32.png" alt="" />*@</div>
+            <div class="t-right">搜索</div>
+            <div style="clear:both;"></div>
+        </div>
+    }
+    <div class="city-search">
+        <div class="s-inp">
+            <div class="s-left">
+                <input type="text" id="c-s-inp" placeholder="度假地、酒店" />
+            </div>
+            <div class="s-right">
+                <a href="javascript:;" id="c-s-cancel">取消</a>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="cityquicklist-bg" style="display:none;" data-sw="0"></div>
+        <div class="cityquicklist" style="display:none;">
+        </div>
+        <div class="s-history" style="display:none;">
+            <div class="s-tit">最近搜索</div>
+            <div class="s-list">
+                @*<ul><li onclick=districtClick('', 1, '')>上海</li></ul>*@
+            </div>
+        </div>
+    </div>
+
+    <div class="city-group" id="aroundCitySection">
+        <div class="g-tit">当前定位：定位中</div>
+        <div class="g-list"></div>
+    </div>
+
+    @cityGroup("港澳台日韩", Model.HMTCitys)
+
+    @cityGroup("国内热门", Model.HotArea)
+
+    @cityGroup("东南亚 / 海岛度假", Model.SouthEastAsiaCitys)
+
+    <div class="city-list">
+        @if (Model.CityGroupList != null)
+        {
+            foreach (var item in Model.CityGroupList)
+            {
+                var key = item.Key;
+                var list = item.ToList();
+                <div class="c-list-tit" data-l="@key" data-s="0">@key</div>
+                <div class="c-list-section" id="c-list-section-@(key)" style="display:none;">
+                    <ul>
+                        @for (int cnum = 0; cnum < list.Count; cnum++)
+                        {
+                            var cityEntity = list[cnum];
+                            var url = WHotelSite.App_Code.UrlHelperExtension.CityItemUrl(Model.IsApp, cityEntity.ID, cityEntity.Name);
+                            <li onclick="districtClick('@url',@cityEntity.ID, '@cityEntity.Name', @cityEntity.lat, @cityEntity.lon, true)"><a href="javascript:;">@cityEntity.Name</a></li>
+                        }
+                    </ul>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<div style="display:none;">
+    <input type="hidden" id="_appType" value="@(appType)" />
+    <input type="hidden" id="_isApp" value="@(Model.IsApp ? "1" : "0")" />
+</div>
+
+@helper cityGroup(string tit, List<HJD.HotelServices.Contracts.CityEntity> list)
+{
+    <div class="city-group">
+        <div class="g-tit">@tit</div>
+        <div class="g-list">
+            <ul>
+                @if (list != null && list.Count > 0)
+                {
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        var item = list[i];
+                        var url = WHotelSite.App_Code.UrlHelperExtension.CityItemUrl(Model.IsApp, item.ID, item.Name);
+                        <li onclick="districtClick('@url',@item.ID, '@item.Name', @item.lat, @item.lon, true)"><a href="javascript:;">@item.Name</a></li>
+                    }
+                }
+            </ul>
+        </div>
+    </div> 
+}
+
+<script src="~/Content/js/app/citymenu.js?v=@cssVersion"></script>
+@if (Model.IsInWeixin)
+{
+    <script>
+        GetWeixinApiConfig();//注册
+        function GetWeixinApiConfig() {
+            var url = location.href.split("#")[0];
+            $.ajax({
+                url: '/Coupon/GetWeixinConfigInfo',
+                type: 'POST',
+                data: { url: url },
+                dataType: 'json',
+                async: false,
+                error: function () {
+                    console.log("网络服务错误");
+                },
+                success: function (result) {
+                    if (typeof (result.Success) != undefined && result.Success == 1) {
+                        return false;
+                    }
+                    else {
+                        //得到微信config的值
+                        var array = [
+                            'checkJsApi',
+                            'openLocation',
+                            'getLocation'
+                        ];
+                        if (result.jsApiList) {
+                            var jsArray = result.jsApiList.split(',');
+                            for (var key in jsArray) {
+                                array.push("" + jsArray[key]);
+                            }
+                        }
+
+                        wx.config({
+                            debug: false,
+                            appId: result.appId,
+                            timestamp: "" + result.timestamp,
+                            nonceStr: result.nonceStr,
+                            signature: result.signature,
+                            jsApiList: array
+                        });
+                    }
+                }
+            });
+        }
+
+        wx.ready(function ()
+        {
+            wx.getLocation({
+                type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                success: function (res) {
+                    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+                    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+                    var speed = res.speed; // 速度，以米/每秒计
+                    var accuracy = res.accuracy; // 位置精度
+
+                    $.get('/App/AroundCityList', { userlat: latitude, userlng: longitude }, function (html) {
+                        if (html) {
+                            $("#aroundCitySection").html(html);
+                        }
+                    });
+                }
+            });
+        });
+    </script>   
+}
+else
+{ 
+    <script>
+        var _appType = $("#_appType").val();
+        var _isApp = ($("#_isApp").val() == "1");
+        var latitude = $("#userlat").val();
+        var longitude = $("#userlng").val();
+
+        if (parseInt(latitude) <= 0 && parseInt(longitude) <= 0) {
+            if (_isApp) {
+                if (_appType == "android") {
+                    try {
+                        appOnLocationFinish('{userlat}', '{userlng}', '');
+                    } catch (e) {
+                        appOnLocationFinish(0, 0, "");
+                    }
+                }
+                else {
+                    setTimeout(function () {
+                        var locUrl = "whotelapp://loadJS?url=javascript:appOnLocationFinish({userlat},{userlng})";
+                        location.href = locUrl;
+                    }, 3000);
+                }
+            }
+            else {
+                appOnLocationFinish(0, 0, "");
+            }
+        }
+        else {
+            appOnLocationFinish(latitude, longitude, "");
+        }
+
+        //定位完成 lat & lng 都是0代表定位失败
+        function appOnLocationFinish(lat, lng, city) {
+            $.get('/App/AroundCityList', { userlat: lat, userlng: lng }, function (html) {
+                if (html) {
+                    $("#aroundCitySection").html(html);
+                }
+            });
+        }
+    </script>
+}

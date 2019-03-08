@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HJD.WeixinService.Contract", "HaoJiudian.WeixinService.Contract\HJD.WeixinService.Contract.csproj", "{C63748C9-501D-472A-AEFF-36C4C77814B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HJD.WeixinService.Implement", "HaoJiudian.WeixinService.Implement\HJD.WeixinService.Implement.csproj", "{A79489B2-6067-4673-9CDB-332CFDAC7F48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HJD.WeixinService.Host", "HaoJiudian.WeixinService.Host\HJD.WeixinService.Host.csproj", "{1B5627BB-1F3E-4B2C-8264-FD80189202A5}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://192.168.1.114:8080/tfs/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = HaoJiudian.WeixinService.Host\\HJD.WeixinService.Host.csproj
+		SccProjectName1 = HaoJiudian.WeixinService.Host
+		SccLocalPath1 = HaoJiudian.WeixinService.Host
+		SccProjectUniqueName2 = HaoJiudian.WeixinService.Contract\\HJD.WeixinService.Contract.csproj
+		SccProjectName2 = HaoJiudian.WeixinService.Contract
+		SccLocalPath2 = HaoJiudian.WeixinService.Contract
+		SccProjectUniqueName3 = HaoJiudian.WeixinService.Implement\\HJD.WeixinService.Implement.csproj
+		SccProjectName3 = HaoJiudian.WeixinService.Implement
+		SccLocalPath3 = HaoJiudian.WeixinService.Implement
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C63748C9-501D-472A-AEFF-36C4C77814B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C63748C9-501D-472A-AEFF-36C4C77814B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C63748C9-501D-472A-AEFF-36C4C77814B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C63748C9-501D-472A-AEFF-36C4C77814B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A79489B2-6067-4673-9CDB-332CFDAC7F48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A79489B2-6067-4673-9CDB-332CFDAC7F48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A79489B2-6067-4673-9CDB-332CFDAC7F48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A79489B2-6067-4673-9CDB-332CFDAC7F48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B5627BB-1F3E-4B2C-8264-FD80189202A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B5627BB-1F3E-4B2C-8264-FD80189202A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B5627BB-1F3E-4B2C-8264-FD80189202A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B5627BB-1F3E-4B2C-8264-FD80189202A5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

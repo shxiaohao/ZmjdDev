@@ -1,0 +1,184 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    var cssVersion = "190001010000";
+    try
+    {
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex) { }
+
+    var userid = ViewBag.UserId;
+    var userlat = ViewBag.Userlat;
+    var userlng = ViewBag.Userlng;
+
+    //闪购&亲子团
+    HomePageData30 hotResult = ViewBag.HotResult;
+
+    //Top 20
+    RecommendHotelResult recmHotelResult = ViewBag.RecHotelResult;
+    
+    var isInWeixin = ViewBag.isInWeixin;
+    var isApp = ViewBag.IsApp;
+    var isThanVer46 = ViewBag.IsThanVer46;
+    var appType = ViewBag.AppType;
+    
+    ViewBag.Title = "订优惠";
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+}
+
+@section styles
+{
+    <link href="~/Content/css/framework/amazeui.min.css" rel="stylesheet" />
+    <link href="~/Content/css/app/discountcollection.css?v=@cssVersion" rel="stylesheet" />
+    <style type="text/css">
+    </style>
+}
+
+<script type="text/javascript">
+
+    function goto(param) {
+        var isapp = $("#isapp").val() == "1";
+        var url = "whotelapp://www.zmjiudian.com/" + param;
+        if (!isapp) {
+            url = "http://www.zmjiudian.com/" + param;
+        }
+
+        this.location = url;
+    }
+
+</script>
+
+<div class="dc-panel">
+    <div class="top-pic">
+        <img src="http://whfront.b0.upaiyun.com/app/img/discountcollection/dingyouhui-banner.png" alt="" />
+    </div>
+    <div class="menu-panel-base" id="menu-panel-def"><div class="menu-panel"><ul></ul></div></div>
+    <div class="menu-panel-base" id="menu-panel">
+        <div class="menu-panel">
+            <ul>
+                <li class="l-def-1 sel" data-num="1">精选</li>
+                <li class="c-def-1" data-num="2">江浙沪</li>
+                <li class="c-def-2" data-num="3">国内其它</li>
+                <li class="r-def-1" data-num="4">海外</li>
+            </ul>
+        </div>
+    </div>
+    <div class="tab" data-dt="1" data-rg="1" id="tab-1">
+        @*@if (hotResult != null && hotResult.FlashDeals != null && hotResult.FlashDeals.Count > 0)
+        {
+            <div class="group">
+                <div class="t1">
+                    <div>限时闪购</div>
+                </div>
+                <div class="list">
+                    @for (int i = 0; i < hotResult.FlashDeals.Count; i++)
+                    {
+                        var item = hotResult.FlashDeals[i];
+                        <div class="item @(i + 1 < hotResult.FlashDeals.Count ? "item-line" : "")" onclick="gotopage('coupon/shop/@item.activityId')">
+                            <div class="r1">
+                                <div class="t">@(item.hotelName)<span>￥@(item.activityPrice)</span></div>
+                            </div>
+                            <div class="r2">@(item.packageBrief)</div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }*@
+        @if (recmHotelResult != null && recmHotelResult.HotelList != null && recmHotelResult.HotelList.Count > 0)
+        {
+            <div class="group">
+                <div class="t1">
+                    <div>本周特惠精选</div>
+                </div>
+                <div class="list">
+                    @if (hotResult != null && hotResult.GroupDeals != null && hotResult.GroupDeals.Count > 0)
+                    {
+                        for (int i = 0; i < hotResult.GroupDeals.Count; i++)
+                        {
+                            var item = hotResult.GroupDeals[i];
+                            <div class="item item-line" onclick="gotopage('coupon/shop/group/@item.activityId')">
+                                <div class="r1">
+                                    <div class="t">@(item.hotelName)<div>机酒</div><span>￥@(item.activityPrice)</span></div>
+                                </div>
+                                <div class="r2">@(item.packageBrief)</div>
+                            </div>
+                        }
+                    }
+                    @for (int i = 0; i < recmHotelResult.HotelList.Count; i++)
+                    {
+                        var item = recmHotelResult.HotelList[i];
+
+                        var url = string.Format("http://www.zmjiudian.com/Hotel/Package/{0}", item.PID);
+                        if (isApp)
+                        {
+                            url += string.Format("?userid={{userid}}");
+                            url = string.Format("whotelapp://www.zmjiudian.com/gotopage?url={0}", HttpUtility.UrlEncode(url));
+                        }
+                        else
+                        {
+                            url += string.Format("?userid={0}", userid);
+                        }
+
+                        <div class="item @(i + 1 < recmHotelResult.HotelList.Count ? "item-line" : "")" onclick="gourl('@url')">
+                            <div class="r1">
+                                <div class="t">@(item.HotelName)<span>￥@(item.HotelPrice)</span></div>
+                            </div>
+                            <div class="r2">@(item.PackageBrief)</div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+    <div class="tab hide" data-dt="0" data-rg="1" id="tab-2"></div>
+    <div class="tab hide" data-dt="0" data-rg="2" id="tab-3"></div>
+    <div class="tab hide" data-dt="0" data-rg="3" id="tab-4"></div>
+</div>
+<div class="dc-bottom-tel">
+    <div class="lab">咨询请洽</div>
+    <a href="tel:4000021702" class="tel">4000-021-702</a>
+</div>
+<input type="hidden" id="userid" value="@userid" />
+<input type="hidden" id="isApp" value="@(isApp ? "1" : "0")" />
+<input type="hidden" id="isThanVer46" value="@(isThanVer46 ? "1" : "0")" />
+@if (userid == 88888888)
+{
+    <div style="margin:2em 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3A%2F%2Fwww.zmjiudian.com%2Fapp%2Fhome%3Fuserid%3D%7Buserid%7D%26userlat%3D%7Buserlat%7D%26userlng%3D%7Buserlng%7D">GO APP >>></a></div>
+    <div style="margin:2em 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3A%2F%2F192.168.1.22%3A8081%2Fapp%2Fhome%3Fuserid%3D%7Buserid%7D%26userlat%3D%7Buserlat%7D%26userlng%3D%7Buserlng%7D">GO APP (Local) >>></a></div>
+}
+
+@section scripts
+{
+    <script src="~/Content/js/framework/jquery.lazyload.min.js"></script>
+    <script src="~/Content/js/app/discountcollection.js?v=@cssVersion"></script>
+    <script src="~/Content/js/framework/amazeui.min.js"></script>
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+    }
+    <script type="text/javascript" charset="utf-8">
+        @*try {
+            onAppShowAdBox = function () {
+                var boxId = "@(adbox.boxId)";
+                var frequency = "@(adbox.frequency)";
+                var isShow = "@(adbox.isShow)";
+                var lazyLoadTime = "@(adbox.lazyLoadTime)";
+                var showUrl = "@(adbox.showUrl)";
+                var widthHeightRatio = "@(adbox.widthHeightRatio)";
+                var widthRatio = "@(adbox.widthRatio)";
+
+                try { whotel.appShowAdBox(boxId, frequency, isShow, lazyLoadTime, showUrl, widthHeightRatio, widthRatio); } catch (e) { }
+                var returnStr = '{"boxId":"{0}","frequency":"{1}","isShow":"{2}","lazyLoadTime":"{3}","showUrl":"{4}","widthHeightRatio":"{5}","widthRatio":"{6}"}';
+                return returnStr.format(boxId, frequency, isShow, lazyLoadTime, showUrl, widthHeightRatio, widthRatio);
+            }
+            onAppShowAdBox();
+        }
+        catch (e) { }*@
+    </script>
+
+}

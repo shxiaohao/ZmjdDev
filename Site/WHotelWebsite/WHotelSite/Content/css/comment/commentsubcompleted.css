@@ -1,0 +1,137 @@
+.subed-body {
+    width:100%;
+    height:auto;
+}
+.subed-tit {
+    width:88%;
+    height:auto;
+    margin:0 auto 0 auto;
+    padding:3em 0 2.4em 0;
+    border-bottom:1px solid #eee;
+    text-align:center;
+    font-size:1.3em;
+    color:#888;
+}
+.subed-sharetip {
+    width:100%;
+    text-align:center;
+    margin:6em auto 2.8em auto;
+}
+    .subed-sharetip img{
+        width:14em;
+        margin:0 auto 0 auto;
+    }
+.subed-brief {
+    width:88%;
+    height:auto;
+    line-height:1.4em;
+    margin:0 auto 0 auto;
+    text-align:center;
+    padding:0 0 0 0;
+    font-size:1.3em;
+    color:#686868;
+}
+.subed-sharebtn {
+    margin:2.8em 0 0 0;
+}
+    .subed-sharebtn .share{
+        width:76%;
+        height:3em;
+        line-height:3em;
+        margin:0 auto 0 auto;
+        font-size:1.5em;
+        text-align:center;
+        color:#fff;
+        background:#f0822e;
+        border-radius: 5px;
+    }
+        .subed-sharebtn .share:hover{
+            background:#f27b21;
+        }
+.subed-share-md {
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.7);
+    position:fixed;
+    left:0;
+    top:0;
+    z-index:1;
+}
+.subed-share-panel {
+    width:100%;
+    height:auto;
+    margin:0 auto 0 auto;
+    padding:0 0 0 0;
+    background:#fff;
+    position:fixed;
+    left:0;
+    bottom:0;
+    z-index:2;
+}
+    .subed-share-panel .icons{
+        width:90%;
+        height:auto;
+        margin:0 0 0 5%;
+        padding:2.5em 0 0.5em 0;
+        border-bottom:1px solid #eee;
+        text-align:center;
+        display:inline-table;
+    }
+        .subed-share-panel .icons ul{
+            width:100%;
+            height:auto;
+            margin:0 auto 0 auto;
+            padding:0 0 0 0;
+            list-style:none;
+        }
+            .subed-share-panel .icons ul li{
+                width:25%;
+                height:auto;
+                margin:0 auto 1em auto;
+                padding:0 0 0 0;
+                float:left;
+            }
+                .subed-share-panel .icons ul li .icon{
+                    width:100%;
+                    height:auto;
+                    margin:0 auto 0 auto;
+                    padding:0 0 0 0;
+                    text-align:center;
+                }
+                    .subed-share-panel .icons ul li .icon img{
+                        width:4em;
+                        margin:0 auto 0 auto;
+                    }
+                .subed-share-panel .icons ul li .txt{
+                    width:100%;
+                    height:auto;
+                    line-height:2.3em;
+                    margin:0 auto 0 auto;
+                    padding:0 0 0 0;
+                    text-align:center;
+                    font-size:1em;
+                    color:#888;
+                }
+    .subed-share-panel .btn{
+        width:100%;
+        height:auto;
+        margin:0 auto 0 auto;
+    }
+        .subed-share-panel .btn .cancel{
+            width:100%;
+            height:2.8em;
+            line-height:2.8em;
+            margin:0 auto 0 auto;
+            font-size:1em;
+            text-align:center;
+            color:#000;
+            background:#fff;
+        }
+            .subed-share-panel .btn .cancel:hover{
+                background:#ccc;
+            }
+
+
+
+
+

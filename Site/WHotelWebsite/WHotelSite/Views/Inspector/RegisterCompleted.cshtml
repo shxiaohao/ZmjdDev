@@ -1,0 +1,118 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    var cssVersion = "190001010000";
+    try
+    {
+        //var last = this.GetType().Assembly.Location;
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex)
+    {
+    }
+    
+    InspectorParam param = ViewBag.param;
+
+    ViewBag.Title = string.Format("成为品鉴师");
+    ViewBag.Keywords = string.Format("成为品鉴师");
+    ViewBag.Description = string.Format("成为品鉴师");
+
+    ViewBag.BodyStyle = "overflow-x:hidden;";
+    ViewBag.BodyClass = "inspectorregcompletedpage";
+
+    var isApp = ViewBag.IsApp;
+    var verIsOk = ViewBag.VersionIsOk;
+    var apptype = ViewBag.AppType;
+}
+@section styles
+{
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .modal-content {
+            width: 90%;
+            margin: auto;
+        }
+
+        .modal-body {
+            padding: 2.6em 0.8em 1.7em 0.8em;
+        }
+
+        .modal-footer {
+            margin-top: 0;
+            padding: 0.7em 0.9em;
+        }
+
+        .btn-default, .btn-primary {
+            width: auto;
+            min-width: 4em;
+            border: none;
+            color: #3e9ec0;
+            font-size: 1.4em;
+        }
+
+        .btn-default0 {
+            color: #333;
+        }
+
+        .box-big-btn {
+            width: 96%;
+        }
+
+        .box-btn-bottomborder {
+            padding-bottom: 0.7em;
+            margin-bottom: 0.3em;
+            border-bottom: 1px solid #eeeded;
+            border-radius: 0;
+        }
+    </style>
+}
+<script>
+    function goto(param) {
+        var url = "@(ViewBag.AccessProtocal)" + param;
+        this.location = url;
+    }
+
+    function gotopage(param) {
+        var url = "@(ViewBag.AccessProtocalPage)" + param; 
+        this.location = url;
+    }
+    function gourl(url) {
+        location.href = url;
+    }
+    function loginCallback(userid) {
+        goWriteComment(userid);
+    }
+</script>
+<div class="regcompleted-body">
+    <div class="regcompleted-panel">
+        <div class="regcompleted-img"><img src="http://whfront.b0.upaiyun.com/www/img/inspector/ok-green-big.png" alt="" /></div>
+        <div class="regcompleted-tit">您已报名成功！</div>
+    </div>
+    @if (isApp)
+    {
+        <div class="regcompleted-btn-panel">
+            <button class="regcompleted-writecom-btn" data-userid="@param.UserId" data-isapp="@isApp">去写点评</button>
+        </div>
+    }
+    else
+    {
+         <div class="regcompleted-btn-panel">
+             <button class="regcompleted-downloadapp-btn" onclick="gotopage('inspector/RecruitInspector?userid=@param.UserId')" data-userid="@param.UserId" data-isapp="@isApp">下载周末酒店APP</button>
+        </div> 
+    }
+</div>
+<input type="hidden" id="isapptxt" value="@(isApp ? "1" : "0")" />
+<input type="hidden" id="verIsOk" value="@(verIsOk ? "1" : "0")" />
+<input type="hidden" id="apptype" value="@(apptype)" />
+<input type="hidden" id="useridtxt" value="@(param.UserId)" />
+@section scripts
+{
+    @Scripts.Render("~/Content/js/bootbox.js?v=" + cssVersion, "~/Content/js/inspector/inspector.js?v=" + cssVersion, "~/Content/js/inspector/register.js?v=" + cssVersion)
+}

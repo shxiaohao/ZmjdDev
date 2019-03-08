@@ -1,0 +1,652 @@
+﻿@using WHotelSite
+@using WHotelSite.Params.Hotel
+@{
+    var isMobile = ViewBag.isMobile;
+    var isInWeixin = ViewBag.IsInWeixin;
+    var bodyMarginTop = isInWeixin ? 105 : 150;
+
+    var userid = ViewBag.UserId;
+    var isVip = ViewBag.IsVip;//true;//
+
+    HotelPrice3 priceEntity = ViewBag.PriceEntity;
+    HotelPrice3 priceEntity2 = ViewBag.PriceEntity2;
+    ViewBag.Title = priceEntity.Name + (priceEntity.PackageGroups.Count > 0 ? "预订" : "比价预订");
+    PackagesParam param = ViewBag.param;
+    HotelItem3 hotel = ViewBag.hotel;
+    List<PDayItem> calendar = ViewBag.calendar;
+
+    int firstpid = ViewBag.firstpid;
+    string httpsBookUrlTemplate = ViewBag.HttpsBookUrlTemplate;
+}
+
+@section styles
+{
+    <link href="~/Content/css/framework/zmjd.modal.min.css" rel="stylesheet" />
+    <link href="~/Content/css/calendar.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/Content/css/hotel/packages.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style>
+        ._modal-section ._tit {
+            font-size: 1.5rem;
+        }
+
+        ._modal-section ._body {
+            font-size: 1.5rem;
+        }
+
+        ._modal-section ._btns ._left ._confirm {
+            font-size: 1.5rem;
+        }
+
+        ._modal-section ._btns ._right ._cancel {
+            font-size: 1.5rem;
+        }
+
+        ._modal-section ._close img {
+            width: 1.8rem;
+        }
+    </style>
+}
+
+@section scripts
+{
+    @if (Utils.IsMobile())
+    {
+        @Scripts.Render(
+            "~/Content/js/iscroll-lite.js",
+            "~/Content/js/bootbox.js"
+        )
+    }
+    else
+    {
+        @Scripts.Render(
+            "~/Content/js/ctrip_cquery.js",
+            "~/Content/js/ctrip_calendar.js",
+            "~/Content/js/bootbox.js"
+        )
+    }
+    <script src="~/Content/js/framework/zmjd.modal.min.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/geetest/gt.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/login.js?v=@(Helpers.curAppVer())"></script>
+    @Helpers.CalendarOptions(Html, calendar, priceEntity.DayLimitMin, priceEntity.DayLimitMax)
+    @Scripts.Render("~/Content/js/calendar.js?v=" + Helpers.curAppVer(), "~/Content/js/hotel/packages.js?v=" + Helpers.curAppVer())
+}
+
+@section breadcrumbs
+{
+    @Helpers.BreadCrumbs(Url, hotel)
+}
+
+<!-- HotelName -->
+<div class="fullscreen">
+    <div class="container mainbody">
+        <div class="row">
+            <div class="col-md-1">
+            </div>
+            <div class="col-md-10">
+                <div class="row hidden-xs">
+                    <div class="col-md-6 hotelname">
+                        @priceEntity.Name
+                    </div>
+                    <div class="col-md-6 hotelstar">
+                        @Helpers.StarImage(Url, hotel.Star, null)
+                    </div>
+                </div>
+                <div class="row  mbhead hidden">
+                    <div class="col-xs-12 text-left">
+                        <button type="button" class="btn btn-default btn-sm">返回</button>
+                    </div>
+                </div>
+
+                <!-- mobile header 开始 -->
+
+                <div class="container hidden" style="margin-bottom:-1px;">
+                    <div class="row toolbar2 ">
+                        <div class="col-xs-3">
+                            <a href="@Url.RouteUrl("酒店详情", new { hotel = hotel.HotelID})" class="btn btn-sm  btn-img01">
+                                <img src="@Url.Content("~/content/images/icon-back.png")" class="mobilepic" alt="" />
+                            </a>
+                        </div>
+                        <div class="col-xs-6 text-center listtitle">
+                            特惠套餐
+                        </div>
+                        <div class="col-sm-2 col-xs-3 text-right">
+                        </div>
+                    </div>
+                </div>
+                <!--  mobile header 结束 -->
+                <div class="row">
+                    <!-- Hotel Left -->
+                    <div class="col-md-8 zmpanel2">
+                        <div class="panel panel-default date hidden-xs">
+                            <div class="panel-heading hidden-xs">
+                                <div class="row">
+                                    <div class="title col-xs-3">
+                                        选择日期
+                                    </div>
+                                    <div class="remarks col-xs-9 text-right" id="remarks">
+                                        <!--* 灰色日期为不可订-->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel-body hidden-xs">
+                                <form role="form">
+                                    <table cellspacing="0" cellpadding="3" border="0" class="" width="100%">
+                                        <tr>
+                                            <td width="40%" class="text-center">
+                                                <b>入住时间</b>
+                                            </td>
+                                            <td width="40%" class="text-center">
+                                                <b>离店时间</b>
+                                            </td>
+                                            <td width="20%"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center fontdate">
+                                                <div class="form-group" align="center">
+                                                    <input type="text" id="checkIn" class="form-control text-center btngray" value="@param.CheckIn" style="width:130px;">
+                                                </div>
+                                            </td>
+                                            <td class="text-center fontdate">
+                                                <div class="form-group" align="center">
+                                                    <input type="text" id="checkOut" class="form-control text-center btngray" value="@param.CheckOut" style="width:130px;">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <button type="button" id="confirmChange" class="btn btn-primary btn-sm" style="margin-top:-15px;">确定</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </form>
+                            </div>
+                        </div>
+
+                        @helper dateHelper(DateTime date)
+                        {
+                            <span class="_date">@date.Format("yyyy/MM/dd") 周@("日一二三四五六".Substring((int)date.DayOfWeek, 1))</span>
+                        }
+                        @if (isMobile)
+                        {
+                            <div class="m-fixed-date" id="m-dates" style="display:none;">
+                                @dateHelper(param.CheckInDate) &minus; @dateHelper(param.CheckOutDate)
+                            </div>
+                        }
+                        <div class="panel panel-default date visible-xs m-flow-date">
+                            <div class="panel-body visible-xs mbdate">
+                                <header class="hotel-head hotel-head-bottomline @(isInWeixin ? " hidden" : "")">
+                                    <div class="left">
+                                        <a href="javascript:window.history.back();"><img src="~/content/images/icon-back-blue.png" alt="" /></a>
+                                    </div>
+                                    <div class="text">预订</div>
+                                    <div class="right"></div>
+                                </header>
+                                <form role="form">
+                                    <div class="row1" id="dates">
+                                        <div class="_m-check-date">
+                                            <div class="_ci"><span class="_h">入住日期</span> @dateHelper(param.CheckInDate)</div>
+                                            <div class="_co"><span class="_h">离店日期</span> @dateHelper(param.CheckOutDate)</div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        @{
+                            int packageCount = 0;
+                            bool showMorePackage = true;
+
+                            //
+                            bodyMarginTop = 0;
+                        }
+
+                        <div class="visible-xs" style="margin-top: @(bodyMarginTop)px;"></div>
+
+                        @*@if (priceEntity.HotelBenefitPolicy != null && !string.IsNullOrEmpty(priceEntity.HotelBenefitPolicy.ActionUrl) && !string.IsNullOrEmpty(priceEntity.HotelBenefitPolicy.Text))
+                            {
+                                <div class="shareTip">@(priceEntity.HotelBenefitPolicy.Description)<a href="@(priceEntity.HotelBenefitPolicy.ActionUrl)" target="_blank">@(priceEntity.HotelBenefitPolicy.Text)</a></div>
+                            }*@
+
+                        <div style="margin:0 0 0 0;">
+                            @foreach (var groupItem in priceEntity.PackageGroups)
+                            {
+                                if (groupItem.dicRoomTypePackage != null)
+                                {
+                                    @PackageItem2(priceEntity, groupItem, httpsBookUrlTemplate, param.CheckIn, param.CheckOut, userid, isVip, showMorePackage)
+                                }
+                            }
+                        </div>
+
+                        @if (priceEntity2 != null && priceEntity2.PackageGroups != null && priceEntity2.PackageGroups.Count > 0 && showMorePackage)
+                        {
+                            <div class="ota-morepackage" style="@(isMobile ? "" : "margin-bottom: 10px;")"><span class="txt">更多价格</span><div class="line">&nbsp;</div></div>
+                            <div class="ota-packages" style="display:none;">
+                                @foreach (var groupItem in priceEntity2.PackageGroups)
+                                {
+                                    if (groupItem.dicRoomTypePackage != null)
+                                    {
+                                        @PackageItem2(priceEntity2, groupItem, httpsBookUrlTemplate, param.CheckIn, param.CheckOut, userid, isVip, true, true)
+                                    }
+                                }
+                            </div>
+                        }
+
+                        @if (priceEntity.PackageGroups == null || priceEntity.PackageGroups.Count == 0)
+                        {
+                            <div class="visible-xs" style="width:100%;line-height:2.2em;margin:13em 0 5em 0;color:#999;text-align:center;">
+                                <img src="\Content\images\hotel\no_package_icon.png" style="width:1.6em;" /><br />
+                                当前日期无可售套餐
+                            </div>
+                            <div class="hidden-xs" style="width:100%;line-height:2.2em;margin:5em 0 5em 0;color:#999;text-align:center;">
+                                <img src="\Content\images\hotel\no_package_icon.png" style="width:1.6em;" /><br />
+                                当前日期无可售套餐
+                            </div>
+                        }
+
+                        @{
+                            int OTACount = 0;
+                        }
+                        @foreach (OTAInfo2 ota in priceEntity.OTAList)
+                        {
+                            if (OTACount == 0 && (priceEntity.PackageGroups == null || priceEntity.PackageGroups.Count == 0))
+                            {
+                                <div class="panel panel-default ota-panel visible-xs" style="margin-top: @(bodyMarginTop)px; ">
+                                    <a class="panel-body" href="@Utils.BuildOTALink(ota.AccessURL, param.CheckInDate, param.CheckOutDate)">
+                                        <div class="ota-name">
+                                            @ota.Name
+                                        </div>
+                                        <div class="ota-price">
+                                            <b>￥</b>@ota.Price.ToString("0")
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="panel panel-default ota-panel hidden-xs">
+                                    <a class="panel-body" href="@Utils.BuildOTALink(ota.AccessURL, param.CheckInDate, param.CheckOutDate)">
+                                        <div class="ota-name">
+                                            @ota.Name
+                                        </div>
+                                        <div class="ota-price">
+                                            <b>￥</b>@ota.Price.ToString("0")
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="panel panel-default ota-panel">
+                                    <a class="panel-body" href="@Utils.BuildOTALink(ota.AccessURL, param.CheckInDate, param.CheckOutDate)">
+                                        <div class="ota-name">
+                                            @ota.Name
+                                        </div>
+                                        <div class="ota-price">
+                                            <b>￥</b>@ota.Price.ToString("0")
+                                        </div>
+                                    </a>
+                                </div>
+                            }
+                            OTACount++;
+                        }
+                    </div>
+                    <!-- Hotel Right -->
+                    <div class="col-md-4 visible-md visible-lg zmrightpanel">
+                        @Helpers.QRCodes(Url)
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+            </div>
+        </div>
+    </div>
+</div>
+
+@helper PackageItem2(HotelPrice3 priceEntity, PackageGroupItem packageGroup, string httpsBookUrlTemplate, string checkIn, string checkOut, long userid, bool isVip, bool showMorePackage, bool isMorePackage = false)
+{
+    var groupPackageCount = packageGroup.dicRoomTypePackage.Keys.Count;
+    var packageNum = 0;
+    <div class="p-group" style="@(!isMorePackage ? "border-bottom:7px solid #e6e6e6;" : "border-bottom:1px solid #e6e6e6;")">
+        @if (!isMorePackage)
+        {
+            //取出第一个套餐做头部展示
+            var firstPackage = new PackageInfoEntity();
+            var firstPackageKey = "";
+            if (groupPackageCount > 0)
+            {
+                firstPackage = packageGroup.dicRoomTypePackage.First().Value;
+                firstPackageKey = packageGroup.dicRoomTypePackage.First().Key;
+            }
+
+            var groupIconHtml = "";
+            if (packageGroup.GroupItemLables != null && packageGroup.GroupItemLables.Count > 0)
+            {
+                foreach (var lurl in packageGroup.GroupItemLables)
+                {
+                    groupIconHtml += string.Format("<img src='{0}' />", lurl);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(packageGroup.SeriaNoDesc))
+            {
+                @*<div style="border-bottom:6px solid #e0e0e0;"></div>*@
+                <div class="group-tip">@(packageGroup.SeriaNoDesc)</div>
+            }
+
+            <div class="group-head" data-op="0">
+                @if (!string.IsNullOrEmpty(groupIconHtml))
+                {
+                    <div class="group-labels">@Html.Raw(groupIconHtml)</div>
+                }
+                <div class="head-seaction">
+                    <div class="group-tit-big">@(packageGroup.SerialNo)</div>
+                    <div class="l">
+                        <div class="group-info2">@(firstPackage.packageBase.Brief)</div>
+                    </div>
+                    <div class="r">
+                        <div class="price1"><span class="zmjd-iconfont _icon">&#xe623;</span>￥@(firstPackage.VIPPrice)/<span class="night">@(priceEntity.NightCount)晚</span></div>
+                        <div class="price2">普通价￥@(firstPackage.NotVIPPrice)/@(priceEntity.NightCount)晚</div>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+                @if (!isMorePackage)
+                {
+                    <div class="zmjd-iconfont arrow-icon-down"><span class="txt">查看更多房型</span>&#xe650;</div>
+                    <div class="zmjd-iconfont arrow-icon-up" style="display:none;"><span class="txt">收起更多房型</span>&#xe64f;</div>
+                }
+            </div>
+        }
+        <div class="group-items @(!isMorePackage ? "g-items-margin" : "g-items-big")" style="@(!isMorePackage ? "display:none;" : "")">
+            @foreach (var pKey in packageGroup.dicRoomTypePackage.Keys)
+            {
+                var package = packageGroup.dicRoomTypePackage[pKey];
+                var payTypeHtml = "";
+                if (package.PayLabelUrls != null && package.PayLabelUrls.Count > 0)
+                {
+                    payTypeHtml += "<div class='title-labels'>";
+                    foreach (var lurl in package.PayLabelUrls)
+                    {
+                        payTypeHtml += string.Format("<img src='{0}' />", lurl);
+                    }
+                    payTypeHtml += "</div>";
+                }
+
+                //成为VIP
+                var buyVipUrl = "";
+                var buyVipTxt = "";
+                if (package.Suggest != null && !string.IsNullOrEmpty(package.Suggest.ActionUrl) && !string.IsNullOrEmpty(package.Suggest.Text))
+                {
+                    buyVipUrl = package.Suggest.ActionUrl + "&userid=" + userid;
+                    buyVipTxt = package.Suggest.Text;
+                }
+
+                //判断是否需要显示“更多价格”
+                if (showMorePackage && package.PackageType == Convert.ToInt32(HotelServiceEnums.PackageType.CtripPackageByApi))
+                {
+                    showMorePackage = false;
+                }
+
+                //是否已售完
+                var isSoldOut = false;
+                if (package.packageBase.IsSellOut)
+                {
+                    isSoldOut = package.packageBase.IsSellOut;
+                }
+
+                //不同的价格标签
+                var vipPriceLabel = "VIP价";
+                var notVipPriceLabel = "普通价";
+
+                //当前套餐是否需要询价
+                var isAskPrice = false;
+                if (package.CustomerAskPrice != null && !string.IsNullOrEmpty(package.CustomerAskPrice.ActionUrl) && !string.IsNullOrEmpty(package.CustomerAskPrice.Description))
+                {
+                    isAskPrice = true;
+
+                    //替换url中的{userid}
+                    package.CustomerAskPrice.ActionUrl = package.CustomerAskPrice.ActionUrl.Replace("{userid}", userid.ToString());
+
+                    vipPriceLabel = "VIP参考价";
+                    notVipPriceLabel = "参考价";
+                }
+
+                //test
+                //package.CustomerAskPrice.Description = "这是询价套餐";
+
+                <div class="package group-package-item">
+                    <div class="item-info _prow">
+                        <div class="g-package-info" title="点击查看房型信息">
+                            <div class="hidden-xs">
+                                @if (isMorePackage)
+                                {
+                                    <div class="p-tit-1">@(packageGroup.SerialNo)</div>
+                                }
+                                else
+                                {
+                                    <div class="p-tit-1">@(pKey)</div>
+                                }
+
+                                <div class="p-tip">@Html.Raw(payTypeHtml)</div>
+
+                                @if (isAskPrice)
+                                {
+                                    <div class="p-tip-2">@(package.CustomerAskPrice.Description)</div>
+                                }
+                            </div>
+                            <div class="visible-xs">
+                                @if (isMorePackage)
+                                {
+                                    <div class="p-tit-1">@(packageGroup.SerialNo)</div>
+                                }
+                                else
+                                {
+                                    <div class="p-tit-1">@(pKey)</div>
+                                }
+
+                                <div class="p-tip">@Html.Raw(payTypeHtml)</div>
+                                @if (!isVip)
+                                {
+                                    <div class="p-tip-vip"><div class="line-vip">付199元年费可<a onclick="goBuyVip()" href="javascript:;">@(buyVipTxt)</a></div></div>
+                                }
+
+                                @if (isAskPrice)
+                                {
+                                    <div class="p-tip-2">@(package.CustomerAskPrice.Description)</div>
+                                }
+                            </div>
+
+                        </div>
+                        <div class="text-right button g-package-price">
+
+                            @if (isAskPrice)
+                            {
+                                <div class="price-lab-sml">参考价</div>
+                            }
+
+                            <div class="price1"><span class="zmjd-iconfont _icon">&#xe623;</span>￥@(package.VIPPrice)/<span class="night">@(priceEntity.NightCount)晚</span></div>
+                            <div class="price2">普通价￥@(package.NotVIPPrice)/@(priceEntity.NightCount)晚</div>
+
+                            <div class="shopbtn g-package-btns">
+                                @if (isSoldOut)
+                                {
+                                    <div class="p-btn-0">已售完</div>
+                                    if (package.CanUseCashCoupon > 0)
+                                    {
+                                        <div class="p-tip-0">可用券@(package.CanUseCashCoupon)</div>
+                                    }
+                                }
+                                else
+                                {
+                                    if (isAskPrice)
+                                    {
+                                        <div class="p-btn-1" data-gourl="@(package.CustomerAskPrice.ActionUrl)">询价</div>
+                                        if (package.CanUseCashCoupon > 0)
+                                        {
+                                            <div class="p-tip-1">可用券@(package.CanUseCashCoupon)</div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        object args = new { package = package.packageBase.ID };
+
+                                        switch (package.SellState)
+                                        {
+                                            //可售，显示预订
+                                            case 1:
+                                                {
+                                                    <div class="p-btn-1" data-sellstate="@(package.SellState)" data-bookurl="@string.Format(httpsBookUrlTemplate, package.packageBase.ID, checkIn, checkOut)">预订</div>
+                                                    if (package.CanUseCashCoupon > 0)
+                                                    {
+                                                        <div class="p-tip-1">可用券@(package.CanUseCashCoupon)</div>
+                                                    }
+                                                    break;
+                                                }
+                                            //不可售，显示查看可售日
+                                            case 2:
+                                                {
+                                                    <div class="p-btn-2" data-sellstate="@(package.SellState)" data-calendar-options="@Url.Action("PackageCalendar", args)">查看可售日</div>
+                                                    if (package.CanUseCashCoupon > 0)
+                                                    {
+                                                        <div class="p-tip-2">可用券@(package.CanUseCashCoupon)</div>
+                                                    }
+                                                    break;
+                                                }
+                                            //不可售，显示预订，点击弹出日历选择日期
+                                            case 3:
+                                                {
+                                                    <div class="p-btn-2" data-sellstate="@(package.SellState)" data-calendar-options="@Url.Action("PackageCalendar", args)">预订</div>
+                                                    if (package.CanUseCashCoupon > 0)
+                                                    {
+                                                        <div class="p-tip-1">可用券@(package.CanUseCashCoupon)</div>
+                                                    }
+                                                    break;
+                                                }
+                                        }
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                    @if (packageNum + 1 < groupPackageCount)
+                    {
+                        <div class="item-line"></div>
+                    }
+                    <div class="panel-body" style="display:none;">
+                        <div class="p-section">
+                            <div class="package-room">
+                                @if (package.Room != null)
+                                {
+                                    var _imgSrc = "http://whfront.b0.upaiyun.com/app/img/home/noroom-load-16x9.png";
+                                    if (!string.IsNullOrEmpty(package.Room.PicShortNames))
+                                    {
+                                        _imgSrc = package.Room.PicShortNames.Replace("_appview", "_640x360");
+                                    }
+                                    <div class="room-pics">
+                                        <img data-orisrc="@_imgSrc" src="http://whfront.b0.upaiyun.com/app/img/home/noroom-load-16x9.png" alt="" />
+                                    </div>
+                                    <div class="room-names">
+                                        <div class="r-n-item">@package.Room.RoomCode</div>
+                                    </div>
+                                }
+                                <div class="room-pname">@(pKey)</div>
+                                <div class="room-brief">@(package.packageBase.Brief)</div>
+                                <div class="price1"><span class="zmjd-iconfont _icon">&#xe623;</span>￥@(package.VIPPrice)/<span class="night">@(priceEntity.NightCount)晚</span><span class="def-price">普通价￥@(package.NotVIPPrice)/@(priceEntity.NightCount)晚</span></div>
+
+                                @if (isAskPrice)
+                                {
+                                    <div class="room-tip">@(package.CustomerAskPrice.Description)</div>
+                                }
+
+                                <div class="room-vip">@Html.Raw(payTypeHtml)</div>
+
+                                @if (!isVip && !string.IsNullOrEmpty(buyVipTxt))
+                                {
+                                    <div class="buyvip-section p-tip-vip visible-xs"><div class="line-vip">付199元年费可<a onclick="goBuyVip()" href="javascript:;">@(buyVipTxt)</a></div></div>
+                                }
+
+                            </div>
+                            <div class="package-detail">
+                                套餐详情:
+                                <ul>
+                                    <li>@(package.Room.Description)</li>
+                                    @foreach (PItemEntity item in package.Items)
+                                    {
+                                        if (item.Type == 1)
+                                        {
+                                            <li>@Html.Raw(item.Description)</li>
+                                        }
+                                    }
+                                </ul>
+                                注意事项:
+                                <ul>
+                                    @foreach (PItemEntity item in package.Items)
+                                    {
+                                        if (item.Type != 1)
+                                        {
+                                            <li>@Html.Raw(item.Description)</li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="buy-ctrl">
+
+                            @if (isSoldOut)
+                            {
+                                <div class="soldout">已售完</div>
+                            }
+                            else
+                            {
+                                if (isAskPrice)
+                                {
+                                    <a class="buy btn-goask" href="javascript:;" data-gourl="@(package.CustomerAskPrice.ActionUrl)">询价</a>
+                                }
+                                else
+                                {
+                                    object args = new { package = package.packageBase.ID };
+
+                                    switch (package.SellState)
+                                    {
+                                        //可售，显示预订
+                                        case 1:
+                                            {
+                                                <a class="buy btn-gobuy" href="javascript:;" data-sellstate="@(package.SellState)" data-price="@(package.Price)" data-vipprice="@(package.VIPPrice)" data-pid="@(package.packageBase.ID)" data-bookurl="@string.Format(httpsBookUrlTemplate, package.packageBase.ID, checkIn, checkOut)">@(vipPriceLabel) ¥@(package.VIPPrice) 点击购买</a>
+                                                break;
+                                            }
+                                        //不可售，显示查看可售日
+                                        case 2:
+                                            {
+                                                <a class="look btn unavailable" href="javascript:;" data-sellstate="@(package.SellState)" data-calendar-options="@Url.Action("PackageCalendar", args)">查看可售日</a>
+                                                break;
+                                            }
+                                        //不可售，显示预订，点击弹出日历选择日期
+                                        case 3:
+                                            {
+                                                <a class="look btn unavailable" href="javascript:;" data-sellstate="@(package.SellState)" data-calendar-options="@Url.Action("PackageCalendar", args)">预订</a>
+                                                break;
+                                            }
+                                    }
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                packageNum++;
+            }
+        </div>
+
+    </div>
+}
+
+<div class="single-package-bg" style="display:none;"></div>
+<div class="single-package" style="display:none;">
+    <div class="close-ctrl" title="关闭">Ｘ</div>
+    <div class="p-content"></div>
+</div>
+
+<input type="hidden" id="userid" value="@(userid)" />
+<input type="hidden" id="isInWeixin" value="@(isInWeixin ? 1 : 0)" />
+<input type="hidden" id="isVip" value="@(isVip ? 1 : 0)" />
+<input type="hidden" id="_name" value="@string.Format("{0}套餐预订", priceEntity.Name)" />
+<input type="hidden" id="hidCurUserCID" value="@(ViewBag.CID)" />
+<input type="hidden" id="hidWxUnionid" value="@(ViewBag.Unionid)" />

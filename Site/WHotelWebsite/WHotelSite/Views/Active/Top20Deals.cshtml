@@ -1,0 +1,107 @@
+﻿@model  List<HJD.HotelServices.Contracts.TopNPackageItem>
+@{
+    Layout = null;
+    
+    ViewBag.Title = "本周Top25最惠";
+    
+    var isApp = ViewBag.IsApp;
+}
+
+<!DOCTYPE html>
+
+<script type="text/javascript">
+    function goto(param) {
+        var url = "@(ViewBag.AccessProtocal)" + param;
+        this.location = url;
+    }
+
+    function openHotel(hotelid) {
+        var isapp = $("#isapp").val() == "1";
+        if (isapp) {
+            goto('hotel/' + hotelid);
+        }
+        else {
+            location.href = "http://www.zmjiudian.com/hotel/" + hotelid;
+        }
+    }
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>本周Top25特惠</title>
+    <link href="/content/css/active/toptuijian.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+</head>
+<body>
+
+    <div class="top-body">
+        <div class="top-tit"><img src="~/Content/images/active/top20hotel/main-tit-25.png" alt="" /></div>
+        <div class="list-hotel">
+            <ul class="ul-hotel">
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    var no = i + 1;
+                    TopNPackageItem hotel = Model[i];
+                    var pic = (hotel.PicUrls != null && hotel.PicUrls.Count > 0 ? hotel.PicUrls[0] : "");
+                    
+                    <li class="item-hotel">
+                        <div onclick="openHotel('@hotel.HotelID')">
+                            <div class="head">
+                                <img src="~/Content/images/active/top20hotel/item-head.png" alt="" />
+                            </div>
+                            <div class="body">
+                                <div class="title">
+                                    <div class="left">
+                                        <span class="item-no item-no-@no"></span>
+                                    </div>
+                                    <div class="right">
+                                        <div class="hotel-name">@(hotel.HotelName)</div>
+                                        <div class="hotel-info">
+                                            <div class="hotel-package">@(hotel.PackageBrief)</div>
+                                            <div class="hotel-price">
+                                                @if (hotel.PackagePrice != null)
+                                                {
+                                                    var def = hotel.PackagePrice.Find(p => p.Type == 0);
+                                                    if (def != null)
+                                                    {
+                                                        <span>平日<span class="price"><span class="t">￥</span>@def.Price</span></span>
+                                                    }
+
+                                                    var week = hotel.PackagePrice.Find(p => p.Type == 6 || p.Type == 7);
+                                                    if (week != null)
+                                                    {
+                                                        <span> / 周末<span class="price"><span class="t">￥</span>@week.Price</span></span>   
+                                                    }
+                                                }
+                                            </div>
+                                            </div>
+                                    </div>
+                                    <div style="clear:both;"></div>
+                                </div>
+
+                                <div class="pic">
+                                    <img src="@pic" alt="@hotel.HotelName" />
+                                </div>
+                                <div class="info">
+                                    <span class="tit">上榜理由：</span>@Html.Raw(hotel.RecomemndWord)
+                                </div>
+                            </div>
+                            <div class="foot"><img src="~/Content/images/active/top20hotel/item-bottom.png" alt="" /></div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+    </footer>
+
+    <script src="~/Content/js/jquery-1.10.2-min.js"></script>
+    <script type="text/javascript">
+        var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+        document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F3566e9570ddbe6722a51adedffbf065b' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+</body>
+</html>

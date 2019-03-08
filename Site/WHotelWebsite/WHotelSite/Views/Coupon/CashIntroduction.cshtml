@@ -1,0 +1,53 @@
+﻿@{
+    //ViewBag.Title = "CashIntroduction";
+    Layout = null;
+    DateTime date = DateTime.Now;
+    var cssSuffix = string.Format("?suffix={0}{1}{2}{3}{4}", date.Year, date.Month, date.Day, date.Hour, date.Minute);
+}
+
+<head>
+    <meta charset="utf-8">
+    <title>返现说明</title>
+    <link rel="stylesheet" href="~/Content/css/cash_list_reset.css" />
+    <link rel="stylesheet" href="~/Content/css/css_shuoming.css@(cssSuffix)" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=xi0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="format-detection" content="telephone=no">
+</head>
+
+<div class="container">
+    <div class="tou">
+        <div class="k1">
+            <h5>返现获取</h5>
+        </div>
+        <div class="k2">
+            <p>从您领取现金券开始的2年内有效。</p>
+        </div>
+        <div class="k3">
+
+        </div>
+    </div>
+    <div class="wei">
+        <div class="k1">
+            <h5>使用方法</h5>
+        </div>
+        <div class="k2">
+            <p>在现金券的有效期内，您可以使用现金券抵扣预订酒店的消费金额。系统会根据不同的订单金额自动算出可抵用的现金额度，直接从您的所需支付的款项中扣除。</p>
+        </div>
+        <div class="k3">
+        </div>
+    </div>
+</div>
+
+
+@*<h3>返现说明</h3>
+<div style="border-color:gray;border:solid">
+    <p>当您预付成功带有返现金额的酒店时，您可以获得相应金额的返现。</p>
+    <p>您参与“发红包”的活动，也可获得相应的返现红包</p>
+</div>
+<br />
+<h3>返现入账</h3>
+<div style="border-color:gray;border:solid">
+    <p>您通过预订订单所获得的返现，将会在5个工组日内原路返还到和您的订单关联的支付帐号中。</p>
+</div>*@

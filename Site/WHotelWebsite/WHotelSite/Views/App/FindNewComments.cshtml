@@ -1,0 +1,110 @@
+﻿@{
+    Layout = null;
+
+    var isInWeixin = ViewBag.isInWeixin;
+    var isApp = ViewBag.IsApp;
+    var appType = ViewBag.AppType;
+    
+    RecommendCommentListModel cmList = ViewBag.CmList;
+}
+
+@section styles
+{
+
+}
+
+@if (cmList != null && cmList.CommentList != null && cmList.CommentList.Count > 0)
+{
+    for (int cnum = 0; cnum < cmList.CommentList.Count; cnum++)
+    {
+        var cmEntity = cmList.CommentList[cnum];
+
+        //点评照片
+        var picCount = cmEntity.PhotoUrls.Count;
+
+        <div class="item">
+            <div class="left">
+                <div class="u-img" onclick="goto('personal/homepage?userid=@(cmEntity.AuthorUserID)')">
+                    @if (cnum > 1)
+                    {
+                        <img data-original='@(cmEntity.AvatarUrl.Replace("_small", "_120x120"))' data-lazyload-id='@(cnum)' alt="" />   
+                    }
+                    else
+                    { 
+                        <img src='@(cmEntity.AvatarUrl.Replace("_small", "_120x120"))' alt="" />   
+                    }
+                    @if (!string.IsNullOrEmpty(cmEntity.RoleDesc))
+                    {
+                        <div class="utag"><img src="http://whfront.b0.upaiyun.com/app/img/find/inspector-tag-icon.png" alt="" /></div>
+                    }
+                </div>
+            </div>
+            <div class="right">
+                <div class="u-name" onclick="goto('personal/homepage?userid=@(cmEntity.AuthorUserID)')">@(cmEntity.NickName)</div>
+                <div class="u-remark">@(cmEntity.RecommendDesc)</div>
+                <div class="u-c-hotel" onclick="goto('hotel/@cmEntity.HotelId')">
+                    <div class="l">
+                        @if (cnum > 1)
+                        {
+                            <img data-original="@(!string.IsNullOrEmpty(cmEntity.HotelPicUrl) ? cmEntity.HotelPicUrl.Replace("290x290", "120x120") : "http://whfront.b0.upaiyun.com/app/img/home/home-load-1x1.png")" data-lazyload-id='@(cnum)' alt="" />
+                        }
+                        else
+                        {
+                            <img src="@(!string.IsNullOrEmpty(cmEntity.HotelPicUrl) ? cmEntity.HotelPicUrl.Replace("290x290", "120x120") : "http://whfront.b0.upaiyun.com/app/img/home/home-load-1x1.png")" alt="" />
+                        }
+                    </div>
+                    <div class="r">
+                        <div class="hn">@(cmEntity.HotelName)</div>
+                        <div class="hs @(appType == "android" ? ".hs-android" : "")">@(cmEntity.HotelScore)分 @(cmEntity.HotelRecommendedCount > 0 ? string.Format("{0}人推荐", cmEntity.HotelRecommendedCount) : "")</div>
+                        <div class="hp @(appType == "android" ? ".hp-android" : "")"><span>￥</span>@(cmEntity.HotelPrice)</div>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+                <div class="u-c-desc" onclick="goto('personal/comments/@(cmEntity.CommentID)')">@(cmEntity.Content)</div>
+                @if (picCount > 0)
+                {
+                    <div class="u-c-photos" onclick="goto('personal/comments/@(cmEntity.CommentID)')">
+                        @for (int pnum = 0; pnum < picCount; pnum++)
+                        {
+                            var picSrc = cmEntity.PhotoUrls[pnum];
+                            
+                            //根据点评照片数量，控制照片大小
+                            var picAddClass = "";
+                            if (picCount == 1) 
+                            {
+                                picAddClass = "p-1";
+                                //picSrc = picSrc.Replace("290x290", "140X140");
+                            }
+                            else if (picCount <= 4)
+                            {
+                                picAddClass = "p-4";
+                                picSrc = picSrc.Replace("290x290", "120x120");
+                            }
+                            else
+                            {
+                                picSrc = picSrc.Replace("290x290", "120x120");
+                            }
+                            <div class="p-item @(picAddClass)">
+                                @if (cnum > 0)
+                                {
+                                    <img data-original="@(picSrc)" data-lazyload-id='@(cnum*pnum)' alt="" />
+                                }
+                                else
+                                {
+                                    <img src="@(picSrc)" alt="" />
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+                <div class="u-c-time">@(cmEntity.TimeDesc)</div>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+    }   
+}
+
+@section scripts
+{
+    
+}

@@ -1,0 +1,30 @@
+﻿@model WHotelSite.Models.CityListEntity
+@{
+    Layout = null;
+}
+@if (Model.AroundCityList != null && Model.AroundCityList.aroundCityCount > 0 && Model.AroundCityList.cityList != null && Model.AroundCityList.cityList.Count > 0)
+{
+    var disName = (!string.IsNullOrEmpty(Model.AroundCityList.currentCityName) ? Model.AroundCityList.currentCityName : "定位中");
+    var disCount = (Model.AroundCityList.cityList.Count > 16 ? 16 : Model.AroundCityList.cityList.Count);
+    <div class="g-tit">当前定位：@disName</div>
+    <div class="g-list">
+        <ul>
+            @for (int i = 0; i < disCount; i++)
+            {
+                var item = Model.AroundCityList.cityList[i];
+                var url = WHotelSite.App_Code.UrlHelperExtension.CityItemUrl(Model.IsApp, item.DistrictID, item.DistrictName);
+                if (i == 0 && false)
+                {
+                    var url2 = WHotelSite.App_Code.UrlHelperExtension.CityItemUrl(Model.IsApp, item.DistrictID, item.DistrictName + "及周边", 3);
+                    <li onclick="districtClick('@url2',@item.DistrictID, '@item.DistrictName', 0, 0, true)"><a href="javascript:;">@(item.DistrictName)及周边</a></li>
+                }
+                <li onclick="districtClick('@url',@item.DistrictID, '@item.DistrictName', 0, 0, true)"><a href="javascript:;">@item.DistrictName</a></li>
+            }
+        </ul>
+    </div>
+}
+else
+{
+    <div class="g-tit">当前定位：定位失败</div>
+    <div class="g-list"></div>
+}

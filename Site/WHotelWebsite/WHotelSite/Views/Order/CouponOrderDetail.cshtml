@@ -1,0 +1,170 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    var userid = ViewBag.UserId;
+
+    var isInWeixin = ViewBag.isInWeixin;
+    var isApp = ViewBag.IsApp;
+    var isMobile = ViewBag.IsMobile;
+    var appType = ViewBag.AppType;
+    var appVerCode = ViewBag.AppVerCode;
+    var appBundleVer = ViewBag.AppBundleVer;
+
+    //订单ID
+    var oid = ViewBag.OID;
+    
+    //当前时间
+    var now = DateTime.Now;
+    
+    ViewBag.Title = "订单详情";
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    ViewBag.LoadHmBaidu = false;
+}
+
+@section styles
+{
+    <link href="~/Content/css/framework/zmjd.modal.min.css" rel="stylesheet" />
+    <link href="/content/css/framework/iscroll.css" rel="stylesheet">
+    <link href="~/Content/css/order/couponorderdetail.css?v=@(Helpers.curAppVer() + DateTime.Now.ToString("hhmmss"))" rel="stylesheet" />
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+}
+<div v-cloak id="orderDetail" class="orderDetail">
+    <div class="top-tip" v-if="detailInfo.TopTip">{{{detailInfo.TopTip}}}</div>
+    <div class="section sku-info">
+        <div class="item-info">
+            <div class="tit">
+                <div class="_icon"><img :src="detailInfo.OrderIcon" alt="" /></div>
+                {{detailInfo.PageTitle}}
+            </div>
+            <div class="package clearfloat">
+                <div class="name">{{detailInfo.SkuName}}</div>
+                <div class="price" v-if="!detailInfo.IsPromotion&&detailInfo.TotalPoints">{{detailInfo.TotalPoints}}积分</div>
+                <div class="price" v-if="!detailInfo.IsPromotion&&detailInfo.TotalPrice">¥{{detailInfo.TotalPrice}}</div>
+            </div>
+            <div class="others clearfloat">
+                <div class="desc">{{{detailInfo.OthersTip}}}</div>
+                <div class="state {{detailInfo.StateAddCss}}">{{detailInfo.StateName}}</div>
+            </div>
+        </div>
+        <div class="ctrl">
+            <a href="{{detailInfo.productUrl}}" class="link" target="_blank">查看详情>></a>
+        </div>
+    </div>
+    <div class="section coupon-info" v-if="detailInfo.ShowCouponSection">
+        <div class="tit">
+            <div class="_t1">－券码－</div>
+            <div class="_t2">券码只可使用一次，过期无效</div>
+        </div>
+        <div class="meddle-line"><img src="http://whfront.b0.upaiyun.com/app/img/order/coupon-meddle-line.png" alt="" /></div>
+        <div class="coupon">
+            <div class="no-info clearfloat">
+                <div class="no" v-if="detailInfo.FirstReserveInfo">
+                    <div class="_info1">{{detailInfo.CouponNo}}</div>
+                    <div class="_info2">已预约：{{detailInfo.FirstReserveInfo.BookDay}} {{detailInfo.FirstReserveInfo.PlayNumName}}</div>
+                </div>
+                <div class="no" v-else>{{detailInfo.CouponNo}}</div>
+                <div class="btn" v-if="detailInfo.ShowQrcode">
+                    <a href="javascript:;" class="qrcode-btn zmjd-iconfont" onclick="showQrcode('{{detailInfo.CouponNo}}')">&#xe616;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section travel-info" v-if="detailInfo.TravelPerson&&detailInfo.TravelPerson.length">
+        <div class="tit">出行人</div>
+        <div class="item {{$index+1==detailInfo.TravelPerson.length?'item-nobr':''}}" v-for="item in detailInfo.TravelPerson">
+            <div class="lab">{{item.TravelPersonName}}</div>
+            <div class="val">{{item.CardTypeName}} {{item.IDNumber}}</div>
+        </div>
+    </div>
+    <div class="section tempData-info" v-if="detailInfo.TemplateData&&detailInfo.TemplateData.ContentList&&detailInfo.TemplateData.ContentList.length">
+        <div class="item clearfloat {{$index+1==detailInfo.TemplateData.ContentList.length?'item-nobr':''}}" v-for="item in detailInfo.TemplateData.ContentList">
+            <div class="lab">{{item.Name}}</div>
+            <div class="val">{{item.Content}}</div>
+        </div>
+    </div>
+    <div class="section detail-info">
+        <div class="tit">使用说明</div>
+        <div class="detail">
+            <div class="item" v-for="nitem in detailInfo.Notice">
+                <div class="no">{{nitem.indexOf('#')==0||!nitem?'':'&bull;'}}</div>
+                {{{nitem.indexOf('#')==0?nitem.replace('#',''):nitem}}}
+            </div>
+        </div>
+        <div class="line" v-if="detailInfo.otherObjList&&detailInfo.otherObjList.length"></div>
+        <div class="moreinfo" v-if="detailInfo.otherObjList&&detailInfo.otherObjList.length">
+            <div v-for="item in detailInfo.otherObjList">
+                <div class="item" v-if="item.istel">{{item.lab}}：<a href="tel:{{item.tel}}" class="tel">{{item.tel}}</a> {{item.telex}}</div>
+                <div class="item" v-else>{{item.lab}}：{{item.val}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="order-info" v-for="exitem in detailInfo.ExchangeCouponList">
+            <div class="tit" v-if="detailInfo.ExchangeCouopnOrderType==6&&exitem.IsDepositOrder">阶段一：定金</div>
+            <div class="tit" v-if="detailInfo.ExchangeCouopnOrderType==6&&!exitem.IsDepositOrder&&detailInfo.ExchangeCouponList.length>1">阶段二：尾款</div>
+            <div class="item"><span class="l">订单号：</span><span class="v">{{exitem.ID}}</span></div>
+            <div class="item"><span class="l">下单时间：</span><span class="v">{{exitem.CreateTime}}</span></div>
+            <div v-if="!detailInfo.IsPromotion">
+                <div class="item" v-if="exitem.Points"><span class="l">总价：</span><span class="v1">{{exitem.Points}}积分</span></div>
+                <div class="item" v-else><span class="l">总价：</span><span class="v1">¥{{exitem.Price}}</span></div>
+            </div>
+            <div class="item"><span class="l">数量：</span><span class="v">{{exitem.OrderCount}}</span></div>
+            <div class="item" v-if="exitem.CashCouponAmount"><span class="l">现金券：</span><span class="v">{{exitem.CashCouponAmount?'- ¥'+exitem.CashCouponAmount:'¥0'}}{{exitem.CashCouponAmountName?'('+exitem.CashCouponAmountName+')':''}}</span></div>
+            <div class="item" v-if="exitem.VoucherAmount"><span class="l">代金券：</span><span class="v">{{exitem.VoucherAmount?'- ¥'+exitem.VoucherAmount:'¥0'}}</span></div>
+            <div class="item" v-if="exitem.UserUseHousingFundAmount"><span class="l">住基金：</span><span class="v">{{exitem.UserUseHousingFundAmount?'- ¥'+exitem.UserUseHousingFundAmount:'¥0'}}</span></div>
+            <div class="item" v-if="detailInfo.ExchangeCouopnOrderType==6&&!exitem.IsDepositOrder&&exitem.ExpansionAmount"><span class="l">定金抵扣：</span><span class="v1">¥{{exitem.ExpansionAmount}}</span></div>
+            <div v-if="!detailInfo.IsPromotion">
+                <div class="item" v-if="exitem.Points"><span class="l">支付价：</span><span class="v1">{{exitem.Points}}积分</span></div>
+                <div class="item" v-else><span class="l">支付价：</span><span class="v1">¥{{exitem.FinishPayPrice}}</span></div>
+            </div>
+        </div>
+    </div>
+    <div class="space-section"></div>
+    <div class="foot-section" v-cloak>
+        <div class="ctrl-section">
+            <a href="/coupon/exchange/{{detailInfo.ThisExchangeId}}?userid={{detailInfo.UserID}}" class="exchange-btn" v-if="detailInfo.ShowExchange&&detailInfo.ActivityType==200" target="_blank">兑换</a>
+            <a href="javascript:;" class="exchange-btn" v-if="detailInfo.ShowExchange&&detailInfo.ActivityType==500" target="_blank" onclick="goCouponExchangeActivityType500('{{detailInfo.UserID}}', '{{detailInfo.ThisExchangeId}}', '{{detailInfo.RelPackageAlbumsID}}')">兑换</a>
+            <a href="/Coupon/CouponReserve?skuid={{detailInfo.ReserveSKUID}}&exid={{detailInfo.ReserveExId}}&userid={{detailInfo.UserID}}&_newpage=1" class="reserve-btn" v-if="detailInfo.ShowReserve" target="_blank">预约</a>
+            <a href="javascript:;" class="cancel-reserve-btn" v-if="detailInfo.ShowCanelReserve" onclick="cancelReserve('{{detailInfo.FirstReserveInfo.ID}}')">取消预约</a>
+            <a href="javascript:;" class="refund-btn" v-if="detailInfo.ShowRefund" onclick="refund('{{detailInfo.ThisExchangeId}}')">退款</a>
+            <a href="{{detailInfo.GetGroupPosterUrl}}" class="get-poster-btn" v-if="detailInfo.ShowGetGroupPoster" target="_blank">获取助力海报</a>
+            <a href="tel:4000021702" class="tell-btn" v-if="detailInfo.ShowServiceTell">联系客服</a>
+            <a href="javascript:;" class="gopay-btn" v-if="detailInfo.ShowPay" onclick="productcouponGoPay('{{detailInfo.CouponOrderID}}')">支付</a>
+            <a href="javascript:;" class="gopay-btn" v-if="detailInfo.ShowFinalPay" onclick="goCouponBook('{{detailInfo.CouponOrderStepGroup.BookPosition}}', '{{detailInfo.CouponOrderStepGroup.TailSKUID}}', 1, 0, '{{detailInfo.FinalNeedCouponOrderId}}')">{{detailInfo.ShowFinalTxt}}</a>
+            <a href="javascript:;" class="gopay0-btn" v-if="detailInfo.ShowFinalPay0">{{detailInfo.ShowFinalTxt}}</a>
+        </div>
+    </div>
+
+    <div id="qrcode-section" class="qrcode-section" style="display:none;" onclick="hideQrcodeSection()"></div>
+
+    <footer>
+        <input type="hidden" id="oid" value="@oid" />
+        <input type="hidden" id="userid" value="@userid" />
+        <input type="hidden" id="isApp" value="@(isApp ? "1" : "0")" />
+
+        <input type="hidden" id="year0" value="@now.Year" />
+        <input type="hidden" id="month0" value="@(now.Month)" />
+        <input type="hidden" id="day0" value="@now.Day" />
+        <input type="hidden" id="hour0" value="@now.Hour" />
+        <input type="hidden" id="minute0" value="@now.Minute" />
+        <input type="hidden" id="second0" value="@now.Second" />
+    </footer>
+
+</div>
+
+@*<div style="margin:1em 0 5em 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3a%2f%2f192.168.1.22%3a8081%2fApp%2fOrder%3fuserid%3d%7buserid%7d">GO APP (Local) >>></a></div>*@
+
+@section scripts
+{
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/framework/zmjd.modal.min.js"></script>
+    <script src="~/Content/js//framework/iscroll.js"></script>
+    <script src="~/Content/js/framework/zmjd.qrcode.min.js"></script>
+    <script src="~/Content/js/order/couponorderdetail.js?v=@(Helpers.curAppVer())"></script>
+}

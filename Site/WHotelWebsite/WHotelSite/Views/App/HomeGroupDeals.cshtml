@@ -1,0 +1,98 @@
+﻿@model HomePageData30
+@{
+    Layout = null;
+
+    var cssVersion = "190001010000";
+    try
+    {
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex) { }
+    
+    var isApp = ViewBag.IsApp;
+    var userid = ViewBag.UserId;
+    var appType = ViewBag.AppType;
+}
+
+@if (Model != null && Model.GroupDeals != null && Model.GroupDeals.Count > 0)
+{
+    var listMax = 5;
+    var listCount = Model.GroupDeals.Count >= listMax ? listMax : Model.GroupDeals.Count;
+    
+    <div class="home-tit home-tit-big-height home-hide">
+        @*<div class="center">－ 酒+机套餐 －</div>*@
+        <div class="left">酒+机套餐</div>
+        <div class="right">
+            @if (Model.GroupDeals.Count > listMax)
+            {
+                <div class="more-link zmjd-iconfont" onclick="gourl('/App/MorePackageList?userid=@(userid)&albumId=0&t=2&_newpage=1&_dorpdown=1')">更多&#xe601;</div>
+            }
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="home-multiple home-hide" id="home-middle-banner2">
+        <div id="groupdeals-banner" class="am-slider am-slider-default am-slider-carousel home-hlist-panel seat-banner" style="margin:0 0 0 0;">
+            <ul class="am-slides" style="border:none;">
+                @for (int i = 0; i < listCount; i++)
+                {
+                    var groupItem = Model.GroupDeals[i];
+
+                    <li onclick="gotopage('coupon/shop/group/@(groupItem.activityId)?_dorpdown=1')">
+                        <div class="h-img">
+                            @if (i < 2)
+                            {
+                                <img src="@groupItem.hotelPicUrl" alt="" />
+                            }
+                            else
+                            {
+                                <img data-orisrc="@groupItem.hotelPicUrl" src="http://whfront.b0.upaiyun.com/app/img/home/home-load2-16x9.png" alt="" />
+                            }
+                            <div class="h-tit-tip-mode"></div>
+                            <div class="h-tit-tip-txt" style="left: 0.7em;top: 0.4em;">
+                                <span class="state">仅售@(groupItem.totalNum)套</span>
+                            </div>
+                            <div class="h-tit-tip-price"><span class="p-un">￥</span>@groupItem.activityPrice</div>
+                        </div>
+                        <div class="hname-info">
+                            <div class="hotel-name">@groupItem.hotelName</div>
+                            <div class="hotel-packagebrief">@groupItem.packageBrief</div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="home-multiple-border2"></div>
+    <script>
+        $(".home-tit").show();
+        $(".home-multiple").show();
+    </script>
+    <script>
+
+        var wwidth = $(window).width();
+        var itemWidth = 363; if (wwidth < 410) itemWidth = 333; if (wwidth == 360) itemWidth = 320; if (wwidth < 350) itemWidth = 285;
+
+        //团购
+        var groupImgSwIndex = 2;
+        $('#groupdeals-banner').flexslider({
+            itemWidth: itemWidth,
+            itemMargin: 6,
+            slideshow: false,
+            animationLoop: false,
+            animationSpeed: 300,
+            pauseOnAction: true,
+            controlNav: false,
+            directionNav: false,
+            after: function (slider) {
+                if (groupImgSwIndex < slider.slides.length) {
+                    var li = $(slider.slides[groupImgSwIndex]);
+                    var imgObj = li.find("img");
+                    setImgOriSrc(imgObj);
+                    groupImgSwIndex++;
+                }
+            }
+        });
+    </script>
+}

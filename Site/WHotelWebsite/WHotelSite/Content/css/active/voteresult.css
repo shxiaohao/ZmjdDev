@@ -1,0 +1,146 @@
+﻿@charset "UTF-8";
+html, body {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  background: #FFFAF5;
+  -webkit-user-select: none;
+  user-select: none;
+  font-family:Arial;
+}
+
+/*禁止长按链接与图片弹出菜单*/
+a, img {
+  -webkit-touch-callout: none; 
+}
+
+.main-panel {
+    width:100%;
+    height:auto;
+    margin:0 auto 0 auto;
+    padding:0 0 0 0;
+    display:table;
+}
+    .main-panel .banner{
+        width:100%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0 0 0 0;
+    }
+        .main-panel .banner img{
+            width:100%;
+        }
+
+    .main-panel .vote-item{
+        width:90%;
+        height:auto;
+        margin:0.8em auto 0 auto;
+        padding:1.1em 0.5em 0.8em 0.5em;
+        background:#fff;
+        box-shadow: 0px 2px 6px rgba(0,0,0,0.12);
+        border-radius:4px;
+        box-sizing:border-box;
+        overflow:hidden;
+        position:relative;
+    }
+        .main-panel .vote-item .no-tag{
+            width:2.6em;
+            height:2.6em;
+            margin:0 auto 0 auto;
+            padding:0.25em 0 0 0.4em;
+            text-align:left;
+            font-size:0.8em;
+            color:#fff;
+            position:absolute;
+            left:0;
+            top:0;
+            background:url(http://whfront.b0.upaiyun.com/www/img/Active/voteresult/vote-number-tag-bg.png) no-repeat;
+            background-size:2.6em;
+            box-sizing:border-box;
+        }
+            .main-panel .vote-item .no-tag-ten{
+                padding:0.25em 0 0 0.3em;
+            }
+        .main-panel .vote-item .left{
+            width:5em;
+            height:auto;
+            margin:0 auto 0 auto;
+            padding:0 0 0 0;
+            float:left;
+            text-align:center;
+        }
+            .main-panel .vote-item .left img{
+                width:3.6em;
+                border-radius:4px;
+            }
+        .main-panel .vote-item .right{
+            width:calc(100% - 5em);
+            height:auto;
+            margin:0 auto 0 auto;
+            padding:0 0 0 0.6em;
+            float:right;
+            box-sizing:border-box;
+        }
+            .main-panel .vote-item .right .name{
+                width:100%;
+                height:auto;
+                margin:0 auto 0 auto;
+                padding:0.5em 0 0.3em 0;
+                box-sizing:border-box;
+            }
+                .main-panel .vote-item .right .name .no{
+                    margin:0 0 0 0;
+                    padding:0 0 0 0;
+                    font-size:0.8em;
+                    color:#2c2c2c;
+                }
+                .main-panel .vote-item .right .name .n{
+                    margin:0 0 0 0.8em;
+                    padding:0 0 0 0;
+                    font-size:0.8em;
+                    color:#2c2c2c;
+                }
+                
+            .main-panel .vote-item .right .votes{
+                width:100%;
+                height:auto;
+                margin:0 auto 0 auto;
+                padding:0 0 0 0;
+                box-sizing:border-box;
+                font-size:1em;
+                color:#fe8000;
+            }
+            .main-panel .vote-item .right .vote-state{
+                width:3.6em;
+                height:auto;
+                margin:0 0 0 0;
+                padding:0.5em 0 0.5em 0;
+                box-sizing:border-box;
+                text-align:center;
+                font-size:0.7em;
+                color:#919191;
+                background:#f5f5f5;
+                border-radius:4px;
+                position:absolute;
+                right:1.5em;
+                top:33%;
+            }
+
+    .main-panel .vote-item-this{
+
+    }
+
+    .main-panel .result{
+        width:100%;
+        height:auto;
+        margin:1.5em auto 1em auto;
+        padding:0 0 0 0;
+    }
+        .main-panel .result .tit{
+            width:90%;
+            height:auto;
+            margin:0 auto 0 auto;
+            padding:0 0 0 0;
+            font-size:1em;
+            font-weight:bold;
+            color:#2c2c2c;
+        }

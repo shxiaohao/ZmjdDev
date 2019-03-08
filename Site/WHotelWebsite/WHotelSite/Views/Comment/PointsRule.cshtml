@@ -1,0 +1,120 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    var cssVersion = "190001010000";
+    try
+    {
+        //var last = this.GetType().Assembly.Location;
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex)
+    {
+    
+    }
+    
+    ViewBag.Title = string.Format("积分规则");
+    ViewBag.Keywords = string.Format("积分规则");
+    ViewBag.Description = string.Format("积分规则");
+
+    ViewBag.BodyStyle = "overflow-x:hidden;";
+}
+@section styles
+{
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+    </style>
+}
+<script>
+    function gourl(url) {
+        location.href = url;
+    }
+</script>
+<link href="~/Content/css/comment/commentrules.css?v=@cssVersion" rel="stylesheet" />
+<div class="container mainbody hidden-xs">
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            @Helpers.BreadCrumbs(Url, ViewBag.Title)
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>
+<div class="fullscreen">
+    <div class="container mainbody">
+        <div class="row">
+            <div class="col-md-1">
+            </div>
+            <div class="col-md-10">
+
+                <div class="row mbhead hidden">
+                    <div class="col-xs-12 text-left">
+                        <button type="button" class="btn btn-default btn-sm">返回</button>
+                    </div>
+                </div>
+
+                <div class="row hidden-xs">
+                    <div class="col-md-6 articlename">
+                        积分规则
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Hotel Left -->
+                    <div class="col-md-8">
+                        <div class="panel panel-default">
+                            <div class="comment-rule-body">
+                                <div class="comment-rule-panel">
+                                    <div class="comment-rule-tit">
+                                        感谢您的分享！为了鼓励更为丰富的点评内容，我们为您提供了奖励积分，具体规则如下：
+                                    </div>
+                                    <div class="comment-rule-text">
+                                        <p class="tit">1、如何获得周末酒店的积分？</p>
+                                        <p class="tit">通过周末酒店预订，成功入住之后发表点评：</p>
+                                        <p class="child">a、原创点评字数超过80字且真实照片超过3张，分享给朋友或朋友圈，获得积分5分；字数或照片不够数量，无积分</p>
+                                        <p class="child">b、如入选精彩点评，获得积分8分</p>
+                                        <p class="child">c、三个月内，有订单的点评，同一家酒店的点评只记积分1次</p>
+                                        <p class="tit">未通过周末酒店预订，写点评并被发表：</p>
+                                        <p class="child">a、如获得品鉴师资格，字数超过80字且照片超过3张，分享给朋友或朋友圈，获得积分2分；如入选精彩点评，获得积分5分</p>
+                                        <p class="child">b、尚未获得品鉴师资格的用户，欢迎分享点评，但不计积分。如入选精彩点评，获得积分5分</p>
+                                        <p class="child">c、三个月内，非订单点评只能写点评1次</p>
+                                        <p class="child">d、参加免费品鉴活动所写的点评，不积累积分</p>
+                                        <p class="tit">2、如何入选精彩点评？</p>
+                                        <p class="child">点评内容详实，可读性强，能给其他用户和读者带来相关信息和很大帮助的点评。 通常获得阅读量多，且获得用户点“有用”多的点评为精彩点评。</p>
+                                        <p class="tit">3、发表的点评可以删除吗？</p>
+                                        <p class="child">已经经过审核的点评，用户无法自行删除，但是可以联系“周末酒店”的客服协助。如果您的点评被举报，或经过“周末酒店”审核发现违反了相关规定，则会被删除，该点评获得的对应积分也将被扣减。</p>
+                                        <p class="tit">4、关于点评的文字和图片版权</p>
+                                        <p class="child">a、用户在“周末酒店”发表的点评仅代表作者本人观点，不代表“周末酒店”赞同其观点。用户发表点评文字和图片等信息，将视作点评者默认授权并同意将其著作权无偿转让给“周末酒店”所有。</p>
+                                        <p class="child">b、用户发表的由“周末酒店”提供的免费品鉴入住的点评文字和图片等信息，将视作点评者默认授权并同意将其著作权无偿且独家转让给“周末酒店”所有，授予“周末酒店”将信息用作其他用途之全部权利，且不在非“周末酒店”许可的第三方平台发表。</p>
+                                        <p class="tit">5、哪些点评可能不被发布？</p>
+                                        <p class="child">a、点评文字及照片须为点评人原创且真实入住所发表，如果仅是参观拜访餐饮，或者复制他人的点评内容或照片，将被视作无效。如因转载、抄袭而引起的版权责任由点评人自行承担。</p>
+                                        <p class="child">b、点评中不能出现点评人或他人的联系方式，不能发表辱骂、威胁或人身攻击的内容，不能发布带有明显商业推广意图的信息。</p>
+                                        <p class="child">c、点评出现重复内容和非文字非图片内容，将不予发布。</p>
+                                        <p class="child">d、点评文字和图片与酒店不符或无关联，将不予发布。</p>
+                                        <p class="child">e、点评涉及法律纠纷如丢失贵重物品、伤残、死亡及酒店内部重大变动、调整等内容，将不予发布。</p>
+                                        <br />
+                                        <p class="tit" style="margin-top:1em;">以上规定最终解释权归“周末酒店”所有。</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Hotel Right -->
+                    <div class="col-md-4 visible-md visible-lg zmrightpanel">
+                        @Helpers.QRCodes(Url)
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+            </div>
+        </div>
+    </div>
+</div>
+

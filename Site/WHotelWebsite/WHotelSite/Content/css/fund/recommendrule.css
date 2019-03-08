@@ -1,0 +1,28 @@
+﻿body {
+    font-size:0.9em;
+    background:#fff;
+}
+.rec-rule-panel {
+    width:100%;
+    height:auto;
+    padding:0.5em 0 0 0;
+}
+    .rec-rule-panel .group{
+        width:88%;
+        height:auto;
+        line-height:1.6em;
+        margin:1.2em auto 1em auto;
+        font-size:1em;
+        color:#888;
+    }
+        .rec-rule-panel .group .tit{
+            width:100%;
+            height:auto;
+            line-height:1.6em;
+            font-size:1.1em;
+            color:#000;
+        }
+    
+            
+
+

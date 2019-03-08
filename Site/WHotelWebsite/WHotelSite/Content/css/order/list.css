@@ -1,0 +1,93 @@
+html, body {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    background: #eee;
+    -webkit-user-select: none;
+    user-select: none;
+    overflow-x: hidden;
+    font-family: Arial;
+}
+
+/*禁止长按链接与图片弹出菜单*/
+a, img {
+    -webkit-touch-callout: none;
+}
+
+.order-item {
+    width:88%;
+    height:auto;
+    margin:1.3em auto 0 auto;
+    padding:0 0 0 0;
+    background:#fff;
+}
+    .order-item .top{
+        width:92%;
+        height:auto;
+        margin:0 auto 1em auto;
+        padding:1.3em 0 1em 0;
+        border-bottom:1px dashed #e0e0e0;
+    }
+        .order-item .top .l{
+            width:66%;
+            float:left;
+            font-size:1.2em;
+            font-family:Arial;
+            color:#919191;
+        }
+        .order-item .top .r{
+            width:33%;
+            float:right;
+            font-size:1.2em;
+            color:#919191;
+            text-align:right;
+        }
+    .order-item .h-info{
+        width:92%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0 0 0 0;
+    }
+        .order-item .h-info .l{
+            width:74%;
+            float:left;
+            font-size:1.5em;
+            color:#474747;
+        }
+        .order-item .h-info .r{
+            width:25%;
+            float:right;
+            font-size:1.5em;
+            font-family:Arial;
+            color:#fe8000;
+            text-align:right;
+        }
+    .order-item .o-info{
+        width:92%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0.5em 0 1em 0;
+        font-size:1.2em;
+        color:#919191;
+    }
+    .order-item .sub-info{
+        width:100%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:1.3em 0 0 0;
+        text-align:center;
+        border-top:1px solid #e0e0e0;
+    }
+    .order-item .sub-info a{
+        width:100%;
+        height:auto;
+        display:table;
+        text-align:center;
+        font-size:1.3em;
+        color:#fe8000;
+    }
+
+.order-page-menu {
+    width:88%;
+    height:auto;
+    margin:1.5em auto 0 auto;
+}

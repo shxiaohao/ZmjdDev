@@ -1,0 +1,100 @@
+﻿@model RecommendHotelResult
+@{
+    Layout = null;
+
+    var cssVersion = "190001010000";
+    try
+    {
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex) { }
+    
+    var isApp = ViewBag.IsApp;
+    var userid = ViewBag.UserId;
+    var appType = ViewBag.AppType;
+
+    var listMax = 5;
+    var listCount = Model.HotelList.Count >= listMax ? listMax : Model.HotelList.Count;
+}
+
+@if (Model != null && Model.HotelList != null && Model.HotelList.Count > 0)
+{
+    <div class="home-tit home-tit-big-height home-hide">
+        @*<div class="center">－ 最近搜索 －</div>*@
+        <div class="left">最近搜索</div>
+        <div class="right"></div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="onlyone-banner">
+        <div id="disSearchHis-banner" class="home-dlist-panel seat-banner">
+            <ul>
+                @for (int i = 0; i < listCount; i++)
+                {
+                    var item = Model.HotelList[i];
+                    
+                    <li onclick="gourl('@item.ActionURL')">
+                        @if (string.IsNullOrEmpty(item.HotelPicUrl))
+                        {
+                            <div class="d-img d-img-defbg">
+                                <img src="http://whfront.b0.upaiyun.com/app/img/home/home-trans-16x9.png" alt="" />
+                                <div class="d-img-name">@item.HotelName</div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="d-img">
+                                @if (i < 2)
+                                {
+                                    <img src="@item.HotelPicUrl" alt="" />
+                                }
+                                else
+                                {
+                                    <img data-orisrc="@item.HotelPicUrl" src="http://whfront.b0.upaiyun.com/app/img/home/home-trans-16x9.png" alt="" />
+                                }
+                                <div class="d-img-mode"></div>
+                                <div class="d-img-name">@item.HotelName</div>
+                            </div>
+                        }
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="home-multiple-border2"></div>
+    <input type="hidden" id="disSearchHis-count" value="@Model.HotelList.Count" />
+    <script>
+        $(".home-tit").show();
+    </script>
+    <script>
+        //var hCount = parseInt($("#disSearchHis-count").val());
+        //var onlyOneCount = hCount == 1;
+        //var wwidth = $(window).width();
+        //var itemWidth = 363; if (wwidth < 410) itemWidth = 333; if (wwidth == 360) itemWidth = 320; if (wwidth < 350) itemWidth = 285;
+        //if (onlyOneCount) {
+        //    itemWidth = wwidth;
+        //}
+
+        ////最近搜索
+        //var groupImgSwIndex = 2;
+        //$('#disSearchHis-banner').flexslider({
+        //    itemWidth: itemWidth,
+        //    itemMargin: 6,
+        //    slideshow: false,
+        //    animationLoop: false,
+        //    animationSpeed: 300,
+        //    pauseOnAction: true,
+        //    controlNav: false,
+        //    directionNav: false,
+        //    after: function (slider) {
+        //        if (groupImgSwIndex < slider.slides.length) {
+        //            var li = $(slider.slides[groupImgSwIndex]);
+        //            var imgObj = li.find("img");
+        //            setImgOriSrc(imgObj);
+        //            groupImgSwIndex++;
+        //        }
+        //    }
+        //});
+    </script>
+}

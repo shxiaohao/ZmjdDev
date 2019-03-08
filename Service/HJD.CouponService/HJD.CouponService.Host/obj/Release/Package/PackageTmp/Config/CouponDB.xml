@@ -1,0 +1,791 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <statements>
+    <select id="GetNeedCancelMemberUserList">
+      <![CDATA[
+        select
+          ec.UserID
+          from CouponDB..RefundCoupons rf with(nolock)
+          inner join CouponDB..ExchangeCoupon ec with(nolock) on ec.ID = rf.CouponID
+          inner join CouponDB..CouponActivity ca with(nolock) on ca.ID = ec.ActivityID
+        where (rf.State = 2 OR rf.State = 3) and ca.Type = 400
+      ]]>
+    </select>  
+    <select id="GetCouponActivitySKURelBySKUID">
+      <![CDATA[       
+SELECT *
+FROM   dbo.CouponActivitySKURel r(NOLOCK)
+WHERE  SKUID = @SKUID
+      ]]>
+    </select>
+    <select id="GetCouponActivitySKURelByActivityID">
+      <![CDATA[       
+SELECT *
+FROM   dbo.CouponActivitySKURel r(NOLOCK)
+WHERE  CouponActivityID = @ActivityID
+      ]]>
+    </select>
+    <select id="GetNeedSettlementBotaoCouponList">
+      <![CDATA[
+        select
+          ec.ID, settleType = 1
+          from CouponDB..RefundCoupons rc with(nolock) 
+          inner join CouponDB..ExchangeCoupon ec with(nolock) on ec.ID = rc.CouponID
+          inner join CouponDB..CouponActivity ca with(nolock) on ca.ID = ec.ActivityID
+	          left join HotelDB..BotaoSettlement bs with(nolock) on bs.OrderId = ec.ID
+          where rc.state = 3 and ca.MerchantCode = 'bohuijinrong' and ca.Type = 200 and bs.OrderId is null
+          union all
+          select
+          ec.ID, settleType = 2
+          from CouponDB..ExchangeCoupon ec with(nolock)
+          inner join CouponDB..CouponActivity ca with(nolock) on ca.ID = ec.ActivityID
+          left join CouponDB..RefundCoupons rc with(nolock) on rc.CouponID = ec.ID
+	          left join HotelDB..BotaoSettlement bs with(nolock) on bs.OrderId = ec.ID
+          where ec.state = 2 and ca.ReturnPolicy = 3 and ca.MerchantCode = 'bohuijinrong' and ca.Type = 200  and rc.CouponID is null and bs.OrderId is null
+          union all
+          select
+	          ec.ID, settleType = 2
+          from 
+	          CouponDB..ExchangeCoupon ec with(nolock) 
+	          inner join CouponDB..CouponActivity ca with(nolock) on ca.ID = ec.ActivityID
+	          inner join HotelDB..Orders o with(nolock) on o.OrderID = ec.ExchangeTargetID
+	          inner join HotelDB..OrderOperate op with(nolock) on op.ID = o.ID
+	          left join HotelDB..BotaoSettlement bs with(nolock) on bs.OrderId = ec.ID
+        where ec.State = 3 and ec.ExchangeTargetID > 0 and ca.Type = 200 and ca.MerchantCode = 'bohuijinrong' and o.state = 12 and op.LastCancelTime <= GETDATE() and bs.OrderId is null
+        ]]>
+    </select>
+    <select id="GetCouponRateEntityList">
+      <![CDATA[
+        Select*From CouponDB..CouponRate where CouponActivity = @couponActivity 
+      ]]>
+    </select>
+    <select id="GetOneExchangeCoupon">
+      <![CDATA[      
+SELECT ec.*,
+       ca.SourceID,
+       CouponName = ISNULL(ISNULL(p.Code, ca.PackageInfo), ''),
+       ObjectName = ISNULL(h.HotelName, ca.pageTitle),
+       ObjectID = ISNULL(h.HotelID, 0),
+       ca.ExpireTime ExpireTime,
+       ca.NightRoomCount,
+       ISNULL(rc.State, 0) RefundState,
+       ca.IsFestivalCanUse,
+       ca.IsAllowMultiRoom,
+       ca.ExchangeMethod,
+       ca.RelPackageAlbumsID,
+       ca.RelProductID
+FROM   [CouponDB]..[ExchangeCoupon] ec
+       INNER JOIN [CouponDB]..[CouponActivity] ca WITH(NOLOCK)
+            ON  ca.ID = ec.ActivityID
+       LEFT JOIN HotelDB..Package p WITH(NOLOCK)
+            ON  p.ID = ca.SourceID
+       LEFT JOIN HotelDB..Hotel h WITH(NOLOCK)
+            ON  h.HotelId = p.HotelID
+       LEFT JOIN CouponDB..[RefundCoupons] rc WITH(NOLOCK)
+            ON  rc.CouponID = ec.ID
+WHERE  ec.ID =  @CouponID
+      ]]>
+    </select>
+    <select id="GetWaitingRefundCouponList">
+      <![CDATA[
+        Select ec.*, ISNULL(rc.State,0) RefundState 
+        from ExchangeCoupon ec with(nolock)
+        inner join [CouponDB]..[CouponActivity] ca with(nolock) on ca.ID = ec.ActivityID
+        left join CouponDB..[RefundCoupons] rc with(nolock) on rc.CouponID = ec.ID
+        where ec.[State] = 2 AND ca.ID > 100000 AND ca.[ReturnPolicy] != 3 AND ca.[ExpireTime] <= GETDATE()
+      ]]>
+    </select>
+    <select id="GetRefundCouponsList">
+      <![CDATA[   
+SELECT *
+FROM   (
+           SELECT ROW_NUMBER() OVER(ORDER BY tempcolumn) temprownumber,
+                  tempcolumn,
+                  CouponID,
+                  PhoneNum,
+                  PayType,
+                  PayAccount,
+                  PayID,
+                  Price,
+                  STATE,
+                  CreateTime,
+                  RefundTime,
+                  HotelID,
+                  HotelName,
+                  Creator,
+                  Updator,
+                  (
+                      SELECT EmailAccount
+                      FROM   AccountDB..User_Info
+                      WHERE  UserID = Creator
+                  ) EmailCreator,
+                  (
+                      SELECT EmailAccount
+                      FROM   AccountDB..User_Info
+                      WHERE  UserID = Updator
+                  ) EmailUpdator,
+                  ISNULL(Remark, '') Remark,
+                  PageTitle,
+                  ExchangeNo
+           FROM   (
+                      SELECT TOP(@end) tempcolumn = 0,
+                             rc.*,
+                             ca.PageTitle,
+                             ec.ExchangeNo,
+                             ISNULL(h.HotelId, 0) HotelID,
+                             ISNULL(h.HotelName, '') HotelName
+                      FROM   RefundCoupons rc WITH(NOLOCK)
+                             INNER JOIN hoteldb.dbo.OrderPaymentCode opc(NOLOCK)
+                                  ON  opc.ID = rc.PayType
+                             INNER JOIN ExchangeCoupon ec WITH(NOLOCK)
+                                  ON  ec.ID = rc.CouponID
+                             INNER JOIN CouponActivity ca WITH(NOLOCK)
+                                  ON  ca.id = ec.ActivityID
+                             LEFT JOIN HotelDB..Package p WITH(NOLOCK)
+                                  ON  p.ID = ca.SourceID
+                             LEFT JOIN HotelDB..Hotel h WITH(NOLOCK)
+                                  ON  h.HotelId = p.HotelID
+                      WHERE  (@State = 0 OR rc.[State] = @State)
+                             AND (
+                                     @PayType = 0
+                                     OR (@PayType != 1000 AND opc.CanAutoRefund = 0)
+                                     OR (@PayType = 1000 AND opc.CanAutoRefund = 1)
+                                 )
+                      ORDER BY
+                             rc.CouponID DESC
+                  )t
+       )tt
+WHERE  temprownumber > @start
+
+      ]]>
+    </select>
+    <select id="GetRefundCouponsCount">
+      <![CDATA[
+     SELECT COUNT(CouponID)
+FROM   RefundCoupons rc(NOLOCK)
+       INNER JOIN hoteldb.dbo.OrderPaymentCode opc(NOLOCK)
+            ON  rc.PayType = opc.ID
+WHERE  (@State = 0 OR [State] = @State)
+       AND (
+               @PayType = 0
+               OR (@PayType != 1000 AND opc.CanAutoRefund = 0)
+               OR (@PayType = 1000 AND opc.CanAutoRefund = 0)
+           )   ]]>
+    </select>
+    <select id="GetUsedCouponByOrderID">
+      <![CDATA[
+      SELECT ec.*, ca.SourceID, p.Code CouponName, h.HotelName ObjectName, ca.ExpireTime ExpireTime, ca.NightRoomCount  
+      FROM [CouponDB]..[ExchangeCoupon] ec
+      inner join [CouponDB]..[CouponActivity] ca with(nolock) on ca.ID = ec.ActivityID
+      inner join HotelDB..Package p with(nolock) on p.ID = ca.SourceID 
+      inner join HotelDB..Hotel h with(nolock) on h.HotelId = p.HotelID
+      WHERE ec.[ExchangeTargetID] = @orderID
+      ]]>
+    </select>
+    <select id="GetOneExchangeCouponByCouponNo">
+      <![CDATA[
+     
+SELECT ec.*,
+       ca.SourceID,
+       CouponName = ISNULL(ISNULL(p.Code, ca.PackageInfo), ''),
+       ObjectName = ISNULL(h.HotelName, ca.pageTitle),
+       ObjectID = ISNULL(h.HotelID, 0),
+       ca.ExpireTime ExpireTime,
+       ca.NightRoomCount,
+       ISNULL(rc.State, 0) RefundState,
+       ca.IsFestivalCanUse,
+       ca.IsAllowMultiRoom,
+       ca.ExchangeMethod,
+       ca.RelPackageAlbumsID,
+       ca.RelProductID,
+       ca.PackageInfo
+FROM   [CouponDB]..[ExchangeCoupon] ec
+       INNER JOIN [CouponDB]..[CouponActivity] ca WITH(NOLOCK)
+            ON  ca.ID = ec.ActivityID
+       LEFT JOIN HotelDB..Package p WITH(NOLOCK)
+            ON  p.ID = ca.SourceID
+       LEFT JOIN HotelDB..Hotel h WITH(NOLOCK)
+            ON  h.HotelId = p.HotelID
+       LEFT JOIN CouponDB..[RefundCoupons] rc WITH(NOLOCK)
+            ON  rc.CouponID = ec.ID
+WHERE  ec.ExchangeNo = @CouponNo
+      ]]>
+    </select>
+    <select id="GetOneCommOrderEntity">
+      <![CDATA[
+      SELECT * FROM [HotelDB]..[CommOrders] cos
+      WHERE cos.[IDX] = @IDX
+      ]]>
+    </select>
+    <select id="GetExchangeCouponEntityByPayID">
+      <![CDATA[
+      SELECT ec.*, ca.SourceID, p.Code CouponName, h.HotelName ObjectName, ca.ExpireTime ExpireTime, 
+      ca.NightRoomCount, ISNULL(rc.State,0) RefundState, ISNULL(op.PayType,0) PayType, op.PayAccount PayAccount 
+      FROM [CouponDB]..[ExchangeCoupon] ec
+      inner join [CouponDB]..[CouponActivity] ca with(nolock) on ca.ID = ec.ActivityID
+      left join HotelDB..Package p with(nolock) on p.ID = ca.SourceID 
+      left join HotelDB..Hotel h with(nolock) on h.HotelId = p.HotelID
+      left join CouponDB..[RefundCoupons] rc with(nolock) on rc.CouponID = ec.ID
+      left join HotelDB..[OrderPayment] op with(nolock) on op.PayOrderID = ec.PayID
+      WHERE ec.[PayID] = @PayID
+      ]]>
+    </select>
+    <select id="GetExchangeCouponPageListCount">
+      <![CDATA[
+      IF @state = 7
+       SELECT COUNT(1)
+                  FROM [CouponDB]..[ExchangeCoupon] ec with(nolock)
+                  inner join [CouponDB]..[CouponActivity] ca with(nolock) on ca.ID = ec.ActivityID
+                  left join HotelDB..Package p with(nolock) on p.ID = ca.SourceID 
+                  left join HotelDB..Hotel h with(nolock) on h.HotelId = p.HotelID
+                  left join CouponDB..[RefundCoupons] rc with(nolock) on rc.CouponID = ec.ID
+                  left join HotelDB..[OrderPayment] op with(nolock) on op.PayOrderID = ec.PayID
+                  WHERE ec.[ActivityID] = @ActivityID 
+                        AND (ec.state = 2 or ec.state = 6)
+                        AND rc.State >0  
+      ELSE
+       SELECT COUNT(1)
+                  FROM [CouponDB]..[ExchangeCoupon] ec with(nolock)
+                  inner join [CouponDB]..[CouponActivity] ca with(nolock) on ca.ID = ec.ActivityID
+                  left join HotelDB..Package p with(nolock) on p.ID = ca.SourceID 
+                  left join HotelDB..Hotel h with(nolock) on h.HotelId = p.HotelID
+                  left join CouponDB..[RefundCoupons] rc with(nolock) on rc.CouponID = ec.ID
+                  left join HotelDB..[OrderPayment] op with(nolock) on op.PayOrderID = ec.PayID
+                  WHERE ec.[ActivityID] = @ActivityID 
+                        AND (ec.state = @state or @state = 0)
+      ]]>
+    </select>
+    <select id="GetExchangeCouponPageList">
+      <![CDATA[
+      IF @state = 7
+      SELECT * FROM 
+              (SELECT ec.*, ca.SourceID, p.Code CouponName, h.HotelName ObjectName, 
+                      ca.ExpireTime ExpireTime, ca.NightRoomCount, ca.ReturnPolicy, 
+                      ISNULL(rc.State,0) RefundState, ISNULL(op.PayType,0) PayType, op.PayAccount PayAccount,
+                      ROW_NUMBER() OVER(ORDER BY ec.id desc) rn
+                  FROM [CouponDB]..[ExchangeCoupon] ec with(nolock)
+                  inner join [CouponDB]..[CouponActivity] ca with(nolock) on ca.ID = ec.ActivityID
+                  left join HotelDB..Package p with(nolock) on p.ID = ca.SourceID 
+                  left join HotelDB..Hotel h with(nolock) on h.HotelId = p.HotelID
+                  left join CouponDB..[RefundCoupons] rc with(nolock) on rc.CouponID = ec.ID
+                  left join HotelDB..[OrderPayment] op with(nolock) on op.PayOrderID = ec.PayID
+                  WHERE ec.[ActivityID] = @ActivityID 
+                        AND (ec.state = 2 or ec.state = 6)
+                        AND rc.State >0
+              ) ECP
+          WHERE ECP.rn > (@pageIndex - 1) * @pageSize AND ECP.rn <= @pageIndex * @pageSize 
+      ELSE
+      SELECT * FROM 
+              (SELECT ec.*, ca.SourceID, p.Code CouponName, h.HotelName ObjectName, 
+                      ca.ExpireTime ExpireTime, ca.NightRoomCount, ca.ReturnPolicy, 
+                      ISNULL(rc.State,0) RefundState, ISNULL(op.PayType,0) PayType, op.PayAccount PayAccount,
+                      ROW_NUMBER() OVER(ORDER BY ec.id desc) rn
+                  FROM [CouponDB]..[ExchangeCoupon] ec with(nolock)
+                  inner join [CouponDB]..[CouponActivity] ca with(nolock) on ca.ID = ec.ActivityID
+                  left join HotelDB..Package p with(nolock) on p.ID = ca.SourceID 
+                  left join HotelDB..Hotel h with(nolock) on h.HotelId = p.HotelID
+                  left join CouponDB..[RefundCoupons] rc with(nolock) on rc.CouponID = ec.ID
+                  left join HotelDB..[OrderPayment] op with(nolock) on op.PayOrderID = ec.PayID
+                  WHERE ec.[ActivityID] = @ActivityID 
+                        AND (ec.state = @state or @state = 0)
+              ) ECP
+          WHERE ECP.rn > (@pageIndex - 1) * @pageSize AND ECP.rn <= @pageIndex * @pageSize 
+      ]]>
+    </select>
+
+    <select id="GetExchangeCouponEntityListByActivity">
+      <![CDATA[
+      SELECT ec.*, ca.SourceID, p.Code CouponName, h.HotelName ObjectName, 
+      ca.ExpireTime ExpireTime, ca.NightRoomCount, ca.ReturnPolicy, 
+      ISNULL(rc.State,0) RefundState, ISNULL(op.PayType,0) PayType, op.PayAccount PayAccount
+      FROM [CouponDB]..[ExchangeCoupon] ec with(nolock)
+      inner join [CouponDB]..[CouponActivity] ca with(nolock) on ca.ID = ec.ActivityID
+      left join HotelDB..Package p with(nolock) on p.ID = ca.SourceID 
+      left join HotelDB..Hotel h with(nolock) on h.HotelId = p.HotelID
+      left join CouponDB..[RefundCoupons] rc with(nolock) on rc.CouponID = ec.ID
+      left join HotelDB..[OrderPayment] op with(nolock) on op.PayOrderID = ec.PayID
+      WHERE ec.[ActivityID] = @ActivityID
+      ]]>
+    </select> 
+    <select id="GetExchangeCouponEntityListByActivityIDAndUserID">
+      <![CDATA[
+      SELECT ec.*, ca.SourceID, p.Code CouponName, h.HotelName ObjectName, 
+      ca.ExpireTime ExpireTime, ca.NightRoomCount, ca.ReturnPolicy, 
+      ISNULL(rc.State,0) RefundState, ISNULL(op.PayType,0) PayType, op.PayAccount PayAccount
+      FROM [CouponDB]..[ExchangeCoupon] ec with(nolock)
+      inner join [CouponDB]..[CouponActivity] ca with(nolock) on ca.ID = ec.ActivityID
+      left join HotelDB..Package p with(nolock) on p.ID = ca.SourceID 
+      left join HotelDB..Hotel h with(nolock) on h.HotelId = p.HotelID
+      left join CouponDB..[RefundCoupons] rc with(nolock) on rc.CouponID = ec.ID
+      left join HotelDB..[OrderPayment] op with(nolock) on op.PayOrderID = ec.PayID
+      WHERE ec.[ActivityID] = @ActivityID and ec.UserID = @UserID
+      ]]>
+    </select>
+    <select id="GetExchangeCouponList">
+      <![CDATA[
+      SELECT ec.*
+      FROM [CouponDB]..[ExchangeCoupon] ec with(nolock)
+      WHERE ec.[ActivityID] = @activityID
+      ]]>
+    </select>
+    <select id="GetExchangeCouponListByUserSKU">
+      <![CDATA[
+      SELECT ec.*,rc.CouponID
+      FROM [CouponDB]..[ExchangeCoupon] ec with(nolock)
+      Left join coupondb..RefundCoupons rc on ec.ID = rc.CouponID
+      WHERE ec.UserID = @UserID and ec.SKUID = @SKUID and ec.State not in (4,5,6,7) and rc.CouponID is null and ec.PromotionID = @PromotionID
+      ]]>
+    </select>
+    <select id="GetExchangeCouponEntityListByUser">
+      <![CDATA[     
+
+SELECT ec.*,
+       ca.ReturnPolicy,
+       ca.SourceID,
+       CouponName = ISNULL(p.Code,ca.PackageInfo),
+       ObjectName = ISNULL(h.HotelName, ca.pageTitle ),
+       ca.ExpireTime ExpireTime,
+       ca.NightRoomCount,
+       ca.IsAllowMultiRoom,
+       ca.ExchangeMethod,
+       ISNULL(rc.State, 0) RefundState,
+       ISNULL(op.PayType, 0) PayType,
+       op.PayAccount PayAccount,
+       ca.RelPackageAlbumsID,
+       ca.RelProductID,
+       ca.Notice,
+       ca.Properties
+FROM   [CouponDB]..[ExchangeCoupon] ec
+       INNER JOIN [CouponDB]..[CouponActivity] ca WITH(NOLOCK)
+            ON  ca.ID = ec.ActivityID
+       LEFT JOIN HotelDB..Package p WITH(NOLOCK)
+            ON  p.ID = ca.SourceID
+       LEFT JOIN HotelDB..Hotel h WITH(NOLOCK)
+            ON  h.HotelId = p.HotelID
+       LEFT JOIN CouponDB..[RefundCoupons] rc WITH(NOLOCK)
+            ON  rc.CouponID = ec.ID
+       LEFT JOIN HotelDB..[OrderPayment] op WITH(NOLOCK)
+            ON  op.PayOrderID = ec.PayID
+WHERE  ec.[UserID] = @UserID
+       AND (@ActivityType = 0 OR ec.[ActivityType] = @ActivityType)
+    
+      ]]>
+    </select>
+    
+    <select id="GetRoomCouponDistrictInfoForWxapp">
+      <!--SQL语句应放入 CDATA标记中-->
+      <![CDATA[   
+       select dz.DistrictID,di.Name as DistrictName,PicUrl from destdb..DistrictZone dz(nolock)    
+       inner join fn_Split(@districtIds,',') irh
+       on irh.Item = dz.DistrictID  and dz.Type = 1
+       inner join destdb..DistrictInfo di(nolock)
+       on di.DistrictID= irh.Item
+      ]]>
+    </select>
+    <select id="GetExchangeCouponEntityListByIDList">
+      <![CDATA[
+      SELECT ec.*, 
+		  ca.SourceID, 
+		  p.Code CouponName, 
+		  h.HotelName ObjectName, 
+		  ca.ExpireTime ExpireTime, 
+		  ca.NightRoomCount, 
+		  ca.IsAllowMultiRoom,
+		  ca.ExchangeMethod,
+		  ISNULL(rc.State,0) RefundState, 
+		  ISNULL(op.PayType,0) PayType, 
+		  op.PayAccount PayAccount,
+       ca.RelPackageAlbumsID,
+       ca.RelProductID
+    FROM [CouponDB]..[ExchangeCoupon] ec
+	    inner join [CouponDB]..[CouponActivity] ca with(nolock) on ca.ID = ec.ActivityID
+	    INNER JOIN dbo.fn_Split( @IDList,',') fs ON fs.Item = ec.id 
+	    left join HotelDB..Package p with(nolock) on p.ID = ca.SourceID 
+	    left join HotelDB..Hotel h with(nolock) on h.HotelId = p.HotelID
+	    left join CouponDB..[RefundCoupons] rc with(nolock) on rc.CouponID = ec.ID
+	    left join HotelDB..[OrderPayment] op with(nolock) on op.PayOrderID = ec.PayID 
+      ]]>
+    </select>
+    
+    <select id="GetExchangeCouponEntityListByPhone">
+      <![CDATA[
+      SELECT ec.*, 
+      ca.SourceID, 
+      p.Code CouponName, 
+      h.HotelName ObjectName, 
+      ca.ExpireTime ExpireTime, 
+      ca.NightRoomCount,
+      ca.ExchangeMethod,
+      ca.IsAllowMultiRoom,
+      ISNULL(rc.State,0) RefundState, 
+      ISNULL(op.PayType,0) PayType, 
+      op.PayAccount PayAccount ,
+       ca.RelPackageAlbumsID,
+       ca.RelProductID
+      FROM [CouponDB]..[ExchangeCoupon] ec
+      inner join [CouponDB]..[CouponActivity] ca with(nolock) on ca.ID = ec.ActivityID
+      left join HotelDB..Package p with(nolock) on p.ID = ca.SourceID 
+      left join HotelDB..Hotel h with(nolock) on h.HotelId = p.HotelID
+      left join CouponDB..[RefundCoupons] rc with(nolock) on rc.CouponID = ec.ID
+      left join HotelDB..[OrderPayment] op with(nolock) on op.PayOrderID = ec.PayID
+      WHERE ec.[PhoneNum] = @PhoneNum AND (@ActivityType = 0 OR ec.[ActivityType] = @ActivityType)
+      ]]>
+    </select>
+    <select id="GetTodayCouponActivity">
+      <![CDATA[
+      SELECT Top 1 sa.* FROM [CouponDB]..[CouponActivity] sa with(nolock)
+      WHERE sa.State = 1 AND convert(date,sa.EffectiveTime) = convert(date,GETDATE())
+      ]]>
+    </select>
+    <select id="GetOneCouponActivityWithNoLock">
+      <![CDATA[
+      SELECT sa.* FROM [CouponDB]..[CouponActivity] sa with(nolock)
+      WHERE sa.ID = @id
+      ]]>
+    </select>
+    <select id="GetOneCouponActivityWithLock">
+      <![CDATA[
+      SELECT sa.* FROM [CouponDB]..[CouponActivity] sa
+      WHERE sa.ID = @id
+      ]]>
+    </select>
+    <select id="GetOneCouponActivityByIdAndType">
+      <![CDATA[
+      SELECT sa.* FROM [CouponDB]..[CouponActivity] sa
+      WHERE sa.ID = @id AND type = @type
+      ]]>
+    </select>
+    <select id="GetCouponActivityList">
+      <![CDATA[     
+     ;
+with  CAList 
+AS (
+  
+  SELECT top(@count) * 
+  From
+        (SELECT sa.*,NoExchangeCount = (select COUNT(1) from [CouponDB]..[ExchangeCoupon] ec with(nolock) where ec.ActivityID=sa.ID and ec.State=2)
+        , ROW_NUMBER() over(order by sa.ID desc) rowNo  
+        FROM 
+        [CouponDB]..[CouponActivity] sa with(nolock)
+        inner join fn_split(@stateItems,',') fs on fs.Item = sa.State
+        inner join fn_split(@activityTypeItems,',') fs2 on fs2.Item = sa.Type
+        where sa.UpdateTime >= @lastEditTime AND (sa.MerchantCode = @merchantCode OR @merchantCode = 'all') AND (sa.GroupNo = @GroupNo OR @GroupNo = 0)
+        )temp
+      where temp.rowNo > @start )
+      
+   select cl.*, ZeroPriceCount = isnull(a.ZeroPriceCount, 0),CancelCount = ISNULL( a.CancelCount,0)
+   from CAList cl
+   left  join ( 
+   select c.ID
+   , ZeroPriceCount = SUM ( case when ec.price = 0 and ec.state = 2 then 1 else 0  end ) 
+   , CancelCount = SUM( case when ec.price > 0 and ec.state = 5 then 1 else 0 end )
+    from  ExchangeCoupon  ec (nolock)
+   inner join CAList c on c.ID = ec.ActivityID 
+   group by c.ID
+   ) a on a.ID = cl.ID 
+   order by cl.NoExchangeCount desc ,cl.EffectiveTime desc 
+   
+      ]]>
+    </select>
+    
+    <select id="MemberCouponActivityList">
+      <![CDATA[     
+     ;
+WITH  CAList 
+AS (
+       SELECT TOP(@count) *
+       FROM   (
+                  SELECT sa.*,
+                         NoExchangeCount = (
+                             SELECT COUNT(1)
+                             FROM   [CouponDB]..[ExchangeCoupon] ec WITH(NOLOCK)
+                             WHERE  ec.ActivityID = sa.ID
+                                    AND ec.State = 2
+                         ),
+                         h.HotelName,
+                         ROW_NUMBER() OVER(ORDER BY sa.ID DESC) rowNo
+                  FROM   [CouponDB]..[CouponActivity] sa WITH(NOLOCK)
+                         INNER JOIN fn_split(@stateItems, ',') fs
+                              ON  fs.Item = sa.State
+                         INNER JOIN fn_split(@activityTypeItems, ',') fs2
+                              ON  fs2.Item = sa.Type
+                         LEFT JOIN HotelDB..Package p(NOLOCK)
+                              ON  p.ID = sa.SourceID
+                         LEFT JOIN HotelDB..hotel h(NOLOCK)
+                              ON  p.HotelID = h.HotelId
+                  WHERE  sa.UpdateTime >= @lastEditTime
+                         AND (sa.MerchantCode = @merchantCode OR @merchantCode = 'all')
+                         AND (-1 = @GroupNo OR sa.GroupNo = @GroupNo)
+                         AND ('' = @HotelName OR h.HotelName LIKE '%' + @HotelName + '%')
+              )temp
+       WHERE  temp.rowNo > 0
+   )
+      
+SELECT cl.*,
+       ZeroPriceCount = ISNULL(a.ZeroPriceCount, 0),
+       CancelCount = ISNULL(a.CancelCount, 0)
+FROM   CAList cl
+       LEFT  JOIN (
+                SELECT c.ID,
+                       ZeroPriceCount = SUM(CASE WHEN ec.price = 0 AND ec.state = 2 THEN 1 ELSE 0 END),
+                       CancelCount = SUM(CASE WHEN ec.price > 0 AND ec.state = 5 THEN 1 ELSE 0 END)
+                FROM   ExchangeCoupon ec(NOLOCK)
+                       INNER JOIN CAList c
+                            ON  c.ID = ec.ActivityID
+                GROUP BY
+                       c.ID
+            ) a
+            ON  a.ID = cl.ID
+ORDER BY
+       cl.NoExchangeCount DESC,
+       cl.EffectiveTime DESC  
+   
+      ]]>
+    </select>
+    
+    <select id="MemberCouponActivityListCount">
+      <![CDATA[
+      SELECT COUNT(1)
+FROM   [CouponDB]..[CouponActivity] sa WITH(NOLOCK)
+       INNER JOIN fn_split(@stateItems, ',') fs
+            ON  fs.Item = sa.State
+       INNER JOIN fn_split(@activityTypeItems, ',') fs2
+            ON  fs2.Item = sa.Type
+       LEFT JOIN HotelDB..Package p(NOLOCK)
+            ON  p.ID = sa.SourceID
+       LEFT JOIN HotelDB..hotel h(NOLOCK)
+            ON  p.HotelID = h.HotelId
+WHERE  sa.UpdateTime >= @lastEditTime
+       AND (sa.MerchantCode = @merchantCode OR @merchantCode = 'all')
+       AND (-1 = @GroupNo OR sa.GroupNo = @GroupNo)
+       AND ('' = @HotelName OR h.HotelName LIKE '%' + @HotelName + '%')
+      ]]>
+    </select>
+      
+    <select id="GetCouponActivityCount">
+      <![CDATA[
+      SELECT Count(1) FROM 
+        [CouponDB]..[CouponActivity] sa with(nolock)
+        inner join fn_split(@stateItems,',') fs on fs.Item = sa.State
+        inner join fn_split(@activityTypeItems,',') fs2 on fs2.Item = sa.Type
+      where sa.UpdateTime >= @lastEditTime AND (sa.MerchantCode = @merchantCode OR @merchantCode = 'all')
+        AND (sa.GroupNo = @GroupNo OR 0 = @GroupNo)
+      ]]>
+    </select>
+    <select id="GetInspectorRewardByUserId">
+      <![CDATA[
+      SELECT ir.*,od.Amount as Amount,od.State as OrderState,od.SubmitDate as SubmitDate,ht.HotelName as HotelName 
+      FROM InspectorReward ir
+      inner join HotelDB..Orders od on od.OrderID = ir.OrderId
+      inner join HotelDB..Hotel ht on ht.HotelId = od.HotelID
+      WHERE ir.Inspector = @userid ORDER BY od.ID desc
+       ]]>
+    </select>
+    <select id="GetUnexpiredCouponList">
+      <![CDATA[
+      SELECT * FROM AcquiredCoupon
+      WHERE userId = @userId AND (cast(nullif(expiredTime,'1900-01-01 00:00:00.000') as datetime) is NULL OR expiredTime > GETDATE()) 
+      ORDER BY ID asc
+      ]]>
+    </select>
+    <select id="GetExpiredCouponList">
+      <![CDATA[
+      SELECT * FROM AcquiredCoupon
+      WHERE  userId = @userId AND (cast(nullif(expiredTime,'1900-01-01 00:00:00.000') as datetime) is NULL OR GETDATE() >= expiredTime)  
+      ORDER BY ID asc
+      ]]>
+    </select>
+    <select id="GetUserCouponList">
+      <![CDATA[
+      SELECT * FROM AcquiredCoupon
+      WHERE  userId = @userId ORDER BY ID asc
+      ]]>
+    </select>
+    <select id="GetUserCouponSum">
+      <![CDATA[
+      SELECT SUM(restMoney) AS count 
+      FROM AcquiredCoupon ac with(nolock)
+        inner join OriginCoupon oc with(nolock) on ac.originId = oc.ID
+      WHERE ac.userId = @userId AND (cast(nullif(ac.expiredTime,'1900-01-01 00:00:00.000') as datetime) is NULL OR ac.expiredTime > GETDATE())
+      ]]>
+    </select>
+    <select id="GetOriginIdByGUID">
+      <![CDATA[
+      SELECT ID FROM OriginCoupon
+      WHERE GUID = @guid
+      ]]>
+    </select>
+    <select id="GetOrderRecord">
+      <![CDATA[
+      SELECT discountMoney FROM UseCouponRecord
+      WHERE orderId = @orderId
+      ]]>
+    </select>
+    <select id="GetAcquiredCouponList">
+      <![CDATA[
+      SELECT * FROM AcquiredCoupon
+      WHERE originId = @originId
+      ]]>
+    </select>
+    <select id="GetOriginCouponList">
+      <![CDATA[
+      SELECT * FROM OriginCoupon
+      WHERE userId = @userId And state != 2 ORDER BY id desc
+      ]]>
+    </select>
+    <select id="GetOriginGUIDByOrderAndTypeId">
+      <![CDATA[
+      SELECT GUID FROM OriginCoupon
+      WHERE sourceId = @sourceId And typeId = @typeId
+       ]]>
+    </select>
+    <select id="GetOriginCoupon">
+      SELECT * FROM OriginCoupon
+      WHERE sourceId = @sourceId And typeId = @typeId
+    </select>
+    <select id="GetAcquiredCouponByPhone">
+      SELECT count(ac.ID) FROM AcquiredCoupon ac
+      inner join OriginCoupon oc on oc.ID = ac.originId
+      WHERE ac.phoneNo = @phoneNo And oc.GUID = @guid
+    </select>
+    <select id="GetAcquiredCouponById">
+      SELECT*FROM AcquiredCoupon
+      WHERE ID = @id
+    </select>
+    <select id="GetCashCoupon">
+      SELECT * FROM OriginCoupon
+      WHERE ID = @id OR GUID = @guid
+    </select>
+    <select id="GetCouponTypeDefine">
+      SELECT * FROM CouponTypeDefine
+    </select>
+    <select id="GetCouponTypeDefineById">
+      SELECT * FROM CouponTypeDefine
+      WHERE ID = @id
+    </select>
+    <select id="GetCouponTypeDefineByType">
+      SELECT * FROM CouponTypeDefine
+      WHERE Type = @Type
+    </select>
+    <select id="GetCouponTypeDefineByCode">
+      SELECT * FROM CouponTypeDefine
+      WHERE Code = @Code
+    </select>
+    <select id="GetUserOrgCouponInfoByType">
+      SELECT *
+      FROM   dbo.OriginCoupon
+      WHERE  typeId = @TypeID
+      AND userId = @UserID
+    </select>
+    <select id="GetUseCouponRecordByUserID">
+      <![CDATA[
+        SELECT ucr.*,o.Amount,o.HotelID,h.HotelName as ObjectName
+        FROM HotelDB..Orders o
+        inner join HotelDB..Hotel h on h.HotelId = o.HotelId
+        inner join UseCouponRecord ucr on o.OrderID = ucr.orderId
+        WHERE o.UserID = @userid AND o.State >= 10 AND ucr.discountMoney > 0
+       ]]>
+    </select>
+    <select id="GetAcquireCouponRecordByUserID">
+      <![CDATA[
+        SELECT ac.*,ctd.Code as TypeCode,
+        oc.sourceId as SourceID,ctd.Title as TypeName
+        FROM AcquiredCoupon ac with(nolock)
+        inner join OriginCoupon oc with(nolock) on ac.originId = oc.ID
+        left join CouponTypeDefine ctd with(nolock) on ctd.Type = oc.typeId
+        WHERE ac.userId = @userid AND oc.typeId != 0
+       ]]>
+    </select>
+    <select id="IsVipNoPayReserveUser">
+      select
+      ec.PhoneNum into #payphones
+      from coupondb.dbo.ExchangeCoupon ec with(nolock)
+      inner join hoteldb.dbo.OrderPayment op with(nolock) on ec.PayID = op.OrderID
+      where ec.ActivityType = 400
+
+      select Count(distinct al.name)
+      from commdb.dbo.Actvie_LuckyDraw al
+      left join #payphones pp on pp.PhoneNum = al.phone
+      --left join AccountDB.dbo.Inspector ip on ip.UserID = CONVERT(bigint, al.Name) and (ip.State = 2 or ip.State = 6)
+      --left join hoteldb.dbo.Orders o on o.UserID = CONVERT(bigint, al.Name) and o.State = 12
+      where
+      al.ActiveCode = 83 and pp.PhoneNum is null --and (ip.State = 2 or ip.State = 6 or o.ID is not null)
+      and al.name = @UserId
+
+      --drop table #payphones
+
+    </select>
+    
+    <select id="GetOriginCouponByUserIdForT8">
+      <![CDATA[
+        select top 1 * from coupondb.dbo.OriginCoupon oc 
+        where oc.typeId = 8 and oc.sourceId > 0 and oc.sourceId <> oc.userId and oc.userId = @UserId
+       ]]>
+    </select>
+
+    <select id="GetVoucherDefineList">
+      <![CDATA[
+        select * from VoucherDefine vd(nolock) 
+        where (IDX = @IDX or 0 = @IDX)
+              and (@Name is null or vd.Name like '%' + @Name + '%' )
+       ]]>
+    </select>
+
+    <select id="GetVoucherChanneList">
+      <![CDATA[
+        select * from [CouponDB].[dbo].[VoucherChannel] vc(nolock) 
+        where (IDX = @IDX or 0 = @IDX)
+              and (@Name is null or vc.Name like '%' + @Name + '%' )
+              and (DefineID = @DefineID or 0 = @DefineID )
+       ]]>
+    </select>
+    <select id="GetVoucherChanneByCode">
+      <![CDATA[
+        select * from [CouponDB].[dbo].[VoucherChannel] vc(nolock) 
+        where Code = @Code
+       ]]>
+    </select>
+
+
+    <select id="GetVoucherItemByVoucherChannelid">
+      <![CDATA[
+        SELECT v.*,vc.Name,vc.Code FROM VoucherItems v(nolock)
+        inner join [VoucherChannel] vc(nolock)
+        on v.VoucherChannelID=vc.IDX 
+        where vc.IDX = @IDX
+       ]]>
+    </select>
+
+    <select id="GetUsedCouponProductBySupplierId">
+      <![CDATA[
+          SELECT uc.*,sku.Name SkuName,spu.Name SkuName,sku.Price,ec.SettlePrice  FROM CouponDB.dbo.ExchangeCoupon ec(nolock)
+          INNER JOIN CouponDB.dbo.UsedConsumerCouponInfo uc(nolock)
+                  on ec.ExchangeNo=uc.ExchangeNo
+          INNER JOIN ProductDB.dbo.SKU sku (nolock) 
+                  on sku.ID=ec.SKUID
+          INNER JOIN ProductDB.dbo.SPU spu (nolock) 
+                  on sku.SPUID=spu.ID
+          WHERE uc.SupplierId = @SupplierId
+                AND uc.CreateTime >= @StartTime AND uc.CreateTime <= @EndTime 
+       ]]>
+    </select>
+    
+    <select id="GetUsedCouponProductByExchangeNo">
+      <![CDATA[
+          SELECT uc.*  FROM CouponDB..UsedConsumerCouponInfo uc(nolock)
+          WHERE uc.ExchangeNo = @ExchangeNo
+       ]]>
+    </select>
+
+    <select id="GetSKUCouponActivityListBySKUIds">
+      <![CDATA[       
+select ckr.SKUID,ID CouponActivityID,PageTitle,Tags,TotalNum,SellNum,SingleBuyNum,Type,Price,MarketPrice,PicPath,State,EffectiveTime,CreateTime,ExpireTime,SaleEndDate,Rank,ReturnPolicy,ManuSellNum,NightRoomCount,MinBuyNum,IsFestivalCanUse,GroupNo,ExchangeMethod,IsVipExclusive,MoreDetailUrl  
+from coupondb..CouponActivitySKURel ckr 
+inner join fn_split(@SKUIds,',') fs on fs.Item = ckr.SKUID
+left join coupondb..CouponActivity ca on ca.ID = ckr.CouponActivityID
+where ca.State = 1
+      ]]>
+    </select>
+
+  </statements>
+</configuration>

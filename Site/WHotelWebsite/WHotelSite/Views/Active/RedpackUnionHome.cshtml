@@ -1,0 +1,451 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params.Hotel
+@using HJD.WeixinServices.Contracts
+@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.isInWeixin;
+    var partnerid = ViewBag.ThisPartnerId;
+    var isGetThisRedpack = ViewBag.IsGetThisRedpack;
+    var showKeyword = ViewBag.ShowKeyword;
+
+    //活动基本信息
+    WeixinActivityEntity weixinActiveEntity = ViewBag.WeixinActiveEntity;
+
+    //用户信息
+    ActiveWeixinUser weixinUser = ViewBag.WeixinUser;
+
+    //阅读记录
+    List<ActiveWeixinShareRead> shareReadList = ViewBag.ShareReadList;
+
+    //宝石记录
+    List<ActiveWeixinFicMoney> gemList = ViewBag.GemList;
+    var gemCount = ViewBag.GemCount;
+
+    //宝石扣除记录
+    List<ActiveWeixinFicMoney> deGemList = ViewBag.DeGemList;
+
+    //关联合作伙伴
+    List<ActiveWeixinPartner> relPartnerList = ViewBag.RelPartnerList;
+
+    //当前合作伙伴
+    ActiveWeixinPartner thisPartnerEntity = ViewBag.ThisPartnerEntity;
+
+    //获取当前用户已获得的红包 all
+    List<WeixinRewardRecord> redpackGetedList = ViewBag.RedpackGetedList;
+
+    //成功以及待发的红包
+    List<WeixinRewardRecord> redpackGetedList_1 = ViewBag.RedpackGetedList_1;
+
+    //当前合作伙伴的红包
+    List<WeixinRewardRecord> redpackGetedList_this = ViewBag.RedpackGetedList_this;
+
+    //计算当前可用未领的红包
+    var canGetRedpackCount = relPartnerList.Where(_ => _.ActiveFund > 0 && !redpackGetedList_1.Exists(_t => _t.SourceId == _.Id)).Count();
+
+    var goget = ViewBag.Goget;
+
+    //不同活动的素材元素不同
+    var pageTitle = "红包大联欢";
+    var redpackBgImg = "http://whfront.b0.upaiyun.com/www/img/Active/redpackunion/redpack-amount-bg.png";
+    var redpackBgImg2 = "http://whfront.b0.upaiyun.com/www/img/Active/redpackunion/redpack-amount-bg-2.png";
+    var ficIconImg = "http://whfront.b0.upaiyun.com/www/img/Active/redpackunion/blue-gem-icon.png";
+    var ficName = "宝石";
+    var ficRules = "集齐宝石领取红包，分享给朋友获得更多宝石～";
+    switch (weixinActiveEntity.ActivityID)
+    {
+        //2018 新春红包大联欢
+        case 498:
+            {
+                break;
+            }
+        //2018 红包闹元宵
+        case 515: 
+            {
+                pageTitle = "红包闹元宵";
+                redpackBgImg = "http://whfront.b0.upaiyun.com/www/img/Active/redpackunion/515-redpack-amount-bg.png";
+                redpackBgImg2 = "http://whfront.b0.upaiyun.com/www/img/Active/redpackunion/515-redpack-amount-bg-2.png";
+                ficIconImg = "http://whfront.b0.upaiyun.com/www/img/Active/redpackunion/fic-yuanxiao-icon.png";
+                ficName = "元宵";
+                ficRules = "集齐元宵领取红包，分享给朋友获得更多元宵～";
+                break;
+            }
+        //2018 3.8女神节
+        case 524:
+            {
+                pageTitle = "女王驾到";
+                redpackBgImg = "http://whfront.b0.upaiyun.com/www/img/Active/redpackunion/524-38-redpack-amount-bg.png";
+                redpackBgImg2 = "http://whfront.b0.upaiyun.com/www/img/Active/redpackunion/524-38-redpack-amount-bg-2.png";
+                ficIconImg = "http://whfront.b0.upaiyun.com/www/img/Active/redpackunion/fic-38-icon.png";
+                ficName = "玫瑰";
+                ficRules = "集齐玫瑰领取红包，分享给朋友获得更多玫瑰～";
+                break;
+            }
+    }
+
+    ViewBag.Title = pageTitle;
+    
+    //分享配置
+    var s_title = ViewBag.ShareTitle;
+    var s_content = "";
+    var s_poto_url = ViewBag.ShareImgUrl;
+    var s_url = ViewBag.ShareLink;
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+}
+
+@section styles 
+{
+    <link href="~/Content/css/framework/zmjd.modal.min.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css/active/redpackunionhome.css?v=" + (Helpers.curAppVer()))
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+}
+
+<div class="top-banner">
+    @*<img src="http://whfront.b0.upaiyun.com/www/img/Active/redpackunion/2018redpack-banner.png" alt="" />*@
+    <img src="@(weixinActiveEntity.WeixinSignUpTopBannerUrl)" alt="" />
+</div>
+<div class="bottom-section">
+    @if (partnerid > 0 && partnerid != 7)
+    {
+        //当前合作伙伴的总红包金额
+        decimal redpackAmount_this = 0;
+        if (redpackGetedList_this != null && redpackGetedList_this.Count > 0)
+        {
+            redpackAmount_this = Convert.ToDecimal(redpackGetedList_this.Sum(_ => _.Amount)) / Convert.ToDecimal(100);
+        }
+        
+        <div class="redpack-amount-section">
+            <div class="bg"><img src="@(redpackBgImg2)" alt="" /></div>
+            @if (redpackAmount_this > 0)
+            {
+                <div class="info">
+                    <div class="tit">获得红包</div>
+                    <div class="amount">@(redpackAmount_this)<span class="u">元</span></div>
+                    <div class="tip-partner">还有<span class="h">@(canGetRedpackCount)</span>个红包待领取</div>
+                </div>
+            }
+            else
+            {
+                if (thisPartnerEntity != null && thisPartnerEntity.ActiveFund > 0)
+                { 
+                    <div class="info">
+                        <div class="tit">领取失败</div>
+                        <div class="amount-0">请重试</div>
+                        <div class="tip-partner">还有<span class="h">@(canGetRedpackCount)</span>个红包待领取</div>
+                    </div>
+                }
+                else
+                { 
+                    <div class="info">
+                        <div class="tit">抱歉，你来晚了</div>
+                        <div class="amount-0">红包已领完</div>
+                        <div class="tip-partner">还有<span class="h">@(canGetRedpackCount)</span>个红包待领取</div>
+                    </div>
+                }
+            }
+
+            @if (canGetRedpackCount > 0)
+            {
+                <div class="get-moregem-btn"><img src="http://whfront.b0.upaiyun.com/www/img/Active/redpackunion/get-more-gem-btn-2.png" alt="" /></div>
+            }
+            else
+            { 
+                <div class="get-moregem-btn"><img src="http://whfront.b0.upaiyun.com/www/img/Active/redpackunion/look-more-gem-btn.png" alt="" /></div>   
+            }
+        </div>
+        <div class="redpack-remark">
+            <span class="t">红包说明：</span><br />
+            &bull;&nbsp;所得红包将发放至你的微信钱包，5-10分钟到账；<br />
+            &bull;&nbsp;因微信平台规定，未实名认证的用户，无法领取红包；<br />
+            &bull;&nbsp;24小时内未领取的红包将自动失效，不予补发；<br />
+            &bull;&nbsp;如遇到红包未到账的情况，请联系“周末酒店服务号”；
+        </div>
+    }
+    else
+    {
+        //当前获取的总红包金额
+        decimal redpackAmount_1 = 0;
+        if (redpackGetedList_1 != null && redpackGetedList_1.Count > 0)
+        {
+            redpackAmount_1 = Convert.ToDecimal(redpackGetedList_1.Sum(_ => _.Amount)) / Convert.ToDecimal(100);
+        }
+        
+        <div class="redpack-amount-section">
+            <div class="bg"><img src="@(redpackBgImg)" alt="" /></div>
+            <div class="info">
+                @if (redpackAmount_1 > 0)
+                {
+                    <div class="tit">已获得红包</div>
+                    <div class="amount">@(redpackAmount_1)<span class="u">元</span></div>
+                    <div class="tip-partner">还有<span class="h">@(canGetRedpackCount)</span>个红包待领取</div>
+                }
+                else
+                {
+                    <div class="big-txt">你有@(canGetRedpackCount)个红包待领取</div>
+                    <div class="go-btn">立即领取</div>
+                }
+            </div>
+        </div>
+        <div class="gem-section">
+            <div class="gem-rule">
+                <div class="gem-info">
+                    <div class="bg"><img src="http://whfront.b0.upaiyun.com/www/img/Active/redpackunion/gem-info-tip-bg.png" alt="" /></div>
+                    <div class="count-info">现有@(ficName)：@(gemCount < 0 ? 0 : gemCount)<img class="gem-icon  gem-icon-big" src="@(ficIconImg)" alt="@(ficName)" /></div>
+                </div>
+                <div class="rule">
+                    @(ficRules)
+                </div>
+            </div>
+            <div class="gem-share-btn">
+                获取更多@(ficName)
+            </div>
+        </div>
+        <div class="partner-tit"><img src="http://whfront.b0.upaiyun.com/www/img/Active/redpackunion/partner-tit.png?v=1" alt="" /></div>
+        <div class="partner-list">
+            <div class="list">
+                @for (int i = 0; i < relPartnerList.Count; i++)
+                {
+                    var _pEntity = relPartnerList[i];
+                    
+                    //默认头像
+                    if (string.IsNullOrEmpty(_pEntity.LogoUrl) || !_pEntity.LogoUrl.ToLower().Contains("http"))
+                    {
+                        _pEntity.LogoUrl = "http://whfront.b0.upaiyun.com/www/img/Active/redpackunion/def-bg-gray-192x192.png";
+                    }
+                    else
+                    {
+                        _pEntity.LogoUrl = _pEntity.LogoUrl.Replace("_jupiter", "_350X350");
+                    }
+                    
+                    <div class="item">
+                        <div class="bg"><img src="http://whfront.b0.upaiyun.com/www/img/Active/redpackunion/redpack-bg-small.png?v=1" alt="" /></div>
+                        <div class="name">@_pEntity.Name</div>
+                        @if (deGemList != null && deGemList.Count > 0 && deGemList.Exists(_ => _.PartnerId == _pEntity.Id))
+                        {
+                            var _getTxt = "已领取";
+                            if (redpackGetedList_1.Exists(_ => _.SourceId == _pEntity.Id))
+                            {
+                                var _redpackInfo = redpackGetedList_1.Find(_ => _.SourceId == _pEntity.Id);
+                                
+                                var _redAmount = Convert.ToDecimal(Convert.ToDecimal(_redpackInfo.Amount) / Convert.ToDecimal(100));
+                                
+                                switch (_redpackInfo.State)
+                                {
+                                    case 0: 
+                                        {
+                                            _getTxt = string.Format("¥{0}到账中", _redAmount);
+                                            break;
+                                        }
+                                    case 1:
+                                        {
+
+                                            _getTxt = string.Format("¥{0}已领取", _redAmount);
+                                            break;
+                                        }
+                                    case -1:
+                                        {
+                                            _getTxt = string.Format("¥{0}未到账", _redAmount);
+                                            break;
+                                        }
+                               }
+                            }
+                            
+                            <div class="ctrl-0"><div class="get">@(_getTxt)</div></div>
+                        }
+                        else
+                        {
+                            if (_pEntity.ActiveFund > 0)
+                            {
+                                <div class="ctrl get-partner-btn" data-pname="@_pEntity.Name" data-pqrcode="@_pEntity.QrCodeUrl" data-headurl="@_pEntity.LogoUrl" data-cost="@(_pEntity.ActiveJoinCost)"><div class="get">领取需 @(_pEntity.ActiveJoinCost)</div><img class="gem-icon gem-icon-sml" src="@(ficIconImg)" alt="@(ficName)" /></div>
+                            }
+                            else
+                            {
+                                <div class="ctrl-0"><div class="get">已领完</div></div>
+                            }
+                        }
+                    </div>
+                }
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+        <div class="redpack-remark">
+            <span class="t">红包说明：</span><br />
+            &bull;&nbsp;所得红包将发放至你的微信钱包，5-10分钟到账；<br />
+            &bull;&nbsp;因微信平台规定，未实名认证的用户，无法领取红包；<br />
+            &bull;&nbsp;24小时内未领取的红包将自动失效，不予补发；<br />
+            &bull;&nbsp;如遇到红包未到账的情况，请联系“周末酒店服务号”；
+        </div>
+        <div class="foot-logo">
+            <img src="http://whfront.b0.upaiyun.com/www/img/Active/redpackunion/logo-zmjdservice.png" alt="" />
+        </div>
+        
+        <div id="showPosterSection" style="display:none;"><img id="showImg" src="" alt="" /></div>
+        <div class="poster-tip" style="display:none;"><div class="content"><span class="h">长按保存</span>下方海报并<span class="h">分享给好友</span>，每有一位好友扫码参与，你就能获得一颗@(ficName)，多劳多得，快去行动吧～</div></div>
+        <div class="poster-tip-loading" style="display:none;">海报生成中...</div>
+        <div class="poster-bg" style="display:none;"></div>
+        <div class="mine-poster" style="display:none;">
+            <div class="bg"><img src="http://whfront.b0.upaiyun.com/www/img/Active/redpackunion/redpack-bg-poster.png?v=1" crossorigin="anonymous" alt="" /></div>
+            @if (redpackAmount_1 > 0)
+            {
+                <div class="nickname">@(weixinUser.Nickname)已经领取了</div>
+                <div class="red-value">@(redpackAmount_1)<span class="u">元</span></div>
+                <div class="top-tip">红包已入账微信钱包，可提现</div>
+            }
+            else
+            {
+                <div class="nickname">@(weixinUser.Nickname)正在参与<br />@(showKeyword)活动</div>
+                <div class="red-tip">百万红包等你来领</div>
+                <div class="top-tip">红包将入账微信钱包，可提现</div>
+            }
+            @*<div class="head-img"><img src="" crossorigin="anonymous" alt="" /></div>*@
+            <div class="poster-qrcode-sction"><div class="poster-qrcode" id="poster-qrcode"></div></div>
+            <div class="qrcode-tip">长按二维码和我一起领红包吧</div>
+        </div>
+        @*<div class="mine-poster" style="display:none;">
+            <div class="p-banner"><img src="@(weixinActiveEntity.WeixinSignUpTopBannerUrl)?v=@(Helpers.curAppVer())" crossorigin="anonymous" alt="" /></div>
+            <div class="p-qrcode-section">
+                <div class="bg"><img src="http://whfront.b0.upaiyun.com/www/img/Active/redpackunion/redpack-amount-bg-poster.png?v=@(Helpers.curAppVer())" crossorigin="anonymous" alt="" /></div>
+                <div class="info">
+                    <div class="tip">长按识别二维码识别活动</div>
+                    <div class="poster-qrcode" id="poster-qrcode"></div>
+                </div>
+            </div>
+            <div class="foot"><img src="http://whfront.b0.upaiyun.com/www/img/Active/redpackunion/logo-zmjdservice.png?v=@(Helpers.curAppVer())" crossorigin="anonymous" alt="" /></div>
+        </div>*@
+        <script src="~/Content/js/framework/zmjd.qrcode.min.js"></script>
+        <script src="~/Content/js/framework/html2canvas.min.js"></script>
+    }
+</div>
+
+<div style="margin:3em 0 0 0;display:none;">
+    <div>活动ID：@weixinActiveEntity.ActivityID</div>
+    <div>当前用户wxid：@weixinUser.ID</div>
+    <div>@weixinUser.Openid</div>
+    <div>@weixinUser.Nickname</div>
+    <div>@weixinUser.Headimgurl</div>
+    <div>已阅读人数：@shareReadList.Count</div>
+    <div>现有宝石数：@gemCount</div>
+    <div>已消耗宝石：@deGemList.Sum(_ => _.Value)</div>
+    <div>宝石记录数：@gemList.Count</div>
+</div>
+
+<footer>
+    <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+    <input type="hidden" id="isInWeixin" value="@(isInWeixin ? 1 : 0)" />
+    <input type="hidden" id="isGetThisRedpack" value="@(isGetThisRedpack ? 1 : 0)" />
+    <input type="hidden" id="activeid" value="@(weixinActiveEntity.ActivityID)" />
+    <input type="hidden" id="showKeyword" value="@(showKeyword)" />
+    <input type="hidden" id="ficName" value="@(ficName)" />
+    <input type="hidden" id="partnerid" value="@(partnerid)" />
+    <input type="hidden" id="thisRedpackCost" value="@(thisPartnerEntity.ActiveJoinCost)" />
+    <input type="hidden" id="gemCount" value="@(gemCount)" />
+    <input type="hidden" id="headimgurl" value="@(weixinUser.Headimgurl)" />
+    <input type="hidden" id="shareLink" value="@(s_url)" />
+    <input type="hidden" id="goget" value="@(goget ? 1 : 0)" />
+</footer>
+
+@section scripts
+{
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/framework/config.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjd.modal.min.js"></script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/active/redpackunionhome.js?v=@(Helpers.curAppVer())"></script>
+
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+        <script>
+
+        GetWeixinApiConfig();//注册
+
+        wx.ready(function () {
+
+            wx.onMenuShareTimeline({
+                title: '@s_title',
+                desc: '@(s_content)',
+                link: '@(s_url)',
+                imgUrl: '@(s_poto_url)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareAppMessage({
+                title: '@s_title',
+                desc: '@(s_content)',
+                link: '@(s_url)',
+                imgUrl: '@(s_poto_url)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+        });
+
+        function GetWeixinApiConfig() {
+
+            var url = location.href.split("#")[0];
+            $.ajax({
+                url: '/Coupon/GetWeixinConfigInfo',
+                type: 'POST',
+                data: { url: url },
+                dataType: 'json',
+                async: false,
+                error: function () {
+                    console.log("网络服务错误");
+                },
+                success: function (result) {
+                    if (typeof (result.Success) != undefined && result.Success == 1) {
+                        return false;
+                    }
+                    else {
+                        //得到微信config的值
+                        var array = [
+                            'checkJsApi',
+                            'onMenuShareTimeline',
+                            'onMenuShareAppMessage',
+                            'onMenuShareQQ',
+                            'onMenuShareQZone',
+                            'hideOptionMenu'
+                        ];
+                        if (result.jsApiList) {
+                            var jsArray = result.jsApiList.split(',');
+                            for (var key in jsArray) {
+                                array.push("" + jsArray[key]);
+                            }
+                        }
+
+                        wx.config({
+                            debug: false,
+                            appId: result.appId,
+                            timestamp: "" + result.timestamp,
+                            nonceStr: result.nonceStr,
+                            signature: result.signature,
+                            jsApiList: array
+                        });
+                    }
+                }
+            });
+        }
+
+        </script>
+    }
+}

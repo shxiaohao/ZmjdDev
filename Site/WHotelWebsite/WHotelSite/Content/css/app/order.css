@@ -1,0 +1,69 @@
+﻿@charset "UTF-8";
+
+html, body {
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    background: #fff;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/*禁止长按链接与图片弹出菜单*/
+a, img {
+    -webkit-touch-callout: none;
+}
+
+.order-menu {
+    width: 100%;
+    height: auto;
+    margin: 0 0 0 0;
+    background: #fff;
+    display:table;
+    font-size:1em;
+    font-family:Arial;
+}
+
+    .order-menu ul {
+        width: 90%;
+        height: auto;
+        margin:0 auto 0 auto;
+        padding:0 0 0 0;
+        display: table;
+        list-style:none;
+    }
+
+        .order-menu ul li {
+            width: 100%;
+            height: 3.5em;
+            line-height: 3.75em;
+            margin:0 auto 0 auto;
+            padding: 0 0 0 0;
+            float: left;
+            font-size: 0.9em;
+            display:table;
+        }
+            .order-menu ul li .l{
+                width: 49%;
+                float:left;
+            }
+            .order-menu ul li .r{
+                width: 49%;
+                float:right;
+                text-align:right;
+                color:#fe8000;
+                font-family:Arial;
+            }
+            .order-menu ul li .r .un-tip{
+                margin:0 0 0 0;
+                color:#acacac;
+                font-size:1em;
+            }
+            .order-menu ul li .r .icon-arowright{
+                margin:0 0 0 0.1em;
+                color:#919191;
+                font-size:1em;
+            }
+
+    .order-menu .tag-li-line {
+        border-bottom: 1px solid #ececec;
+    }

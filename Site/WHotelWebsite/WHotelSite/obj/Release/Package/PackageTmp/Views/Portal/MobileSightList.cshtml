@@ -1,0 +1,38 @@
+﻿@model InterestListViewModel
+@using WHotelSite.App_Code
+@{
+    Layout = null;
+}
+
+@foreach (var category in Model.SightCategories)
+{
+    var list = Model.Interests.Where(p => category.InterestIds.Contains(p.Id)).ToList();
+
+    if (list.Count > 0)
+    {
+        <a href="javascript:;">
+            <div class="mobilenav">
+                <img src="@Url.Content("~/Content/images/icon-aarow7.png")" alt=""> @category.Name<small>@list.Sum(p => p.HotelCount)</small>
+            </div>
+        </a>
+        <div class="mobileztlist container jdlist" style="display:none">
+            <div class="row row1">
+                @foreach (var entity in list)
+                {
+                    var url = Url.ListUrl(Model.DistrictId, entity.Id.ToString(), "0", "", "0", 2, Model.Type);
+                    <div class="col-xs-6">
+                        <div class="row row2">
+                            <div class="col-xs-6">
+                                <a href="@url"><img src="@(WHotelSite.Utils.GetFitPicUrl(entity.ImageUrl))" class="img-responsive" alt=""></a>
+                            </div>
+                            <div class="col-xs-6">
+                                <h5>@entity.Name</h5>
+                                <h6>@entity.HotelCount</h6>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+}

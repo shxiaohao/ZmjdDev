@@ -1,0 +1,64 @@
+﻿body {
+    font-size:0.9em;
+}
+.rec-panel {
+    width:100%;
+    height:auto;
+}
+    .rec-panel .tit{
+        width:80%;
+        height:auto;
+        margin:4.3em auto 1em auto;
+        padding:0 0 1em 0;
+        border-bottom:1px solid #ddd;
+        text-align:center;
+        font-size:1.4em;
+        color:#000;
+    }
+        .rec-panel .tit .img{
+            width:35%;
+            height:auto;
+            margin:0 auto 0.8em auto;
+            padding:0 0 0 0;
+        }
+            .rec-panel .tit .img img{
+                width:100%;
+            }
+    .rec-panel .info{
+        width:100%;
+        height:auto;
+        line-height:1.4em;
+        margin:0 auto 0 auto;
+        padding:0 0 0 0;
+        text-align:center;
+        font-size:1em;
+        color:#888;
+    }
+        .rec-panel .info .r{
+            width:100%;
+            height:auto;
+            line-height:2.5em;
+        }
+    .rec-panel .btns{
+        width:100%;
+        height:auto;
+        margin:4em auto 0 auto;
+        text-align:center;
+    }
+        .rec-panel .btns .share{
+                width:74%;
+                height:2.8em;
+                line-height:2.8em;
+                margin:0 auto 0 auto;
+                font-size:1.3em;
+                text-align:center;
+                color:#fff;
+                background:#e99a6c;
+                border-radius: 5px;
+            }
+                .rec-panel .btns .share:hover{
+                    background:#f68e52;
+                }
+            
+
+

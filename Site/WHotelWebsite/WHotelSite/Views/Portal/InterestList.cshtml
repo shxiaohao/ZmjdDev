@@ -1,0 +1,36 @@
+﻿@model InterestListViewModel
+@using WHotelSite.App_Code
+@{
+    Layout = null;
+}
+<div class="row interest-list hidden-xs">
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-10">
+        <div class="row indexzt">
+            @foreach (var entity in Model.ThemeInterestList)
+            {
+                var url = Url.ListUrl(Model.DistrictId, entity.ID.ToString(), "0", "", "0", 1, Model.Type);
+
+                <div class="col-sm-3 col-xs-6">
+                    <div class="minizt">
+                        <a href="@url"><img src="@(WHotelSite.Utils.GetFitPicUrl(entity.ImageUrl))" class="miniztpic" alt="@entity.Name" /></a>
+                        <div class="miniztsum row hidden-xs">
+                            <div class="col-xs-4">
+                                <h3>@entity.Name</h3>
+                            </div>
+                            <div class="col-xs-8 text-right ">
+                                <h6><i>@entity.HotelCount</i>酒店</h6>
+                            </div>
+                        </div>
+                        <div class="miniztsum2 visible-xs">
+                            <h6>@entity.Name</h6>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-md-1">
+    </div>
+</div>

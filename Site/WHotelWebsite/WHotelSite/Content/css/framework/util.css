@@ -1,0 +1,26 @@
+@font-face {
+    font-family: "iconfont";
+    src: url('../../fonts/zmjd.eot?t=1550808476603'); /* IE9*/
+    src: url('../../fonts/zmjd.eot?t=1550808476603#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('../../fonts/zmjd.woff?t=1550808476603') format('woff'), /* chrome, firefox */
+    url('../../fonts/zmjd.ttf?t=1550808476603') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+    url('../../fonts/zmjd.svg?t=1550808476603#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.zmjd-iconfont{
+  font-family:"iconfont" !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+.zmjd-hide{
+  display:none;
+}
+
+/*clear float*/ 
+.clearfloat:after{display:block;clear:both;content:"";visibility:hidden;height:0} 
+.clearfloat{zoom:1}
+
+#cnzz_stat_icon_1275441729 {
+    display:none;
+}

@@ -1,0 +1,45 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+    
+    var isApp = ViewBag.IsApp;
+    var userid = ViewBag.UserId; //userid = 4512064;
+    var isMobile = ViewBag.isMobile;
+
+    ViewBag.Title = "邀请好友";
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    if (isApp)
+    {
+        ViewBag.LoadHmBaidu = false;
+    }
+}
+
+@section styles
+{
+    <link href="/content/css/acount/invitefriend.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+}
+
+<div class="menu">
+    <div class="item" onclick="gourl('/Fund/UserRecommend2?userid=@(userid)&realuserid=1&_newpage=1')"><img src="http://whfront.b0.upaiyun.com/app/img/acount/invitefriend/invite-register.png" alt="" /></div>
+    @*<div class="item" onclick="gourl('/Account/InviteBuyVip?userid=@(userid)&realuserid=1&_newpage=1')"><img src="http://whfront.b0.upaiyun.com/app/img/acount/invitefriend/invite-buy-vip.png?v=2017110301" alt="" /></div>*@
+</div>
+
+<footer>
+    <input type="hidden" id="userid" value="@userid" />
+    <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+</footer>
+
+@*<div style="margin:1em 0 1em 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3a%2f%2f192.168.1.22%3a8081%2fAccount%2fInviteFriend%3fuserid%3d%7buserid%7d">GO APP (Local) >>></a></div>
+
+<div style="margin:1em 0 1em 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3a%2f%2fwww.zmjiudian.com%2fAccount%2fInviteFriend%3fuserid%3d%7buserid%7d">GO APP (WWW) >>></a></div>*@
+
+@section scripts
+{
+    <script src="~/Content/js/coupon/invitefriend.js?v=@(Helpers.curAppVer())"></script>
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+}

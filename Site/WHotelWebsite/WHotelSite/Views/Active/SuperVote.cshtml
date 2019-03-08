@@ -1,0 +1,330 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    ViewBag.Title = "酒店亲子大使活动主场";
+
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.isInWeixin;
+    var userid = ViewBag.UserId;
+    var activeId = ViewBag.ActiveId;
+
+    HJD.WeixinServices.Contracts.ActiveWeixinDraw weixinDraw = ViewBag.WeixinDraw;
+    WHotelSite.Models.WeixinUserInfo weixinUserInfo = ViewBag.WeixinUser;
+    var openid = ViewBag.Openid;
+    var unionid = ViewBag.Unionid;
+    var wxuid = ViewBag.WeixinUid;
+
+    if (string.IsNullOrEmpty(weixinDraw.HeadImgUrl))
+    {
+        if (!string.IsNullOrEmpty(weixinUserInfo.Headimgurl))
+        {
+            weixinDraw.HeadImgUrl = weixinUserInfo.Headimgurl;
+        }
+        else
+        {
+            weixinUserInfo.Headimgurl = "/Content/images/default-avatar2.png";
+        }
+    }
+
+    if (string.IsNullOrEmpty(weixinDraw.UserName))
+    {
+        weixinDraw.UserName = "亲子大使";
+    }
+
+    //是否来自自己
+    var urlfrommine = ViewBag.Urlfrommine;
+    var isurlfrommine = urlfrommine > 0;
+
+    //多少票抽一次(目前定68票可抽一次奖)
+    var luckdrawForVoteCount = 68;
+
+    //最多可投票数
+    var maxGoVoteCount = 5;
+
+    //当前时间
+    var now = DateTime.Now;
+
+    //今天关注二维码弹出的key
+    var qrcodeAlertKey = string.Format("QrKey_1_{0}", DateTime.Now.Date.ToString("yyyyMMdd"));
+
+    //分享配置
+    var s_title = "我正在参加酒店亲子大使打榜，快来pick！";
+    var s_content = "一起瓜分百万大奖，参与人人有奖";
+    var s_url = string.Format("http://www.zmjiudian.com/wx/active/supervote/{0}/0", activeId);
+    var s_poto_url = "http://whphoto.b0.upaiyun.com/118ONXn0_350X350";
+
+    var isOver = false;
+    if (DateTime.Now > DateTime.Parse("2018-12-10 23:59:59"))
+    {
+        isOver = true;
+    }
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+}
+
+@section styles
+{
+    <link href="~/Content/css/framework/zmjd.modal.min.css" rel="stylesheet" />
+    <link href="~/Content/css/active/supervote.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .login-section {
+            font-size: 0.8em;
+        }
+    </style>
+}
+
+    <div v-cloak class="main-panel" id="active-obj">
+
+        <div class="marquee-section"><marquee scrollamount="3">活动期间，如用户存在违规行为（包括但不限于作弊、刷票），平台将取消违规用户的投票资格，并收回奖励。</marquee></div>
+
+        <div class="active-rule-section"><a href="http://www.zmjiudian.com/active/activepage?pageid=135">规则</a></div>
+
+        <div class="banner" onclick="gourl('{{activeInfo.WeixinSignUpShareLink}}')">
+            <img :src="activeInfo.WeixinSignUpTopBannerUrl" />
+        </div>
+
+        @if (!string.IsNullOrEmpty(weixinDraw.Phone))
+        {
+            <div class="draw-user-info clearfloat">
+                <div class="left">
+                    <img src="@(weixinDraw.HeadImgUrl)" id="drawUserHeadImg" alt="" />
+                </div>
+                <div class="right">
+                    <div class="topinfo clearfloat">
+                        <div class="name">@(weixinDraw.UserName)</div>
+                        @*<div class="vote">今日可投：{{thisUserInfo.trueGoVoteCount}}票</div>*@
+                    </div>
+                    <div class="txt">代言酒店数量：{{thisUserInfo.mineRuleExList.length}}</div>
+                    @*<div class="txt">当前最高排名：{{9}}</div>*@
+                </div>
+                <div style="clear:both;"></div>
+                <div class="btns clearfloat">
+                    <a href="javascript:;" class="go-getvote-btn">查看代言酒店</a>
+                    <a href="javascript:;" class="go-luckdraw-btn">去抽奖</a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="guest-user-info clearfloat">
+                <div class="left">
+                    <img src="@(weixinDraw.HeadImgUrl)" alt="" />
+                </div>
+                <div class="right">
+                    <div class="topinfo clearfloat">
+                        <div class="name">@(weixinDraw.UserName)</div>
+                        @*<div class="vote">今日可投：{{thisUserInfo.trueGoVoteCount}}票</div>*@
+                    </div>
+                    <div class="txt">快来pick你心仪的酒店~</div>
+                </div>
+                <div style="clear:both;"></div>
+                <div class="btns">
+                    @if (!isOver)
+                    {
+                        <a href="javascript:;" class="go-reg-btn">成为亲子大使</a>
+                    }
+                </div>
+            </div>
+        }
+
+        @*<div class="active-info">
+            <div class="section-title">活动介绍</div>
+            <div class="info">
+                2018酒店亲子大使活动是由“周末酒店APP”主办，联合全国50+家高品质亲子酒店，送出总统套房、现金大奖、酒店霸王餐等壕礼，总价值超过100万元。11月1日-30日活动期间，选择你心仪的酒店，成为TA的亲子大使，并为TA代言拉票，就有机会获得由“周末酒店APP”提供的现金红包和由酒店提供的丰富壕礼。活动最终票选结果将产生《酒店尚榜·2018中国最受欢迎TOP30亲子酒店》榜单。
+            </div>
+        </div>*@
+
+        <div class="rank-info">
+
+            <div class="rank-tab clearfloat">
+                <div class="tab-item tab-item-def seled">酒店票数排行</div>
+                <div class="tab-item right-item tab-item-result">奖品价值排行</div>
+            </div>
+            <div class="rank-list">
+                <div class="item-reg-tip clearfloat">
+                    <div class="left">我是酒店方，我想参与活动</div>
+                    <div class="right"><a href="https://wj.qq.com/s/2874123/5a55">点我申请>></a></div>
+                </div>
+                <div class="list rank-list-def">
+                    <div class="_item" v-for="item in voteInfo.voteResultList">
+                        <div class="rank-icon" v-if="item.RankIcon"><img :src="item.RankIcon" alt="" /></div>
+                        <div class="rank-icon" v-else><img src="http://whfront.b0.upaiyun.com/www/img/Active/supervote/icon-rank-item-no-bg.png" alt="" /><div class="no-txt">{{item.RankNo}}</div></div>
+                        <div class="info clearfloat" onclick="gourl('/wx/active/supervoteitem/@(activeId)/{{item.ID}}/0/@(urlfrommine)')">
+                            <div class="pic-info">
+                                <img data-original='{{item.PicUrl}}' data-lazyload-id='{{$index}}' src1="item.PicUrl" alt="" />
+                            </div>
+                            <div class="name-info">
+                                <div class="tit">{{item.Title}}</div>
+                                <div class="val">票数：<span class="h">{{item.VoteCount}}</span></div>
+                                <div class="val">奖品总价值：<span class="h">¥{{item.OrderNum}}</span></div>
+                            </div>
+                        </div>
+                        <div class="ctrl clearfloat">
+                            @if (!isOver)
+                            {
+                                <a href="/wx/active/supervoteitem/@(activeId)/{{item.ID}}/0/@(urlfrommine)" class="reg-btn" v-if="!item.IsSpokesman">成为亲子大使</a>
+                                <a href="javascript:;" class="reged-btn" data-ruleexid="{{item.ID}}" v-else>去拉票</a>
+
+                                <a href="/wx/active/supervoteitem/@(activeId)/{{item.ID}}/0/@(urlfrommine)" class="vote-btn" v-if="!item.TodayVoteState">投一票</a>
+                                <a href="javascript:;" class="voted-btn" v-else>今日已投</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="list rank-list-result zmjd-hide">
+                    <div class="_item" v-for="item in voteInfo.voteItemList">
+                        <div class="info clearfloat" onclick="gourl('/wx/active/supervoteitem/@(activeId)/{{item.ID}}/0/@(urlfrommine)')">
+                            <div class="pic-info">
+                                <img :src="item.PicUrl" alt="" />
+                            </div>
+                            <div class="name-info">
+                                <div class="tit">{{item.Title}}</div>
+                                <div class="val">票数：<span class="h">{{item.VoteCount}}</span></div>
+                                <div class="val">奖品总价值：<span class="h">¥{{item.OrderNum}}</span></div>
+                            </div>
+                        </div>
+                        <div class="ctrl clearfloat">
+                            @if (!isOver)
+                            {
+                                <a href="/wx/active/supervoteitem/@(activeId)/{{item.ID}}/0/@(urlfrommine)" class="reg-btn" v-if="!item.IsSpokesman">成为亲子大使</a>
+                                <a href="javascript:;" class="reged-btn" data-ruleexid="{{item.ID}}" v-else>去拉票</a>
+
+                                <a href="/wx/active/supervoteitem/@(activeId)/{{item.ID}}/0/@(urlfrommine)" class="vote-btn" v-if="!item.TodayVoteState">投一票</a>
+                                <a href="javascript:;" class="voted-btn" v-else>今日已投</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="mine-qrcode-info" style="display:none;">
+            <div class="mine-qrcode-section">
+                <div class="qrcode-info"><img src="" id="userQrcodeImg" alt="" /></div>
+                <div class="qrcode-tip">识别二维码前往你的个人主页，查看代言酒店和参与抽奖哦~</div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+        <input type="hidden" id="isInWeixin" value="@(isInWeixin ? 1 : 0)" />
+        <input type="hidden" id="userId" value="@(userid)" />
+        <input type="hidden" id="activeId" value="@(activeId)" />
+        <input type="hidden" id="openid" value="@(openid)" />
+        <input type="hidden" id="unionid" value="@(unionid)" />
+        <input type="hidden" id="wxuid" value="@(wxuid)" />
+        <input type="hidden" id="activeDrawId" value="@(weixinDraw.ID)" />
+        <input type="hidden" id="drawPhone" value="@(weixinDraw.Phone)" />
+        <input type="hidden" id="luckdrawForVoteCount" value="@(luckdrawForVoteCount)" />
+        <input type="hidden" id="maxGoVoteCount" value="@(maxGoVoteCount)" />
+        <input type="hidden" id="urlfrommine" value="@(urlfrommine)" />
+        <input type="hidden" id="qrcodeAlertKey" value="@(qrcodeAlertKey)" />
+
+        <input type="hidden" id="year0" value="@now.Year" />
+        <input type="hidden" id="month0" value="@(now.Month)" />
+        <input type="hidden" id="day0" value="@now.Day" />
+        <input type="hidden" id="hour0" value="@now.Hour" />
+        <input type="hidden" id="minute0" value="@now.Minute" />
+        <input type="hidden" id="second0" value="@now.Second" />
+    </footer>
+
+@section scripts
+{
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/framework/zmjd.modal.min.js"></script>
+    <script src="~/Content/js/framework/config.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/jquery.lazyload.min.js"></script>
+    <script src="~/Content/js/active/supervote.js?v=@(Helpers.curAppVer())"></script>
+
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+        <script>
+
+            GetWeixinApiConfig();//注册
+
+            wx.ready(function () {
+
+                    wx.hideMenuItems({
+                        menuList: ["menuItem:copyUrl", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:QZone", "menuItem:openWithSafari", "menuItem:openWithQQBrowser", "menuItem:share:brand", "menuItem:share:email"]
+                    });
+
+                    wx.onMenuShareTimeline({
+                        title: '@s_title',
+                        desc: '@(s_content)',
+                        link: '@(s_url)',
+                        imgUrl: '@(s_poto_url)',
+                        success: function (res) {
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                    wx.onMenuShareAppMessage({
+                        title: '@s_title',
+                        desc: '@(s_content)',
+                        link: '@(s_url)',
+                        imgUrl: '@(s_poto_url)',
+                        success: function (res) {
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+            });
+
+            function GetWeixinApiConfig() {
+
+                var url = location.href.split("#")[0];
+                $.ajax({
+                    url: '/Coupon/GetWeixinConfigInfo',
+                    type: 'POST',
+                    data: { url: url },
+                    dataType: 'json',
+                    error: function () {
+                        console.log("网络服务错误");
+                    },
+                    success: function (result) {
+                        if (typeof (result.Success) != undefined && result.Success == 1) {
+                            return false;
+                        }
+                        else {
+                            //得到微信config的值
+                            var array = [
+                                'checkJsApi',
+                                'onMenuShareTimeline',
+                                'onMenuShareAppMessage',
+                                'hideOptionMenu',
+                                'hideMenuItems'
+                            ];
+                            if (result.jsApiList) {
+                                var jsArray = result.jsApiList.split(',');
+                                for (var key in jsArray) {
+                                    array.push("" + jsArray[key]);
+                                }
+                            }
+
+                            wx.config({
+                                debug: false,
+                                appId: result.appId,
+                                timestamp: "" + result.timestamp,
+                                nonceStr: result.nonceStr,
+                                signature: result.signature,
+                                jsApiList: array
+                            });
+                        }
+                    }
+                });
+            }
+
+        </script>
+    }
+}

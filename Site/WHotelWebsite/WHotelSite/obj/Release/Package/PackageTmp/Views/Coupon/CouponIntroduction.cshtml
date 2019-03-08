@@ -1,0 +1,54 @@
+﻿@{
+    //ViewBag.Title = "CashIntroduction";
+    Layout = null;
+    DateTime date = DateTime.Now;
+    var cssSuffix = string.Format("?suffix={0}{1}{2}{3}{4}", date.Year, date.Month, date.Day, date.Hour, date.Minute);
+}
+
+<head>
+    <meta charset="utf-8">
+    <title>现金券说明</title>
+    <link rel="stylesheet" href="~/Content/css/cash_list_reset.css" />
+    <link rel="stylesheet" href="~/Content/css/css_shuoming.css@(cssSuffix)" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=xi0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="format-detection" content="telephone=no">
+</head>
+
+<div class="container">
+    <div class="tou">
+        <div class="k1">
+            <h5>有效期</h5>
+        </div>
+        <div class="k2">
+            <p>从您领取现金券开始的2年内有效。</p>
+        </div>
+        <div class="k3">
+            
+        </div>
+    </div>
+    <div class="wei">
+        <div class="k1">
+            <h5>使用方法</h5>
+        </div>
+        <div class="k2">
+            <p>在现金券的有效期内，您可以使用现金券抵扣预订酒店的消费金额。系统会根据不同的订单金额自动算出可抵用的现金额度，直接从您的所需支付的款项中扣除。</p>
+        </div>
+        <div class="k3">
+
+        </div>
+    </div>
+</div>
+
+@*<h3>现金券获取</h3>
+<div style="border-color:gray;border:solid">
+    <p>1、当您邀请了一位新朋友使用了周末酒店的服务，且该朋友成功完成入住之后，您将获得20元的奖励。</p>
+    <p>2、当您收到您朋友的邀请，在注册时，输入了您朋友提供的邀请代码，并在预订成功，入住完成之后，您将获得50元的奖励。</p>
+</div>
+<br />
+<h3>奖励入账</h3>
+<div style="border-color:gray;border:solid">
+    <p>您通过成功邀请朋友和接受邀请所获得的奖励将汇款至您提供的银行账户中，需要您提供账户名、开户行名称已经账号信息。</p>
+    <p>请注意，您将在您或您的朋友完成入住之后获得返现。</p>
+</div>*@

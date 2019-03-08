@@ -1,0 +1,121 @@
+﻿@model RecommendHotelResult
+@{
+    Layout = null;
+
+    var isApp = ViewBag.IsApp;
+    var userid = ViewBag.UserId;
+    var albumId = ViewBag.AlbumId;
+
+    //列表是否grid方式显示
+    var isGridStyle = ViewBag.IsGridStyle;
+}
+@if (Model != null && Model.HotelList.Count > 0)
+{
+    if (isGridStyle)
+    {
+        <div class="b-list">
+            @for (int i = 0; i < Model.HotelList.Count; i++)
+            {
+                var hotelEntity = Model.HotelList[i];
+
+                if (string.IsNullOrEmpty(hotelEntity.HotelPicUrl))
+                {
+                    hotelEntity.HotelPicUrl = "http://whfront.b0.upaiyun.com/app/img/home/home-load2-3x2.png";
+                }
+
+                var url = string.Format("/Hotel/Package/{0}", hotelEntity.PID);
+                if (isApp)
+                {
+                    url += string.Format("?userid={{userid}}&_newpage=1&_newtitle=1");
+                }
+                else
+                {
+                    url += string.Format("?userid={0}", userid);
+                }
+
+                <div class="b-item @(i % 2 == 0 ? "" : "b-item-r")" onclick="gourl('@url')">
+                    <div class="i-img">
+                        <img src="@(hotelEntity.HotelPicUrl.Replace("theme", "320x213"))" alt="" />
+                        @if (hotelEntity.TotalHotelPrice > hotelEntity.TotalVIPPrice)
+                        {
+                            <div class="high-price">省¥@(hotelEntity.TotalHotelPrice - hotelEntity.TotalVIPPrice)</div>   
+                        }
+                    </div>
+                    <div class="i-name">@(!string.IsNullOrEmpty(hotelEntity.PackageName) ? hotelEntity.PackageName : hotelEntity.PackageBrief)</div>
+                    <div class="i-tag">@hotelEntity.HotelName</div>
+                    @if (hotelEntity.TotalVIPPrice > 0)
+                    {
+                        <div class="i-price1"><span class="zmjd-iconfont _vip">&#xe623;</span>¥@(hotelEntity.TotalVIPPrice)起</div>
+                        <div class="i-price2">普通价:¥@(hotelEntity.TotalHotelPrice)起</div>
+                    }
+                    else
+                    {
+                        <div class="i-price1">查询价格</div>
+                    }
+                </div>
+            }
+        </div>
+    }
+    else
+    { 
+        <ul>
+            @for (int i = 0; i < Model.HotelList.Count; i++)
+            {
+                var hotelEntity = Model.HotelList[i];
+
+                if (string.IsNullOrEmpty(hotelEntity.HotelPicUrl))
+                {
+                    hotelEntity.HotelPicUrl = "http://whfront.b0.upaiyun.com/app/img/home/home-load2-3x2.png";
+                }
+            
+                var url = string.Format("/Hotel/Package/{0}", hotelEntity.PID);
+                if (isApp)
+                {
+                    url += string.Format("?userid={{userid}}&_newpage=1&_newtitle=1");
+                }
+                else
+                {
+                    url += string.Format("?userid={0}", userid);
+                }
+
+                <li class="li-line" onclick="gourl('@url')">
+                    @if (hotelEntity.ForVIPFirstBuy)
+                    {
+                        <div class="h-p-tip-nvip"><img src="http://whfront.b0.upaiyun.com/app/img/home/banners/icon-h-p-nvip.png" alt="" /></div>   
+                    }
+                    <div class="h-img">
+                        <img @(i == 0 ? string.Format(" src={0} ", hotelEntity.HotelPicUrl) : string.Format(" data-original={0} data-lazyload-id={1} ", hotelEntity.HotelPicUrl, i)) alt="">
+                        @*<div class="h-tit-tip-price3">
+                            @if (hotelEntity.TotalVIPPrice > 0)
+                            {
+                                <div class="v-price">
+                                    <span>￥</span>@hotelEntity.TotalVIPPrice<span>起</span>
+                                    <div class="v-icon"><span class="zmjd-iconfont">&#xe623;</span></div>
+                                </div>
+                                <div class="d-price"><span>￥</span>@hotelEntity.TotalHotelPrice<span>起</span></div>
+                            }
+                            else
+                            {
+                                <div class="d-price"><span>查询价格</span></div>
+                            }
+                        </div>*@
+                    </div>
+                    <div class="hname-info">
+                        <div class="hotel-name2">@(!string.IsNullOrEmpty(hotelEntity.Title) ? hotelEntity.Title : hotelEntity.PackageName)</div>
+                        <div class="hotel-packagebrief2">@hotelEntity.HotelName</div>
+                        @if (hotelEntity.TotalVIPPrice > 0)
+                        {
+                            <div class="hotel-price">
+                                <span class="atv-price"><span class="zmjd-iconfont p-un">&#xe623;</span> <span class="p-un">¥ &nbsp;</span>@hotelEntity.TotalVIPPrice</span>
+                                @if (hotelEntity.TotalVIPPrice != hotelEntity.TotalHotelPrice)
+                                {
+                                    <span class="del-price">普通价 ¥@hotelEntity.TotalHotelPrice</span>
+                                }
+                            </div>
+                        }
+                    </div>
+                </li>
+            }
+        </ul>   
+    }
+}

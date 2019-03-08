@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>@ViewBag.Title</title>
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="keywords" content="@ViewBag.Keywords">
+    <meta name="description" content="@ViewBag.Description">
+    <meta name="copyright" content="@DateTime.Now.Year, zmjiudian.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+
+    <!-- Bootstrap core CSS -->
+    @Styles.Render("~/Content/css/bootstrap.css", "~/Content/css/zmjiudian.css", "~/Content/css/zmjiudian-ex.css")
+    @RenderSection("styles", false)
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+    </script>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.0/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+@{
+    var isLogin = WHotelSite.UserState.IsLogin;
+}
+
+<body class="@ViewBag.BodyClass" style="@ViewBag.BodyStyle">
+
+    @RenderBody()
+
+    <!-- Bootstrap core JavaScript -->
+    @Scripts.Render("~/Content/js/jquery-1.10.2-min.js", "~/Content/js/common.js", "~/Content/js/underscore-min.js", "~/Content/js/underscore.string.min.js", "~/Content/js/bootstrap.min.js", "~/Content/js/account.js", "~/Content/js/verifyInput.js", "~/Content/js/hotel/search.js", "~/Content/js/order/detail.js", "~/Content/js/order/pay.js", "~/Content/js/comment.js", "~/Content/js/Upload/Upload.js", "~/Content/js/Upload/upyun-mu.js", "~/Content/js/Upload/async.js", "~/Content/js/Upload/spark-md5.js", "~/Content/js/Coupon.js")
+    @RenderSection("scripts", required: false)
+
+    <script src='http://hm.baidu.com/h.js%3F3566e9570ddbe6722a51adedffbf065b' type='text/javascript'></script>
+
+</body>
+</html>

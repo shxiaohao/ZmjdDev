@@ -1,0 +1,626 @@
+@using System.Text.RegularExpressions
+@using System.Web.Mvc
+@using WHotelSite
+
+@functions{
+
+    static string curVer = "";
+
+    public static IHtmlString curAppVer()
+    {
+        if (curVer == "")
+        {
+            var cssVersion = "190001010000";
+            try
+            {
+                var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                var lastTime = System.IO.File.GetLastWriteTime(last);
+                cssVersion = lastTime.ToString("yyyyMMddhhmm");
+            }
+            catch (Exception ex) { }
+
+            curVer = cssVersion;
+        }
+        return new HtmlString(curVer);
+    }
+}
+
+@helper ShowCancelPolicy(DateTime lastCancelTime)
+{
+    if (DateTime.Now < lastCancelTime)
+    {
+        <span> @(lastCancelTime.ToString("yyyy年MM月dd日 ") + (lastCancelTime.Hour <=12 ?"上午":"") + lastCancelTime.Hour.ToString()  + (lastCancelTime.Minute == 0 ? "整" : lastCancelTime.Minute.ToString() + "分")) 之前取消预订，可无理由全额退款；过期不可取消或更改。 </span>
+    }
+    else
+    {
+        <span>订单确认之后，不可更改或取消。</span>;
+    }
+}
+
+@helper QRCodes(UrlHelper url)
+{
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">周末酒店APP下载</h3>
+        </div>
+        <div class="panel-body text-center">
+            <a href="http://app.zmjiudian.com" target="_blank"><img src="@url.Content("~/Content/images/qrcode-app.png")" alt="" /></a>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">订阅官方微信号</h3>
+        </div>
+        <div class="panel-body text-center">
+            <img src="@url.Content("~/Content/images/qrcode-wx-new.jpg")" alt="" />
+        </div>
+    </div>
+}
+@helper DLLinks(UrlHelper url)
+{
+    <ul class="list-inline">
+        <li>App下载</li>
+        <li><a href="http://whfront.b0.upaiyun.com/android/WHotel_zmjd.apk">Android</a></li>
+        <li><a href="https://itunes.apple.com/cn/app/zhou-mo-jiu-dian/id763264901" target="_blank">iOS</a></li>
+        @if (@UserState.IsLogin)
+        {
+            string nickName = "匿名";
+            if (HttpContext.Current.Request.Cookies["NickName"] != null)
+            {
+                nickName = HttpUtility.UrlDecode(HttpContext.Current.Request.Cookies["NickName"].Value);
+            }
+            else
+            {
+                HJD.AccountServices.Entity.MemberProfileInfo info = HJDAPI.APIProxy.account.GetCurrentUserInfo(UserState.UserID);
+                nickName = info.NickName;
+            }
+            <li style="padding-left:20px;padding-right:20px" class="usermenuhead">
+                <a href="javascript:;" class="nickname">@nickName</a>
+                <span class="useraarow" id="menuArrow"><a href=""><img src="@url.Content("~/Content/images/aarow.png")" alt="" /></a></span>
+            </li>
+        }
+        else
+        {
+            <li style="padding-left:20px">
+                <a href="javascript:;" data-toggle="modal" data-target="#myModal" style="font-weight: normal" id="anchorLogin">登录</a>
+            </li>
+            <li style="padding-right:20px">
+                <a href="javascript:;" data-toggle="modal" data-target="#myModal2" style="font-weight: normal" id="anchorRegister">注册</a>
+            </li>
+        }
+    </ul>
+}
+
+@helper LoginRegisterLinks(UrlHelper url)
+{
+    <!-- Modal login  登录 -->
+    <div class="modal fade formfloat1" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">登录周末酒店账号</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form" class="form-horizontal">
+                        <div class="form-group">
+                            <label for="phoneNum4Login" class="col-sm-3 control-label">手机号码:</label>
+                            <div class="col-sm-8 maininput">
+                                <input type="email" class="form-control phoneNum" id="phoneNum4Login" placeholder="">
+                            </div>
+                            <div class="col-sm-1 imgsuccess">
+                                <a href="javascript:;"><img src="@url.Content("~/Content/images/icon-yes.png")" class="alertimg" alt="" /></a>
+                            </div>
+                            <div class="col-sm-1 imgerror">
+                                <a href="javascript:;"><img src="@url.Content("~/Content/images/icon-error.png")" class="alertimg" alt="" /></a>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password4Login" class="col-sm-3 control-label">密码:</label>
+                            <div class="col-sm-8 maininput">
+                                <input type="password" class="form-control password" id="password4Login" placeholder="">
+                            </div>
+                            <div class="col-sm-1 imgsuccess">
+                                <a href="javascript:;"><img src="@url.Content("~/Content/images/icon-yes.png")" class="alertimg" alt="" /></a>
+                            </div>
+                            <div class="col-sm-1 imgerror">
+                                <a href="javascript:;"><img src="@url.Content("~/Content/images/icon-error.png")" class="alertimg" alt="" /></a>
+                            </div>
+                        </div>
+                        <div class="checkbox">
+                            <label class="col-xs-6" id="isAutoLogin">
+                                <input type="hidden" value="True"><input id="autoLogin" type="checkbox" checked>下次自动登录
+                            </label>
+                            <div class="col-xs-6 alignright">
+                                <a href="javascript:;" class="ftblue alignright" data-toggle="modal" data-target="#myModal3" data-dismiss="modal" aria-hidden="true">忘记密码？</a>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary btn-login" style="width:100%;">登录</button>
+                        </div>
+                        <div class="alignright">
+                            <a href="javascript:;" class="ftblue" data-toggle="modal" data-target="#myModal2" data-dismiss="modal" aria-hidden="true">立即注册</a>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <!-- Modal2 Register  注册 -->
+    <div class="modal fade formfloat1" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">注册</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" class="form-horizontal">
+                    <div class="form-group">
+                        <label for="phoneNum4Register" class="col-sm-3 control-label">手机号码:</label>
+                        <div class="col-sm-8 maininput">
+                            <input type="email" class="form-control phoneNum" id="phoneNum4Register" placeholder="">
+                        </div>
+                        <div class="col-sm-1 imgsuccess">
+                            <a href="javascript:;"><img src="@url.Content("~/Content/images/icon-yes.png")" class="alertimg" alt="" /></a>
+                        </div>
+                        <div class="col-sm-1 imgerror">
+                            <a href="javascript:;"><img src="@url.Content("~/Content/images/icon-error.png")" class="alertimg" alt="" /></a>
+                        </div>
+                    </div>
+                    <div id="confirmCode" class="form-group">
+                        <input type="hidden" value="" id="intervalIdHidden4Register" />
+                        <label for="verifyCode4Register" class="col-sm-3 control-label">验证码:</label>
+                        <div class="col-sm-5 maininput">
+                            <input type="email" class="form-control" id="verifyCode4Register" placeholder="">
+                        </div>
+                        <div class="col-sm-3 yzm">
+                            <button type="button" class="btn btn-yzm2 hidden" style="width:100%;">30秒后重发</button>
+                            <button type="button" class="btn btn-yzm1" style="width:100%;">发送验证码</button>
+                        </div>
+                        <div class="col-sm-1 imgsuccess">
+                            <a href="javascript:;"><img src="@url.Content("~/Content/images/icon-yes.png")" class="alertimg" alt="" /></a>
+                        </div>
+                        <div class="col-sm-1 imgerror">
+                            <a href="javascript:;"><img src="@url.Content("~/Content/images/icon-error.png")" class="alertimg" alt="" /></a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password4Register" class="col-sm-3 control-label">密码:</label>
+                        <div class="col-sm-8 maininput">
+                            <input type="password" class="form-control password" id="password4Register" placeholder="">
+                        </div>
+                        <div class="col-sm-1 imgsuccess">
+                            <a href="javascript:;"><img src="@url.Content("~/Content/images/icon-yes.png")" class="alertimg" alt="" /></a>
+                        </div>
+                        <div class="col-sm-1 imgerror">
+                            <a href="javascript:;"><img src="@url.Content("~/Content/images/icon-error.png")" class="alertimg" alt="" /></a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password4RegisterAgain" class="col-sm-3 control-label">密码确认:</label>
+                        <div class="col-sm-8 maininput">
+                            <input type="password" class="form-control password" id="password4RegisterAgain" placeholder="">
+                        </div>
+                        <div class="col-sm-1 imgsuccess">
+                            <a href="javascript:;"><img src="@url.Content("~/Content/images/icon-yes.png")" class="alertimg" alt="" /></a>
+                        </div>
+                        <div class="col-sm-1 imgerror">
+                            <a href="javascript:;"><img src="@url.Content("~/Content/images/icon-error.png")" class="alertimg" alt="" /></a>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-login" style="width:100%;">注册</button>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- Modal3 忘记密码1 找回密码1：输入手机号 -->
+<div class="modal fade formfloat1" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">密码找回</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" class="form-horizontal">
+                    <br />
+                    <div class="form-group">
+                        <label for="phoneNum4Password" class="col-sm-3 control-label">手机号码:</label>
+                        <div class="col-sm-8 maininput">
+                            <input type="email" class="form-control phoneNum" id="phoneNum4Password" placeholder="请输入注册手机号码">
+                        </div>
+                        <div class="col-sm-1 imgsuccess">
+                            <a href="javascript:;"><img src="@url.Content("~/Content/images/icon-yes.png")" class="alertimg" alt="" /></a>
+                        </div>
+                        <div class="col-sm-1 imgerror">
+                            <a href="javascript:;"><img src="@url.Content("~/Content/images/icon-error.png")" class="alertimg" alt="" /></a>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-login" style="width:60%;" data-toggle="modal" data-target="#myModal4" data-dismiss="modal" aria-hidden="true">下一步</button>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- Modal4 忘记密码-2 找回密码2：输入验证码、新密码，新密码确认  -->
+<div class="modal fade formfloat1" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">设置密码</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" class="form-horizontal">
+                    <div class="form-group">
+                        <input type="hidden" value="" id="intervalIdHidden4Password" />
+                        <label for="verifyCode4Password" class="col-sm-3 control-label">验证码:</label>
+                        <div class="col-sm-5 maininput">
+                            <input type="email" class="form-control" id="verifyCode4Password" placeholder="">
+                        </div>
+                        <div class="col-sm-3 yzm">
+                            <button type="button" class="btn btn-yzm2 hidden" style="width:100%;">30秒后重发</button>
+                            <button type="button" class="btn btn-yzm1" style="width:100%;">发送验证码</button>
+                        </div>
+                        <div class="col-sm-1 imgsuccess">
+                            <a href="javascript:;"><img src="@url.Content("~/Content/images/icon-yes.png")" class="alertimg" alt="" /></a>
+                        </div>
+                        <div class="col-sm-1 imgerror">
+                            <a href="javascript:;"><img src="@url.Content("~/Content/images/icon-error.png")" class="alertimg" alt="" /></a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword" class="col-sm-3 control-label">输入新密码:</label>
+                        <div class="col-sm-8 maininput">
+                            <input type="password" class="form-control password" id="newPassword" placeholder="">
+                        </div>
+                        <div class="col-sm-1 imgsuccess">
+                            <a href="javascript:;"><img src="@url.Content("~/Content/images/icon-yes.png")" class="alertimg" alt="" /></a>
+                        </div>
+                        <div class="col-sm-1 imgerror">
+                            <a href="javascript:;"><img src="@url.Content("~/Content/images/icon-error.png")" class="alertimg" alt="" /></a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPasswordAgain" class="col-sm-3 control-label">确认新密码:</label>
+                        <div class="col-sm-8 maininput">
+                            <input type="password" class="form-control password" id="newPasswordAgain" placeholder="">
+                        </div>
+                        <div class="col-sm-1 imgsuccess">
+                            <a href="javascript:;"><img src="@url.Content("~/Content/images/icon-yes.png")" class="alertimg" alt="" /></a>
+                        </div>
+                        <div class="col-sm-1 imgerror">
+                            <a href="javascript:;"><img src="@url.Content("~/Content/images/icon-error.png")" class="alertimg" alt="" /></a>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-login" style="width:60%;" data-toggle="modal" data-target="#myModal5" data-dismiss="modal" aria-hidden="true">完成</button>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- Modal5 忘记密码-3 找回密码3：密码更新成功提醒框 设置成功提醒  -->
+<div class="modal fade formfloat1" id="myModal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">提醒</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" class="form-horizontal">
+                    <br />
+                    <div class="form-group">
+                        <label class="col-sm-12 alertinfo">密码更新成功，请重新登录！</label>
+                    </div>
+                    <br />
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-login" style="width:60%;" data-toggle="modal" data-target="#myModal" data-dismiss="modal" aria-hidden="true">确定</button>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+}
+
+@helper StarImage(UrlHelper url, int star, string klass)
+{
+    if (star > 0 && star < 6)
+    {
+        <img src="@url.Content("~/Content/images/star" + star.ToString() + ".png")" class="@klass" alt="" />
+    }
+}
+@helper BreadCrumbs(UrlHelper Url, int cityId, string cityName)
+{
+    @BreadCrumbs(Url, cityId, cityName, 0, "")
+}
+@helper BreadCrumbs(UrlHelper Url, HJDAPI.Models.HotelItem3 hotel)
+{
+    if (String.IsNullOrEmpty(hotel.districtName))
+    {
+        hotel.districtName = Utils.GetDistrictInfo(hotel.districtID).Name;
+    }
+    @Helpers.BreadCrumbs(Url, hotel.districtID, hotel.districtName, hotel.HotelID, hotel.Name)
+}
+@helper BreadCrumbs(UrlHelper Url, HJDAPI.Models.HotelItem4 hotel)
+{
+    if (String.IsNullOrEmpty(hotel.districtName))
+    {
+        hotel.districtName = Utils.GetDistrictInfo(hotel.districtID).Name;
+    }
+    @Helpers.BreadCrumbs(Url, hotel.districtID, hotel.districtName, hotel.HotelID, hotel.Name)
+}
+@helper BreadCrumbs(UrlHelper Url, HJDAPI.Models.HotelItem5 hotel)
+{
+    if (String.IsNullOrEmpty(hotel.districtName))
+    {
+        hotel.districtName = Utils.GetDistrictInfo(hotel.districtID).Name;
+    }
+    @Helpers.BreadCrumbs(Url, hotel.districtID, hotel.districtName, hotel.HotelID, hotel.HotelName)
+}
+@helper BreadCrumbs(UrlHelper Url, int cityId, string cityName, int hotelId, string hotelName, int sctype = 0)
+{
+    var url = string.Empty;
+    if (sctype == 3)
+    {
+        url = Url.RouteUrl("酒店列表-城市及周边", new { city = cityId });
+        cityName += "及周边酒店";
+    }
+    else
+    {
+        url = Url.RouteUrl("酒店列表-城市", new { city = cityId });
+        cityName += "酒店";
+    }
+
+    <ol class="breadcrumb small">
+        <li><a href="@Url.Action("Home", "Portal")">首页</a></li>
+        @if (hotelId > 0)
+        {
+            <li><a href="@url">@(cityName)</a></li>
+            <li><a class="active">@hotelName</a></li>
+        }
+        else
+        {
+            <li><a class="active">@(cityName)</a></li>
+        }
+    </ol>
+}
+@helper BreadCrumbs(UrlHelper Url, string pageTitle)
+{
+    <ol class="breadcrumb small">
+        <li><a href="@Url.Action("Home", "Portal")">首页</a></li>
+        <li><a href="javascript:;">@(pageTitle)</a></li>
+    </ol>
+}
+@helper Pagination(UrlHelper Url, WHotelSite.Params.ParamBase param, int total, int pageSize, int currentStart)
+{
+    var url = "~" + Request.Url.PathAndQuery;
+    var reg = new Regex(@"start=\d+",RegexOptions.IgnoreCase|RegexOptions.Compiled);
+    var match = reg.Match(url);
+    if (match.Success)
+    {
+        url = reg.Replace(url, "start=");
+    }
+    else
+    {
+        url = url + (url.Contains("?") ? "&start=" : "?start=");
+    }
+    int maxPage = (int)Math.Ceiling((double)total / pageSize);
+    int currentPage = currentStart / pageSize + 1;
+    if (maxPage < 2)
+    {
+        return;
+    }
+
+    <ul class="pagination">
+        <li>
+            @if (currentPage > 1)
+            {
+                <a href="@Url.Content(url.Replace("&start=",string.Empty).Replace("?start=",string.Empty))">&laquo;</a>
+            }
+        </li>
+        @for (int i = 1; i <= maxPage; ++i)
+        {
+            if (i < currentPage - 3)
+            {
+                <li class="item hide"><a href="@Url.Content((url + pageSize * (i - 1)).Replace("&start=0", string.Empty).Replace("?start=0", string.Empty))">@i</a></li>
+            }
+            else if (i == currentPage - 3)
+            {
+                <li class="item"><a href="@Url.Content((url + pageSize * (i - 1)).Replace("&start=0", string.Empty).Replace("?start=0", string.Empty))">...</a></li>
+            }
+            else if (i == currentPage + 3)
+            {
+                <li class="item"><a href="@Url.Content((url + pageSize * (i - 1)).Replace("&start=0", string.Empty).Replace("?start=0", string.Empty))">...</a></li>
+            }
+            else if (i > currentPage + 3)
+            {
+                <li class="item hide"><a href="@Url.Content((url + pageSize * (i - 1)).Replace("&start=0", string.Empty).Replace("?start=0", string.Empty))">@i</a></li>
+            }
+            else
+            {
+                string klass = i == currentPage ? "active" : "";
+                <li class="@klass item"><a href="@Url.Content((url + pageSize * (i - 1)).Replace("&start=0", string.Empty).Replace("?start=0", string.Empty))">@i</a></li>
+            }
+        }
+        <li>
+            @if (currentPage < maxPage)
+            {
+                <a href="@Url.Content(url + pageSize * (maxPage - 1))">&raquo;</a>
+            }
+        </li>
+    </ul>
+}
+@helper CalendarOptions(HtmlHelper<dynamic> Html, List<HJD.HotelServices.Contracts.PDayItem> pdayItems, int minDay, int maxDay)
+{
+    var dict = Utils.MakeCalendarOptions(pdayItems, minDay, maxDay);
+    if (dict == null)
+    {
+        return;
+    } 
+    <script>
+        window.calendarOptions = @Html.Raw(Utils.JSONEncode(dict));
+    </script>
+}
+
+@helper BreadCrumbs(UrlHelper Url, int userId, int orderId, int infoType)
+{
+    var url = string.Empty;
+    var infoTypeName = string.Empty;
+    @*1代表订单列表*@
+    if (infoType == 1)
+    {
+        url = Url.RouteUrl("我的订单");
+        infoTypeName = "订单列表";
+    }
+    @*2代表点评列表*@
+    else if (infoType == 2)
+    {
+        url = Url.RouteUrl("我的点评");
+        infoTypeName = "点评列表";
+    }
+    @*3代表收藏列表*@
+    else if (infoType == 3)
+    {
+        url = Url.RouteUrl("我的收藏");
+        infoTypeName = "收藏列表";
+    }
+    else
+    {
+        url = Url.RouteUrl("个人信息");
+        infoTypeName = "个人信息";
+    }
+    <ol class="breadcrumb small">
+        <li><a href="@Url.Action("Home", "Portal")">首页</a></li>
+        <li><a href="@Url.RouteUrl("我的订单")">个人中心</a></li>
+        <li><a href="@url" class="active">@infoTypeName</a></li>
+    </ol>
+}
+
+@helper InsertLeftNaviPanel(int infoType,UrlHelper url)
+{
+    var classOrder = string.Empty;
+    var classReview = string.Empty;
+    var classCollection = string.Empty;
+    var classInfo = string.Empty;
+    @*1代表订单列表*@
+    if (infoType == 1)
+    {
+        classOrder = "cur";
+    }
+        @*2代表点评列表*@
+    else if (infoType == 2)
+    {
+        classReview = "cur";
+    }
+    @*3代表收藏列表*@
+    else if (infoType == 3)
+    {
+        classCollection = "cur";
+    }
+    @*其余代表个人信息*@
+    else
+    {
+        classInfo = "cur";
+    }
+    @*ToDo 绑定左侧分类导航*@
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt class="@classOrder"><a href="@url.Action("List", "Order")">我的订单</a></dt>
+            <dd></dd>
+            <dt class="@classReview"><a href="@url.Action("List", "Comment")">我的点评</a></dt>
+            <dd></dd>
+            <dt class="@classCollection"><a href="@url.Action("List", "Collection")">我的收藏</a></dt>
+            <dd></dd>
+            <dt class="@classInfo"><a href="@url.Action("Info", "Account")">个人信息</a></dt>
+            <dd></dd>
+        </dl>
+    </div>
+}
+
+@helper BindUserMenu(UrlHelper url) {
+    
+    var orderUrl = url.RouteUrl("我的订单");
+    var reviewUrl = url.RouteUrl("我的点评");
+    var collectUrl = url.RouteUrl("我的收藏");
+    var infoUrl = url.RouteUrl("个人信息");
+    
+    <!-- 登录后用户菜单 -->
+    <div class="usermenu hidden" style="z-index:9999;" >
+        <div class="quicklist2 col-sm-12">
+            <ul class="">
+                <li><a href="@orderUrl" target="_blank">我的订单</a></li>
+                <li><a href="@reviewUrl" target="_blank">我的点评</a></li>
+                <li><a href="@collectUrl" target="_blank">我的收藏</a></li>
+                <li><a href="@infoUrl" target="_blank">个人信息</a></li>
+                <li><a href="javascript:;" target="_blank" id="btnQuit">退出</a></li>
+            </ul>
+        </div>
+    </div>
+}
+
+@helper BindOrderDetailOption(UrlHelper url, long orderId, long hotelId, long packageId, DateTime checkIn, DateTime checkOut, int orderState, string contact, string contactPhone, int roomCount, string note, int CanWriteComment, int payType, List<string> canShowButtons)
+{
+    string submitUrlCancel = url.Action("CancelAuthOrder", "Order", new {order = orderId});
+    string commentUrl = url.Action("Section", "Comment", new { section = 0, hotel = hotelId, order = orderId });
+    //string payUrl = url.RouteUrl("酒店预订", new { hotel = hotelId, package = packageId, checkIn = checkIn.ToString("yyyy-MM-dd"), checkOut = checkOut.ToString("yyyy-MM-dd"), contact = contact, contactPhone = contactPhone, roomCount = roomCount, note = note });
+
+    bool isMobile = WHotelSite.Utils.IsMobile();
+    
+    string btnWidth = "width:25%;margin-left:0.5em;";
+    if (isMobile) { btnWidth = "width:90%;"; }
+
+    for (int i = 0; i < canShowButtons.Count; i++)
+    {
+        var btnType = canShowButtons[i];
+        switch (btnType)
+        {
+            case "writecomment":
+                {
+                    <button type="button" class="btn btn-01-od btn-od-comment" data-comment-url="@commentUrl" style="@(btnWidth)">写点评</button>
+                    break;
+                }
+            case "pay":
+                {
+                    //跳到现有支付页面 核心内容
+                    if (!isMobile)
+                    {
+                        <button type="button" class="btn btn-01-od btn-od-pay" data-toggle="modal" data-target="#myModal" style="@(btnWidth)" onclick="bindPayOrderId(event,@orderId);">支付</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-01-od btn-od-pay" style="@(btnWidth)" onclick="gotoPayUrl2(@orderId);">支付</button>
+                    }
+                    break;
+                }
+            case "cancel":
+                {
+                    <button type="button" class="btn btn-01-od btn-od-cancel" data-cancel-url="@submitUrlCancel" style="@(btnWidth)">取消订单</button>
+                    break;
+                }
+            case "delete":
+                {
+                    <button type="button" class="btn btn-01-od btn-od-delete" data-delete-url="@url.Action("DeleteOrder", "Order", new { order = orderId })" style="@(btnWidth)">删除订单</button>
+                    break;
+                }
+        }
+    }
+}
+ 
+@helper MarkPhone(string phone)
+{
+    if(phone.Length == 11)
+    {
+        <span> @phone.Substring(0,3) ***** @phone.Substring(8) </span>
+    }
+}

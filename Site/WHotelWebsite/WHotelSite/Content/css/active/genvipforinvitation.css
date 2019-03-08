@@ -1,0 +1,211 @@
+﻿body {
+    background:url(http://whfront.b0.upaiyun.com/www/img/Active/coupon/cash-bg-wh.png) no-repeat left top;
+    background-size:100%;
+    background-color:#fff;
+    font-size:0.85em;
+}
+
+.main-panel {
+    width:100%;
+    height:auto;
+    margin:4em auto 0 auto;
+}
+    .main-panel .top{
+        width:60%;
+        height:auto;
+        margin:0 auto 0 auto;
+        display:table;
+    }
+        .main-panel .top img{
+            width:100%;
+        }
+    .main-panel .middle{
+        width:100%;
+        height:auto;
+        margin:0 0 0 0;
+        display:table;
+    }
+        .main-panel .middle .tit{
+            width:100%;
+            height:auto;
+            line-height:1.3em;
+            margin:1.2em 0 1.2em 0;
+            text-align:center;
+            font-size:1.2em;
+            color:#3e9ec0;
+        }
+        .main-panel .middle .center-line{
+            width:6em;
+            height:auto;
+            margin:0 auto 2em auto;
+            text-align:center;
+            font-size:1em;
+            border-bottom:1px solid #e0e0e0;
+        }
+        .main-panel .middle .btn{
+            width:100%;
+            height:auto;
+            margin:0.8em auto 1em auto;
+            text-align:center;
+        }
+            .main-panel .middle .btn .go-getcash-btn{
+                width:80%;
+                height:auto;
+                line-height:3em;
+                margin:0 auto 0 auto;
+                background:#3E9EC0;
+                border:none;
+                border-radius:4px;
+                text-align:center;
+                font-size:1.2em;
+                color:#fff;
+                display:table;
+            }
+                .main-panel .middle .btn go-getcash-btn:hover{
+                    background:#3E9EC0;
+                }
+        .main-panel .middle .shareuser {
+            width:100%;
+            height:auto;
+            margin:2.5em auto 2em auto;
+            text-align:center;
+        }
+            .main-panel .middle .shareuser .tip2{
+                width:100%;
+                height:auto;
+                margin:0 auto 0 auto;
+                text-align:center;
+                font-size:1.1em;
+                font-family:Arial;
+                color:#474747;
+            }
+        .main-panel .middle-bar{
+            width:100%;
+            height:auto;
+            line-height:0.1em;
+            margin:0 0 0 0;
+            padding:0 0 0 0;
+            display:table;
+        }
+            .main-panel .middle-bar img{
+                width:100%;
+                margin:0 0 0 0;
+                padding:0 0 0 0;
+            }
+    .main-panel .bottom{
+        width:100%;
+        height:auto;
+        display:table;
+    }
+        .main-panel .bottom img{
+            width:100%;
+            vertical-align:top;
+        }
+.foot-panel {
+    width:100%;
+    height:auto;
+    margin:5em 0 0 0;
+    padding:0 0 1em 0;
+    line-height:0.1em;
+    text-align:center;
+}
+    .foot-panel img{
+        width:80%;
+        margin:0 auto 0 auto;
+        vertical-align:bottom;
+    }
+    
+.main-panel2 {
+    width:88%;
+    height:auto;
+    position:absolute;
+    left:6%;
+    top:5em;
+    z-index:2;
+}
+    .main-panel2 .middle{
+        width:100%;
+        height:auto;
+        margin:0 0 0 0;
+        padding:0 0 0 0;
+        display:table;
+    }
+        .main-panel2 .middle img{
+            width:100%;
+            vertical-align:bottom;
+        }
+    .main-panel2 .bottom{
+        width:100%;
+        height:auto;
+        margin:0 0 0 0;
+        background:url(http://whfront.b0.upaiyun.com/www/img/Active/coupon/cash-content-middle2.png) repeat-y left top;
+        background-size:100%;
+        display:table;
+        
+    }
+        .main-panel2 .bottom .btn{
+            width:100%;
+            height:auto;
+            margin:1.2em 0 0.8em 0;
+            text-align:center;
+        }
+            .main-panel2 .bottom .btn input{
+                width:85%;
+                height:auto;
+                line-height:2.5em;
+                margin:0 auto 0 auto;
+                background:#72cedb;
+                border:none;
+                border-radius:3px;
+                text-align:center;
+                font-size:1em;
+                color:#fff;
+            }
+                .main-panel2 .bottom .btn input:hover{
+                    background:#5dcad9;
+                }
+        .main-panel2 .bottom .tip{
+            width:100%;
+            height:auto;
+            margin:0 0 0 0;
+            text-align:center;
+            font-size:0.8em;
+            color:#888;
+        }
+    .main-panel2 .foot{
+        width:100%;
+        height:auto;
+        display:table;
+    }
+        .main-panel2 .foot img{
+            width:100%;
+            vertical-align:top;
+        }
+.right-top-panel {
+    width:8em;
+    height:auto;
+    position:fixed;
+    right:2em;
+    top:2em;
+    z-index:1;
+}
+    .right-top-panel img{
+        width:100%;
+    }
+.foot-panel2 {
+    width:100%;
+    height:auto;
+    margin:0 0 0 0;
+    padding:0 0 1em 0;
+    line-height:0.1em;
+    text-align:center;
+    position:fixed;
+    left:0;
+    bottom:0;
+    z-index:1;
+}
+    .foot-panel2 img{
+        width:94%;
+        margin:0 auto 0 auto;
+        vertical-align:bottom;
+    }

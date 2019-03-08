@@ -1,0 +1,57 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params.Hotel
+@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    ViewBag.Title = "红包大联欢";
+
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.isInWeixin;
+
+    ////分享者信息
+    //var shareUserInfo = ViewBag.ShareUserInfo;
+    //if (string.IsNullOrEmpty(shareUserInfo.NickName))
+    //{
+    //    shareUserInfo.NickName = "";
+    //}
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+}
+
+@section styles
+{
+    <link href="~/Content/css/framework/zmjd.swiper.min.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css/active/redpackunionshare.css?v=" + (Helpers.curAppVer()))
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+}
+
+
+<div>
+    看到这个就对了，没然后了～ you can close this page 了
+</div>
+
+<footer>
+    <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+    <input type="hidden" id="isInWeixin" value="@(isInWeixin ? 1 : 0)" />
+</footer>
+
+@section scripts
+{
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/framework/config.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/active/redpackunionshare.js?v=@(Helpers.curAppVer())"></script>
+}

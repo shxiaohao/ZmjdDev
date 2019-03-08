@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Ctrip.APICall.PlugIn.SDK</name>
+    </assembly>
+    <members>
+        <member name="M:Ctrip.APICall.PlugIn.SDK.FlightSDKCallPlugin.CallAPIAsyn(Ctrip.APICall.BaseLib.BaseClass.BaseAPICallEntity)">
+            <summary>
+            
+            </summary>
+            <param name="APICallEntity">请求实体</param>
+        </member>
+        <member name="M:Ctrip.APICall.PlugIn.SDK.FlightSDKCallPlugin.CallAPISyn(Ctrip.APICall.BaseLib.BaseClass.BaseAPICallEntity)">
+            <summary>
+            根据不同的请求类型，调用相应的业务
+            </summary>
+            <param name="APICallEntity">请求实体</param>
+            <returns>返回结果实体类</returns>
+        </member>
+    </members>
+</doc>

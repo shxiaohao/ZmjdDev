@@ -1,0 +1,166 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    var cssVersion = "190001010000";
+    try
+    {
+        //var last = this.GetType().Assembly.Location;
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex)
+    {
+    }
+    
+    
+    ViewBag.Title = string.Format("点评提交确认");
+
+    ViewBag.BodyStyle = "overflow-x:hidden;";
+
+    CommentSharePageData sharePageData = ViewBag.SharePageData;
+
+    //微信好友
+    var shareLink_WeixinFriend = ViewBag.ShareLink_WeixinFriend;
+
+    //微信朋友圈
+    var shareLink_WeixinLoop = ViewBag.ShareLink_WeixinLoop;
+
+    //QQ好友
+    var shareLink_QqFriend = ViewBag.ShareLink_QqFiend;
+    
+    //QQ空间
+    var shareLink_QqZone = ViewBag.ShareLink_QqZone;
+
+    //新浪
+    var shareLink_Sina = ViewBag.ShareLink_Sina;
+
+    //复制链接
+    var shareLink_CopyLink = ViewBag.ShareLink_CopyLink;
+    
+    //更多
+    var shareLink_More = ViewBag.ShareLink_More;
+
+    //打开原生分享bar
+    var shareLink_Native = ViewBag.ShareLink_Native;
+    
+    //当前系统环境（ios | android）
+    var appType = ViewBag.AppType;
+
+    //检查当前版本是否大于等于4.4版本
+    var isThanVer4_4 = ViewBag.IsThanVer4_4;
+}
+@section styles
+{
+    <style>
+        html, body {
+                height: 100%;
+                margin: 0;
+            }
+    </style>
+}
+<script>
+    function gourl(url) {
+        location.href = url;
+    }
+</script>
+<link href="~/Content/css/comment/commentsubcompleted.css?v=@cssVersion" rel="stylesheet" />
+<div class="subed-body">
+    <div class="subed-tit">点评已提交 完成审核后发表</div>
+    <div class="subed-sharebtn">
+        <div class="share" data-op="0">分享给好友</div>
+        @*<br /><br /><a href="whotelapp://www.zmjiudian.com/gotopage?url=http://192.168.1.22:8081/Comment/CommentSubCompleted?commentid=4606&userid=0">GO APP >>></a>
+        <br /><br />微信好友：<a href="@shareLink_WeixinFriend">@shareLink_WeixinFriend</a>
+    <br /><br />朋友圈：<a href="@shareLink_WeixinLoop">@shareLink_WeixinLoop</a>
+    <br /><br />QQ空间：<a href="@shareLink_QqZone">@shareLink_QqZone</a>
+    <br /><br />新浪微博：<a href="@shareLink_Sina">@shareLink_Sina</a>*@
+    </div>
+</div>
+<div class="subed-share-panel" style="display:none;">
+    <div class="icons">
+        <ul>
+            <li id="li-weixin" onclick="gourl('@shareLink_WeixinFriend')">
+                <div class="icon"><img src="http://whfront.b0.upaiyun.com/www/img/comment/weixin.png" alt="微信好友" /></div>
+                <div class="txt">微信好友</div>
+            </li>
+            <li id="li-wloop" onclick="gourl('@shareLink_WeixinLoop')">
+                <div class="icon"><img src="http://whfront.b0.upaiyun.com/www/img/comment/w-loop.png" alt="朋友圈" /></div>
+                <div class="txt">朋友圈</div>
+            </li>
+            <li id="li-qfriend" onclick="gourl('@shareLink_QqFriend')" style="@(isThanVer4_4 ? "" : "display:none;")">
+                <div class="icon"><img src="http://whfront.b0.upaiyun.com/www/img/comment/q-friend.png" alt="QQ好友" /></div>
+                <div class="txt">QQ好友</div>
+            </li>
+            <li id="li-qzone" onclick="gourl('@shareLink_QqZone')" style="@(isThanVer4_4 ? "" : "display:none;")">
+                <div class="icon"><img src="http://whfront.b0.upaiyun.com/www/img/comment/q-zone.png" alt="QQ空间" /></div>
+                <div class="txt">QQ空间</div>
+            </li>
+            <li id="li-sina" onclick="gourl('@shareLink_Sina')">
+                <div class="icon"><img src="http://whfront.b0.upaiyun.com/www/img/comment/sina.png" alt="新浪微博" /></div>
+                <div class="txt">新浪微博</div>
+            </li>
+            <li id="li-copylink" onclick="gourl('@shareLink_CopyLink')" style="@(isThanVer4_4 ? "" : "display:none;")">
+                <div class="icon"><img src="http://whfront.b0.upaiyun.com/www/img/comment/copy-link.png" alt="复制链接" /></div>
+                <div class="txt">复制链接</div>
+            </li>
+            <li id="li-more" onclick="gourl('@shareLink_More')" style="@(appType.Contains("android") && isThanVer4_4 ? "" : "display:none;")">
+                <div class="icon"><img src="http://whfront.b0.upaiyun.com/www/img/comment/more.png" alt="更多" /></div>
+                <div class="txt">更多</div>
+            </li>
+        </ul>
+    </div>
+    <div class="btn">
+        <div class="cancel">取消</div>
+    </div>
+</div>
+<div class="subed-share-md" style="display:none;"></div>
+<input type="hidden" id="thanVer44" value="@(isThanVer4_4 ? "1" : "0")" />
+<input type="hidden" id="shareNativeLink" value="@shareLink_Native" /> 
+@section scripts
+{
+    <script>
+        $(".share").click(function ()
+        {
+            var thanVer44 = $("#thanVer44").val();
+            if (thanVer44 == "1")
+            {
+                var shareNativeLink = $("#shareNativeLink").val();
+                gourl(shareNativeLink);
+            }
+            else
+            {
+                var op = $(this).data("op");
+                if (op == "1") {
+                    showMd(false);
+                    $(".subed-share-panel").slideUp(100);
+                    $(this).data("op", "0");
+                }
+                else {
+                    showMd(true);
+                    $(".subed-share-panel").slideDown(200);
+                    $(this).data("op", "1");
+                }
+            }
+        });
+
+        $(".cancel").click(function ()
+        {
+            showMd(false);
+            $(".subed-share-panel").slideUp(100);
+            $(".share").data("op", "0");
+        });
+        $(".subed-share-md").click(function () { $(".cancel").click(); });
+
+        function showMd(s)
+        {
+            if (s) {
+                $(".subed-share-md").fadeIn();
+            }
+            else {
+                $(".subed-share-md").fadeOut();
+            }
+        }
+
+    </script>
+}

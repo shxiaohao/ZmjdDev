@@ -1,0 +1,373 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@using ProductService.Contracts.Entity
+@{
+    Layout = null;
+
+    var skuid = ViewBag.SKUID;
+    var groupid = ViewBag.GROUPID;
+    var cid = ViewBag.CID;
+    var isApp = ViewBag.IsApp;
+
+    //当前环境 (1wap/2web/3app/4weixin)
+    ProductService.Contracts.Entity.ProductServiceEnums.SceneType stype = ViewBag.SType;
+
+    var AppType = ViewBag.AppType;
+    var AppVerForIOS = ViewBag.AppVerForIOS;
+    var AppVerForAndroid = ViewBag.AppVerForAndroid;
+    var IsLatestVerApp = ViewBag.IsLatestVerApp;
+
+    //用户信息（包含会员身份）
+    UserInfoResult userInfo = ViewBag.UserInfo;
+    var userid = ViewBag.UserId;
+
+    //是否VIP
+    var isVip = ViewBag.IsVip;
+
+    //是否微信环境
+    var isInWeixin = ViewBag.isInWeixin;
+
+    //当前活动/产品所配置的归属账号(周末酒店服务号浩颐/苏州服务号等等)
+    var weixinAcountName = "周末酒店服务号";
+    var weixinAcountId = ViewBag.WeixinAcount;
+    var weixinAcount = (HJD.WeixinService.Contract.WeiXinChannelCode)weixinAcountId;
+    switch (weixinAcount)
+    {
+        case HJD.WeixinService.Contract.WeiXinChannelCode.周末酒店服务号_皓颐:
+            weixinAcountName = "周末酒店服务号";
+            break;
+        case HJD.WeixinService.Contract.WeiXinChannelCode.周末酒店苏州服务号_皓颐:
+            weixinAcountName = "周末酒店苏州服务号";
+            break;
+        case HJD.WeixinService.Contract.WeiXinChannelCode.周末酒店成都服务号_皓颐:
+            weixinAcountName = "周末酒店成都服务号";
+            break;
+        case HJD.WeixinService.Contract.WeiXinChannelCode.周末酒店深圳服务号_皓颐:
+            weixinAcountName = "周末酒店深圳服务号";
+            break;
+        case HJD.WeixinService.Contract.WeiXinChannelCode.遛娃指南南京服务号_皓颐:
+            weixinAcountName = "遛娃指南南京服务号";
+            break;
+        case HJD.WeixinService.Contract.WeiXinChannelCode.遛娃指南无锡服务号_皓颐:
+            weixinAcountName = "遛娃指南无锡服务号";
+            break;
+        case HJD.WeixinService.Contract.WeiXinChannelCode.遛娃指南广州服务号_皓颐:
+            weixinAcountName = "遛娃指南广州服务号";
+            break;
+        case HJD.WeixinService.Contract.WeiXinChannelCode.遛娃指南杭州服务号_皓颐:
+            weixinAcountName = "遛娃指南杭州服务号";
+            break;
+    }
+
+
+    //微信用户信息
+    WHotelSite.Models.WeixinUserInfo weixinUserInfo = ViewBag.WeixinUserInfo;
+    //weixinUserInfo.Openid = "oHGzlw64Od16EpBke0PUojcPJEC0";
+
+    //微信授权code
+    var code = ViewBag.Code;
+
+    GroupSKUCouponActivityModel couponSkuInfo = ViewBag.CouponSkuInfo;
+    HJD.CouponService.Contracts.Entity.CouponActivityEntity activity = couponSkuInfo.activity;
+
+    SKUEntity singleBuySKU = ViewBag.SingleBuySKU;
+    SKUEntity groupBuySKU = ViewBag.GroupBuySKU;
+
+    //产品图
+    var productImgFirstSrc = "http://whfront.b0.upaiyun.com/app/img/pic-null-3x2.png";
+    if (activity.PicList != null && activity.PicList.Count > 0)
+    {
+        productImgFirstSrc = activity.PicList[0].Replace("p1.test.sl.corp", "p1.zmjiudian.com");
+    }
+
+    //价格
+    var sellPrice = isVip ? couponSkuInfo.SKUInfo.SKU.VIPPrice : couponSkuInfo.SKUInfo.SKU.Price;
+
+    ////查询券的状态
+    //BuyCouponCheckNumResult buyResult = ViewBag.BuyResult;
+
+    ////开售日
+    //var selldate = activity.EffectiveTime;
+
+    ////抢购结束日
+    //var closedate = activity.SaleEndDate;
+
+    //购买按钮的状态
+    var canShop = true;
+    var noCanTxt = "立即购买";
+
+    ////最小购买数量
+    //var minBuyNum = activity.MinBuyNum;
+
+    ////价格label
+    //var priceLabel = activity.PriceLabel;
+
+    //当前时间（服务器时间）
+    var now = DateTime.Now;
+
+    //房券URL
+    var walletRoomCouponLink = ViewBag.WalletRoomCouponLink;
+
+    //消费券URL
+    var walletProductCouponLink = ViewBag.WalletProductCouponLink;
+
+    //当前产品的购买url
+    var groupProductUrl = string.Format("/coupon/group/product/{0}/0?_newpage=1", groupBuySKU.ID);
+    if(couponSkuInfo != null && couponSkuInfo.IsCreator)
+    {
+        groupProductUrl = string.Format("/coupon/group/product/{0}/{1}?userid={2}&_newpage=1", groupBuySKU.ID, groupid, userid);
+    }
+
+    //页面标题
+    var pageTitle = !string.IsNullOrEmpty(activity.PageTitle) ? activity.PageTitle : "周末酒店";
+    pageTitle = "助力拼团";
+
+    //原生分享配置
+    var s_title = !string.IsNullOrEmpty(activity.PageTitle) ? "帮我助力！" + activity.PageTitle : "嗨！帮我助力拼团哦，就差你了！";
+    if (couponSkuInfo.GroupPurchase != null && couponSkuInfo.IsJoinGroup)
+    {
+        //s_title = string.Format("我￥{0}拼了{1}，快加入我吧。", groupBuySKU.VIPPrice, activity.PageTitle);
+    }
+
+    var s_poto_url = productImgFirstSrc.Replace("_jupiter", "_290x290s").Replace("_theme", "_290x290s").Replace("_appdetail1", "_290x290s");
+    var s_url = string.Format("http://www.zmjiudian.com/coupon/group/tree/{0}/{1}?cid={2}", groupBuySKU.ID, 0, cid);
+    var s_content = "快戳这里，帮我助力＞＞";
+
+    //原生分享链接
+    var _shareLink = "whfriend://comment?title={0}&photoUrl={1}&shareLink={2}&nextUrl={3}&content={4}&shareType={5}";
+    _shareLink = string.Format(_shareLink, HttpUtility.UrlEncode(s_title), HttpUtility.UrlEncode(s_poto_url), HttpUtility.UrlEncode(s_url), "", HttpUtility.UrlEncode(s_content), "{0}");
+    var appShareLink = string.Format(_shareLink, 0);
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>@(pageTitle)</title>
+    <meta name="keywords" content="@ViewBag.PageKeywords" />
+    <meta name="description" content="@ViewBag.PageDescription" />
+    <meta name="copyright" content="2013, zmjiudian.com" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+
+    <link href="~/Content/css/framework/zmjd.modal.min.css" rel="stylesheet" />
+    <link href="~/Content/css/framework/zmjd.swiper.min.css" rel="stylesheet" />
+    <link href="/Content/css/framework/util.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="/content/css/coupon/groupproductfortree.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+</head>
+<body>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .login-section {
+            font-size: 0.8em;
+        }
+    </style>
+
+    <div id="showPosterSection" style="display:none;"><img id="showImg" src="" alt="" /></div>
+    <div class="poster-bg" style="display:none;"></div>
+
+    <div id="product-detail">
+
+        <div class="poster-tip" v-if="productDetail.IsCreator" style="display:none;">长按图片保存到相册，发送给好友邀请助力</div>
+        <div class="mine-poster" style="display:none;">
+
+            <div class="p-img"><img src="{{productDetail.activity.productImgUrl}}" crossorigin="anonymous" alt="" /></div>
+            <div class="p-info">
+                <div class="desc-section">
+                    <div class="txt">{{productDetail.activity.PageTitle}}</div>
+                    <div class="price"><span class="p1">¥<span class="h">{{productDetail.GroupSKU.VIPPrice}}</span></span><span class="p2">市场价¥{{productDetail.GroupSKU.MarketPrice}}</span></div>
+                </div>
+                <div class="qrcode-section">
+                    <img src="{{productDetail.activity.posterQrcodeUrl}}" crossorigin="anonymous" alt="" />
+                </div>
+                <div class="qrcode-section-bg">
+                    <img src="http://whfront.b0.upaiyun.com/bg/channel/posteractive/poster-qrcode-bg-1.png" crossorigin="anonymous" alt="" />
+                </div>
+            </div>
+            <div class="tip">长按二维码和我一起领取吧</div>
+
+            @*<div class="p-img"><img src="{{productDetail.activity.productImgUrl}}" crossorigin="anonymous" alt="" /></div>
+                <div class="p-info">
+                    <div class="qrcode-img"><img src="{{productDetail.activity.posterQrcodeUrl}}" crossorigin="anonymous" alt="" /></div>
+                    <div class="pname">{{productDetail.activity.PageTitle}}</div>
+                    <div class="pprice">
+                        <span class="p1">¥<span class="h">{{productDetail.GroupSKU.VIPPrice}}</span></span>
+                        <span class="p2">市场价¥{{productDetail.GroupSKU.MarketPrice}}</span>
+                    </div>
+                </div>
+                <div class="tip">长按二维码和我一起领取吧</div>*@
+
+        </div>
+        <div class="poster-close" style="display:none;"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/groupproductfortree/icon-poster-close.png" alt="" /></div>
+
+        <div style="display:none;">
+
+            <div class="pubAlertTip" style="display:none;">
+                <div class="tipinfo"></div>
+            </div>
+            <footer>
+                <input type="hidden" id="skuid" value="@skuid" />
+                <input type="hidden" id="groupid" value="@groupid" />
+                <input type="hidden" id="pubaid" value="@(activity.ID)" />
+                <input type="hidden" id="aid" v-model="productDetail.activity.ID" />
+                <input type="hidden" id="atype" v-model="productDetail.activity.Type" />
+                <input type="hidden" id="sellPrice" v-model="productDetail.IsVip?productDetail.SKUInfo.SKU.VIPPrice:productDetail.SKUInfo.SKU.Price" />
+                <input type="hidden" id="skuPrice" v-model="productDetail.SKUInfo.SKU.Price" />
+                <input type="hidden" id="skuVipPrice" v-model="productDetail.SKUInfo.SKU.VIPPrice" />
+                <input type="hidden" id="isNewVipProduct" v-model="productDetail.activity.PageTitle" />
+                <input type="hidden" id="_name" v-model="productDetail.activity.PageTitle" />
+
+                <input type="hidden" id="hidCurUserCID" value="@(ViewBag.CID)" />
+                <input type="hidden" id="hidWxUnionid" value="@(ViewBag.Unionid)" />
+                <input type="hidden" id="userid" value="@userid" />
+                <input type="hidden" id="openid" value="@(weixinUserInfo != null ? weixinUserInfo.Openid : "")" />
+                <input type="hidden" id="customerType" value="@userInfo.CustomerType" />
+                <input type="hidden" id="isvip" value="@(isVip ? 1 : 0)" />
+                <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+                <input type="hidden" id="isInWeixin" value="@(isInWeixin ? 1 : 0)" />
+                <input type="hidden" id="stype" value="@(Convert.ToInt32(stype))" />
+                <input type="hidden" id="cansell" value="@(canShop ? 1 : 0)" />
+                <input type="hidden" id="appShareLink" value="@appShareLink" />
+                <input type="hidden" id="walletRoomCouponLink" value="@walletRoomCouponLink" />
+                <input type="hidden" id="walletProductCouponLink" value="@walletProductCouponLink" />
+                <input type="hidden" id="weixinCode" value="@code" />
+                <input type="hidden" id="weixinAcountId" value="@weixinAcountId" />
+
+                <input type="hidden" id="year0" value="@now.Year" />
+                <input type="hidden" id="month0" value="@(now.Month)" />
+                <input type="hidden" id="day0" value="@now.Day" />
+                <input type="hidden" id="hour0" value="@now.Hour" />
+                <input type="hidden" id="minute0" value="@now.Minute" />
+                <input type="hidden" id="second0" value="@now.Second" />
+
+                <form style="display:none;">
+                    <input type="text" id="loginput" value="0" />
+                </form>
+            </footer>
+
+        </div>
+
+    </div>
+
+    <script>
+        var pub_userid = "@userid";
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script src="~/Content/js/jquery-1.10.2-min.js"></script>
+    <script src="~/Content/js/framework/config.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/framework/zmjd.modal.min.js"></script>
+    <script src="~/Content/js/framework/zmjd.swiper.min.js"></script>
+    <script src="~/Content/js/framework/html2canvas.min.js"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/geetest/gt.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/login.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/coupon/groupproductfortree.js?v=@(Helpers.curAppVer())"></script>
+    <script>
+        try {
+            onAppShareCall = function () {
+                var title = "@s_title";
+                var Content = "@(s_content)";
+                var photoUrl = "@(s_poto_url)";
+                var shareLink = "@(s_url)";
+                try { whotel.appShareData(title, Content, photoUrl, shareLink); } catch (e) { }
+                var returnStr = '{"title":"{0}","Content":"{1}","photoUrl":"{2}","shareLink":"{3}"}';
+                return returnStr.format(title, Content, photoUrl, shareLink);
+            }
+            onAppShareCall();
+        }
+        catch (e) { }
+    </script>
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+        <script>
+
+    GetWeixinApiConfig();//注册
+
+    wx.ready(function () {
+
+        wx.onMenuShareTimeline({
+            title: '@s_title',
+            desc: '@(s_content)',
+            link: '@(s_url)',
+            imgUrl: '@(s_poto_url)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareAppMessage({
+                title: '@s_title',
+                desc: '@(s_content)',
+                link: '@(s_url)',
+                imgUrl: '@(s_poto_url)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+    });
+
+    function GetWeixinApiConfig() {
+
+        var url = location.href.split("#")[0];
+        $.ajax({
+            url: '/Coupon/GetWeixinConfigInfo',
+            type: 'POST',
+            data: { url: url },
+            dataType: 'json',
+            async: false,
+            error: function () {
+                console.log("网络服务错误");
+            },
+            success: function (result) {
+                if (typeof (result.Success) != undefined && result.Success == 1) {
+                    return false;
+                }
+                else {
+                    //得到微信config的值
+                    var array = [
+                        'checkJsApi',
+                        'onMenuShareTimeline',
+                        'onMenuShareAppMessage',
+                        'onMenuShareQQ',
+                        'onMenuShareQZone',
+                        'hideOptionMenu'
+                    ];
+                    if (result.jsApiList) {
+                        var jsArray = result.jsApiList.split(',');
+                        for (var key in jsArray) {
+                            array.push("" + jsArray[key]);
+                        }
+                    }
+
+                    wx.config({
+                        debug: false,
+                        appId: result.appId,
+                        timestamp: "" + result.timestamp,
+                        nonceStr: result.nonceStr,
+                        signature: result.signature,
+                        jsApiList: array
+                    });
+                }
+            }
+        });
+    }
+
+        </script>
+    }
+</body>
+</html>

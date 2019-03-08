@@ -1,0 +1,161 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params.Hotel
+@{
+    SearchHotelListResult result = Model;
+    ListParam param = ViewBag.param;
+    DistrictInfoEntity city = ViewBag.city;
+    InterestModel3 homePageData30 = ViewBag.HomePageData30;
+    var distanceFilters = ViewBag.DistanceFilters;
+    var priceFilters = ViewBag.PriceFilters;
+    var starFilters = ViewBag.StarFilters;
+    var theme = homePageData30.ThemeInterestList != null ? homePageData30.ThemeInterestList.FirstOrDefault(p => p.ID == param.Interest) : null;
+    ViewBag.BodyClass = "";
+
+    if (theme != null)
+    {
+        if (param.ScType == 3)
+        {
+            ViewBag.Title = string.Format("{0}及周边 {1}", city.Name, theme.Name);
+            ViewBag.Keywords = string.Format("发现{0}附近{1}{2}家适合度假酒店，点击查看更多酒店住、吃、玩信息、网友点评、优惠价格，发现更适合你的酒店。", city.Name, theme.Name, result.TotalCount);
+            ViewBag.Description = string.Format("{0}附近{1}酒店_住宿-{0}{1}周边酒店_住宿", city.Name, theme.Name);
+        }
+        else
+        {
+            ViewBag.Title = string.Format("{0} {1}", city.Name, theme.Name);
+            ViewBag.Keywords = string.Format("发现{0}附近{1}{2}家适合度假酒店，点击查看更多酒店住、吃、玩信息、网友点评、优惠价格，发现更适合你的酒店。", city.Name, theme.Name, result.TotalCount);
+            ViewBag.Description = string.Format("{0}附近{1}酒店_住宿-{0}{1}周边酒店_住宿", city.Name, theme.Name);
+        }
+    }
+    else
+    {
+        if (param.ScType == 3)
+        {
+            ViewBag.Title = string.Format("{0}及周边", city.Name);
+            ViewBag.Keywords = string.Format("发现{0}周边景点景区酒店，点击查看更多酒店住、吃、玩信息、网友点评、优惠价格，发现更适合你的酒店。", city.Name);
+            ViewBag.Description = string.Format("{0}附近景区酒店-{0}周边景点附近酒店-周末酒店", city.Name);
+        }
+        else
+        {
+            ViewBag.Title = string.Format("{0}景区酒店", city.Name);
+            ViewBag.Keywords = string.Format("发现{0}景点附近酒店，点击查看更多酒店住、吃、玩信息、网友点评、优惠价格，发现更适合你的酒店。", city.Name);
+            ViewBag.Description = string.Format("{0}附近景区酒店-{0}周边景点附近酒店-周末酒店", city.Name);
+        }
+    }
+
+    if (homePageData30.ThemeInterestList != null)
+    {
+        foreach (List<InterestEntity> list in new List<InterestEntity>[] {
+            homePageData30.ThemeInterestList
+        })
+        {
+            InterestEntity entity = new InterestEntity();
+            entity.ID = 0;
+            entity.Name = "全部";
+            entity.HotelCount = homePageData30.TotalHotelNum;
+            list.Insert(0, entity);
+        }
+    }
+    else
+    {
+        homePageData30.ThemeInterestList = new List<InterestEntity>();
+    }
+
+    var isApp = ViewBag.IsApp;
+}
+
+@section breadcrumbs
+{
+    @Helpers.BreadCrumbs(Url, city.DistrictID, city.Name, 0, "", param.ScType)
+}
+
+<link href="~/Content/css//framework/iscroll.css" rel="stylesheet">
+<link href="~/Content/css/zmjiudian-list.css?v=20161024" rel="stylesheet" />
+<script>
+    function gourl(url) {
+        var isApp = $("#isApp").val();
+        if (isApp == "1") {
+            url = "whotelapp://www.zmjiudian.com" + url;
+        }
+        location.href = url;
+    }
+</script>
+
+<div id="dateList" class="visible-xs">
+    <div class="_scroller">
+        <ul>
+            <li class="@(city.DistrictID == 2 ? "curli" : "")" data-num="0" onclick="gourl('/wx/cityaround2/theme@(param.Interest)')">上海及周边</li>
+            <li class="@(city.DistrictID == 24343 ? "curli" : "")" data-num="1" onclick="gourl('/wx/cityaround24343/theme@(param.Interest)')">成都及周边</li>
+            <li class="@(city.DistrictID == 20579 ? "curli" : "")" data-num="2" onclick="gourl('/wx/cityaround20579/theme@(param.Interest)')">广深及周边</li>
+            <li class="@(city.DistrictID == 1 ? "curli" : "")" data-num="3" onclick="gourl('/wx/cityaround1/theme@(param.Interest)')">北京及周边</li>
+        </ul>
+    </div>
+</div>
+
+<!-- HotelName -->
+<div class="container mainbody">
+  <div class="row">
+    <div class="col-md-10">
+        <div class="row">
+                <!-- 酒店列表 开始 -->
+                @if (result.Result20.Any())
+                {
+                    @Html.Partial("ListContent2", result.Result20)
+                    <div class="pager1 text-right">
+                        @Helpers.Pagination(Url, param, result.TotalCount, param.Count, param.Start)
+                    </div>
+                }
+                else
+                {
+                    <div class="nullalert text-center">
+                        <h5>对不起！没有找到符合您要求的酒店！</h5>
+                    </div>
+
+                }
+                <!-- 酒店列表 结束 -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- linker -->
+<div class="container linker">
+    <div class="row">
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-10">
+            <div class="row">
+                @foreach (InterestEntity t in homePageData30.ThemeInterestList)
+                {
+                    if (t.ID == 0)
+                    {
+                        continue;
+                    }
+                    <div class="col-md-2 col-sm-3 col-xs-6">
+                        <a href="@Url.ListUrl(param.City, t.ID.ToString(), string.Empty, string.Empty, string.Empty, param.ScType)">@(city.Name)附近@(t.Name)酒店</a>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-sm-1">
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="isApp" value="@(isApp ? "1" : "0")" />
+
+@section scripts
+{
+    @Scripts.Render("~/Content/js/srollpage.js", "~/Content/js/hotel/list.js")
+    <script src="~/Content/js//framework/iscroll.js"></script>
+    <script>
+        //让日期选择列表支持横向滑动
+        var dateListScroll = new IScroll('#dateList', { eventPassthrough: true, scrollX: true, scrollY: false, preventDefault: false });
+
+        var curLi = $("#dateList ._scroller").find(".curli");
+        var liNum = parseInt(curLi.data("num"));
+        if (liNum > 1) {
+            //如果选择的项靠后，则自动滚动到指定区域
+            dateListScroll.scrollToElement('li:nth-child(' + (liNum - 1) + ')', 500);
+        }
+    </script>
+}

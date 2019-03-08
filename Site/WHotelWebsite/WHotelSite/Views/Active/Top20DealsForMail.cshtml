@@ -1,0 +1,138 @@
+﻿@model  List<HJD.HotelServices.Contracts.TopNPackageItem>
+@{
+    
+    Layout = null;
+    
+    ViewBag.Title = "本周Top20最惠";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>本周Top20最惠</title>
+</head>
+<body style="padding: 0; margin: 0; overflow-x: hidden; background: #f0f0f0; ">
+
+    <style type="text/css">
+        body {
+            padding: 0;
+            margin: 0;
+            overflow-x: hidden;
+            background:#f0f0f0;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+
+    <div style="width: 100%;height: auto;text-align:center;">
+        <div style="width: 100%; height: auto; background: #6a50a4; text-align: center; ">
+            <div style="width: 100%; max-width: 660px; margin: 0 auto 0 auto; *width: 660px;"><img src="http://www.zmjiudian.com/Content/images/active/top20hotel/banner.png" style="width: 100%;" alt="" /></div>
+        </div>
+        <div style="width: 100%;height:auto;margin:2.2em 0 2em 0;">
+            <div style="width: 100%;height:1.8em;padding:0 0 0.2em 0;text-align:center;">
+                <div style="width:5.4em;height:1.8em;margin:0 auto 0 auto;"><img src="http://www.zmjiudian.com/Content/images/active/top20hotel/logotxt.png" style="width:100%;" alt="" /></div>
+            </div>
+            <div style="width:100%;height:2.6em;line-height:1.3em;font-size:0.9em;text-align:center;color:#999;">
+                专业提供有特色、好口碑、价格优惠的<br />
+                度假酒店推荐和预订服务
+            </div>
+        </div>
+        <div style="width: 100%;height:auto;text-align:center;">
+            <div style="width: 100%; max-width: 660px; height: auto; padding: 0; margin: 0 auto 0 auto; *width: 660px;">
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    var no = i + 1;
+                    TopNPackageItem hotel = Model[i];
+                    var pic = (hotel.PicUrls != null && hotel.PicUrls.Count > 0 ? hotel.PicUrls[0] : "");
+
+                    <div style="width: 99%; height: auto; margin: 0 auto 0 auto; border: 1px solid #ddd; background: #fff;">
+                        <a href="http://www.zmjiudian.com/hotel/@(hotel.HotelID)" style="text-decoration:none;">
+                            <div style="width: 100%; height: auto; margin: 1.2em 0 1.2em 0;cursor:pointer;text-align:center;">
+                                <div style="width: 94%; height: auto; margin: 0 auto 1em auto; text-align: left;">
+                                    @{
+                                        var noStyle = "background: url(http://www.zmjiudian.com/Content/images/active/top20hotel/item-no-list2.png) no-repeat 0 0;background-size: 85px;padding: 0.8em 3em;";
+                                        switch (no)
+                                        {
+                                            case 1: { noStyle = "background: url(http://www.zmjiudian.com/Content/images/active/top20hotel/item-no-list2.png) no-repeat 0 0;background-size: 85px;padding: 0.8em 3em;"; break; }
+                                            case 2: { noStyle = "background: url(http://www.zmjiudian.com/Content/images/active/top20hotel/item-no-list2.png) no-repeat 0 -48px;background-size: 85px;padding: 0.8em 3em;"; break; }
+                                            case 3: { noStyle = "background: url(http://www.zmjiudian.com/Content/images/active/top20hotel/item-no-list2.png) no-repeat 0 -93px;background-size: 85px;padding: 0.8em 3em;"; break; }
+                                            case 4: { noStyle = "background: url(http://www.zmjiudian.com/Content/images/active/top20hotel/item-no-list2.png) no-repeat 0 -140px;background-size: 85px;padding: 0.8em 3em;"; break; }
+                                            case 5: { noStyle = "background: url(http://www.zmjiudian.com/Content/images/active/top20hotel/item-no-list2.png) no-repeat 0 -188px;background-size: 85px;padding: 0.8em 3em;"; break; }
+                                            case 6: { noStyle = "background: url(http://www.zmjiudian.com/Content/images/active/top20hotel/item-no-list2.png) no-repeat 0 -236px;background-size: 85px;padding: 0.8em 3em;"; break; }
+                                            case 7: { noStyle = "background: url(http://www.zmjiudian.com/Content/images/active/top20hotel/item-no-list2.png) no-repeat 0 -280px;background-size: 85px;padding: 0.8em 3em;"; break; }
+                                            case 8: { noStyle = "background: url(http://www.zmjiudian.com/Content/images/active/top20hotel/item-no-list2.png) no-repeat 0 -328px;background-size: 85px;padding: 0.8em 3em;"; break; }
+                                            case 9: { noStyle = "background: url(http://www.zmjiudian.com/Content/images/active/top20hotel/item-no-list2.png) no-repeat 0 -376px;background-size: 85px;padding: 0.8em 3em;"; break; }
+                                            case 10: { noStyle = "background: url(http://www.zmjiudian.com/Content/images/active/top20hotel/item-no-list2.png) no-repeat 0 -424px;background-size: 85px;padding: 0.8em 3em;"; break; }
+                                            case 11: { noStyle = "background: url(http://www.zmjiudian.com/Content/images/active/top20hotel/item-no-list2.png) no-repeat 0 -472px;background-size: 85px;padding: 0.8em 3em;"; break; }
+                                            case 12: { noStyle = "background: url(http://www.zmjiudian.com/Content/images/active/top20hotel/item-no-list2.png) no-repeat 0 -518px;background-size: 85px;padding: 0.8em 3em;"; break; }
+                                            case 13: { noStyle = "background: url(http://www.zmjiudian.com/Content/images/active/top20hotel/item-no-list2.png) no-repeat 0 -564px;background-size: 85px;padding: 0.8em 3em;"; break; }
+                                            case 14: { noStyle = "background: url(http://www.zmjiudian.com/Content/images/active/top20hotel/item-no-list2.png) no-repeat 0 -612px;background-size: 85px;padding: 0.8em 3em;"; break; }
+                                            case 15: { noStyle = "background: url(http://www.zmjiudian.com/Content/images/active/top20hotel/item-no-list2.png) no-repeat 0 -660px;background-size: 85px;padding: 0.8em 3em;"; break; }
+                                            case 16: { noStyle = "background: url(http://www.zmjiudian.com/Content/images/active/top20hotel/item-no-list2.png) no-repeat 0 -704px;background-size: 85px;padding: 0.8em 3em;"; break; }
+                                            case 17: { noStyle = "background: url(http://www.zmjiudian.com/Content/images/active/top20hotel/item-no-list2.png) no-repeat 0 -754px;background-size: 85px;padding: 0.8em 3em;"; break; }
+                                            case 18: { noStyle = "background: url(http://www.zmjiudian.com/Content/images/active/top20hotel/item-no-list2.png) no-repeat 0 -800px;background-size: 85px;padding: 0.8em 3em;"; break; }
+                                            case 19: { noStyle = "background: url(http://www.zmjiudian.com/Content/images/active/top20hotel/item-no-list2.png) no-repeat 0 -846px;background-size: 85px;padding: 0.8em 3em;"; break; }
+                                            case 20: { noStyle = "background: url(http://www.zmjiudian.com/Content/images/active/top20hotel/item-no-list2.png) no-repeat 0 -894px;background-size: 85px;padding: 0.8em 3em;"; break; }
+                                        }
+                                    }
+                                    <table cellpadding="0" cellspacing="0" style="width:100%;height:auto;" border="0">
+                                        <tr>
+                                            <td rowspan="2" style="width:5em;text-align:center;" valign="middle">
+                                                <div style=""><img style="width:5em;" src="http://www.zmjiudian.com/Content/images/active/top20hotel/no-@(no).png" /></div>
+                                            </td>
+                                            <td>
+                                                <div style="width: 100%; height: auto;line-height:1.2em; color: #000; font-size: 1.1em;">@(hotel.HotelName)</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div style="width: 100%; height: auto;line-height:1.3em; padding: 0.2em 0 0 0; color: #999; font-size: 0.9em;">@(hotel.PackageBrief)</div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div style="width: 94%; height: auto; margin: 0 auto 0 auto;">
+                                    <a href="http://www.zmjiudian.com/hotel/@(hotel.HotelID)" style="text-decoration:none;"><img src="@pic" alt="@hotel.HotelName" style="width: 100%;border:none;" /></a>
+                                </div>
+                                <div style="width: 94%; height: auto; line-height: 1.3em; margin: 0.6em auto 0 auto; color: #666; font-size: 0.9em; text-align: left; ">
+                                    <span style="color: #000; font-size: 1em;">上榜理由：</span>@Html.Raw(hotel.RecomemndWord)
+                                </div>
+                                <div style="width: 90%;height:auto; margin: 1em auto 0 auto; text-align: right;">
+                                    @if (hotel.PackagePrice != null)
+                                    {
+                                        var def = hotel.PackagePrice.Find(p => p.Type == 0);
+                                        if (def != null)
+                                        {
+                                            <span style="color: #666; font-size: 0.9em; ">平日<span style="color: #FD9026; font-size: 1.2em; "><span style="color: #666; font-size: 0.6em; ">￥</span>@def.Price</span></span>
+                                        }
+
+                                        var week = hotel.PackagePrice.Find(p => p.Type == 6 || p.Type == 7);
+                                        if (week != null)
+                                        {
+                                            <span style="color: #666; font-size: 0.9em; "> <span style="color:#999;">/</span> 周末<span style="color: #FD9026; font-size: 1.2em; "><span style="color: #666; font-size: 0.6em; ">￥</span>@week.Price</span></span>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div style="width:100%;height:1em;line-height:1em;font-size:0.9em;">&nbsp;</div>
+                }
+            </div>
+        </div>
+        <div style="width: 100%; line-height: 1.3em; text-align: center; color: #333;margin:1em 0 0.2em 0;">
+            关注 "周末酒店" 微信号<br />
+            随时查订各地特惠精品酒店
+        </div>
+        <div style="width:12.5em;height:auto;margin:0 auto 0 auto;"><img src="http://www.zmjiudian.com/Content/images/qrcode-wx-big-4.0.jpg" style="width:100%;" alt="" /></div>
+        <div style="width: 12em; height: auto; margin: 0.3em auto 2em auto;">
+            <div style="float: left; width: 50%; text-align: left;"><a href="http://www.zmjiudian.com/aboutus" style="color: #999; text-decoration: underline;">关于周末酒店</a></div>
+            <div style="float: right; width: 50%; text-align: right;"><a href="http://www.zmjiudian.com/mail/EUserManager?idx={IDX}&state={STATE}" style="color: #999; text-decoration: underline; ">取消订阅</a></div>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+</body>
+</html>

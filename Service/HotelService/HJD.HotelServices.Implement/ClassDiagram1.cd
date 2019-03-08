@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="HJD.HotelServices.HotelService">
+    <Position X="0.5" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>1unln2L02o/0o2x0jSfz6/z7l/k99sfXb2/X67+/Kfs=</HashCode>
+      <FileName>HotelPackageService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="HJD.HotelServices.HotelDAL">
+    <Position X="3.5" Y="0.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>PIHNTjchnhe4FzF1Py9i5srLwrv+8E5yam1rhngRiDo=</HashCode>
+      <FileName>DAL\HotelDAL.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="微软雅黑" Size="9" />
+</ClassDiagram>

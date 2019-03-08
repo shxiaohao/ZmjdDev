@@ -1,0 +1,695 @@
+﻿@charset "UTF-8";
+html, body {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  background: #FBF4E8;
+  -webkit-user-select: none;
+  user-select: none;
+  overflow-x: hidden; 
+}
+
+/*禁止长按链接与图片弹出菜单*/
+a, img {
+  -webkit-touch-callout: none; }
+
+
+.top-banner {
+    width:100%;
+    height:auto;
+    margin:0 auto 0 auto;
+    padding:0 0 0 0;
+    position:relative;
+    font-family:Arial;
+}
+    .top-banner img{
+        width:100%;
+    }
+
+.bottom-section {
+    width:100%;
+    height:100%;
+    margin:-4em 0 0 0;
+    position:relative;
+    display:table;
+    font-family:Arial;
+}
+    .bottom-section .redpack-amount-section{
+        width:100%;
+        height:auto;
+        margin:0 0 0 0;
+        padding:0 0 0 0;
+        position:relative;
+        display:table;
+    }
+        .bottom-section .redpack-amount-section .bg{
+            width:100%;
+            height:auto;
+            margin:0 0 0 0;
+        }
+            .bottom-section .redpack-amount-section .bg img{
+                width:100%;
+            }
+        .bottom-section .redpack-amount-section .info{
+            width:100%;
+            height:auto;
+            margin:0 0 0 0;
+            position:absolute;
+            top:2em;
+            left:0;
+            z-index:10;
+        }
+            .bottom-section .redpack-amount-section .info .tit{
+                width:100%;
+                height:auto;
+                margin:0 0 0 0;
+                padding:0em 0 0.3em 0;
+                position:relative;
+                z-index:20;
+                text-align:center;
+                font-size:1.1em;
+                color:#2c2c2c;
+            }
+            .bottom-section .redpack-amount-section .info .amount{
+                width:100%;
+                height:auto;
+                margin:0 0 0 0;
+                padding:0 0 0 0;
+                position:relative;
+                z-index:20;
+                text-align:center;
+                font-size:2.5em;
+                font-weight:bold;
+                color:#da4d42;
+            }
+                .bottom-section .redpack-amount-section .info .amount .u{
+                    font-size:0.7em;
+                    font-weight:normal;
+                }
+            .bottom-section .redpack-amount-section .info .amount-0{
+                width:100%;
+                height:auto;
+                margin:0 0 0 0;
+                padding:0 0 0 0;
+                position:relative;
+                z-index:20;
+                text-align:center;
+                font-size:2.5em;
+                font-weight:bold;
+                color:#555;
+            }
+            .bottom-section .redpack-amount-section .info .big-txt{
+                width:100%;
+                height:auto;
+                margin:0.6em 0 0 0;
+                padding:0 0 0 0;
+                position:relative;
+                z-index:20;
+                text-align:center;
+                font-size:1.5em;
+                color:#da4d42;
+            }
+            .bottom-section .redpack-amount-section .info .tip{
+                width:100%;
+                height:auto;
+                margin:0.8em 0 0 0;
+                padding:0 0 0 0;
+                position:relative;
+                z-index:20;
+                text-align:center;
+                font-size:0.8em;
+                color:#555;
+            }
+            .bottom-section .redpack-amount-section .info .tip-partner{
+                width:100%;
+                height:auto;
+                margin:0.4em 0 0 0;
+                padding:0 0 0 0;
+                position:relative;
+                z-index:20;
+                text-align:center;
+                font-size:0.9em;
+                font-weight:bold;
+                color:#da4d42;
+            }
+                .bottom-section .redpack-amount-section .info .tip-partner .h{
+                    font-size:1.3em;
+                }
+            .bottom-section .redpack-amount-section .info .go-btn{
+                width:7em;
+                height:auto;
+                margin:1.2em auto 0 auto;
+                padding:0.5em 0 0.5em 0;
+                position:relative;
+                z-index:20;
+                text-align:center;
+                font-size:0.9em;
+                color:#fff;
+                background:#f47567;
+                border-radius:4em;
+            }
+            .bottom-section .redpack-amount-section .get-moregem-btn{
+                width:55%;
+                height:auto;
+                margin:-7.6em auto 0 auto;
+                padding:0 0 1.3em 0;
+                display:table;
+                text-align:center;
+                position:relative;
+            }
+                .bottom-section .redpack-amount-section .get-moregem-btn img{
+                    width:100%;
+                }
+    .bottom-section .redpack-remark{
+        width:90%;
+        height:auto;
+        line-height:1.7em;
+        margin:0 auto 0 auto;
+        padding:0.5em 0 1.3em 0;
+        display:table;
+        text-align:left;
+        font-size:0.8em;
+        color:#555;
+    }
+        .bottom-section .redpack-remark .t{
+            line-height:2em;
+            font-size:1.1em;
+            font-weight:bold;
+        }
+    .bottom-section .gem-section{
+        width:100%;
+        height:auto;
+        margin:2em 0 1em 0;
+        display:table;
+        position:relative;
+    }
+        .bottom-section .gem-section .gem-rule{
+            width:90%;
+            height:auto;
+            margin:0 auto 0 auto;
+            border:1px dashed #f47567;
+        }
+            .bottom-section .gem-section .gem-rule .rule{
+                width:90%;
+                height:auto;
+                margin:0 auto 1em auto;
+                padding:1em 0 1.5em 0;
+                text-align:center;
+                font-size:0.8em;
+                color:#2c2c2c;
+            }
+            .bottom-section .gem-section .gem-rule .gem-info{
+                width:60%;
+                height:auto;
+                margin:-1.8em auto 0 auto;
+                padding:0 0 0 0;
+                position:relative;
+            }
+                .bottom-section .gem-section .gem-rule .gem-info .bg{
+                    width:100%;
+                }
+                    .bottom-section .gem-section .gem-rule .gem-info .bg img{
+                        width:100%;
+                    }
+                    .bottom-section .gem-section .gem-rule .gem-info .count-info{
+                        width:auto;
+                        height:auto;
+                        padding:0 1.5em 0 0;
+                        position:absolute;
+                        top:1em;
+                        left:24%;
+                        text-align:center;
+                        font-size:1em;
+                        font-weight:bold;
+                        color:#2c2c2c;
+                    }
+                        .bottom-section .gem-section .gem-rule .gem-info .count-info .gem-icon{
+                            width:1.5em;
+                            margin:0 0 0 0;
+                            display:table;
+                            position:absolute;
+                            right:0;
+                            top:-0.08em;
+                        }
+        .bottom-section .gem-section .gem-share-btn{
+            width:9.5em;
+            height:auto;
+            margin:-1.25em auto 0 auto;
+            padding:0.5em 0 0.5em 0;
+            position:relative;
+            border:1px solid #f47567;
+            background:#f47567;
+            border-radius:2em;
+            text-align:center;
+            font-size:0.9em;
+            color:#fff;
+        }
+    .bottom-section .partner-tit{
+        width:100%;
+        height:auto;
+        margin:2.5em 0 0 0;
+        display:table;
+    }
+        .bottom-section .partner-tit img{
+            width:65%;
+            margin:0 auto 0 auto;
+            display:table;
+        }
+    .bottom-section .partner-list{
+        width:100%;
+        height:auto;
+        margin:1.2em 0 1em 0;
+        display:table;
+    }
+        .bottom-section .partner-list .list{
+            width:99%;
+            height:auto;
+            display:table;
+            margin:0 0 0 1.7%;
+        }
+            .bottom-section .partner-list .list .item{
+                width:30%;
+                height:auto;
+                margin:0 0 0.4em 2%;
+                padding:0 0 0em 0;
+                float:left;
+                background-color:transparent;
+                /*overflow:hidden;*/
+                position:relative;
+            }
+                .bottom-section .partner-list .list .item .bg{
+                    width:100%;
+                    height:auto;
+                    margin:0 auto 0 auto;
+                    position:relative;
+                    z-index:100;
+                }
+                    .bottom-section .partner-list .list .item .bg img{
+                        width:100%;
+                        box-shadow: 0px 4px 5px rgba(255, 101, 85, 0.36);
+                    }
+                .bottom-section .partner-list .list .item .name{
+                    width:88%;
+                    height:2.8em;
+                    line-height:1.4em;
+                    margin:0em auto 0.5em auto;
+                    padding:0.3em 0 0.4em 0;
+                    font-size:0.8em;
+                    color:#fff;
+                    text-align:center;
+                    overflow:hidden;
+				    -webkit-box-orient: vertical;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    position:absolute;
+                    left:6%;
+                    bottom:3.6em;
+                    z-index:101;
+                }
+                .bottom-section .partner-list .list .item .ctrl{
+                    width:82%;
+                    height:auto;
+                    margin:0 auto 0.5em auto;
+                    padding:0.2em 0 0.2em 0;
+                    background:#fff;
+                    border-radius:1em;
+                    position:absolute;
+                    left:10%;
+                    bottom:0.8em;
+                    z-index:101;
+                }
+                    .bottom-section .partner-list .list .item .ctrl .get{
+                        width:auto;
+                        height:auto;
+                        margin:0 0 0 0;
+                        padding:0 0.3em 0 0;
+                        position:relative;
+                        text-align:center;
+                        font-size:0.8em;
+                        color:#F47567;
+                        /*border:1px solid blue;*/
+                    }
+                     .bottom-section .partner-list .list .item .ctrl .gem-icon{
+                        width:1em;
+                        margin:0 0 0 0;
+                        display:table;
+                        position:absolute;
+                        right:0.4em;
+                        top:0.31em;
+                    }
+                    @media (max-height: 372px) {
+                        .bottom-section .partner-list .list .item .ctrl .gem-icon{
+                            width:0.7em;
+                            right:0.2em;
+                            top:0.35em;
+                        }
+                    }
+                .bottom-section .partner-list .list .item .ctrl-0{
+                    width:82%;
+                    height:auto;
+                    margin:0 auto 0.5em auto;
+                    padding:0.2em 0 0.2em 0;
+                    background:rgba(255, 255, 255, 0.36);
+                    border-radius:1em;
+                    position:absolute;
+                    left:10%;
+                    bottom:0.8em;
+                    z-index:101;
+                }
+                    .bottom-section .partner-list .list .item .ctrl-0 .get{
+                        width:auto;
+                        height:auto;
+                        margin:0 0 0 0;
+                        padding:0 0.3em 0 0;
+                        position:relative;
+                        text-align:center;
+                        font-size:0.8em;
+                        color:#fff;
+                        /*border:1px solid blue;*/
+                    }
+    .bottom-section .foot-logo{
+        width:100%;
+        height:auto;
+        margin:2em 0 2em 0;
+        display:table;
+    }
+        .bottom-section .foot-logo img{
+            width:8em;
+            margin:0 auto 0 auto;
+            display:table;
+        }
+
+#showPosterSection {
+    width:80%;
+    height:auto;
+    position:fixed;
+    top:95px;
+    left:10%;
+    z-index:210;
+    background:#EA5343;
+}
+    #showPosterSection img{
+        width:100%;
+    }
+.poster-bg {
+    width:100%;
+    height:100%;
+    margin:0 0 0 0;
+    padding:0 0 0 0;
+    display:table;
+    background:rgba(0, 0, 0, 0.75);
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:200;
+}
+.poster-tip {
+    width:100%;
+    height:auto;
+    margin:0 0 0 0;
+    padding:0 0 0 0;
+    display:table;
+    position:fixed;
+    top:0px;
+    left:0%;
+    z-index:210;
+    background:#FBF4E8;
+}
+    .poster-tip .content{
+        width:90%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0.8em 0 0.8em 0;
+        display:table;
+        color:#2c2c2c;
+        font-size:0.9em;
+        font-family:Arial;
+        text-align:justify;
+    }
+        .poster-tip .content .h{
+            color:#EC6253;
+            font-weight:bold;
+        }
+.poster-close {
+    width:2em;
+    height:auto;
+    margin:0 0 0 0;
+    padding:0 0 0 0;
+    display:table;
+    position:fixed;
+    top:45px;
+    right:6%;
+    z-index:210;
+}
+    .poster-close img{
+        width:100%;
+    }
+.poster-tip-loading {
+    width:84%;
+    height:auto;
+    margin:0 0 0 0;
+    padding:7em 0 0em 0;
+    display:table;
+    position:fixed;
+    top:95px;
+    left:8%;
+    z-index:201;
+    text-align:center;
+    color:#fff;
+    font-size:1em;
+}
+.mine-poster {
+    width:80%;
+    height:auto;
+    margin:0 0 0 0;
+    padding:0 0 0em 0;
+    display:table;
+    position:fixed;
+    top:95px;
+    left:10%;
+    z-index:199;
+    background:#EA5343;
+    font-family:Arial;
+}
+    .mine-poster .bg{
+        width:100%;
+        height:auto;
+        margin:0 auto 0 auto;
+        position:relative;
+        z-index:100;
+    }
+        .mine-poster .bg img{
+            width:100%;
+        }
+    .mine-poster .nickname{
+        width:80%;
+        height:auto;
+        line-height:1.2em;
+        margin:0 auto 0em auto;
+        padding:0em 0 0em 0;
+        text-align:center;
+        font-size:1em;
+        color:#FFE6BB;
+        position:absolute;
+        left:10%;
+        top:8%;
+        z-index:101;
+    }
+    .mine-poster .red-tip{
+        width:80%;
+        height:auto;
+        margin:0 auto 0em auto;
+        padding:0em 0 0em 0;
+        text-align:center;
+        font-size:1.6em;
+        font-weight:bold;
+        color:#FFE6BB;
+        position:absolute;
+        left:10%;
+        top:17%;
+        z-index:101;
+    }
+    .mine-poster .red-value{
+        width:80%;
+        height:auto;
+        margin:0 auto 0em auto;
+        padding:0em 0 0em 0;
+        text-align:center;
+        font-size:3em;
+        font-weight:bold;
+        color:#FFE6BB;
+        position:absolute;
+        left:10%;
+        top:13.5%;
+        z-index:101;
+    }
+        .mine-poster .red-value .u{
+            margin:0 0 0 0;
+            font-size:0.6em;
+            font-weight:normal;
+            color:#FFE6BB;
+        }
+    .mine-poster .top-tip{
+        width:80%;
+        height:auto;
+        margin:0 auto 0em auto;
+        padding:0em 0 0em 0;
+        text-align:center;
+        font-size:0.8em;
+        color:rgba(0, 0, 0, 0.46);
+        position:absolute;
+        left:10%;
+        top:27%;
+        z-index:101;
+    }
+    .mine-poster .head-img{
+        width:100%;
+        height:auto;
+        margin:0 auto 0em auto;
+        padding:0em 0 0em 0;
+        display:table;
+        position:absolute;
+        left:0%;
+        top:33%;
+        z-index:101;
+    }
+        .mine-poster .head-img img{
+            width:20%;
+            display:table;
+            margin:0 auto 0 auto;
+            border-radius:100%;
+            border:3px solid #fff;
+        }
+    .mine-poster .poster-qrcode-sction{
+        width:80%;
+        height:auto;
+        margin:0em auto 0 auto;
+        padding:0 0 0 0;
+        display:table;
+        position:absolute;
+        left:10%;
+        top:51%;
+        z-index:101;
+    }
+        .mine-poster .poster-qrcode-sction .poster-qrcode{
+            width:115px;
+            height:auto;
+            margin:0em auto 0 auto;
+            padding:0 0 0 0;
+            display:table;
+            border:3px solid #fff;
+        }
+    .mine-poster .qrcode-tip{
+        width:80%;
+        height:auto;
+        margin:0 auto 0em auto;
+        padding:0em 0 0em 0;
+        text-align:center;
+        font-size:0.9em;
+        color:rgba(0, 0, 0, 0.46);
+        position:absolute;
+        left:10%;
+        top:82%;
+        z-index:101;
+    }
+
+
+    .mine-poster .p-banner{
+        width:100%;
+        height:auto;
+        margin:0 0 0 0;
+        padding:0 0 0 0;
+        display:table;
+    }
+        .mine-poster .p-banner img{
+            width:100%;
+            height:auto;
+            margin:0 0 0 0;
+            padding:0 0 0 0;
+            display:table;
+        }
+    /*.mine-poster .p-qrcode-section{
+        width:100%;
+        height:auto;
+        margin:-4.3em 0 0 0;
+        padding:0 0 0 0;
+        position:relative;
+        display:table;
+    }
+        .mine-poster .p-qrcode-section .bg{
+            width:100%;
+            height:auto;
+            margin:0 0 0 0;
+        }
+            .mine-poster .p-qrcode-section .bg img{
+                width:100%;
+            }
+        .mine-poster .p-qrcode-section .info{
+            width:100%;
+            height:auto;
+            margin:0 0 0 0;
+            position:absolute;
+            top:1.5em;
+            left:0;
+            z-index:10;
+        }
+            .mine-poster .p-qrcode-section .info .tip{
+                width:100%;
+                height:auto;
+                margin:0 0 0 0;
+                padding:0em 0 0em 0;
+                position:relative;
+                z-index:20;
+                text-align:center;
+                font-size:0.7em;
+                color:#2c2c2c;
+            }
+            .mine-poster .p-qrcode-section .info .poster-qrcode{
+                width:80px;
+                height:auto;
+                margin:0.8em auto 0 auto;
+                padding:0 0 0 0;
+                display:table;
+            }*/
+    .mine-poster .foot{
+        width:100%;
+        height:auto;
+        margin:0em 0 1em 0;
+        display:table;
+    }
+        .mine-poster .foot img{
+            width:6em;
+            margin:0 auto 0 auto;
+            display:table;
+        }
+
+.alert-p-head {
+    width:100%;
+    height:auto;
+    position:absolute;
+    top:-2.5em;
+    left:0;
+}
+    .alert-p-head img{
+        width:5em;
+        margin:0 auto 0 auto;
+        display:table;
+        border-radius:5em;
+        border:5px solid #fff;
+    }
+.alert-p-tit {
+    width:90%;
+    height:auto;
+    margin:1.2em auto 0.8em auto;
+    display:table;
+    text-align:center;
+    font-size:1.1em;
+    font-weight:bold;
+    color:#2c2c2c;
+}
+.alert-p-desc {
+    width:90%;
+    height:auto;
+    margin:0 auto 0.8em auto;
+    display:table;
+}
+

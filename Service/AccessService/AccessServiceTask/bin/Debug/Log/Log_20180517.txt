@@ -1,0 +1,19 @@
+
+[18/5/17 11:49:22] Start Job [DownLoadWexinMaterialJob]
+[18/5/17 11:49:45] LastOffset已经存储至本地！1
+[18/5/17 11:49:52] 起始：Offset【1】 Count【10】
+[18/5/17 12:04:51] GetAllWeixinMaterialList is null:lastOffset:1
+[18/5/17 12:04:51] ～下载完了～
+[18/5/17 12:04:51] LastOffset已经存储至本地！1
+[18/5/17 12:04:51] 初始页码为 1
+[18/5/17 12:04:51] Stop Job [DownLoadWexinMaterialJob]
+[18/5/17 12:04:57] Start Job [DownLoadWexinMaterialJob]
+[18/5/17 12:05:11] 【GetLastOffset】:1
+[18/5/17 12:05:11] 起始：Offset【1】 Count【10】
+[18/5/17 12:12:19] Start Job [DownLoadWexinMaterialJob]
+[18/5/17 12:12:30] 【GetLastOffset】:1
+[18/5/17 12:12:31] 起始：Offset【1】 Count【10】
+[18/5/17 15:08:53] Start Job [DownLoadWexinLiuwaMaterialJob]
+[18/5/17 15:09:00] 【GetLastOffset】:1
+[18/5/17 15:09:01] 起始：Offset【1】 Count【10】
+[18/5/17 15:09:13] GetAllWeixinMaterialList Count:10

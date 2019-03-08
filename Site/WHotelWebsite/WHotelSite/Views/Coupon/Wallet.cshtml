@@ -1,0 +1,1745 @@
+﻿@using HJD.CouponService.Contracts.Entity
+@using HJD.HotelPrice.Contract.DataContract.Order
+@using HJD.HotelManagementCenter.Domain
+@using HJD.HotelManagementCenter.Domain.Fund
+@{
+    Layout = null;
+
+    long userid = ViewBag.userid;
+    string pageTag = ViewBag.tag;   // == "cash" ? true : false;
+    var mode = ViewBag.Mode;    //detail | null
+
+    int HadRebateAmount = ViewBag.HadRebateAmount;
+    int WaitingRebateAmount = ViewBag.WaitingRebateAmount;
+    List<UserRebateInfoEntity> list = ViewBag.RebateList;
+    PointResult pointResult = ViewBag.PointResult;
+    List<PointsEntity> pointDetailList = ViewBag.PointDetailList;
+    CouponResult couponResult = ViewBag.CouponResult;
+    int cashCouponCount = ViewBag.CashCouponCount;
+    int voucherCount = ViewBag.VoucherCount;
+    List<AcquiredCoupon> couponDetailList = ViewBag.CouponDetailList;
+    RoomCouponResult roomcouponResult = ViewBag.RoomcouponResult;
+
+    //住基金相关对象
+    UserFundEntity userFundInfo = ViewBag.UserFundInfo;
+    List<UserFundIncomeStatEntity> fundDetailList = ViewBag.FundDetailList;
+
+    //航空里程相关对象
+    EasternAirLinesCardEntity airMilesResult = ViewBag.AirMilesResult;
+    List<EasternAirLinesRecordEntity> airMilesDetailResult = ViewBag.AirMilesDetailResult;
+
+    //消费券相关对象
+    var productCouponCount = ViewBag.ProductCouponCount;
+    ProductCouponResult productCouponDetailResult = ViewBag.ProductCouponDetailResult;
+
+    //可重新上传照片的券ID
+    var canUpdatePhotoExid = ViewBag.CanUpdatePhotoExid;
+    
+    var pointUrl = ViewBag.PointUrl;
+    var pointDetailUrl = ViewBag.PointDetailUrl;
+    var fundUrl = ViewBag.FundUrl;
+    var fundDetailUrl = ViewBag.FundDetailUrl;
+    var cashCouponUrl = ViewBag.CashCouponUrl;
+    var voucherUrl = ViewBag.VoucherUrl;
+    var couponUrl = ViewBag.CouponUrl;
+    var couponDetailUrl= ViewBag.CouponDetailUrl;
+    var roomcouponUrl = ViewBag.RoomCouponUrl;
+    var cashUrl = ViewBag.CashUrl;
+    var airmilesUrl = ViewBag.AirMilesUrl;
+    var airmilesDetailUrl = ViewBag.AirMilesDetailUrl;
+    var productCouponUrl = ViewBag.ProductCouponUrl;
+    var productCouponDetailUrl = ViewBag.ProductCouponDetailUrl;
+
+    //当前系统环境（ios | android）
+    var appType = ViewBag.AppType;
+
+    //是否大于等于app版本5.0
+    var isThanVer5_0 = ViewBag.IsThanVer5_0;
+
+    //是否大于等于app版本5.2
+    var isThanVer5_2 = ViewBag.IsThanVer5_2;
+
+    //是否大于等于app版本5.4
+    var isThanVer5_4 = ViewBag.IsThanVer5_4;
+}
+
+@helper PointSection(PointResult pointResult, string pointDetailUrl, List<PointsEntity> pointDetailList, string mode, long userid, bool isThanVer5_0)
+{
+    if (mode != "detail")
+    {
+        if (!isThanVer5_0)
+        {
+            <div class="page-topright-link" onclick="gourl('/active/activepage?pageid=50&defbg=1&_newpage=1')">积分规则</div>   
+        }
+        <div class="block-top">
+            <div class="group">
+                <div class="t">积分</div>
+                @if (pointResult.CanUsePoints > 0)
+                {
+                    <div onclick="gourl('@pointDetailUrl')" class="@(pointResult.CanUsePoints>9999?"v2":"v")">@(pointResult.CanUsePoints)</div>
+                    <div onclick="gourl('@pointDetailUrl')" class="l">查看明细</div>
+                }
+                else
+                {
+                    <div class="@(pointResult.CanUsePoints>9999?"v2":"v")">@(pointResult.CanUsePoints)</div>
+                    <div class="l2">查看明细</div>
+                }
+            </div>
+        </div>
+        <div class="block-def">
+            <div class="info">您可以通过购买产品、写点评、邀请朋友注册的方式获取积分，详情请见“积分规则”</div>
+            @*<div class="btn1" onclick="gourl('/inspector/hotellist?_newpage=1&userid=@userid')">查看品鉴酒店</div>*@
+            <div class="btn1" onclick="gourl('/Coupon/MoreProductList?userid=@(userid)&albumId=22&grid=1&_newpage=1')">积分兑换</div>
+            <br /><br />
+        </div>
+        <script>
+            try {
+                setAppTitleMenu = function () {
+
+                    var _lab = "积分规则";
+                    var _url = "http://www.zmjiudian.com/active/activepage?pageid=50&defbg=1?_newpage=1";
+
+                    try { whotel.appTitleMenu(_lab, _url); } catch (e) { }
+                    return '{"lab":"' + _lab + '","url":"' + _url + '"}';
+                }
+                setAppTitleMenu();
+            } catch (e) {
+
+            }
+        </script>
+    }
+    else
+    {
+        if (pointDetailList != null && pointDetailList.Count > 0)
+        {
+            <div class="pointdetail-list">
+                @for (int i = 0; i < pointDetailList.Count; i++)
+                {
+                    var _item = pointDetailList[i];
+                    //if (i == 3) { _item.TotalPoint = -20; }
+                    <div class="row">
+                        <div class="left">
+                            <div class="pn">@_item.TypeName</div>
+                            <div class="pd">@_item.CreateTime.ToString("yyyy-MM-dd")</div>
+                        </div>
+                        <div class="right @(_item.TotalPoint > 0 ? "r-c1" : "r-c2")">@(_item.TotalPoint > 0 ? _item.TotalPoint : 0 - _item.TotalPoint)</div>
+                        <div style="clear:both;"></div>
+                    </div>
+                }
+            </div>
+        }
+    }
+}
+
+@helper FundSection(UserFundEntity userFundInfo, string fundDetailUrl, List<UserFundIncomeStatEntity> fundDetailList, string mode, long userid, bool isThanVer5_0)
+{
+    if (mode != "detail")
+    {
+        if (!isThanVer5_0)
+        { 
+            <div class="page-topright-link" onclick="gourl('/active/activepage?pageid=49&defbg=1&_newpage=1')">使用规则</div>   
+        }
+        <div class="block-top">
+            <div class="group">
+                <div class="t">住基金</div>
+                @if (userFundInfo.TotalFund > 0)
+                {
+                    var _totalFund = float.Parse(userFundInfo.TotalFund.ToString()).ToString();
+                    
+                    <div onclick="gourl('@fundDetailUrl')" class="@(userFundInfo.TotalFund >= 100 ? "v3" : "v2")">￥@(_totalFund)</div>
+                    <div onclick="gourl('@fundDetailUrl')" class="l">查看明细</div>
+                }
+                else
+                {
+                    <div class="@(userFundInfo.TotalFund >= 100 ? "v3" : "v2")">￥@(userFundInfo.TotalFund)</div>
+                    <div class="l2">查看明细</div>
+                }
+            </div>
+        </div>
+        <div class="block-def">
+            <div class="info">邀请新朋友预订酒店，成功入住后，您可享受其消费金额1%的住基金奖励。</div>
+            <div class="btn2" onclick="gourl('/Fund/UserRecommend2?realuserid=1&_newpage=1&userid=@userid')">邀请好友</div>
+        </div>
+        @*<div class="block-def">
+            <div class="block-border"></div>
+            <div class="info">成为铂金VIP会员，完成预订入住后，您将获得订单消费金额1%的住基金返利。</div>
+            <div class="btn2" onclick="gourl('/custom/shop/vip/100398?_newpage=1&userid=@userid')">成为铂金会员</div>
+        </div>*@
+        <script>
+            try {
+                setAppTitleMenu = function () {
+
+                    var _lab = "使用说明";
+                    var _url = "http://www.zmjiudian.com/active/activepage?pageid=49&defbg=1?_newpage=1";
+
+                    try { whotel.appTitleMenu(_lab, _url); } catch (e) { }
+                    return '{"lab":"' + _lab + '","url":"' + _url + '"}';
+                }
+                setAppTitleMenu();
+            } catch (e) {
+
+            }
+        </script>
+    }
+    else
+    {
+        if (fundDetailList != null && fundDetailList.Count > 0)
+        {
+            <div class="pointdetail-list">
+                @for (int i = 0; i < fundDetailList.Count; i++)
+                {
+                    var _item = fundDetailList[i];
+                    //if (i == 3) { _item.Fund = -20; }
+                    <div class="row">
+                        <div class="left">
+                            <div class="pn">@_item.Label</div>
+                            <div class="pd">@_item.Day.ToString("yyyy-MM-dd")</div>
+                        </div>
+                        @if (_item.Fund != 0)
+                        {
+                            <div class="right @(_item.Fund > 0 ? "r-c1" : "r-c2")">￥@(_item.Fund > 0 ? _item.Fund : 0 - _item.Fund)</div>
+                        }
+                        <div style="clear:both;"></div>
+                    </div>
+                }
+            </div>
+        } 
+    }
+}
+
+@helper CouponSection(CouponResult couponResult, string couponDetailUrl, List<AcquiredCoupon> couponDetailList, string mode, long userid, bool isThanVer5_0)
+{
+    if (mode != "detail")
+    {
+        couponResult.CanUseCoupon = (int)Math.Round((decimal)couponResult.CanUseCoupon / 100, 0);
+        if (!isThanVer5_0)
+        { 
+            <div class="page-topright-link" onclick="gourl('/active/activepage?pageid=47&defbg=1?_newpage=1')">使用规则</div>   
+        }
+        <div class="block-top">
+            <div class="group">
+                <div class="t">现金券</div>
+                @if (couponResult.CanUseCoupon > 0)
+                {
+                    <div onclick="gourl('@couponDetailUrl')" class="@(couponResult.CanUseCoupon >= 10000 ? "v3" : "v")">@(couponResult.CanUseCoupon)</div>
+                    <div onclick="gourl('@couponDetailUrl')" class="l">查看明细</div>
+                }
+                else
+                {
+                    <div class="@(couponResult.CanUseCoupon >= 10000 ? "v3" : "v")">@(couponResult.CanUseCoupon)</div>
+                    <div class="l2">查看明细</div>
+                }
+            </div>
+        </div>
+        @*<div class="block-def">
+            <div class="info">邀请朋友注册成功，您与朋友均可获得50元现金券。</div>
+            <div class="btn2" onclick="gourl('/Fund/UserRecommend2?realuserid=1&_newpage=1&userid=@userid')">邀请好友</div>
+        </div>
+        <div class="block-def">
+            <div class="block-border"></div>
+            <div class="info">部分订单支付成功后可弹出发红包提示，分享成功即可获得不同金额的现金券。</div>
+            <div class="btn2" onclick="gourl('http://www.zmjiudian.com/App/MorePackageList?userid=@userid&albumId=0&t=6&userlat={userlat}&userlng={userlng}&_newpage=1')">开始预订</div>
+        </div>*@
+        <script>
+            try {
+                setAppTitleMenu = function () {
+
+                    var _lab = "使用说明";
+                    var _url = "http://www.zmjiudian.com/active/activepage?pageid=47&defbg=1?_newpage=1";
+
+                    try { whotel.appTitleMenu(_lab, _url); } catch (e) { }
+                    return '{"lab":"' + _lab + '","url":"' + _url + '"}';
+                }
+                setAppTitleMenu();
+            } catch (e) {
+
+            }
+        </script>
+    }
+    else
+    {
+        if (couponDetailList != null && couponDetailList.Count > 0)
+        {
+            <div class="pointdetail-list">
+                @for (int i = 0; i < couponDetailList.Count; i++)
+                {
+                    var _item = couponDetailList[i];
+                    _item.TotalMoney = Math.Round((decimal)_item.TotalMoney / 100, 0);
+                    <div class="row">
+                        <div class="left">
+                            <div class="pn">@_item.TypeName</div>
+                            @if (_item.AcquiredTime.HasValue)
+                            {
+                                DateTime _date = (DateTime)_item.AcquiredTime;
+                                <div class="pd">@_date.ToString("yyyy-MM-dd")</div>
+                            }
+                        </div>
+                        @if (_item.TotalMoney != 0)
+                        {
+                            <div class="right @(_item.TotalMoney > 0 ? "r-c1" : "r-c2")">@(_item.TotalMoney > 0 ? _item.TotalMoney : 0 - _item.TotalMoney)</div>
+                        }
+                        <div style="clear:both;"></div>
+                    </div>
+                }
+            </div>
+        }
+    }
+}
+
+@helper AirMilesSection(EasternAirLinesCardEntity airMilesResult, List<EasternAirLinesRecordEntity> airMilesDetailResult, string detailUrl, string mode, long userid, bool isThanVer5_0)
+{
+    airMilesResult = (airMilesResult == null ? new EasternAirLinesCardEntity() : airMilesResult);
+    
+    if (mode != "detail")
+    {
+        if (airMilesResult.ID > 0)
+        {
+            var acountNoStr = !string.IsNullOrEmpty(airMilesResult.AccountNO) ? System.Text.RegularExpressions.Regex.Replace(airMilesResult.AccountNO, @"(\w{4})", "$1 ").Trim('-') : "";
+            
+            <div class="top">
+                <div class="card">
+                    <img src="http://whfront.b0.upaiyun.com/app/img/coupon/wallet/donghang-card-big.png" class="_bg" alt="" />
+                    <div class="del"><a href="javascript:;" class="zmjd-iconfont icon-del" data-cardid="@(airMilesResult.ID)" id="del-miles-link">Ｘ</a></div>
+                    <div class="info">
+                        <div class="l">
+                            <div class="label">NO</div>
+                            <div class="val">@(acountNoStr)</div>
+                        </div>
+                        <div class="r">
+                            <div class="label">NAME</div>
+                            <div class="val">@(string.Format("{0} {1}", airMilesResult.PreName, airMilesResult.OtherName))</div>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                </div>
+            </div>
+    
+            if (airMilesResult.States == 0 || airMilesResult.States == 1)
+            {
+                <div class="card-desc">
+                    <div class="tit">验证中</div>
+                    <div class="desc">验证一般需要2-3个工作日，请耐心等待</div>
+                </div>
+            }
+            else if (airMilesResult.States == 3)
+            {
+                if (string.IsNullOrEmpty(airMilesResult.Description))
+                {
+                    airMilesResult.Description = "验证失败，如有疑问请联系我们";
+                }
+                <div class="card-desc">
+                    <div class="tit err">验证失败</div>
+                    <div class="desc">@(airMilesResult.Description)</div>
+                </div>
+            }
+        }
+        else
+        {
+            @*<div class="top">
+                <a href="/Coupon/FlyerBuild?userid=@(userid)" class="add" id="addFlyer"><b>＋</b>绑定常旅客会员卡</a>
+            </div>*@
+            
+        }
+        
+        <div class="info-list">
+            <div class="item">
+                <div class="l">累计次数</div>
+                <div class="r num">@(airMilesResult.Counts)次</div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="item">
+                <div class="l">累计积分</div>
+                <div class="r point">@(airMilesResult.Points)积分</div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="item" onclick="gourl('@detailUrl')">
+                <div class="l">积分明细</div>
+                <div class="r"><span class="zmjd-iconfont icon-arowright">&#xe601;</span></div>
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+        <script>
+            try {
+                setAppTitleMenu = function () {
+
+                    var _lab = "使用说明";
+                    var _url = "http://www.zmjiudian.com/active/activepage?pageid=55&defbg=1?_newpage=1";
+
+                    try { whotel.appTitleMenu(_lab, _url); } catch (e) { }
+                    return '{"lab":"' + _lab + '","url":"' + _url + '"}';
+                }
+                setAppTitleMenu();
+            } catch (e) {
+
+            }
+        </script>
+    }
+    else
+    { 
+        <div class="detail">
+            @if (airMilesDetailResult != null && airMilesDetailResult.Count > 0)
+            {
+                for (int i = 0; i < airMilesDetailResult.Count; i++)
+                {
+                    var milesItem = airMilesDetailResult[i];
+
+                    var acountNoStr = !string.IsNullOrEmpty(milesItem.AccountNO) ? System.Text.RegularExpressions.Regex.Replace(milesItem.AccountNO, @"(\w{4})", "$1 ").Trim('-') : "";
+
+                    var oidStr = milesItem.BusinessID.ToString();
+                    //if (milesItem.BusinessID > 0)
+                    //{
+                    //    oidStr = !string.IsNullOrEmpty(oidStr) ? System.Text.RegularExpressions.Regex.Replace(oidStr, @"(\w{4})", "$1 ").Trim('-') : "";   
+                    //}
+                    
+                    <div class="row">
+                        @if (milesItem.BusinessID > 0)
+                        {
+                            <div class="oid">订单号：@(oidStr)</div>   
+                        }
+                        <div class="left">
+                            <div class="pname">@(milesItem.SourceTypeName)</div>
+                            @if (!string.IsNullOrEmpty(acountNoStr))
+                            {
+                                <div class="pno">卡号：@(acountNoStr)</div>   
+                            }
+                            else
+                            {
+                                <div class="pno">未设置账号</div>   
+                            }
+                        </div>
+                        <div class="right">
+                            <div class="ppoint">+@(milesItem.Points)</div>
+                            @if (!string.IsNullOrEmpty(acountNoStr))
+                            {
+                                if (milesItem.DealState == 0 || milesItem.DealState == 1 || milesItem.DealState == 2)
+                                {
+                                    <div class="pdate ing">同步中...</div>
+                                }
+                                else if (milesItem.DealState == 4)
+                                {
+                                    <div class="pdate err">同步失败</div>
+                                }
+                                else
+                                { 
+                                    <div class="pdate">@(milesItem.CreateTime.ToString("yyyy-MM-dd"))</div>   
+                                }
+                            }
+                            else
+                            { 
+                                <div class="pdate ing">已记录</div>
+                            }
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="null">
+                    <img src="http://whfront.b0.upaiyun.com/app/img/coupon/wallet/img-point-null.png" alt="" />
+                    <div class="txt">还没有积分哦～</div>
+                </div>
+            }
+        </div>
+    }
+}
+
+@helper ProductCouponSection(ProductCouponResult productCouponDetailResult, string detailUrl, string mode, long userid, bool isThanVer5_0, int canUpdatePhotoExid)
+{
+    if (mode == "detail")
+    {
+        <style>
+            html, body {
+                background: #f0f0f0;
+            }
+        </style>
+        <script src="~/Content/js/framework/zmjd.qrcode.min.js"></script>
+        <script>
+            function productcouponGoPay(orderid) {
+                var dic = {};
+                dic["orderid"] = orderid;
+
+                $.get('/Coupon/CheckCanPay', dic, function (result) {
+                    var success = result.Success;
+                    if (success == "0")
+                    {
+                        location.href = result.Url;
+                    }
+                    else
+                    {
+                        alert("订单已过期或已取消");
+                        location.reload();
+                    }
+                });
+            }
+        </script>
+        if (productCouponDetailResult != null && productCouponDetailResult.productCouponList != null && productCouponDetailResult.productCouponList.Count > 0)
+{
+    for (int i = 0; i < productCouponDetailResult.productCouponList.Count; i++)
+    {
+        var entity = productCouponDetailResult.productCouponList[i];
+
+        var thisSkuId = entity.ExchangeCouponList[0].SKUID;
+        var exActiveId = entity.ExchangeCouponList[0].ActivityID;
+        var couponActiveUrl = string.Format("/coupon/product/{0}?_newpage=1&userid={1}", entity.SkuID, userid);
+        var promotionId = entity.ExchangeCouponList[0].PromotionID;
+
+        if (entity.GroupPurchase != null && entity.GroupPurchase.ID > 0)
+        {
+            //手拉手团购
+            couponActiveUrl = string.Format("/coupon/group/product/{0}/{1}?_newpage=1&userid={2}", entity.ExchangeCouponList[0].SKUID, entity.GroupPurchase.ID, userid);
+        }
+        else if (entity.CouponOrderStepGroup != null)
+        {
+            //大团购（阶梯团）
+            couponActiveUrl = string.Format("/coupon/stepgroup/product/{0}?_newpage=1&userid={1}", entity.CouponOrderStepGroup.DepositSKUID, userid);
+        }
+
+        //是否定金sku
+        var isDingjinSku = (entity.CouponOrderStepGroup != null && thisSkuId == entity.CouponOrderStepGroup.DepositSKUID);
+
+        //是否尾款sku
+        var isWeikuanSku = (entity.CouponOrderStepGroup != null && thisSkuId == entity.CouponOrderStepGroup.TailSKUID);
+
+        //获取所有的可用的兑换券
+        <div class="productcoupon-item">
+            <a href="@(couponActiveUrl)">
+                <div class="hotel">
+                    <div class="hotelname">@entity.HotelName</div>
+                </div>
+                <div class="hotel">
+                    <div class="left">
+                        <div class="packagename">@entity.SkuName</div>
+                        @if (entity.State != 1)
+                        {
+                            <div class="timeinfo">有效期至 @DateTime.Parse(entity.ExchangeCouponList[0].ExpireTime.ToString()).ToString("yyyy.MM.dd")</div>
+                        }
+                    </div>
+                    <div class="right">
+                        @if(entity.CouponOrderStepGroup != null && entity.CouponOrderStepGroup.IsPayFinish)
+                        {
+                            <span class="price"><span class="t">￥</span>@entity.CouponOrderStepGroup.TotalPrice</span>
+                        }
+                        else
+                        {
+                            if (entity.TotalPrice == 0 && entity.TotalPoints == 0)
+                            {
+                                <span class="price">免费</span>
+                            }
+                            else if (entity.TotalPrice > 0)
+                            {
+                                if (promotionId <= 0)
+                                {
+                                    <span class="price"><span class="t">￥</span>@entity.TotalPrice</span>
+                                }
+                            }
+                            else if (entity.TotalPoints > 0)
+                            {
+                                <span class="price">@Convert.ToInt32(entity.TotalPoints)<span class="t">积分</span></span>
+                            }
+                        }
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+                @if (entity.CouponOrderStepGroup != null && !entity.CouponOrderStepGroup.IsPayFinish && isDingjinSku)
+                {
+                    <div class="otherinfo">尾款支付时间：<span class="h">@(string.Format("{0}－{1}", entity.CouponOrderStepGroup.TailMoneyStartTime.ToString("MM月dd日 HH:mm:ss"), entity.CouponOrderStepGroup.TailMoneyEndTime.ToString("MM月dd日 HH:mm:ss")))</span></div>
+                }
+            </a>
+            @{
+        if (entity.State == 1)
+        {
+            <div class="quanlist">
+                <ul>
+                    <li style="height: 2.4em; line-height: 2.4em;">
+                        <div class="left">
+                            <span class="label">券码</span>
+                            @if (entity.GroupPurchase != null)
+                            {
+                                switch (entity.GroupPurchase.State)
+                                {
+                                    case 0:
+                                    case 3: { <span class="value2">支付后参与拼团</span> break; }
+                                    case 1: { <span class="value">支付后显示</span> break; }
+                                    case 2: { <span class="value3">拼团失败</span> break; }
+                                    case 4: { <span class="value3">拼团取消</span> break; }
+                                }
+                            }
+                            else
+                            {
+                                if (entity.CouponOrderStepGroup != null)
+                                {
+                                    //团失败
+                                    if (entity.CouponOrderStepGroup.StepGroupState == 2)
+                                    {
+                                        <span class="value3">拼团失败</span>
+                                    }
+                                    else
+                                    {
+                                        if (isDingjinSku)
+                                        {
+                                            <span class="value2">定金待支付</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="value2">支付后显示</span>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="value">支付后显示</span>   
+                                }
+                            }
+                        </div>
+                        <div class="right">
+                            @if (entity.GroupPurchase != null && (entity.GroupPurchase.State == 2 && entity.GroupPurchase.State == 4))
+                            {
+                                <div></div>
+                            }
+                            else
+                            {
+                                if (entity.CouponOrderStepGroup != null)
+                                {
+                                    //团失败
+                                    if (entity.CouponOrderStepGroup.StepGroupState == 2)
+                                    {
+                                        <div></div>
+                                    }
+                                    else
+                                    {
+                                        <div class="paybtn" onclick="productcouponGoPay('@entity.CouponOrderID')">去支付</div>
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="paybtn" onclick="productcouponGoPay('@entity.CouponOrderID')">去支付</div>
+                                }
+                            }
+                        </div>
+                        <div style="clear:both;"></div>
+                    </li>
+                </ul>
+            </div>
+        }
+        else
+        {
+            //是否包含可使用的券
+            var haveUse = false;
+
+            //是否包含需要预约
+            var haveReserve = false;
+
+            //是否可以取消预约
+            var canCancelReserve = true;
+
+            //是否包含退款
+            var haveRefund = false;
+
+            //exchange couponorderid
+            long exchangeCouponOrderId = 0;
+            
+            //券的核销类型
+            var exchangeMethod = 0;
+            
+            var reserveExId = 0;
+            var reserveList = new List<ProductService.Contracts.Entity.BookUserDateInfoEntity>();
+
+            <div class="quanlist">
+                <ul>
+                    @for (int no = 0; no < entity.ExchangeCouponList.Count; no++)
+                    {
+                        var excoupon = entity.ExchangeCouponList[no];
+
+                        if (excoupon != null)
+                        {
+                            //是否包含需要预约
+                            if (excoupon.IsBook)
+                            {
+                                haveReserve = true;
+                                reserveExId = excoupon.ID;
+                                reserveList = excoupon.BookUserDateList;
+                            }
+
+                            //是否可取消预约
+                            if (!excoupon.IsCancelBook)
+                            {
+                                canCancelReserve = false;
+                            }
+                            
+                            //券码的不同状态的颜色
+                            var noAddCss = "";
+                            if (excoupon.State == 3 || excoupon.State == 4 || excoupon.State == 5 || excoupon.State == 7 || excoupon.State == 8)
+                            {
+                                noAddCss = "no-v";
+                            }
+
+                            //每四位一个空格隔开
+                            var exno = excoupon.ExchangeNo != null ? System.Text.RegularExpressions.Regex.Replace(excoupon.ExchangeNo, @"(\w{4})", "$1 ").Trim('-') : "";
+                            if (excoupon.ExchangeNoType == 2 || excoupon.ExchangeNoType == 3)
+                            {
+                                //第三方下单
+                                exno = excoupon.ExchangeTipsName;
+                            }
+
+                            //至商家扫码核销使用
+                            exchangeMethod = excoupon.ExchangeMethod;
+                            if (exchangeMethod == 5)
+                            {
+                                exno = "请至商家微信扫码使用";
+                            }
+                            
+                            exchangeCouponOrderId = excoupon.CouponOrderId;
+                            
+                            <li style="@(excoupon.State == 2 ? "height: 2.4em; line-height: 2.4em;" : "")">
+                                <div class="left">
+                                    <span class="label">券码</span>
+                                    @if (entity.GroupPurchase != null)
+                                    {
+                                        switch (entity.GroupPurchase.State)
+                                        {
+                                            case 0: { <span class="value2">拼团成功后，生成券码</span> break; }
+                                            case 1: { <span class="value @(noAddCss)">@exno</span><span class="note no-v">@(excoupon.CouponNote)</span> break; }
+                                            case 2: { <span class="value3">拼团失败</span> break; }
+                                            case 4: { <span class="value3">拼团取消</span> break; }
+                                            case 3: { <span class="value3">拼团取消</span> break; }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (entity.CouponOrderStepGroup != null && !entity.CouponOrderStepGroup.IsPayFinish)
+                                        {
+                                            if (entity.CouponOrderStepGroup.StepGroupState == 2)
+                                            {
+                                                <span class="value3">拼团失败</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="value2">支付尾款后，生成券码</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="value @(noAddCss)">@exno</span><span class="note no-v">@(excoupon.CouponNote)</span>   
+                                        }
+                                    }
+                                </div>
+                                <div class="right">
+                                    @if (excoupon.State == 2)
+                                    {
+                                        if (excoupon.RefundState > 0)
+                                        {
+                                            haveRefund = true;
+                                            haveReserve = false;
+
+                                            <span class="use1">退款中</span>
+                                        }
+                                        else
+                                        {
+                                            if (entity.CouponOrderStepGroup != null && !entity.CouponOrderStepGroup.IsPayFinish)
+                                            {
+                                                <span></span>
+                                            }
+                                            else
+                                            { 
+                                                if (excoupon.ExpireTime < DateTime.Now.Date)
+                                                {
+                                                    haveReserve = false;
+                                                
+                                                    //已过期直接显示过期
+                                                    <span class="use1">已过期</span>
+                                                }
+                                                else
+                                                {
+                                                    haveUse = excoupon.CanExchange;
+
+                                                    if (excoupon.Price > 0 || excoupon.Points > 0)
+                                                    {
+                                                        if (excoupon.ReturnPolicy == 2)
+                                                        {
+                                                            if (entity.GroupPurchase != null)
+                                                            {
+                                                                switch (entity.GroupPurchase.State)
+                                                                {
+                                                                    case 1: { <a class="return-policy-btn" href="javascript:;" data-exid="@(excoupon.ID)">退款</a> break; }
+                                                                }
+                                                            }
+                                                            else
+                                                            { 
+                                                                <a class="return-policy-btn" href="javascript:;" data-exid="@(excoupon.ID)">退款</a>   
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            if (entity.GroupPurchase == null)
+                                                            {
+                                                                <span class="use0">已支付</span>
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else if (excoupon.State == 3)
+                                    {
+                                        if (entity.CategoryParentId == 20)
+                                        {
+                                            if(excoupon.IsBook){ haveReserve = true; }
+                                            haveReserve = false;
+                                            canCancelReserve = false;
+                                            <span class="use1">已出票</span>
+                                        }
+                                        else
+                                        {
+                                            haveReserve = false;
+                                            <span class="use1">已使用</span>   
+                                        }
+                                    }
+                                    else if (excoupon.State == 4)
+                                    {
+                                        haveReserve = false;
+                                        
+                                        <span class="use1">已取消</span>
+                                    }
+                                    else if (excoupon.State == 5)
+                                    {
+                                        haveReserve = false;
+                                        
+                                        <span class="use1">已退款</span>
+                                    }
+                                    else if (excoupon.State == 6)
+                                    {
+                                        haveReserve = false;
+
+                                        <span class="use1">超时支付</span>
+                                    }
+                                    else if (excoupon.State == 7)
+                                    {
+                                        haveReserve = false;
+                                        
+                                        <span class="use1">待退款</span>
+                                    }
+                                    else if (excoupon.State == 8)
+                                    {
+                                        haveReserve = false;
+                                        
+                                        <span class="use1">已过期</span>
+                                    }
+                                </div>
+                                <div style="clear:both;"></div>
+                                @if (!string.IsNullOrEmpty(excoupon.PhotoUrl))
+                                {
+                                    //excoupon.PhotoUrl = "http://p1.zmjiudian.com/118CPDg0zA_640x640";
+
+                                    <div class="photo-ctrl">
+                                        <span class="label">照片</span>
+                                        <span class="photo"><img src="@(excoupon.PhotoUrl.Replace("_640x640", "_290x290"))" data-oriimg2="@(excoupon.PhotoUrl)" data-oriimg="@(excoupon.PhotoUrl)" alt="" /></span>
+                                        @if (excoupon.ID == canUpdatePhotoExid)
+                                        {
+                                            <a class="photo-upload" href="javascript:;" data-exid="@excoupon.ID">重新上传</a>
+                                            <span class="uploadlodding" style="display: none;">上传中...</span>
+                                        }
+                                    </div>
+                                }
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+            <div class="couponitem-ctrl">
+                @if (entity.GroupPurchase != null)
+                {
+                    //如果当前消费券设计手拉手团购，则需要验证参团状态
+                    switch (entity.GroupPurchase.State)
+                    {
+                        case 0:
+                            {
+                                <a class="go-group-detail" href="@(couponActiveUrl)">拼团详情</a>
+                                haveUse = false;
+                                haveReserve = false;
+                                break;
+                            }
+                        case 1:
+                            {
+                                <a class="go-group-detail" href="@(couponActiveUrl)">拼团详情</a>
+                                break;
+                            }
+                        case 2:
+                            {
+                                <a class="go-group-detail" href="@(couponActiveUrl)">拼团详情</a>
+                                haveUse = false;
+                                haveReserve = false;
+                                break;
+                            }
+                        case 3: { haveUse = false; break; }
+                        case 4: { haveUse = false; break; }
+                    }
+                }
+                else if (entity.CouponOrderStepGroup != null && !entity.CouponOrderStepGroup.IsPayFinish)
+                {
+                    haveReserve = false;
+                    haveUse = false;
+
+                    if (entity.State == 2)
+                    {
+                        switch (entity.CouponOrderStepGroup.StepGroupState)
+                        {
+                            case 0:
+                                {
+                                    <a class="stepgroup-ing" href="javascript:;">团购中</a>
+                                    break;
+                                }
+                            case 1:
+                                {
+                                    if ((entity.CouponOrderStepGroup.TailMoneyStartTime <= DateTime.Now && entity.CouponOrderStepGroup.TailMoneyEndTime >= DateTime.Now))
+                                    {
+                                        <a class="pay-stepgroup" href="javascript:;" data-depositskuid="@(entity.CouponOrderStepGroup.DepositSKUID)" data-tailskuid="@(entity.CouponOrderStepGroup.TailSKUID)" data-tailprice="@(entity.CouponOrderStepGroup.Price)" data-corderid="@(exchangeCouponOrderId)" data-bookpostion="@(entity.CouponOrderStepGroup.BookPosition)">支付尾款 ¥@(entity.CouponOrderStepGroup.Price)</a>
+                                    }
+                                    else if (DateTime.Now < entity.CouponOrderStepGroup.TailMoneyStartTime)
+	                                {
+                                        <a class="stepgroup-ing" href="javascript:;">团购中</a>
+	                                }
+                                    else
+                                    {
+                                        <a class="stepgroup-ing" href="javascript:;">尾款逾期未付</a>
+                                    }
+                                    break;
+                                }
+                        }
+                        <a class="go-stepgroup-detail" href="@(couponActiveUrl)">团购详情</a>
+                    }
+                }
+                
+                @{
+                    //至商家核销类型的券不显示使用按钮
+                    if (exchangeMethod == 5)
+                    {
+                        haveUse = false;
+                    }
+                }
+
+                @if (haveReserve || (reserveList != null && reserveList.Count > 0))
+                {
+                    if (reserveList != null && reserveList.Count > 0)
+                    {
+                        var _firstReserveEntity = reserveList[0];
+                        
+                        if (canCancelReserve)
+                        {
+                            <a href="javascript:;" class="left-info">已预约@(_firstReserveEntity.BookDay.ToString("yyyy/MM/dd")) @(_firstReserveEntity.PlayNumName)</a>
+                            if (haveReserve)
+                            {
+                                <a href="javascript:;" class="reserve-cancel" data-bookid="@(_firstReserveEntity.ID)">取消预约</a>   
+                            }
+                        }
+                        else 
+                        {
+                            <a href="javascript:;" class="left-info">已预约@(_firstReserveEntity.BookDay.ToString("yyyy/MM/dd")) @(_firstReserveEntity.PlayNumName)（出票状态，不能取消）</a>
+                        }
+                    }
+                    else
+                    {
+                        if (haveReserve)
+                        {
+                            //当需要预约，并且预约信息为空时，显示预约功能
+                            <a href="/Coupon/CouponReserve?skuid=@(entity.SkuID)&exid=@(reserveExId)&userid=@(userid)&_newpage=1" class="reserve-coupon">预约</a>
+                        }
+                    }
+                }
+                else 
+                {
+                    if (haveUse)
+                    {
+                        <a href="javascript:;" class="use-coupon">使用</a>
+                    }   
+                }
+                
+            </div>
+                if (haveUse)
+                {
+                    <div class="use-section" style="display:none;">
+                        <div class="tit">使用小贴士</div>
+                        <div class="rules">
+                            @for (int ncnum = 0; ncnum < entity.Notice.Count; ncnum++)
+			                {
+                                var ncitem = entity.Notice[ncnum];
+                                <div class="item">&bull; @(ncitem)</div>
+			                }
+                        </div>
+                        <div class="hr">
+                            <div class="line">&nbsp;</div>
+                            <div class="l">&nbsp;</div>
+                            <div class="r">&nbsp;</div>
+                        </div>
+                        <div class="c-nos">
+                            @for (int nonum = 0; nonum < entity.ExchangeCouponList.Count; nonum++)
+                            {
+                                var exitem = entity.ExchangeCouponList[nonum];
+
+                                //每四位一个空格隔开
+                                var exno = exitem.ExchangeNo != null ? System.Text.RegularExpressions.Regex.Replace(exitem.ExchangeNo, @"(\w{4})", "$1 ").Trim('-') : "";
+
+                                //是否可用
+                                var canUse = (exitem.State == 2 && exitem.RefundState <= 0 && exitem.ExpireTime >= DateTime.Now.Date && exitem.CanExchange);
+
+                                if (canUse)
+                                {
+                                    <div class="item">券码：@(exno)<span class="showQ" onclick="showQrcode('@(exitem.ExchangeNo)')"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/product/icon-qrcode-sml.png" alt="二维码" /></span></div>
+                                }
+                                else
+                                {
+                                    <div class="item"><del>券码：@(exno)</del></div>
+                                }
+                            }
+                        </div>
+                        @if (entity.DicProperties != null && entity.DicProperties.Keys != null && entity.DicProperties.ContainsKey("电话"))
+                        {
+                            var val = entity.DicProperties["电话"];
+                            var tel = val;
+                            var telex = "";
+                            if (val.Contains("转"))
+                            {
+                                tel = val.Split('转')[0];
+                                telex = "转" + val.Split('转')[1];
+                            }
+                            <div class="tel">
+                                <a href="tel:@(tel)" class="link">预约电话：@(val)</a>
+                            </div>
+                        }
+
+                    </div>
+                }
+        }
+}
+        </div>
+    }
+}
+else
+{
+    <div class="productcoupon-section">
+        <div class="detail">
+            <div class="null">
+                <img src="http://whfront.b0.upaiyun.com/app/img/coupon/wallet/img-point-null.png" alt="" />
+                <div class="txt">暂无可用消费券</div>
+            </div>
+        </div>
+    </div>
+}
+
+    <input type="file" onchange="previewImage(this)" style="display: none;" id="previewImg">
+
+<div class="preview-img-bg" style="display:none;"></div>
+<div class="preview-img-alert" style="display:none;">
+    <img src="" alt="" />
+</div>
+
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    @switch (pageTag)
+    {
+        case "point":
+        <title>积分@(mode == "detail" ? "明细" : "")</title> break;
+        case "fund":
+        <title>住基金@(mode == "detail" ? "明细" : "")</title> break;
+        case "coupon":
+        <title>现金券@(mode == "detail" ? "明细" : "")</title> break;
+        case "roomcoupon":
+        <title>房券</title> break;
+        case "productcoupon":
+        <title>消费券@(mode == "detail" ? "" : "")</title>
+        <link href="~/Content/css/coupon/wallet_productcoupon.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+        break;
+        case "airmiles":
+        <title>航空里程@(mode == "detail" ? "明细" : "")</title> break;
+        case "cash":
+        <title>返现</title> break;
+        default:
+        <title>钱包</title> break;
+    }
+    <link href="~/Content/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/css/framework/util.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/css/cash_list_reset.css" />
+    <link rel="stylesheet" href="~/Content/css/css_hongbao.css?v=@(Helpers.curAppVer())" />
+    <link rel="stylesheet" href="~/Content/css/framework/zmjd.modal.min.css" />
+    <link rel="stylesheet" href="~/Content/css/coupon/wallet.css?v=@(Helpers.curAppVer())" />
+    <style>
+        ._modal-section ._tit {
+            font-size: 1.5rem;
+        }
+
+        ._modal-section ._body {
+            font-size: 1.5rem;
+        }
+
+        ._modal-section ._btns ._left ._confirm {
+            font-size: 1.5rem;
+        }
+
+        ._modal-section ._btns ._right ._cancel {
+            font-size: 1.5rem;
+        }
+
+        ._modal-section ._btns ._ok {
+            font-size: 1.5rem;
+        }
+
+        ._modal-section ._close img {
+            width: 1.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!--class,id, name,data-*,src, for, type, href,title, alt,aria-*, role属性排序-->
+
+        @switch (pageTag)
+        {
+            case "point":
+            <div>
+                @Html.Raw(PointSection(pointResult, pointDetailUrl, pointDetailList, mode, userid, isThanVer5_0))
+            </div>
+                break;
+            case "fund":
+            <div>
+                @Html.Raw(FundSection(userFundInfo, fundDetailUrl, fundDetailList, mode, userid, isThanVer5_0))
+            </div>
+                break;
+            case "coupon":
+            <div>
+                @Html.Raw(CouponSection(couponResult, couponDetailUrl, couponDetailList, mode, userid, isThanVer5_0))
+            </div>
+                break;
+            case "productcoupon":
+                @Html.Raw(ProductCouponSection(productCouponDetailResult, productCouponDetailUrl, mode, userid, isThanVer5_0, canUpdatePhotoExid))
+                <div id="qrcode-section" class="qrcode-section" style="display:none;" onclick="hideQrcodeSection()"></div>
+                break;
+            case "airmiles":
+            <div class="airmiles-section">
+                @Html.Raw(AirMilesSection(airMilesResult, airMilesDetailResult, airmilesDetailUrl, mode, userid, isThanVer5_0))
+            </div>
+                break;
+            case "roomcoupon":
+            <style>
+                html, body {
+                    background: #f0f0f0;
+                }
+            </style>
+            <script>
+                function roomcouponGoPay(orderid) {
+                    var dic = {};
+                    dic["orderid"] = orderid;
+
+                    $.get('/Coupon/CheckCanPay', dic, function (result) {
+                        var success = result.Success;
+                        if (success == "0")
+                        {
+                            location.href = result.Url;
+                        }
+                        else
+                        {
+                            alert("订单已过期或已取消");
+                            location.reload();
+                        }
+                    });
+                }
+            </script>
+                if (roomcouponResult == null || roomcouponResult.couponList == null || roomcouponResult.couponList.Count <= 0)
+                {
+                    <style>
+                        html, body {
+                            margin: 0 0 0 0;
+                            padding: 0 0 0 0;
+                            background: #fff;
+                            -webkit-user-select: none;
+                            user-select: none;
+                            overflow-x: hidden;
+                        }
+                    </style>
+                    <div class="no-list" style="margin-top: 10em; ">
+                        <p style="text-align:center;margin:0 0 2em 0;"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/wallet/img-coupon-null.png" alt="" /></p>
+                        <p>你还没有任何房券</p>
+                    </div>
+                }
+                else
+                {
+                    for (int i = 0; i < roomcouponResult.couponList.Count; i++)
+                    {
+                        var entity = roomcouponResult.couponList[i];
+
+                        //是否平日券
+                        var is500 = false;
+                        
+                        //区分团购产品的跳转
+                        var groupNode = "";
+                        if (entity.ExchangeCouponList != null && entity.ExchangeCouponList.Count > 0)
+                        {
+                            if (entity.ExchangeCouponList[0].ActivityType == 300)
+                            {
+                                groupNode = "group/";
+                            }
+                            else if (entity.ExchangeCouponList[0].ActivityType == 500)
+                            {
+                                is500 = true;
+                            }
+                        }
+
+                        var thisSkuId = entity.ExchangeCouponList[0].SKUID;
+                        var exActiveId = entity.ExchangeCouponList[0].ActivityID;
+                        var couponActiveUrl = string.Format("/coupon/shop/{0}{1}?_newpage=1&userid={2}", groupNode, exActiveId, userid);
+                        var promotionId = entity.ExchangeCouponList[0].PromotionID;
+                        
+                        //如果当前房券是通过SKU购买的，则通过SKU跳转明细
+                        if (entity.ExchangeCouponList[0].SKUID > 0)
+                        {
+                            couponActiveUrl = string.Format("/coupon/product/{0}?_newpage=1&userid={1}", entity.ExchangeCouponList[0].SKUID, userid);
+                        }
+                        
+                        //天天果园活动券
+                        if (exActiveId == 100944)
+                        {
+                            couponActiveUrl = "http://www.zmjiudian.com/active/activepage?pageid=59";
+                        }
+                        
+                        //手拉手
+                        if (entity.GroupPurchase != null && entity.GroupPurchase.ID > 0)
+                        {
+                            couponActiveUrl = string.Format("/coupon/group/product/{0}/{1}?_newpage=1&userid={2}", entity.ExchangeCouponList[0].SKUID, entity.GroupPurchase.ID, userid);
+                        }
+                        //else if (entity.CouponOrderStepGroup != null)
+                        //{
+                        //    //大团购（阶梯团）
+                        //    couponActiveUrl = string.Format("/coupon/stepgroup/product/{0}?_newpage=1&userid={1}", entity.CouponOrderStepGroup.DepositSKUID, userid);
+                        //}
+
+                        //是否定金sku
+                        var isDingjinSku = (entity.CouponOrderStepGroup != null && thisSkuId == entity.CouponOrderStepGroup.DepositSKUID);
+
+                        //是否尾款sku
+                        var isWeikuanSku = (entity.CouponOrderStepGroup != null && thisSkuId == entity.CouponOrderStepGroup.TailSKUID);
+                        
+            <div class="roomcoupon-item">
+                <a href="@(couponActiveUrl)">
+                    <div class="hotel">
+                        <div class="hotelname">@entity.HotelName</div>
+                    </div>
+                    <div class="hotel">
+                        <div class="left">
+                            <div class="packagename">@entity.PackageName</div>
+                            @if (entity.State != 1)
+                            {
+                                <div class="timeinfo">有效期至 @DateTime.Parse(entity.ExchangeCouponList[0].ExpireTime.ToString()).ToString("yyyy.MM.dd")</div>
+                            }
+                        </div>
+                        <div class="right">
+                            @if (!is500)
+                            {
+                                if(entity.CouponOrderStepGroup != null && entity.CouponOrderStepGroup.IsPayFinish)
+                                {
+                                    <span class="price"><span class="t">￥</span>@entity.CouponOrderStepGroup.TotalPrice</span>
+                                }
+                                else
+                                { 
+                                    if (entity.TotalPrice == 0 && entity.TotalPoints == 0)
+                                    {
+                                        <span class="price">免费</span>
+                                    }
+                                    else if (entity.TotalPrice > 0)
+                                    {
+                                        if (promotionId <= 0)
+                                        {
+                                           <span class="price"><span class="t">￥</span>@entity.TotalPrice</span>   
+                                        }
+                                    }
+                                    else if (entity.TotalPoints > 0)
+                                    {
+                                        <span class="price">@Convert.ToInt32(entity.TotalPoints)<span class="t">积分</span></span>
+                                    }
+                                }
+                            }
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                    @if (entity.CouponOrderStepGroup != null && !entity.CouponOrderStepGroup.IsPayFinish && isDingjinSku)
+                    {
+                        <div class="otherinfo">尾款支付时间：<span class="h">@(string.Format("{0}－{1}", entity.CouponOrderStepGroup.TailMoneyStartTime.ToString("MM月dd日 HH:mm:ss"), entity.CouponOrderStepGroup.TailMoneyEndTime.ToString("MM月dd日 HH:mm:ss")))</span></div>
+                    }
+                </a>
+                @{
+                    if (entity.State == 1)
+                    {
+                        <div class="quanlist">
+                            <ul>
+                                <li style="height: 2.4em; line-height: 2.4em;">
+                                    <div class="left">
+                                        <span class="label">券码</span>
+                                        @if (entity.GroupPurchase != null)
+                                        {
+                                            switch (entity.GroupPurchase.State)
+                                            {
+                                                case 0:
+                                                case 3: { <span class="value2">支付后参与拼团</span> break; }
+                                                case 1: { <span class="value">支付后显示</span> break; }
+                                                case 2: { <span class="value3">拼团失败</span> break; }
+                                                case 4: { <span class="value3">拼团取消</span> break; }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (entity.CouponOrderStepGroup != null)
+                                            {
+                                                if (entity.CouponOrderStepGroup.StepGroupState == 2)
+                                                {
+                                                    <span class="value3">拼团失败</span>
+                                                }
+                                                else
+                                                { 
+                                                    if (isDingjinSku)
+                                                    {
+                                                        <span class="value2">定金待支付</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="value2">支付后显示</span>
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            { 
+                                                <span class="value">支付后显示</span>      
+                                            }
+                                        }
+                                    </div>
+                                    <div class="right">
+                                        @if (entity.GroupPurchase != null && (entity.GroupPurchase.State == 2 && entity.GroupPurchase.State == 4))
+                                        {
+                                            <div></div>
+                                        }
+                                        else
+                                        {
+                                            if (entity.CouponOrderStepGroup != null)
+                                            {
+                                                //团失败
+                                                if (entity.CouponOrderStepGroup.StepGroupState == 2)
+                                                {
+                                                    <div></div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="paybtn" onclick="roomcouponGoPay('@entity.CouponOrderID')">去支付</div>   
+                                                }
+                                            }
+                                            else
+                                            { 
+                                                <div class="paybtn" onclick="roomcouponGoPay('@entity.CouponOrderID')">去支付</div>      
+                                            }
+                                        }
+                                    </div>
+                                    <div style="clear:both;"></div>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        //exchange couponorderid
+                        long exchangeCouponOrderId = 0;
+                        
+                        <div class="quanlist">
+                            <ul>
+                                @for (int no = 0; no < entity.ExchangeCouponList.Count; no++)
+                                {
+                                    var excoupon = entity.ExchangeCouponList[no];
+
+                                    if (excoupon != null)
+                                    {
+                                        //券码的不同状态的颜色
+                                        var noAddCss = "";
+                                        if (excoupon.State == 3 || excoupon.State == 4 || excoupon.State == 5 || excoupon.State == 7 || excoupon.State == 8)
+                                        {
+                                            noAddCss = "no-v";
+                                        }
+
+                                        //每四位一个空格隔开
+                                        var exno = excoupon.ExchangeNo != null ? System.Text.RegularExpressions.Regex.Replace(excoupon.ExchangeNo, @"(\w{4})", "$1 ").Trim('-') : "";
+                                        if (excoupon.ExchangeNoType == 2 || excoupon.ExchangeNoType == 3)
+                                        {
+                                            //第三方下单
+                                            exno = excoupon.ExchangeTipsName;
+                                        }
+
+                                        exchangeCouponOrderId = excoupon.CouponOrderId;
+                                        
+                                        <li style="@(excoupon.State == 2 ? "height: 2.4em; line-height: 2.4em;" : "")">
+                                            <div class="left">
+                                                <span class="label">券码</span>
+                                                @if (entity.GroupPurchase != null)
+                                                {
+                                                    switch (entity.GroupPurchase.State)
+                                                    {
+                                                        case 0: { <span class="value2">拼团成功后，生成券码</span> break; }
+                                                        case 1: { <span class="value @(noAddCss)">@exno</span> break; }
+                                                        case 2: { <span class="value3">拼团失败</span> break; }
+                                                        case 4: { <span class="value3">拼团取消</span> break; }
+                                                        case 3: { <span class="value3">拼团取消</span> break; }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (entity.CouponOrderStepGroup != null && !entity.CouponOrderStepGroup.IsPayFinish)
+                                                    {
+                                                        if (entity.CouponOrderStepGroup.StepGroupState == 2)
+                                                        {
+                                                            <span class="value3">拼团失败</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="value2">支付尾款后，生成券码</span>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="value @(noAddCss)">@exno</span>
+                                                    }
+                                                }
+                                            </div>
+                                            <div class="right">
+                                                @if (excoupon.State == 2)
+                                                {
+                                                    if (excoupon.RefundState > 0)
+                                                    {
+                                                        <span class="use1">退款中</span>
+                                                    }
+                                                    else 
+                                                    {
+                                                        if (entity.CouponOrderStepGroup != null && !entity.CouponOrderStepGroup.IsPayFinish)
+                                                        {
+                                                            <span></span>
+                                                        }
+                                                        else
+                                                        { 
+                                                            if (excoupon.ExpireTime < DateTime.Now.Date)
+                                                            {
+                                                                //已过期直接显示过期
+                                                                <span class="use1">已过期</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                if (excoupon.CanExchange)
+                                                                {
+                                                                    //商户兑换
+                                                                    if (excoupon.ExchangeMethod == 4)
+                                                                    {
+                                                                        if (excoupon.ShopWriteOffCouponTipList != null && excoupon.ShopWriteOffCouponTipList.Count > 0)
+                                                                        {
+                                                                            var _list = excoupon.ShopWriteOffCouponTipList;
+                                                                            //_list.Add("请尽快与酒店预约入住日期，抢购后未经预约直接到店恕不可用");
+                                                                            //_list.Add("0512-888888888");
+                                                                            //_list.Add("15001966513");
+                                                                    
+                                                                            <a class="exchangebtn shopexchange" href="javascript:;" data-exid="@(excoupon.ID)">预约</a>
+                                                                            <div id="shopexchange_@(excoupon.ID)" style="display:none;">
+                                                                                @for (int _telNum = 0; _telNum < _list.Count; _telNum++)
+			                                                                    {
+                                                                                    if (_telNum == 0)
+                                                                                    {
+                                                                                        <div style="line-height:1.3em;margin:0 0 0.5em 0;">@(_list[_telNum])</div>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <div style="margin:0.5em 0 0 0;"><a href="tel:@(_list[_telNum])" style="color:#555;">预约电话：<span style="color: #3E9EC0;">@(_list[_telNum])</span></a></div>
+                                                                                    }
+			                                                                    }
+                                                                            </div>   
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        if (excoupon.ActivityType == 500)
+                                                                        {
+                                                                            if (excoupon.RelPackageAlbumsID > 0)
+                                                                            {
+                                                                                <a class="exchangebtn" href="/exchange/packages/@(excoupon.RelPackageAlbumsID)?userid=@(userid)&exchangeid=@(excoupon.ID)&userlat=0&userlng=0&_newpage=1">去兑换</a>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <a class="exchangebtn exchangebtn500" href="javascript:;">去兑换</a>   
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if (entity.GroupPurchase != null)
+                                                                            {
+                                                                                switch (entity.GroupPurchase.State)
+                                                                                {
+                                                                                    case 0: { break; }
+                                                                                    case 1: { <a class="exchangebtn" href="/coupon/exchange/@excoupon.ID?userid=@userid">去兑换</a> break; }
+                                                                                    case 2: { break; }
+                                                                                    case 4: { break; }
+                                                                                    case 3: { break; }
+                                                                                }
+                                                                            }
+                                                                            else
+                                                                            { 
+                                                                                <a class="exchangebtn" href="/coupon/exchange/@excoupon.ID?userid=@userid">去兑换</a>
+                                                                            }
+                                                                        }   
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class="use0">已支付</span>
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                else if (excoupon.State == 3)
+                                                {
+                                                    <span class="use1">已兑换</span>
+                                                }
+                                                else if (excoupon.State == 4)
+                                                {
+                                                    <span class="use1">已取消</span>
+                                                }
+                                                else if (excoupon.State == 5)
+                                                {
+                                                    <span class="use1">已退款</span>
+                                                }
+                                                else if (excoupon.State == 6)
+                                                {
+                                                    <span class="use1">超时支付</span>
+                                                }
+                                                else if (excoupon.State == 7)
+                                                {
+                                                    <span class="use1">待退款</span>
+                                                }
+                                                else if (excoupon.State == 8)
+                                                {
+                                                    <span class="use1">已过期</span>
+                                                }
+                                            </div>
+                                            <div style="clear:both;"></div>
+                                        </li>
+                                    }
+
+                                }
+                            </ul>
+                        </div>
+                        if (entity.GroupPurchase != null)
+                        {
+                            switch (entity.GroupPurchase.State)
+                            {
+                                case 0:
+                                case 1:
+                                case 2:
+                                    { 
+                                        <div class="more">
+                                            <a class="go-group-detail" href="@(couponActiveUrl)">拼团详情</a>
+                                        </div>
+                                        break; 
+                                    }
+                            }
+                        }
+                        else if (entity.CouponOrderStepGroup != null && !entity.CouponOrderStepGroup.IsPayFinish)
+                        {
+                            <div class="more">
+                                @if (entity.State == 2)
+                                {
+                                    switch (entity.CouponOrderStepGroup.StepGroupState)
+                                    {
+                                        case 0:
+                                            {
+                                                <a class="stepgroup-ing" href="javascript:;">团购中</a>
+                                                break;
+                                            }
+                                        case 1:
+                                            {
+                                                if ((entity.CouponOrderStepGroup.TailMoneyStartTime <= DateTime.Now && entity.CouponOrderStepGroup.TailMoneyEndTime >= DateTime.Now))
+                                                {
+                                                    <a class="pay-stepgroup" href="javascript:;" data-depositskuid="@(entity.CouponOrderStepGroup.DepositSKUID)" data-tailskuid="@(entity.CouponOrderStepGroup.TailSKUID)" data-tailprice="@(entity.CouponOrderStepGroup.Price)" data-corderid="@(exchangeCouponOrderId)" data-bookpostion="@(entity.CouponOrderStepGroup.BookPosition)">支付尾款 ¥@(entity.CouponOrderStepGroup.Price)</a>
+                                                }
+                                                else if (DateTime.Now < entity.CouponOrderStepGroup.TailMoneyStartTime)
+	                                            {
+		                                             <a class="stepgroup-ing" href="javascript:;">团购中</a>
+	                                            }
+                                                else
+                                                {
+                                                    <a class="stepgroup-ing" href="javascript:;">尾款逾期未付</a>
+                                                }
+                                                break;
+                                            }
+                                    }
+                                    <a class="go-stepgroup-detail" href="@(couponActiveUrl)">团购详情</a>
+                                }
+                            </div>
+                        }
+                    }
+                }
+            </div>
+            }
+        }
+
+                break;
+            case "cash":
+            <div class="cash-head-panel">
+                <ul class="wallet-tap-ul">
+                    <li data-tap="cashNoTap" class="cash-tap-li li-select"><span class="tit">待返</span><span class="wallet-bignum">@Math.Round((decimal)WaitingRebateAmount / 100, 0)</span></li>       @*@Math.Round((decimal)WaitingRebateAmount / 100, 0)*@
+                    <li data-tap="cashOkTap" class="cash-tap-li"><span class="tit">已返</span><span class="wallet-bignum">@Math.Round((decimal)HadRebateAmount / 100, 0)</span></li>     @*@Math.Round((decimal)HadRebateAmount / 100, 0)*@
+                </ul>
+            </div>
+
+                if (list != null && list.Count > 0)
+                {
+                    var noList = list.Where(l => l.RebateState != 2).ToList();
+            <div id="cashNoTap">
+                @if (noList != null && noList.Count > 0)
+                        {
+                    <div class="cash-tap-panel">
+                        <div class="tit"><span>待返明细</span></div>
+                        <ul class="wallet-detail-ul">
+                            @for (int i = 0; i < noList.Count; i++)
+                                    {
+                                        var temp = noList[i];
+                                <li class="cash-detail-li @(i + 1 < noList.Count ? "li-line" : "")">
+                                    <div class="left">
+                                        <p class="cash-detail-des">@temp.Description</p>
+                                        <p class="cash-detail-date">
+                                            @string.Format("成功预订{0}", temp.SubmitDate.ToString("yyyy/MM/dd"))@Html.Raw(string.Format("&nbsp;&nbsp;可返现{0}", Math.Round(temp.Rebate / 100, 0)))
+                                        </p>
+                                    </div>
+                                    <div class="right" style="margin-top:0.5em;">
+                                        @if (temp.RebateState == 11)
+                                                {
+                                            <a class="cash-btn-sub" onclick="requestRebate(this,@(temp.OrderID));return false;" href="javascript:;"><div>申请返现</div></a>
+                                                }
+                                                else if (temp.RebateState == 0)
+                                                {
+                                            <a class="cash-btn-span" onclick="CanNotRequest(); return false;" href="javascript:;"><div>申请返现</div></a>
+                                                }
+                                                else if (temp.RebateState == 1)
+                                                {
+                                            <div class="cash-btn-span"><div>已申请</div></div>
+                                                }
+                                    </div>
+                                    <div class="clear"></div>
+                                </li>
+                                    }
+                        </ul>
+                    </div>
+                        }
+                        else
+                        {
+                    <div class="no-list" style="margin-top: 14.5em; ">
+                        <p style="text-align:center "><img src="/Content/images/bg-icon-notice.png" alt="" /></p>
+                        <p>没有待返明细</p>
+                    </div>
+                        }
+            </div>
+
+                    var okList = list.Where(l => l.RebateState == 2).ToList();
+            <div id="cashOkTap" style="display:none;">
+                @if (okList != null && okList.Count > 0)
+                        {
+                    <div class="cash-tap-panel">
+                        <div class="tit"><span>已返明细</span></div>
+                        <ul class="wallet-detail-ul">
+                            @for (int i = 0; i < okList.Count; i++)
+                                    {
+                                        var temp = okList[i];
+                                <li class="cash-detail-li @(i + 1 < okList.Count ? "li-line" : "")">
+                                    <div class="left">
+                                        <p class="cash-detail-des">@temp.Description</p>
+                                        <p class="cash-detail-date">
+                                            @string.Format("订单{0}", temp.OrderID)@Html.Raw(string.Format("&nbsp;&nbsp;入住{0}", temp.CheckIn.ToString("yyyy/MM/dd")))
+                                        </p>
+                                    </div>
+                                    <div class="right" style="margin-top:0.1em;">
+                                        @if (temp.RebateState == 2)
+                                                {
+                                            <p style="font-size: 1.1em; color: #999; margin-left: 1.2em;">订单/已返</p>
+                                            <p style="font-size: 1.1em; color: #999; margin-left: 1.2em; ">@Convert.ToInt32(temp.Amount)/<span style="font-size:1em;color: #ff6a00;">@Math.Round(temp.Rebate / 100, 0)</span></p>
+                                            @*<span class="notic02">已返现</span>*@
+                                                }
+                                    </div>
+                                    <div class="clear"></div>
+                                </li>
+                                    }
+                        </ul>
+                    </div>
+                        }
+                        else
+                        {
+                    <div class="no-list" style="margin-top: 14.5em; ">
+                        <p style="text-align:center "><img src="/Content/images/bg-icon-notice.png" alt="" /></p>
+                        <p>没有已返明细</p>
+                    </div>
+                        }
+            </div>
+                }
+                else
+                {
+            <div class="no-list" style="margin-top: 14.5em; ">
+                <p style="text-align:center "><img src="/Content/images/bg-icon-notice.png" alt="" /></p>
+                <p>您还没有返现</p>
+            </div>
+                }
+                break;
+            default:
+            <div class="walletTagPanel">
+                <ul>
+                    <li class="tag-li-line" data-tag="point" data-url="@pointUrl"><div class="l">积分</div><div class="r">@(pointResult.CanUsePoints)积分<span class="zmjd-iconfont icon-arowright">&#xe601;</span></div></li>
+                    <li class="tag-li-line" data-tag="fund" data-url="@fundUrl"><div class="l">住基金</div><div class="r">@(float.Parse(userFundInfo.TotalFund.ToString()).ToString())<span class="zmjd-iconfont icon-arowright">&#xe601;</span></div></li>
+                    @*<li class="tag-li-line" data-tag="coupon" data-url="@couponUrl"><div class="l">现金券</div><div class="r">@((int)Math.Round((decimal)couponResult.CanUseCoupon / 100, 0))元<span class="zmjd-iconfont icon-arowright">&#xe601;</span></div></li>*@
+                    <li class="tag-li-line" data-tag="coupon" data-url="@cashCouponUrl"><div class="l">现金券</div><div class="r">@(cashCouponCount)张<span class="zmjd-iconfont icon-arowright">&#xe601;</span></div></li>
+                    <li class="tag-li-line" data-tag="coupon" data-url="@voucherUrl"><div class="l">代金券</div><div class="r">@(voucherCount)张<span class="zmjd-iconfont icon-arowright">&#xe601;</span></div></li>
+                    <li class="tag-li-line wallet-roomcoupon-menu" style="display:none;" data-tag="roomcoupon" data-url="@roomcouponUrl"><div class="l">房券</div><div class="r">@(roomcouponResult.couponList != null ? roomcouponResult.couponList.Count : 0)张<span class="zmjd-iconfont icon-arowright">&#xe601;</span></div></li>
+                    <li class="tag-li-line wallet-productcoupon-menu" style="display:none;" data-tag="productcoupon" data-url="@productCouponDetailUrl"><div class="l">消费券</div><div class="r">@(productCouponCount)张<span class="zmjd-iconfont icon-arowright">&#xe601;</span></div></li>
+                    @if (airMilesResult != null && airMilesResult.ID > 0)
+                    {
+                        <li class="tag-li-line" data-tag="airmiles" data-url="@airmilesUrl"><div class="l">航空里程</div><div class="r">@(airMilesResult.Points)积分<span class="zmjd-iconfont icon-arowright">&#xe601;</span></div></li>
+                    }
+                    else
+                    {
+                        <li class="tag-li-line" data-tag="airmiles" data-url="@airmilesUrl"><div class="l">航空里程</div><div class="r"><span class="un-tip">未设置账号</span><span class="zmjd-iconfont icon-arowright">&#xe601;</span></div></li>
+                    }
+                    @*<li class="tag-li-line" data-tag="cash" data-url="@cashUrl"><div class="l">返现</div><div class="r"></div></li>*@
+                </ul>
+            </div>
+        @*<div style="margin:2em 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http://192.168.1.22:8081/personal/wallet/{userid}?_dorpdown=1">GO APP (Local) >>></a></div>*@
+                break;
+        }
+
+    <div class="product-model-bg" style="display:none;"></div>
+
+    <input type="hidden" id="appType" value="@(appType)" />
+    <input type="hidden" id="userid" value="@(userid)" />
+    <input type="hidden" id="isThanVer5_0" value="@(isThanVer5_0 ? "1" : "0")" />
+    <input type="hidden" id="isThanVer5_2" value="@(isThanVer5_2 ? "1" : "0")" />
+    <input type="hidden" id="isThanVer5_4" value="@(isThanVer5_4 ? "1" : "0")" />
+    <input type="hidden" id="pageTag" value="@(pageTag)" />
+    <input type="hidden" id="mode" value="@(mode)" />
+
+    <script src="~/Content/js/jquery-1.10.2-min.js" type="text/javascript"></script>
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <script src="~/Content/js/bootbox.js"></script>
+    <script src="~/Content/js/framework/config.js"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjd.modal.min.js"></script>
+    <script src="~/Content/js/coupon/wallet.js?v=@(Helpers.curAppVer())" type="text/javascript"></script>
+    <script src="~/Content/js/Coupon.js" type="text/javascript"></script>
+    <script src="~/Content/js/Upload/async.js"></script>
+    <script src="~/Content/js/Upload/spark-md5.js"></script>
+    <script src="~/Content/js/Upload/Upload.js"></script>
+    <script src="~/Content/js/Upload/upyun-mu.js"></script>
+
+</body>
+</html>

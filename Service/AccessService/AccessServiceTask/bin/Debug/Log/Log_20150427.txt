@@ -1,0 +1,31 @@
+
+[2015/4/27 18:48:05] Start Job [PackagePriceContrastReport]
+[2015/4/27 18:49:09] Job [PackagePriceContrastReport] Error:远程服务器返回错误: (500) 内部服务器错误。
+[2015/4/27 18:49:09] Stop Job [PackagePriceContrastReport]
+[2015/4/27 18:49:54] Start Job [PackagePriceContrastReport]
+[2015/4/27 18:56:02] Job [PackagePriceContrastReport] Error:远程服务器返回错误: (500) 内部服务器错误。
+[2015/4/27 18:56:02] Stop Job [PackagePriceContrastReport]
+[2015/4/27 18:56:05] Start Job [PackagePriceContrastReport]
+[2015/4/27 19:25:27] Start Job [PackagePriceContrastReport]
+[2015/4/27 19:25:36] GetPackageMatchReport Count:2501
+[2015/4/27 19:26:45] Stop Job [PackagePriceContrastReport]
+[2015/4/27 19:28:55] Start Job [PackagePriceContrastReport]
+[2015/4/27 19:30:08] Start Job [PackagePriceContrastReport]
+[2015/4/27 19:30:10] GetPackageMatchReport Count:2501
+[2015/4/27 19:30:11] Stop Job [PackagePriceContrastReport]
+[2015/4/27 19:40:40] Start Job [PackagePriceContrastReport]
+[2015/4/27 19:40:40] GetPackageMatchReport Count:2501
+[2015/4/27 19:41:19] Send Mail OK!
+[2015/4/27 19:41:19] Stop Job [PackagePriceContrastReport]
+[2015/4/27 19:42:33] Start Job [PackagePriceContrastReport]
+[2015/4/27 19:42:33] GetPackageMatchReport Count:2501
+[2015/4/27 19:42:40] Send Mail OK!
+[2015/4/27 19:42:40] Stop Job [PackagePriceContrastReport]
+[2015/4/27 19:43:27] Start Job [PackagePriceContrastReport]
+[2015/4/27 19:43:27] GetPackageMatchReport Count:2501
+[2015/4/27 19:43:29] Send Mail OK!
+[2015/4/27 19:43:29] Stop Job [PackagePriceContrastReport]
+[2015/4/27 19:43:54] Start Job [PackagePriceContrastReport]
+[2015/4/27 19:43:55] GetPackageMatchReport Count:2501
+[2015/4/27 19:43:57] Send Mail OK!
+[2015/4/27 19:43:57] Stop Job [PackagePriceContrastReport]

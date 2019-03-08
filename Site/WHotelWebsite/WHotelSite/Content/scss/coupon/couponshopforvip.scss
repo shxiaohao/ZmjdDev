@@ -1,0 +1,202 @@
+﻿html, body{
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+	background: #fff;
+    -webkit-user-select:none; 
+    user-select: none;
+    overflow-x:hidden;
+}
+
+/*禁止长按链接与图片弹出菜单*/
+a,img { -webkit-touch-callout: none }
+
+.vip-top {
+    width:100%;
+    height:auto;
+    margin:0 0 0 0;
+    padding:0 0 0 0;
+}
+    .vip-top img{
+        width:100%;
+    }
+.vip-bottom {
+    width:100%;
+    height:auto;
+    margin:0 0 0 0;
+    padding:0 0 0 0;
+}
+    .vip-bottom img{
+        width:100%;
+    }
+.vip-info {
+    width:88%;
+    height:auto;
+    margin:3em auto 0 auto;
+}
+    .vip-info fieldset {
+        padding:0 0 0 0;
+        border:1px solid rgba(0,0,0,0.3);
+        border-radius: 10px;
+    }
+    .vip-info fieldset legend{
+        width:8em;
+        margin:0 0 0 0;
+        padding:0 0 0 0;
+        text-align:center;
+        font-size:0.9em;
+        color:rgba(0,0,0,0.6);
+        border:none;
+    }
+    .vip-info fieldset .info{
+        line-height:1.8em;
+        margin:0.5em 0 1em 0;
+        padding:0 0 0 0;
+        text-align:center;
+        font-size:1.2em;
+        color:rgba(0,0,0,0.6);
+    }
+.vip-phone {
+    width:88%;
+    height:auto;
+    margin:1em auto 0 auto;
+    padding:0.8em 0 0.8em 0;
+    border:1px solid #ddd;
+    border-radius: 10px;
+}
+    .vip-phone .name-line{
+        width:94%;
+        height:auto;
+        margin:0 auto 0.5em auto;
+        padding:0 0 0.3em 0;
+        border-bottom:1px solid #ddd;
+    }
+        .vip-phone .name-line .userName{
+            width:99%;
+            height:1.8em;
+            margin:0 0.2em 0 0em;
+            padding:0 0 0 0.1em;
+            background-color:transparent;
+            border:none;
+            border-radius: 0px;
+            font-size:1em;
+            text-align:left;
+            vertical-align:top;
+        }
+    .vip-phone .phone-line{
+        width:94%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0 0 0.3em 0;
+        border-bottom:1px solid #ddd;
+    }
+        .vip-phone .phone-line .userPhone{
+            width:64%;
+            height:1.8em;
+            margin:0 0.2em 0.3em 0em;
+            padding:0 0 0 0.1em;
+            background-color:transparent;
+            border:none;
+            border-radius: 0px;
+            font-size:1em;
+            text-align:left;
+            vertical-align:top;
+        }
+        .vip-phone .phone-line .vCodeBtn{
+            width:33%;
+            height:2.2em;
+            line-height:2.1em;
+            margin:0;
+            padding:0 0.3em;
+            border: 1px solid #ddd;
+            background-color: #ddd;
+            color:#555;
+            font-size:0.9em;
+            border-radius: 2px;
+        }
+        .vip-phone .phone-line .userPhone2{
+            width:99%;
+            height:1.8em;
+            margin:0 0.2em 0 0em;
+            padding:0 0 0 0.1em;
+            background-color:transparent;
+            border:none;
+            border-radius: 0px;
+            font-size:1em;
+            text-align:left;
+            vertical-align:top;
+        }
+    .vip-phone .vcode-line{
+        width:94%;
+        height:auto;
+        margin:0 auto 0 auto;
+    }
+        .vip-phone .vcode-line .vCode{
+            width:99%;
+            height:1.8em;
+            margin:0.5em 0.2em 0 0em;
+            padding:0 0 0 0.1em;
+            background-color:transparent;
+            border:none;
+            border-radius: 0px;
+            font-size:1em;
+            text-align:left;
+            vertical-align:top;
+        }
+    .vip-phone .onlyone-line {
+        margin-bottom:0em;
+        border-bottom:none;
+    }
+.vip-btns {
+    width:88%;
+    height:auto;
+    margin:1em auto 2em auto;
+}
+    .vip-btns .submit{
+        width:100%;
+        height:2.4em;
+        line-height:2.4em;
+        margin:0 auto 0 auto;
+        font-size:1.2em;
+        text-align:center;
+        color:#fff;
+        background:#f4a650;
+        border-radius: 8px;
+    }
+    .vip-btns .submit0 {
+        width:100%;
+        height:2.4em;
+        line-height:2.4em;
+        margin:0 auto 0 auto;
+        font-size:1.2em;
+        text-align:center;
+        color:#fff;
+        background:#bababa;
+        border-radius: 8px;
+    }
+
+.vip-go-link {
+    width:100%;
+    height:auto;
+    margin:0.7em auto 2.2em auto;
+    text-align:center;
+    font-size:0.9em;
+}
+    .vip-go-link a{
+        padding:0.6em 1.1em 0.6em 1.1em;
+        border:1px solid #F4A950;
+        border-radius:5px;
+        color:#F4A950;
+        font-family:Arial;
+        text-decoration:none;
+    }
+
+.vip-answer-link {
+    width:100%;
+    height:auto;
+    margin:1.5em auto 2em auto;
+    text-align:center;
+}
+    .vip-answer-link a{
+        color:#555;
+        text-decoration:none;
+    }

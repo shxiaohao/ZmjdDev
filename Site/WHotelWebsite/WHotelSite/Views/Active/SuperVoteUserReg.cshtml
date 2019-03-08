@@ -1,0 +1,255 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    ViewBag.Title = "成为酒店大使";
+
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.isInWeixin;
+    var userid = ViewBag.UserId;
+    var activeId = ViewBag.ActiveId;
+
+    HJD.WeixinServices.Contracts.ActiveWeixinDraw weixinDraw = ViewBag.WeixinDraw;
+    WHotelSite.Models.WeixinUserInfo weixinUserInfo = ViewBag.WeixinUser;
+    var openid = ViewBag.Openid;
+    var unionid = ViewBag.Unionid;
+    var wxuid = ViewBag.WeixinUid;
+    var ruleExId = ViewBag.RuleExId;
+    var posterSloganPic = ViewBag.PosterSloganPic;
+
+    //头像上传ID
+    var headImgUploadId = ViewBag.HeadImgUploadId;
+
+    if (string.IsNullOrEmpty(weixinDraw.HeadImgUrl))
+    {
+        if (!string.IsNullOrEmpty(weixinUserInfo.Headimgurl))
+        {
+            weixinDraw.HeadImgUrl = weixinUserInfo.Headimgurl;
+        }
+        else
+        {
+            weixinDraw.HeadImgUrl = "/Content/images/default-avatar2.png";
+        }
+    }
+
+    //海报中的头像使用的图片地址
+    var posterHeadImgUrl = weixinDraw.HeadImgUrl;
+    if (posterHeadImgUrl.ToLower().Contains("http:"))
+    {
+        posterHeadImgUrl = string.Format("http://api.zmjiudian.com/api/photo/GetZmjdImgByUrl?url={0}", weixinDraw.HeadImgUrl);
+    }
+
+    if (string.IsNullOrEmpty(weixinDraw.UserName))
+    {
+        weixinDraw.UserName = "亲子大使";
+    }
+
+    //是否来自自己
+    var urlfrommine = ViewBag.Urlfrommine;
+    var isurlfrommine = urlfrommine > 0;
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+}
+
+@section styles
+{
+    <link href="~/Content/css/framework/zmjd.modal.min.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/Content/css/active/supervote.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/Content/css/active/supervoteuserreg.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .login-section {
+            font-size: 0.8em;
+        }
+    </style>
+}
+
+    <div v-cloak class="main-panel" id="active-obj">
+
+        <div class="back-home-section"><a href="/wx/active/supervote/@(activeId)/@(urlfrommine)">返回主场>></a></div>
+
+        <div id="reg-section">
+            <div class="banner" onclick="gourl('{{activeInfo.WeixinSignUpShareLink}}')">
+                <img :src="activeInfo.WeixinSignUpTopBannerUrl" />
+            </div>
+
+            <div class="section-link" onclick="gourl('http://www.zmjiudian.com/active/activepage?pageid=135')">活动规则>></div>
+
+            <div class="reg-info">
+                @if (!string.IsNullOrEmpty(weixinDraw.Phone))
+                {
+                    <input type="text" class="reg-inp" value="@weixinDraw.Phone" placeholder="填写手机号" id="reg-phone" readonly />
+                }
+                else
+                {
+                    <input type="text" class="reg-inp" placeholder="填写手机号" id="reg-phone" />
+                }
+                <div class="reg-tip">请填写真实有效的手机号，以方便发放奖品时联系你。</div>
+            </div>
+
+            <div class="reg-ctrl">
+                <a href="javascript:;" class="reg-btn">确认报名</a>
+            </div>
+        </div>
+        <div id="reged-section" class="zmjd-hide">
+
+            <div class="head-section">
+                <div class="icon zmjd-iconfont">&#xe672;</div>
+                <div class="title">报名成功</div>
+                <div class="tip">点击下方按钮获取海报，邀好友为你投票</div>
+                <div class="btns">
+                    <a href="javascript:;" class="get-poster-btn"
+                       data-id="@(ruleExId)"
+                       data-producturl="@(string.Format("http://www.zmjiudian.com/wx/active/supervoteitem/{0}/{1}/{2}/0", activeId, ruleExId, weixinDraw.ID))"
+                       data-bannerurl="{{thisVoteResult.PicUrl}}"
+                       data-headimgurl="@(posterHeadImgUrl)"
+                       data-username="@(weixinDraw.UserName)"
+                       data-posterdesc="{{thisVoteResult.PosterDesc}}"
+                       data-tipimgurl="http://whfront.b0.upaiyun.com/www/img/Active/supervote/vote-poster-tip-pic.png">获取海报</a>
+                </div>
+            </div>
+            @*<div class="mine-tip">
+                <div class="qrcode-info"><img src="" id="userQrcodeImg" alt="" /></div>
+                <div class="qrcode-tip">识别二维码前往你的个人主页<br />查看你的当前排行和投票信息</div>
+            </div>*@
+
+        </div>
+
+        <div id="mine-qrcode-info" style="display:none;">
+            <div class="mine-qrcode-section">
+                <div class="qrcode-info"><img src="" id="userQrcodeImg" alt="" /></div>
+                <div class="qrcode-tip">识别二维码前往你的个人主页，获取海报和查看代言酒店</div>
+            </div>
+        </div>
+
+    </div>
+
+<div id="showPosterSection" class="showPosterSection zmjd-hide">
+    <div class="poster-result zmjd-hide">
+        <div class="share-info">
+            <div class="share-tit">－长按可以分享海报哦－</div>
+            @*<div class="share-desc">(PS:将海报保存在本地更方便分享哦~)</div>*@
+        </div>
+        @*<div class="poster-tit">－长按海报保存到本地－</div>*@
+        <div class="poster-img"><img id="showImg" src="" alt="" /></div>
+        <div class="poster-close"><img src="http://whfront.b0.upaiyun.com/bg/channel/posteractive/poster-close.png" alt="关闭" /></div>
+    </div>
+    <div class="poster-loadding">
+        <div class="loading-tip">海报生成中...</div>
+        <div class="mine-poster">
+            <div class="p-img"><img src="" id="item-banner-img" crossorigin="anonymous" alt="" /></div>
+            <div class="slogan-img"><img src="@(posterSloganPic)" crossorigin="anonymous" alt="" /></div>
+            <div class="slogan-img-bg"></div>
+            <div class="p-info">
+                <div class="user-info">
+                    <div class="h-img"><img src="@(posterHeadImgUrl)" id="user-head-img" crossorigin="anonymous" alt="" /></div>
+                </div>
+                <div class="qrcode-section clearfloat">
+                    <div class="left"><img src="" id="goget-qrcode-img" crossorigin="anonymous" alt="" /></div>
+                    <div class="right">
+                        <div class="desc-section" id="poster-desc">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-img">
+                    <img src="http://whphoto.b0.upaiyun.com/118IKKk0_jupiter" crossorigin="anonymous" alt="" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="poster-bg" style="display:none;"></div>
+<div id="productQrcode" style="display:none;"></div>
+
+<footer>
+    <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+    <input type="hidden" id="isInWeixin" value="@(isInWeixin ? 1 : 0)" />
+    <input type="hidden" id="userId" value="@(userid)" />
+    <input type="hidden" id="activeId" value="@(activeId)" />
+    <input type="hidden" id="openid" value="@(openid)" />
+    <input type="hidden" id="unionid" value="@(unionid)" />
+    <input type="hidden" id="wxuid" value="@(wxuid)" />
+    <input type="hidden" id="nickName" value="@(weixinDraw.UserName)" />
+    <input type="hidden" id="ruleExId" value="@(ruleExId)" />
+    <input type="hidden" id="activeDrawId" value="@(weixinDraw.ID)" />
+    <input type="hidden" id="drawPhone" value="@(weixinDraw.Phone)" />
+    <input type="hidden" id="headImgUploadId" value="@(headImgUploadId)" />
+    <input type="hidden" id="urlfrommine" value="@(urlfrommine)" />
+</footer>
+
+@section scripts
+{
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/framework/config.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjd.modal.min.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjd.qrcode.min.js"></script>
+    <script src="~/Content/js/framework/html2canvas.min.js"></script>
+    <script src="~/Content/js/active/supervoteuserreg.js?v=@(Helpers.curAppVer())"></script>
+
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+        <script>
+
+            GetWeixinApiConfig();//注册
+
+            wx.ready(function () {
+
+                wx.hideMenuItems({
+                    menuList: ["menuItem:share:timeline", "menuItem:copyUrl", "menuItem:share:appMessage", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:QZone", "menuItem:openWithSafari", "menuItem:openWithQQBrowser", "menuItem:share:brand", "menuItem:share:email"]
+                });
+
+            });
+
+            function GetWeixinApiConfig() {
+
+                var url = location.href.split("#")[0];
+                $.ajax({
+                    url: '/Coupon/GetWeixinConfigInfo',
+                    type: 'POST',
+                    data: { url: url },
+                    dataType: 'json',
+                    error: function () {
+                        console.log("网络服务错误");
+                    },
+                    success: function (result) {
+                        if (typeof (result.Success) != undefined && result.Success == 1) {
+                            return false;
+                        }
+                        else {
+                            //得到微信config的值
+                            var array = [
+                                'checkJsApi',
+                                'onMenuShareTimeline',
+                                'onMenuShareAppMessage',
+                                'hideOptionMenu',
+                                'hideMenuItems'
+                            ];
+                            if (result.jsApiList) {
+                                var jsArray = result.jsApiList.split(',');
+                                for (var key in jsArray) {
+                                    array.push("" + jsArray[key]);
+                                }
+                            }
+
+                            wx.config({
+                                debug: false,
+                                appId: result.appId,
+                                timestamp: "" + result.timestamp,
+                                nonceStr: result.nonceStr,
+                                signature: result.signature,
+                                jsApiList: array
+                            });
+                        }
+                    }
+                });
+            }
+
+        </script>
+    }
+}

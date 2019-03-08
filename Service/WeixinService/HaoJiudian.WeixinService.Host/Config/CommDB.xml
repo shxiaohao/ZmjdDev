@@ -1,0 +1,864 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<configuration>
+  <statements>
+    <select id="GetCommDictList">
+      <![CDATA[
+        select t.dicKey , t.DicValue, t.Descript from commDict t (nolock)  where t.Type = @type
+      ]]>
+    </select>
+    <select id="GetCommDict">
+      <!--SQL语句应放入 CDATA标记中-->
+      <![CDATA[ 
+         select * from commDict t (nolock)  where t.Type = @type and t.dicKey = @dictKey
+        ]]>
+    </select>
+    <select id="GetWeixinActives">
+      <!--SQL语句应放入 CDATA标记中-->
+      <![CDATA[ 
+  select 
+  ID
+  ,ActiveID ActivityID
+  ,KeyWord ActivityKeyWord
+  ,StartTime ActivityStartDateTime
+  ,EndTime ActivityFinishDateTime
+  ,ActiveEndTime
+  ,NoStartAlert ActivityNotStartWord
+  ,GameOverAlert ActivityFinishWord
+  ,Solutions
+  ,TxtCanEmpty
+  ,EnrollAlert EnrollTxtSuccess
+  ,HasEnrollAlert HasEnrollTxtMessage
+  ,EnrollErrorAlert EnrollTxtAlert
+  ,HasPhotoStep
+  ,DefaultPhotoAlert DefaultPhotoSuccess
+  ,EnrollPhotoAlert EnrollPhotoSuccess
+  ,[Type]
+  ,HaveSignUp
+  ,WeixinSignUpTopBannerUrl
+  ,WeixinSignUpTopBannerTitle
+  ,WeixinSignUpTopBannerTitle2
+  ,WeixinSignUpTopBannerTitleAlign
+  ,WeixinSignUpShareTitle
+  ,WeixinSignUpShareLink
+  ,WeixinSignUpShareImgUrl
+  ,WeixinSignUpShareTip
+  ,WeixinSignUpResultLink
+  ,WeixinAcountId
+  ,RelPartnerIds
+  ,isnull(NeedPaySign,0) NeedPaySign
+  ,isnull(PayPrice,1) PayPrice
+  ,isnull(ReturnPrice,5) ReturnPrice
+  ,isnull(IsInvite,0) IsInvite
+  ,isnull(PersonMaxLucks,0) PersonMaxLucks
+  from ActiveRule  (nolock) 
+  where type > 0
+  order by ID desc
+        ]]>
+    </select>
+      <select id="GetOneWeixinActive">
+      <!--SQL语句应放入 CDATA标记中-->
+      <![CDATA[ 
+  select 
+  ID
+  ,ActiveID ActivityID
+  ,KeyWord ActivityKeyWord
+  ,StartTime ActivityStartDateTime
+  ,EndTime ActivityFinishDateTime
+  ,ActiveEndTime
+  ,NoStartAlert ActivityNotStartWord
+  ,GameOverAlert ActivityFinishWord
+  ,Solutions
+  ,TxtCanEmpty
+  ,EnrollAlert EnrollTxtSuccess
+  ,HasEnrollAlert HasEnrollTxtMessage
+  ,EnrollErrorAlert EnrollTxtAlert
+  ,HasPhotoStep
+  ,DefaultPhotoAlert DefaultPhotoSuccess
+  ,EnrollPhotoAlert EnrollPhotoSuccess
+  ,[Type]
+  ,HaveSignUp
+  ,WeixinSignUpTopBannerUrl
+  ,WeixinSignUpTopBannerTitle
+  ,WeixinSignUpTopBannerTitle2
+  ,WeixinSignUpTopBannerTitleAlign
+  ,WeixinSignUpShareTitle
+  ,WeixinSignUpShareLink
+  ,WeixinSignUpShareImgUrl
+  ,WeixinSignUpShareTip
+  ,WeixinSignUpResultLink
+  ,WeixinAcountId
+  ,RelPartnerIds
+  ,isnull(NeedPaySign,0) NeedPaySign
+  ,isnull(PayPrice,1) PayPrice
+  ,isnull(ReturnPrice,5) ReturnPrice
+  ,isnull(IsInvite,0) IsInvite
+  ,isnull(PersonMaxLucks,0) PersonMaxLucks
+  from ActiveRule  (nolock) 
+  where type > 0 and ActiveID = @ActiveID
+  order by ID desc
+        ]]>
+    </select>
+    <select id="EditWeixinActive">
+      <!--SQL语句应放入 CDATA标记中-->
+      <![CDATA[ 
+  IF NOT EXISTS( SELECT ID FROM ActiveRule WHERE ActiveID = @ActivityID )
+  BEGIN
+  
+  insert into ActiveRule (ActiveID,KeyWord,StartTime,EndTime,ActiveEndTime,NoStartAlert,GameOverAlert,Solutions,TxtCanEmpty,EnrollAlert,HasEnrollAlert,EnrollErrorAlert,HasPhotoStep,DefaultPhotoAlert,EnrollPhotoAlert,[Type],HaveSignUp,WeixinSignUpTopBannerUrl,WeixinSignUpTopBannerTitle,WeixinSignUpTopBannerTitle2,WeixinSignUpTopBannerTitleAlign,WeixinSignUpShareTitle,WeixinSignUpShareLink,WeixinSignUpShareImgUrl,WeixinSignUpShareTip,WeixinSignUpResultLink,WeixinAcountId,RelPartnerIds,NeedPaySign,PayPrice,ReturnPrice,IsInvite,PersonMaxLucks)
+  values
+  (
+  (select isnull(MAX(ActiveID),0) + 1 from ActiveRule  (nolock) )
+  ,@ActivityKeyWord,@ActivityStartDateTime,@ActivityFinishDateTime,@ActiveEndTime,@ActivityNotStartWord,@ActivityFinishWord,@Solutions,@TxtCanEmpty,@EnrollTxtSuccess,@HasEnrollTxtMessage,@EnrollTxtAlert,@HasPhotoStep,@DefaultPhotoSuccess,@EnrollPhotoSuccess,@Type,@HaveSignUp,@WeixinSignUpTopBannerUrl,@WeixinSignUpTopBannerTitle,@WeixinSignUpTopBannerTitle2,@WeixinSignUpTopBannerTitleAlign,@WeixinSignUpShareTitle,@WeixinSignUpShareLink,@WeixinSignUpShareImgUrl,@WeixinSignUpShareTip,@WeixinSignUpResultLink,@WeixinAcountId,@RelPartnerIds,@NeedPaySign,@PayPrice,@ReturnPrice,@IsInvite,@PersonMaxLucks)
+  
+  END
+  ELSE
+  BEGIN
+  
+  update ActiveRule 
+  Set
+  KeyWord = @ActivityKeyWord,StartTime = @ActivityStartDateTime,EndTime = @ActivityFinishDateTime,ActiveEndTime = @ActiveEndTime,NoStartAlert = @ActivityNotStartWord,
+  GameOverAlert = @ActivityFinishWord,Solutions = @Solutions,TxtCanEmpty = @TxtCanEmpty,EnrollAlert = @EnrollTxtSuccess,HasEnrollAlert = @HasEnrollTxtMessage,
+  EnrollErrorAlert = @EnrollTxtAlert,HasPhotoStep = @HasPhotoStep,DefaultPhotoAlert = @DefaultPhotoSuccess,EnrollPhotoAlert = @EnrollPhotoSuccess
+  ,HaveSignUp = @HaveSignUp,WeixinSignUpTopBannerUrl = @WeixinSignUpTopBannerUrl,WeixinSignUpTopBannerTitle = @WeixinSignUpTopBannerTitle,WeixinSignUpTopBannerTitle2 = @WeixinSignUpTopBannerTitle2,WeixinSignUpTopBannerTitleAlign = @WeixinSignUpTopBannerTitleAlign
+  ,WeixinSignUpShareTitle = @WeixinSignUpShareTitle,WeixinSignUpShareLink = @WeixinSignUpShareLink,WeixinSignUpShareImgUrl = @WeixinSignUpShareImgUrl,WeixinSignUpShareTip = @WeixinSignUpShareTip
+  ,WeixinSignUpResultLink = @WeixinSignUpResultLink,WeixinAcountId = @WeixinAcountId,RelPartnerIds = @RelPartnerIds
+  ,NeedPaySign = @NeedPaySign,PayPrice = @PayPrice,ReturnPrice = @ReturnPrice
+  ,IsInvite = @IsInvite,Type = @Type,PersonMaxLucks = @PersonMaxLucks
+  where ActiveID = @ActivityID
+  
+  END
+        ]]>
+    </select>
+    
+    <select id="GetActiveRuleGroups">
+      <![CDATA[ 
+         select * from ActiveRuleGroup order by Id
+        ]]>
+    </select>
+    <select id="EditActiveRuleGroup">
+      <![CDATA[ 
+IF NOT EXISTS( SELECT ID FROM ActiveRuleGroup WHERE ID = @ID )
+  BEGIN
+  
+  insert into ActiveRuleGroup (Title,SubTitle,PicUrl,Description,ActiveId,Type,UpdateTime)
+  values (@Title,@SubTitle,@PicUrl,@Description,@ActiveId,@Type,GETDATE())
+  
+  END
+  ELSE
+  BEGIN
+  
+  update ActiveRuleGroup 
+  Set Title = @Title,SubTitle = @SubTitle,PicUrl = @PicUrl,Description = @Description,ActiveId = @ActiveId,Type = @Type,UpdateTime = GETDATE()
+  where ID = @ID
+  
+  END
+        ]]>
+    </select>
+    <select id="GetActiveRuleExs">
+      <![CDATA[ 
+         select * from ActiveRuleEx order by OrderNum
+        ]]>
+    </select>
+    <select id="EditActiveRuleEx">
+      <![CDATA[ 
+IF NOT EXISTS( SELECT ID FROM ActiveRuleEx WHERE ID = @ID )
+  BEGIN
+  
+  insert into ActiveRuleEx (HotelId,ActiveId,GroupId,Title,SubTitle,PicUrl,RoomInfo,OfferCount,Description,OrderNum,UpdateTime)
+  values (@HotelId,@ActiveId,@GroupId,@Title,@SubTitle,@PicUrl,@RoomInfo,@OfferCount,@Description,@OrderNum,GETDATE())
+  
+  END
+  ELSE
+  BEGIN
+  
+  update ActiveRuleEx 
+  Set
+  HotelId = @HotelId,ActiveId = @ActiveId,GroupId = @GroupId,Title = @Title,SubTitle = @SubTitle,
+  PicUrl = @PicUrl,RoomInfo = @RoomInfo,OfferCount = @OfferCount,Description = @Description,OrderNum = @OrderNum,UpdateTime = GETDATE()
+  where ID = @ID
+  
+  END
+        ]]>
+    </select>
+    <select id="GetActiveRuleExsByActiveId">
+      <![CDATA[ 
+select arex.ID,arex.HotelId,ar.ActiveId,arex.GroupId,arex.Title,arex.SubTitle,arex.PicUrl,arex.RoomInfo,arex.OfferCount,arex.Description,arex.OrderNum,arex.UpdateTime 
+from ActiveRule ar
+inner join ActiveRuleGroup arg on ar.ActiveID = arg.ActiveId
+inner join ActiveRuleEx arex on arex.GroupId = arg.ID
+where ar.ActiveID = @ActiveID
+        ]]>
+    </select>
+    <select id="GetActiveRuleExsForVoteByActiveId">
+      <![CDATA[ 
+select arex.ID,arex.HotelId,ar.ActiveId,arex.GroupId,arex.Title,arex.SubTitle,arex.PicUrl,arex.RoomInfo,arex.OfferCount,arex.Description,arex.OrderNum,arex.UpdateTime,isnull(voteinfo.COUNTS,0) VoteCount
+from ActiveRule ar
+inner join ActiveRuleGroup arg on ar.ActiveID = arg.ActiveId
+inner join ActiveRuleEx arex on arex.GroupId = arg.ID
+left join (select SourceId,COUNT(1) COUNTS from commdb.dbo.ActiveVoteRecord votes where votes.ActiveId = @ActiveID and votes.SourceType = 1 group by SourceId) voteinfo on voteinfo.SourceId = arex.ID
+where ar.ActiveID = @ActiveID
+order by OrderNum desc
+        ]]>
+    </select>
+    <select id="GetActiveRuleExsForVoteByActiveIdAndID">
+      <![CDATA[ 
+select arex.ID,arex.HotelId,ar.ActiveId,arex.GroupId,arex.Title,arex.SubTitle,arex.PicUrl,arex.RoomInfo,arex.OfferCount,arex.Description,arex.OrderNum,arex.UpdateTime,isnull(voteinfo.COUNTS,0) VoteCount
+from ActiveRule ar
+inner join ActiveRuleGroup arg on ar.ActiveID = arg.ActiveId
+inner join ActiveRuleEx arex on arex.GroupId = arg.ID
+left join (select SourceId,COUNT(1) COUNTS from commdb.dbo.ActiveVoteRecord votes where votes.ActiveId = @ActiveID and votes.SourceType = 1 group by SourceId) voteinfo on voteinfo.SourceId = arex.ID
+where ar.ActiveID = @ActiveID and arex.ID = @ID
+        ]]>
+    </select>
+    <select id="GetActiveRulePrizeBySourceId">
+      <![CDATA[ 
+Select ID,Code,Name,Description,Picture,TagName,LevelName,[Count],Price,SourceId,SourceType,ActiveId 
+From ActiveRulePrize prize 
+Where prize.ActiveId = @ActiveID and prize.SourceId = @SourceId
+order by Price desc
+        ]]>
+    </select>
+    <select id="GetActiveSpokesmanInfoByActiveIdAndExId">
+      <![CDATA[ 
+select man.ID,man.ActiveDrawId,man.RuleExId,man.ActiveId,man.CreateTime,wu.Nickname,wu.Headimgurl,isnull(voteinfo.COUNTS,0) VoteCount,isnull(minevoteinfo.COUNTS,0) MineVoteCount,isnull(man2.COUNTS,0) SpokesCount ,isnull(minevotetime.LastCreateTime,'2018-11-01') LastCreateTime
+from commdb.dbo.ActiveRuleSpokesman man
+inner join commdb.dbo.ActiveWeixinDraw draw on draw.ActiveId = @ActiveId and man.ActiveDrawId = draw.Id
+inner join commdb.dbo.WeixinUser wu on wu.Openid = draw.Openid
+left join (select SourceId,COUNT(1) COUNTS from commdb..ActiveVoteRecord votes where votes.ActiveId = @ActiveId and votes.SourceType = 2 group by SourceId) voteinfo on voteinfo.SourceId = draw.ID
+left join (select SourceId,COUNT(1) COUNTS from commdb..ActiveVoteRecord votes where votes.ActiveId = @ActiveId and votes.SourceType = 2 and votes.ReltionId = @ExId group by SourceId) minevoteinfo on minevoteinfo.SourceId = draw.ID
+left join (select SourceId,Max(CreateTime) LastCreateTime from commdb..ActiveVoteRecord votes where votes.ActiveId = @ActiveId and votes.SourceType = 2 and votes.ReltionId = @ExId group by SourceId) minevotetime on minevotetime.SourceId = draw.ID
+left join (select sman.ActiveDrawId,COUNT(1) COUNTS from commdb..ActiveRuleSpokesman sman where sman.ActiveId = @ActiveId and sman.RuleExId = @ExId group by sman.ActiveDrawId) man2 on man2.ActiveDrawId = man.ActiveDrawId
+where man.ActiveId = @ActiveId and man.RuleExId = @ExId
+order by MineVoteCount desc,LastCreateTime
+        ]]>
+    </select>
+    <select id="GetActiveVoteRecordForType1ByWxAccount">
+      <![CDATA[ 
+select ID,WeixinAccount,UserId,SourceId,SourceType,ReltionId,State,ActiveId,CreateTime 
+from ActiveVoteRecord 
+where ActiveId = @ActiveId and SourceType = 1 and WeixinAccount = @WeixinAccount
+order by CreateTime desc
+        ]]>
+    </select>
+    <select id="GetActiveVoteRecordForType2BySourceId">
+      <![CDATA[ 
+select ID,WeixinAccount,UserId,SourceId,SourceType,ReltionId,State,ActiveId,CreateTime 
+from ActiveVoteRecord 
+where ActiveId = @ActiveId and SourceType = 2 and SourceId = @SourceId 
+order by CreateTime desc
+        ]]>
+    </select>
+    <select id="GetActiveVoteRecordForType2BySourceIdAndReltionId">
+      <![CDATA[ 
+select top 1 ID,WeixinAccount,UserId,SourceId,SourceType,ReltionId,State,ActiveId,CreateTime 
+from ActiveVoteRecord 
+where ActiveId = @ActiveId and SourceType = 2 and SourceId = @SourceId and ReltionId = @ReltionId and WeixinAccount = @WeixinAccount
+order by CreateTime desc
+        ]]>
+    </select>
+    <select id="AddActiveVoteRecord">
+      <![CDATA[ 
+insert into ActiveVoteRecord
+(WeixinAccount,UserId,SourceId,SourceType,ReltionId,State,ActiveId,CreateTime)
+values
+(@WeixinAccount,@UserId,@SourceId,@SourceType,@ReltionId,@State,@ActiveId,@CreateTime)
+        ]]>
+    </select>
+    <select id="GetActiveRuleExsForVoteByDrawId">
+      <![CDATA[ 
+select arex.ID,arex.HotelId,man.ActiveId,arex.GroupId,arex.Title,arex.SubTitle,arex.PicUrl,arex.RoomInfo,arex.OfferCount,arex.Description,arex.OrderNum,arex.UpdateTime,isnull(voteinfo.COUNTS,0) voteCount
+,
+CONVERT(int,
+isnull(
+(
+select top 1 rankno from (
+select sourceid,RankNo from
+(select records.sourceid,Rank() over(order by count(1) desc,Max(records.CreateTime)) as RankNo 
+from ActiveVoteRecord records 
+inner join ActiveRuleSpokesman man on man.RuleExId = arex.ID and man.activedrawid = records.sourceid
+where records.ActiveId = @ActiveID and records.sourcetype = 2 and records.reltionid = arex.ID group by records.sourceid) rankinfo where rankinfo.sourceid = @ActiveDrawId) rankinfo2
+), (select COUNT(1) from ActiveRuleSpokesman man2 where man2.ActiveId = @ActiveID) ) 
+) RankNo
+,isnull(voteinfo.LastCreateTime,'2018-11-01') LastCreateTime
+from ActiveRuleSpokesman man 
+inner join ActiveRuleEx arex on arex.ID = man.RuleExId
+left join (select reltionid,COUNT(1) COUNTS,Max(CreateTime) LastCreateTime from commdb..ActiveVoteRecord votes where votes.ActiveId = @ActiveID and votes.SourceType = 2 and votes.SourceId = @ActiveDrawId group by reltionid) voteinfo on voteinfo.reltionid = arex.ID
+where man.ActiveDrawId = @ActiveDrawId
+order by RankNo,voteCount desc
+        ]]>
+    </select>
+    <select id="AddActiveRuleSpokesman">
+      <![CDATA[ 
+IF NOT EXISTS(select Id from commdb.dbo.ActiveRuleSpokesman (nolock) where ActiveId = @ActiveId and ActiveDrawId = @ActiveDrawId and RuleExId = @ExId)
+insert into 
+commdb.dbo.ActiveRuleSpokesman 
+(ActiveDrawId,RuleExId,ActiveId,CreateTime) 
+values (@ActiveDrawId,@ExId,@ActiveId,@CreateTime)
+        ]]>
+    </select>
+    
+    <select id="GetActiveLuckDrawRecordByDrawId">
+      <![CDATA[ 
+select ID,ActiveDrawId,PrizeId,Remark,State,ActiveId,CreateTime 
+from commdb.dbo.ActiveLuckDrawRecord 
+where ActiveDrawId = @ActiveDrawId
+        ]]>
+    </select>
+    <select id="GetActiveLuckRecordAndPrizeByDrawId">
+      <![CDATA[ 
+select prize.ID,prize.Code,prize.Name,prize.Description,prize.Picture,prize.TagName,prize.LevelName,prize.[Count],prize.Price,prize.SourceId,prize.SourceType,prize.ActiveId
+,record.Remark RecordRemark,record.CreateTime RecordTime
+from commdb.dbo.ActiveLuckDrawRecord record
+inner join ActiveRulePrize prize on prize.ID = record.PrizeId
+where record.ActiveDrawId = @ActiveDrawId
+        ]]>
+    </select>
+    <select id="AddActiveLuckDrawRecord">
+      <![CDATA[ 
+insert into commdb.dbo.ActiveLuckDrawRecord
+(ActiveDrawId,PrizeId,Remark,State,ActiveId,CreateTime)
+values
+(@ActiveDrawId,@PrizeId,@Remark,@State,@ActiveId,@CreateTime)
+        ]]>
+    </select>
+      
+     <select id="AddUpActiveRuleExOfferCountById">
+      <![CDATA[ 
+Update ActiveRuleEx 
+Set OfferCount = OfferCount+1,UpdateTime = GETDATE()
+Where ID = @ID
+        ]]>
+    </select>
+      
+    <select id="IsPartWeixinActivity">
+      <!--SQL语句应放入 CDATA标记中-->
+      <![CDATA[ 
+         select count(1) haveCount from Actvie_LuckyDraw  (nolock) where activecode = @ActiveCode and Phone = @Phone --and sort > 0
+        ]]>
+    </select>
+    <select id="GetActiveWeixinLuckyReport">
+      <!--SQL语句应放入 CDATA标记中-->
+      <![CDATA[ 
+select ad.ActiveId,asr.LuckCode,au.NickName,ad.Phone,asr.CreateTime LuckCodeTime
+from ActiveWeixinUser au  (nolock) 
+left join ActiveWeixinDraw ad (nolock)  on au.openid = ad.openid and ad.activeid = @ActiveId
+left join ActiveWeixinShareRead asr (nolock)  on asr.shareropenid = au.openid and asr.activeid = @ActiveId
+where (asr.luckcode < (@LuckCode + 2) and asr.luckcode > (@LuckCode - 2))
+order by asr.luckcode desc
+        ]]>
+    </select>
+    <select id="GetActiveWeixinLuckyUser">
+      <!--SQL语句应放入 CDATA标记中-->
+      <![CDATA[ 
+select au.OpenId,asr.LuckCode,ad.UserName,au.NickName,au.Sex,au.Province+au.City+au.Country Address,au.Headimgurl,ad.Phone ,asr.CreateTime LuckCodeTime,ad.CreateTime UserDrawTime
+from ActiveWeixinUser au  (nolock) 
+left join ActiveWeixinDraw ad (nolock)  on au.openid = ad.openid and ad.activeid = @ActiveId
+left join ActiveWeixinShareRead asr (nolock)  on asr.shareropenid = au.openid and asr.activeid = @ActiveId
+where asr.LuckCode = @LuckCode
+order by asr.id desc
+        ]]>
+    </select>
+    
+    <select id="GetActiveWeixinUser">
+      <![CDATA[ 
+         select top 1 * from ActiveWeixinUser (nolock)  where Openid = @Openid
+        ]]>
+    </select>
+    <select id="GetActiveWeixinUserById">
+      <![CDATA[ 
+         select top 1 * from ActiveWeixinUser (nolock)  where Id = @Id
+        ]]>
+    </select>
+    <select id="AddActiveWeixinUser">
+      <![CDATA[ 
+IF NOT EXISTS( select Id from ActiveWeixinUser (nolock) where Openid = @Openid)
+Insert Into ActiveWeixinUser values(@Openid,@Nickname,@Sex,@Province,@City,@Country,@Headimgurl,@Privilege,@Unionid,@Phone,@ActiveID,GETDATE())
+ELSE
+update ActiveWeixinUser set Nickname = @Nickname,Headimgurl = @Headimgurl where Openid = @Openid
+        ]]>
+    </select>
+    <select id="GetActiveWeixinDraw">
+      <![CDATA[ 
+         select Id,ActiveId,PartnerId,Openid,UserName,Phone,IsShare,ShareTime,SendFriendCount,LastSendFriendTime,IsPay,PayTime,CreateTime,HeadImgUrl from ActiveWeixinDraw (nolock)  where ActiveId = @ActiveId and Openid = @Openid
+        ]]>
+    </select>
+    <select id="GetActiveWeixinDrawByPhone">
+      <![CDATA[ 
+         select Id,ActiveId,PartnerId,Openid,UserName,Phone,IsShare,ShareTime,SendFriendCount,LastSendFriendTime,IsPay,PayTime,CreateTime,HeadImgUrl from ActiveWeixinDraw (nolock)  where ActiveId = @ActiveId and Phone = @Phone
+        ]]>
+    </select> 
+    <select id="GetActiveWeixinDrawById">
+      <![CDATA[ 
+         select Id,ActiveId,PartnerId,Openid,UserName,Phone,IsShare,ShareTime,SendFriendCount,LastSendFriendTime,IsPay,PayTime,CreateTime,HeadImgUrl from ActiveWeixinDraw (nolock)  where ActiveId = @ActiveId and Id = @Id
+        ]]>
+    </select>
+    <select id="AddActiveWeixinDraw">
+      <![CDATA[ 
+IF NOT EXISTS( select Id from ActiveWeixinDraw  (nolock) where ActiveId = @ActiveId and Openid = @Openid)
+Insert Into ActiveWeixinDraw 
+(ActiveId,PartnerId,Openid,UserName,Phone,IsShare,ShareTime,SendFriendCount,LastSendFriendTime,IsPay,PayTime,CreateTime,HeadImgUrl)
+values
+(@ActiveId,@PartnerId,@Openid,@UserName,@Phone,@IsShare,@ShareTime,@SendFriendCount,@LastSendFriendTime,@IsPay,@PayTime,GETDATE(),@HeadImgUrl)
+        ]]>
+    </select>
+    <select id="UpdateActiveWeixinDrawIsShare">
+      <![CDATA[ 
+        Update ActiveWeixinDraw set IsShare = 1,ShareTime = getdate() where ActiveId = @ActiveId and Openid = @Openid
+        ]]>
+    </select>
+    <select id="UpdateActiveWeixinDrawIsPay">
+      <![CDATA[ 
+        Update ActiveWeixinDraw set IsPay = 1,PayTime = getdate() where ActiveId = @ActiveId and Openid = @Openid
+        ]]>
+    </select>
+    <select id="UpdateActiveWeixinDrawPhone">
+      <![CDATA[ 
+        Update ActiveWeixinDraw set Phone = @Phone where ActiveId = @ActiveId and Openid = @Openid
+        ]]>
+    </select>
+    <select id="UpdateActiveWeixinDrawHeadImgUrl">
+      <![CDATA[ 
+        Update ActiveWeixinDraw set HeadImgUrl = @HeadImgUrl where ActiveId = @ActiveId and Openid = @Openid
+        ]]>
+    </select>
+    <select id="UpdateActiveWeixinDrawSendCount">
+      <![CDATA[ 
+        Update ActiveWeixinDraw set SendFriendCount = SendFriendCount + 1, LastSendFriendTime = GETDATE() where ActiveId = @ActiveId and Openid = @Openid
+        ]]>
+    </select>
+      <select id="GetActiveWeixinDrawByReadUser">
+      <![CDATA[ 
+select ad.Id, ad.ActiveId, ad.PartnerId, ad.Openid, ad.UserName, ad.Phone, ad.IsShare, ad.ShareTime, ad.SendFriendCount, ad.LastSendFriendTime, ad.IsPay, ad.PayTime, ad.CreateTime, ad.,HeadImgUrl
+from ActiveWeixinShareRead ar (nolock) 
+inner join ActiveWeixinDraw ad (nolock)  on ar.shareropenid = ad.openid and ad.activeid = @ActiveId
+where ar.activeid = @ActiveId and ar.openid = @Openid
+order by ar.createTime 
+        ]]>
+    </select>
+    
+    <select id="GetActiveWeixinShareReadList">
+      <![CDATA[ 
+         select * from ActiveWeixinShareRead (nolock)  where ActiveId = @ActiveId and SharerOpenid = @SharerOpenid order by CreateTime
+        ]]>
+    </select>
+    <select id="AddActiveWeixinShareRead">
+      <![CDATA[ 
+IF NOT EXISTS( select Id from ActiveWeixinShareRead where ActiveId = @ActiveId and SharerOpenid = @SharerOpenid and Openid = @Openid)
+begin
+Insert Into ActiveWeixinShareRead values(@ActiveId,@SharerOpenid,@Openid
+,(select isnull(MAX(LuckCode),0) + 1 from ActiveWeixinShareRead lock where activeid = @ActiveId)
+,@ReadCount,@LastReadTime,GETDATE())
+end
+ELSE
+begin
+Update ActiveWeixinShareRead set ReadCount = ReadCount + 1,LastReadTime = GETDATE() where ActiveId = @ActiveId and SharerOpenid = @SharerOpenid and Openid = @Openid
+end
+
+--delete ActiveWeixinShareRead where SharerOpenid = Openid
+
+        ]]>
+    </select>
+    <select id="AddActiveWeixinShareRead_Luck">
+      <![CDATA[ 
+IF NOT EXISTS( select Id from ActiveWeixinShareRead where ActiveId = @ActiveId and SharerOpenid = @SharerOpenid and Openid = @Openid)
+begin
+Insert Into ActiveWeixinShareRead values(@ActiveId,@SharerOpenid,@Openid,0,@ReadCount,@LastReadTime,GETDATE())
+end
+ELSE
+begin
+Update ActiveWeixinShareRead set ReadCount = ReadCount + 1,LastReadTime = GETDATE() where ActiveId = @ActiveId and SharerOpenid = @SharerOpenid and Openid = @Openid
+end
+        ]]>
+    </select>
+    <select id="AddActiveWeixinLuckCode">
+      <![CDATA[ 
+IF NOT EXISTS( select Id from ActiveWeixinLuckCode where ActiveId = @ActiveId and LuckCode = @LuckCode)
+begin
+Insert Into ActiveWeixinLuckCode values(@ActiveId,@Openid,
+(select isnull(Count(1),0) + 1 from ActiveWeixinLuckCode lock where activeid = @ActiveId)
+,@PartnerId,@TagName,@SourceOpenid,GETDATE())
+end
+        ]]>
+    </select>
+    <select id="GetActiveWeixinLuckCodeCount">
+      <![CDATA[ 
+DECLARE @LuckCode1 INT 
+DECLARE @LuckCode2 INT 
+
+select @LuckCode1 = COUNT(1) from ActiveWeixinLuckCode (nolock)  where activeid = @Activeid
+select @LuckCode2 = MAX(luckcode) from ActiveWeixinLuckCode (nolock)  where activeid = @Activeid
+
+if (@LuckCode2 > @LuckCode1)
+set @LuckCode1 = @LuckCode2
+
+select @Activeid ActiveId,0 AuthorCount,0 SignupCount,0 SignupPayCount,0 ReadCount,@LuckCode1 LuckCount,getdate() CreateTime
+        ]]>
+    </select>
+    <select id="GetActiveWeixinLuckCodeInfo">
+      <![CDATA[ 
+select Id,ActiveId,Openid,LuckCode,PartnerId,TagName,SourceOpenid,CreateTime from ActiveWeixinLuckCode (nolock)  where ActiveId = @ActiveId and Openid = @Openid
+        ]]>
+    </select>
+    <select id="GetActiveWeixinLuckCodeInfoByTagName">
+      <![CDATA[ 
+select Id,ActiveId,Openid,LuckCode,PartnerId,TagName,SourceOpenid,CreateTime from ActiveWeixinLuckCode (nolock)  where ActiveId = @ActiveId and TagName = @TagName
+        ]]>
+    </select>
+    <select id="GetActiveWeixinLuckCodeInfoByTagNameAndSource">
+      <![CDATA[ 
+select Id,ActiveId,Openid,LuckCode,PartnerId,TagName,SourceOpenid,CreateTime from ActiveWeixinLuckCode (nolock)  where ActiveId = @ActiveId and TagName = @TagName and SourceOpenid = @SourceOpenid
+        ]]>
+    </select>
+    
+    <select id="AddActiveWeixinFicMoney">
+      <![CDATA[ 
+Insert Into ActiveWeixinFicMoney values(@ActiveId,@Openid,@Value,@PartnerId,@Remark,GETDATE())
+        ]]>
+    </select>
+    <select id="GetActiveWeixinFicMoneyInfo">
+      <![CDATA[ 
+select Id,ActiveId,Openid,Value,PartnerId,Remark,CreateTime from ActiveWeixinFicMoney (nolock) where ActiveId = @ActiveId and Openid = @Openid
+        ]]>
+    </select>
+      
+    <select id="GetAllWeixinPartners">
+      <![CDATA[ 
+select top 100 Id,PartnerCode,Name,Brief,QrCodeUrl,LogoUrl,LuckCodeCount,State,CreateTime,ISNULL(ActiveFund,0) ActiveFund,ISNULL(ActiveJoinCost,0) ActiveJoinCost, ISNULL(ActiveMinReward, 0) ActiveMinReward,ISNULL(ActiveMaxReward, 0) ActiveMaxReward,ISNULL(ShortName,'') ShortName from  ActiveWeixinPartner (nolock)  order by Id
+        ]]>
+    </select>
+    <select id="AddActiveWeixinPartner">
+      <![CDATA[ 
+IF NOT EXISTS( select Id from ActiveWeixinPartner where PartnerCode = @PartnerCode)
+begin
+Insert Into ActiveWeixinPartner 
+(PartnerCode,Name,Brief,QrCodeUrl,LogoUrl,LuckCodeCount,State,CreateTime,ActiveFund,ActiveJoinCost,ActiveMinReward,ActiveMaxReward,ShortName)
+values
+(@PartnerCode,@Name,@Brief,@QrCodeUrl,@LogoUrl,@LuckCodeCount,@State,GETDATE(),@ActiveFund,@ActiveJoinCost,@ActiveMinReward,@ActiveMaxReward,@ShortName)
+select @@IDENTITY
+end
+ELSE
+begin
+update ActiveWeixinPartner 
+set PartnerCode = @PartnerCode,Name = @Name,Brief = @Brief,QrCodeUrl = @QrCodeUrl,LogoUrl = @LogoUrl,LuckCodeCount = @LuckCodeCount,State = @State,ActiveFund = @ActiveFund,ActiveJoinCost = @ActiveJoinCost,ActiveMinReward = @ActiveMinReward,ActiveMaxReward = @ActiveMaxReward,ShortName = @ShortName
+where Id = @Id
+end
+        ]]>
+    </select>
+    
+    <select id="GetActiveWeixinShareReadVillaSpringList">
+      <![CDATA[ 
+         select * from ActiveWeixinShareRead_VillaSpring (nolock)  where ActiveId = @ActiveId and SharerOpenid = @SharerOpenid order by CreateTime
+        ]]>
+    </select>
+    <select id="AddActiveWeixinShareReadVillaSpring">
+      <![CDATA[ 
+IF NOT EXISTS( select Id from ActiveWeixinShareRead_VillaSpring (nolock)  where ActiveId = @ActiveId and SharerOpenid = @SharerOpenid and Openid = @Openid)
+begin
+Insert Into ActiveWeixinShareRead_VillaSpring values(@ActiveId,@SharerOpenid,@Openid,@ReadCount,@LastReadTime,GETDATE())
+end
+ELSE
+begin
+Update ActiveWeixinShareRead_VillaSpring set ReadCount = ReadCount + 1,LastReadTime = GETDATE() where ActiveId = @ActiveId and SharerOpenid = @SharerOpenid and Openid = @Openid
+end
+
+--delete ActiveWeixinShareRead_VillaSpring where SharerOpenid = Openid
+
+        ]]>
+    </select>
+    
+    <select id="GetActiveWeixinShareReadHeartValleyList">
+      <![CDATA[ 
+         select * from ActiveWeixinShareRead_HeartValley  (nolock) where ActiveId = @ActiveId and SharerOpenid = @SharerOpenid order by CreateTime
+        ]]>
+    </select>
+    <select id="AddActiveWeixinShareReadHeartValley">
+      <![CDATA[ 
+IF NOT EXISTS( select Id from ActiveWeixinShareRead_HeartValley  (nolock) where ActiveId = @ActiveId and SharerOpenid = @SharerOpenid and Openid = @Openid)
+begin
+Insert Into ActiveWeixinShareRead_HeartValley values(@ActiveId,@SharerOpenid,@Openid,@ReadCount,@LastReadTime,GETDATE())
+end
+ELSE
+begin
+Update ActiveWeixinShareRead_HeartValley set ReadCount = ReadCount + 1,LastReadTime = GETDATE() where ActiveId = @ActiveId and SharerOpenid = @SharerOpenid and Openid = @Openid
+end
+
+--delete ActiveWeixinShareRead_HeartValley where SharerOpenid = Openid
+
+        ]]>
+    </select>
+    
+    <select id="GetWeixinStatReportData_Def">
+      <![CDATA[ 
+DECLARE @LuckCode1 INT 
+DECLARE @LuckCode2 INT 
+
+select @LuckCode1 = COUNT(1) from ActiveWeixinLuckCode (nolock)  where activeid = @Activeid
+select @LuckCode2 = MAX(luckcode) from ActiveWeixinLuckCode (nolock)  where activeid = @Activeid
+
+if (@LuckCode2 > @LuckCode1)
+set @LuckCode1 = @LuckCode2
+
+select 
+@Activeid ActiveId,
+(select COUNT(1) from ActiveWeixinUser (nolock)  where activeid = @Activeid) AuthorCount,
+(select COUNT(1) from ActiveWeixinDraw (nolock)  where activeid = @Activeid) SignupCount,
+(select COUNT(1) from ActiveWeixinDraw (nolock)  where activeid = @Activeid and isPay = 1) SignupPayCount,
+(select COUNT(1) from ActiveWeixinShareRead (nolock)  where activeid = @Activeid) ReadCount,
+(@LuckCode1) LuckCount,
+getdate() CreateTime
+
+        ]]>
+    </select>
+    <select id="GetWeixinStatReportData_VillaSpring">
+      <![CDATA[ 
+         select 
+         @Activeid ActiveId,
+(select COUNT(1) from ActiveWeixinUser (nolock)  where activeid = @Activeid) AuthorCount,
+(select COUNT(1) from ActiveWeixinDraw (nolock)  where activeid = @Activeid) SignupCount,
+(select COUNT(1) from ActiveWeixinShareRead_VillaSpring (nolock)  where activeid = @Activeid) ReadCount,
+getdate() CreateTime
+        ]]>
+    </select>
+    <select id="GetWeixinStatReportData_HeartValley">
+      <![CDATA[ 
+         select 
+         @Activeid ActiveId,
+(select COUNT(1) from ActiveWeixinUser (nolock)  where activeid = @Activeid) AuthorCount,
+(select COUNT(1) from ActiveWeixinDraw (nolock)  where activeid = @Activeid) SignupCount,
+(select COUNT(1) from ActiveWeixinShareRead_HeartValley (nolock)  where activeid = @Activeid) ReadCount,
+getdate() CreateTime
+        ]]>
+    </select>
+    
+    <select id="UpdateWeixinUserSubscribe">
+      <![CDATA[ 
+IF NOT EXISTS( select Id from WeixinUser (nolock)  where Openid = @Openid)
+begin
+Insert Into WeixinUser values(@Openid,@Unionid,@Nickname,@Sex,@Province,@City,@Country,@Headimgurl,@Privilege,@Phone,@Remark,@GroupId,@Subscribe,@SubscribeTime,@Language,@WeixinAcount,@CreateTime)
+end
+ELSE
+begin
+update WeixinUser set Nickname = @Nickname,Headimgurl = @Headimgurl,Subscribe = @Subscribe,SubscribeTime = @SubscribeTime where Openid = @Openid
+end
+        ]]>
+    </select>
+    <select id="UpdateWeixinUserInfo">
+      <![CDATA[ 
+IF NOT EXISTS( select Id from WeixinUser(nolock) where Openid = @Openid)
+begin
+Insert Into WeixinUser values(@Openid,@Unionid,@Nickname,@Sex,@Province,@City,@Country,@Headimgurl,@Privilege,@Phone,@Remark,@GroupId,@Subscribe,@SubscribeTime,@Language,@WeixinAcount,@CreateTime)
+end
+ELSE
+begin
+update WeixinUser set Unionid = @Unionid,Nickname = @Nickname,Sex = @Sex,Province = @Province,City = @City,Country = @Country,Headimgurl = @Headimgurl,Privilege = @Privilege,Phone = @Phone,Remark = @Remark,GroupId = @GroupId,Subscribe = @Subscribe,SubscribeTime = @SubscribeTime,Language = @Language,WeixinAcount = @WeixinAcount where Openid = @Openid
+end
+        ]]>
+    </select>
+    <select id="GetWeixinUserByUnionid">
+      <![CDATA[ 
+select top 1 Id,Openid,Unionid,Nickname,Sex,Province,City,Country,HeadImgurl,Privilege,Phone,Remark,GroupId,SubScribe,SubscribeTime,Language,WeixinAcount,CreateTime 
+from WeixinUser  (nolock) 
+where WeixinAcount = @WeixinAcount and Unionid = @Unionid
+        ]]>
+    </select>
+    <select id="GetWeixinUser">
+      <![CDATA[ 
+         Select * From Commdb.dbo.WeixinUser Where Openid = @Openid
+        ]]>
+    </select>
+    <select id="GetWeixinUserById">
+      <![CDATA[ 
+         Select * From Commdb.dbo.WeixinUser Where Id = @Id
+        ]]>
+    </select>
+    <select id="GetWeixinUserByUnionidAndAccount">
+      <![CDATA[ 
+         Select top 1 * From Commdb.dbo.WeixinUser Where WeixinAcount = @weixinAccount and Unionid = @unionid
+        ]]>
+    </select>
+    <select id="AddWeixinRewardRecord">
+      <![CDATA[ 
+Insert into commdb.dbo.WeixinRewardRecord 
+(SourceId,SourceType,ReOpenid,Wishing,Amount,Number,ActiveId,ActiveName,Remark,SceneId,SendName,WillSendTime,RealSendTime,State)
+values
+(@SourceId,@SourceType,@ReOpenid,@Wishing,@Amount,@Number,@ActiveId,@ActiveName,@Remark,@SceneId,@SendName,@WillSendTime,@RealSendTime,@State)
+        ]]>
+    </select>
+    <select id="AddWeixinRewardRecordForRedpackUnion">
+      <![CDATA[ 
+IF NOT EXISTS( select Id from commdb.dbo.WeixinRewardRecord where SourceId = @SourceId and SourceType = @SourceType and ActiveId = @ActiveId and ReOpenid = @ReOpenid)
+begin
+Insert into commdb.dbo.WeixinRewardRecord 
+(SourceId,SourceType,ReOpenid,Wishing,Amount,Number,ActiveId,ActiveName,Remark,SceneId,SendName,WillSendTime,RealSendTime,State)
+values
+(@SourceId,@SourceType,@ReOpenid,@Wishing,@Amount,@Number,@ActiveId,@ActiveName,@Remark,@SceneId,@SendName,@WillSendTime,@RealSendTime,@State)
+end
+        ]]>
+    </select>
+      <select id="AddWeixinRewardRecordByWxuid">
+      <![CDATA[ 
+declare @openid nvarchar(200)
+
+select top 1 @openid = openid from commdb.dbo.WeixinUser where ID = @ReWxUid
+
+Insert into commdb.dbo.WeixinRewardRecord 
+(SourceId,SourceType,ReOpenid,Wishing,Amount,Number,ActiveId,ActiveName,Remark,SceneId,SendName,WillSendTime,RealSendTime,State)
+values
+(@SourceId,@SourceType,@openid,@Wishing,@Amount,@Number,@ActiveId,@ActiveName,@Remark,@SceneId,@SendName,@WillSendTime,@RealSendTime,@State)
+        ]]>
+    </select>
+    <select id="GetWeixinRewardRecordByWxActive">
+      <![CDATA[ 
+select  [Id]
+      ,[SourceId]
+      ,[SourceType]
+      ,[ReOpenid]
+      ,0 ReWxUid
+      ,[Wishing]
+      ,[Amount]
+      ,[Number]
+      ,[ActiveId]
+      ,[ActiveName]
+      ,[Remark]
+      ,Convert(int,[SceneId]) [SceneId]
+      ,[SendName]
+      ,[WillSendTime]
+      ,[RealSendTime]
+      ,[State] 
+      from commdb.dbo.WeixinRewardRecord 
+where SourceType = @SourceType and ActiveId = @ActiveId and ReOpenid = @ReOpenid 
+        ]]>
+    </select>
+    <select id="UpdateWxPartnerActiveFund">
+      <![CDATA[ 
+DECLARE @retcode INT 
+BEGIN TRANSACTION
+SET @retcode = 0  
+
+update commdb.dbo.ActiveWeixinPartner set ActiveFund = ActiveFund - @Value where id = @ID
+
+Exit_Flag:   
+IF @@TranCount > 0
+    IF @RetCode = 0
+        COMMIT TRANSACTION
+    ELSE
+        ROLLBACK TRANSACTION
+SELECT @retcode AS ExecInfo
+        ]]>
+    </select>
+  
+    <select id="AddCustomActiveUser">
+      <![CDATA[ 
+IF NOT EXISTS( select Id from CustomActiveUser (nolock)  where Phone = @Phone and ActiveId = @ActiveId)
+begin
+Insert Into CustomActiveUser 
+(Openid,Unionid,UserName,Phone,Point,ActiveId,State,CreateTime)
+values
+(@Openid,@Unionid,@UserName,@Phone,@Point,@ActiveId,@State,GETDATE())
+end
+        ]]>
+    </select>
+    <select id="GetCustomActiveUser">
+      <![CDATA[ 
+select top 1 Id,Openid,Unionid,UserName,Phone,Point,ActiveId,State,CreateTime 
+from CustomActiveUser  (nolock) 
+where ActiveId = @ActiveId and Phone = @Phone
+        ]]>
+    </select>
+    
+    <select id="GetMaterialListWithType">
+      <![CDATA[ 
+        select * from (
+        select  ROW_NUMBER() over(order by updatetime desc,createtime desc) as row,
+        a.*,b.Name as CategoryName,HotelName=isnull(h.HotelName,''),HotelID=isnull(h.HotelID,0) from WeixinMaterial  a
+        inner join WeixinMaterialCategory b
+        on a.CategoryId=b.Id
+        left join WeixinMaterialHotelRel rel
+        on rel.MaterialID=a.IDX
+        left join HotelDB..Hotel (nolock) h
+        on h.HotelID=Rel.HotelID
+        where 1=1
+        and a.State=1
+        and a.CategoryId=@type
+        and
+        (Title like '%'+@Key+'%'
+        or Digest like '%'+@Key+'%'
+        or Author like '%'+@Key+'%'
+        )
+        ) A
+        where a.row between @Start and @End
+        ]]>
+    </select>
+    <select id="GetMaterialList">
+      <![CDATA[ 
+        select * from (
+        select  ROW_NUMBER() over(order by updatetime desc,createtime desc) as row,
+        a.*,b.Name as CategoryName,HotelName=isnull(h.HotelName,''),HotelID=isnull(h.HotelID,0) from WeixinMaterial  a
+        inner join WeixinMaterialCategory b
+        on a.CategoryId=b.Id
+         left join WeixinMaterialHotelRel rel
+        on rel.MaterialID=a.IDX
+        left join HotelDB..Hotel (nolock) h
+        on h.HotelID=Rel.HotelID
+        where 1=1
+        and a.State=1
+        and
+        (Title like '%'+@Key+'%'
+        or Digest like '%'+@Key+'%'
+        or Author like '%'+@Key+'%'
+        )
+        ) A
+        where a.row between @Start and @End
+        ]]>
+    </select>
+    <select id="GetMaterialListCount">
+      <![CDATA[ 
+        select count(*) from (
+        select  ROW_NUMBER() over(order by updatetime,createtime desc) as row,
+        a.*,b.Name as CategoryName from WeixinMaterial  a
+        inner join WeixinMaterialCategory b
+        on a.CategoryId=b.Id
+        where 1=1
+        and a.State=1
+        and
+        (Title like '%'+@Key+'%'
+        or Digest like '%'+@Key+'%'
+        or Author like '%'+@Key+'%'
+        )
+        ) A
+        ]]>
+    </select>
+    <select id="GetMaterialListCountWithType">
+      <![CDATA[ 
+        select count(*) from (
+        select  ROW_NUMBER() over(order by updatetime,createtime desc) as row,
+        a.*,b.Name as CategoryName from WeixinMaterial  a
+        inner join WeixinMaterialCategory b
+        on a.CategoryId=b.Id
+        where 1=1
+        and a.State=1
+        and a.CategoryId=@type
+        and
+        (Title like '%'+@Key+'%'
+        or Digest like '%'+@Key+'%'
+        or Author like '%'+@Key+'%'
+        )
+        ) A
+        ]]>
+    </select>
+    <select id="GetMaterialCategoryList">
+      <![CDATA[ 
+        select * from WeixinMaterialCategory
+        where State=1 order by state desc,Id asc
+        ]]>
+    </select>
+   
+    
+    <select id="GetMaterialByID">
+      <![CDATA[ 
+    select * from WeixinMaterial where IDX=@IDX
+        ]]>
+    </select>
+  </statements>
+</configuration>

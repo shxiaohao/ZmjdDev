@@ -1,0 +1,309 @@
+﻿@model  List<HJD.HotelServices.Contracts.CanSaleHotelInfoEntity>
+@{
+    Layout = null;
+
+    var userid = ViewBag.UserId;
+
+    //当前系统环境（ios | android）
+    var appType = ViewBag.AppType;
+    var isVip = ViewBag.IsVip;
+    var swVip = ViewBag.SwVip;
+    if (!swVip && isVip)
+    {
+        swVip = true;
+    }
+
+    //是否微信环境
+    var isInWeixin = ViewBag.IsInWeixin;
+
+    //头图
+    var topBanner = ViewBag.TopBanner;
+
+    //分享标题
+    var shareTitle = ViewBag.ShareTitle;
+
+    //分享说明
+    var shareDesc = ViewBag.ShareContent;   //"为聪明的懒人度身定制的节日酒店推荐";
+
+    //分享小图
+    var shareImgUrl = ViewBag.ShareImg;     //(topBanner.Contains("_") ? topBanner.Replace("_jupiter", "_290x290s").Replace("_appdetail1s", "_290x290s") : "");
+
+    //分享链接
+    var shareLink = ViewBag.ShareLink;
+
+    //分享跟踪参数的分享人对象
+    HJD.AccountServices.Entity.MemberProfileInfo shareUserInfo = ViewBag.ShareUserInfo;
+
+    Dictionary<string, List<CanSaleHotelInfoEntity>> d1 = ViewBag.D1;
+
+    var checkIn = ViewBag.CheckIn;
+    var dateList = ViewBag.DateList;
+    var dateNames = ViewBag.DateNames;
+}
+
+<div class="holiday-panel">
+    <div class="topimg">
+        <div class="col-xs-12">
+            <img src="@(topBanner)" class="img-responsive" alt="" />
+        </div>
+    </div>
+    <div class="menu-panel-base">
+        <div class="menu-panel" id="menu-panel">
+            <div id="dateList">
+                <div class="_scroller">
+                    <ul>
+                        @for (int i = 0; i < dateList.Count; i++)
+                        {
+                            var date = dateList[i];
+                            var dateName = dateNames.Count > i ? dateNames[i] : "";
+
+                            @*<li class="@(date == checkIn ? "curli" : "") @(dateList.Count <= 4 ? "longli" : "")" data-num="@i" onclick="gourl('/Active/Holiday?strCheckDate=@(date.ToShortDateString())&userid=@(userid)&swvip=@(swVip?"1":"0")')">@date.ToString("M.d")<div class="name">@(dateName)</div></li>*@
+                            <li class="@(date == checkIn ? "curli" : "") @(dateList.Count <= 4 ? "longli" : "")" data-num="@i" onclick="loadHolidayContent('@(date.ToShortDateString())','@(userid)',@(swVip?"1":"0"))">
+                                @date.ToString("M.d")
+                                <div class="name">@(dateName)</div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (d1 != null && d1.Keys != null && d1.Keys.Count > 0)
+    {
+        var _gnum = 0;
+        foreach (var dKey in d1.Keys)
+        {
+            var _list = d1[dKey];
+            if (_list.Count == 0) { continue; }
+
+            //当前组是否存在 查看更多
+            var haveShowPartMore = false;
+
+            <div class="group">
+                <div class="tit">
+                    <div class="tit-item @(_gnum == 0 ? "" : "tit-close")" data-num="@(_gnum)">@(dKey)</div>
+                </div>
+                <div class="list-panel" style="@(_gnum == 0 ? "" : "display:none;")" id="group-list-@(_gnum)" data-op="@(_gnum == 0 ? "1" : "0")">
+                    <div class="list">
+                        @for (int _itemNum = 0; _itemNum < _list.Count; _itemNum++)
+                        {
+                            var _item = _list[_itemNum];
+                            var hideSpaceLine = _itemNum == _list.Count - 1;
+
+                            //是否局部隐藏item，只显示前3个（目前只在第一个group这样处理）
+                            var isPartMoreItem = (_gnum == 0 && _itemNum > 2);
+                            var showPartMore = (_gnum == 0 && _itemNum == 3);
+                            if (!haveShowPartMore)
+                            {
+                                haveShowPartMore = showPartMore;
+                            }
+
+                            if (_item.VipPrice > 0)
+                            {
+                                <div class="item @(hideSpaceLine ? "" : "item-space-line")" style="@(isPartMoreItem ? "display:none;" : "")">
+                                    <div class="info" onclick="goto(@(_item.HotelId),'@( _item.HotelName)','@( _item.PackageID)')">
+                                        <div class="t1">@_item.HotelName</div>
+                                        <div class="t2">@_item.PackageBrief</div>
+                                    </div>
+                                    <div class="price">
+                                        <div class="left">
+                                            @if (swVip)
+                                            {
+                                                <div class="p-vip zmjd-iconfont"><span class="zmjd-iconfont vip-color">&#xe623;</span>￥@(_item.VipPrice)@Html.Raw(_item.IsNotRisePrice ? "<span class='price-icon zmjd-iconfont'>&#xe68d;</span>" : "")</div>
+                                                <div class="p-def">普通会员价￥@(_item.Businessprice)</div>
+                                            }
+                                            else
+                                            {
+                                                <div class="p-vip">￥@(_item.Businessprice)@Html.Raw(_item.IsNotRisePrice ? "<span class='price-icon zmjd-iconfont'>&#xe68d;</span>" : "")</div>
+                                                <div class="p-def2"><span class="zmjd-iconfont vip-color">&#xe627;</span>VIP会员价￥@(_item.VipPrice)<a href="http://www.zmjiudian.com/Coupon/VipShopInfo?_newpage=1" target="_blank">成为VIP>></a></div>
+                                            }
+                                        </div>
+                                        <div class="right">
+                                            <div class="p-btn" onclick="goto(@(_item.HotelId),'@( _item.HotelName)','@( _item.PackageID)')">预订</div>
+                                        </div>
+                                        <div style="clear:both;"></div>
+                                    </div>
+                                </div>
+                            }
+
+                            if (showPartMore)
+                            {
+                                <div class="show-partmore-bar" data-num="@(_gnum)">查看更多<span class="zmjd-iconfont">&#xe650;</span></div>
+                            }
+                        }
+                    </div>
+                    <div class="stop-group-bar" id="stop-group-bar-@(_gnum)" data-num="@(_gnum)" style="@(haveShowPartMore ? "display:none;" : "")">收起<span class="zmjd-iconfont">&#xe64f;</span></div>
+                </div>
+            </div>
+
+            _gnum++;
+        }
+    }
+
+    @*<div style="margin:2em 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http://192.168.1.188:8081/active/Holiday">GO APP (Local) >>></a></div>
+        <div style="margin:2em 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http://www.zmjiudian.com/active/Holiday?userid=0&_newpage=1&_dorpdown=1">GO APP (Local)2 >>></a></div>*@
+    <div class="bottom-tip">
+        咨询请洽：<span>4000-021-702</span>
+    </div>
+
+    @if (shareUserInfo.UserID > 0)
+    {
+        <div class="share-member-panel">
+            <div class="share-member-head">
+                <div class="member-head"><img src="@(shareUserInfo.AvatarUrl)" alt="@(shareUserInfo.NickName)" /></div>
+                <div class="member-nick">@(shareUserInfo.NickName)<br />@(string.IsNullOrEmpty(shareUserInfo.NickName) ? "" : "正在用")周末酒店App</div>
+                <div class="ad-tip">邀请您</div>
+            </div>
+            <div class="share-btns">
+                <div class="join-zmjd" onclick="gourl('/Active/GenCashCouponForInvitation?sourceId=@(shareUserInfo.UserID)')" data-op="0">使用周末酒店 获得50元现金券</div>
+            </div>
+            <div class="share-bottom-logo">
+                <img src="http://whfront.b0.upaiyun.com/www/img/comment/zmjd-bottom-logo.png" alt="周末酒店" />
+            </div>
+        </div>
+    }
+</div>
+
+<footer>
+    <input type="hidden" id="appType" value="@(appType)" />
+</footer>
+<script src="~/Content/js//framework/iscroll.js"></script>
+<script src="~/Content/js/active/holiday.js?v=@(Helpers.curAppVer())"></script>
+
+
+<script type="text/javascript">
+
+        function goto(hotelid, hotelname, pid) {
+            var url = "@(ViewBag.AccessProtocal)" + hotelid + "?checkIn=@( ViewBag.CheckIn.ToString("yyyy-MM-dd"))&checkOut=@( ViewBag.CheckOut.ToString("yyyy-MM-dd"))&pid=" + pid;
+
+            this.location = url;
+        }
+
+        try {
+            onAppShareCall = function () {
+                var title = "@(shareTitle)";
+                var Content = "@(shareDesc)";
+                var photoUrl = "@(shareImgUrl)";
+                var shareLink = "@(shareLink)";
+                try { whotel.appShareData(title, Content, photoUrl, shareLink); } catch (e) { }
+                var returnStr = '{"title":"{0}","Content":"{1}","photoUrl":"{2}","shareLink":"{3}"}';
+                return returnStr.format(title, Content, photoUrl, shareLink);
+            }
+            onAppShareCall();
+        }
+        catch (e) { }
+</script>
+@if (isInWeixin)
+{
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js?v=@(Helpers.curAppVer())" type="text/javascript"></script>
+    <script>
+            var loadWechat = function(_shareTitle,_shareDesc,_shareLink,_shareImgUrl, _shareSucessFunc){
+
+                GetWeixinApiConfig();//注册
+
+                wx.ready(function () {
+
+                    wx.onMenuShareTimeline({
+                        title: _shareTitle,
+                        desc: _shareDesc,
+                        link: _shareLink,
+                        imgUrl: _shareImgUrl,
+                        success: function (res) {
+                            _shareSucessFunc(res)
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                    wx.onMenuShareAppMessage({
+                        title: _shareTitle,
+                        desc: _shareDesc,
+                        link: _shareLink,
+                        imgUrl: _shareImgUrl,
+                        success: function (res) {
+                            _shareSucessFunc(res)
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                    wx.onMenuShareQQ({
+                        title: _shareTitle,
+                        desc: _shareDesc,
+                        link: _shareLink,
+                        imgUrl: _shareImgUrl,
+                        success: function (res) {
+                            _shareSucessFunc(res)
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                    wx.onMenuShareQZone({
+                        title: _shareTitle,
+                        desc: _shareDesc,
+                        link: _shareLink,
+                        imgUrl: '@(shareImgUrl)',
+                        success: function (res) {
+                            _shareSucessFunc(res)
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                });
+
+                function GetWeixinApiConfig() {
+
+                    var url = location.href.split("#")[0];
+                    $.ajax({
+                        url: '/Coupon/GetWeixinConfigInfo',
+                        type: 'POST',
+                        data: { url: url },
+                        dataType: 'json',
+                        error: function () {
+                            console.log("网络服务错误");
+                        },
+                        success: function (result) {
+                            if (typeof (result.Success) != undefined && result.Success == 1) {
+                                return false;
+                            }
+                            else {
+                                //得到微信config的值
+                                var array = [
+                                    'checkJsApi',
+                                    'onMenuShareTimeline',
+                                    'onMenuShareAppMessage',
+                                    'onMenuShareQQ',
+                                    'onMenuShareQZone',
+                                    'hideOptionMenu'
+                                ];
+                                if (result.jsApiList) {
+                                    var jsArray = result.jsApiList.split(',');
+                                    for (var key in jsArray) {
+                                        array.push("" + jsArray[key]);
+                                    }
+                                }
+
+                                wx.config({
+                                    debug: false,
+                                    appId: result.appId,
+                                    timestamp: "" + result.timestamp,
+                                    nonceStr: result.nonceStr,
+                                    signature: result.signature,
+                                    jsApiList: array
+                                });
+                            }
+                        }
+                    });
+                }
+
+            }
+            loadWechat('@shareTitle','@shareDesc','@shareLink','@shareImgUrl', function(){});
+
+    </script>
+}
+
+@*</body>
+    </html>*@

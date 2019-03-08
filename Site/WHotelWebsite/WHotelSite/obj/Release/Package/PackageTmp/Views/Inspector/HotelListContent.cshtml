@@ -1,0 +1,40 @@
+﻿@model List<InspectorHotelResult>
+@{
+    Layout = null;
+    bool isMobile = WHotelSite.Utils.IsMobile();
+}
+
+@foreach (InspectorHotelResult hotel in Model)
+{
+    var firstPic = hotel.hotelItem.Picture;
+    var expired = hotel.inspectorHotel.ExpiredDate.ToString("yyyy/MM/dd");
+    var have = hotel.inspectorHotel.LeaveCount > 0;
+    var applyCss = "btn-apply-normal";
+    if (!have || hotel.isEnrolled)
+    {
+        applyCss = "btn-apply-gray";
+    }
+    <div class="hotelitem">
+        <div class="pic">
+            <a href="javascript:;" onclick="goto('hotel/@(hotel.hotelItem.Id)')"><img src="@firstPic"></a>
+        </div>
+        <div class="name">
+            @hotel.hotelItem.Name
+        </div>
+        <div class="ctrl">
+            <div class="ctrl-left">
+                @if (have)
+                {
+                    <div class="ctrl-leave">尚有 <span class="h">@string.Format("{0}位", hotel.inspectorHotel.LeaveCount)</span> 品鉴名额</div>
+                }
+                else
+                {
+                    <div class="ctrl-leave ctrl-full">品鉴余额已满</div>
+                }
+                <div class="ctrl-expired">有效期至 @expired</div>
+            </div>
+            <div class="ctrl-right"><button class="btn-apply @applyCss" data-id="@hotel.inspectorHotel.ID" data-hotelid="@hotel.inspectorHotel.HotelID">申请品鉴</button></div>
+            <div class="clear"></div>
+        </div>
+    </div>
+}

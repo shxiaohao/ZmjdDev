@@ -1,0 +1,137 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    ViewBag.Title = "投票活动";
+
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.isInWeixin;
+    var userid = ViewBag.UserId;
+    var activeId = ViewBag.ActiveId;
+    var voteId = ViewBag.VoteId;
+    
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+}
+
+@section styles 
+{
+    <link href="~/Content/css/active/voteresult.css?v=1@(Helpers.curAppVer())" rel="stylesheet" />
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .login-section {
+            font-size: 0.8em;
+        }
+    </style>
+}
+
+<div v-cloak class="main-panel" id="active-obj">
+
+    <div class="banner" v-if="activeInfo&&activeInfo.WeixinSignUpTopBannerUrl" onclick="gourl('{{activeInfo.WeixinSignUpShareLink}}')">
+        <img :src="activeInfo.WeixinSignUpTopBannerUrl" alt="" />
+    </div>
+    <div class="vote-item vote-item-this clearfloat" v-if="voteInfo.thisVoteInfo">
+        <div class="left"><img :src="voteInfo.thisVoteInfo.PicUrl" alt="" /></div>
+        <div class="right">
+            <div class="name"><span class="no">编号：{{voteInfo.thisVoteInfo.Number}}</span><span class="n">{{voteInfo.thisVoteInfo.Title}}</span></div>
+            <div class="votes">票数：{{voteInfo.thisVoteInfo.OfferCount}}</div>
+            <div class="vote-state">已投</div>
+        </div>
+        @*<div class="no-tag {{voteInfo.thisVoteInfo.HotelId>=10?'no-tag-ten':''}}">{{voteInfo.thisVoteInfo.Ranking}}</div>*@
+
+    </div>
+    <div class="result" v-if="voteInfo.voteResultList">
+        <div class="tit">当前投票情况</div>
+        <div class="list">
+            <div class="vote-item clearfloat" v-for="item in voteInfo.voteResultList">
+                <div class="left"><img :src="item.PicUrl" alt="" /></div>
+                <div class="right">
+                    <div class="name"><span class="no">编号：{{item.Number}}</span><span class="n">{{item.Title}}</span></div>
+                    <div class="votes">票数：{{item.OfferCount}}</div>
+                </div>
+                @*<div class="no-tag {{item.HotelId>=10?'no-tag-ten':''}}">{{item.Ranking}}</div>*@
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+    <input type="hidden" id="isInWeixin" value="@(isInWeixin ? 1 : 0)" />
+    <input type="hidden" id="userId" value="@(userid)" />
+    <input type="hidden" id="activeId" value="@(activeId)" />
+    <input type="hidden" id="voteId" value="@(voteId)" />
+</footer>
+
+@section scripts
+{
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/framework/config.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/active/voteresult.js?v=@(Helpers.curAppVer())"></script>
+
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+        <script>
+
+        GetWeixinApiConfig();//注册
+
+        wx.ready(function () {
+
+            wx.hideMenuItems({
+                menuList: ["menuItem:share:timeline", "menuItem:copyUrl", "menuItem:share:appMessage", "menuItem:share:qq", "menuItem:share:weiboApp", "menuItem:share:QZone", "menuItem:openWithSafari", "menuItem:openWithQQBrowser", "menuItem:share:brand", "menuItem:share:email"]
+            });
+
+        });
+
+        function GetWeixinApiConfig() {
+
+            var url = location.href.split("#")[0];
+            $.ajax({
+                url: '/Coupon/GetWeixinConfigInfo',
+                type: 'POST',
+                data: { url: url },
+                dataType: 'json',
+                error: function () {
+                    console.log("网络服务错误");
+                },
+                success: function (result) {
+                    if (typeof (result.Success) != undefined && result.Success == 1) {
+                        return false;
+                    }
+                    else {
+                        //得到微信config的值
+                        var array = [
+                            'checkJsApi',
+                            'onMenuShareTimeline',
+                            'onMenuShareAppMessage',
+                            'hideOptionMenu',
+                            'hideMenuItems'
+                        ];
+                        if (result.jsApiList) {
+                            var jsArray = result.jsApiList.split(',');
+                            for (var key in jsArray) {
+                                array.push("" + jsArray[key]);
+                            }
+                        }
+
+                        wx.config({
+                            debug: false,
+                            appId: result.appId,
+                            timestamp: "" + result.timestamp,
+                            nonceStr: result.nonceStr,
+                            signature: result.signature,
+                            jsApiList: array
+                        });
+                    }
+                }
+            });
+        }
+
+        </script>
+    }
+}

@@ -1,0 +1,12 @@
+﻿@model SearchListViewModel
+@{
+    Layout = null;
+}
+<ul class="">
+    @foreach (var item in Model.Hotels)
+    {
+        int length = item.HotelName.Length;
+        string subNameStr = item.HotelName.Substring(0, length <= 20 ? length : 20).TrimEnd('(');
+        <li><a href="@Url.RouteUrl("酒店详情", new { Hotel = item.HotelId })">@Html.Raw(@subNameStr.Replace(Model.Keyword, "<i>" + Model.Keyword + "</i>"))</a></li>
+    }
+</ul>

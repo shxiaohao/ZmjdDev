@@ -1,0 +1,5 @@
+
+[17/11/8 13:34:55] Start Job [DownLoadWexinUserInfoJob]
+[17/11/8 13:35:27] ¡¾NextOpenid¡¿:
+[17/11/8 13:35:30] ¡¾0¡¿
+[17/11/8 13:35:30] GetAllWeixinSubscribeUser Count:10000

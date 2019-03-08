@@ -1,0 +1,116 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+
+    InspectorHotelParam param = ViewBag.param;
+    var result = param.HotelList;
+    var currentList = result.currentResult;
+    var pastList = result.pastResult;
+    
+    var isApp = ViewBag.IsApp;
+    
+    ViewBag.Title = string.Format("免费品鉴酒店");
+    ViewBag.Keywords = string.Format("免费品鉴酒店，免费");
+    ViewBag.Description = string.Format("免费品鉴酒店");
+
+    ViewBag.BodyStyle = "overflow-x:hidden;";
+    ViewBag.BodyClass = "inspectorhotellistpage";
+}
+@section styles
+{
+    <style>
+        html, body {
+                height: 100%;
+                margin: 0;
+            }
+        .btn-default, .btn-primary {
+            width: 48%;
+            border: none;
+            color: #6294D1;
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+    </style>
+}
+<script>
+    function goto(param) {
+        var url = "@(ViewBag.AccessProtocal)" + param;
+        this.location = url;
+    }
+    function gotopage(param) {
+        var url = "@(ViewBag.AccessProtocalPage)" + param;
+        this.location = url;
+    }
+
+    function loginCallback(userid) {
+        goApplyInspector(userid);
+        //bootbox.alert({ message: "【Callback】已返回用户ID：" + userid, closeButton: false });
+    }
+    function loadLoginCallback(userid) {
+        //location.replace(location.href + "?userid=4512003");
+        location.href = location.href + "?userid=" + userid;    // + userid;
+    }
+
+</script>
+<header class="hotellist-head @(isApp ? " hidden" : "")">
+    <div class="left">
+        <a href="/inspector/explain?userid=@(param.UserId)"><img src="~/content/images/icon-back.png" class="backimg"></a>
+    </div>
+    <div class="text">免费品鉴酒店</div>
+    <div class="right"></div>
+</header>
+<section class="hotellist-current">
+    <div class="title">本期酒店</div>
+    <!-- 酒店列表 开始 -->
+    @if (currentList.items != null && currentList.items.Any())
+    {
+        @Html.Partial("HotelListContent", currentList.items)
+        @*<div class="pager1 text-right">
+            @Helpers.Pagination(Url, param, currentList.count, param.Count, param.Start)
+        </div>*@
+    }
+    else
+    {
+        <div class="nullalert text-center">
+            <h5>对不起！没有找到符合您要求的酒店！</h5>
+        </div>
+    }
+    <!-- 酒店列表 结束 -->
+</section>
+<section class="hotellist-past">
+    <div class="title">往期酒店</div>
+    <!-- 酒店列表 开始 -->
+    @if (pastList.items != null && pastList.items.Any())
+    {
+        @Html.Partial("HotelListContent", pastList.items)
+        @*<div class="pager1 text-right">
+                @Helpers.Pagination(Url, param, pastList.count, param.Count, param.Start)
+            </div>*@
+    }
+    else
+    {
+        <div class="nullalert text-center">
+            <h5>对不起！没有找到符合您要求的酒店！</h5>
+        </div>
+    }
+    <!-- 酒店列表 结束 -->
+</section>
+<footer>
+    <input type="hidden" id="userid" value="@(param.UserId)" />
+    <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)"/>
+</footer>
+<!--  -->
+
+@section scripts
+{
+    @Scripts.Render("~/Content/js/srollpage.js", "~/Content/js/bootbox.js", "~/Content/js/inspector/inspector.js")
+}
+
+<script>
+    @*var userid = "@(param.UserId)"; //alert(userid);
+    if (userid == "0") {
+        var loadloginapphref = "whotelapp://loadJS?url=javascript:loadLoginCallback('{userid}')";
+        location.href = loadloginapphref;
+    }*@
+</script>

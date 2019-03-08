@@ -1,0 +1,30 @@
+﻿@using HJD.CommentService.Contract
+@using HJD.HotelPrice.Contract.DataContract.Order
+
+@model List<OrderListItem>
+@foreach (OrderListItem entity in Model)
+{
+    decimal packagePrice = entity.Amount/entity.RoomCount;
+    <tr>
+	    <td>
+		    订单号：<i>@entity.Orderid</i><br />
+		    预定日期：@entity.SubmitDate.ToShortDateString()<br />
+		    套餐：@entity.PackageName  ￥@Math.Round(packagePrice,0)<br />
+	    </td>
+	    <td>
+		    @entity.Contact
+	    </td>
+	    <td>
+		    @entity.CheckIn.ToShortDateString()<br />
+		    @(entity.NightCount)晚 ，@(entity.RoomCount)间
+	    </td>
+	    <td><span class="price">￥@Math.Round(entity.Amount,0)</span></td>
+	    <td><span class="dt-finish">@entity.StateName</span></td>
+	    <td>
+		    <a href="@Url.RouteUrl("订单详情", new { order = entity.Orderid })" target="_self">查看</a><br />
+            @if(entity.State == 12){
+		        <a href="@Url.Action("Section", "Comment", new { section = 0,hotel = entity.HotelId,order = entity.Orderid })" target="_self">写点评</a>
+            }
+	    </td>
+    </tr>
+}

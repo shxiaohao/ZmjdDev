@@ -1,0 +1,259 @@
+﻿@model HomePageData30
+@{
+    Layout = null;
+
+    var cssVersion = "190001010000";
+    try
+    {
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex) { }
+    
+    var isApp = ViewBag.IsApp;
+    var userid = ViewBag.UserId;
+    var appType = ViewBag.AppType;
+}
+
+@if (Model != null && Model.FlashDeals != null && Model.FlashDeals.Count > 0)
+{
+    var listMax = 5;
+    var listCount = Model.FlashDeals.Count >= listMax ? listMax : Model.FlashDeals.Count;
+    
+    <div class="home-tit home-tit-big-height home-hide">
+        @*<div class="center">－ 限时闪购 －</div>*@
+        <div class="left">限时闪购</div>
+        <div class="right">
+            @if (Model.FlashDeals.Count > listMax)
+            {
+                <div class="more-link zmjd-iconfont" onclick="gourl('/App/MorePackageList?userid=@(userid)&albumId=0&t=1&_newpage=1&_dorpdown=1')">更多&#xe601;</div>
+            }
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="home-multiple home-hide" id="home-middle-banner2">
+        <div id="flashdeals-banner" class="am-slider am-slider-default am-slider-carousel home-hlist-panel seat-banner" style="margin:0 0 0 0;">
+            <ul class="am-slides" style="border:none;">
+                @for (int i = 0; i < listCount; i++)
+                {
+                    var hotItem = Model.FlashDeals[i];
+
+                    var nowTimeObj = DateTime.Now;
+                    var endTimeObj = hotItem.startSellTime;
+                    var closeTimeObj = hotItem.endSellTime;
+
+                    if (string.IsNullOrEmpty(hotItem.hotelPicUrl))
+                    {
+                        hotItem.hotelPicUrl = "http://whfront.b0.upaiyun.com/app/img/home/home-load2-16x9.png";
+                    }
+                    
+                    <li onclick="gotopage('coupon/shop/@(hotItem.activityId)?_dorpdown=1')">
+                        <div class="h-img">
+                            @if (i < 2)
+                            {
+                                <img src="@hotItem.hotelPicUrl" alt="" />
+                            }
+                            else
+                            {
+                                <img data-orisrc="@hotItem.hotelPicUrl" src="http://whfront.b0.upaiyun.com/app/img/home/home-load2-16x9.png" alt="" />
+                            }
+                            <div class="h-tit-tip-mode"></div>
+                            <div class="h-tit-tip-txt" style="left: 0.7em;top: 0.4em;">
+                                <span class="state timer-tag"
+                                      data-year0="@nowTimeObj.Year"
+                                      data-month0="@(nowTimeObj.Month-1)"
+                                      data-day0="@nowTimeObj.Day"
+                                      data-hour0="@nowTimeObj.Hour"
+                                      data-minute0="@nowTimeObj.Minute"
+                                      data-second0="@nowTimeObj.Second"
+                                      data-year1="@endTimeObj.Year"
+                                      data-month1="@(endTimeObj.Month-1)"
+                                      data-day1="@endTimeObj.Day"
+                                      data-hour1="@endTimeObj.Hour"
+                                      data-minute1="@endTimeObj.Minute"
+                                      data-second1="@endTimeObj.Second"
+                                      data-year2="@closeTimeObj.Year"
+                                      data-month2="@(closeTimeObj.Month - 1)"
+                                      data-day2="@closeTimeObj.Day"
+                                      data-hour2="@closeTimeObj.Hour"
+                                      data-minute2="@closeTimeObj.Minute"
+                                      data-second2="@closeTimeObj.Second"></span>
+                            </div>
+                            <div class="h-tit-tip-price"><span class="p-un">￥</span>@hotItem.activityPrice</div>
+                        </div>
+                        <div class="hname-info">
+                            <div class="hotel-name">@hotItem.hotelName</div>
+                            <div class="hotel-packagebrief">@hotItem.packageBrief</div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="home-multiple-border2"></div>
+    <input type="hidden" id="home-flashdeals-count" value="@Model.FlashDeals.Count" />
+    <script>
+        $(".home-tit").show();
+        $(".home-multiple").show();
+    </script>
+    <script>
+        var flashDealsCount = parseInt($("#home-flashdeals-count").val());
+        var onlyOneFlash = flashDealsCount == 1;
+        var wwidth = $(window).width();
+        var itemWidth = 363; if (wwidth < 410) itemWidth = 333; if (wwidth == 360) itemWidth = 320; if (wwidth < 350) itemWidth = 285;
+        if (onlyOneFlash) {
+            itemWidth = wwidth;
+        }
+
+        //闪购
+        var flashImgSwIndex = 2;
+        $('#flashdeals-banner').flexslider({
+            itemWidth: itemWidth,
+            itemMargin: 6,
+            slideshow: false,
+            animationLoop: false,
+            animationSpeed: 300,
+            pauseOnAction: true,
+            controlNav: false,
+            directionNav: false,
+            after: function (slider) {
+                if (flashImgSwIndex < slider.slides.length) {
+                    var li = $(slider.slides[flashImgSwIndex]);
+                    var imgObj = li.find("img");
+                    setImgOriSrc(imgObj);
+                    flashImgSwIndex++;
+                }
+            }
+        });
+    </script>
+    <script>
+        var timerTags = $(".timer-tag");
+        var timeDic = [];
+        if (timerTags) {
+            for (var i = 0; i < timerTags.length; i++) {
+
+                timeDic[i] = {
+                    timerEntity: null,
+                    nowTime: null,
+                    endDate: null,
+                    closeDate: null,
+                    endTimerState: true,
+                    closeTimerState: false,
+                    initNowtime: function () {
+                        this.nowTime = new Date(
+                        parseInt(this.timerEntity.data("year0"))
+                        , parseInt(this.timerEntity.data("month0"))
+                        , parseInt(this.timerEntity.data("day0"))
+                        , parseInt(this.timerEntity.data("hour0"))
+                        , parseInt(this.timerEntity.data("minute0"))
+                        , parseInt(this.timerEntity.data("second0"))
+                            ).getTime();
+                    },
+                    initEndtime: function () {
+                        this.endDate = new Date(
+                        parseInt(this.timerEntity.data("year1"))
+                        , parseInt(this.timerEntity.data("month1"))
+                        , parseInt(this.timerEntity.data("day1"))
+                        , parseInt(this.timerEntity.data("hour1"))
+                        , parseInt(this.timerEntity.data("minute1"))
+                        , parseInt(this.timerEntity.data("second1"))
+                            ).getTime();
+                    },
+                    initClosetime: function () {
+                        this.closeDate = new Date(
+                        parseInt(this.timerEntity.data("year2"))
+                        , parseInt(this.timerEntity.data("month2"))
+                        , parseInt(this.timerEntity.data("day2"))
+                        , parseInt(this.timerEntity.data("hour2"))
+                        , parseInt(this.timerEntity.data("minute2"))
+                        , parseInt(this.timerEntity.data("second2"))
+                            ).getTime();
+                    },
+                    init: function () {
+                        this.initNowtime();
+                        this.initEndtime();
+                        this.initClosetime();
+                    },
+                    timerAction: function () {
+                        if (this.endTimerState) {
+                            var t = this.endDate - this.nowTime;
+                            var d = Math.floor(t / (1000 * 60 * 60 * 24));
+                            var h = Math.floor(t / 1000 / 60 / 60 % 24) + (d * 24);
+                            var m = Math.floor(t / 1000 / 60 % 60);
+                            var s = Math.floor(t / 1000 % 60);
+
+                            var timehtml = h <= 0
+                                ? "距离开抢还有 00:" + (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s)
+                                : "距离开抢还有" + (h < 10 ? "0" + h : h) + ":" + (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+
+                            this.timerEntity.html(timehtml);
+                            //$("#timer-tag-0").html(timehtml);
+
+                            try {
+
+                                if (d < 0 || (d <= 0 && h <= 0 && m <= 0 && s <= 0)) {
+                                    this.stopEndAction();
+                                }
+
+                            } catch (e) { }
+
+                            this.nowTime = this.nowTime + 1000;
+                        }
+                    },
+                    timerCloseAction: function () {
+                        if (this.closeTimerState) {
+                            var t = this.closeDate - this.nowTime;
+                            var d = Math.floor(t / (1000 * 60 * 60 * 24));
+                            var h = Math.floor(t / 1000 / 60 / 60 % 24);// + (d * 24);
+                            var m = Math.floor(t / 1000 / 60 % 60);
+                            var s = Math.floor(t / 1000 % 60);
+
+                            var timehtml = d <= 0 ?
+                                (h <= 0 ? "还有" + (m < 10 ? "0" + m : m) + "分钟闪购结束"
+                                : "还有" + (h < 10 ? "0" + h : h) + "小时闪购结束")
+                                : "还有" + (d < 10 ? "" + d : d) + "天闪购结束";
+
+                            this.timerEntity.html(timehtml);
+                            //$("#timer-tag-0").html(timehtml);
+
+                            try {
+
+                                if (d < 0 || (d <= 0 && h <= 0 && m <= 0 && s <= 0)) {
+                                    this.stopCloseAction();
+                                }
+
+                            } catch (e) { }
+
+                            this.nowTime = this.nowTime + 1000;
+                        }
+                    },
+                    stopEndAction: function () {
+                        this.endTimerState = false;
+                        this.closeTimerState = true;
+                        this.timerEntity.html("进行中");
+                    },
+                    stopCloseAction: function () {
+                        this.closeTimerState = false;
+                        this.timerEntity.html("已结束");
+                    }
+                };
+
+                //build
+                timeDic[i].timerEntity = $(timerTags[i]);
+
+                //init
+                timeDic[i].init();
+
+                //start
+                timeDic[i].timerAction();
+                setInterval("gotime(timeDic[" + i + "])", 1000);
+            }
+        }
+
+        function gotime(timeObj) {
+            timeObj.timerAction();
+            timeObj.timerCloseAction();
+        }
+    </script>
+}

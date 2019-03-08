@@ -1,0 +1,4550 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <statements>
+    <select id="GetManyHotelContacts">
+      <![CDATA[
+        select
+          hc.HotelID,
+          hc.ShowCtripPrice
+        from hoteldb..HotelContacts hc with(nolock)
+        inner join fn_Split(@hotelIds,',') fs on fs.Item = hc.HotelID
+      ]]>
+    </select>
+      <select id="GetHotelCtripPricePolicy">
+      <![CDATA[
+       SELECT  c= COUNT(1) FROM HotelContacts hc
+WHERE hc.HotelID = @hotelid AND OnlyShowOrgCtripPrice = 1
+      ]]>
+    </select>
+    <select id="GetOnePackageEntity">
+      <![CDATA[
+        SELECT [ID]
+            ,[HotelID]
+            ,[Code]
+            ,[StartDate]
+            ,[EndDate]
+            ,[isValid]
+            ,[RoomID]
+            ,[PackageCount]
+            ,[DayLimitMin]
+            ,[DayLimitMax]
+            ,[RoomNightLimitMin]
+            ,[RoomNightLimitMax]
+            ,[Brief]
+            ,[IsAutoFax]
+            ,[startNum]
+            ,[TimeAdvance]
+            ,[CanInvoice]
+            ,[HotelPayType]
+            ,[MonthPayDate]
+            ,[FaxPriceType]
+            ,[Supplier]
+            ,[FaxNeedUserPhone]
+            ,[SalesInfo]
+            ,[SerialNO]
+            ,[IsSpecialDeal]
+            ,[SupplierID]
+            ,[ConfirmNote]
+            ,[IsAutoEmail]
+            ,[PackageState]
+            ,[NotShowOnWeb]
+            ,[ShowSortNo]
+            ,[SaleStartTime]
+            ,[SaleEndTime]
+            ,[ForVIPFirstBuy]
+            ,[OnlyForVIP] 
+        FROM [hoteldb].[dbo].[Package] (NOLOCK) where ID = @pId
+      ]]>
+    </select>
+    
+    <select id="GetHotelPackageFirstAvailablePriceByPIds">
+      <![CDATA[
+        select*from
+        (select
+              PID = p.ID,
+              p.HotelID,
+              p.Brief,
+              p.Code,
+              p.showsortno,
+              p.StartDate,
+              p.EndDate,
+              p.SaleStartTime,
+              p.SaleEndTime,
+              ppc.price,
+              ppc.VIPPrice,
+              ppc.DT,
+              h.HotelName,
+              ROW_NUMBER() over (partition by p.id order by ppc.DT) rowNo
+          from dbo.fn_Split(@pids, ',') s
+          INNER JOIN Package p(NOLOCK) ON s.Item = p.ID
+          INNER JOIN Hotel h(NOLOCK) ON h.HotelID = p.HotelID
+          INNER JOIN pricedb..PackagePriceCalendar ppc(NOLOCK) ON ppc.pid = p.id
+          where (@checkIn = '' or ppc.dt >= CONVERT(date, @checkIn)))tab
+          where tab.rowNo = 1
+      ]]>
+    </select>
+    
+    <select id="GetHotelPackageMinPriceByPIds">
+      <![CDATA[
+        select*from
+        (select
+              PID = p.ID,
+              p.HotelID,
+              p.Brief,
+              p.Code,
+              p.showsortno,
+              p.StartDate,
+              p.EndDate,
+              p.SaleStartTime,
+              p.SaleEndTime,
+              ppc.price,
+              ppc.VIPPrice,
+              ppc.DT,
+              h.HotelName,
+              ROW_NUMBER() over (partition by p.id order by ppc.VIPPrice) rowNo
+          from dbo.fn_Split(@pids, ',') s
+          INNER JOIN Package p(NOLOCK) ON s.Item = p.ID
+          INNER JOIN Hotel h(NOLOCK) ON h.HotelID = p.HotelID
+          INNER JOIN pricedb..PackagePriceCalendar ppc(NOLOCK) ON ppc.pid = p.id
+          where (@checkIn = '' or ppc.dt >= CONVERT(date, @checkIn)) and getdate() < CONVERT(date, DATEADD(day,1,CONVERT(date, ppc.DT))))tab
+          where tab.rowNo = 1
+      ]]>
+    </select>
+    
+    <select id="GetCanSellDistrictCheapHotelList">
+      <![CDATA[
+        IF @range = 1
+        BEGIN
+            select
+            h.hotelid, h.hotelName, p.id pid, p.Brief, p.Code, tab3.price, di.Name city, tab4.province
+            from
+            (select
+            tab2.hotelid, tab2.PID, tab2.Price
+            from
+            (select
+            tab.hotelid, tab.PID, tab.Price,
+            ROW_NUMBER( ) OVER (PARTITION BY hotelid order by price) rowNo
+            from
+            (select
+            ppc.hotelid, ppc.PID, MIN(ppc.price) price
+            from pricedb..PackagePriceCalendar ppc with(nolock)
+            where ppc.DT >= CONVERT(date,GETDATE())
+            group by ppc.hotelid,ppc.PID)tab)tab2 where tab2.rowNo = 1)tab3
+            inner join hoteldb..Hotel h with(nolock) on h.HotelId = tab3.hotelid
+            inner join hoteldb..Package p with(nolock) on p.ID = tab3.PID
+            inner join destdb..DistrictInfo di with(nolock) on di.DistrictID = h.DistrictID
+            inner join (
+	            select dsr.SubDistrictID, case dsr.DistrictID when 2 then '上海' when 5501 then '浙江' when 19570 then '江苏' else '' end province
+	            from destdb..DistrictSubRel dsr with(nolock) inner join destdb.dbo.fn_Split('2,5501,19570',',') i on i.Item = dsr.DistrictID
+            ) tab4 on tab4.SubDistrictID = di.DistrictID
+        END
+        ELSE IF @range = 2
+        BEGIN          
+            select
+            h.hotelid, h.hotelName, p.id pid, p.Brief, p.Code, tab3.price, di.Name city, case dd.RootName when '中国' then di.Name else dd.RootName end province
+            from
+            (select
+            tab2.hotelid, tab2.PID, tab2.Price
+            from
+            (select
+            tab.hotelid, tab.PID, tab.Price,
+            ROW_NUMBER( ) OVER (PARTITION BY hotelid order by price) rowNo
+            from
+            (select
+            ppc.hotelid, ppc.PID, MIN(ppc.price) price
+            from pricedb..PackagePriceCalendar ppc with(nolock)
+            where ppc.DT >= CONVERT(date,GETDATE())
+            group by ppc.hotelid,ppc.PID)tab)tab2 where tab2.rowNo = 1)tab3
+            inner join hoteldb..Hotel h with(nolock) on h.HotelId = tab3.hotelid
+            inner join hoteldb..Package p with(nolock) on p.ID = tab3.PID
+            inner join destdb..DistrictInfo di with(nolock) on di.DistrictID = h.DistrictID
+            inner join destdb..DistrictDirectory dd with(nolock) on dd.DistrictID = di.DistrictID and dd.InChina = 1
+            left join (
+	            select dsr.SubDistrictID, case dsr.DistrictID when 2 then '上海' when 5501 then '浙江' when 19570 then '江苏' else '' end province
+	            from destdb..DistrictSubRel dsr with(nolock) inner join destdb.dbo.fn_Split('2,5501,19570',',') i on i.Item = dsr.DistrictID
+            ) tab4 on tab4.SubDistrictID = di.DistrictID
+            where tab4.SubDistrictID is null   
+        END
+        ELSE IF @range = 3
+        BEGIN
+            select
+            h.hotelid, h.hotelName, p.id pid, p.Brief, p.Code, tab3.price, di.Name city, case dd.RootName when '中国' then di.Name else dd.RootName end province
+            from
+            (select
+            tab2.hotelid, tab2.PID, tab2.Price
+            from
+            (select
+            tab.hotelid, tab.PID, tab.Price,
+            ROW_NUMBER( ) OVER (PARTITION BY hotelid order by price) rowNo
+            from
+            (select
+            ppc.hotelid, ppc.PID, MIN(ppc.price) price
+            from pricedb..PackagePriceCalendar ppc with(nolock)
+            where ppc.DT >= CONVERT(date,GETDATE())
+            group by ppc.hotelid,ppc.PID)tab)tab2 where tab2.rowNo = 1)tab3
+            inner join hoteldb..Hotel h with(nolock) on h.HotelId = tab3.hotelid
+            inner join hoteldb..Package p with(nolock) on p.ID = tab3.PID
+            inner join destdb..DistrictInfo di with(nolock) on di.DistrictID = h.DistrictID
+            inner join destdb..DistrictDirectory dd with(nolock) on dd.DistrictID = di.DistrictID and dd.InChina = 0    
+        END
+      ]]>
+    </select>      
+      
+    <select id="GetSameSerialPackageEntityList">
+      <![CDATA[
+        select 
+	        p1.ID pId,
+	        p1.SerialNO serialNo,
+          p1.PackageGroupName PackageGroupName,
+	        pri.ID roomTypeId,
+	        pri.RoomCode roomTypeName,
+          pri.Description roomDesc
+        from hoteldb..Package p with(nolock)
+        inner join hoteldb..Package p1 with(nolock) on p.SerialNO = p1.SerialNO
+        inner join hoteldb..PRoomInfo pri with(nolock) on p1.RoomID = pri.ID and p.HotelID = pri.HotelID
+        where p.ID = @pId and p.SerialNO is not null and p1.isValid = 1 and pri.IsValid = 1 and p1.isNotSale = 0
+      ]]>
+    </select>
+      
+    <select id="GetSerialPackageItemListByPid">
+      <![CDATA[
+        select distinct
+	        p1.ID pId,
+	        p1.SerialNO serialNo,
+          p1.PackageGroupName PackageGroupName,
+	        pri.ID roomTypeId,
+	        pri.RoomCode roomTypeName,
+          pri.Description roomDesc
+        from hoteldb..Package p with(nolock)
+        inner join hoteldb..Package p1 with(nolock) on p.PackageGroupName = p1.PackageGroupName
+        inner join hoteldb..PRoomInfo pri with(nolock) on p1.RoomID = pri.ID and p.HotelID = pri.HotelID
+        where p.ID = @pId and p.SerialNO is not null and p1.isValid = 1 and pri.IsValid = 1 and p1.isNotSale = 0
+              and ( p1.PackageGroupName!='' or p1.PackageGroupName!=null) 
+              --and p1.SaleStartTime < GETDATE() and p1.SaleEndTime>GETDATE()
+              --and p1.packagetype = 1
+      ]]>
+    </select>
+    
+     <select id="GetHotelTop1PackageInfo">
+      <![CDATA[
+          SELECT PID,
+                 HotelID,
+                 Brief,
+                 ShowSortNo,
+                 StartDate,
+                 SaleStartTime,
+                 SaleEndTime,
+                 EndDate,
+                 Price,
+                 VIPPrice,
+                 DT
+          FROM   (
+                     SELECT PID = p.ID,
+                            p.HotelID,
+                            p.Brief,
+                            p.showsortno,
+                            p.StartDate,
+                            p.EndDate,
+                            p.SaleStartTime,
+                            p.SaleEndTime,
+                            ppc.price,
+                            ppc.VIPPrice,
+                            ppc.DT,
+                            rn = ROW_NUMBER() OVER(
+                                PARTITION BY p.hotelid ORDER BY p.showsortno DESC
+                                , isnull(ppc.price, 100000)
+                            )
+                     FROM   dbo.fn_Split(@hotellist, ',') s
+                            INNER JOIN Package p(NOLOCK)
+                                 ON  s.Item = p.HotelID and p.isValid = 1 and p.isNotSale = 0 and p.IsSellOut = 0
+                            INNER JOIN pricedb.dbo.PackagePriceCalendar ppc(NOLOCK)
+                                 ON  ppc.hotelid = p.HotelID
+                                 AND ppc.pid = p.ID
+                                 AND ppc.DT >= @CheckIN
+                 ) a
+          WHERE  rn = 1
+      ]]>
+    </select>
+    <select id="GetHotelListNearPOI">
+      <![CDATA[        
+        select n.poiid, n.hotelid, h.hotelname, n.distance
+        from hoteldb..NearbyHotels n with(nolock) 
+	        inner join hoteldb..hotel h with(nolock) on h.hotelid = n.hotelId
+        where n.poiid = @poiid
+      ]]>
+    </select>
+    
+    <select id="GetHotelIdByName">
+      <![CDATA[
+        select hotelid from hoteldb..hotel h with(nolock) where h.hotelname = @name
+      ]]>
+    </select>
+    
+    <select id="GetPackRoomHotelIdList">
+      <![CDATA[
+        select
+        distinct tab1.HotelID
+        from
+          (SELECT prbs.RoomID, pf.HotelID, SUM(prbs.count) count
+          FROM [hoteldb].[dbo].[PackRoomBedState] prbs with(nolock) 
+          inner join hoteldb..RoomSupplier rs with(nolock) on rs.ID = prbs.PackRoomSupplierID and rs.Type = 2
+          inner join hoteldb..PRoomInfo pf with(nolock) on pf.ID = prbs.RoomID
+          where prbs.count > 0 and prbs.Date = @date
+          group by prbs.RoomID,pf.HotelID)tab1
+        left join
+          (select op2.RoomTypeID RoomID,o.HotelID,SUM(op2.RoomCount) count
+          from hoteldb..Orders o with(nolock) 
+          inner join hoteldb..OrderOperate op with(nolock) on o.ID = op.ID
+          inner join hoteldb..OrderPackage op2 with(nolock) on op.ID = op2.ID
+          inner join hoteldb..RoomSupplier rs with(nolock) on rs.ID = op.RoomSupplierID and rs.Type = 2
+          where op2.CheckIn = @date and o.State = 12
+          group by op2.RoomTypeID,o.HotelID)tab2 on tab1.RoomID = tab2.RoomID and tab1.HotelID = tab2.HotelID
+        where tab1.count > isnull(tab2.count,0)
+      ]]>
+    </select>
+    
+    <select id="GetPackageCalendarPriceList">
+      <![CDATA[
+        SELECT*FROM HotelDB..PackageCalendarPrice with(nolock) where packageid = @pid
+      ]]>
+    </select>
+    <select id="GetBotaoSettleOrderList">
+      <![CDATA[
+        select
+	        o.OrderID,o.Amount,op.Price,op.Note PayToken,settleType = 1
+        from 
+	          HotelDB..Orders o with(nolock) 
+	          inner join HotelDB..OrderPayment op with(nolock) on o.OrderID = op.OrderID
+	          left join HotelDB..BotaoSettlement bs with(nolock) on bs.OrderId = o.OrderID
+        where op.PayType = 9 and o.State = 5 and bs.OrderId is null
+        union all
+        select
+	        o.OrderID,o.Amount,op.Price,op.Note PayToken,settleType = 2
+        from 
+	          HotelDB..Orders o with(nolock) 
+	          inner join HotelDB..OrderOperate opp with(nolock) on opp.ID = o.ID
+	          inner join HotelDB..OrderPayment op with(nolock) on o.OrderID = op.OrderID
+	          left join HotelDB..BotaoSettlement bs with(nolock) on bs.OrderId = o.OrderID
+        where op.PayType = 9 and o.Amount * 100 = op.Price and o.State = 12 and opp.LastCancelTime <= GETDATE() and bs.OrderId is null
+        union all
+        select
+	        o.OrderID,o.Amount,op.Price,op.Note PayToken,settleType = 3
+          from 
+	          HotelDB..Orders o with(nolock) 
+	          inner join HotelDB..OrderOperate opp with(nolock) on opp.ID = o.ID
+	          inner join HotelDB..OrderPayment op with(nolock) on o.OrderID = op.OrderID
+	          left join HotelDB..BotaoSettlement bs with(nolock) on bs.OrderId = o.OrderID
+        where op.PayType = 9 and o.Amount * 100 != op.Price and o.State = 12 and opp.LastCancelTime <= GETDATE() and bs.OrderId is null
+      ]]>
+    </select>
+    <select id="GetCheapHotelPackage4Botao">
+      <![CDATA[
+        select
+	      h.HotelId, h.HotelName, p.brief pbrief, p.ID pid, p.Code pname, p.EndDate, di.name districtName, tab.Price
+	      from
+	      (select*from
+		      (select ppc.pid, ppc.BoTaoPrice price, ROW_NUMBER() over(Partition BY ppc.pid order by ppc.dt) rank
+		      from pricedb..PackagePriceCalendar ppc with(nolock)
+			      where ppc.BoTaoPrice > 0 AND ppc.DT >= convert(date,@curNow))t where t.rank = 1
+	      )tab
+	      inner join Package p with(nolock) on p.ID = tab.pid --AND p.code != '限时抢购'
+	      inner join hotel h with(nolock) on h.HotelId = p.HotelID
+	      inner join destdb..DistrictInfo di with(nolock) on di.DistrictID = h.DistrictID
+      ]]>
+    </select>
+    <select id="GetProomInfoList">
+      <![CDATA[
+      SELECT ID,
+       HotelID,
+       RoomCode,
+       (PicShortNames + CtripPic) PicShortNames,
+       IsRecommend,
+       [Area],
+       [Floor],
+       [BigBedWidth],
+       [TwinBedWidth],
+       CommentCount
+FROM   (
+           SELECT ID,
+                  HotelID,
+                  RoomCode,
+                  PicShortNames = Replace(PicShortNames,' ',''),
+                  IsRecommend,
+                  [Area],
+                  [Floor],
+                  [BigBedWidth],
+                  [TwinBedWidth],
+                  CommentCount = (
+                      SELECT COUNT(1)
+                      FROM   hoteldb..PRoomInfo pr2 WITH(NOLOCK)
+                             INNER JOIN [hotelreviews].[dbo].[ReviewFilter] rf 
+                                  WITH(NOLOCK)
+                                  ON  rf.hotelid = @hotelid
+                                  AND rf.FilterCol = 190000000000 + pr2.ID
+                      WHERE  pr2.ID = pr.ID
+                  ),
+                  CtripPic = ISNULL(
+                      STUFF(
+                          (
+                              SELECT ',' + hp.SURL
+                              FROM   HotelDB.dbo.proominfo pr2(NOLOCK)
+                                     INNER JOIN PhotoDB.dbo.CtripHotelPhoto hp(NOLOCK)
+                                          ON  hp.InvBlockCode = pr2.RelOTARoomID
+                              WHERE  pr2.ID = pr.ID
+                                     AND pr2.RelOTARoomID > 0
+                                     AND LEN(ISNULL(hp.SURL, '')) > 0 FOR XML 
+                                         PATH('')
+                          ),
+                          1,
+                          1,
+                          ','
+                      ),
+                      ''
+                  )
+           FROM   hoteldb..PRoomInfo pr WITH(NOLOCK)
+           WHERE  pr.HotelID = @hotelid
+                  AND pr.IsValid = 1
+                  AND pr.Hidden = 0
+                  AND pr.NotShowOnAPPRoomList = 0
+       )tab
+      ]]>
+    </select>
+
+    <select id="GetAllChannelInfoList">
+      <![CDATA[
+SELECT *
+FROM   HotelBizDB.dbo.ChannelInfo ci(NOLOCK)
+      ]]>
+    </select>
+    <select id="GetPRoomInfoEntityList">
+      <![CDATA[
+        SELECT [ID]
+            ,[HotelID]
+            ,[RoomCode]
+            ,[Description]
+            ,[IsValid]
+            ,(REPLACE( [PicShortNames],' ','') + ISNULL(stuff((select ',' + hp.SURL
+			            from HotelDB.dbo.proominfo pr2 with(nolock)
+			            inner join PhotoDB.dbo.CtripHotelPhoto hp with(nolock) on hp.InvBlockCode = pr2.RelOTARoomID
+			            where pr2.ID = pr.ID and pr2.RelOTARoomID > 0 and len(ISNULL(hp.SURL,'')) > 0 for xml path('')),1,1,','),'')) PicShortNames
+            ,[IsRecommend]
+        FROM [hoteldb].[dbo].[PRoomInfo] pr with(nolock)
+        inner join [hoteldb]..fn_split(@roomids,',') fs on fs.Item = pr.ID
+      ]]>
+    </select>
+    
+    <select id="GetHotelRoomTypeFilterTagList">
+      <![CDATA[
+       with RF 
+as (
+select * from  [hotelreviews].[dbo].[ReviewFilter] rf WITH(NOLOCK) 
+            WHERE rf.hotelid =@hotelid )
+ 
+SELECT ft.ID,
+       ft.Name,
+       tab.ID RoomID,
+       tab.RoomCode,
+       COUNT(1) CommentCount
+FROM  FeaturedCategoryTree fct WITH(NOLOCK) 
+INNER JOIN FeaturedCategoryRel fcr WITH(NOLOCK)
+            ON  fct.ID = fcr.CategoryID
+        INNER JOIN featuredtree ft WITH(NOLOCK)
+        ON      fct.ID = fcr.CategoryID
+        INNER JOIN  RF  
+            ON  rf.FilterCol =  ft.ID + 80000000000         
+       INNER JOIN (
+                SELECT pr.ID,
+                       pr.HotelID,
+                       pr.RoomCode,
+                       rf.writing
+                FROM   hoteldb..PRoomInfo pr WITH(NOLOCK)
+                       INNER JOIN RF WITH(NOLOCK)
+                            ON  rf.FilterCol = 190000000000 + pr.ID
+                WHERE  pr.HotelID = @hotelid
+                       AND pr.IsValid = 1
+            ) tab
+            ON  tab.writing = rf.writing
+WHERE fct.ID = 19
+GROUP BY
+       tab.ID,
+       tab.RoomCode,
+       ft.ID,
+       ft.Name
+ORDER BY
+       tab.ID
+      ]]>
+    </select>
+    <select id="GetHotelDisplayFilterTagList">
+      <![CDATA[
+       SELECT tab1.*,
+       CommentCount = (
+           SELECT COUNT(1)
+           FROM   [hotelreviews]..[ReviewFilter] rf (NOLOCK)
+                  INNER JOIN featuredtree ft (NOLOCK)
+                       ON  ft.ID + 80000000000 = rf.FilterCol
+                  INNER JOIN FeaturedCategoryRel fcr (NOLOCK)
+                       ON  fcr.FeaturedID = ft.ID
+                  INNER JOIN FeaturedCategoryTree fct (NOLOCK)
+                       ON  fct.ID = fcr.CategoryID
+           WHERE  rf.hotelid = @hotelid
+                  AND ft.ID = tab1.ID
+                  AND fcr.CategoryID = tab1.CategoryID
+       ),
+       Comment = (
+           SELECT CASE 
+                       WHEN LEN(fc.Comment) > 0 THEN fc.Comment
+                       ELSE fc.CalComment
+                  END
+           FROM   FeaturedComment fc WITH(NOLOCK)
+                  INNER JOIN FeaturedCategoryRel fcr WITH(NOLOCK)
+                       ON  fcr.featuredid = fc.featuredid
+           WHERE  fc.hotelid = tab1.hotelid
+                  AND fc.featuredid = tab1.ID
+                  AND fcr.CategoryID = tab1.CategoryID
+                  AND fc.released = 1
+       )
+FROM   (
+           SELECT hf.HotelID,
+                  ft.ID,
+                  ft.Name,
+                  fct.Name CategoryName,
+                  hf.FilterCol,
+                  fcr.CategoryID
+           FROM   HotelFilter hf (NOLOCK)
+                  INNER JOIN (
+                           SELECT ftID = ID + 230000000000,
+                                  *
+                           FROM   featuredtree(NOLOCK)
+                           UNION 
+                           SELECT ftID = ID + 140000000000,
+                                  *
+                           FROM   featuredtree(NOLOCK)
+                           UNION 
+                           SELECT ftID = ID + 190000000000,
+                                  *
+                           FROM   featuredtree(NOLOCK)
+                       ) ft
+                       ON  ft.ftID = hf.FilterCol
+                  INNER JOIN FeaturedCategoryRel fcr (NOLOCK)
+                       ON  fcr.FeaturedID = ft.ID
+                  INNER JOIN FeaturedCategoryTree fct (NOLOCK)
+                       ON  fct.ID = fcr.CategoryID
+           WHERE  HotelID = @hotelid
+       )tab1
+      ]]>
+    </select>
+    <select id="GetOneInterestEntity">
+      <![CDATA[
+        SELECT  [ID]
+              ,[Name]
+              ,[Type]
+              ,[Expression]
+              ,[released]
+              ,[ImageUrl]
+              ,[sort]
+              ,[IsMultiPlace]
+              ,ISNULL([districtid],0) districtid
+              ,ISNULL([RelHotelSightID],0) RelHotelSightID
+              ,[Points]
+              ,[GPoints]
+              ,[LogoURL]
+              ,[LogoBGColor]
+        FROM [hoteldb].[dbo].[Interest] (NOLOCK) where ID = @Id
+      ]]>
+    </select>      
+    <select id="GetBrowseringCountOneComment">
+      <![CDATA[
+      select count(1) from
+        hoteldb..Comments c with(nolock)
+        inner join hotelbizdb..BrowsingRecord br with(nolock) on c.ID = br.BusinessID and br.BusinessType = 1
+        inner join hoteldb..fn_split(@items,',') fs on fs.Item = br.TerminalType
+      where c.ID = @commentId
+      ]]>
+    </select>    
+    <select id="GetManyHotelFilterCols">
+      <![CDATA[
+      Select 
+        hf.*
+      from 
+      hoteldb..HotelFilter hf with(nolock)
+      inner join fn_Split(@items,',') fs on fs.Item = hf.HotelID
+      ]]>
+    </select>
+    <select id="GetShareRecordList">
+      <![CDATA[
+      select top(@count) * from
+      (
+        select *, ROW_NUMBER() over(order by ID desc) rowNum
+        from hotelbizdb..ShareRecord with(nolock)
+        where 1=1
+        AND (@businessType = 0 OR BusinessType = @businessType) 
+        AND (@businessId = 0 OR BusinessID = @businessId) 
+        AND (@userId = 0 OR shareuser = @userId)
+      )temp
+      where temp.rowNum > @start
+      ]]>
+    </select>
+    <select id="GetDistrictZonePicSUrl">
+      <![CDATA[
+        Select ISNULL(dz.PicUrl,'') from DestDB..DistrictZone dz with(nolock)    
+        where dz.DistrictID = @districtId AND Type = 1
+      ]]>
+    </select>
+    <select id="GetHotelMapInfo">
+      <![CDATA[
+        select h.HotelId HotelID, h.HotelName, h.DistrictID, hp.Glat, hp.Glon, hp.BLat, hp.BLon, dd.InChina 
+        from HotelDB..Hotel h with(nolock)
+        inner join HotelDB.dbo.HotelPlace hp with(nolock) on h.HotelId = hp.HotelID
+        inner join DestDB..DistrictDirectory dd with(nolock) on dd.DistrictID = h.DistrictID
+        where h.HotelId = @hotelID
+      ]]>
+    </select>
+    <select id="GetHotelBasicInfoList">
+      <![CDATA[
+      SELECT
+	        h.HotelId,
+	        h.HotelName,
+	        h.DistrictID,
+	        hs.ReviewCount,
+	        hs.ReviewScore,
+	        hs.RecommendCount
+      FROM hoteldb..Hotel h WITH (NOLOCK)
+      INNER JOIN hoteldb..fn_Split(@hotelIDs, ',') fs ON fs.Item = h.HotelId
+      INNER JOIN hoteldb..HotelStat hs with(nolock) on hs.HotelID = fs.Item
+      ]]>
+    </select>
+    <select id="GetInterestHotelCountList">
+      <![CDATA[
+      Select interest.Name interestName, interest.Type interestType, a.* 
+      From [HotelDB].[dbo].Interest interest with(nolock)
+      inner join (Select i.ID interestID, Count(*) hotelCount 
+      From [HotelDB].[dbo].Interest i with(nolock)
+      inner join [HotelDB].[dbo].[InterestPlace] ip with(nolock) on i.ID = ip.IID
+      inner join [HotelDB].[dbo].[InterestHotelRel] ihr with(nolock) on ihr.IPID = ip.ID
+      where (@interestType = 0 OR i.Type = @interestType) and i.released = 1
+      group by i.ID) a on a.interestID = interest.ID
+      order by a.hotelCount desc
+      ]]>
+    </select>
+    <select id="GetInterestListByHotel">
+      <![CDATA[
+      Select distinct i.ID, i.Name, i.Type, ihr.HID HotelID
+      From [HotelDB].[dbo].Interest i with(nolock)
+      inner join [HotelDB].[dbo].[InterestPlace] ip with(nolock) on i.ID = ip.IID
+      inner join [HotelDB].[dbo].[InterestHotelRel] ihr with(nolock) on ihr.IPID = ip.ID
+      where i.released = 1 and ihr.HID = @hotelID
+      ]]>
+    </select>
+    <select id="GetHotelFacilitysByHotelID">
+      <![CDATA[
+      SELECT hhf.[HotelID], hf.*
+      FROM [HotelDB].[dbo].[HJDHotelFacility] hhf
+          inner join [HotelDB].[dbo].HJDFacilitys hf on hf.Facility = hhf.Facility
+      where hhf.HotelID = @HotelID AND hf.isValid = 1 --AND hf.Facility >= 104
+      ]]>
+    </select>
+    <select id="GetUserAddHotelForComment">
+      <![CDATA[
+      SELECT Top 1 uah.ID 
+      FROM UserAddHotels uah with(nolock)
+      inner join UserAddHotelCommentRel uahcr with(nolock) on uahcr.[UserAddHotelID] = uah.ID
+      inner join Comments c with(nolock) on c.ID = uahcr.CommentID
+      where c.[UserID] = @userID AND uah.HotelName = @hotelName
+      ]]>
+    </select>
+    <select id="GetUserAddHotelByComment">
+      <![CDATA[
+      SELECT uah.* 
+      FROM UserAddHotels uah with(nolock)
+      inner join UserAddHotelCommentRel uahcr with(nolock) on uahcr.[UserAddHotelID] = uah.ID
+      where (@commentID = 0 OR uahcr.[CommentID] = @commentID) AND (@userID = 0 OR uah.Creator = @userID)
+      ]]>
+    </select>
+    <select id="GetHotelListFilterTagInfos">
+      <![CDATA[
+            SELECT
+                  CONVERT(BIGINT,10000000000 * 18 + dz.ID) as [Key],
+                  18 as TYPE,
+                  dz.ID as ID,
+                  dz.Name as NAME,
+                  0 Num,
+                  0 sort
+            From DestDB..DistrictZone dz with(nolock)
+            INNER JOIN fn_Split(@zoneids, ',') fs ON dz.ID = fs.Item
+            WHERE dz.State = 1 AND dz.Type != 1 --要发布的 非地区 区域
+            UNION ALL
+            SELECT 
+                  CONVERT(BIGINT, 10000000000 * 16 + i.ID) [Key],
+                  16 TYPE,
+                  i.ID ID,
+                  i.NAME,
+                  0 Num,
+                  0 sort
+            FROM  Interest i with(NOLOCK)
+            INNER JOIN fn_Split(@interestids, ',') fs ON i.ID = fs.Item
+            WHERE i.Type = 1 AND i.released = 1 --主题类型和发布状态
+            Union ALL
+            SELECT 
+                  CONVERT(BIGINT,10000000000 * 21 + css.ClassType) as [Key],
+                  21 as TYPE,
+                  css.ClassType as ID,
+                  css.Name as NAME,
+                  0 Num,
+                  0 sort
+            From [HotelBizDB].[dbo].[HotelClass2Define] css with(nolock)
+            INNER JOIN [HotelBizDB].[dbo].fn_Split(@classids, ',') fs ON css.ClassType = fs.Item
+            Union ALL 
+            Select 
+                  CONVERT(BIGINT,10000000000 * 19 + FT.ID) as [Key],
+                  19 as TYPE,
+                  FT.ID,
+                  FT.Name as NAME,
+                  0 Num,
+                  0 sort
+            From [HotelDB].[dbo].[FeaturedTree] FT with(Nolock)
+                 INNER JOIN [HotelDB].[dbo].fn_Split(@facilitys, ',') f ON FT.ID = f.Item
+            Union ALL 
+            Select 
+                  CONVERT(BIGINT,10000000000 * 23 + FT.ID) as [Key],
+                  23 as TYPE,
+                  FT.ID,
+                  FT.Name as NAME,
+                  0 Num,
+                  0 sort
+            From [HotelDB].[dbo].[FeaturedTree] FT with(Nolock)
+                 INNER JOIN [HotelDB].[dbo].fn_Split(@featuredtrees, ',') f ON FT.ID = f.Item
+      ]]>
+    </select>
+    <select id="GetClassListByIDs">
+      <![CDATA[
+            SELECT * From Class css with(nolock)
+            LEFT JOIN fn_Split( @ids, ',') fs ON css.ClassID = fs.Item
+            WHERE 1 = 1
+      ]]>
+    </select>
+    <select id="GetPackRoomBedState">
+      <![CDATA[
+       SELECT prbs.*, rs.Name as PackRoomSupplierName
+       FROM  PackRoomBedState prbs with(NOLOCK)
+       INNER JOIN PRoomInfo p with(NOLOCK) ON p.id = prbs.RoomID and p.hidden = 0
+       LEFT JOIN RoomSupplier rs with(NOLOCK) ON rs.ID = prbs.PackRoomSupplierID
+       WHERE p.hotelid = @hotelid AND prbs.Date BETWEEN @startDate AND @endDate
+       ]]>
+    </select>
+    <select id="GetPackageTypeAndPriceList">
+      <![CDATA[ 
+        SELECT  pr.PID , pr.Type, avg(pr.Price) Price FROM HotelDB..[PRate] pr  (NOLOCK)
+        INNER JOIN fn_Split( @PIDList ,',') fs ON pr.PID = fs.Item      
+        where pr.Type in (0,6) 
+        group by pr.PID,pr.Type
+     ]]>
+    </select>
+    <select id="GetPackageTypeAndPriceListByDate">
+      <![CDATA[ 
+        SELECT  pr.PID , pr.Type, avg(pr.Price) Price FROM HotelDB..[PRate] pr (NOLOCK)
+        INNER JOIN fn_Split( @PIDList ,',') fs ON pr.PID = fs.Item      
+        where pr.Type = 8 AND pr.Date = @specialDate
+        group by pr.PID,pr.Type
+     ]]>
+    </select>
+    <select id="GetTopNPackageContent">
+      <![CDATA[ 
+        select 	
+        distinct
+		      h.HotelId HotelID,
+		      h.HotelName,
+          p.ForVIPFirstBuy,
+		      p.Code PackageName,
+		      p.ID PackageID,
+          p.IsSellOut,
+		      p.Brief PackageBrief,
+          p.DayLimitMin,
+		      ISNULL(t.RecomemndWord,'') RecomemndWord,
+          ISNULL(t.RecomendPicShortNames,'') RecomendPicShortNames,
+		      ISNULL(t.RecomemndWord2,'') RecomemndWord2,
+          ISNULL(t.RecomendPicShortNames2,'') RecomendPicShortNames2,
+          di.DistrictID DistrictID,
+          di.Name DistrictName,
+          di.EName DistrictEName,
+          t.UpdateTime,
+          p.IsDistributable,
+          p.PackageType,
+          p.DateSelectType,
+          p.ShareDescription,
+          p.ShareTitle,
+          p.NeedVIPGuide,
+          p.PackageState
+	      from Package p (NOLOCK)
+	      inner join fn_Split(@PIDList,',') fs ON p.ID = fs.Item      
+	      inner join Hotel h (NOLOCK) on p.HotelID = h.HotelId
+		    left join hotelbizdb..TopNPackages t (NOLOCK) on t.PID = p.id and t.IsValid=1
+        left join destdb.dbo.DistrictInfo di on di.DistrictID = h.DistrictID
+        --where t.IsValid=1 
+        where p.packageState =1
+        order by t.UpdateTime desc
+     ]]>
+    </select>
+    <select id="GetPackageContentNofilterPackageState">
+      <![CDATA[ 
+        select 	
+        distinct
+		      h.HotelId HotelID,
+		      h.HotelName,
+          p.ForVIPFirstBuy,
+		      p.Code PackageName,
+		      p.ID PackageID,
+          p.IsSellOut,
+		      p.Brief PackageBrief,
+          p.DayLimitMin,
+		      ISNULL(t.RecomemndWord,'') RecomemndWord,
+          ISNULL(t.RecomendPicShortNames,'') RecomendPicShortNames,
+		      ISNULL(t.RecomemndWord2,'') RecomemndWord2,
+          ISNULL(t.RecomendPicShortNames2,'') RecomendPicShortNames2,
+          di.DistrictID DistrictID,
+          di.Name DistrictName,
+          di.EName DistrictEName,
+          t.UpdateTime,
+          p.IsDistributable,
+          p.PackageType,
+          p.DateSelectType,
+          p.ShareDescription,
+          p.ShareTitle,
+          p.NeedVIPGuide,
+          p.PackageState
+	      from Package p (NOLOCK)
+	      inner join fn_Split(@PIDList,',') fs ON p.ID = fs.Item      
+	      inner join Hotel h (NOLOCK) on p.HotelID = h.HotelId
+		    left join hotelbizdb..TopNPackages t (NOLOCK) on t.PID = p.id and t.IsValid=1
+        left join destdb.dbo.DistrictInfo di on di.DistrictID = h.DistrictID
+        order by t.UpdateTime desc
+     ]]>
+    </select>
+    <select id="GetObjectNamesByCommentIDs">
+      <![CDATA[
+        SELECT c.ID as SourceID, h.HotelName as ObjectName 
+        from Comments c (NOLOCK)
+        left join dbo.fn_Split(@CommentIDList, ',') f ON c.ID = f.Item
+        inner join Hotel h (NOLOCK) on h.HotelId = c.HotelID        
+        WHERE 1 = 1
+      ]]>
+    </select>
+    <select id="GetHotelContactByHotelID">
+      <![CDATA[
+        SELECT *
+        FROM   HotelContacts hc (NOLOCK)
+        WHERE  hc.HotelID = @HotelID
+      ]]>
+    </select>
+    <select id="GetHotelContactPackageByHotelIDAndPid">
+      <![CDATA[
+        SELECT *,p.SupplierID,p.ID PID
+        FROM   HotelContacts hc (NOLOCK)
+        INNER JOIN   Package p(NOLOCK) 
+               ON  hc.HotelID = p.HotelID
+        WHERE  hc.HotelID = @HotelID AND p.id  = @pid
+      ]]>
+    </select>
+    <select id="GetObjectNamesByInspectorRefHotelIDs">
+      <![CDATA[
+        SELECT irh.ID as SourceID, h.HotelName as ObjectName 
+        from HotelBizDB..InspectorRefHotel irh (NOLOCK)
+        left join dbo.fn_Split(@InspectorRefHotelIDList, ',') f ON irh.ID = f.Item
+        inner join Hotel h (NOLOCK) on h.HotelId = irh.HotelID      
+        WHERE 1=1
+      ]]>
+    </select>
+    <select id="GetOrderHotelIdsByUserId">
+      <![CDATA[
+       SELECT o.HotelID
+       FROM Orders o  (NOLOCK)
+       where  (@userid = 0 or UserID = @userid) AND (@state = 0 or State = @state)
+      ]]>
+    </select>
+    <select id="GetHotelPackageRate">
+      <![CDATA[      
+SELECT pr.ID,
+       ProductID  = isnull(pk.SupplierID,0),
+       DateType = pr.[Type],
+       pr.Price,
+       pr.Date,
+       pr.PayType,
+       ShowPrice = 0,
+       SettlePrice =  convert(int,pr.PayForHotel),
+       PackageID = pr.PID,
+       SupplierID = pk.hotelid,
+       SupplierType = 1,
+       RoomSupplierType = ISNULL(rs.Type,1),
+       pr.Rebate,
+       pr.ActiveRebate,
+       pr.CashCoupon,
+       pr.CanUseCashCoupon,
+       pr.ManualActiveRebate,
+       pr.ManualCashCoupon,
+       pr.ManualCanUseCashCoupon,
+       pr.CanUseCashCouponForBoTao ,
+       pr.VIPPrice,
+       pr.ManualVIPPrice,
+       pr.AutoCommission,
+       pr.ManualCommission
+FROM   PRate pr with(NOLOCK)
+       INNER JOIN Package pk with(NOLOCK) ON  pk.id = pr.PID
+       LEFT JOIN RoomSupplier rs with(NOLOCK) ON pk.SupplierID = rs.ID
+WHERE  (pk.hotelid = @hotelid AND pk.isvalid = 1 AND @PID = 0) OR (pk.ID = @PID)
+
+UNION ALL
+SELECT spr.ID,
+       ProductID = spr.PID,
+       DateType = spr.[Type],
+       spr.Price,
+       spr.Date,
+       PayType =0,
+       spr.ShowPrice,
+       spr.SettlePrice,
+       ppr.PackageID,
+       sp.SupplierID,
+       SupplierType = 2,
+       RoomSupplierType = 0,
+       Rebate = 0,
+       ActiveRebate = 0,
+       CashCoupon = 0,
+       CanUseCashCoupon = 0,
+       ManualActiveRebate = 0,
+       ManualCashCoupon = 0,
+       ManualCanUseCashCoupon = 0,       
+       CanUseCashCouponForBoTao = 0 ,
+       VIPPrice = spr.Price,
+       ManualVIPPrice =spr.Price,
+       AutoCommission = 0 ,
+       ManualCommission = 0
+FROM   SupplierProductRate spr(NOLOCK)
+       INNER JOIN PackageProductRel ppr(NOLOCK)
+            ON  ppr.ProductID = spr.PID
+       INNER JOIN Package pk(NOLOCK)
+            ON  pk.id = ppr.PackageID
+       INNER JOIN SupplierProduct sp(NOLOCK)
+            ON  sp.ID = spr.PID
+WHERE  (pk.hotelid = @hotelid AND pk.isvalid = 1 AND @PID = 0)  OR (pk.ID = @PID)          
+      ]]>
+    </select>
+    <select id="GetCommentHotelIdsByUserId">
+      <![CDATA[
+       SELECT s.HotelID
+       FROM Comments s (NOLOCK)
+       where (@userid = 0 or UserID = @userid)
+      ]]>
+    </select>
+    <select id="GetAttractionCategoryRel">
+      <![CDATA[SELECT *
+FROM   AttractionCategory ac (NOLOCK)
+       INNER JOIN AttractionCategoryRel acr (NOLOCK)
+            ON  ac.id = acr.CatetoryID ]]>
+    </select>
+    <select id="GetHotelShowTags">
+      <![CDATA[SELECT CategoryID = fct.ID,
+       CategoryName = fct.[Name],
+       fc.hotelid,
+       fc.idx,
+       fc.featuredid,
+       FeaturedName = ft.[Name],
+       fc.CommentCount,
+       RelInterestID = ISNULL(tt.interestid, 0),
+       TagType = CASE 
+                      WHEN tt.id IS NULL THEN 2
+                      ELSE 1
+                 END
+FROM   FeaturedComment fc (NOLOCK)
+       INNER JOIN FeaturedCategoryRel fcr (NOLOCK)
+            ON  fc.featuredid = fcr.FeaturedID
+       INNER JOIN FeaturedCategoryTree fct (NOLOCK)
+            ON  fct.ID = fcr.CategoryID
+            AND fct.ParentID = 15 --展示分类
+                
+       INNER JOIN featuredtree ft (NOLOCK)
+            ON  ft.ID = fc.featuredid
+       LEFT JOIN (
+                SELECT ft.ID,
+                       interestid = i.ID
+                FROM   FeaturedTree ft (NOLOCK)
+                       INNER JOIN FeaturedCategoryRel fcr (NOLOCK)
+                            ON  fcr.FeaturedID = ft.ID
+                       INNER JOIN FeaturedCategoryTree fct (NOLOCK)
+                            ON  fct.ID = fcr.CategoryID
+                            AND fct.ParentID = 14 --主题类
+                                
+                       INNER JOIN Interest i (NOLOCK)
+                            ON  i.[Name] = fct.[Name]
+            ) tt
+            ON  tt.ID = ft.ID
+WHERE  fc.hotelid = @hotelid
+       AND fc.released = 1 ]]>
+    </select>
+    <select id="GetHotelInterestTags">
+      <![CDATA[SELECT
+      CategoryID = fct.ID,
+       CategoryName = fct.[Name],
+       fc.hotelid,
+       fc.idx,
+       fc.featuredid,
+       FeaturedName = ft.[Name],
+       fc.CommentCount,
+       fct.RelInterestID
+FROM   FeaturedComment fc (NOLOCK)
+       INNER JOIN FeaturedCategoryRel fcr (NOLOCK)
+            ON  fc.featuredid = fcr.FeaturedID
+       INNER JOIN FeaturedCategoryTree fct (NOLOCK)
+            ON  fct.ID = fcr.CategoryID
+            AND fct.ParentID <> 15 --展示分类                
+       INNER JOIN featuredtree ft (NOLOCK)
+            ON  ft.ID = fc.featuredid
+WHERE  fc.hotelid = @hotelid
+       AND fc.released = 1 ]]>
+    </select>
+    <select id="GetSpecialDealPackages">
+      <![CDATA[SELECT h.HotelId,
+       h.HotelName,
+       p.ID,
+       p.brief,
+       Price = 0,
+       CheckDate = GETDATE(),
+       RooCount = 1,
+       picUrl = '',
+       SURL = hp.SURL
+FROM   Package p(NOLOCK)
+       INNER JOIN hotel h(NOLOCK)
+            ON  p.hotelid = h.hotelid
+       INNER JOIN PhotoDB.dbo.HotelPhoto hp (NOLOCK)
+            ON  hp.HotelID = p.hotelid
+            AND hp.isCover = 1
+WHERE  p.IsSpecialDeal = 1
+       AND GETDATE() BETWEEN startDate AND EndDate --AND isvalid = 1 ]]>
+    </select>
+    <select id="GetHotelFeaturedCommentInfo">
+      <![CDATA[ SELECT fc.HotelID,
+              fc.featuredid,
+              FeaturedName = ft.[Name],
+              comment = CASE 
+                             WHEN LEN(comment) > 0 THEN comment
+                             ELSE calComment
+                        END,
+              commentCount,
+              CategoryID = fct.ID,
+              RelInterestID = ISNULL(tt.interestid, 0),
+              TagType = CASE 
+                             WHEN  fc.isTheme = 0 OR  tt.id IS NULL THEN 2
+                             ELSE 1
+                        END
+       FROM   FeaturedComment fc(NOLOCK)
+              INNER JOIN FeaturedTree ft(NOLOCK)
+                   ON  ft.ID = fc.featuredid
+              INNER JOIN FeaturedCategoryRel fcr(NOLOCK)
+                   ON  fcr.featuredid = fc.featuredid
+              INNER JOIN FeaturedCategoryTree fct(NOLOCK)
+                   ON  fct.ID = fcr.CategoryID
+              LEFT JOIN (
+                       SELECT ft.ID,
+                              interestid = i.ID
+                       FROM   FeaturedTree ft (NOLOCK)
+                              INNER JOIN FeaturedCategoryRel fcr (NOLOCK)
+                                   ON  fcr.FeaturedID = ft.ID
+                              INNER JOIN FeaturedCategoryTree fct (NOLOCK)
+                                   ON  fct.ID = fcr.CategoryID
+                                   AND fct.ParentID = 14 --主题类
+                                       
+                              INNER JOIN Interest i (NOLOCK)
+                                   ON  i.[Name] = fct.[Name]
+                   ) tt
+                   ON  tt.ID = fc.featuredid
+       WHERE  fc.released = 1
+              AND hotelid =  @hotelID ]]>
+    </select>
+    <select id="GetHotelFeaturedInfo">
+      <![CDATA[ 
+      SELECT ft.ID
+      FROM FeaturedTree  ft (nolock)  
+           INNER JOIN FeaturedComment fc (nolock) on fc.featuredid = ft.ID  
+           INNER JOIN FeaturedCategoryRel fcr (nolock) on fcr.CategoryID = 16 and fcr.FeaturedID = ft.ID 
+      WHERE fc.released = 1 and fc.NotIsFeature = 0 
+           AND fc.HotelID =  @hotelID ]]>
+    </select>
+    <select id="GetValidPackageHotelID">
+      <![CDATA[
+        select hc.HotelID from HotelContacts hc(NOLOCK)
+WHERE  (@tag = '' OR  ',' +hc.tag+',' like '%,'+ @tag +',%')
+]]>
+    </select>
+    <select id="GetJLTourValidPackageHotel">
+      <![CDATA[
+      SELECT di.DataPathName,
+       b.HotelId,
+       b.HotelName,
+       b.DistrictID,
+       b.night,
+       b.qtyable,
+       b.businessprice,
+       b.ratetypename
+FROM   (
+           SELECT *,
+                  rn = ROW_NUMBER() OVER(PARTITION BY hotelid, night ORDER BY businessprice)
+           FROM   (
+                      SELECT h.HotelId,
+                             h.HotelName,
+                             h.DistrictID,
+                             night = CONVERT(DATETIME, op.night),
+                             op.qtyable,
+                             ratetypename,
+                             businessprice = CONVERT(INT , op.businessprice)
+                      FROM   OTAPriceJLTour op(NOLOCK)
+                             INNER JOIN HotelOTA ho(NOLOCK)
+                                  ON  ho.HotelOriID = op.hotelId
+                                  AND ho.ChannelID = 102
+                             INNER JOIN InterestHotelRel ihr
+                                  ON  ihr.HID = ho.HotelId
+                                  AND ihr.state > 10
+                             INNER JOIN hotel h(NOLOCK)
+                                  ON  h.HotelId = ihr.HID
+                             LEFT JOIN (
+                                      SELECT DISTINCT hotelid
+                                      FROM   Package
+                                      WHERE  isValid = 1
+                                  ) ph
+                                  ON  ph.hotelid = h.HotelId
+                      WHERE  ph.HotelID IS NULL
+                             AND night > @startDate
+                             AND night < @endDate
+                             AND qtyable > 0
+                             and ho.HotelId IN (79
+,23506
+,42080
+,55755
+,56041
+,62241
+,67067
+,109758
+,122071
+,125357
+,138866
+,139277
+,156536
+,157938
+,166382
+,168413
+,196080
+,208660
+,216799
+,233770
+,327649
+,345609
+,352521
+,401016
+,402198
+,405268
+,406314
+,445298
+,504782
+,508265
+,512376
+,524028
+,529558
+,591612
+,597435
+,597569
+,597589)
+                  ) a
+           WHERE  ratetypename NOT LIKE '%票%'
+       ) b
+       INNER JOIN destdb.dbo.DistrictDirectory di
+            ON  di.DistrictID = b.DistrictID
+WHERE  b.rn = 1
+ORDER BY
+       di.DataPath,
+       HotelId,
+       night
+
+]]>
+    </select>
+    <select id="GetHotelRoomInfoByRoomID">
+      <![CDATA[
+  -- DECLARE @RoomID INT = 6
+
+SELECT pi1.ID,
+       pi1.HotelID,
+       pi1.RoomCode,
+       pi1.[Description],
+       pi1.Options,
+       pi1.DefaultOption,
+       Area = ISNULL(pi1.Area, ''),
+       [Floor] = ISNULL(pi1.[Floor], ''),
+       pi1.AddBedFee,
+       pi1.AddBedFeeIncludeBreakfast,
+       pi1.BigBedCount,
+       pi1.BigBedWidth,
+       pi1.TwinBedCount,
+       pi1.TwinBedWidth,
+       pi1.TwinBedCanMove,
+       SpecialDes = ISNULL(pi1.SpecialDes, ''),
+       pi1.DefaultBedType,
+       pi1.IsCheckBedType,
+       hasTwinBed = ISNULL(rbr.hasTwinBed, 0),
+       hasBigBed = ISNULL(rbr.hasBigBed, 0)
+FROM   PRoomInfo pi1(NOLOCK)
+       LEFT  JOIN (
+                SELECT rbr.RoomID,
+                       hasTwinBed = SUM(CASE WHEN rbr.BedTypeID = 1 THEN 1 ELSE 0 END),
+                       hasBigBed = SUM(CASE WHEN rbr.BedTypeID = 2 THEN 1 ELSE 0 END)
+                FROM   RoomBedRel rbr(NOLOCK)
+                WHERE  rbr.RoomID = @RoomID
+                GROUP BY
+                       rbr.RoomID
+            ) rbr
+            ON  rbr.RoomID = pi1.id
+WHERE  pi1.ID = @RoomID
+      ]]>
+    </select>
+    <select id="GetHotelRoomTypeCount">
+      <![CDATA[
+      SELECT RoomTypeCount = COUNT(DISTINCT pi1.ID)
+      FROM   PRoomInfo pi1(NOLOCK)
+             INNER JOIN Package p(NOLOCK)
+                  ON  p.Roomid = pi1.ID
+                  AND p.isvalid = 1
+      WHERE  p.hotelid = @hotelID 
+      ]]>
+    </select>
+    <select id="GetHotelRoomSouldInfo">
+      <![CDATA[
+
+SELECT p.RoomID,
+       op.CheckIn,
+       op.NightCount,
+       op.RoomCount,
+       oo.BigBed,
+       oo.TwinBed,
+       oo.RoomSupplierID,
+       ISNULL(rs.Type, 1) RoomSupplierType
+FROM   OrderPackage op (NOLOCK)
+       INNER JOIN Package p(NOLOCK)
+            ON  p.ID = op.PID
+       INNER JOIN Orders o(NOLOCK)
+            ON  o.ID = op.id
+       INNER JOIN OrderOperate oo(NOLOCK)
+            ON  oo.ID = op.ID
+       LEFT JOIN RoomSupplier rs WITH(NOLOCK)
+            ON  rs.ID = oo.RoomSupplierID
+       LEFT JOIN PackProductBatch ppb(NOLOCK)
+            ON  ppb.ProductType = 1
+            AND ppb.OrderID > 0
+            AND ppb.ProductID = o.HotelID
+            AND ppb.OrderID = o.OrderID
+WHERE  p.HotelID = @HotelID
+       AND o.State >= 10
+       AND op.CheckIn BETWEEN @startDate AND @endDate
+       AND ppb.ID IS NULL
+       
+      ]]>
+    </select>
+    <select id="GetHotelRoomInfoByPID">
+      <![CDATA[
+        SELECT pi1.ID,
+               pi1.HotelID,
+               pi1.RoomCode,
+               pi1.[Description],
+               pi1.Options,
+               pi1.DefaultOption,
+               Area = ISNULL(pi1.Area, ''),
+               [Floor] = ISNULL(pi1.[Floor], ''),
+               pi1.AddBedFee,
+               pi1.AddBedFeeIncludeBreakfast,
+               pi1.BigBedCount,
+               pi1.BigBedWidth,
+               pi1.TwinBedCount,
+               pi1.TwinBedWidth,
+               pi1.TwinBedCanMove,
+               SpecialDes = ISNULL(pi1.SpecialDes, ''),
+               pi1.DefaultBedType,
+               hasTwinBed = (
+                   SELECT COUNT(1)
+                   FROM   RoomBedRel rbr (NOLOCK)
+                   WHERE  rbr.RoomID = pi1.id
+                          AND rbr.BedTypeID = 1
+               ),
+               hasBigBed = (
+                   SELECT COUNT(1)
+                   FROM   RoomBedRel rbr (NOLOCK)
+                   WHERE  rbr.RoomID = pi1.id
+                          AND rbr.BedTypeID = 2
+               )
+        FROM   Package p(NOLOCK)
+               INNER JOIN proominfo pi1(NOLOCK)
+                    ON  pi1.ID = p.roomid
+        WHERE  p.ID = @PID
+    ]]>
+    </select>
+    <select id="GetHotelPackageRoomBedCount">
+      <![CDATA[
+      WITH roomIDs AS 
+      (
+          SELECT DISTINCT p.roomid
+          FROM   Package p(NOLOCK)
+          WHERE  p.HotelID = @HotelID
+                 AND p.isValid = 1
+                 AND p.StartDate <= @endDate
+                 AND p.EndDate >= @startDate
+      )
+
+      SELECT rbs1.RoomID,
+             rbs1.[Date],
+             RCount = SUM(ISNULL(rbs2.[count], 200)),
+             BigBed = SUM(ISNULL(CASE WHEN rbr.BedTypeID = 1 THEN 0 ELSE rbs2.[count] END ,200)),
+             TwinBed = SUM(ISNULL(CASE WHEN rbr.BedTypeID = 2 THEN 0 ELSE rbs2.[count] END ,200))
+      FROM   (
+                 SELECT *
+                 FROM   roomIDs
+                        CROSS JOIN (
+                                 SELECT DISTINCT rbs.date
+                                 FROM   roomIDs r
+                                        INNER JOIN RoomBedState rbs(NOLOCK)
+                                             ON  rbs.RoomID = r.RoomID
+                                             AND rbs.Date BETWEEN @startDate AND @endDate
+                             ) b
+             ) rbs1
+             INNER JOIN RoomBedRel rbr(NOLOCK)
+                  ON  rbr.roomid = rbs1.RoomID
+             LEFT JOIN RoomBedState rbs2(NOLOCK)
+                  ON  rbs2.RoomID = rbr.RoomID
+                  AND rbs2.BedTypeID = rbr.BedTypeID
+                  AND rbs2.date = rbs1.date
+      GROUP BY
+             rbs1.RoomID,
+             rbs1.[Date];
+        ]]>
+    </select>
+    <select id="GetHotelPackRoomBedCount">
+      <![CDATA[
+      SELECT prbs.RoomID, prbs.Date, 
+      RCount = SUM(ISNULL(prbs.[count], 200)),
+      BigBed = SUM(ISNULL(CASE WHEN prbs.BedTypeID = 1 THEN 0 ELSE prbs.[count] END ,200)),
+      TwinBed = SUM(ISNULL(CASE WHEN prbs.BedTypeID = 2 THEN 0 ELSE prbs.[count] END ,200))
+      FROM   [PackRoomBedState] prbs (NOLOCK)
+      INNER JOIN [PRoomInfo] pri (NOLOCK)
+          ON prbs.RoomID = pri.ID
+      WHERE  (@HotelID = 0 OR pri.HotelID = @HotelID)
+      AND prbs.Date BETWEEN @startDate AND @endDate
+      Group BY prbs.RoomID, prbs.Date
+      ]]>
+    </select>
+    <select id="GetPackageHotelList">
+      <![CDATA[SELECT DISTINCT hotelid
+FROM   Package p (NOLOCK)
+WHERE  isValid = 1
+       AND GETDATE() BETWEEN StartDate AND EndDate ]]>
+    </select>
+    <!--<select id="GetHotelRoomCountInfo">
+      <![CDATA[            
+SELECT rbs.roomid,
+       rbs.Date,
+       Count = SUM(rbs.[count])
+FROM   RoomBedState rbs(NOLOCK)
+       INNER JOIN RoomBedRel rbr(NOLOCK)
+            ON  rbs.RoomID = rbr.RoomID
+            AND rbs.BedTypeID = rbr.BedTypeID
+       INNER JOIN PRoomInfo pi1(NOLOCK)
+            ON  pi1.ID = rbr.RoomID
+            AND pi1.HotelID = @hotelid
+       INNER JOIN Package p ON p.roomid = pi1.id and p.isValid = 1
+WHERE  rbs.Date BETWEEN @startDate AND @endDate
+GROUP BY
+       rbs.roomid,
+       rbs.Date
+       ]]>
+    </select>-->
+    <select id="GetHotelNoBedDateRoomInfo">
+      <![CDATA[ 
+SELECT r.roomid,
+       r.Date
+FROM   (
+           SELECT rbs.roomid,
+                  rbs.Date,
+                  c = COUNT(1)
+           FROM   RoomBedState rbs(NOLOCK)
+                  INNER JOIN RoomBedRel rbr(NOLOCK)
+                       ON  rbs.RoomID = rbr.RoomID
+                       AND rbs.BedTypeID = rbr.BedTypeID
+                  INNER JOIN PRoomInfo pi1(NOLOCK)
+                       ON  pi1.ID = rbr.RoomID
+                       AND pi1.HotelID = @hotelid
+           WHERE  rbs.Date BETWEEN @startDate AND @endDate
+           GROUP BY
+                  rbs.roomid,
+                  rbs.Date
+       ) r
+       INNER JOIN (
+                SELECT roomid,
+                       bedTypeCount = COUNT(1)
+                FROM   RoomBedRel rbr (NOLOCK)
+                GROUP BY
+                       rbr.RoomID
+            ) t
+            ON  r.roomid = t.roomid
+            AND r.c = t.bedTypeCount
+ORDER BY
+       r.roomid,
+       r.Date   ]]>
+    </select>
+    <select id="GetSimplePackageInfo">
+      <![CDATA[    
+SELECT p.id,
+       h.HotelId,
+       h.HotelName,
+       hs.ReviewScore,
+       hs.ReviewCount,
+       p.brief,
+       minPrice = (
+           SELECT MIN(p2.Price)
+           FROM   PRate p2 (NOLOCK)
+           WHERE  p2.PID = p.id
+       ),
+       picSURL = (
+           SELECT TOP 1 surl
+           FROM   photodb.dbo.HotelPhoto hp (NOLOCK)
+           WHERE  hp.hotelid = p.hotelid
+                  AND hp.[deleted] = 0
+           ORDER BY
+                  hp.isCover DESC,
+                  id
+       )
+FROM   package p
+       INNER JOIN hotel h(NOLOCK)
+            ON  h.HotelId = p.hotelid
+       INNER JOIN HotelStat hs (NOLOCK)
+            ON  hs.HotelId = h.HotelId
+       INNER JOIN dbo.fn_Split(@pids, ',') fs
+            ON  fs.Item = p.ID
+    ]]>
+    </select>
+    <select id="GetPackagedInterestPlace">
+      <![CDATA[  
+SELECT DISTINCT ip.ID FROM InterestHotelRel ihr (nolock)
+INNER JOIN InterestPlace ip (nolock) ON ip.ID = ihr.IPID
+INNER JOIN Package p (nolock) ON p.hotelid = ihr.hid AND p.isvalid = 1
+WHERE ihr.[state] > 10 
+    ]]>
+    </select>
+    <select id="GetAllInterest">
+      <![CDATA[    
+SELECT * from Interest (NOLOCK)
+    ]]>
+    </select>
+    <select id="GetSharePckageInfoByPrice">
+      <![CDATA[    
+SELECT p.*,SoldCountSum=0 FROM Package p (NOLOCK)
+INNER JOIN PRate p2 (NOLOCK) ON p.id = p2.PID
+WHERE p.hotelid = @hotelID and p.isValid = 1 and Price=@price
+    ]]>
+    </select>
+    <select id="GetTopTownHotelRoom">
+      <![CDATA[    
+SELECT ho.HotelId
+        ,ho.HotelOriID
+        ,hi.ID TopTownHotelID
+        ,rfi.IDX RoomId
+        ,RoomTypeName
+        ,BedTypeName
+        ,hi.HotelCode
+        ,RoomTypeCode
+        ,MaxAddBed
+FROM    hotelota  ho(NOLOCK)
+        INNER JOIN TopTown.dbo.HotelInfo hi(NOLOCK) ON hi.id = ho.HotelOriID
+        INNER JOIN  TopTown..RoomTypeInfo rfi(NOLOCK) on rfi.HotelCode=hi.HotelCode
+WHERE   ho.ChannelID = 104
+        AND ho.HotelId = @hotelid
+    ]]>
+    </select>
+    <select id="GetTopTownHotelRoomPrice">
+      <![CDATA[   
+SELECT ho.HotelId
+       ,hi.ID TopTownHotelId
+       ,rfi.IDX RoomId
+       ,rt.IDX RateId
+       ,rt.PaymentType
+       ,rt.RatePlanCode
+       ,rt.RatePlanName
+       ,rt.RoomTypeCode
+       ,rt.RoomTypeName
+       ,rt.AmountAfterTax
+       ,rt.AmountBeforeTax
+       ,rt.Breakfast
+       ,rt.Child
+       ,rt.EffectiveDate
+       ,rt.ExpireDate
+       ,rt.LastOrderTime
+       ,rt.LastDays
+       ,rt.AdvanceDays
+       ,rt.Ability
+       ,rt.RateCancelPolicy
+       ,rt.BedTypeName
+       ,rt.RateNotUpdateable
+       ,rt.StopCancelDate
+       ,rt.RTStopCancelTime
+       ,rt.PaymentPolicies
+FROM   HotelOTA ho(nolock)
+       INNER JOIN TopTown..HotelInfo hi(nolock) on hi.ID=ho.HotelOriID
+       INNER JOIN  TopTown..RoomTypeInfo rfi on rfi.HotelCode=hi.HotelCode
+       INNER JOIN TopTown..Rate rt (nolock) on rfi.RoomTypeCode = rt.RoomTypeCode 
+WHERE  ho.ChannelID = 104 
+       AND HotelId =  @hotelid
+       AND  CONVERT(datetime,rt.EffectiveDate) >=  @checkin AND  CONVERT(datetime,rt.EffectiveDate) < @checkout
+    ]]>
+    </select>
+    <select id="GetJLHotelRoom">
+      <![CDATA[    
+SELECT ho.HotelId,
+       oj.hotelid jlHotelID,
+       oj.roomtypeid,
+       oj.namechn,
+       oj.acreages,
+       oj.floordistribution,
+       dic.dicvalue bedtype,
+       oj.bedsize,
+       oj.allowaddbed,
+       oj.remark2,oj.remark
+FROM   hotelota ho(NOLOCK)
+       INNER JOIN OTARoomJLTour oj (NOLOCK)
+            ON  oj.hotelid = ho.HotelOriID
+       LEFT JOIN jltour_dic dic (NOLOCK)
+            ON  dic.TYPE = 'bedtype'
+            AND dic.dickey = oj.bedtype
+WHERE  ho.ChannelID = 102
+       AND ho.HotelId = @hotelid
+    ]]>
+    </select>
+    <select id="GetJLHotelRoomPrice">
+      <![CDATA[   
+SELECT op.ID,
+       op.qtyable,
+       op.allotmentType,
+       op.voidabletype,
+       op.cashscaletype,
+       op.dayselect,
+       op.timeselect,
+       ho.HotelId,
+       op.hotelId jlHotelID,
+       op.roomtypeId,
+       op.supplierid,
+       op.termtype,
+       op.advancedays,
+       op.advancetime,
+       op.appointeddate,
+       op.continuousdays,
+       op.beginday,
+       op.endday,
+       op.night,
+       op.pricingtype,
+       op.currency,
+       op.preeprice,
+       op.rebate,
+       op.ActiveRebate,
+	     op.CashCoupon,
+	     op.CanUseCashCoupon,
+       price = op.businessprice,
+       op.ratetype,
+       op.ratetypename,
+       includebreakfastqty2 = dic2.dicValue,
+       netcharge = CASE 
+                        WHEN op.netcharge = 0 THEN '免费'
+                        ELSE '收费'
+                   END
+FROM   hotelota ho(NOLOCK)
+       INNER JOIN otapricejltour op (NOLOCK)
+            ON  op.hotelId = ho.HotelOriID
+       LEFT JOIN jltour_dic dic2 (NOLOCK)
+            ON  dic2.TYPE = 'includebreakfastqty2'
+            AND dic2.dickey = CONVERT(VARCHAR, op.includebreakfastqty2)
+WHERE  ho.ChannelID = 102
+       AND ho.HotelId = @hotelid
+       AND op.night >=  @checkin AND op.night < @checkout
+       AND op.waitingUpdate = 0 
+       AND op.qtyable > 0       
+    ]]>
+    </select>
+    <select id="GetHotelRestaurant">
+      <![CDATA[       
+SELECT hr.ID, hr.[Name], hr.fee, hr.taste, hr.environment, hr.[service], hr.tag,
+       hr.featrued, hr.IsInner, hr.DPURL, isnull(hr.shopid,0) shopid, hr.lat, hr.lon,Convert(varchar,hrr.distance) distance,
+       hrr.hotelid,
+       hrr.[state]
+FROM   HotelRestaurantRel hrr (NOLOCK)
+       INNER JOIN HotelRestaurant hr (NOLOCK)
+            ON  hr.id = hrr.id
+WHERE  hrr.[state] > 10
+       AND hrr.hotelid = @hotelid
+ORDER BY hr.IsInner desc , hrr.distance 
+    ]]>
+    </select>
+    <select id="GetHotelSight">
+      <![CDATA[
+          SELECT * FROM (
+          SELECT hsr.hotelid,
+                 hsr.sightid,
+                 s.name,
+                 intro=isnull(intro,''),
+                 ticket = isnull(ticket,''),
+                 distance = dbo.GetDistance(s.lon, s.lat, hp.Glon, hp.Glat)
+          FROM   hotelsightrel hsr (NOLOCK)
+                 INNER JOIN HotelPlace hp
+                      ON  hsr.hotelid = hp.HotelID
+                 INNER JOIN HotelSight s (NOLOCK)
+                      ON  s.sight = hsr.sightid
+          WHERE  hsr.[state] > 10 AND s.canShow = 1
+                 AND hsr.hotelid = @HotelID
+          ) a 
+          ORDER BY distance
+      ]]>
+    </select>
+    <select id="GetRoomInfo">
+      <![CDATA[
+     SELECT * FROM RoomInfo ri (NOLOCK)
+     WHERE ri.HotelID = @HotelID
+    ]]>
+    </select>
+    <select id="GetPackage">
+      <![CDATA[
+      SELECT p.*,WHPackageType = p.PackageType, IsNull(rs.Type,1) as SupplierType,
+             SoldCountSum = (
+                 SELECT  IsNull(sum(op.RoomCount*op.NightCount),0)
+                 FROM   orderpackage op (NOLOCK)
+                        INNER JOIN orders o (NOLOCK)
+                             ON  o.id = op.id and o.[State]>=10
+                 WHERE  pid = p.id
+             )
+      FROM   Package p (NOLOCK)
+      left join RoomSupplier rs on rs.ID = p.SupplierID
+      WHERE (HotelID =  @HotelID and p.IsValid = 1 and @pid=0 ) OR (@pid = p.ID)
+    ]]>
+    </select>
+    <select id="GetPackageForWebSite">
+      <![CDATA[
+       SELECT p.*,WHPackageType = p.PackageType, IsNull(rs.Type,1) as SupplierType,
+            SoldCountSum = (
+                 SELECT  IsNull(sum(op.RoomCount*op.NightCount),0)
+                 FROM   orderpackage op (NOLOCK)
+                        INNER JOIN orders o
+                             ON  o.id = op.id and o.[State]>=10
+                 WHERE  pid = p.id
+             )
+      FROM   Package p (NOLOCK)
+      left join RoomSupplier rs (NOLOCK) on rs.ID = p.SupplierID
+      WHERE p.NotShowOnWeb = 0 AND ((HotelID =  @HotelID and p.IsValid = 1 and @pid=0 ) OR (@pid = p.ID ))
+    ]]>
+    </select>
+    <select id="GetHotelPackageByCode">
+      <![CDATA[    
+SELECT *,
+       SoldCountSum = (
+           SELECT  isnull(sum( op.RoomCount*op.NightCount ),0)
+           FROM   orderpackage op (NOLOCK)
+                  INNER JOIN orders o (NOLOCK)
+                       ON  o.id = op.id and o.[State]>=10
+           WHERE  pid = p.id
+       )
+FROM   Package p (NOLOCK)
+WHERE  HotelID = @HotelID and (Code = @c OR ID = @pid)
+    ]]>
+    </select>
+    <select id="GetPRoomInfo">
+      <![CDATA[   
+    SELECT distinct  pi1.* FROM PRoomInfo pi1 (NOLOCK) 
+    INNER JOIN Package p  (NOLOCK) ON p.RoomID = pi1.ID
+    WHERE   pi1.HotelID = @HotelID   
+    ]]>
+    </select>   
+    <select id="GetPRoomInfoWithPID">
+      <![CDATA[   
+    SELECT p.ID PID, pi1.* FROM PRoomInfo pi1 (NOLOCK)
+    INNER JOIN Package p  (NOLOCK) ON p.RoomID = pi1.ID
+    WHERE ( p.HotelID = @HotelID  and @pid =0 ) or ( @pid = p.id) 
+    ]]>
+    </select>
+    <select id="GetPRoomOptions">
+      <![CDATA[   
+    
+ SELECT p.ID PID,
+        pro.* 
+ FROM   PRoomOptions pro (NOLOCK)
+        INNER JOIN PRoomInfo pi1 (NOLOCK)
+             ON  pi1.id = pro.roomid
+        INNER JOIN Package p (NOLOCK)
+             ON  p.RoomID = pi1.ID
+ WHERE  ( p.HotelID = @HotelID  and @pid =0 ) or ( @pid = p.id)
+    ]]>
+    </select>
+    <select id="GetPItem">
+      <![CDATA[   
+
+--DECLARE @hotelid  INT = 120230
+--DECLARE @pid      INT = 16
+
+
+IF @pid = 0
+BEGIN
+    SELECT *
+    FROM   (
+               SELECT pr.PID,
+                      sortNo = pr.ID,
+                      pr.SourceType,
+                      p.ID,
+                      p.HotelID,
+                      p.ItemCode,
+                      p.[Description],
+                      p.Price,
+                      p.[type],
+                      pr.DateType,
+                      ISNULL(pr.Date, '1900-1-1') Date
+               FROM   PItem p(NOLOCK)
+                      INNER JOIN PItemRel pr(NOLOCK)
+                           ON  p.ID = pr.ItemID
+                           AND pr.SourceType = 0
+                      INNER JOIN Package p2(NOLOCK)
+                           ON  p2.id = pr.PID
+               WHERE  p2.HotelID = @HotelID
+                      AND @pid = 0 
+               UNION ALL
+               SELECT PID = pr.PackageID,
+                      sortNo = 1000000,
+                      SourceType = 2,
+                      p.ID,
+                      HotelID = p2.hotelid,
+                      ItemCode = p.[Name],
+                      [Description] = p.Descript,
+                      Price = p.DisplayPrice,
+                      [type] = 1,
+                      DateType = 0,
+                      [Date] = CONVERT(DATETIME, '1900-1-1')
+               FROM   SupplierProduct p(NOLOCK)
+                      INNER JOIN PackageProductRel pr(NOLOCK)
+                           ON  p.ID = pr.ProductID
+                      INNER JOIN Package p2(NOLOCK)
+                           ON  p2.id = pr.PackageID
+               WHERE  p2.HotelID = @HotelID
+                      AND @pid = 0
+           ) a
+    ORDER BY
+           PID,
+           datetype,
+           sortNo
+END
+ELSE
+BEGIN
+    SELECT *
+    FROM   (
+               SELECT pr.PID,
+                      sortNo = pr.ID,
+                      pr.SourceType,
+                      p.ID,
+                      p.HotelID,
+                      p.ItemCode,
+                      p.[Description],
+                      p.Price,
+                      p.[type],
+                      pr.DateType,
+                      ISNULL(pr.Date, '1900-1-1') Date
+               FROM   PItem p(NOLOCK)
+                      INNER JOIN PItemRel pr(NOLOCK)
+                           ON  p.ID = pr.ItemID
+                           AND pr.SourceType = 0
+                      INNER JOIN Package p2(NOLOCK)
+                           ON  p2.id = pr.PID
+               WHERE  p2.id = @pid 
+               UNION ALL
+               SELECT PID = pr.PackageID,
+                      sortNo = 1000000,
+                      SourceType = 2,
+                      p.ID,
+                      HotelID = p2.hotelid,
+                      ItemCode = p.[Name],
+                      [Description] = p.Descript,
+                      Price = p.DisplayPrice,
+                      [type] = 1,
+                      DateType = 0,
+                      [Date] = CONVERT(DATETIME, '1900-1-1')
+               FROM   SupplierProduct p(NOLOCK)
+                      INNER JOIN PackageProductRel pr(NOLOCK)
+                           ON  p.ID = pr.ProductID
+                      INNER JOIN Package p2(NOLOCK)
+                           ON  p2.id = pr.PackageID
+               WHERE  p2.id = @pid  
+           ) a
+    ORDER BY
+           PID,
+           datetype,
+           sortNo
+END 
+
+    ]]>
+    </select>
+    <select id="GetPRate">
+      <![CDATA[   
+   
+
+--DECLARE @HotelID  INT = 120230
+--DECLARE @pid      INT = 18925
+ 
+IF @pid = 0
+BEGIN
+    SELECT p.ID,
+           p.PID,
+           p.[Type],
+           p.Price,
+           p.Date,
+           p.Rebate,
+           p.PayType,
+           p.HotelPayForwardDay,
+           p.PayForHotel,
+           p.CancelDayLimit,
+           p.CancelTimeLimitHour,
+           p.CancelTimeLinitMinute,
+           ActiveRebate = CASE 
+                               WHEN p.ManualActiveRebate = -1 THEN p.ActiveRebate
+                               ELSE p.ManualActiveRebate
+                          END,
+           CashCoupon = CASE 
+                             WHEN p.ManualCashCoupon = -1 THEN p.CashCoupon
+                             ELSE p.ManualCashCoupon
+                        END,
+           CanUseCashCoupon = CASE 
+                                   WHEN p.ManualCanUseCashCoupon = -1 THEN p.CanUseCashCoupon
+                                   ELSE p.ManualCanUseCashCoupon
+                              END,
+           CanUseCashCouponForBoTao = CASE 
+                                           WHEN p.ManualCanUseCashCoupon = -1 THEN 
+                                                p.CanUseCashCouponForBoTao
+                                           ELSE 0
+                                      END
+    FROM   PRate p(NOLOCK)
+           INNER JOIN Package p2(NOLOCK)
+                ON  p2.id = p.PID
+    WHERE  p2.HotelID = @HotelID
+           AND p2.IsValid = 1
+END
+ELSE
+BEGIN
+    SELECT p.ID,
+           p.PID,
+           p.[Type],
+           p.Price,
+           p.Date,
+           p.Rebate,
+           p.PayType,
+           p.HotelPayForwardDay,
+           p.PayForHotel,
+           p.CancelDayLimit,
+           p.CancelTimeLimitHour,
+           p.CancelTimeLinitMinute,
+           ActiveRebate = CASE 
+                               WHEN p.ManualActiveRebate = -1 THEN p.ActiveRebate
+                               ELSE p.ManualActiveRebate
+                          END,
+           CashCoupon = CASE 
+                             WHEN p.ManualCashCoupon = -1 THEN p.CashCoupon
+                             ELSE p.ManualCashCoupon
+                        END,
+           CanUseCashCoupon = CASE 
+                                   WHEN p.ManualCanUseCashCoupon = -1 THEN p.CanUseCashCoupon
+                                   ELSE p.ManualCanUseCashCoupon
+                              END,
+           CanUseCashCouponForBoTao = CASE 
+                                           WHEN p.ManualCanUseCashCoupon = -1 THEN 
+                                                p.CanUseCashCouponForBoTao
+                                           ELSE 0
+                                      END
+    FROM   PRate p(NOLOCK)
+           INNER JOIN Package p2(NOLOCK)
+                ON  p2.id = p.PID
+    WHERE  @pid = p2.id
+END 
+    ]]>
+    </select>
+    <select id="GetPCount">
+      <![CDATA[   
+    SELECT p.* FROM PCount p (NOLOCK)
+    INNER JOIN Package p2 (NOLOCK) ON p2.id = p.PID AND p2.IsValid = 1
+    WHERE p2.hotelid = @HotelID
+    ]]>
+    </select>
+
+    <select id="GetOnePackagePCount">
+      <![CDATA[   
+    SELECT p.* FROM PCount p (NOLOCK)
+    WHERE p.PID = @PID
+    ]]>
+    </select>
+
+    <select id="GetHotelPackageOrder">
+      <![CDATA[   
+    
+SELECT op.ID,
+       op.PID,
+       op.CheckIn,
+       op.NightCount,
+       op.RoomCount
+FROM   OrderPackage op (NOLOCK)
+       INNER JOIN orders o (NOLOCK)
+            ON  o.id = op.ID
+WHERE  op.CheckIn BETWEEN @startDate AND @endDate AND o.hotelid = @HotelID
+       AND o.[State] >= 10
+    ]]>
+    </select>
+
+    <select id="GetZMJDCityData">
+      <![CDATA[   
+     SELECT DISTINCT di.DistrictID ID,
+       di.Name,
+       di.EName,
+       di.pinyin,
+       di.lat,
+       di.lon
+FROM   interestPlace a (NOLOCK)
+       INNER JOIN Interest i (NOLOCK)
+            ON  i.ID = a.IID
+            AND i.released = 1
+            AND i.[Type] = 1
+       INNER JOIN DestDB..DistrictInfo di (NOLOCK)
+            ON  di.DistrictID = a.districtID and di.Released = 1
+       INNER JOIN (
+                SELECT ipid,
+                       COUNT(1) c
+                FROM   InterestHotelRel ihr (NOLOCK)
+                WHERE  STATE > 10
+                GROUP BY
+                       ipid
+            ) ihrc
+            ON  ihrc.ipid = a.id
+WHERE  a.Released = 1
+      
+       ]]>
+    </select>
+
+    <select id="GetZMJDSelectedCityData">
+      <![CDATA[   
+    SELECT DISTINCT di.DistrictID ID,
+       di.Name,
+       di.EName,
+       di.pinyin,
+       di.lat,
+       di.lon
+    FROM   interestPlace a (NOLOCK)
+           INNER JOIN Interest i (NOLOCK)
+                ON  i.ID = a.IID
+                AND i.released = 1
+                AND i.[Type] = 1
+           INNER JOIN DestDB..DistrictInfo di (NOLOCK)
+                ON  di.DistrictID = a.districtID and di.Released = 1
+           INNER JOIN (
+                    SELECT ipid,
+                           COUNT(1) c
+                    FROM   InterestHotelRel ihr (NOLOCK)
+                    INNER JOIN hotelstate hs (NOLOCK)
+                        ON hs.hotelid = ihr.hid AND hs.state = 2
+                    WHERE  ihr.STATE > 10
+                    GROUP BY
+                           ipid
+                ) ihrc
+                ON  ihrc.ipid = a.id
+    WHERE  a.Released = 1
+    union   --特殊指定
+    SELECT ID=52217,EName='Hokkaido',Name='北海道',pinyin='bei hai dao',lat=43.0646147,lon=141.3468074
+       ]]>
+    </select>
+  
+    <select id="GetZMJDAllCityData">
+      <![CDATA[   
+    SELECT DISTINCT di.DistrictID ID,
+       di.Name,
+       di.EName,
+       di.pinyin,
+       di.lat,
+       di.lon
+FROM   HotelState hs(NOLOCK)
+       INNER JOIN Hotel  h (NOLOCK)
+            ON h.hotelid = hs.hotelid AND h.Enabled = 'T'
+       INNER JOIN DestDB..DistrictInfo di (NOLOCK)
+            ON  di.DistrictID = h.districtID and di.Released = 1
+WHERE  hs.state = 1
+       ]]>
+    </select>
+
+    <select id="GetZMJDLoveCityData">
+      <![CDATA[   
+      SELECT DISTINCT di.DistrictID ID,
+       di.Name,
+       di.EName,
+       di.pinyin,
+       di.lat,
+       di.lon
+FROM   interestPlace a (NOLOCK)
+       INNER JOIN Interest i
+            ON  i.ID = a.IID
+            AND i.released = 1 AND i.id =11
+       INNER JOIN DestDB..DistrictInfo di (NOLOCK)
+            ON  di.DistrictID = a.districtID
+       INNER JOIN (
+                SELECT ipid,
+                       COUNT(1) c
+                FROM   InterestHotelRel ihr (NOLOCK)
+                WHERE  STATE > 10
+                GROUP BY
+                       ipid
+            ) ihrc
+            ON  ihrc.ipid = a.id
+WHERE  a.Released = 1      
+       ]]>
+    </select>
+    <select id="GetAllHotelTheme">
+      <![CDATA[    
+SELECT *
+FROM   (
+           SELECT t.ID,
+                  t.Name,
+                  
+                  HotelCount = COUNT(1),
+                  t.imgUrl,
+                  t.Sort,
+                  Hotels = STUFF(
+                      (
+                          SELECT ',' + hotelname
+                          FROM   (
+                                     SELECT TOP 2 h.hotelname
+                                     FROM   hotel h(NOLOCK)
+                                            INNER JOIN themehotel th (NOLOCK)
+                                                 ON  th.hotelid = h.hotelid
+                                                 AND th.themeid = t.ID
+                                            LEFT JOIN HotelRank hr(NOLOCK)
+                                                 ON  hr.hotelid = th.hotelid
+                                                 AND hr.districtid = t.id
+                                                 AND hr.type = 3
+                                     ORDER BY
+                                            ISNULL(hr.rank, 999)
+                                 ) a FOR XML PATH('')
+                      ),
+                      1,
+                      1,
+                      ''
+                  )
+           FROM   theme t(NOLOCK)
+                  INNER JOIN themehotel th (NOLOCK)
+                       ON  t.ID = th.ThemeID and state > 10
+                       where t.released = 1
+           GROUP BY
+                  t.ID,
+                  t.Name,
+                  t.imgUrl,
+                  t.Sort
+       ) a
+ORDER BY
+       Sort 
+       ]]>
+    </select>
+    <select id="GetNearbyHotelTheme">
+      <![CDATA[  
+   DECLARE @geo1 geography
+   SELECT @geo1 = geography::Point(@GLat, @GLon, 4326)
+
+   SELECT *
+   FROM   (
+   SELECT t.ID,
+   t.Name,
+   HotelCount = (
+   SELECT COUNT(1)
+   FROM   themehotel ht (NOLOCK)
+   INNER JOIN hotelplace hp(NOLOCK)
+   ON  hp.hotelid = ht.hotelid
+   WHERE  ht.themeid = t.id
+   AND @geo1.STDistance(hp.geo) < 200000
+                  ),
+                  t.imgUrl,
+                  t.Sort,
+                  Hotels = STUFF(
+                      (
+                          SELECT ',' + shortname
+                          FROM   (
+                                     SELECT TOP 2 h.shortname
+                                     FROM   hotel h(NOLOCK)
+                                            INNER JOIN themehotel th (NOLOCK)
+                                                 ON  th.hotelid = h.hotelid
+                                                 AND th.themeid = t.ID
+                                                 AND th.state > 10
+                                            INNER JOIN HotelPlace hp (NOLOCK)
+                                                 ON  hp.HotelID = h.HotelId
+                                                 AND @geo1.STDistance(hp.geo) < 
+                                                     200000
+                                            LEFT JOIN HotelRank hr(NOLOCK)
+                                                 ON  hr.hotelid = th.hotelid
+                                                 AND hr.districtid = t.id
+                                                 AND hr.type = 3
+                                     ORDER BY
+                                            ISNULL(hr.rank, 999)
+                                 ) a FOR XML PATH('')
+                      ),
+                      1,
+                      1,
+                      ''
+                  )
+           FROM   theme t(NOLOCK)
+       ) a
+ORDER BY
+       Sort 
+        ]]>
+    </select>
+    <select id="GetDistrictHotelTheme">
+      <![CDATA[  
+      SELECT *
+FROM   (
+           SELECT t.ID,
+                  t.Name,
+                  HotelCount = COUNT(1),
+                  t.imgUrl,
+                  t.Sort,
+                  Hotels = STUFF(
+                      (
+                          SELECT ',' + shortname
+                          FROM   (
+                                     SELECT TOP 2 h.shortname
+                                     FROM   hotel h(NOLOCK)
+                                            INNER JOIN themehotel th (NOLOCK)
+                                                 ON  th.hotelid = h.hotelid
+                                                 AND th.themeid = t.ID
+                                                 AND th.state > 10
+                                            INNER JOIN DestDB..DistrictAggregateRel 
+                                                 dir(NOLOCK)
+                                                 ON  dir.Districtid = @districtid
+                                                 AND dir.subDistrictID = h.DistrictID
+                                            LEFT JOIN HotelRank hr(NOLOCK)
+                                                 ON  hr.hotelid = th.hotelid
+                                                 AND hr.districtid = t.id
+                                                 AND hr.type = 3
+                                     ORDER BY
+                                            ISNULL(hr.rank, 999)
+                                 ) a FOR XML PATH('')
+                      ),
+                      1,
+                      1,
+                      ''
+                  )
+           FROM   theme t(NOLOCK)
+                  INNER JOIN themehotel th(NOLOCK)
+                       ON  t.ID = th.ThemeID
+                       AND STATE > 10
+                  INNER JOIN hotel h(NOLOCK)
+                       ON  h.HotelId = th.HotelID
+                  INNER JOIN DestDB..DistrictAggregateRel dir(NOLOCK)
+                       ON  dir.Districtid = @districtid
+                       AND dir.subDistrictID = h.DistrictID
+           GROUP BY
+                  t.ID,
+                  t.Name,
+                  t.imgUrl,
+                  t.Sort
+       ) a
+ORDER BY
+       Sort 
+       ]]>
+    </select>
+
+    <select id="GetHotelInterestIDs">
+      <![CDATA[  SELECT i.ID
+      FROM   InterestHotelRel ihr(NOLOCK)
+      INNER JOIN InterestPlace ip(NOLOCK)
+      ON  ip.ID = ihr.IPID
+      AND ip.released = 1
+      INNER JOIN Interest i(NOLOCK)
+      ON  i.ID = ip.IID
+      AND i.released = 1
+      WHERE  ihr.HID = @HotelID
+    ]]>
+ </select>
+
+    <select id="GetHotelInterestTag" >
+      <![CDATA[
+   
+IF @interestID = 100002 OR @interestID=110000  --特惠精选  --所有
+BEGIN
+    SELECT @InterestID InterestID,
+           @HotelID HotelID,
+           1 [type],
+           *
+    FROM   (
+               SELECT TOP 3 * 
+               FROM   (
+                          SELECT DISTINCT 
+                                 itr.TID tftid,
+                                 htd.[Name] tftname,
+                                 ht.Num reviewCount,
+                                 itr.sort
+                          FROM   interesthotelrel ihr(NOLOCK)
+                                 INNER JOIN interestplace ip(NOLOCK)
+                                      ON  ihr.IPID = ip.ID
+                                 INNER JOIN Interest i(NOLOCK)
+                                      ON  i.ID = ip.IID
+                                 INNER JOIN InterestTagRel itr(NOLOCK)
+                                      ON  itr.IID = i.ID
+                                 INNER JOIN HotelTag ht (NOLOCK)
+                                      ON  ht.TagId = itr.TID
+                                      AND ht.HotelId = @HotelID
+                                 INNER JOIN HotelTagDefine htd (NOLOCK)
+                                      ON  htd.ID = ht.TagId
+                          WHERE  i.released = 1
+                                 AND ihr.HID = @hotelid  AND ihr.[state] > 10
+                      ) b
+               ORDER BY
+                      sort,
+                      reviewCount DESC
+           ) a
+    ORDER BY
+           a.reviewCount DESC
+END
+ELSE
+BEGIN
+    DECLARE @districtID INT --景区类-香港迪士尼(100001)
+    SET @districtID = 0
+    IF @interestID = 184
+    BEGIN
+        SELECT @districtID = districtid
+        FROM   hotel h(NOLOCK)
+        WHERE  hotelid = @hotelid
+    END 
+    
+    
+    IF @InterestID = 0
+    BEGIN
+        SET @InterestID = (
+                SELECT TOP 1 i.ID
+                FROM   Interest i (NOLOCK)
+                       INNER JOIN InterestPlace ip (NOLOCK)
+                            ON  ip.IID = i.ID
+                       INNER JOIN InterestHotelRel ihr (NOLOCK)
+                            ON  ihr.IPID = ip.ID
+                            AND ihr.HID = @HotelID
+                WHERE  i.released = 1
+            )
+    END
+    
+    
+    SELECT @InterestID InterestID,
+           @HotelID HotelID,
+           1 [type],
+           *
+    FROM   (
+               SELECT TOP 3 
+                      
+                      itr.TID tftid,
+                      htd.[Name] tftname,
+                      ht.Num reviewCount
+               FROM   Interest i(NOLOCK)
+                      INNER JOIN InterestTagRel itr(NOLOCK)
+                           ON  itr.IID = (
+                                   CASE 
+                                        WHEN @interestID = 184
+                                   AND @districtID = 47720 THEN 100001 WHEN i.[Type] 
+                                       = 2 THEN 100000 ELSE i.ID END
+                               )
+                      INNER JOIN HotelTag ht (NOLOCK)
+                           ON  ht.TagId = itr.TID
+                           AND ht.HotelId = @HotelID
+                      INNER JOIN HotelTagDefine htd (NOLOCK)
+                           ON  htd.ID = ht.TagId
+               WHERE  i.released = 1
+                      AND i.ID = @InterestID
+               ORDER BY
+                      itr.sort,
+                      ht.Num DESC
+           ) a
+    ORDER BY
+           a.reviewCount DESC
+END
+  
+  
+      ]]>
+    </select>
+
+    <select id="GetHotelTFTRel">
+      <![CDATA[     
+      
+select * from (
+SELECT tft.hotelid,
+      tft.type,
+       tft.tftid,
+       ISNULL(t.name, ISNULL(f.name, tag.name)) tftname,
+       CASE WHEN tft.type > 1 then 1000 ELSE ISNULL(ht.Num, 0) end reviewCount
+FROM   HotelTFTRel tft(NOLOCK)
+       LEFT JOIN Interest t(NOLOCK)
+            ON  tft.tftid = t.id
+            AND tft.type = 3
+       LEFT JOIN featured f(NOLOCK)
+            ON  tft.tftid = f.id
+            AND tft.type = 2
+       LEFT JOIN hoteltagdefine tag(NOLOCK)
+            ON  tft.tftid = tag.id
+            AND tft.type = 1
+       LEFT JOIN HotelTag (nolock) ht on ht.HotelId = tft.HotelID and tft.TFTID = ht.TagId and tft.Type = 1
+WHERE  tft.hotelid = @HotelId
+) a 
+order by a.type desc , a.reviewCount desc 
+       ]]>
+    </select>
+
+    <select id="GetHotelTFTReview">
+      <![CDATA[     
+SELECT tft.hotelid,
+      tft.type,
+       tft.tftid,
+       tft.ReviewID,
+       ISNULL(t.name, ISNULL(f.name, tag.name)) tftname
+FROM   HotelTFTReview tft(NOLOCK)
+       LEFT JOIN theme t(NOLOCK)
+            ON  tft.tftid = t.id
+            AND tft.type = 3
+       LEFT JOIN featured f(NOLOCK)
+            ON  tft.tftid = f.id
+            AND tft.type = 2
+       LEFT JOIN hoteltagdefine tag(NOLOCK)
+            ON  tft.tftid = tag.id
+            AND tft.type = 1
+WHERE  tft.hotelid = @hotelid
+       ]]>
+    </select>
+    
+    <select id="GetHotelInfo">
+      <![CDATA[    
+  
+  SELECT hh.hotelID,
+               hh.hotelName                AS resourcename,
+               he.Telephone,
+               hh.HotelSource,
+               hh.starLicence,
+               he.address,
+               isnull(he.hotelPic,'') as hotelPic,
+               isnull(he.roomquantity, 0)  AS roomquantity,
+               isnull(Lo.Locationname, '') AS LocationName,
+               ISNULL(hh.star,0) star,
+               isnull(hh.ename, '')        AS Enresourcename,
+               isnull(RM.GLAT, 0)          AS GLAT,
+               isnull(RM.GLON, 0)          AS GLON,
+               isnull(RM.BLAT, 0)          AS BLAT,
+               isnull(RM.BLON, 0)          AS BLON,
+               isnull(he.brief,'') as brief
+        FROM   HotelDB..Hotel hh WITH (nolock)
+               JOIN HotelDB.dbo.fn_Split(@HotelIdList, ',') a
+                 ON hh.HotelId = a.Item
+               LEFT JOIN HotelDB..HotelPlace rm (nolock)
+                 ON rm.hotelID = hh.hotelID
+               LEFT JOIN HotelDB..Hotel2 he (nolock)
+                 ON he.hotelID = hh.hotelID
+               LEFT JOIN HotelDB..Location LO (nolock)
+                 ON hh.Location = LO.Location
+               LEFT JOIN HotelDB..hotelCtripScore hcs (NOLOCK)
+                 ON hcs.resource = hh.hotelID
+        WHERE  hh.HotelName <> 'del'
+               AND hh.HotelName NOT LIKE '%预订%' 
+       ]]>
+    </select>
+
+    <select id="GetOTAHotelCode">
+      <![CDATA[    
+  
+  SELECT *
+        FROM   HotelDB..OTAHotelCode h WITH (nolock)
+               JOIN HotelDB.dbo.fn_Split(@otahotelidlist, ',') a
+                 ON h.OTAHotelId = a.Item
+                WHERE h.channelid = @channelid
+       ]]>
+    </select>
+
+    <select id="GetHotelChannelByHotel">
+      <![CDATA[
+          SELECT hc.hotelid,
+                 o.channel channel,
+                 hc.hotelOriID,
+                 hc.ChannelID,
+                 hc.CanSyncPrice
+          FROM   HotelOTA hc(NOLOCK)
+                 JOIN HotelDB.dbo.fn_Split(@HotelIdList, ',') a
+                      ON  hc.HotelId = a.Item
+                 INNER JOIN OTAStatus o ON o.ID = hc.ChannelID AND o.IsProductValid = 1
+          WHERE  hc.IsValid = 1
+          ORDER BY
+                 o.channel,
+                 hotelOriID ASC
+       ]]>
+    </select>
+    <select id="GetHotelRankByHotel">
+      <![CDATA[    
+        SELECT lc.classname,
+               lc.classid,
+               lc.sort,
+               hr.DistrictID,
+               hr.Rank,
+              hc.HotelCount AS ClassHotelNumber,
+               hr.HotelId
+        FROM   dbo.HotelRank hr (nolock)
+               JOIN HotelDB.dbo.fn_Split(@HotelIdList, ',') a
+                 ON hr.HotelId = a.Item
+               JOIN Class lc (Nolock)
+                 ON lc.classid = hr.HotelClassID 
+               LEFT JOIN DistrictHotelCount hc (nolock)
+                 ON hc.districtid = hr.DistrictID
+       ]]>
+    </select>
+    <select id="GetHotelRank">
+      <![CDATA[    
+       
+SELECT *
+FROM   dbo.HotelRank hr(NOLOCK)
+       JOIN HotelDB.dbo.fn_Split(@HotelIdList, ',') a
+            ON  hr.HotelId = a.Item
+WHERE  hr.HotelClassID = @HotelTypeID
+       AND hr.DistrictID = @ResourceID
+       AND hr.[type] = @RankType
+       ]]>
+    </select>
+    <select id="GetHotelClassByHotel">
+      <![CDATA[    
+        SELECT lc.classname,
+               lc.classid,
+               lc.sort,
+               hr.HotelId
+        FROM   dbo.HotelClass hr (nolock)
+               JOIN HotelDB.dbo.fn_Split(@HotelIdList, ',') a
+                 ON hr.HotelId = a.Item
+               JOIN Class lc (Nolock)
+                 ON lc.classid = hr.classid 
+       ]]>
+    </select>
+    <select id="GetHotelUrlByIdlist">
+      <![CDATA[
+          select Hotel, HotelUrl,HotelReviewUrl,HotelWriteUrl from  HotelUrl hc(nolock)
+          JOIN HotelDB.dbo.fn_Split(@HotelIdList, ',') a
+          ON hc.Hotel = a.Item
+          ]]>
+    </select>
+
+    <select id="GetHotelInfoClassList">
+      <![CDATA[    
+       select classid,classname,sort from Class (Nolock) 
+       where mergeto>0
+       order by sort
+ 
+       ]]>
+    </select>
+
+    <select id="GetDistrictHotelClassByDistrict">
+      <![CDATA[    
+       select
+        t.classid,
+        t.classHotelNumber, 
+        lc.classname
+         from ( 
+         select hotelClassID as classid,HotelCount as ClassHotelNumber from 
+         HotelRank r (Nolock) 
+         where r.districtid=@District
+         group by hotelClassID,HotelCount ) t
+         join Class lc (nolock) on lc.classid=t.classid
+        order by lc.sort
+        
+
+       ]]>
+    </select>
+
+    <select id="GetHotelRankOrNumberByClass">
+      <![CDATA[    
+         select r.rank,isnull(lc.classname,'') as classname ,hotelClassID as classid,HotelCount as ClassHotelNumber,hotelid from 
+           HotelRank r (Nolock) 
+            JOIN HotelDB.dbo.fn_Split(@HotelIdList, ',') a
+                    ON r.Hotelid = a.Item
+           left join Class lc (Nolock) on lc.classid=r.hotelClassID
+           
+       ]]>
+    </select>
+    <select id="GetDistrictAirportTrainstation">
+      <![CDATA[    
+       select id,isnull(mark,name) as name,type,districtid from DestDB..placemark r (nolock)
+        where r.mark is not null
+        and districtid=@District order by type,id asc
+       ]]>
+    </select>
+    <select id="GetHotelInfoEX">
+      <![CDATA[    
+          SELECT hh.hotelID,
+                 hh.hotelName                AS resourcename,
+                 hh.districtid,
+                 di.Name as DistrictName,
+                 di.EName as DistrictEName,
+                 isnull(he.Telephone, '')    Telephone,
+                 hh.HotelSource,
+                 hh.starLicence,
+                 isnull(hh.hotelType, 0)     AS hotelType,
+                 isnull(he.brand, 0)         AS brand,
+                 isnull(hb.brandname, '')    brandname,
+                 isnull(he.address, '')      address,
+                 isnull(he.hoteldesc, '')    AS hoteldesc,
+                 isnull(he.website, '')      AS website,
+                 he.zipcode,
+                 isnull(he.email, '')        AS email,
+                 isnull(he.hotelPic, '')     AS hotelPic,
+                 isnull(he.roomquantity, 0)  AS roomquantity,
+                 isnull(Lo.Location, 0)      AS Location,
+                 isnull(Lo.Locationname, '') AS LocationName,
+                 ISNULL(hh.star,0) star,
+                 isnull(vz.zonename, '')     AS zonename,
+                 isnull(vz.zone, 0)          AS zone,
+                 isnull(hh.ename, '')        AS Enresourcename,
+                 isnull(RM.GLAT, 0)          AS GLAT,
+                 isnull(RM.GLON, 0)          AS GLON,
+                  isnull(RM.BLAT, 0)          AS BLAT,
+                 isnull(RM.BLON, 0)          AS BLON,
+                 isnull(he.brief,'') as brief,
+                  isnull(hh.UseBookingRule,0) as UseBookingRule,
+                  he.Openyear,
+                  CASE WHEN hv.Score IS NULL THEN CONVERT(BIT,0) ELSE CONVERT(BIT,1) END   IsValued
+                  
+          FROM   HotelDB..Hotel hh WITH (nolock)
+                 JOIN HotelDB.dbo.fn_Split(@HotelIdList, ',') a
+                   ON hh.HotelId = a.Item
+                 LEFT JOIN HotelDB..HotelPlace rm (nolock)
+                   ON rm.hotelID = hh.hotelID
+                 LEFT JOIN HotelDB..Hotel2 he (nolock)
+                   ON he.hotelID = hh.hotelID
+                 LEFT JOIN HotelDB..Location LO (nolock)
+                   ON hh.Location = LO.Location
+                 LEFT JOIN HotelDB..zone vz (nolock)
+                   ON vz.zone = hh.zone
+                 LEFT JOIN HotelDB..Brand hb (NOLOCK)
+                   ON hb.brand = he.brand
+                   left join DestDB.dbo.DistrictInfo di (nolock)
+                   on di.DistrictID=hh.DistrictID 
+                 LEFt JOIN HotelDB..Valued hv (NOLOCK)
+                   ON hv.hotelID = hh.hotelID
+          WHERE  hh.HotelName <> 'del'
+                 AND hh.HotelName NOT LIKE '%预订%' 
+       ]]>
+    </select>
+    <select id="GetHotelFacilityList">
+      <![CDATA[
+         SELECT hs.Facility,
+                 hs.HotelID,
+                 lf.facilityname,
+                 lf.Icon,
+                 lf.cat
+          FROM   HJDHotelFacility hs (nolock)
+                 LEFT JOIN HJDFacilitys lf (Nolock)
+                   ON lf.facility = hs.facility
+                 JOIN dbo.fn_Split(@HotelIdList, ',') f
+                   ON hs.hotelid = f.Item                  
+         WHERE lf.isValid = 1 
+         ORDER BY cat,lf.Priority
+        ]]>
+    </select>
+
+    <select id="GetHotelKeyWordList">
+      <![CDATA[
+      select  ID,Hotelid,keyword,num  as number from dbo.HotelKeyWord hs (Nolock)
+        JOIN dbo.fn_Split(@HotelIdList, ',') f
+                   ON hs.hotelid = f.Item  
+                  
+        order by hs.hotelid 
+
+        ]]>
+    </select>
+
+
+    <select id="GetCommentKeyWordList">
+      <![CDATA[
+     
+ select keyword,keywordExt,prop from (
+ 
+ select ckw.id, ck.keyword,ckw.keywordExt,ckw.prop,1 as dx from 
+ dbo.CommentNoKeyWord 
+ ck (nolock)
+ left join commentKeyWord ckw (Nolock)
+ on ck.keywordext=ckw.keyword
+ where ck.keyword=@keyword
+ and ckw.keywordext not like '%不%'
+ 
+ union 
+  select id, keyword,keywordExt,prop ,0 as dx  from  CommentKeyWord (nolock) 
+  where keyword=@keyword
+  ) t order by dx asc,id asc
+
+        ]]>
+    </select>
+
+    <select id="GetCommentNoKeyWordList">
+      <![CDATA[
+   
+      
+ select ckw.keyword,ckw.keywordExt,ckw.prop from 
+ CommentNoKeyWord 
+ ck (nolock)
+ left join commentKeyWord ckw (Nolock)
+ on ck.keywordext=ckw.keyword
+ where ck.keyword=@keyword
+ and ckw.keywordext not like '%不%'
+
+        ]]>
+    </select>
+
+    <select id="GetHotelKeyWordWritingList">
+      <![CDATA[
+       select  ID,Hotelid,hs.writing from dbo.HotelKeywordWriting hs (Nolock)
+      join HotelReview hw (nolock) on hw.writing=hs.writing and hw.deleted='F'
+        JOIN dbo.fn_Split(@HotelIdList, ',') f
+                   ON hs.hotelid = f.Item
+        order by hs.hotelid 
+
+        ]]>
+    </select>
+
+    <select id="GetFacilityList">
+      <![CDATA[      
+         select facility,facilityname,isnull(icon,'') as icon from HJDFacilitys (Nolock)
+        order by facility
+
+        ]]>
+    </select>
+
+    <select id="GetHotelReviewWriting">
+      <![CDATA[
+               SELECT Writing,
+               Cast(Rating AS VARCHAR(100)) AS Rating,
+               [resource]                   AS HotelID,
+               CommentSubject
+        FROM   [HotelReview] d (nolock)
+               JOIN [HotelDB].dbo.fn_Split(@idList, ',') a
+                 ON d.writing = a.Item 
+         ]]>
+    </select>
+
+    <select id="GetHotelShowPhoto">
+      <![CDATA[      
+      select v.hotelpic as url ,v.hotelid from Hotel2 v (nolock)   
+          JOIN dbo.fn_Split(@hotelID, ',') a on a.item=v.hotelid
+          where v.hotelpic is not null
+      ]]>
+    </select>
+
+
+    <select id="GetTop3HotelReviewWriting">
+      <![CDATA[
+     SELECT a.hotelid,
+             a.writing,
+             cast (RatingRoom + RatingAtmosphere + RatingService + RatingCostBenefit AS DECIMAL) / 4 AS rating,
+             a.wdate,
+             a.commentsubject,
+             a.userid,
+             a.content
+      FROM   (SELECT a.resource                                                                              AS hotelid,
+                     a.writing,
+                     a.wdate,
+                     a.userid,
+                     row_number() OVER(partition BY a.resource ORDER BY a.wdate DESC )                     AS Sequence,
+                     isnull(a.commentsubject, isnull(a.content, '酒店点评'))                                     AS commentsubject,
+                     a.content
+              FROM   HotelReview a WITH(nolock)
+                     JOIN dbo.fn_Split(@HotelIdList, ',') f
+                       ON a.resource = f.Item
+                  
+              -- AND hl.hotel = a.resource
+              WHERE  a.deleted = 'F') a    
+              JOIN hotelratinglog hl WITH ( nolock )
+                       ON hl.writing = a.writing
+      WHERE  a.Sequence <= 1 
+
+         ]]>
+    </select>
+
+    <select id="GetHotelReviewNumAndRating">
+      <![CDATA[
+  SELECT a.resource                                                                                              AS hotelid,
+COUNT(1)                                                                                                AS CountHotelReview,
+sum(CASE
+WHEN hcr.IsRecommend = 'T' THEN 1
+ELSE 0
+END)                                                                                                AS CountRecommend,
+SUM(CASE
+WHEN hcr.IsRecommend = 'T' THEN 1
+WHEN hcr.IsRecommend = 'F' THEN 1
+ELSE 0
+END)                                                                                                AS CountTotalRecommend,
+cast(SUM(RatingRoom) AS DECIMAL) / COUNT(*)                                                             AS RatingRoom,
+cast(SUM(RatingAtmosphere) AS DECIMAL) / COUNT(*)                                                       AS RatingAtmosphere,
+cast(SUM(RatingService)AS DECIMAL) / COUNT(*)                                                           AS RatingService,
+cast(SUM(RatingCostBenefit) AS DECIMAL) / COUNT(*)                                                      AS RatingCostBenefit,
+CAST (sum(RatingRoom + RatingAtmosphere + RatingService + RatingCostBenefit) AS DECIMAL) / 4 / COUNT(*) AS Rating
+
+FROM   HotelReview a WITH ( nolock )
+left join HotelReviewRecommendlog hcr (nolock) on hcr.writing =a.writing
+JOIN hotelratinglog hl WITH ( nolock )
+ON hl.writing = a.writing
+--AND hl.hotel = a.resource
+JOIN dbo.fn_Split(@HotelIdList, ',') f
+ON a.resource = f.Item
+WHERE  a.deleted = 'F'
+GROUP  BY a.resource 
+
+
+         ]]>
+    </select>
+
+    <select id="GetFeatruedReviewList">
+      <![CDATA[
+          SELECT  * 
+          FROM   FeaturedTagRel ftr(NOLOCK)
+                 INNER JOIN HotelTagReview htr(NOLOCK)
+                      ON  ftr.TID = htr.ID
+                 INNER JOIN dbo.fn_Split(@Writinglist, ',') f
+                      ON  htr.writing = f.Item
+          WHERE  ftr.FID = @Featured
+      ]]>
+    </select>
+
+    <select id="GetHotelReviewIDListForCheckData">
+      <![CDATA[
+          SELECT TOP 1000 writing
+          FROM   HotelReview pie (nolock)
+          WHERE  pie.writing < @writing
+                 AND pie.writing > @HotelReviewCheckRange
+          ORDER  BY pie.writing DESC  
+      ]]>
+    </select>
+    <select id="GetHotelReviewByWriting">
+      <![CDATA[      
+        SELECT  
+               WritingTypeID = 1,
+               a.[writing],
+               a.[wdate],
+               rtrim(a.[uid])                                                                         AS Uid,
+               a.[content],
+               a.[resource]                                                                           AS HotelID,
+               a.[deleted],
+               a.[orderid],
+               [IsRecommend],
+               [user_identity]                                                                        AS UserIdentity,
+               isnull([identitytxt], '')                                                              AS UserIdentityText,
+               isnull([commentsubject], '')                                                           AS commentsubject,
+               a.[status],
+               a.[UserID],
+               [RatingRoom],
+               [RatingAtmosphere],
+               [RatingService],
+               [RatingCostBenefit],
+               cast(RatingRoom + RatingAtmosphere + RatingService + RatingCostBenefit AS DECIMAL) / 4 AS Rating,
+               c.DistrictID,
+               a.writingType,
+               isnull(b.useful, 0)                                                                    AS useful,
+               isnull(a.channelType,0) as channelType,
+               isnull(a.wholerate,0) as wholerate,
+               isnull(a.otareviewid,0) as OTAReviewID
+        FROM   [HotelReview] a (nolock)
+               JOIN dbo.fn_Split(@Writinglist, ',') f
+                 ON a.writing = f.Item
+               JOIN dbo.Hotel c (nolock)
+                 ON a.resource = c.HotelId
+               LEFT JOIN dbo.HotelRatingLog b (nolock)
+                 ON a.writing = b.writing      
+         ]]>
+    </select>
+    <select id="GetOTAHotelReviewByWriting">
+      <![CDATA[
+      SELECT
+       WritingTypeID = 2,
+       a.[id] writing,
+       a.CreateDate [wdate],
+       a.Creator AS Uid,
+       a.[content],
+       a.HotelID AS HotelID,
+       'P' [status],
+       c.DistrictID,
+       a.ChannelID ChannelType,
+       isnull(a.commentSubject,'') commentSubject,
+        isnull(a.otaid,0) as OTAReviewID,
+        Userid
+FROM   [OTAHotelReview] a(NOLOCK)
+       JOIN dbo.fn_Split(@Writinglist, ',') f
+            ON  a.ID = f.Item
+       JOIN dbo.Hotel c(NOLOCK)
+            ON  a.hotelid = c.HotelId
+         ]]>
+    </select>
+    <select id="GetWHotelReviewByWriting">
+      <![CDATA[
+      SELECT
+       WritingTypeID = 3,
+       a.[id] writing,
+       a.CreateTime [wdate],
+       ui.NickName AS Uid,
+       [content] = '',
+       a.HotelID AS HotelID,
+       'P' [status],
+       c.DistrictID,
+       0 ChannelType,
+       '' commentSubject,
+       0 AS OTAReviewID,
+       a.Userid,
+       a.Score
+FROM   [comments] a(NOLOCK)
+       JOIN dbo.fn_Split(@Writinglist, ',') f
+            ON  a.ID = f.Item
+       JOIN dbo.Hotel c(NOLOCK)
+            ON  a.hotelid = c.HotelId
+       JOIN AccountDB.dbo.User_Info ui(NOLOCK)
+            ON  a.UserID = ui.UserID
+         ]]>
+    </select>
+    <select id="GetHotelReviewByCommentId">
+      <![CDATA[
+      SELECT
+       WritingTypeID = 3,
+       a.[id] writing,
+       a.CreateTime [wdate],
+       ui.NickName AS Uid,
+       [content] = '',
+       a.HotelID AS HotelID,
+       'P' [status],
+       c.DistrictID,
+       0 ChannelType,
+       '' commentSubject,
+       0 AS OTAReviewID,
+       a.Userid,
+       a.Score
+FROM   [comments] a(NOLOCK)
+       JOIN dbo.Hotel c(NOLOCK)
+            ON  a.hotelid = c.HotelId
+       JOIN AccountDB.dbo.User_Info ui(NOLOCK)
+            ON  a.UserID = ui.UserID
+       WHERE a.ID = @commentId
+         ]]>
+    </select>
+    <select id="GetHotelReviewGroupRating">
+      <![CDATA[
+      SELECT HotelID,
+             UserIdentity,
+             Rating,
+             count(*) AS Count
+      FROM   (SELECT a.resource                                                                                               AS HotelID,
+                     ( CASE a.user_identity
+                         WHEN 10 THEN 1
+                         WHEN 20 THEN 3
+                         WHEN 30 THEN 3
+                         WHEN 40 THEN 4
+                         WHEN 50 THEN 5
+                         WHEN 70 THEN 2
+                         ELSE 6
+                       END )                                                                                                  AS UserIdentity,
+                     cast(floor(( RatingRoom + RatingAtmosphere + RatingService + RatingCostBenefit ) / 4.0 + 0.50001)AS INT) AS Rating
+              FROM   HotelReview a WITH ( nolock )
+                     JOIN hotelratinglog hl WITH ( nolock )
+                       ON hl.writing = a.writing
+                     --AND hl.hotel = a.resource
+                     JOIN dbo.fn_Split(@HotelIdList, ',') f
+                       ON a.resource = f.Item
+              WHERE  a.deleted = 'F') a
+      GROUP  BY HotelID,
+                UserIdentity,
+                Rating 
+      ]]>
+    </select>
+    <select id="GetNewestHotelReview">
+      <![CDATA[                    
+                     select vb.hotelid,vb.hotelname,vb.ename as hotelEnName,di.ename as districtEnName,t.maxID as maxID,
+        
+          COUNT(1)                                                                              AS CountNumber,
+               ISNULL(SUM(RatingRoom + RatingAtmosphere + RatingService + RatingCostBenefit), 0) / 4 AS AllMark
+                from  Hotel vb (nolock)
+       join (         
+        
+       select TOP (@top) a.resource as hotelid,max(a.writing) as maxID from HotelReview a (nolock)  
+          join Hotel b (nolock) on a.resource=b.HotelId
+         
+          where b.Enabled='T' and b.districtid=@district
+          and a.deleted='F'
+          group by a.resource
+          order by max(a.writing) desc ) t on t.hotelid=vb.hotelid
+           LEFT JOIN DestDB..DistrictInfo di (nolock)
+                 ON di.districtid = vb.districtid
+                 
+                   LEFT JOIN HotelDB.dbo.HotelReview a WITH(nolock)
+                 ON a.resource = vb.hotelid
+               LEFT JOIN hotelratinglog hl WITH(nolock)
+                 ON hl.writing = a.writing
+                   GROUP  BY vb.hotelid,                  
+                  vb.hotelname,
+                  t.maxID,
+                  vb.ename,
+                  di.ename
+
+      ]]>
+    </select>
+
+
+    <select id="GetNewestHotelReviewByRegion">
+      <![CDATA[     
+
+        select TOP (@top) a.resource as hotelid from HotelReview a (nolock)  
+          join Hotel b (nolock) on a.resource=b.HotelId
+          join DestDB..DistrictDirectory dt (Nolock) 
+          On b.DistrictID=dt.DistrictID
+          where b.Enabled='T' and dt.DataPath like  @District
+          and a.deleted='F'
+          group by a.resource
+          order by max(a.writing) desc
+
+      ]]>
+    </select>
+
+    <select id="GetCommDict">
+      <![CDATA[
+            SELECT descript FROM commDict cd (NOLOCK)
+    WHERE cd.[Type]= 301 AND cd.DicKey = 20
+            ]]>
+    </select>
+
+
+    <select id="GetOwnerStatus">
+      <![CDATA[
+            select o.status from owner o with(nolock) 
+          join ownerLink ol with(nolock) on o.id = ol.ownerId
+          where o.uid = @uid and ol.hotelId = @hotelId
+            ]]>
+    </select>
+    <select id="GetCommWritingIdByLpWritingId">
+      <![CDATA[
+      select commwriting from HotelReview_Rel (NOLOCK)
+                    where writing=@writing
+            ]]>
+    </select>
+    <select id="GetWritingIdByCommWritingId">
+      <![CDATA[select writing from HotelReview_Rel
+                    where Commwriting=@writing]]>
+    </select>
+
+    <select id="GetLpHotelWritingFbId">
+      <![CDATA[
+select fbid from HotelReviewFB (nolock) where writing =@writing
+            ]]>
+    </select>
+    <select id="GetWritingIdFromLpWritingFbByWritingId">
+      <![CDATA[
+select writing from HotelReviewFB with(nolock) where writing=@writing
+            ]]>
+    </select>
+
+    <select id="GetHotelidByHotelOriid">
+      <![CDATA[select top 1 Hotelid From HotelOTA (NOLOCK) 
+      where channelid =2 and hoteloriid =@hoteloriid order by hotelid]]>
+    </select>
+    <select id="GetHotelOriidByHotelid">
+      <![CDATA[select top 1 HotelOriID from HotelDB.dbo.HotelOTA (NOLOCK)
+      where HotelId = @HotelID and ChannelID = 103 and IsValid = 1]]>
+    </select>
+
+    <select id="GetPriceChannelIdByHotelId">
+      <![CDATA[   
+select top 1 PriceChannelID from HotelDB.dbo.HotelContacts hc (NOLOCK)
+where hc.HotelID = @HotelID
+       ]]>
+    </select>
+
+
+    <select id="GetDistrictInfo">
+      <![CDATA[    
+         select i.districtid, i.name, i.EName from DestDB..DistrictInfo i with(nolock) 
+                            join DestDB..DistrictDirectory d with(nolock) on i.districtid = d.districtid
+                            join DestDB..DistrictExtRel e with(nolock) on e.relationid = i.districtid and datasource = 10002
+                            where i.Released=1 
+       ]]>
+    </select>
+
+    <select id="GetHotelReviewDelLog">
+      <![CDATA[    
+        SELECT * FROM UGCDeleteLog ul (NOLOCK)
+WHERE ul.UGCType=4 AND ul.UGCID = @writingID AND ul.DelType IN (2,5,7,8,10)
+       ]]>
+    </select>
+
+    <select id="GetNearHotelByRestaurant">
+      <![CDATA[    
+   
+select top 5 * from (
+
+      Select  hb.hotelid, Cast(dbo.[GetDistance](@lat,@lon,hm.glat,hm.glon) as decimal) as distance 
+  
+    From Hotel hb (nolock)    
+      Left  join HotelPlace hm (Nolock) on hm.hotelid=hb.hotelid    
+   
+   where districtid = @district and
+      hm.glat<>-1 and hm.glon<>-1 and hm.glat<>0 and hm.glon<>0  
+      ) A 
+    
+  where   distance<= 10000
+      order by distance asc
+       ]]>
+    </select>
+    <select id="GetHotelByDistrict">
+      <![CDATA[ 
+      SELECT hh.hotelID,
+             hh.Location,
+             hh.DistrictID,
+             hh.Zone,
+             ext.Brand,
+             ( Row_Number() OVER ( ORDER BY e.CtripScore DESC, hr.NoVoters DESC ) ) AS CtripScoreRank,
+             ( Row_Number() OVER (ORDER BY hotelName ASC, e.CtripScore DESC) )      AS HotelNameRank
+      FROM   Hotel hh WITH (nolock)
+             JOIN Hotel2 ext (nolock)
+               ON hh.HotelId = ext.HotelID
+             JOIN DestDB.dbo.DistrictAggregateRel AS R WITH (NOLOCK)
+               ON R.SubDistrictID = hh.DistrictID
+             LEFT JOIN HotelCtripScore AS E WITH (NOLOCK)
+               ON hh.HotelId = E.Resource
+             LEFT JOIN HotelRating AS hr (nolock)
+               ON hh.HotelId = hr.hotel
+      WHERE  hh.Enabled = 'T'
+             AND r.DistrictID = @DistrictID  
+       ]]>
+    </select>
+    <select id="GetDistrictListForHotelCheckData">
+      <![CDATA[    
+      SELECT DISTINCT r.DistrictID
+      FROM   Hotel hh WITH (nolock)
+             JOIN DestDB.dbo.DistrictAggregateRel AS R WITH (NOLOCK)
+               ON R.SubDistrictID = hh.DistrictID
+      WHERE  hh.Enabled = 'T' 
+      ORDER BY r.DistrictID
+        ]]>
+    </select>
+    <select id="GetHotelClassRankByDistrict">
+      <![CDATA[  
+            SELECT hh.hotelID,
+                   hc.classid as HotelClass,
+                   ( Row_Number() OVER (Partition BY hc.classid ORDER BY e.CtripScore DESC, hr.NoVoters DESC ) ) AS Rank
+            FROM   Hotel hh WITH (nolock)
+                   JOIN dbo.HotelClass hc (nolock)
+                     ON hh.HotelId = hc.Hotelid
+                   JOIN DestDB.dbo.DistrictAggregateRel AS R WITH (NOLOCK)
+                     ON R.SubDistrictID = hh.DistrictID
+                   LEFT JOIN HotelCtripScore AS E WITH (NOLOCK)
+                     ON hh.HotelId = E.Resource
+                   LEFT JOIN HotelRating AS hr (nolock)
+                     ON hh.HotelId = hr.hotel
+            WHERE  hh.Enabled = 'T'
+                   AND r.DistrictID = @DistrictID 
+         ]]>
+    </select>
+    <!--<select id="GetHotelReviewCache">
+      <![CDATA[    
+                
+                select top 10   
+w.writing, w.wdate, case when len(w.uid)> 10 then substring(w.uid,1,7) + '****'
+ else w.uid end as Uid ,  title, content, isnull(W.wholerate,0) as rating,
+  resource as HotelId, isnull(user_identity,0) as user_identity,   
+isnull(identitytxt,'其他') identitytxt, isnull(commentsubject,'')
+ commentsubject, writingType, isnull(UserID,0) UserID,   
+case when isnull(Nickname,'') = '' then 
+case when len(w.uid)> 10
+ then substring(w.uid,1,7) + '****' else w.uid end 
+ else  Nickname end Nickname,  
+isnull('http://www.zmjiudian.com/members/' + 
+case when isnull(m.profileUrl,'')='' then m.ProfileUrlno else m.profileUrl end,'') 
+as UserUrl, RatingRoom, RatingAtmosphere, RatingService, RatingCostBenefit  
+From HotelReview w   
+
+Join HotelRatingLog L (nolock) on w.writing = l.writing  
+Left Join Commdb..MemberProfile m (nolock) on w.Uid = m.Uid  
+where w.resource=@Hotelid and w.deleted='F'
+AND w.wdate < getdate()-1 and w.writingType='L'
+  
+
+
+                ]]>
+    </select>-->
+    <select id="GetZone">
+      <![CDATA[
+      if(@ClassID = '')
+        begin
+           SELECT z.Zone,
+                 z.ZoneName
+          FROM   Zone (nolock) z
+                 JOIN (SELECT Zone,
+                              COUNT(*) AS zoneHotelCount
+                       FROM   Hotel (nolock)
+                       WHERE  DistrictID = @DistrictID
+                              AND Enabled = 'T'
+                       GROUP  BY Zone) b
+                   ON z.Zone = b.Zone
+                   where z.districtid=@DistrictID
+          ORDER  BY ( CASE
+                        WHEN z.ZoneName LIKE '%周边%' THEN 0
+                        ELSE 1
+                      END ) DESC,
+                    zoneHotelCount DESC
+
+         end
+      else
+       begin
+         SELECT z.Zone,
+               z.ZoneName
+        FROM   Zone (nolock) z
+               JOIN (SELECT Zone,
+                            COUNT(*) AS zoneHotelCount
+                     FROM   Hotel hb (nolock)
+                     left join HotelClass hc (nolock) on
+                     hb.hotelid=hc.hotelid
+                     JOIN HotelDB.dbo.fn_Split(@ClassID, ',') a
+                      ON hc.ClassID = a.Item
+                     WHERE  DistrictID = @DistrictID
+                            AND Enabled = 'T'
+                     GROUP  BY Zone) b
+                 ON z.Zone = b.Zone
+                 where z.districtid=@DistrictID
+        ORDER  BY ( CASE
+                      WHEN z.ZoneName LIKE '%周边%' THEN 0
+                      ELSE 1
+                    END ) DESC,
+                  zoneHotelCount DESC
+       end
+     ]]>
+    </select>
+    <select id="GetLocation">
+      <![CDATA[    
+    
+ 
+ if(@ClassID = '')
+        begin
+    select zone,zonename from (
+  SELECT HotelCount,z.Location as Zone,
+           z.LocationName as ZoneName
+    FROM   Location (nolock) z
+           JOIN (SELECT Location,
+                        COUNT(*) AS HotelCount
+                 FROM   Hotel (nolock)
+                 WHERE  DistrictID = @DistrictID
+                        AND Enabled = 'T'
+                 GROUP  BY Location) b
+             ON z.Location = b.Location   
+              where z.districtid=@DistrictID
+ 
+
+ ) t ORDER  BY HotelCount DESC 
+ 
+ end
+ else
+ begin
+  select zone,zonename from (
+  SELECT HotelCount,z.Location as Zone,
+           z.LocationName as ZoneName
+    FROM   Location (nolock) z
+           JOIN (SELECT Location,
+                        COUNT(*) AS HotelCount
+                 FROM   Hotel  hb (nolock)
+                 join HotelClass hc (nolock) on hc.hotelid=hb.hotelid
+                 JOIN HotelDB.dbo.fn_Split(@ClassID, ',') a
+                      ON hc.ClassID = a.Item
+                 WHERE  DistrictID = @DistrictID
+                        AND Enabled = 'T'
+                 GROUP  BY Location) b
+             ON z.Location = b.Location   
+               where z.districtid=@DistrictID
+ 
+ ) t ORDER  BY HotelCount DESC 
+ end
+       ]]>
+    </select>
+
+    <select id="GetDownCtripCommentStartDate">
+      <![CDATA[
+   select  isnull(begtime,'2012-08-30') as StartTime , pagesum , pagecum  from DownLoaCtripCommentTime (Nolock)
+
+          ]]>
+    </select>
+    <select id="GetClassStar">
+      <![CDATA[
+      SELECT DISTINCT Star
+      FROM   Hotel (nolock)
+      WHERE  DistrictID = @DistrictID
+             AND Enabled = 'T'
+             AND Star BETWEEN 3 AND 5
+      ORDER  BY Star 
+          ]]>
+    </select>
+    <select id="GetClassBrand">
+      <![CDATA[
+         if(@HotelClass='H')
+        begin
+      SELECT a.Brand,
+             a.BrandName
+      FROM   Brand (nolock) a
+             JOIN (SELECT he.brand,
+                          COUNT(*) AS HotelCount
+                   FROM   Hotel h (nolock)
+                          JOIN Hotel2 AS he (nolock)
+                            ON h.HotelId = he.HotelID
+                   WHERE  DistrictID = @DistrictID
+                          AND Enabled = 'T'
+                   GROUP  BY brand) b
+               ON a.brand = b.brand
+      ORDER  BY ( CASE
+                    WHEN A.Brand = 35 THEN 9
+                    WHEN A.Brand = 18 THEN 8
+                    WHEN A.Brand = 12 THEN 7
+                    WHEN A.Brand = 24 THEN 6
+                    WHEN A.Brand = 31 THEN 5
+                    WHEN A.Brand = 23 THEN 4
+                    WHEN A.Brand = 25 THEN 4
+                    WHEN A.Brand = 6 THEN 4
+                    WHEN A.Brand = 50 THEN 4
+                    WHEN A.Brand = 10 THEN 4
+                    WHEN A.Brand = 5 THEN 4
+                    WHEN A.Brand = 21 THEN 4
+                    WHEN A.Brand = 26 THEN 4
+                    WHEN A.Brand = 46 THEN 4
+                    WHEN A.Brand = 49 THEN 4
+                    WHEN A.Brand = 69 THEN 4
+                    WHEN A.Brand = 4 THEN 4
+                  END ) DESC,
+                HotelCount DESC
+                end
+                
+                   ELSE if(@HotelClass='L')
+         begin
+           SELECT a.Brand,
+             a.BrandName
+      FROM   Brand (nolock) a
+             JOIN (SELECT he.brand,
+                          COUNT(*) AS HotelCount
+                   FROM   Hotel h (nolock)
+                          JOIN Hotel2 AS he (nolock)
+                            ON h.HotelId = he.HotelID
+                            join HotelClass hc (nolock) on hc.hotelid=h.hotelid
+                   WHERE  DistrictID = @DistrictID
+                          AND Enabled = 'T' AND  hc.classid>1 and hc.classid<5
+                   GROUP  BY brand) b
+               ON a.brand = b.brand
+      ORDER  BY ( CASE
+                    WHEN A.Brand = 35 THEN 9
+                    WHEN A.Brand = 18 THEN 8
+                    WHEN A.Brand = 12 THEN 7
+                    WHEN A.Brand = 24 THEN 6
+                    WHEN A.Brand = 31 THEN 5
+                    WHEN A.Brand = 23 THEN 4
+                    WHEN A.Brand = 25 THEN 4
+                    WHEN A.Brand = 6 THEN 4
+                    WHEN A.Brand = 50 THEN 4
+                    WHEN A.Brand = 10 THEN 4
+                    WHEN A.Brand = 5 THEN 4
+                    WHEN A.Brand = 21 THEN 4
+                    WHEN A.Brand = 26 THEN 4
+                    WHEN A.Brand = 46 THEN 4
+                    WHEN A.Brand = 49 THEN 4
+                    WHEN A.Brand = 69 THEN 4
+                    WHEN A.Brand = 4 THEN 4
+                  END ) DESC,
+                HotelCount DESC
+         end
+   ELSE 
+         begin
+           SELECT a.Brand,
+             a.BrandName
+      FROM   Brand (nolock) a
+             JOIN (SELECT he.brand,
+                          COUNT(*) AS HotelCount
+                   FROM   Hotel h (nolock)
+                          JOIN Hotel2 AS he (nolock)
+                            ON h.HotelId = he.HotelID
+                            join HotelClass hc (nolock) on hc.hotelid=h.hotelid
+                   WHERE  DistrictID = @DistrictID
+                          AND Enabled = 'T' AND  hc.classid=1
+                   GROUP  BY brand) b
+               ON a.brand = b.brand
+      ORDER  BY ( CASE
+                    WHEN A.Brand = 35 THEN 9
+                    WHEN A.Brand = 18 THEN 8
+                    WHEN A.Brand = 12 THEN 7
+                    WHEN A.Brand = 24 THEN 6
+                    WHEN A.Brand = 31 THEN 5
+                    WHEN A.Brand = 23 THEN 4
+                    WHEN A.Brand = 25 THEN 4
+                    WHEN A.Brand = 6 THEN 4
+                    WHEN A.Brand = 50 THEN 4
+                    WHEN A.Brand = 10 THEN 4
+                    WHEN A.Brand = 5 THEN 4
+                    WHEN A.Brand = 21 THEN 4
+                    WHEN A.Brand = 26 THEN 4
+                    WHEN A.Brand = 46 THEN 4
+                    WHEN A.Brand = 49 THEN 4
+                    WHEN A.Brand = 69 THEN 4
+                    WHEN A.Brand = 4 THEN 4
+                  END ) DESC,
+                HotelCount DESC
+         end
+      ]]>
+    </select>
+    <select id="GetHotelIDListForCheckData">
+      <![CDATA[
+          SELECT TOP 1000 HotelId
+          FROM   Hotel (nolock)
+          WHERE  HotelId < @HotelId
+          ORDER  BY HotelId DESC  
+      ]]>
+    </select>
+    <select id="GetHotelCountByDistrict">
+      <![CDATA[
+          SELECT TOP 1 HotelCount
+          FROM   HotelRank (nolock)
+          WHERE  DistrictID = @DistrictID
+                 AND HotelClassID = 0 
+      ]]>
+    </select>
+
+    <select id="GetHotelSimilarCommentByWriting">
+      <![CDATA[
+        select * from (
+        Select top 10  hw.writing  from HotelReview  hw  (nolock)
+         JOIN HotelDB..HotelReview  f (nolock)
+                                       ON hw.resource = f.resource
+        left join Hotel hb (Nolock) on hb.hotelid=hw.resource
+        where
+         f.writing=@Writing and isnull(hw.wholerate,hw.rating)=isnull(f.wholerate,f.rating)
+         AND hw.Deleted='F' and hw.writing<>@Writing
+         and hw.commentsubject not like '%'+hb.hotelname+'%' and  hw.commentsubject<>''
+         order by  newid()
+         ) t order by writing desc
+      ]]>
+    </select>
+
+    <select id="GetSimilarReviewHotelList">
+      <![CDATA[ 
+  select Hotelid from SimilarReviewHotelList (nolock)
+
+      ]]>
+    </select>
+    
+    <select id="GetHotel">
+      <![CDATA[
+        SELECT TOP 1 hh.hotelID AS Id,
+               hh.hotelName AS NAME,
+               isNULL(hh.shortName,'') AS ShortNAME,
+               ISNULL(hh.ename, '') AS EName,    
+               '￥' AS currency,
+               hh.hotelSource,
+               ISNULL(hr.rank, 9999) AS RANK,
+               ISNULL(hs.ReviewScore, 0) AS score,
+               ISNULL(hh2.Telephone, '') AS Telephone,
+               ISNULL(hh2.address, '') AS ADDRESS,
+               ISNULL(hh.star, 0) star,
+               ISNULL(RM.GLAT, 0) AS GLAT,
+               ISNULL(RM.GLON, 0) AS GLON,
+               ISNULL(RM.BLAT, 0) AS BLAT,
+               ISNULL(RM.BLON, 0) AS BLON,
+               ISNULL(hh.districtid, 0) AS DistrictId,
+               ISNULL(di.Name, '') AS DistrictName,
+               ISNULL(di.EName, '') AS DistrictEName,
+               ISNULL(dd.RootName, '') AS ProvinceName,
+               CONVERT(BIT,dd.InChina) AS InChina,
+               0 AS ReviewCount,
+               ISNULL(hh2.HotelDesc, '') AS DESCRIPTION,
+               ISNULL(hh.Zone, 0) Zone,
+               '' ZoneName,
+               ISNULL(hh.Location, 0) Location,
+               '' LocationName,
+               CONVERT(BIT, 0) IsValued,
+               0 AS UseBookingRule,
+               0 AS DISTRICTCOUNT,
+                ISNULL(hh2.OpenDate,'') OpenDate,
+                ISNULL(hh2.OpenYear,'1900-1-4') OpenYear,
+                ReBuildInfo = IsNull(hh2.ReBuildInfo,''),
+               AttractionDistance = isNULL( STUFF(
+                   (
+                       SELECT ',' + a.name + ':' + CONVERT(VARCHAR, t.distance)
+                       FROM   DestDB..AttractionHotelRel t(NOLOCK)
+                              INNER JOIN DestDB..Attraction a(NOLOCK)
+                                   ON  t.attractionid = a.id and a.released = 1
+                       WHERE  t.hotelid = hh.hotelid FOR XML PATH('')
+                   ),
+                   1,
+                   1,
+                   ''
+               ) ,'')
+        FROM   Hotel hh WITH (NOLOCK)
+               INNER JOIN HotelPlace rm(NOLOCK)
+                    ON  hh.hotelID = rm.hotelID
+               left JOIN Hotel2 hh2 WITH(NOLOCK)
+                    ON  hh.hotelID = hh2.hotelID            
+               LEFT JOIN HotelStat hs(NOLOCK)
+                    ON  hs.HotelID = hh.HotelId
+               left JOIN hotelrank hr(NOLOCK)
+                    ON  hr.HotelID = hh.hotelID     
+               left JOIN  destdb.dbo.DistrictInfo di 
+                    ON  di.DistrictID = hh.DistrictID
+               left JOIN  destdb.dbo.DistrictDirectory dd 
+               ON  di.DistrictID = dd.DistrictID
+        WHERE  hh.hotelid = @id
+      ]]>
+    </select>
+
+    <select id="GetSimpleHotels">
+      <![CDATA[
+          SELECT hh.hotelID AS Id,
+                 hh.hotelName AS NAME,
+                 hh.shortName ,
+                 ISNULL(hh.ename, '') AS EName,
+                 '￥' AS currency,
+                 hh.hotelSource,
+                 0 AS DistrictCount,
+                 9999 AS RANK,
+                 ISNULL(hs.ReviewScore, 0) AS score,       
+                 ISNULL(hs.ReviewCount, 0) AS ReviewCount,
+                 ISNULL(hs.RecommendCount, 0) AS RecommendCount,
+                 ISNULL(hh2.Telephone, '') AS Telephone,
+                 ISNULL(hh2.address, '') AS ADDRESS,
+                 ISNULL(hh.star, 0) star,
+                 ISNULL(RM.GLAT, 0) AS GLAT,
+                 ISNULL(RM.GLON, 0) AS GLON,
+                 ISNULL(RM.BLAT, 0) AS BLAT,
+                 ISNULL(RM.BLON, 0) AS BLON,
+                 0 AS DistrictId,
+                 di.Name AS districtname,
+                 '' AS districtename,
+                 0 AS InChina,
+                 ISNULL(hh2.HotelDesc, '') AS DESCRIPTION,
+                 ISNULL(hh.Zone, 0) Zone,
+                 ISNULL(z.ZoneName, '') ZoneName,
+                 ISNULL(hh.Location, 0) Location,
+                 ISNULL(lo.LocationName, '') LocationName,
+                 CONVERT(BIT, 0)IsValued,
+                 isnull(hp.surl,'') PicSURL,
+                 ToAttractionDistance =isNULL( STUFF((SELECT ','+ CONVERT(VARCHAR,[attractionID]) +':' + CONVERT(VARCHAR,Distance) FROM DestDB..AttractionHotelrel t WHERE t.hotelid=hh.hotelid FOR XML PATH('')), 1, 1, '')  ,'')
+          FROM   Hotel hh WITH (NOLOCK)
+                 INNER JOIN dbo.fn_Split(@HotelIDs, ',') fs
+                      ON  fs.Item = hh.HotelId
+                 INNER JOIN HotelPlace rm(NOLOCK)
+                      ON  hh.hotelID = rm.hotelID
+                 INNER JOIN DestDB..DistrictInfo di (nolock) on di.districtID = hh.districtid
+                 LEFT JOIN HotelStat hs(NOLOCK)
+                      ON  hs.HotelID = hh.HotelId       
+                 LEFT JOIN Hotel2 hh2 WITH(NOLOCK)
+                      ON  hh.hotelID = hh2.hotelID
+                 LEFT JOIN Location LO(NOLOCK)
+                      ON  hh.Location = LO.Location    
+                 LEFT JOIN Zone z(NOLOCK)
+                      ON  z.zone = hh.Zone
+                 LEFT JOIN PhotoDB..HotelPhoto hp(NOLOCK)
+                      ON  hp.hotelid = hh.hotelid
+                      AND hp.isCover = 1
+      ]]>
+    </select>
+
+    <select id="GetPackageListByHotelId">
+      <![CDATA[
+           SELECT * FROM   Package p WITH (NOLOCK) WHERE p.HotelId = @HotelId
+      ]]>
+    </select>
+
+    <select id="GetHotelPhotos">
+      <![CDATA[
+        SELECT  ID ,
+	Title,
+	channelID,
+	OTAID,
+	HotelID,
+	[type],
+	isUpdate,
+	[deleted],
+	createDate,
+	isCover,
+	 SURL = SURL  
+        FROM   PhotoDB..HotelPhoto hp WITH (NOLOCK)
+        WHERE hp.HotelId = @HotelID AND  hp.[deleted] = 0 AND hp.isUpdate = 1
+        ORDER BY hp.isCover DESC ,hp.ID
+      ]]>
+    </select>
+    <select id="GetZhongDangPriceSection">
+      <![CDATA[
+      SELECT dd.DistrictID,
+        ISNULL(zdp.Minprice, 0) MinPrice,
+        ISNULL(zdp.Maxprice, 0) MaxPrice,
+        dd.InChina
+ FROM   Destdb..districtDirectory dd (NOLOCK)
+        LEFT JOIN ZhongDangPriceSection zdp (NOLOCK)
+             ON  zdp.DistrictId = dd.districtID
+ WHERE  dd.DistrictID =   @DistrictID
+      ]]>
+    </select>
+
+    <select id="GetCtripHotel">
+      <![CDATA[
+        select top 100 a.WritingId,a.LanguageType,a.WritingTitle,a.WritingContent,a.WritingDate,
+        a.UserId,a.WritingType,a.IpAddress,a.MasterResource,a.RoomId,a.RoomName,a.ChangeDateTime,
+        a.OrderId,a.UserIdentity,a.IdentityText,a.RecommendFlag,a.Status, a.DeletedFlag, a.CodeFrom,a.ImportReviewId,a.SourceName,b.RatingAll,
+        b.RatingRoom,b.RatingService,b.RatingCostBenefit,b.RatingDining,b.RatingPrice,b.RatingPosit
+        from Comm_Hotel_Writing_Comment a WITH (NOLOCK) left join  Comm_Hotel_RatingLog b WITH (NOLOCK)  on a.WritingId=b.WritingId
+        where a.WritingType = '1' and a.WritingId>@id
+        ]]>
+    </select>
+
+    <select id="GetDownloadNote">
+      <![CDATA[
+      select '指针' + CONVERT(varchar(50),BegTime,121)+ 'Note' + isnull(note,'') as note  from HotelDB..DownLoaCtripCommentTime (NOLOCK)
+      ]]>
+
+    </select>
+
+    <select id="GetHotelReviewIDListByTimeStamp">
+      <![CDATA[
+          SELECT TOP 1000 writing as HotelReviewID,CAST(TimeStampCol AS BIGINT) AS [TimeStamp]
+          FROM   HotelReview pie (nolock)
+          WHERE   TimeStampCol>@LastTimeStamp
+                 AND pie.writing > @HotelReviewCheckRange
+          ORDER  BY TimeStampCol
+      ]]>
+    </select>
+
+    <select id="GetHotelInfoByDistrict">
+      <![CDATA[    
+  
+  SELECT  hh.hotelID,
+                 hh.hotelName                AS resourcename,
+                 hh.districtid,
+                 di.Name as DistrictName,
+                 di.EName as DistrictEName,
+                 isnull(he.Telephone, '')    Telephone,
+                 hh.HotelSource,
+                 hh.starLicence,
+                 isnull(hh.hotelType, 0)     AS hotelType,
+                 isnull(he.brand, 0)         AS brand,
+                 isnull(hb.brandname, '')    brandname,
+                 isnull(he.address, '')      address,
+                 isnull(he.hoteldesc, '')    AS hoteldesc,
+                 isnull(he.website, '')      AS website,
+                 he.zipcode,
+                 isnull(he.email, '')        AS email,
+                 isnull(he.hotelPic, '')     AS hotelPic,
+                 isnull(he.roomquantity, 0)  AS roomquantity,
+                 isnull(Lo.Location, 0)      AS Location,
+                 isnull(Lo.Locationname, '') AS LocationName,
+                 ISNULL(hh.star,0) star,
+                 isnull(vz.zonename, '')     AS zonename,
+                 isnull(vz.zone, 0)          AS zone,
+                 isnull(hh.ename, '')        AS Enresourcename,
+                 isnull(RM.GLAT, 0)          AS GLAT,
+                 isnull(RM.GLON, 0)          AS GLON,
+                 isnull(RM.BLAT, 0)          AS BLAT,
+                 isnull(RM.BLON, 0)          AS BLON,
+                 isnull(he.brief,'') as brief,
+                  isnull(hh.UseBookingRule,0) as UseBookingRule
+          FROM   HotelDB..Hotel hh WITH (nolock)
+                 JOIN HotelDB.dbo.fn_Split(@DistrictList, ',') a
+                   ON hh.DistrictID = a.Item
+                 LEFT JOIN HotelDB..HotelPlace rm (nolock)
+                   ON rm.hotelID = hh.hotelID
+                 LEFT JOIN HotelDB..Hotel2 he (nolock)
+                   ON he.hotelID = hh.hotelID
+                 LEFT JOIN HotelDB..Location LO (nolock)
+                   ON hh.Location = LO.Location
+                 LEFT JOIN HotelDB..zone vz (nolock)
+                   ON vz.zone = hh.zone
+                 LEFT JOIN HotelDB..Brand hb (NOLOCK)
+                   ON hb.brand = he.brand
+                   left join DestDB.dbo.DistrictInfo di (nolock)
+                   on di.DistrictID=hh.DistrictID 
+      
+       ]]>
+    </select>
+
+    <select id="GetVacationHotelPyRank">
+      <![CDATA[    
+  select id as VacationHotelID,PyRank = row_number() over(order by
+r.name collate Chinese_PRC_CS_AI_WS asc,r.ID asc)
+from UnitInfo_base  r (nolock) where districtid=@District and enabled='T'
+
+   ]]>
+    </select>
+    <select id="GetUnitInfoByDistrict">
+      <![CDATA[   
+      
+   
+   select ub.id,ub.name,ub.ename,ub.districtid,di.name as districtname,
+   ue.description,ue.address,ue.sleeps,isnull(ue.bedcount,0)
+    as bedcount,ue.livingroom,ue.bathroom,ue.bedroom
+,l.locationname,l.location,z.zonename,z.zone
+
+ from UnitInfo_Base ub(nolock)
+   JOIN HotelDB.dbo.fn_Split(@DistrictList, ',') a
+                 ON ub.districtid = a.Item
+left join DestDB..districtinfo di (nolock) on di.districtid=ub.districtid
+left join UnitInfo_Ext ue (Nolock) on ue.id=ub.id
+left join location l (Nolock) on l.location=ub.location
+left join zone z (Nolock) on z.zone=ub.zone
+where  ub.enabled='T'
+
+    ]]>
+
+    </select>
+
+    <select id="GetAggregateDistrict">
+      <![CDATA[
+    SELECT dar.DistrictID,dar.SubDistrictID 
+    FROM DestDB.[dbo].DistrictAggregateRel dar (NOLOCK)
+WHERE dar.SubDistrictID = @DistrictId
+      ]]>
+    </select>
+    <select id="GetHotelTag">
+      <![CDATA[    
+          SELECT ht.TagID,
+                htd.Name,
+                Num
+          FROM HotelTag ht(nolock)
+          JOIN HotelTagDefine htd(nolock) on ht.tagid = htd.id
+          WHERE  ht.HotelID = @hotelID and ht.IsValid = 1
+          ORDER BY Num desc
+      ]]>
+    </select>
+    <select id="GetHotelFeatured">
+      <![CDATA[   
+      SELECT f.ID,
+                f.Name,
+                10 Num
+         FROM   Featured f(NOLOCK)
+                JOIN HotelFilter hf(NOLOCK)
+                     ON  hf.HotelID = @HotelID
+                     AND hf.FilterCol = f.id + 140000000000 
+                
+      ]]>
+    </select>
+    <select id="GetHotel3">
+      <![CDATA[   
+      SELECT *
+         FROM  Hotel3 (NOLOCK)
+         where HotelID = @HotelID
+      ]]>
+    </select>
+    <select id="GetFeaturedList">
+      <![CDATA[   
+      SELECT f.ID,
+                f.Name,
+                10 Num
+         FROM   Featured f(NOLOCK)
+      ]]>
+    </select>
+    <select id="GetNearbyPOIByHotel">
+      <![CDATA[    
+       SELECT nh.POIID, nh.HotelID, nh.distance 
+       FROM NearbyHotels nh (NOLOCK)
+WHERE nh.HotelID = @HotelID
+       ]]>
+    </select>
+    <select id="GetUnitInfo">
+      <![CDATA[   
+      
+      select ub.id,ub.name,ub.ename,ub.districtid,di.name as districtname,ue.description,ue.address,ue.sleeps,isnull(ue.bedcount,0) as bedcount,ue.livingroom,ue.bathroom,ue.bedroom
+,l.locationname,l.location,z.zonename,z.zone
+
+ from UnitInfo_Base ub(nolock)
+   JOIN HotelDB.dbo.fn_Split(@IdList, ',') a
+                 ON ub.id = a.Item
+left join DestDB..districtinfo di (nolock) on di.districtid=ub.districtid
+left join UnitInfo_Ext ue (Nolock) on ue.id=ub.id
+left join location l (Nolock) on l.location=ub.location
+left join zone z (Nolock) on z.zone=ub.zone
+where  ub.enabled='T'
+
+    ]]>
+
+    </select>
+
+    <select id="GetUnitlocation">
+      <![CDATA[        
+
+    select zone,zonename from (
+    SELECT HotelCount,z.Location as Zone,
+    z.LocationName as ZoneName
+    FROM   Location (nolock) z
+    JOIN (SELECT Location,
+    COUNT(*) AS HotelCount
+    FROM   UnitInfo_Base (nolock)
+    WHERE  DistrictID = @DistrictID
+    AND Enabled = 'T'
+    GROUP  BY Location) b
+    ON z.Location = b.Location
+    where z.districtid=@DistrictID
+ ) t ORDER  BY HotelCount DESC
+
+    ]]>
+    </select>
+
+
+    <select id="GetPOIGroup">
+      <![CDATA[ 
+      SELECT p.GroupID FROM POIGroupRel p
+      INNER JOIN fn_Split( @POILIst ,',') fs ON p.poi = fs.Item
+     ]]>
+    </select>
+
+    <select id="GetHotelMinPrice">
+      <![CDATA[ 
+      SELECT MIN( MinPrice ) AS MinPrice FROM HotelBasePrice hp (nolock)
+WHERE hp.HotelID = @HotelID
+     ]]>
+    </select>
+    
+    <select id="GetHotelDistanceListByHotel">
+      <![CDATA[ 
+            SELECT * 
+            FROM NearbyHotels nh (NOLOCK)
+      WHERE nh.HotelID= @HotelID
+     ]]>
+    </select>
+
+    <select id="GetHotelPOIDistanceByHotel">
+      <![CDATA[ 
+            SELECT Distance 
+            FROM NearbyHotels nh (NOLOCK)
+      WHERE nh.HotelID= @HotelID AND nh.POIID = @poiid
+     ]]>
+    </select>
+
+    <select id="GetUnitZone">
+      <![CDATA[        
+
+     select zone,zonename from (
+    SELECT HotelCount,z.zone as Zone,
+    z.zonename as ZoneName
+    FROM   zone (nolock) z
+    JOIN (SELECT zone,
+    COUNT(*) AS HotelCount
+    FROM   UnitInfo_Base (nolock)
+    WHERE  DistrictID = @DistrictID
+    AND Enabled = 'T'
+    GROUP  BY zone) b
+    ON z.zone = b.zone
+    where z.districtid=@DistrictID
+    ) t ORDER  BY HotelCount DESC
+
+    ]]>
+    </select>
+
+    <select id="GetBookingUrlByHotel">
+      <![CDATA[
+     select top 1 bookingUrl from bookingHotel_Url (nolock) where hotelid=@HotelID
+    ]]>
+    </select>
+    
+    <select id="GetAgodaUrlByHotel">
+      <![CDATA[
+     select top 1 HotelUrl from AgodaHotel_Url (nolock) where HotelId=@HotelID
+    ]]>
+    </select>
+
+    <select id="GetHotelIDByHotelOriID">
+      <![CDATA[
+     select top 1 hotelid from hotelota (NOLOCK) Where hotelOriID=@HotelOriID AND channelid=2 order by hotelID asc
+    ]]>
+    </select>
+
+    <select id="GetHotelOTAByCreateTime">
+      <![CDATA[
+     select * from hotelota (NOLOCK) Where CreateTime >= @CreateTime
+    ]]>
+    </select>
+    <select id="GetRecentHotelReview">
+      <![CDATA[
+           SELECT hw.resource, hw.writing, hw.content from HotelReview hw with(nolock)
+           where hw.deleted = 'F' 
+           and hw.wdate between @LastTime and @Now 
+      ]]>
+    </select>
+
+
+    <select id="GetEarlyHotelReview">
+      <![CDATA[
+           SELECT top 10000 hw.resource, hw.writing, hw.content from HotelReview hw with(nolock)
+           where hw.deleted = 'F' and hw.writing > @writing
+           order by writing
+      ]]>
+    </select>
+
+    <select id="GetSeoKeywordReviewID4Do">
+      <![CDATA[
+        select top 1 writing from hotelseokeywordreview (nolock)
+        order by writing desc
+      ]]>
+    </select>
+
+    <select id="GetZhongdangHotelInfo">
+      <![CDATA[
+           select ht.HotelId, ht.tagId, hd.Name from HotelTag ht with(nolock)
+           left join HotelTagDefine hd with(nolock) on hd.ID = ht.tagId
+           where ht.Num >= 5
+      ]]>
+    </select>
+
+    <select id="GetZhongdangRuleList">
+      <![CDATA[
+        select hd.ID, hd.Name, hd.Should, hd.Must, hd.Mustnot 
+        from HotelTagDefine hd with(nolock) where hd.id = 104
+      ]]>
+    </select>
+
+    <select id="GetSeoKeywordRuleList">
+      <![CDATA[
+        select *
+        from HotelSeoKeywordDefine with(nolock)
+      ]]>
+    </select>
+
+    <select id="GetTagParams4HotelList">
+      <![CDATA[
+      if(@ClassID = '')
+        begin
+          select tagid, COUNT(ht.HotelId) num, htd.name from hoteltag ht (nolock)
+          join hotel h(nolock) on h.HotelId = ht.hotelid
+          join HotelTagDefine htd on ht.tagid = htd.id
+          where 0 = @districtid or h.DistrictID = @districtid
+          group by ht.tagid, htd.name
+          order by num desc
+        end
+      else
+        begin
+          select tagid, COUNT(ht.HotelId) num, htd.name from hoteltag ht (nolock)
+          join hotel h(nolock) on h.HotelId = ht.hotelid
+          join hotelClass hc(nolock) on h.HotelId = hc.Hotelid
+          join HotelDB.dbo.fn_Split(@ClassID, ',') a
+                      ON hc.ClassID = a.Item
+          join HotelTagDefine htd on ht.tagid = htd.id
+          where 0 = @districtid or h.DistrictID = @districtid
+          group by ht.tagid, htd.name
+          order by num desc
+        end
+      ]]>
+    </select>
+
+    <select id="GetMostValuedDistrict">
+      <![CDATA[
+        --select di.DistrictID
+        --,(select top 1 v.HotelId from Valued v(nolock) join Hotel h on h.HotelId = v.HotelId where v.Score = t.maxScore and h.DistrictID = t.DistrictID)as MostValuedHotelId
+        --,(select COUNT(1) from Valued v(nolock) join Hotel h on h.HotelId = v.HotelId where h.DistrictID = t.DistrictID)as ValuedHotelCount
+        --,di.Name as DistrictName
+       -- from 
+        --(
+	      --  select Max(Score) maxScore, h.DistrictID from Valued v (nolock)
+	      --  join Hotel h (nolock) on h.HotelId = v.HotelId
+        --  inner join fn_split(@DistrictId,',') a on a.item = h.DistrictID
+        --  where type in (6,5,4,3)
+	      --  group by h.DistrictId
+        --)t
+        --join DestDB.dbo.DistrictInfo di (nolock) on di.DistrictID = t.DistrictID   
+        select di.DistrictId as DistrictId,
+        (select top 1 v.HotelId from Valued v (nolock)join Hotel h on h.HotelId = v.HotelId where h.DistrictID = a.Item order by v.Type desc, v.Score desc) as MostValuedHotelId
+        ,(select COUNT(1) from Valued v(nolock) join Hotel h on h.HotelId = v.HotelId where h.DistrictID = a.Item)as ValuedHotelCount
+        ,di.Name as DistrictName
+        from 
+        fn_split(@DistrictId,',') a
+        join DestDB.dbo.DistrictInfo di (nolock) on di.DistrictID = a.Item
+      ]]>
+    </select>
+    <select id="GetTagList">
+      <![CDATA[
+     SELECT ID,
+            NAME,
+            Should,
+            Must
+     FROM   HotelTagDefine htd (nolock)
+            JOIN fn_Split(@tagIDs, ',') a
+                 ON  htd.ID = a.Item
+        
+      ]]>
+    </select>
+
+    <select id="GetMostUniqueDistrict">
+      <![CDATA[
+        select DistrictId,DistrictName,FirstTagId,FirstTagName,FirstTagHotelNum,SecondTagId,SecondTagName,SecondTagHotelNum,ThirdTagId
+      ,ThirdTagName,ThirdTagHotelNum,ShowHotelId from HomepageUniqueInfo(nolock) order by [order]
+      ]]>
+    </select>
+    <select id="GetHotelTagReviewID">
+      <![CDATA[
+      select writing from HotelTagReview htr (nolock)
+      join HotelTagDefine htd (nolock) on htd.ID = htr.ID
+      where htr.Id=@tagid and HotelId=@hotelid order by Writing desc
+      ]]>
+    </select>
+
+    <select id="GetAllHotelFilterDic">
+      <![CDATA[
+SELECT [key], type, id, name, num
+from
+(
+  SELECT CONVERT(BIGINT,10000000000 * 5 + zone) [Key],
+         5 TYPE,
+         zone ID,
+         ZoneName NAME,
+         0 Num,
+         0 sort
+  FROM   zone (nolock)
+  UNION ALL
+  SELECT CONVERT(BIGINT,10000000000 * 8 + location) [Key],
+         8 TYPE,
+         location ID,
+         LocationName NAME,
+         0 Num,
+         0 sort
+  FROM   Location l (nolock)
+  UNION ALL
+  SELECT CONVERT(BIGINT,10000000000 * 7 + Brand) [Key],
+         7 TYPE,
+         Brand ID,
+         BrandName NAME,
+         0 Num,
+         0 sort
+  FROM   Brand b (nolock)
+  UNION ALL
+  SELECT CONVERT(BIGINT, 10000000000 * 2 + ID) [Key],
+         2 TYPE,
+         ID,
+         NAME,
+         0 Num,
+         0 sort
+  FROM   Featured f (nolock)
+  UNION ALL
+  SELECT CONVERT(BIGINT, 10000000000 * 4 + Facility) [Key],
+         4 TYPE,
+         Facility ID,
+         FacilityName Name,
+         0 Num,
+         0 sort
+  FROM   HJDFacilitys fc (nolock)
+  UNION ALL
+  SELECT CONVERT(BIGINT, 10000000000 * 6 + ClassID) [Key],
+         6 TYPE,
+         ClassID ID,
+         ClassName Name,
+         0 Num,
+         sort
+  FROM   Class c (nolock)
+  WHERE MergeTo > 0
+  
+  UNION ALL
+ SELECT CONVERT(BIGINT, 10000000000 * 13 + ID) [Key],
+         13 TYPE,
+         ID ID,
+         (case WHEN ShortName is null OR LEN(ShortName)=0 THEN Name ELSE ShortName End) Name,
+         0 Num,
+         0 sort
+  FROM   DestDB..Attraction c (nolock)
+
+   
+  UNION ALL                 
+  SELECT CONVERT(BIGINT, 10000000000 * 14 + f.ID) [Key],
+         14 TYPE,
+         ID,
+         NAME,
+         0 Num,
+         0 sort
+  FROM   Featured f(NOLOCK)
+  WHERE  f.isValid = 1
+  --ORDER BY Sort
+  
+  UNION ALL  --主题
+ SELECT CONVERT(BIGINT, 10000000000 * 16 + ID) [Key],
+       116 TYPE,
+       ID ID,
+       NAME,
+       0 Num,
+       sort
+FROM   Interest c(NOLOCK)
+WHERE  c.type = 1
+  
+  UNION ALL  -- 景点
+  
+SELECT CONVERT(BIGINT, 10000000000 * 16 + ID) [Key],
+       117 TYPE,
+       ID ID,
+       NAME,
+       0 Num,
+       sort
+FROM   Interest c(NOLOCK)
+WHERE  c.type = 2
+  
+  UNION ALL
+ SELECT CONVERT(BIGINT, 10000000000 * 13 + ID) [Key],
+         13 TYPE,
+         ID ID,
+         (case WHEN ShortName is null OR LEN(ShortName)=0 THEN Name ELSE ShortName End) Name,
+         0 Num,
+         0 sort
+  FROM   DestDB..Attraction c (nolock)
+  
+  UNION ALL
+  SELECT CONVERT(BIGINT,100000000001) [Key], 10 TYPE, 1 ID, '一星' Name, 0 Num, 5 sort
+  UNION ALL
+  SELECT CONVERT(BIGINT,100000000002) [Key], 10 TYPE, 2 ID, '二星' Name, 0 Num, 4 sort
+  UNION ALL
+  SELECT CONVERT(BIGINT,100000000003) [Key], 10 TYPE, 3 ID, '三星' Name, 0 Num, 3 sort
+  UNION ALL
+  SELECT CONVERT(BIGINT,100000000004) [Key], 10 TYPE, 4 ID, '四星' Name, 0 Num, 2 sort
+  UNION ALL
+  SELECT CONVERT(BIGINT,100000000005) [Key], 10 TYPE, 5 ID, '五星' Name, 0 Num, 1 sort
+) a
+order by type, sort
+      ]]>
+    </select>
+    <select id="GetReviewStatus">
+      <![CDATA[
+      select hw.writing, CommentSubject, status, deleted
+      from hotelDB..hotelreview  hw (Nolock)
+      where hw.resource=@resource  and hw.userid=@userid and datediff(day,hw.wdate,getdate())<90
+         ]]>
+    </select>
+    <select id="GetHotelReviewWritingListByUserid">
+      select writing
+      from hotelreview hr (nolock)
+      where UserID=@userid and (deleted='F' or status='W')
+    </select>
+
+    <select id="GetBaseValuedHotel">
+      <![CDATA[
+        with tmp as
+(
+	select htr.HotelID, hr.writing,
+    case when DATEDIFF(Month, hr.wdate, GETDATE()) >= 0 and DATEDIFF(Month, hr.wdate, GETDATE()) < =12 then 1
+    when DATEDIFF(Month, hr.wdate, GETDATE()) > 12 and DATEDIFF(Month, hr.wdate, GETDATE()) < =24 then 0.5
+    when DATEDIFF(Month, hr.wdate, GETDATE()) > 24 and DATEDIFF(Month, hr.wdate, GETDATE()) < =36 then 0.25
+    when DATEDIFF(Month, hr.wdate, GETDATE()) > 36 and DATEDIFF(Month, hr.wdate, GETDATE()) < =48 then 0.125
+    end as monthnum
+    ,case when htr.Id = 101 then -1
+    else 1
+    end as WordWeight
+    ,hr.wdate
+    from HotelTagReview(nolock) htr
+    join HotelTag(nolock) ht on htr.HotelId = ht.HotelId and ht.TagId = htr.ID
+    join HotelReview(nolock) hr on hr.writing = htr.Writing
+    where 
+        (htr.ID =98 or htr.ID = 99 or htr.ID = 101)
+    and hr.deleted = 'F' and hr.user_identity <> 10 and hr.user_identity <> 60
+    and DATALENGTH(hr.content) >= 50
+)
+
+select isnull(t1.有效点评, 0) as GoodReviewNum,isnull(总点评,0)as AllReviewNum, hib.hotelId,hib.HotelName, hib.DistrictID, 
+isnull(hir.Rank,0) Rank, isnull(hp.MinPrice, 0) as Price, hs.Score
+from Hotel(nolock) hib 
+left join
+(
+    
+    select HotelID, SUM(convert(float,monthnum) * WordWeight)as 有效点评 from tmp
+    group by HotelID
+)t1
+on hib.HotelId = t1.hotelId
+left join HotelRank(nolock) hir on hir.HotelID = hib.hotelId --and hir.DistrictID = hib.DistrictID and hir.HotelClassID = 0
+left join (select HotelID, Min(MinPrice)as minPrice from HotelRealtimePrice(nolock)  where Channel = 'ctrip' and MinPrice >50 group by HotelId) hp on hp.HotelID = hib.hotelId 
+left join (select resource, SUM(1) 差评 from HotelReview(nolock) where rating < 2.1 and deleted = 'F' and DATALENGTH(content) >= 50 group by resource) t3 on t3.resource = hib.hotelId
+left join (select SUM(case when DATEDIFF(Month, hr.wdate, GETDATE()) >= 0 and DATEDIFF(Month, hr.wdate, GETDATE()) < =12 then 1
+    when DATEDIFF(Month, hr.wdate, GETDATE()) > 12 and DATEDIFF(Month, hr.wdate, GETDATE()) < =24 then 0.5
+    when DATEDIFF(Month, hr.wdate, GETDATE()) > 24 and DATEDIFF(Month, hr.wdate, GETDATE()) < =36 then 0.25
+    when DATEDIFF(Month, hr.wdate, GETDATE()) > 36 and DATEDIFF(Month, hr.wdate, GETDATE()) < =48 then 0.125
+    end ) 总点评, resource from HotelReview hr(nolock) where deleted = 'F' and user_identity <> 10 and user_identity <> 60 and DATALENGTH(content) >= 50 group by resource) t2 on hib.hotelId = t2.resource
+left join HotelScore_bak hs on hs.Resource = hib.HotelID and hs.Score > 0
+where Score > 0 and t1.有效点评 > 0
+
+
+      ]]>
+    </select>
+    <select id="GetHotelSEOKeywordByHotel">
+      <![CDATA[
+        SELECT k.num,kd.name,kd.url,kd.title,kd.id FROM hotelseokeyword k (NOLOCK)
+        LEFT JOIN hotelseokeyworddefine kd (NOLOCK) ON k.keywordid = kd.id
+        WHERE k.hotelid=@hotelID
+        ORDER BY num desc
+      ]]>
+    </select>
+    <select id="GetHotelSEOKeyword">
+      <![CDATA[
+        SELECT 0 as num,kd.name,kd.url,kd.title,kd.id FROM hotelseokeyworddefine kd (NOLOCK)
+      ]]>
+    </select>
+    <select id="GetNearHotelByHotel">
+      <![CDATA[
+
+     DECLARE @geo1 geography  
+      DECLARE @glat      FLOAT          
+     DECLARE @glon      FLOAT    
+
+    SELECT @glat = glat,    
+            @glon = glon    
+     FROM   HotelPlace hp(NOLOCK)    
+     WHERE  hp.HotelID = @hotelid  
+  
+     IF (@glat > 0 AND @glon > 0)    
+     BEGIN   
+         SELECT @geo1 = geography::Point(@glat, @glon, 4326)  
+
+         SELECT top 50 hp.hotelid,    
+                convert(DECIMAL(8,3),@geo1.STDistance(geo)) as Distance
+          FROM   hotelplace hp(NOLOCK)
+         where @geo1.STDistance(geo) < 100000 and hp.HotelID <> @hotelid
+         order by @geo1.STDistance(geo)
+     end
+     else
+     begin
+     select 1 as hotelid, 1 as Distance where 1=0
+     end
+      ]]>
+    </select>
+    <select id="GetHotelContactsFor3">
+      <![CDATA[
+ select * from HotelContacts where (pricechannelid = 3 or pricechannelid = 2) and HotelID = @HotelId
+      ]]>
+    </select>
+
+
+    <select id="DeleteOtaPriceCtrip">
+      <![CDATA[
+ delete from OTAPriceCtrip where HotelId = @HotelId and Night = @Night
+      ]]>
+    </select>
+    <select id="GetOtaPriceCtrip">
+      <![CDATA[
+ select * from OTAPriceCtrip with(nolock) where HotelId = @HotelId and Night >= @CheckIn and Night < @CheckOut order by RoomTypeId,RoomId
+      ]]>
+    </select>
+    <select id="GetOtaPriceCtripByPid">
+      <![CDATA[
+ select * from OTAPriceCtrip with(nolock) where ID = @ID
+      ]]>
+    </select>
+
+    <select id="GetOtaPackageIdxCtrip">
+      <![CDATA[
+ select top 1 [ID] from OTAPackageIdxCtrip where RoomId = @RoomId
+      ]]>
+    </select>
+
+    <select id="GetHotelListByDistrict">
+      <![CDATA[
+select distinct h.HotelId from hoteldb..hotel h (NOLOCK)
+inner join hoteldb..HotelState hs (NOLOCK)
+on hs.HotelID = h.HotelId
+inner join hoteldb..HotelContacts hc  (NOLOCK) 
+on hc.HotelID = h.HotelId
+inner join destdb..DistrictSubRel ds (NOLOCK) 
+on ds.SubDistrictID = h.DistrictID
+inner join destdb..DistrictDirectory dd (NOLOCK)
+on dd.DistrictID = ds.DistrictID
+where (hs.State = 2) and ds.districtid = @DistrictId and h.Enabled = 'T' 
+      ]]>
+    </select>
+    <select id="GetHotelListByDistrictInterest">
+      <![CDATA[
+select distinct h.HotelId from hoteldb..hotel h (NOLOCK)
+inner join hoteldb..HotelState hs (NOLOCK) on hs.HotelID = h.HotelId
+inner join hoteldb..HotelContacts hc (NOLOCK) on hc.HotelID = h.HotelId
+inner join destdb..DistrictSubRel ds (NOLOCK) on ds.SubDistrictID = h.DistrictID
+inner join destdb..DistrictDirectory dd (NOLOCK) on dd.DistrictID = ds.DistrictID
+inner join hoteldb..interesthotelrel ihr (NOLOCK) on ihr.HID = h.HotelId
+inner join hoteldb..interestplace ip (NOLOCK) on ip.id = ihr.ipid 
+inner join hoteldb..interest i (NOLOCK) on i.id = ip.iid 
+where (hs.State = 2) and ds.districtid = @DistrictId and h.Enabled = 'T' and ihr.state > 10 and i.released = 1 and i.type = 1 and i.ID = @InterestId
+
+      ]]>
+    </select>
+    <select id="GetHotelListByInterest">
+      <![CDATA[
+select distinct h.HotelId from hoteldb..hotel h (NOLOCK)
+inner join hoteldb..HotelState hs (NOLOCK) on hs.HotelID = h.HotelId
+inner join hoteldb..HotelContacts hc (NOLOCK) on hc.HotelID = h.HotelId
+inner join hoteldb..interesthotelrel ihr (NOLOCK) on ihr.HID = h.HotelId
+inner join hoteldb..interestplace ip (NOLOCK) on ip.id = ihr.ipid 
+inner join hoteldb..interest i (NOLOCK) on i.id = ip.iid 
+where (hs.State = 2) and h.Enabled = 'T' and ihr.state > 10 and i.released = 1 and i.type = 1 and i.ID = @InterestId
+
+
+      ]]>
+    </select>
+    <select id="GetProvinceListByInterest">
+      <![CDATA[
+select distinct Convert(nvarchar(20), dd.DistrictID)+','+di.Name pname,di.Name from hoteldb..hotel h (NOLOCK)
+inner join hoteldb..HotelState hs (NOLOCK) on hs.HotelID = h.HotelId
+inner join hoteldb..HotelContacts hc (NOLOCK) on hc.HotelID = h.HotelId
+inner join destdb..DistrictSubRel ds  (NOLOCK)on ds.SubDistrictID = h.DistrictID
+inner join destdb..DistrictDirectory dd (NOLOCK) on dd.DistrictID = ds.DistrictID
+inner join destdb..DistrictInfo di (NOLOCK) on di.DistrictID = dd.DistrictID
+inner join hoteldb..interesthotelrel ihr (NOLOCK) on ihr.HID = h.HotelId
+inner join hoteldb..interestplace ip (NOLOCK) on ip.id = ihr.ipid 
+inner join hoteldb..interest i (NOLOCK) on i.id = ip.iid 
+where (hs.State = 2) and dd.DataLevel = 3 and h.Enabled = 'T'
+and ihr.state > 10 and i.released = 1 and i.type = 1 and i.ID = @InterestId
+order by di.Name
+      ]]>
+    </select>
+    <select id="GetProvinceListInChina">
+      <![CDATA[
+select distinct Convert(nvarchar(20), dd.DistrictID)+','+di.Name pname,di.Name from hoteldb..hotel h (NOLOCK)
+inner join hoteldb..HotelState hs (NOLOCK) on hs.HotelID = h.HotelId
+inner join hoteldb..HotelContacts hc (NOLOCK) on hc.HotelID = h.HotelId
+inner join destdb..DistrictSubRel ds (NOLOCK) on ds.SubDistrictID = h.DistrictID
+inner join destdb..DistrictDirectory dd (NOLOCK) on dd.DistrictID = ds.DistrictID
+inner join destdb..DistrictInfo di (NOLOCK) on di.DistrictID = dd.DistrictID
+where (hs.State = 2) and dd.DataLevel = 3 and h.Enabled = 'T'
+and dd.InChina = 1
+order by di.Name
+      ]]>
+    </select>
+    <select id="GetProvinceListUnChina">
+      <![CDATA[
+select distinct Convert(nvarchar(20), dd.DistrictID)+','+di.Name pname,di.Name from hoteldb..hotel h (NOLOCK)
+inner join hoteldb..HotelState hs (NOLOCK) on hs.HotelID = h.HotelId
+inner join hoteldb..HotelContacts hc (NOLOCK) on hc.HotelID = h.HotelId
+inner join destdb..DistrictSubRel ds (NOLOCK) on ds.SubDistrictID = h.DistrictID
+inner join destdb..DistrictDirectory dd (NOLOCK) on dd.DistrictID = ds.DistrictID
+inner join destdb..DistrictInfo di (NOLOCK) on di.DistrictID = dd.DistrictID
+where (hs.State = 2) and dd.DataLevel = 3 and h.Enabled = 'T'
+and dd.InChina = 0
+order by di.Name
+      ]]>
+    </select>
+    <select id="GetOtaRoomIdCtripByIdx">
+      <![CDATA[
+ select top 1 RoomId from OTAPackageIdxCtrip (NOLOCK) where ID = @ID
+      ]]>
+    </select>
+    <select id="GetHotelContacts">
+      <![CDATA[
+        select HotelID,OpenState,PriceChannelID,SettleRate from HotelDB.dbo.HotelContacts (NOLOCK) where HotelID = @HotelID
+	    ]]>
+    </select>
+    <select id="GetOtaRoomBedStateByHid">
+      <![CDATA[
+ select * from hoteldb.dbo.OtaRoomBedState (NOLOCK) where HotelId = @HotelId
+      ]]>
+    </select>
+
+    <select id="GetOtaListByHotelID">
+      <![CDATA[
+select a.HotelId,
+a.HotelOriID,
+a.IsValid,
+a.ChannelID,
+a.CanSyncPrice,
+ISNULL(a.CreateTime,GETDATE()) as CreateTime,b.Channel as ChannelCode,c.Name as ChannelName from [HotelDB].[dbo].[HotelOTA] A
+	inner join HotelDB.dbo.OTAStatus B
+	on a.ChannelID=b.ID
+	inner join [HotelDB].[dbo].[OTA_Channel_Config] C
+	on b.Channel=c.Channel
+	 where IsValid=1
+   and IsProductValid=1
+	 and HotelId=@HotelId
+      ]]>
+    </select>
+  <select id="GetOtaHotelRoomStates">
+      <![CDATA[
+select distinct(HotelID) hotelid into #photels from Package p (nolock) where p.isValid = 1
+
+select Convert(bigint,h.HotelId)HotelId,op.HotelOriId,h.HotelName 
+,(select COUNT(1) from hoteldb.dbo.OtaRoomBedState where hotelid = h.hotelid and date >= @Date and State = 1 and SoldCount >= HaveCount) State1
+
+,(select COUNT(1) from hoteldb.dbo.OtaRoomBedState where hotelid = h.hotelid and date >= @Date and State = 0 and SoldCount < HaveCount) State0
+
+,(select COUNT(1) from hoteldb.dbo.OtaRoomBedState where hotelid = h.hotelid and date >= @Date and State = -1) State_1
+from HotelDB.dbo.Hotel h (NOLOCK)
+inner join #photels ph  on ph.hotelid = h.hotelid
+inner join hoteldb.dbo.OTAPackageSourceConfig op (NOLOCK) on op.HotelId = h.HotelId and op.ChannelId = 103
+order by h.HotelId
+
+drop table #photels
+      ]]>
+    </select>
+    <select id="GetHotelPackageDistrictInfo">
+      <![CDATA[
+      IF @lat > 0 AND @lng > 0
+          BEGIN
+          DECLARE @g geography = geography::Point(@lat, @lng, 4326)	
+          IF @geoScopeType = 3
+              BEGIN
+                    SELECT hc.HotelID
+                          ,h.DistrictID
+                          ,h.HotelName
+                          ,packagecount 
+                          ,di.Name DistrictName
+                          ,di.EName DistrictEName
+                    FROM HotelContacts hc(nolock) 
+                    INNER JOIN hotel h(nolock)
+                    on h.HotelId=hc.HotelID
+                    INNER JOIN (SELECT HotelID,Max(EndDate) maxEndDate,COUNT(HotelID) packagecount FROM Package (nolock) WHERE isValid=1  AND EndDate> GETDATE()  GROUP BY HotelID) p
+                           on p.HotelID = hc.HotelID
+                    left join DestDB..DistrictInfo di(nolock)
+                           on di.DistrictID=h.DistrictID
+                    INNER JOIN hoteldb..HotelPlace hp with(nolock) 
+                           on hp.hotelid = h.hotelid
+                    WHERE h.Enabled='T' and @g.STDistance(hp.geo) <= 300000
+               END
+          ELSE
+              BEGIN
+                    --DECLARE @g geography = geography::Point(@lat, @lng, 4326)	
+                    SELECT hc.HotelID
+                          ,h.DistrictID
+                          ,h.HotelName
+                          ,packagecount 
+                          ,di.Name DistrictName
+                          ,di.EName DistrictEName
+                    FROM HotelContacts hc(nolock) 
+                    INNER JOIN hotel h(nolock)
+                    on h.HotelId=hc.HotelID
+                    INNER JOIN (SELECT HotelID,Max(EndDate) maxEndDate,COUNT(HotelID) packagecount FROM Package (nolock) WHERE isValid=1  AND EndDate> GETDATE()  GROUP BY HotelID) p
+                           on p.HotelID = hc.HotelID
+                    left join DestDB..DistrictInfo di(nolock)
+                           on di.DistrictID=h.DistrictID
+                    INNER JOIN hoteldb..HotelPlace hp with(nolock) 
+                           on hp.hotelid = h.hotelid
+                    WHERE h.Enabled='T' and @g.STDistance(hp.geo) >= 300000
+               END
+           END
+       ELSE 
+           BEGIN
+                SELECT hc.HotelID
+                      ,h.DistrictID
+                      ,h.HotelName
+                      ,packagecount 
+                      ,di.Name DistrictName
+                      ,di.EName DistrictEName
+                FROM HotelContacts hc(nolock) 
+                INNER JOIN hotel h(nolock)
+                on h.HotelId=hc.HotelID
+                INNER JOIN (SELECT HotelID,Max(EndDate) maxEndDate,COUNT(HotelID) packagecount FROM Package (nolock) WHERE isValid=1  AND EndDate> GETDATE() GROUP BY HotelID) p
+                on p.HotelID = hc.HotelID
+                left join DestDB..DistrictInfo di(nolock)
+                on di.DistrictID=h.DistrictID
+                WHERE h.Enabled='T'
+           END
+      ]]>
+    </select>
+    <select id="GetHotelPackageByDistrictIdCount">
+    <![CDATA[
+        SELECT COUNT(1)   
+              FROM HotelDB..Hotel   h(nolock)
+              inner join HotelDB..Package p(nolock)
+              on h.HotelId=p.HotelID
+              inner join (select SerialNO,MAX(ID) ID from HotelDB..Package(nolock) pk
+								               inner join HotelDB..hotel h (nolock) 
+								                       on h.HotelId = pk.HotelID 
+						                    where h.DistrictID= @DistictID
+											                  and pk.isValid=1 
+											                  and pk.IsNotSale = 0 
+											                  and pk.EndDate >  GETDATE()
+								                        group by pk.SerialNO ) A
+                       on A.ID=p.ID
+              --left join pricedb..PackagePriceCalendar ppc with(nolock) on ppc.HotelID = h.HotelId and ppc.PID = p.ID and ppc.DT = CONVERT(varchar(100), GETDATE(), 23)
+              --left join HotelDB..HotelStat hs(nolock) on hs.HotelID = h.HotelId
+              where h.DistrictID = @DistictID and p.isValid=1 and p.IsNotSale = 0 and p.EndDate >  GETDATE()  
+      ]]>
+    </select>
+
+    <select id="GetHotelPackageByDistrictId">
+      <![CDATA[
+        select op.PID, COUNT(1) c into #orderinfo
+        from hoteldb.dbo.Orders o
+        join hoteldb.dbo.OrderPackage op on op.ID = o.ID
+        where o.State = 12 and op.CheckIn > dateadd(DAY, -61, GETDATE()) 
+        group by op.PID
+        order by c desc
+
+        SELECT * FROM(
+              SELECT      p.SerialNO
+                          ,h.HotelId
+                          ,h.HotelName
+                          ,h.DistrictId
+                          ,p.ID  PackageID
+                          ,p.Code PackageName
+                          ,p.EndDate
+                          ,p.Brief  PackageBrief
+                          ,p.StartDate
+                          ,p.ForVIPFirstBuy
+                          ,isnull(oinfo.c,0) OrderCount
+                          ,ROW_NUMBER() over(order by isnull(oinfo.c,0) desc) rn
+                          FROM hotel h(nolock)
+              inner join Package p(nolock)
+                      on h.HotelId=p.HotelID
+             inner join (select SerialNO,MAX(ID) ID from Package(nolock) pk
+								              inner join hotel h (nolock) 
+								                      on h.HotelId = pk.HotelID 
+						             where h.DistrictID= @DistictID
+											         and pk.isValid=1 
+											         and pk.IsNotSale = 0 
+										         	 and pk.EndDate >  GETDATE()
+								               group by pk.SerialNO ) A
+                     on A.ID=p.ID
+              --left join pricedb..PackagePriceCalendar ppc with(nolock) on ppc.HotelID = h.HotelId and ppc.PID = p.ID and ppc.DT = CONVERT(varchar(100), GETDATE(), 23)
+              --left join HotelDB..HotelStat hs(nolock) on hs.HotelID = h.HotelId
+              left join #orderinfo oinfo on oinfo.PID = p.ID
+              where h.DistrictID = @DistictID and p.isValid=1 and p.IsNotSale = 0 and p.EndDate >  GETDATE() --and p.StartDate < @StartDate
+              ) a where  a.rn > (@pageIndex-1) * @pageSize and a.rn <= @pageIndex * @pageSize
+      
+      
+       drop table #orderinfo
+      ]]>
+    </select>
+  
+    <select id="GetFirstVipPackageByPackageId">
+      <![CDATA[
+      SELECT * FROM Package WHERE VIPFirstPayParentPID = @PID  AND IsNotSale = 0 AND PackageState= 1     
+      ]]>
+    </select>
+
+    <select id="GetRetailHotelList">
+      <![CDATA[
+      ;with hPrice as
+      (
+		      select p.HotelID,pr.* from hoteldb..PRate pr (nolock)
+		      inner join hoteldb..Package p(nolock)
+		              on p.ID = pr.PID
+		      where p.PackageType = @PackageType and p.PackageState=1 AND IsNotSale = 0 AND IsDistributable = 1
+                AND p.EndDate>GETDATE() and ((pr.Date>GETDATE() and pr.Type>0)or pr.Type=0)
+      )
+                
+      select * into #MinPrice from (select ROW_NUMBER()over(partition by HotelID order by VIPPrice asc) rowId,*   
+      from  hPrice ) as AuctionRecords   
+      where rowId=1
+      IF @sort = 1 or @sort = 3
+      BEGIN
+           select top (@count) * from
+           (
+           select *,
+                    ROW_NUMBER () over(order by case  when @sort = 1 then MinVipPrice 
+                                                      when @sort = 3 then ManualCommission end asc) rn 
+           from (
+                select  h.HotelId,h.HotelName,mp.AutoCommission,CONVERT(decimal(18,2),mp.Price) MinNotVipPrice,'' HotelPic,
+                        ISNULL(ht.HotelOriID ,0) OriHotelId,
+                        CONVERT(decimal(18,2),case when mp.ManualVIPPrice = -1  then mp.Price
+                             when mp.ManualVIPPrice<>-1 then ManualVIPPrice end) MinVipPrice,
+                        CONVERT(decimal(18,2),case when  mp.ManualCommission = -1 or mp.ManualCommission=0
+                             then mp.AutoCommission 
+                             when mp.ManualCommission<>-1 then ManualCommission end)  ManualCommission
+                from #MinPrice mp(nolock)
+                inner join hoteldb..hotel h(nolock)
+                        on h.HotelId =  mp.HotelID
+                left join hoteldb..OTAPackageSourceConfig ht(nolock)
+                        on ht.HotelId =h.HotelId
+                        and ht.IsValid = 1 and ht.ChannelID=103
+                WHERE h.HotelName like  '%'+ @searchWord +'%'
+                ) t
+            )A
+            where A.rn > @start
+      END 
+      ELSE
+      BEGIN
+           select top (@count) * from
+           (
+             select * ,
+                      ROW_NUMBER () over(order by case  when @sort = 0 then hotelid
+                                                        when @sort = 2 then MinVipPrice
+                                                        when @sort = 4 then ManualCommission end desc) rn
+                 from (
+                  select  h.HotelId,h.HotelName,mp.AutoCommission,CONVERT(decimal(18,2),mp.Price) MinNotVipPrice,'' HotelPic,
+                          ISNULL(ht.HotelOriID ,0) OriHotelId,
+                          CONVERT(decimal(18,2),case when mp.ManualVIPPrice = -1 
+                               then mp.Price 
+                               when mp.ManualVIPPrice<>-1 then ManualVIPPrice end) MinVipPrice,
+                          CONVERT(decimal(18,2),case when  mp.ManualCommission = -1 or mp.ManualCommission=0
+                               then mp.AutoCommission
+                               when mp.ManualCommission<>-1 then ManualCommission end)  ManualCommission
+                  from #MinPrice mp(nolock)
+                  inner join hoteldb..hotel h(nolock)
+                          on h.HotelId =  mp.HotelID
+                  left join hoteldb..OTAPackageSourceConfig ht(nolock)
+                          on ht.HotelId =h.HotelId
+                          and ht.IsValid = 1 and ht.ChannelID=103
+                  WHERE h.HotelName like  '%'+ @searchWord +'%'
+                  ) t
+              )A
+            where A.rn > @start
+      END
+      drop table #MinPrice
+      ]]>
+    </select>
+
+    <select id="GetRetailHotelListCount">
+      <![CDATA[
+       ;with hPrice as
+      (
+		      select p.HotelID,pr.* from hoteldb..PRate pr (nolock)
+		      inner join hoteldb..Package p(nolock)
+		              on p.ID = pr.PID
+		      where p.PackageType = @PackageType and p.PackageState=1 AND p.IsNotSale = 0  AND IsDistributable = 1
+                AND p.EndDate>GETDATE()
+      )
+                
+      select * into #MinPrice from (select ROW_NUMBER()over(partition by HotelID order by VIPPrice asc) rowId,*   
+      from  hPrice ) as AuctionRecords   
+      where rowId=1
+      select  COUNT(1)
+            from #MinPrice mp(nolock)
+            inner join hoteldb..hotel h(nolock)
+                    on h.HotelId =  mp.HotelID
+            left join hoteldb..OTAPackageSourceConfig ht(nolock)
+                    on ht.HotelId =h.HotelId
+                    and ht.IsValid = 1 and ht.ChannelID=103
+            WHERE h.HotelName like '%'+ @searchWord +'%'
+      drop table #MinPrice
+      ]]>
+    </select>
+
+    <select id="GetRetailPackageList">
+      <![CDATA[
+    select p.ID PID,SerialNo,Code,p.RoomId,ri.RoomCode RoomName,
+           Case When DayLimitMin = 0 then 1 when DayLimitMin!=0 then DayLimitMin end NightCount 
+    from  HotelDB..Package p(nolock)
+    left join HotelDB..PRoomInfo ri(nolock)
+           on ri.ID = p.RoomId
+    where p.HotelId = @HotelId AND  p.PackageState = 1 AND IsNotSale = 0 and p.IsDistributable = 1 AND p.SaleEndTime>=CONVERT(datetime,CONVERT(nvarchar(100),GETDATE(),23)) 
+      ]]>
+    </select>
+
+
+    <select id="GetPrateListByPids">
+      <![CDATA[
+        select * from 
+        (
+            select * ,ROW_NUMBER() over(partition by pr.pid order by 
+                                          case when  pr.ManualvipPrice = -1 then price
+                                               when pr.ManualvipPrice != -1 then ManualvipPrice end  asc) rn from HotelDB..PRate pr(nolock)
+            inner join fn_Split(@PIDS,',') item 
+            on item.Item =pr.PID
+            where (pr.Date>GETDATE() and pr.Type=8) or pr.Type!=8
+        ) r
+        where r.rn =1
+      ]]>
+    </select>
+
+    <select id="GetHotelChannel">
+      <![CDATA[
+      select h.*,ISNULL(ht.HotelOriID ,0) OriHotelId from hoteldb..hotel h(nolock) 
+            Left join  hoteldb..OTAPackageSourceConfig ht(nolock)
+                    on ht.HotelId =h.HotelId
+       where h.HotelID = @HotelId
+      ]]>
+    </select>
+
+    <select id="GetRetailPackageInfo">
+      <![CDATA[
+     select h.HotelId,h.HotelName,p.ID PID,SerialNo,Code,p.Brief,
+             ISNULL(ru.ShortProductUrl,'') ShortProductUrl,
+             ISNULL(ru.ShortResourceURL,'') ShortResourceURL,
+             ISNULL(ru.ProductUrl,'') ProductUrl,
+             ISNULL(ru.ResourceURL,'') ResourceURL,
+	           Case When DayLimitMin = 0 then 1 
+	                when DayLimitMin!=0 then DayLimitMin 
+	                end NightCount 
+     from  HotelDB..Package p(nolock)
+     inner join HotelDB..hotel h(nolock)
+             on h.HotelId = p.HotelID
+     left join CouponDB..RetailUrl ru(nolock)
+             on ru.pid = p.ID and ru.CID = @CID 
+     where p.ID = @PID
+      ]]>
+    </select>
+  </statements>
+</configuration>

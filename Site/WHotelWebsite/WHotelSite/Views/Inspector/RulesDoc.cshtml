@@ -1,0 +1,85 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+
+    InspectorParam param = ViewBag.param;
+
+    ViewBag.Title = string.Format("品鉴师说明");
+    ViewBag.Keywords = string.Format("品鉴师说明");
+    ViewBag.Description = string.Format("品鉴师说明");
+
+    ViewBag.BodyStyle = "overflow-x:hidden;";
+    ViewBag.BodyClass = "inspectorrulespage";
+
+    var isApp = ViewBag.IsApp;
+}
+@section styles
+{
+    <style>
+        html, body {
+                height: 100%;
+                margin: 0;
+            }
+    </style>
+}
+<script>
+    function goto(param) {
+        var url = "@(ViewBag.AccessProtocal)" + param;
+        this.location = url;
+    }
+
+    function gotopage(param) {
+        var url = "@(ViewBag.AccessProtocalPage)" + param;
+        this.location = url;
+    }
+    function gourl(url) {
+        location.href = url;
+    }
+</script>
+<div class="inspectorBg2"></div>
+<header class="hotellist-head @(isApp ? " hidden" : "visible-xs")">
+    <table class="head-tab" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+            <td class="left-td"><a href="/inspector/register?userid=@(param.UserId)"><img src="~/content/images/icon-back.png" alt="返回" /></a></td>
+            <td class="center-td" valign="middle">品鉴师说明</td>
+            <td class="right-td"></td>
+        </tr>
+    </table>
+</header>
+<div style="width:auto;max-width:600px;margin:0 auto 0 auto;padding:0;">
+    <div class="rules-body">
+        <div class="rulesdoc-moreinfo-panel">
+            <div class="rulesdoc-moreinfo-tit">品鉴师说明</div>
+            <div class="rulesdoc-moreinfo-text">
+                <p>
+                    作为一家专注于推荐特色好酒店的APP，我们推荐的酒店能够获得大家的认可就是我们莫大的满足！为了更好地聚合群智，分享经验，我们将长期招募酒店品鉴师。 成为品鉴师，可免费试住各地特色酒店，与大家分享真实的入住体验和感受。同时，为了确保品鉴师是一群真正喜爱住酒店，追求品质旅游，懂得欣赏，乐于分享的酒店控，
+                    <br /><b style="font-size: 1.1em; line-height: 1em; color: #fff;">我们对品鉴师的入选资格做了一些要求如下：</b>
+                </p>
+                <p>
+                    通过周末酒店成功预订、入住并发表3条精华点评(需要3家不同的酒店），点评内容对其他用户更有参考意义，即可成为品鉴师。（您可在积分规则，查看精华点评标准）。
+                </p>
+                <p>
+                    <b style="font-size: 1.1em; line-height: 1em; color: #fff; ">成为品鉴师之后，品鉴师有资格参与免费品鉴酒店的活动：</b><br />
+                    1、通过写点评积累点评奖励积分，通过“我的钱包”的积分栏目，申请兑换品鉴酒店；<br />
+                    2、加入品鉴师微信群，受邀品鉴新开业酒店（无需消耗积分）。
+                </p>
+                <p>
+                    <b style="font-size: 1.1em; line-height: 1em; color: #fff; ">品鉴师的义务：</b><br />
+                    1、每年至少使用周末酒店的服务一次，以每年12月31日为年度结算截点。<br />
+                    2、保持客观、全面的高质量点评。在免费入住酒店结束后，品鉴师须在入住完成一周内，向周末酒店提交一篇该酒店品鉴报告。如逾期不能完成（或可参考性不达要求），周末酒店将有权取消该用户的品鉴师资格。<br />
+                    3、此免费住宿酒店的品鉴报告须在周末酒店官方指定平台独家发表。品鉴报告及照片的版权全部归周末酒店拥有。如有违反，周末酒店将有权取消该用户的品鉴师资格。<br />
+                    4、品鉴师此次免费住宿的品鉴报告将不获得奖励积分。
+                </p>
+                <p>
+                    <b style="font-size: 1.1em; line-height: 1em; color: #fff; ">免责说明：</b><br />
+                    1、参加报名成为品鉴师的用户将自动视为同意品鉴师项目相关条款。<br />
+                    2、每期可供免费品鉴的酒店名额有限，周末酒店不能保证所有报名的品鉴师都会获得机会，但是会尽量满足，并在下一期优先考虑。<br />
+                    3、品鉴师应自行前往酒店入住，在往来途中及入住期间所造成的任何人身及财产损失的与周末酒店无关，品鉴师应自行向责任人主张。<br />
+                    4、周末酒店有权随时对品鉴师资格、参与方法和品鉴师义务条款进行调整或停止品鉴师项目，而不需要事先通知品鉴师相关的调整。<br />
+                    5、周末酒店官方具有对品鉴师项目运营细则的最终解释权。
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,71 @@
+﻿@model  List<HJD.HotelServices.Contracts.CanSaleHotelInfoEntity>
+@{
+    Layout = null;
+}
+@{
+    ViewBag.Title = "WeekendPackages";
+}
+
+<!DOCTYPE html>
+
+<script type="text/javascript">
+    function goto(hotelid, hotelname)
+    {
+        _hmt.push(['_trackEvent', 'WeekendPackages', 'nav', hotelname, hotelid]);
+        var url = "http://m1.zmjiudian.com/" + hotelid;
+        this.location = url;
+
+    }
+
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>特惠套餐-周末有房</title>
+    <link href="/content/css/bootstrap.css" rel="stylesheet">
+    <link href="/content/css/tehui.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+
+       
+        <div class="row topimg">
+            <div class="col-xs-12">
+                <img src="/content/images/tehui3.png" class="img-responsive" alt="" />
+            </div>
+            <div class="weeken col-xs-12">
+                <h5>周末有房？</h5>
+                @Html.Raw(ViewBag.SatList)
+            </div>
+        </div>
+
+        @foreach (string city in Model.Select(h => h.DataPathName).Distinct().OrderBy(d => d.Trim('.').Split('.').Last()))
+        { 
+
+        <div class="title2">  <h5> @( city.Trim('.').Split('.').Last())</h5></div>
+        <ul>
+            @foreach (HJD.HotelServices.Contracts.CanSaleHotelInfoEntity h in Model.Where(h=>h.DataPathName == city))
+            { 
+                <li> <a href="javascript:;" onclick="goto(@(h.HotelId),'@( h.HotelName)')">@( h.HotelName)  ￥@((int)h.Businessprice)</a></li>
+            }
+        </ul>
+        }
+
+        <div class="row">
+            <div class="col-xs-12 ">
+                <div class="tips2">
+                    咨询请洽：<i>4000-021-702</i>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script type="text/javascript">
+        var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+        document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F3566e9570ddbe6722a51adedffbf065b' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+</body>
+</html>

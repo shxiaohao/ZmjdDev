@@ -1,0 +1,55 @@
+.comment-rule-title {
+    width: 100%;
+    max-width:660px;
+    height: auto;
+    line-height:2em;
+    margin:0.2em auto 0.2em auto;
+    font-size:1.5em;
+    color:#666;
+}
+
+.comment-rule-body {
+    width: 100%;
+    max-width:660px;
+    min-height: 44em;
+    height: auto;
+    margin:0 auto 0 auto;
+    padding:0 0 1em 0;
+    background:#fff;
+}
+.comment-rule-panel {
+    width:90%;
+    height:auto;
+    margin:0 auto 1em auto;
+    padding:2.8em 0 0 0;
+    background: #FFF; 
+}
+.comment-rule-tit {
+    width:100%;
+    margin:0 auto 1em auto;
+    padding:0 0 0.8em 0;
+    text-align:left;
+    line-height:1.5em;
+    color: #333;
+    font-size: 1.2em;
+    border-bottom:1px solid #ddd;
+}
+.comment-rule-text {
+    width:100%;
+    margin:0 auto 0.8em auto;
+}
+.comment-rule-text .tit{
+    line-height:1.5em;
+    color: #333;
+    font-size: 1.2em;
+    margin-top:1em;
+}
+.comment-rule-text p{
+    line-height:1.4em;
+    color: #333;
+    font-size: 1.2em;
+}
+.comment-rule-text .child{
+    width:100%;
+    color: #888;
+}

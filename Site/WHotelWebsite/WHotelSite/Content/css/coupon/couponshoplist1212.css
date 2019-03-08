@@ -1,0 +1,151 @@
+body {
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+  background: #f0f0f0; }
+
+a {
+  text-decoration: none; }
+
+/**/
+.main {
+  width: 100%;
+  height: auto; }
+
+.main .photo {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  margin: 0 auto 0.4em auto; }
+
+.main .photo img {
+  width: 100%; }
+
+.main .list {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  margin: 0 auto 0 auto; }
+
+.main .list .item {
+  width: 94%;
+  height: auto;
+  background: #fff;
+  border: 1px solid #dcdcdc;
+  margin: 0 auto 0.45em auto;
+  cursor: pointer; }
+
+.main .list .item table {
+  width: 100%;
+  height: auto;
+  table-layout: fixed; }
+
+.main .list .item table .imgTd {
+  width: 42%;
+  height: auto;
+  text-align: center; }
+
+.main .list .item table .imgTd img {
+  width: 90%;
+  margin: 0.5em auto 0.3em auto; }
+
+.main .list .item table .infoTd {
+  width: 58%;
+  height: auto;
+  text-align: center;
+  background: url(../../images/icon-aarow7.png) no-repeat right 2em;
+  background-size: 1.5em; }
+
+.main .list .item table .infoTd .names {
+  width: 92%;
+  height: auto;
+  line-height: 1em;
+  text-align: left;
+  margin: 0.5em auto 0 auto;
+  padding: 0 0 0 0;
+  display: inline-table; }
+
+.main .list .item table .infoTd .briefs {
+  width: 90%;
+  height: auto;
+  text-align: left;
+  margin: 0 auto 0 auto;
+  padding: 0.3em 0 0.7em 0;
+  border-bottom: 1px solid #dcdcdc;
+  font-size: 0.8em; }
+
+.main .list .item table .infoTd .briefs div {
+  width: 100%;
+  height: 1.2em;
+  line-height: 1.2em;
+  text-align: left;
+  margin: 0 0 0 0;
+  font-size: 1em;
+  color: #898989;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  overflow: hidden; }
+
+.main .list .item table .infoTd .prices {
+  width: 96%;
+  height: 2.5em;
+  line-height: 2.5em;
+  text-align: left;
+  margin: 0 auto 0 auto; }
+
+.main .list .item table .infoTd table {
+  width: 100%;
+  height: auto; }
+
+.main .list .item table .infoTd .prices .mkprice {
+  width: 100%;
+  color: #888;
+  font-size: 1em;
+  padding: 0 0 0 0;
+  margin: 0 0.3em 0 0; }
+
+.main .list .item table .infoTd .prices .mkprice .mkt {
+  color: #999;
+  font-size: 0.8em;
+  padding: 0 0 0 0; }
+
+.main .list .item table .infoTd .prices .tag {
+  width: 100%;
+  color: #cb5454;
+  font-size: 0.7em;
+  border: 1px solid #cb5454;
+  border-radius: 3px;
+  padding: 0.12em 0.2em 0.12em 0.2em; }
+
+.main .list .item table .infoTd .prices .lable {
+  font-size: 0.8em;
+  color: #cb5454;
+  margin: 0 0.2em 0 0; }
+
+.main .list .item table .infoTd .prices .t {
+  font-size: 0.6em;
+  color: #cb5454;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0; }
+
+.main .list .item table .infoTd .prices .value {
+  color: #cb5454;
+  font-size: 1.4em;
+  font-family: Arial;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0; }
+
+.download-footbanner {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  margin: 0 auto 0 auto;
+  padding: 0;
+  vertical-align: bottom;
+  position: fixed;
+  bottom: 0px; }
+
+.download-footbanner img {
+  width: 100%;
+  vertical-align: bottom; }

@@ -1,0 +1,4 @@
+
+[2015/7/31 17:28:25] Start Job [HotelPriceSlotEngine]
+[2015/7/31 17:28:58] Start Job [HotelPriceSlotEngine]
+[2015/7/31 17:29:41] Start Job [HotelPriceSlotEngine]

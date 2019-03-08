@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<configuration>
+  <statements>
+    <select id="GetPreHotel">
+      <![CDATA[   
+exec SP_GetPreHotel_Select @GroupID
+       ]]>
+    </select>
+    <select id="GetFirstErrorHotel">
+      <![CDATA[   
+exec SP_FirstErrorHotel_Select @CrawlerCount
+       ]]>
+    </select>
+    <select id="GetProxyList">
+      <![CDATA[   
+Select * From Proxy
+       ]]>
+    </select>
+    <select id="GetOptimizeProxyList">
+      <![CDATA[   
+Select * From OptimizeProxy
+       ]]>
+    </select>
+    <select id="GetUpdatedRoomList">
+      <![CDATA[   
+Select * From Room Where Stamp = 1 OR Stamp = 2 Order By [Timestamp] 
+       ]]>
+    </select>
+    <select id="GetUpdatedPriceRateList">
+      <![CDATA[   
+Select * From PriceRate Where Stamp = 1 OR Stamp = 2 Order By [Timestamp] 
+       ]]>
+    </select>
+    <select id="UpdateRoomStamp">
+      <![CDATA[   
+Update Room Set Stamp = @Stamp, TimeStamp = getdate() Where ID = @ID
+       ]]>
+    </select>
+    <select id="UpdatePriceRateStamp">
+      <![CDATA[   
+Update PriceRate Set Stamp = @Stamp, TimeStamp = getdate() Where ID = @ID
+       ]]>
+    </select> 
+    <select id="GetUnCheckHotelBase">
+      <![CDATA[   
+Select Distinct * From HotelBase Where Checked = 0 And HotelID = RealHotelID
+       ]]>
+    </select>
+    <select id="GetBaseRoomInfo">
+      <![CDATA[   
+select * from Room order by HotelID
+       ]]>
+    </select>
+    <select id="GetRoomMatch">
+      <![CDATA[   
+select * from CtripDB.dbo.RoomMatch Where Matched = 1 order by HotelID
+       ]]>
+    </select>    
+    <select id="GetHotelBase">
+      <![CDATA[   
+select * from HotelBase where HotelID = @HotelID
+       ]]>
+    </select>
+    <select id="GetRoomMatchRate">
+      <![CDATA[   
+Select * From RoomMatchRate Where HotelID = @HotelID And PRoomCode = @PRoomCode And HotelOriID = @HotelOriID And OtaRoomName = @OtaRoomName And MatchRate > 0
+       ]]>
+    </select>
+    <select id="BakTodayHotels">
+      <![CDATA[   
+exec ( ' Select * Into Hotels' + @Date + ' From Hotels '  )
+exec ( ' Select * Into Historys' + @Date + ' From Historys '  )
+
+Delete Hotels
+Delete Historys
+       ]]>
+    </select>
+    <select id="GetCrawlerConfig">
+      <![CDATA[   
+select * from CtripDB.dbo.Config where code = @Code
+       ]]>
+    </select>
+    <select id="ExpiredHotelRoom">
+      <![CDATA[   
+
+update pricerate set CanSell = 0 where [TimeStamp] < @ExpiredDate and Night = @Night and  BaseRoomID in (select BaseRoomID from room where HotelID = @HotelId)
+
+update room set Stamp = -1 where [TimeStamp] < @ExpiredDate and HotelID = @HotelId
+
+       ]]>
+    </select>
+    <select id="GetPriceRate">
+      <![CDATA[   
+select * from PriceRate where ID = @ID
+       ]]>
+    </select>
+  </statements>
+</configuration>

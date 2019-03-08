@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<configuration>
+  <statements>
+    <select id="GetDialog">
+      <![CDATA[
+         select * 
+ from Dialog 
+ WHERE  IntDate = @IntDate 
+ and (( @userID > 0 AND userid = @userID ) 
+ OR (@SessionID <>'' AND SessionID = @SessionID))
+      ]]>
+    </select>  
+    <select id="GetUserCustomerCareInfoList">
+      <![CDATA[
+        SELECT uccr.*, cc.[Name], cc.KeFuEmail,CustomerCareUserID= cc.UserID
+        FROM UserCustomerCareRel uccr (NOLOCK) 
+        INNER JOIN CustomerCare cc (NOLOCK) 
+                ON cc.ID = uccr.CustomerCareID
+        WHERE  uccr.UserID = @UserID
+        ORDER BY uccr.IDX DESC 
+      ]]>
+    </select>  
+    <select id="GetAllUserCustomerCare">
+      <![CDATA[
+        SELECT  *
+        FROM   CustomerCare cc (NOLOCK)   
+      ]]>
+    </select>
+    <select id="GetCustomerCareByUserID">
+      <![CDATA[
+        SELECT  *
+        FROM   CustomerCare cc (NOLOCK)   
+        where UserID = @UserID
+      ]]>
+    </select>
+    <select id="GetLastAssignedUserCustomerCareInfo">
+      <![CDATA[
+        SELECT TOP 1 uccr.*, cc.[Name], cc.KeFuEmail,CustomerCareUserID= cc.UserID
+        FROM UserCustomerCareRel uccr (NOLOCK) 
+        INNER JOIN CustomerCare cc (NOLOCK) 
+                ON cc.ID = uccr.CustomerCareID 
+        ORDER BY uccr.IDX DESC 
+      ]]>
+    </select>
+    <select id="GetDialogItems">
+      <![CDATA[
+SELECT di.*,
+       dialogCreateTime = d.CreateTime,
+       d.UserID
+FROM   DialogItems di(NOLOCK)
+       INNER JOIN DIALOG d(NOLOCK)
+            ON  d.ID = di.DialogID
+WHERE  di.DialogID =  @DialogID
+      ]]>
+    </select>
+    <select id="GetLastDialogItems">
+      <![CDATA[
+       SELECT di.*,
+       dialogCreateTime = d.CreateTime,
+       d.UserID
+FROM   DialogItems di(NOLOCK)
+       INNER JOIN DIALOG d(NOLOCK)
+            ON  d.ID = di.DialogID
+where di.IDX > @IDX
+      ]]>
+    </select>
+    <select id="GetLastDialogItemsByUserID">
+      <![CDATA[       
+select di.* from DialogItems di (nolock)
+inner join (
+select top 100 ID from Dialog  (nolock)
+where ( @userID > 0 AND userid = @userID ) OR (@SessionID <>'' AND SessionID = @SessionID)
+order by ID desc ) d  on d.id = di.DialogID
+      ]]>
+    </select>    
+    <select id="GetLastDialogItemsByDialogID">
+      <![CDATA[       
+select di.* 
+from DialogItems di (nolock)
+WHERE di.DialogID = @dialogID
+      ]]>
+    </select>  
+    <select id="GetDialogItemsByIDList">
+      <![CDATA[
+        select di.* 
+from DialogItems di (nolock)
+inner join dbo.fn_split( @ItemIDList ,',') l on l.item = di.IDX
+      ]]>
+    </select>
+  </statements>
+</configuration>

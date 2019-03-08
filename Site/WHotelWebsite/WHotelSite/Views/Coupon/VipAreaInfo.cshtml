@@ -1,0 +1,910 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.IsInWeixin;
+    var userid = ViewBag.UserId; //userid = 4512064;
+    var magicallUrl = ViewBag.MagiCallUrl;
+    if (!isApp)
+    {
+        magicallUrl = "http://www.zmjiudian.com/Account/WxMenuTransfer?menu=4";
+    }
+
+    //用户手机号
+    var userPhone = ViewBag.UserPhone;
+
+    //是否VIP
+    var isVip = ViewBag.IsVip;
+
+    //是否老vip
+    var isOldVip = ViewBag.IsOldVip;
+
+    //现金券url
+    var cashCouponUrl = ViewBag.CashCouponLink;
+
+    //用户的汇总信息
+    UserInfoResult userInfo = ViewBag.UserInfo;
+
+    //用户的身份类型
+    HJDAPI.Common.Helpers.Enums.CustomerType viptype = (HJDAPI.Common.Helpers.Enums.CustomerType)userInfo.CustomerType;
+
+    var time1 = DateTime.Now;
+    var time2 = userInfo.EndVipTime;
+
+    //计算VIP剩余天数
+    TimeSpan ts1 = new TimeSpan(time1.Ticks);
+    TimeSpan ts2 = new TimeSpan(time2.Ticks);
+    TimeSpan ts = ts1.Subtract(ts2).Duration();
+
+    //是否需要续费（目前的规则是30内即将到期的VIP）
+    var needRenew = false;
+    if (isVip && ts.Days <= 30 && viptype != Enums.CustomerType.vip599)
+    {
+        needRenew = true;
+    }
+
+    var _pageTitle = "成为VIP";
+    var shareTitle = "成为VIP会员";
+    var shareDesc = "价值万元专享福利优惠等你拿！";
+    var shareImgUrl = "http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/vip-area-share-img.png";
+    if (isVip)
+    {
+        _pageTitle = "VIP会员专区";
+        shareTitle = "VIP会员权益";
+        shareDesc = "价值万元专享福利优惠等你拿！";
+        shareImgUrl = "http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/vip-area-share-card-img.jpg";
+    }
+    ViewBag.Title = _pageTitle;
+
+    //share info
+    var shareLink = ViewBag.ShareLink; //var shareLink = "http://www.zmjiudian.com/Coupon/VipShopInfo?CID=0";
+
+    //常规活动礼
+    var couponGiftActive = false;
+    if (false && (DateTime.Now > DateTime.Parse("2018-07-16 19:30") || userid == 4514792 || userid == 4848910 || userid == 4862114) && DateTime.Now <= DateTime.Parse("2018-08-31 12:00"))
+    {
+        couponGiftActive = true;
+
+        //活动期间处理，分享链接使用微信活动文章链接
+        shareTitle = "领取￥500现金红包，五星亲子度假酒店低至￥100+/人";
+        shareDesc = "暑期大促，玩嗨假日！";
+        shareLink = "http://dm.zmjiudian.com/PB25";  //"http://mp.weixin.qq.com/s?__biz=MzI4NjU5MjU0MA==&mid=100000209&idx=1&sn=28e0f6ddda9a6325f183cdaae33ab657&chksm=6bdbdaa25cac53b4ea83d49d6dc849d93590cb665a5f2ae086b50695296014028eeb6d2fca3e#rd";
+        shareImgUrl = "http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/2018shuqi-500coupon-share-img.jpg?v=20180716";
+    }
+
+    //打开原生分享bar
+    var shareResultUrl = "";
+    var shareLink_Native = "whfriend://comment?title={0}&photoUrl={1}&shareLink={2}&nextUrl={3}&content={4}&shareType={5}";
+    shareLink_Native = string.Format(shareLink_Native, HttpUtility.UrlEncode(shareTitle), HttpUtility.UrlEncode(shareImgUrl), HttpUtility.UrlEncode(shareLink), HttpUtility.UrlEncode(shareResultUrl), HttpUtility.UrlEncode(shareDesc), "0");
+
+    if (isApp)
+    {
+        shareLink = Server.UrlEncode(shareLink);
+    }
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    ViewBag.LoadHmBaidu = false;
+}
+
+@section styles
+{
+    <link href="~/Content/css/framework/zmjd.modal.min.css" rel="stylesheet" />
+    <link href="/content/css/framework/iscroll.css" rel="stylesheet">
+    <link href="~/Content/css/framework/zmjd.swiper.min.css" rel="stylesheet" />
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="/content/css/coupon/vipareainfo.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+}
+
+<style>
+    [v-cloak] {
+        display: none;
+    }
+
+    .login-section {
+        font-size: 0.8em;
+    }
+</style>
+
+<div class="block-top">
+
+    <div class="swiper-container vip-top-banner" style="display:none;">
+        <ul class="swiper-wrapper">
+            @if (isVip)
+            {
+                <li class="swiper-slide vip-banner-item">
+                    <img class="vip-banner-img" src="~/Content/images/seat/img-home-seat-banner2.png" alt="" />
+                </li>
+            }
+            else
+            {
+                <li class="swiper-slide vip-banner-item">
+                    <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/viparea-top-banner3.png" alt="" />
+                </li>
+            }
+            @*@if (isVip)
+            {
+                <li class="swiper-slide vip-banner-item">
+                    <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/viparea-top-banner3.png" alt="" />
+                </li>
+                <li class="swiper-slide vip-banner-item" onclick="gourl('http://www.zmjiudian.com/Coupon/MoreProductList?albumId=8&_newpage=1&_dorpdown=1')">
+                    <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vip/11-vip-banner.png" alt="" />
+                </li>
+            }
+            else
+            {
+                <li class="swiper-slide vip-banner-item" onclick="gourl('http://www.zmjiudian.com/Coupon/MoreProductList?albumId=8&_newpage=1&_dorpdown=1')">
+                    <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vip/11-vip-banner.png" alt="" />
+                </li>
+                <li class="swiper-slide vip-banner-item">
+                    <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/viparea-top-banner3.png" alt="" />
+                </li>
+            }*@
+        </ul>
+        <div class="pagination"></div>
+    </div>
+
+    @if (isVip)
+    {
+        var _vipIcon = "http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/vip-icon-199.png";
+        if (viptype == Enums.CustomerType.vip599)
+        {
+            _vipIcon = "http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/vip-icon-599.png";
+        }
+        
+        <div class="mine-info">
+            <div class="person">
+                <div class="avatar">
+                    <img src="@userInfo.Avatar.Replace("p1.test.sl.corp", "p1.zmjiudian.com")" alt="" />
+                </div>
+                <div class="right">
+                    <div class="name">@(!string.IsNullOrEmpty(userInfo.RealName) ? userInfo.RealName : userInfo.NickName)<img src="@_vipIcon" alt="" /></div>
+                    @if (needRenew)
+                    {
+                        <div class="tip">@(viptype != Enums.CustomerType.vip599 ? "金牌" : "铂金")VIP<span class="g-h">@Html.Raw(viptype == Enums.CustomerType.vip ? "永久会员" : string.Format("<span class='h'>{0}</span>到期", userInfo.EndVipTime.ToString("yyyy/M/d")))</span></div>
+                        <div class="renew-discount"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/vip-discount-8.8.png" alt="8.8折" /></div>
+                        <div class="renew-vip-btn" data-aid="@(viptype==Enums.CustomerType.vip599?"100398":"100929")">续费</div>
+                    }
+                    else
+                    {
+                        <div class="tip">@(viptype != Enums.CustomerType.vip599 ? "金牌" : "铂金")VIP<span class="g-c">@(viptype == Enums.CustomerType.vip ? "永久会员" : string.Format("{0}到期", userInfo.EndVipTime.ToString("yyyy/M/d")))</span></div>
+                    }
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="data">
+                <div class="points">
+                    <div class="t1">当前积分</div>
+                    <div class="t2">@(userInfo.CanUsePoints)</div>
+                </div>
+                <div class="sales">
+                    <div class="t1">为你节省</div>
+                    <div class="t2">¥@(userInfo.SaveMoney)</div>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+    }
+    else
+    {
+        @*<div class="block-info" style="display:none;">
+            <div class="_tit"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/viparea-top-info-tit.png" alt="" /></div>
+            <img class="sml-img vip-top-info1" src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/viparea-top-info-1.png?v=2017090801" alt="" />
+            <img class="sml-img vip-top-info2" src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/viparea-top-info-2.png?v=2017090801" alt="" />
+            <img class="sml-img vip-top-info3" src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/viparea-top-info-3.png?v=2017090801" alt="" />
+        </div>*@
+    }
+</div>
+
+<div class="block-products">
+    <div class="banner" id="welcome-banner">
+        @if(needRenew)
+        {
+            <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/viparea-redpack-banner-500-renew.png?v=20180328" class="redpack-banner-renew" alt="" />
+        }
+        else
+        {
+            if (!isOldVip)
+            {
+                <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/viparea-redpack-banner-500-ok.png?v=20180117" class="redpack-banner-ok" style="display:none;" alt="" />
+                <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/viparea-redpack-banner-500.png?v=20180117" class="redpack-banner" style="display:none;" alt="" />
+            }
+        }
+    </div>
+    <div class="project">
+        @if(!isVip || needRenew)
+        {
+            if (viptype == Enums.CustomerType.vip599)
+            {
+                <div class="tit">铂金会员六大权益<div class="short-line"></div></div>
+            }
+            else
+            {
+                <div class="tit">金牌会员六大权益<div class="short-line"></div></div>
+            }
+        }
+        else
+        {
+            if (viptype == Enums.CustomerType.vip599)
+            {
+                <div class="tit open-vip-quanyi">铂金会员六大权益<div class="zmjd-iconfont open-icon">&#xe665;</div></div>
+            }
+            else
+            {
+                <div class="tit open-vip-quanyi">金牌会员六大权益<div class="zmjd-iconfont open-icon">&#xe665;</div></div>
+            }
+        }
+        <div class="items" style="@(!isVip||needRenew?"":"display:none;")">
+            <div class="obj vip-top-info-zhuanxiang">
+                <div class="bg"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/vip-project-item-bg-6.png" alt="" /></div>
+                <div class="info">
+                    <div class="tit">－专享优惠－</div>
+                    <div class="desc">1000+酒店及亲子玩乐<br />活动低至3折优惠</div>
+                    <div class="icon zmjd-iconfont">&#xe67d;</div>
+                </div>
+            </div>
+            <div class="obj vip-top-info-free" style="margin-left:2%;">
+                <div class="bg"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/vip-project-item-bg-6.png" alt="" /></div>
+                <div class="info">
+                    <div class="tit">－免费福利－</div>
+                    <div class="desc">价值<span id="freeMarketPrice">万</span>元亲子活动<br />免费体验</div>
+                    <div class="icon zmjd-iconfont">&#xe67d;</div>
+                </div>
+            </div>
+            @if (viptype == Enums.CustomerType.vip599)
+            {
+                <div class="obj vip-top-info-point">
+                    <div class="bg"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/vip-project-item-bg-6.png" alt="" /></div>
+                    <div class="info">
+                        <div class="tit">－四倍积分－</div>
+                        <div class="desc">享受所有消费的四倍<br />积分可兑换超值好礼</div>
+                        <div class="icon zmjd-iconfont">&#xe67d;</div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="obj vip-top-info-point">
+                    <div class="bg"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/vip-project-item-bg-6.png" alt="" /></div>
+                    <div class="info">
+                        <div class="tit">－双倍积分－</div>
+                        <div class="desc">享受所有消费的双倍<br />积分可兑换超值好礼</div>
+                        <div class="icon zmjd-iconfont">&#xe67d;</div>
+                    </div>
+                </div>
+            }
+            <div class="obj vip-top-info-call" style="margin-left:2%;" onclick="gourl('@(magicallUrl)')">
+                <div class="bg"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/vip-project-item-bg-6.png" alt="" /></div>
+                <div class="info">
+                    <div class="tit">－专享服务－</div>
+                    <div class="desc">专享旅行顾问<br />出行无忧</div>
+                    <div class="icon zmjd-iconfont">&#xe67d;</div>
+                </div>
+            </div>
+            <div class="obj vip-top-info-partner" onclick="gourl('/channel/partners?_newpage=1&userid=@(userid)')">
+                <div class="bg"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/vip-project-item-bg-6.png" alt="" /></div>
+                <div class="info">
+                    <div class="tit">－成为度假伙伴－</div>
+                    <div class="desc">轻松拥有自己的事业</div>
+                    <div class="icon zmjd-iconfont">&#xe67d;</div>
+                </div>
+            </div>
+            <div class="obj vip-top-info-usergroup" style="margin-left:2%;">
+                <div class="bg"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/vip-project-item-bg-6.png" alt="" /></div>
+                <div class="info">
+                    <div class="tit">－专享福利群－</div>
+                    <div class="desc">优先获得限量尾单消息</div>
+                    <div class="icon zmjd-iconfont">&#xe67d;</div>
+                </div>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+    <div class="welcome-list-model" style="display:none;"></div>
+    <div id="newvip-p-list" class="welcome-list" style="display:none;">
+        <div class="close"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/viparea-welcome-close.png" /></div>
+        <div class="top-panel"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/viparea-redpack-bg-top.png" alt="" /></div>
+        <div class="middle-panel">
+            <div v-cloak class="item" v-for="couponItem in AlbumsInfo">
+                <div class="left">
+                    <div class="coupon-num">¥{{couponItem.DiscountAmount}}</div>
+                </div>
+                <div class="right">
+                    <div class="bdr-top"></div>
+                    <div class="bdr-foot"></div>
+                    <div class="coupon-info">
+                        <div class="t1" v-if="couponItem.Type==1">立减金</div>
+                        <div class="t1" v-if="couponItem.Type==0">满减券</div>
+                        <div class="t2" v-if="couponItem.Type==1">下单可{{couponItem.Description}}</div>
+                        <div class="t2" v-if="couponItem.Type==0">{{couponItem.Description}}</div>
+                    </div>
+                    <div class="ctrl">
+                        @*@if (isVip)
+                            {
+                                <a href="javascript:;" class="geted">已领取</a>
+                            }
+                            else
+                            {
+                                <a href="javascript:;" class="get get-welcome-coupon">立即领取</a>
+                            }*@
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+        <div class="middle-panel">
+            <div class="get-ctrl">
+                @if(needRenew)
+                {
+                    <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/redpack-get-btn.png" class="renew-welcome-coupon" data-aid="@(viptype==Enums.CustomerType.vip599?"100398":"100929")" alt="" />
+                }
+                else
+                {
+                    <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/redpack-geted-btn.png" class="geted-welcome-coupon" style="display:none;" alt="" />
+                    <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/redpack-get-btn.png" class="get-welcome-coupon" style="display:none;" alt="" />
+                }
+            </div>
+        </div>
+        <div class="foot-panel"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/viparea-redpack-bg-bottom.png" alt="" /></div>
+    </div>
+</div>
+
+@if (!isOldVip)
+{
+    <div class="block-products" style="display:none;">
+        <div class="b-tit">
+            <div class="left">新会员欢迎礼</div>
+            <div class="right"></div>
+            <div style="clear:both;"></div>
+        </div>
+        @if (isVip)
+        {
+            @*<div class="b-tip-h">您已成为VIP，可享受价值¥2300+超值欢迎礼</div>*@
+            <div class="b-tip-h">您已成为VIP，可享受<span id="gift-coupon-discount"></span>现金券</div>
+        }
+        else
+        {
+            @*<div class="b-tip-h">现在成为VIP，立即享受价值¥2300+超值欢迎礼</div>*@
+            <div class="b-tip-h">现在成为VIP，立即获得<span id="gift-coupon-discount"></span>现金券</div>
+        }
+        <div class="scroll-list">
+            <div class="_scroller">
+                <div class="scrollLine">
+                    @*<div class="t-space1"></div>
+                        <loop class="newvip-list2" v-for="hotItem in AlbumsInfo.SKUCouponList" v-if="$index<2" style="display:none;">
+                            <div class="t-item" onclick="gourl('/coupon/product/{{hotItem.SKUID}}?userid={{AlbumsInfo.userid}}&_newpage=1&_dorpdown=1&_newtitle=1')">
+                                <div class="i-img">
+                                    <img src="{{hotItem.PicUrl.replace('theme', '320x213')}}" alt="" />
+                                    <div class="p-info">
+                                        <div class="_t1">{{hotItem.PageTitle}}</div>
+                                        <div class="_t2">{{hotItem.Tags}}</div>
+                                        <div class="_geted" v-if="hotItem.BoughtCount">已领取</div>
+                                        <div class="_get _getSku" v-else>立即领取</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="t-space"></div>
+                        </loop>
+                        <div class="t-item">
+                            <div class="i-img">
+                                <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/cash-card-bg.png" alt="" />
+                                <div class="p-info">
+                                    <div class="_t1">价值300元现金券</div>
+                                    <div class="_t2">可用于平台消费抵用</div>
+                                    <div class="_geted" v-cloak v-if="AlbumsInfo.CashGenCount">已领取</div>
+                                    <div class="_get _getCash" v-else>立即领取</div>
+                                </div>
+                            </div>
+                        </div>*@
+
+                    <div class="t-space-start"></div>
+                    <loop class="newvip-list2" v-for="couponItem in AlbumsInfo" style="display:none;">
+                        <div class="t-item" onclick="gourl('/coupon/product/{{hotItem.SKUID}}?userid={{AlbumsInfo.userid}}&_newpage=1&_dorpdown=1&_newtitle=1')">
+                            <div class="i-img">
+                                <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/cash-card-bg-2.png" alt="" />
+                                <div class="p-info">
+                                    <div class="border-in"></div>
+                                    @if (isVip)
+                                    {
+                                        <div class="cash-haved"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/cash-haved.png" ale="已领取" /></div>
+                                    }
+                                    <div class="_t1" v-if="couponItem.Type==1">立减金</div>
+                                    <div class="_t1" v-if="couponItem.Type==0">满减券</div>
+                                    <div class="_money">¥{{couponItem.DiscountAmount}}</div>
+                                    <div class="_tip" v-if="couponItem.Type==1">下单可{{couponItem.Description}}</div>
+                                    <div class="_tip" v-if="couponItem.Type==0">{{couponItem.Description}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="t-space" v-if="$index+1<AlbumsInfo.length"></div>
+                    </loop>
+                    <div class="t-space"></div>
+                    <div class="t-space2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="big-redpack-model" style="display:none;"></div>
+<div class="big-redpack" style="display:none;">
+    <div class="close"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/viparea-welcome-close.png" /></div>
+    <img class="pack" src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/viparea-big-redpack-20180214.png" alt="" />
+</div>
+
+<div class="gift-coupon-list-model" style="display:none;"></div>
+<div id="gift-coupon-list" class="gift-coupon-list" style="display:none;">
+    <div class="close"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/viparea-welcome-close.png" /></div>
+    <div class="top-panel"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/2018shuqi-coupon-gift-banner.jpg?v=20180716" alt="" /></div>
+    <div class="middle-panel">
+        <div v-cloak class="item" v-for="couponItem in AlbumsInfo">
+            <div class="left">
+                <div class="coupon-num">¥{{couponItem.DiscountAmount}}</div>
+            </div>
+            <div class="right">
+                <div class="bdr-top"></div>
+                <div class="bdr-foot"></div>
+                <div class="coupon-info">
+                    <div class="t1" v-if="couponItem.Type==1">立减金</div>
+                    <div class="t1" v-if="couponItem.Type==0">满减券</div>
+                    <div class="t2" v-if="couponItem.Type==1">下单可{{couponItem.Description}}</div>
+                    <div class="t2" v-if="couponItem.Type==0">{{couponItem.Description}}</div>
+                </div>
+                <div class="ctrl">
+                    <a href="javascript:;" class="geted holiday-gift-geted" style="display:none;">已领取</a>
+                    @*@if (isVip)
+                    {
+                        <a href="javascript:;" class="geted">已领取</a>
+                    }
+                    else
+                    {
+                        <a href="javascript:;" class="get get-welcome-coupon">立即领取</a>
+                    }*@
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="foot-panel">
+        <div class="get-ctrl">
+            <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/gift-gouse-btn.png?v=20180716" class="go-use-coupon" style="display:none;" onclick="gourl('/Coupon/MoreList/1/0/0?albumId=32,33,34&_newpage=1')" alt="" />
+            @*<img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/gift-geted-btn.png" class="geted-gift-coupon" style="display:none;" alt="" />*@
+            <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/gift-shareget-btn.png" class="get-gift-coupon" style="display:none;" alt="" />
+        </div>
+    </div>
+</div>
+<div id="gift-coupon-ball" class="gift-coupon-ball" style="display:none;"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/2018shuqi-coupon-gift-ball3.png" alt="" /></div>
+
+<div class="block-products" id="vip-zx-free">
+    <div id="vip-free-section">
+        <div class="b-tit">
+            <div class="left">会员免费福利</div>
+            <div class="right"><div v-if="AlbumsInfo.SKUCouponList.length>4" class="link" onclick="gourl('/Coupon/MoreProductList?userid=@(userid)&albumId=9&grid=1&_newpage=1')">查看更多</div></div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="b-tip" v-cloak v-if="AlbumsInfo.totalCount">全场{{AlbumsInfo.totalCount}}项会员免费福利，价值{{AlbumsInfo.totalMarketPrice}}元</div>
+        <div class="b-list-seat" id="vip-free-seat"><img src="~/Content/images/seat/img-viparea-seat-list.png" /></div>
+        <div class="b-list" id="vip-free-list" style="display:none;">
+            <div v-for="hotItem in AlbumsInfo.SKUCouponList" v-if="$index<4" class="b-item {{$index%2==0?'':'b-item-r'}}" onclick="gourl('/coupon/product/{{hotItem.SKUID}}?userid={{AlbumsInfo.userid}}&_newpage=1&_dorpdown=1&_newtitle=1')">
+                <div v-if="$index>1" class="top-br"></div>
+                <div class="i-img">
+                    <img src="{{hotItem.PicUrl.replace('theme', '320x213')}}" alt="" />
+                    <div v-if="hotItem.SKUPrice>hotItem.SKUVipPrice" class="high-price">省¥{{hotItem.SKUPrice-hotItem.SKUVipPrice}}</div>
+                </div>
+                <div class="i-name">{{hotItem.PageTitle}}</div>
+                <div class="i-tag">{{hotItem.Tags}}</div>
+                <div class="i-price1" v-if="hotItem.Points">{{hotItem.Points}}积分</div>
+                <div class="i-price1" v-else>免费</div>
+                <div class="i-price2" v-if="hotItem.SKUMarketPrice">市场价:¥{{hotItem.SKUMarketPrice}}起</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="block-products" id="vip-zx-point">
+    <div id="vip-point-section">
+        <div class="b-tit">
+            <div class="left">会员积分商城</div>
+            <div class="right"><div v-if="AlbumsInfo.SKUCouponList.length>4" class="link" onclick="gourl('/Coupon/MoreProductList?userid=@(userid)&albumId=22&grid=1&_newpage=1')">查看更多</div></div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="b-tip" v-cloak v-if="AlbumsInfo.totalCount"></div>
+        <div class="b-list-seat" id="vip-point-seat"><img src="~/Content/images/seat/img-viparea-seat-list.png" /></div>
+        <div class="b-list" id="vip-point-list" style="display:none;">
+            <div v-for="hotItem in AlbumsInfo.SKUCouponList" v-if="$index<4" class="b-item {{$index%2==0?'':'b-item-r'}}" onclick="gourl('/coupon/product/{{hotItem.SKUID}}?userid={{AlbumsInfo.userid}}&_newpage=1&_dorpdown=1&_newtitle=1')">
+                <div v-if="$index>1" class="top-br"></div>
+                <div class="i-img">
+                    <img src="{{hotItem.PicUrl.replace('theme', '320x213')}}" alt="" />
+                    <div v-if="hotItem.SKUPrice>hotItem.SKUVipPrice" class="high-price">省¥{{hotItem.SKUPrice-hotItem.SKUVipPrice}}</div>
+                </div>
+                <div class="i-name">{{hotItem.PageTitle}}</div>
+                <div class="i-tag">{{hotItem.Tags}}</div>
+                <div class="i-price1" v-if="hotItem.Points">{{hotItem.Points}}积分</div>
+                <div class="i-price1" v-else>免费</div>
+                <div class="i-price2" v-if="hotItem.SKUMarketPrice">市场价:¥{{hotItem.SKUMarketPrice}}起</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="block-products" id="vip-zx-youhui">
+    <div class="b-tit">
+        <div class="left">会员专享优惠</div><div class="right"></div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="left-line"></div>
+    <div id="vip-hotel-section">
+        <div class="b-group-tit">
+            <div class="left"><span class="zmjd-iconfont _hotel_icon">&#xe661;</span>酒店</div>
+            <div class="right"><div v-if="AlbumsInfo.HotelList.length>4" class="link" onclick="gourl('/App/MorePackageList?userid=@(userid)&albumId=10&grid=1&_newpage=1')">查看更多</div></div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="b-list-seat" id="vip-hotel-seat"><img src="~/Content/images/seat/img-viparea-seat-list.png" /></div>
+        <div class="b-list" id="vip-hotel-list" style="display:none;">
+            <div v-for="item in AlbumsInfo.HotelList" v-if="$index<4" class="b-item {{$index%2==0?'':'b-item-r'}}" onclick="gourl('http://www.zmjiudian.com/Hotel/Package/{{item.PID}}?userid={{AlbumsInfo.userid}}&_newpage=1&_dorpdown=1&_newtitle=1')">
+                <div v-if="$index>1" class="top-br"></div>
+                <div class="i-img">
+                    <img src="{{item.HotelPicUrl.replace('theme', '320x213')}}" alt="" />
+                    <div v-if="item.TotalHotelPrice>item.TotalVIPPrice" class="high-price">省¥{{item.TotalHotelPrice-item.TotalVIPPrice}}</div>
+                </div>
+                <div class="i-name">{{item.HotelName}}</div>
+                <div class="i-tag">{{item.PackageName?item.PackageName:item.PackageBrief}}</div>
+                <div class="i-price1"><span class="zmjd-iconfont _vip">&#xe623;</span>¥{{item.TotalVIPPrice}}起</div>
+                <div class="i-price2">普通价:¥{{item.TotalHotelPrice}}起</div>
+            </div>
+        </div>
+    </div>
+    <div id="vip-play-section">
+        <div class="b-group-tit tit-br">
+            <div class="left"><span class="zmjd-iconfont _play_icon">&#xe663;</span>玩乐</div>
+            <div class="right"><div v-if="AlbumsInfo.SKUCouponList.length>4" class="link" onclick="gourl('/Coupon/MoreProductList?userid=@(userid)&albumId=3&grid=1&_newpage=1')">查看更多</div></div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="b-list-seat" id="vip-play-seat"><img src="~/Content/images/seat/img-viparea-seat-list.png" /></div>
+        <div class="b-list" id="vip-play-list" style="display:none;">
+            <div v-for="hotItem in AlbumsInfo.SKUCouponList" v-if="$index<4" class="b-item {{$index%2==0?'':'b-item-r'}}" onclick="gourl('http://www.zmjiudian.com/coupon/product/{{hotItem.SKUID}}?userid={{AlbumsInfo.userid}}&_newpage=1&_dorpdown=1&_newtitle=1')">
+                <div v-if="$index>1" class="top-br"></div>
+                <div class="i-img">
+                    <img src="{{hotItem.PicUrl.replace('theme', '320x213')}}" alt="" />
+                    <div v-if="hotItem.SKUPrice>hotItem.SKUVipPrice" class="high-price">省¥{{hotItem.SKUPrice-hotItem.SKUVipPrice}}</div>
+                </div>
+                <div class="i-name">{{hotItem.PageTitle}}</div>
+                <div class="i-tag">{{hotItem.Tags}}</div>
+                <div class="i-price1"><span class="zmjd-iconfont _vip">&#xe623;</span>¥{{hotItem.SKUVipPrice}}起</div>
+                <div class="i-price2">普通价:¥{{hotItem.SKUPrice}}起</div>
+            </div>
+        </div>
+    </div>
+    <div id="vip-food-section">
+        <div class="b-group-tit tit-br">
+            <div class="left"><span class="zmjd-iconfont _food_icon">&#xe662;</span>美食</div>
+            <div class="right"><div v-if="AlbumsInfo.SKUCouponList.length>4" class="link" onclick="gourl('/Coupon/MoreProductList?userid=@(userid)&albumId=2&grid=1&_newpage=1')">查看更多</div></div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="b-list-seat" id="vip-food-seat"><img src="~/Content/images/seat/img-viparea-seat-list.png" /></div>
+        <div class="b-list" id="vip-food-list" style="display:none;">
+            <div v-for="hotItem in AlbumsInfo.SKUCouponList" v-if="$index<4" class="b-item {{$index%2==0?'':'b-item-r'}}" onclick="gourl('http://www.zmjiudian.com/coupon/product/{{hotItem.SKUID}}?userid={{AlbumsInfo.userid}}&_newpage=1&_dorpdown=1&_newtitle=1')">
+                <div v-if="$index>1" class="top-br"></div>
+                <div class="i-img">
+                    <img src="{{hotItem.PicUrl.replace('theme', '320x213')}}" alt="" />
+                    <div v-if="hotItem.SKUPrice>hotItem.SKUVipPrice" class="high-price">省¥{{hotItem.SKUPrice-hotItem.SKUVipPrice}}</div>
+                </div>
+                <div class="i-name">{{hotItem.PageTitle}}</div>
+                <div class="i-tag">{{hotItem.Tags}}</div>
+                <div class="i-price1"><span class="zmjd-iconfont _vip">&#xe623;</span>¥{{hotItem.SKUVipPrice}}起</div>
+                <div class="i-price2">普通价:¥{{hotItem.SKUPrice}}起</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<div class="block-section" id="vip-zx-fuwu">
+    <div class="b-tit">
+        <div class="left">会员专享服务</div><div class="right"></div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="b-info2">
+        <img class="half-img weidan-process" src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/vip-item-weidan.png" alt="" />
+        <img class="half-img" style="margin-left:2%;" onclick="gourl('@(magicallUrl)')" src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/vip-item-im.png" alt="" />
+    </div>
+</div>*@
+
+@if (true)
+{
+    <div class="block-section @(isVip ? "block-section-nobr " : "")">
+        @*<div class="b-tit-c">想要更多权益？</div>
+        <div class="center-line1"></div>
+        <div class="b-open-tit">点我了解<span class="zmjd-iconfont _icon">&#xe665;</span></div>
+        <div class="b-open-group" style="display:none;">
+            <div class="center-line"></div>
+            @if (isVip)
+            {
+                <div class="b-tit-c2">权益升级·铂金VIP</div>
+                <div class="b-tip-c">金牌VIP升级铂金VIP会员只需支付¥400</div>
+            }
+            else
+            {
+                <div class="b-tit-c2">¥599成为铂金VIP会员</div>
+                <div class="b-tip-c">享受金牌VIP会员所有权益之外，还可额外享受如下权益</div>
+            }
+            <div class="b-info">
+                <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/viparea-bojin-info.png?v=20180126" alt="" />
+            </div>
+            @if (isVip)
+            {
+                <div class="b-upgrade">
+                    <div class="btn upgrade599-buy">¥400升级铂金VIP</div>
+                    <div class="tip">*升级铂金VIP，有效期按升级当日起重新计算</div>
+                </div>
+            }
+            else
+            { 
+                <div class="vip-table">
+                    <div class="option">
+                        <div class="l option-199 sel" data-sel="1">金牌会员</div>
+                        <div class="r option-599" data-sel="0">铂金会员</div>
+                        <div style="clear:both;"></div>
+                        <div class="op-bg"></div>
+                    </div>
+                </div>
+            }
+        </div>*@
+        <div class="b-more">
+            <div class="link" onclick="gourl('http://www.zmjiudian.com/active/activepage?pageid=43&defbg=1&_newpage=1')">VIP相关权益及常见问题</div>
+        </div>
+    </div>
+}
+
+@if (!isVip)
+{
+    <div class="line-space"></div>
+    <div class="ctrl-bottom">
+        <div class="btns">
+            <div class="l">购买VIP 省心省钱</div>
+            <div class="r">
+                <a class="go-buy go-buy-199" href="javascript:;">￥199 &bull; 支付</a>
+                <a class="go-buy go-buy-599" href="javascript:;" style="display:none;">￥599 &bull; 支付</a>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+}
+
+@*<div style="margin:1em 0 5em 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http://192.168.1.188:8081/Coupon/VipAreaInfo">GO APP (Local) >>></a></div>*@
+
+@*<div class="more-packages-tit">&diams; 精选会员价酒店 &diams;</div>
+<div class="more-packages more-hlist-panel"></div>
+<div class="more-packages-foot"></div>
+<div class="scrollpageloading more-hide"><img src="http://whfront.b0.upaiyun.com/app/img/loading.gif" alt="" /></div>
+<div class="more-packages-bottom"></div>*@
+
+<div class="_modal-bg" style="display:none;"></div>
+<div class="_modal-panel" style="display:none;">
+    <div class="_close zmjd-iconfont">&#xe615;</div>
+    <div class="_tit">购买VIP</div>
+    <div class="_body">
+        <div class="vip-coupon-tip" style="display:none;">付¥199成为VIP，领取活动礼券哦～</div>
+        <div class="vip-phone">
+            @if (userid <= 0)
+            {
+                <div class="name-line">
+                    <input type="text" id="userName" class="userName" placeholder="输入姓名" />
+                </div>
+                <div class="phone-line">
+                    <input type="tel" id="userPhone" class="userPhone" placeholder="输入手机号" />
+                </div>
+                <div class="vcode-line">
+                    <input type="number" id="vCode" class="vCode" placeholder="输入验证码" /><button type="button" class="vCodeBtn">获取验证码</button>
+                </div>
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(userPhone))
+                {
+                    <div class="name-line">
+                        <input type="text" id="userName" class="userName" placeholder="输入姓名" />
+                    </div>
+                    <div class="phone-line onlyone-line">
+                        <input type="tel" id="userPhone" class="userPhone2" placeholder="输入手机号" value="@userPhone" disabled="disabled" />
+                    </div>
+                }
+                else
+                {
+                    <div class="name-line onlyone-line">
+                        <input type="text" id="userName" class="userName" placeholder="输入姓名" />
+                    </div>
+                }
+            }
+        </div>
+        <div class="_err" style="display:none;"></div>
+    </div>
+    <div class="_btns">
+        <a href="javascript:;" class="_buy">购买</a>
+    </div>
+    <div class="_rules">
+        <div class="info">&bull; 会员自购买之日起即时生效，有效期1年</div>
+        <div class="info">&bull; 点击购买即视为同意<a href="http://www.zmjiudian.com/active/activepage?pageid=86&_newpage=1" target="_blank">《周末酒店VIP会员协议》</a></div>
+    </div>
+</div>
+
+<div class="weixin-share-tip" style="display:none;">
+    <img data-orisrc="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/weixin-share-tip-img.png" src="" alt="点击右上角分享哦" />
+</div>
+
+<footer>
+    <input type="hidden" id="aid199" value="100929" />
+    <input type="hidden" id="aid599" value="100398" />
+    <input type="hidden" id="atype" value="400" />
+    <input type="hidden" id="pid" value="0" />
+    <input type="hidden" id="pricetype" value="0" />
+    <input type="hidden" id="userid" value="@userid" />
+    <input type="hidden" id="phone" value="@userInfo.Mobile" />
+    <input type="hidden" id="albumId" value="10" />
+    <input type="hidden" id="t" value="0" />
+    <input type="hidden" id="userlat" value="-1" />
+    <input type="hidden" id="userlng" value="-1" />
+    <input type="hidden" id="isApp" value="@(isApp ? "1" : "0")" />
+    <input type="hidden" id="isInWeixin" value="@(isInWeixin ? "1" : "0")" />
+    <input type="hidden" id="isVip" value="@(isVip ? "1" : "0")" />
+    <input type="hidden" id="isOldVip" value="@(isOldVip ? "1" : "0")" />
+    <input type="hidden" id="couponGiftActive" value="@(couponGiftActive ? "1" : "0")" />
+    <input type="hidden" id="sellnum" value="1" />
+    <input type="hidden" id="magicallUrl" value="@(magicallUrl)" />
+    <input type="hidden" id="cashCouponUrl" value="@cashCouponUrl" />
+    <input type="hidden" id="hidWxUnionid" value="@(ViewBag.Unionid)" />
+    <input type="hidden" id="shareNativeLink" value="@shareLink_Native" />
+</footer>
+
+@section scripts
+{
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/jquery.lazyload.min.js"></script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/framework/zmjd.modal.min.js"></script>
+    <script src="~/Content/js//framework/iscroll.js"></script>
+    <script src="~/Content/js/framework/zmjd.swiper.min.js"></script>
+    <script src="~/Content/js/login.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/coupon/vipareainfo.js?v=@(Helpers.curAppVer())"></script>
+    <script type="text/javascript" charset="utf-8">
+
+        function gourl(url) {
+            location.href = url;
+        }
+
+    </script>
+    <script>
+        try {
+            onAppShareCall = function () {
+                var title = "@(shareTitle)";
+                var Content = "@(shareDesc)";
+                var photoUrl = "@(shareImgUrl)";
+                var shareLink = "@(shareLink)";
+                try { whotel.appShareData(title, Content, photoUrl, shareLink); } catch (e) { }
+                var returnStr = '{"title":"{0}","Content":"{1}","photoUrl":"{2}","shareLink":"{3}"}';
+                return returnStr.format(title, Content, photoUrl, shareLink);
+            }
+            onAppShareCall();
+        }
+        catch (e) { }
+    </script>
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js?v=@(Helpers.curAppVer())" type="text/javascript"></script>
+        <script>
+
+    var loadWechat = function(_shareTitle,_shareDesc,_shareLink,_shareImgUrl, _shareSucessFunc){
+
+        GetWeixinApiConfig();//注册
+
+        wx.ready(function () {
+
+            wx.onMenuShareTimeline({
+                title: _shareTitle,
+                desc: _shareDesc,
+                link: _shareLink,
+                imgUrl: _shareImgUrl,
+                success: function (res) {
+                    _shareSucessFunc(res)
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareAppMessage({
+                title: _shareTitle,
+                desc: _shareDesc,
+                link: _shareLink,
+                imgUrl: _shareImgUrl,
+                success: function (res) {
+                    _shareSucessFunc(res)
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareQQ({
+                title: _shareTitle,
+                desc: _shareDesc,
+                link: _shareLink,
+                imgUrl: _shareImgUrl,
+                success: function (res) {
+                    _shareSucessFunc(res)
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareQZone({
+                title: _shareTitle,
+                desc: _shareDesc,
+                link: _shareLink,
+                imgUrl: '@(shareImgUrl)',
+                success: function (res) {
+                    _shareSucessFunc(res)
+                },
+                cancel: function (res) {
+                }
+            });
+
+        });
+
+        function GetWeixinApiConfig() {
+
+            var url = location.href.split("#")[0];
+            $.ajax({
+                url: '/Coupon/GetWeixinConfigInfo',
+                type: 'POST',
+                data: { url: url },
+                dataType: 'json',
+                async: false,
+                error: function () {
+                    console.log("网络服务错误");
+                },
+                success: function (result) {
+                    if (typeof (result.Success) != undefined && result.Success == 1) {
+                        return false;
+                    }
+                    else {
+                        //得到微信config的值
+                        var array = [
+                            'checkJsApi',
+                            'onMenuShareTimeline',
+                            'onMenuShareAppMessage',
+                            'onMenuShareQQ',
+                            'onMenuShareQZone',
+                            'hideOptionMenu'
+                        ];
+                        if (result.jsApiList) {
+                            var jsArray = result.jsApiList.split(',');
+                            for (var key in jsArray) {
+                                array.push("" + jsArray[key]);
+                            }
+                        }
+
+                        wx.config({
+                            debug: false,
+                            appId: result.appId,
+                            timestamp: "" + result.timestamp,
+                            nonceStr: result.nonceStr,
+                            signature: result.signature,
+                            jsApiList: array
+                        });
+                    }
+                }
+            });
+        }
+
+    }
+    loadWechat('@shareTitle','@shareDesc','@shareLink','@shareImgUrl', function(){});
+
+</script>
+    }
+}

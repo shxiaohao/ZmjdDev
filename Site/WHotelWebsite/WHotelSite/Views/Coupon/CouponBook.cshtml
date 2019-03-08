@@ -1,0 +1,497 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@using HJD.HotelManagementCenter.Domain.Fund
+@{
+    Layout = null;
+
+    var skuid = ViewBag.SKUID;
+    var isApp = ViewBag.IsApp;
+    var paynum = ViewBag.PayNum;
+    var groupid = ViewBag.GroupId;
+    var openid = ViewBag.OpenId;
+    var coid = ViewBag.CouponOrderId;
+
+    //来自哪个微信用户分享
+    var fromwxuid = ViewBag.FromWxUid;
+
+    //当前环境 (1wap/2web/3app/4weixin)
+    ProductService.Contracts.Entity.ProductServiceEnums.SceneType stype = ViewBag.SType;
+
+    var AppType = ViewBag.AppType;
+    var AppVerForIOS = ViewBag.AppVerForIOS;
+    var AppVerForAndroid = ViewBag.AppVerForAndroid;
+    var IsLatestVerApp = ViewBag.IsLatestVerApp;
+
+    //用户信息（包含会员身份）
+    UserInfoResult userInfo = ViewBag.UserInfo;
+    var userid = ViewBag.UserId;
+
+    //是否VIP
+    var isVip = ViewBag.IsVip;
+
+    SKUCouponActivityDetailModel couponSkuInfo = ViewBag.CouponSkuInfo;
+    HJD.CouponService.Contracts.Entity.CouponActivityEntity activity = couponSkuInfo.activity;
+
+    //用户住基金信息
+    UserFundEntity userFundInfo = ViewBag.UserFundInfo;
+    
+    //产品图
+    var productImgFirstSrc = "http://whfront.b0.upaiyun.com/app/img/pic-null-3x2.png";
+    if (activity.PicList != null && activity.PicList.Count > 0)
+    {
+        productImgFirstSrc = activity.PicList[0].Replace("p1.test.sl.corp", "p1.zmjiudian.com");
+    }
+
+    //价格
+    var sellPrice = isVip ? couponSkuInfo.SKUInfo.SKU.VIPPrice : couponSkuInfo.SKUInfo.SKU.Price;
+
+    //查询券的状态
+    BuyCouponCheckNumResult buyResult = ViewBag.BuyResult;
+
+    //开售日
+    var selldate = activity.EffectiveTime;
+
+    //抢购结束日
+    var closedate = activity.SaleEndDate;
+
+    //购买按钮的状态
+    var canShop = true;
+    var noCanTxt = "立即购买";
+
+    //最小购买数量
+    var minBuyNum = activity.MinBuyNum;
+
+    //价格label
+    var priceLabel = activity.PriceLabel;
+
+    var now = DateTime.Now;
+
+    //出行人信息
+    var userLabel = "联系人";
+    var userPlaceholder = "填写联系人姓名";
+    var maxPersonNum = couponSkuInfo.SKUInfo.SKU.MaxBookCount;
+    var minPersonNum = couponSkuInfo.SKUInfo.SKU.MinBookCount;
+    couponSkuInfo.SKUInfo.SKU.CardTypeList = couponSkuInfo.SKUInfo.SKU.CardTypeList.Where(_ => !string.IsNullOrEmpty(_)).ToList();
+    var cartTypeList = string.Join(",", couponSkuInfo.SKUInfo.SKU.CardTypeList != null ? couponSkuInfo.SKUInfo.SKU.CardTypeList : new List<string>());
+    var personDesc = couponSkuInfo.SKUInfo.SKU.BookDesc; //hotelPackage.TravelPersonDescribe;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>确认订单</title>
+    <meta name="keywords" content="@ViewBag.PageKeywords" />
+    <meta name="description" content="@ViewBag.PageDescription" />
+    <meta name="copyright" content="2013, zmjiudian.com" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+
+    <link href="~/Content/css/framework/zmjd.modal.min.css" rel="stylesheet" />
+    <link href="/Content/css/framework/util.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="/content/css/coupon/couponbook.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .login-section {
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <div v-cloak id="product-content">
+
+        <div class="b-section">
+            <div v-cloak class="tit">{{productDetail.activity.PageTitle}}</div>
+            <div v-cloak class="sku">{{productDetail.SKUInfo.SKU.Name}}</div>
+        </div>
+        <div class="b-section">
+            <div class="row">
+                <div class="lab">数量</div>
+                <div class="info">
+                    <div class="ctrl">
+                        @if (coid > 0)
+                        {
+                            <div class="numer">
+                                <a href="javascript:;" class="zmjd-iconfont btn-no">－</a><input class="sellnum" type="tel" readonly v-model="productDetail.activity.MinBuyNum" /><a href="javascript:;" class="zmjd-iconfont btn-no">＋</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="numer">
+                                <a href="javascript:;" class="zmjd-iconfont btn0">－</a><input class="sellnum" type="tel" readonly v-model="productDetail.activity.MinBuyNum" /><a href="javascript:;" class="zmjd-iconfont btn1">＋</a>
+                            </div>
+                        }
+                    </div>
+                    <div class="val">
+                        <span v-cloak v-if="productDetail.PayType===1">
+                            <span class="money">{{(productDetail.IsVip?productDetail.SKUInfo.SKU.Points:productDetail.SKUInfo.SKU.Points)*productDetail.activity.MinBuyNum}}积分</span>
+                        </span>
+                        <span v-cloak v-else>
+                            <span class="money">¥{{productDetail.orderPayPriceInfo.defOrderPrice}}</span>
+                        </span>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+
+            <div v-cloak class="row row-line" v-if="!(productDetail.PayType===1)">
+                <div class="lab">现金券</div>
+                <div class="info sel-cash">
+                    <div v-if="productDetail.baseCashCouponInfo.CashCouponInfo">
+                        <div v-if="productDetail.baseCashCouponInfo.CashCouponInfo.IDX>=0">
+                            <div v-if="productDetail.baseCashCouponInfo.CashCouponInfo.IDX">
+                                <div class="ctrl">
+                                    <span class="desc">{{productDetail.baseCashCouponInfo.CashCouponShowName}}</span>
+                                </div>
+                                <div class="val">
+                                    <span class="discount">-¥{{productDetail.baseCashCouponInfo.OrderCanDiscountAmount}}</span><span class="zmjd-iconfont icon-arrow-right">&#xe648;</span>
+                                </div>
+                                <div style="clear:both;"></div>
+                            </div>
+                            <div v-else>
+                                <div class="ctrl">
+                                    <span class="desc-0">没有可用现金券</span>
+                                </div>
+                                <div class="val">
+                                    <span class="zmjd-iconfont icon-arrow-right">&#xe648;</span>
+                                </div>
+                                <div style="clear:both;"></div>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <div class="ctrl">
+                                <span class="desc-0">请选择现金券</span>
+                            </div>
+                            <div class="val">
+                                <span class="zmjd-iconfont icon-arrow-right">&#xe648;</span>
+                            </div>
+                            <div style="clear:both;"></div>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <div class="ctrl">
+                            <span class="desc-0">没有可用现金券</span>
+                        </div>
+                        <div class="val">
+                            <span class="zmjd-iconfont icon-arrow-right">&#xe648;</span>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+
+            <div v-cloak class="row row-line" v-if="productDetail.SKUInfo.SKU.CanUseVoucherPrice>=0&&!(productDetail.PayType===1)">
+                <div class="lab">代金券</div>
+                <div class="info sel-voucher">
+                    <div v-if="productDetail.baseVoucherInfo.voucherInfo">
+                        <div class="ctrl">
+                            <span class="desc">{{productDetail.baseVoucherInfo.voucherInfo.VoucherShowName}}</span>
+                        </div>
+                        <div class="val">
+                            <span class="discount">-¥{{productDetail.baseVoucherInfo.voucherInfo.OrderCanDiscountAmount}}</span><span class="zmjd-iconfont icon-arrow-right">&#xe648;</span>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                    <div v-else>
+                        <div v-if="productDetail.baseVoucherInfo.voucherCount">
+                            <div class="ctrl ctrl2"></div>
+                            <div class="val val2">
+                                <span class="discount">{{productDetail.baseVoucherInfo.voucherCount}}张代金券可用</span><span class="zmjd-iconfont icon-arrow-right">&#xe648;</span>
+                            </div>
+                            <div style="clear:both;"></div>
+                        </div>
+                        <div v-else>
+                            <div class="ctrl">
+                                <span class="desc-0">没有可用代金券</span>
+                            </div>
+                            <div class="val">
+                                <span class="zmjd-iconfont icon-arrow-right">&#xe648;</span>
+                            </div>
+                            <div style="clear:both;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+            @if (userFundInfo != null && userFundInfo.TotalFund > 0)
+            {
+                <div v-cloak class="row row-line" v-if="!(productDetail.PayType===1)">
+                    <div class="lab">住基金</div>
+                    <div class="info" id="fund-radio-btn" onclick="fundBindSelectEvent()">
+                        <div v-if="productDetail.fundInfo.userFundAmount">
+                            <div class="ctrl">
+                                <span class="desc fund-desc">可抵扣¥{{productDetail.fundInfo.canUseFund}}</span>
+                            </div>
+                            <div class="val">
+                                <span v-if="productDetail.fundInfo.sel">
+                                    <span class="discount fund-discount">-¥{{productDetail.fundInfo.canUseFund}}</span>
+                                    <span class="radio-btn radio-sel" data-total="{{productDetail.fundInfo.userFundAmount}}"><span class="ball"></span></span>
+                                </span>
+                                <span v-else>
+                                    <span class="radio-btn" data-total="{{productDetail.fundInfo.userFundAmount}}"><span class="ball"></span></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <div class="ctrl">
+                                <span class="desc-0">无可用住基金</span>
+                            </div>
+                            <div class="val">
+                                <span class="radio-btn" data-total="0"><span class="ball"></span></span>
+                            </div>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+            }
+        </div>
+        <div v-cloak class="b-section b-hide" id="vip-tip-section" v-if="!(productDetail.PayType===1)">
+            <div class="row" onclick="goBuyVip()">
+                @*<div class="text">付¥199<span class="link">成为VIP</span>立减<span class="m">¥230</span>，并享万元福利优惠</div>*@
+                <div class="text">{{{productDetail.vipTipInfo.Description}}}</div>
+                <div class="arrow"><span class="zmjd-iconfont icon-right">&#xe648;</span></div>
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+        @if (couponSkuInfo.SKUInfo.SKU.WriteOtherPostion == 1)
+        {
+            <div class="b-hide" id="person-panel">
+                @if (!string.IsNullOrEmpty(personDesc))
+                {
+                    <div class="b-d-desc" style="background:#f5f5f5;">
+                        <div class="info">@personDesc</div>
+                    </div>
+                }
+                @if (couponSkuInfo.SKUInfo.SKU.CardTypeList.Count > 0 && maxPersonNum > 0)
+                {
+                    <div class="b-d-row">
+                        <div class="r-tit">出行人信息</div>
+                        <div class="r-tip">请添加<span class="h">@(maxPersonNum)名</span>出行人信息</div>
+                    </div>
+                    <div v-for="item in sels" class="b-d-row b-d-row-bder b-d-person-item">
+                        <div class="r-left"><a href="javascript:;" onclick="delSelPerson({{$index}})" title="删除"><img src="http://whfront.b0.upaiyun.com/www/img/hotel/book/icon-del.png" alt="" /></a></div>
+                        <div class="r-right">
+                            <div class="pname">{{item.TravelPersonName}}</div>
+                            <div class="pno">{{item.CardTypeName}} {{item.IDNumber2}}</div>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                    <div v-for="item in adds" class="b-d-row b-d-row-bder b-d-row-arrow-2 b-d-person-item" onclick="showSelPerson()">
+                        <div class="r-left"></div>
+                        <div class="r-right"><a href="javascript:;" class="r-link">添加出行人1</a></div>
+                        <div style="clear:both;"></div>
+                    </div>
+                }
+            </div>
+            <script id="ex-user-item-template" type="text/template">
+                <div class="basic-panel top-users">
+                    <div class="left-panel">
+                        <span>@(userLabel):</span>
+                    </div>
+                    <div class="right-panel">
+                        <input type="text" name="ex-checkinUser" class="top-users-input" placeholder="@(userPlaceholder)" value="" />
+                    </div>
+                    <div style="clear:none;"></div>
+                </div>
+            </script>
+        }
+        <div class="b-section">
+            <div class="ex-group-panel" id="form-section" v-if="productDetail.formData.TemplateItemObjs">
+                <div v-for="item in productDetail.formData.TemplateItemObjs">
+                    <div class="basic-panel form-input {{$index+1==productDetail.formData.TemplateItemObjs.length?'form-input-nbr':''}}" v-if="item.Type=='TXT'">
+                        <div class="left-panel">
+                            <span>{{item.Name}}</span>
+                        </div>
+                        <div class="right-panel">
+                            <input type="text" id="{{item.Code}}" name="{{item.Code}}" class="_input" placeholder="{{item.Description}}" v-model="item.Content" />
+                        </div>
+                        <div style="clear:none;"></div>
+                    </div>
+                    <div class="basic-panel form-input {{$index+1==productDetail.formData.TemplateItemObjs.length?'form-input-nbr':''}}" v-if="item.Type=='TXT2'">
+                        <div class="left-panel">
+                            <span>{{item.Name}}</span>
+                        </div>
+                        <div class="right-panel">
+                            <textarea id="{{item.Code}}" name="{{item.Code}}" class="_txtarea" rows="4" placeholder="{{item.Description}}" v-model="item.Content"></textarea>
+                        </div>
+                        <div style="clear:none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-cloak class="b-section" v-if="productDetail.SKUInfo.SKU.NeedPhoto">
+            <div class="tit">上传照片</div>
+            <div class="desc">请上传清晰、近期内的宝宝近照（大头照或者证件照），支持jpg、png格式</div>
+            <div class="photo">
+                <img id="imghead" v-bind:src="productDetail.otherPhotoUrlS" onclick="$('#previewImg').click();" />
+                <input type="file" onchange="previewImage(this)" style="display: none;" id="previewImg">
+            </div>
+            <div class="uploadlodding" style="display: none;">上传中...</div>
+        </div>
+        <div class="bottom-space"></div>
+        <div class="bottom-ctrl">
+            <div class="money">
+                <span class="l">小计：</span>
+                <span v-cloak v-if="productDetail.PayType===1">
+                    <span class="v">{{(productDetail.IsVip?productDetail.SKUInfo.SKU.Points:productDetail.SKUInfo.SKU.Points)*productDetail.activity.MinBuyNum}}积分</span>
+                </span>
+                <span v-cloak v-else>
+                    <span class="v">¥{{productDetail.orderPayPriceInfo.payPrice}}</span>
+                </span>
+                <span class="discount" id="order-discount" v-if="parseFloat(productDetail.orderPayPriceInfo.discount)">已优惠¥{{productDetail.orderPayPriceInfo.discount}}</span>
+            </div>
+            <div class="ctrl">
+                <div v-cloak class="gopay" v-if="productDetail.SKUInfo.SKU.Points||productDetail.SKUInfo.SKU.Price">{{productDetail.PayType===1?"兑换":"支付"}}</div>
+                <div v-cloak class="gopay" v-else>免费领取</div>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+
+        <div class="cash-coupon-section" id="cash-coupon-section" style="display:none;"></div>
+        <div class="cash-coupon-section" id="voucher-section" style="display:none;"></div>
+
+        <div class="_zmjd_loading" style="display:none;">
+            <div class="_loading_icon"><img src="http://whfront.b0.upaiyun.com/app/img/loading.gif" alt="loading.." /></div>
+        </div>
+
+        <div class="b-d-win-model b-hide"></div>
+        <div class="b-d-win-panel b-hide">
+            <div id="ad-person">
+                <div class="w-tit"><div class="left-btn"><a href="javascript:;" id="back-selperson"><img src="http://whfront.b0.upaiyun.com/www/img/hotel/book/icon-back-blue.png" alt="" /></a></div>添加出行人</div>
+                <div>
+                    <button type="button" class="add-person-btn" id="add-person-btn">+ 新增出行人</button>
+                    <div class="p-list">
+                        <div v-for="item in list" class="p-item">
+                            <label for="p-ck-{{$index}}">
+                                <div class="pck">
+                                    <input type="checkbox" v-if="item.select" v-model="item.ck" name="person-ck" id="p-ck-{{$index}}" data-psid="{{item.ID}}" data-psnum="{{$index}}" />
+                                    <input type="checkbox" v-else name="person-ck" id="p-ck-{{$index}}" disabled="disabled" />
+                                </div>
+                                <div class="pinfo">
+                                    <div class="pname">{{item.TravelPersonName}}</div>
+                                    <div class="pno">{{item.CardTypeName}} {{item.IDNumber}}</div>
+                                </div>
+                                <div class="pedit"><a href="javascript:personEditType = 1;showEditPerson({{$index}});" data-psnum="{{$index}}">编辑</a></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="edit-person" style="display:none;">
+                <div class="w-tit">
+                    <div class="left-btn"><a href="javascript:;" id="back-editperson"><img src="http://whfront.b0.upaiyun.com/www/img/hotel/book/icon-back-blue.png" alt="" /></a></div>
+                    编辑信息
+                    <div class="right-btn"><a href="javascript:;" id="save-editperson">完成</a></div>
+                </div>
+                <div class="edit-row">
+                    <div class="left">姓名</div>
+                    <div class="right"><input type="text" placeholder="请与证件保持一致" v-model="person.TravelPersonName" /></div>
+                    <div style="clear:both;"></div>
+                </div>
+                <div class="edit-row">
+                    <div class="left">证件类型</div>
+                    <div class="right">
+                        <select id="idtype-select" v-model="person.IDType">
+                            <option value="1">身份证</option>
+                            <option value="2">护照</option>
+                            <option value="3">户口簿</option>
+                            <option value="4">港澳通行证</option>
+                            <option value="5">台胞证</option>
+                            <option value="10">其他</option>
+                        </select>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+                <div class="edit-row">
+                    <div class="left">证件号码</div>
+                    <div class="right"><input type="text" placeholder="请输入证件号码" v-model="person.IDNumber" /></div>
+                    <div style="clear:both;"></div>
+                </div>
+                <div class="edit-row" v-show="person.IDType!=1" id="birthday-input">
+                    <div class="left">出生日期</div>
+                    <div class="right"><input type="date" placeholder="yyyy-mm-dd" id="brithdayTime" v-model="person.Birthday" /></div>
+                    <div style="clear:both;"></div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <input type="hidden" id="skuid" value="@skuid" />
+            <input type="hidden" id="paynum" value="@paynum" />
+            <input type="hidden" id="groupid" value="@groupid" />
+            <input type="hidden" id="openid" value="@openid" />
+            <input type="hidden" id="fromwxuid" value="@fromwxuid" />
+            <input type="hidden" id="coid" value="@coid" />
+            <input type="hidden" id="thisskuid" v-model="productDetail.SKUID" />
+            <input type="hidden" id="aid" v-model="productDetail.activity.ID" />
+            <input type="hidden" id="atype" v-model="productDetail.activity.Type" />
+            <input type="hidden" id="sellPrice" v-model="productDetail.IsVip?productDetail.SKUInfo.SKU.VIPPrice:productDetail.SKUInfo.SKU.Price" />
+            <input type="hidden" id="skuPrice" v-model="productDetail.SKUInfo.SKU.Price" />
+            <input type="hidden" id="skuVipPrice" v-model="productDetail.SKUInfo.SKU.VIPPrice" />
+            <input type="hidden" id="isNewVipProduct" v-model="productDetail.activity.PageTitle" />
+            <input type="hidden" id="_name" value="@(string.Format("是否继续购买{0}", activity.PageTitle))" />
+
+            <input type="hidden" id="hidCurUserCID" value="@(ViewBag.CID)" />
+            <input type="hidden" id="userid" value="@userid" />
+            <input type="hidden" id="customerType" value="@userInfo.CustomerType" />
+            <input type="hidden" id="isvip" value="@(isVip ? 1 : 0)" />
+            <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+            <input type="hidden" id="stype" value="@(Convert.ToInt32(stype))" />
+            <input type="hidden" id="cansell" value="@(canShop ? 1 : 0)" />
+            <input type="hidden" id="isgroup" value="@(couponSkuInfo.SKUInfo.SKU.IsGroupSKU ? 1 : 0)" />
+            <input type="hidden" id="canUseCoupon" value="@(1)" />
+            <input type="hidden" id="userFundAmount" value="@(userFundInfo != null ? userFundInfo.TotalFund : 0)" />
+
+            <input type="hidden" id="writeOtherPostion" value="@(couponSkuInfo.SKUInfo.SKU.WriteOtherPostion)" />
+            <input type="hidden" id="maxPersonNum" value="@(maxPersonNum)" />
+            <input type="hidden" id="minPersonNum" value="@(minPersonNum)" />
+            <input type="hidden" id="cartTypeList" value="@(cartTypeList)" />
+            <input type="hidden" id="travelPersonDesc" value="@(personDesc)" />
+            <input type="hidden" id="userLabel" value="@(userLabel)" />
+            <input type="hidden" id="userPlaceholder" value="@(userPlaceholder)" />
+
+            <input type="hidden" id="year0" value="@now.Year" />
+            <input type="hidden" id="month0" value="@(now.Month)" />
+            <input type="hidden" id="day0" value="@now.Day" />
+            <input type="hidden" id="hour0" value="@now.Hour" />
+            <input type="hidden" id="minute0" value="@now.Minute" />
+            <input type="hidden" id="second0" value="@now.Second" />
+
+            <form style="display:none;">
+                <input type="text" id="loginput" value="0" />
+            </form>
+        </footer>
+    </div>
+    <div class="pubAlertTip" style="display:none;">
+        <div class="tipinfo"></div>
+    </div>
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script src="~/Content/js/jquery-1.10.2-min.js"></script>
+    <script src="~/Content/js/framework/config.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/framework/zmjd.modal.min.js"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/geetest/gt.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/login.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/coupon/couponbook.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/Upload/async.js"></script>
+    <script src="~/Content/js/Upload/spark-md5.js"></script>
+    <script src="~/Content/js/Upload/Upload.js"></script>
+    <script src="~/Content/js/Upload/upyun-mu.js"></script>
+</body>
+</html>

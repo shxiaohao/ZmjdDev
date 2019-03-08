@@ -1,0 +1,392 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    Layout = null;
+
+    var userid = ViewBag.UserId;
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.IsInWeixin;
+    var isSelect = ViewBag.IsSelect;
+    var isSection = ViewBag.IsSection;
+
+    List<int> selectedCouponIds = ViewBag.SelectedCouponIds;
+    //var couponId = ViewBag.CouponId;
+    var buyCount = ViewBag.BuyCount;
+    var totalPrice = ViewBag.TotalPrice;
+    var skuVoucherPrice = ViewBag.SkuVoucherPrice;
+    var fromDate = ViewBag.FromDate;
+    var toDate = ViewBag.ToDate;
+    var sourceId = ViewBag.SourceId;
+    var sourceType = ViewBag.SourceType;
+
+    List<HJD.CouponService.Contracts.Entity.UserCouponItemInfoEntity> logList = ViewBag.LogList;
+    List<HJD.CouponService.Contracts.Entity.UserCouponItemInfoEntity> usedList = ViewBag.UsedList;
+    List<HJD.CouponService.Contracts.Entity.UserCouponItemInfoEntity> expiredList = ViewBag.ExpiredList;
+    List<HJD.CouponService.Contracts.Entity.UserCouponItemInfoEntity> canList = ViewBag.CanList;
+    List<HJD.CouponService.Contracts.Entity.UserCouponItemInfoEntity> nocanList = ViewBag.NoCanList;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>代金券</title>
+    <meta name="keywords" content="@ViewBag.PageKeywords" />
+    <meta name="description" content="@ViewBag.PageDescription" />
+    <meta name="copyright" content="2017, zmjiudian.com" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+
+    <link href="/Content/css/framework/util.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="/content/css/coupon/walletvoucher.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    @if (isSelect)
+    {
+        if (isSection)
+        {
+            <style>
+                html, body {
+                    margin: 0 0 0 0;
+                    padding: 0 0 0 0;
+                    background: #f5f5f5;
+                    -webkit-user-select: none;
+                    user-select: none;
+                }
+            </style>
+        }
+
+        //选择模式
+
+        <div id="voucher-select">
+            <div id="tabs" class="tab-list">
+                <div class="t-item-s sel" data-op="1" data-id="0">可用</div>
+                <div class="t-item-s" data-op="0" data-id="1">不可用</div>
+            </div>
+            <div class="space"></div>
+            <div class="coupon-rule-tip">代金券支持多选，可叠加使用</div>
+            <div class="coupon-list list-s-0">
+
+                @*@if (canList != null && canList.Count > 0)
+                {
+                    <div class="no-select @((selectedCouponIds != null && selectedCouponIds.Count > 0) ? "" : "nosel-ok")" data-op="@((selectedCouponIds != null && selectedCouponIds.Count > 0) ? "0" : "1")">
+                        <div class="t">不使用现金券</div><div class="hook zmjd-iconfont">&#xe660;</div>
+                    </div>
+                }*@
+
+                @if (canList != null && canList.Count > 0)
+                {
+                    for (int i = 0; i < canList.Count; i++)
+                    {
+                        var _couponEntity = canList[i];
+
+                        var selCss = ((selectedCouponIds != null && selectedCouponIds.Exists(_ => _== _couponEntity.IDX)) ? "sel" : "");
+
+                        <div class="item @(selCss)" data-id="@(_couponEntity.IDX)" data-discount="@(_couponEntity.RestAmount)">
+                            <div class="selected"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-seled.png" alt="已选" /></div>
+                            <div class="top"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-top.png" alt="" /></div>
+                            <div class="middle">
+                                <div class="money"><span class="val">¥@(_couponEntity.RestAmount>(int)_couponEntity.RestAmount ? _couponEntity.RestAmount:(int)_couponEntity.RestAmount)</span></div>
+                                <div class="info">
+                                    <div class="tit">
+                                        @(_couponEntity.CashCouponName)
+                                        @if (_couponEntity.IsShowExpireTips)
+                                        {
+                                            <span class="zmjd-iconfont icon">&#xe666;</span>
+                                        }
+                                    </div>
+                                    @if (_couponEntity.StartDate.Date == _couponEntity.ExpiredDate.Date)
+                                    {
+                                        <div class="time">仅限@(_couponEntity.ExpiredDate.ToString("yyyy/MM/dd"))可用</div>
+                                    }
+                                    else
+                                    { 
+                                        <div class="time">@(_couponEntity.StartDate.ToString("yyyy/MM/dd"))至@(_couponEntity.ExpiredDate.ToString("yyyy/MM/dd"))可用</div>   
+                                    }
+                                </div>
+                                <div style="clear:both;"></div>
+                            </div>
+                            <div class="line"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-line.png" alt="" /></div>
+                            <div class="middle">
+                                <div class="rule">@(_couponEntity.Description)</div>
+                            </div>
+                            <div class="bottom"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-bottom.png" alt="" /></div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="nolist">
+                        <div class="icon"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/cashcoupon-null-icon.png" alt="" /></div>
+                        <div class="tip">暂无相关券</div>
+                    </div>
+                }
+            </div>
+            <div class="coupon-list list-s-1 _hide">
+                @if (nocanList != null && nocanList.Count > 0)
+                {
+                    for (int i = 0; i < nocanList.Count; i++)
+                    {
+                        var _couponEntity = nocanList[i];
+
+                        var selCss = ((selectedCouponIds != null && selectedCouponIds.Exists(_ => _ == _couponEntity.IDX)) ? "sel" : "");
+
+                        <div class="item @(selCss)" data-id="@(_couponEntity.IDX)">
+                            <div class="top"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-top-0.png" alt="" /></div>
+                            <div class="middle middle-0">
+                                <div class="money"><span class="val-0">¥@(_couponEntity.RestAmount > (int)_couponEntity.RestAmount ? _couponEntity.RestAmount: (int)_couponEntity.RestAmount)</span></div>
+                                <div class="info">
+                                    <div class="tit-0">
+                                        @(_couponEntity.CashCouponName)
+                                        @if (_couponEntity.IsShowExpireTips)
+                                        {
+                                            <span class="zmjd-iconfont icon">&#xe666;</span>
+                                        }
+                                    </div>
+                                    @if (_couponEntity.StartDate.Date == _couponEntity.ExpiredDate.Date)
+                                    {
+                                        <div class="time">仅限@(_couponEntity.ExpiredDate.ToString("yyyy-MM-dd"))可用</div>
+                                    }
+                                    else
+                                    {
+                                        <div class="time">@(_couponEntity.StartDate.ToString("yyyy/MM/dd"))至@(_couponEntity.ExpiredDate.ToString("yyyy/MM/dd"))可用</div>
+                                    }
+                                </div>
+                                <div style="clear:both;"></div>
+                            </div>
+                            <div class="line"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-line-0.png" alt="" /></div>
+                            <div class="middle middle-0">
+                                <div class="rule">@(_couponEntity.Description)</div>
+                            </div>
+                            <div class="bottom"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-bottom-0.png" alt="" /></div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="nolist">
+                        <div class="icon"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/cashcoupon-null-icon.png" alt="" /></div>
+                        <div class="tip">暂无相关券</div>
+                    </div>
+                }
+            </div>
+            <div class="space"></div>
+            <div class="coupon-ctrl">
+                <div class="not-use" data-op="0">不使用代金券</div>
+                <div class="confirm">确定</div>
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+    }
+    else
+    {
+        //钱包模式
+        
+        <style>
+            html, body {
+                margin: 0 0 0 0;
+                padding: 0 0 0 0;
+                background: #f5f5f5;
+                -webkit-user-select: none;
+                user-select: none;
+            }
+        </style>
+        <link href="~/Content/css/framework/zmjd.modal.min.css" rel="stylesheet" />
+        
+        <div id="voucher">
+
+            <div id="tabs" class="tab-list">
+                <div class="t-item sel" data-op="1" data-id="0">未使用</div>
+                <div class="t-item" data-op="0" data-id="1">已使用</div>
+                <div class="t-item" data-op="0" data-id="2">已过期</div>
+            </div>
+            <div class="space"></div>
+            <div class="coupon-rule-tip">代金券支持多选，可叠加使用</div>
+            <div class="coupon-list list-0">
+
+                @if (logList != null && logList.Count > 0)
+                {
+                    for (int i = 0; i < logList.Count; i++)
+                    {
+                        var _couponEntity = logList[i];
+
+                        <div class="item">
+                            <div class="top"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-top.png" alt="" /></div>
+                            <div class="middle">
+                                <div class="money"><span class="val">¥@(_couponEntity.RestAmount > (int)_couponEntity.RestAmount ? _couponEntity.RestAmount : (int)_couponEntity.RestAmount)</span></div>
+                                <div class="info">
+                                    <div class="tit">
+                                        @(_couponEntity.CashCouponName)
+                                        @if (_couponEntity.IsShowExpireTips)
+                                        {
+                                            <span class="zmjd-iconfont icon">&#xe666;</span>
+                                        }
+                                    </div>
+                                    @if (_couponEntity.StartDate.Date == _couponEntity.ExpiredDate.Date)
+                                    {
+                                        <div class="time">仅限@(_couponEntity.ExpiredDate.ToString("yyyy-MM-dd"))可用</div>
+                                    }
+                                    else
+                                    {
+                                        <div class="time">@(_couponEntity.StartDate.ToString("yyyy/MM/dd"))至@(_couponEntity.ExpiredDate.ToString("yyyy/MM/dd"))可用</div>
+                                    }
+                                    @if (_couponEntity.UserCouponType == 1)
+                                    {
+                                        <div class="detail-link" data-idx="@(_couponEntity.IDX)">使用记录>></div>   
+                                    }
+                                </div>
+                                <div style="clear:both;"></div>
+                            </div>
+                            <div class="line"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-line.png" alt="" /></div>
+                            <div class="middle">
+                                <div class="rule">@(_couponEntity.Description)</div>
+                            </div>
+                            <div class="bottom"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-bottom.png" alt="" /></div>
+                        </div>
+                    }
+                }
+                else
+                { 
+                    <div class="nolist">
+                        <div class="icon"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/cashcoupon-null-icon.png" alt="" /></div>
+                        <div class="tip">暂无相关券</div>
+                    </div>
+                }
+
+            </div>
+            <div class="coupon-list list-1 _hide">
+                @if (usedList != null && usedList.Count > 0)
+                {
+                    for (int i = 0; i < usedList.Count; i++)
+                    {
+                        var _couponEntity = usedList[i];
+
+                        <div class="item">
+                            <div class="top"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-top-0.png" alt="" /></div>
+                            <div class="middle middle-0">
+                                <div class="money"><span class="val-0">¥@(_couponEntity.DiscountAmount>(int)_couponEntity.DiscountAmount? _couponEntity.DiscountAmount: (int)_couponEntity.DiscountAmount)</span></div>
+                                <div class="info">
+                                    <div class="tit-0">
+                                        @(_couponEntity.CashCouponName)
+                                        @if (_couponEntity.IsShowExpireTips)
+                                        {
+                                            <span class="zmjd-iconfont icon">&#xe666;</span>
+                                        }
+                                    </div>
+                                    @if (_couponEntity.StartDate.Date == _couponEntity.ExpiredDate.Date)
+                                    {
+                                        <div class="time">仅限@(_couponEntity.ExpiredDate.ToString("yyyy-MM-dd"))可用</div>
+                                    }
+                                    else
+                                    {
+                                        <div class="time">@(_couponEntity.StartDate.ToString("yyyy/MM/dd"))至@(_couponEntity.ExpiredDate.ToString("yyyy/MM/dd"))可用</div>
+                                    }
+                                    @if (_couponEntity.UserCouponType == 1)
+                                    {
+                                        <div class="detail-link detail-link-0" data-idx="@(_couponEntity.IDX)">使用记录>></div>
+                                    }
+                                </div>
+                                <div style="clear:both;"></div>
+                            </div>
+                            <div class="line"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-line-0.png" alt="" /></div>
+                            <div class="middle middle-0">
+                                <div class="rule">@(_couponEntity.Description)</div>
+                            </div>
+                            <div class="bottom"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-bottom-0.png" alt="" /></div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="nolist">
+                        <div class="icon"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/cashcoupon-null-icon.png" alt="" /></div>
+                        <div class="tip">暂无相关券</div>
+                    </div>
+                }
+            </div>
+            <div class="coupon-list list-2 _hide">
+                @if (expiredList != null && expiredList.Count > 0)
+                {
+                    for (int i = 0; i < expiredList.Count; i++)
+                    {
+                        var _couponEntity = expiredList[i];
+
+                        var _couponTypeName = (_couponEntity.UserCouponType == 0 ? string.Format("满{0}减{1}", _couponEntity.RequireAmount, _couponEntity.DiscountAmount) : "立减金");
+
+                        <div class="item">
+                            <div class="top"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-top-0.png" alt="" /></div>
+                            <div class="middle middle-0">
+                                <div class="money"><span class="val-0">¥@(_couponEntity.RestAmount > (int)_couponEntity.RestAmount ? _couponEntity.RestAmount : (int)_couponEntity.RestAmount)</span></div>
+                                <div class="info">
+                                    <div class="tit-0">
+                                        @(_couponEntity.CashCouponName)
+                                    </div>
+                                    @if (_couponEntity.StartDate.Date == _couponEntity.ExpiredDate.Date)
+                                    {
+                                        <div class="time">仅限@(_couponEntity.ExpiredDate.ToString("yyyy-MM-dd"))可用</div>
+                                    }
+                                    else
+                                    {
+                                        <div class="time">@(_couponEntity.StartDate.ToString("yyyy/MM/dd"))至@(_couponEntity.ExpiredDate.ToString("yyyy/MM/dd"))可用</div>
+                                    }
+                                    @if (_couponEntity.UserCouponType == 1)
+                                    {
+                                        <div class="detail-link detail-link-0" data-idx="@(_couponEntity.IDX)">使用记录>></div>
+                                    }
+                                </div>
+                                <div style="clear:both;"></div>
+                            </div>
+                            <div class="line"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-line-0.png" alt="" /></div>
+                            <div class="middle middle-0">
+                                <div class="rule">@(_couponEntity.Description)</div>
+                            </div>
+                            <div class="bottom"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-bottom-0.png" alt="" /></div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="nolist">
+                        <div class="icon"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/cashcoupon-null-icon.png" alt="" /></div>
+                        <div class="tip">暂无相关券</div>
+                    </div>
+                }
+            </div>
+
+        </div>
+        
+    }
+
+    <footer>
+        <input type="hidden" id="userid" value="@userid" />
+        <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+        <input type="hidden" id="isInWeixin" value="@(isInWeixin ? 1 : 0)" />
+        <input type="hidden" id="isSelect" value="@(isSelect ? 1 : 0)" />
+        <input type="hidden" id="isSection" value="@(isSection ? 1 : 0)" />
+        <input type="hidden" id="totalPrice" value="@totalPrice" />
+        <input type="hidden" id="skuVoucherPrice" value="@skuVoucherPrice" />
+
+        <form style="display:none;">
+            <input type="text" id="loginput" value="0" />
+        </form>
+    </footer>
+
+    <script src="~/Content/js/jquery-1.10.2-min.js"></script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/framework/config.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=@(Helpers.curAppVer())"></script>
+    @if (!isSelect)
+    {
+        <script src="~/Content/js/framework/zmjd.modal.min.js"></script>
+    }
+    <script src="~/Content/js/coupon/walletvoucher.js?v=@(Helpers.curAppVer())"></script>
+</body>
+</html>

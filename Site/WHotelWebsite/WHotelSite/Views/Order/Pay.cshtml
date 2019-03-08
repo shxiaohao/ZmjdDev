@@ -1,0 +1,565 @@
+﻿@using WHotelSite.Controllers;
+@using WHotelSite.Params.Hotel;
+@{
+    ViewBag.Title = "订单支付";
+    Layout = "~/Views/Shared/_LayoutLite.cshtml";
+    long state = ViewBag.OrderNo;
+    string redirect_uri = Url.Encode(ViewBag.redirectUrl);
+    bool isOK = string.IsNullOrEmpty(ViewBag.Code) ? false : true;
+    string code = isOK ? ViewBag.Code : "null";
+    string orderNo = Convert.ToString(ViewBag.OrderNo);
+    var userid = ViewBag.UserId;
+
+    var isInWeixin = ViewBag.isInWeixin;
+    var isInApp = ViewBag.isInApp;
+
+    //套餐支付类型（1现付 2担保 3预付）
+    var payType = ViewBag.PayType;
+
+    //订单支付方式
+    List<string> payChannels = ViewBag.PayChannelList ?? new List<string>();
+
+    //付款状态lab
+    var labColor = "color-wait";
+    var stateTit = "待支付";
+    var stateLab = "需付款";
+    if (ViewBag.OrderState != 0)
+    {
+        if (ViewBag.OrderState == 3)
+        {
+            stateTit = "已取消";
+            stateLab = "需付款";
+            labColor = "color-cancel";
+        }
+        else
+        {
+            stateTit = "支付成功";
+            stateLab = "已付款";
+            labColor = "color-ok";
+        }
+    }
+
+    List<WHotelSite.Models.PayOrderInfoEntity> payUrlList = ViewBag.PayUrlList;
+    WHotelSite.Models.PayOrderInfoEntity curPayUrl = new WHotelSite.Models.PayOrderInfoEntity();
+
+}
+
+<style type="text/css">
+    .sharediv {
+        width: 100%;
+        background: rgba(0, 0, 0, 0.8) none repeat scroll 0 0 !important;
+        position: absolute;
+        top: 0;
+        z-index: 100;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .panel {
+        margin-bottom: 1em;
+        border: none;
+        border-radius: 0;
+        -webkit-box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.075);
+        box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.075);
+    }
+
+    .panel-body {
+        padding: 0.8em 15px;
+    }
+</style>
+
+<link href="~/Content/css/order/pay.css" rel="stylesheet" />
+<link href="~/Content/css/framework/zmjd.modal.min.css" rel="stylesheet" />
+<script src="~/Content/js/jquery-1.10.2-min.js"></script>
+<script src="~/Content/js/framework/zmjd.modal.min.js"></script>
+
+@section scripts
+{
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        GetWeixinApiConfig();//注册
+
+        $(function () {
+            wx.checkJsApi({
+                jsApiList: ['onMenuShareTimeline', 'chooseWXPay'],
+                success: function (res) {
+                    // 以键值对的形式返回，可用的api值true，不可用为false
+                    // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+                    if (res) {
+                        conso.log(res);
+                    }
+                }
+            });
+        });
+
+        wx.ready(function (res) {
+            // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+            console.log("注册成功：" + JSON.stringify(res));
+        });
+
+        wx.error(function (res) {
+            // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+            console.log("注册失败：" + JSON.stringify(res));
+        });
+        function click_a(divDisplay) {
+            if (document.getElementById(divDisplay).style.display != "block") {
+                document.getElementById(divDisplay).style.display = "block";
+            }
+            else {
+                document.getElementById(divDisplay).style.display = "none";
+            }
+        }
+
+        function ShowCannotPayMessage(msg) {
+            _Modal.show({
+                title: '支付失败',
+                content: msg,
+                confirmText: '确定',
+                confirm: function () {
+                    _Modal.hide();
+                },
+                showCancel: false
+            });
+        }
+
+        var bCanPay =  @(ViewBag.BeforeCheckResult.bCanPay?"true":"false");
+        if (bCanPay === false) {
+            ShowCannotPayMessage("@(ViewBag.BeforeCheckResult.Message )");
+        }
+      
+    </script>
+}
+
+<div id="divOne_1" style="display:none" onclick="return click_a('divOne_1');" class="sharediv">
+    <img src="/Content/images/browserTipOpenPay.png" class="img-responsive" alt="点击右上角用浏览器打开后支付" />
+</div>
+
+<div class="order-pay-top">
+    <div class="info-hotel">
+        <div class="state">
+            <img src="http://whfront.b0.upaiyun.com/app/img/pay/icon_order.png" alt="" /><span class="@(labColor)">@stateTit</span>
+        </div>
+        <div class="desc">
+            @ViewBag.OrderTitle
+        </div>
+    </div>
+    <div class="info-price">
+        <div class="left">@stateLab</div>
+        <div class="right">￥@ViewBag.OrderPrice</div>
+        <div style="clear:both;"></div>
+    </div>
+</div>
+
+<div class="panel panel-default date">
+    <div class="visible-xs mbdate">
+        <header class="hotel-head hotel-head-bottomline @(ViewBag.isShowHeader ? "" : " hidden")">
+            <div class="left">
+                <a href="javascript:window.history.back();"><img src="~/content/images/icon-back-blue.png" alt="" /></a>
+            </div>
+            <div class="text">支付</div>
+            <div class="right"></div>
+        </header>
+    </div>
+</div>
+
+@if (ViewBag.OrderState == 0 && ViewBag.BeforeCheckResult.bCanPay == true)
+{
+    <div class="order-pay-select-tit">选择支付方式：</div>
+    <div class="order-pay-select-menu">
+
+        @{
+            if (ViewBag.mobilePhone == "18021036971")
+            {
+                if (payUrlList.Where(_ => _.payChannelType == "chinaflashpay").Count() > 0)
+                {
+                    curPayUrl = payUrlList.Where(_ => _.payChannelType == "chinaflashpay").First();
+
+                    <a href="javascript:;"  
+                       pay-type="chinaflashpay"
+                       sub-pay-type="1"
+                       data-pay-href="@Url.Action("Direct", "Payment", new { order = ViewBag.OrderNo, channel = "chinaflashpay" })"
+                       data-finishurl="@curPayUrl.completeUrl"
+                       data-successidentifier="@curPayUrl.successIdentifier"
+                       data-failedidentifier="@curPayUrl.failedIdentifier">
+                        <div class="item">
+                            <div class="pic"><img src="http://whfront.b0.upaiyun.com/app/img/pay/icon_china_unionpay.png" alt="" /></div>
+                            <div class="tit">
+                                <div class="t1" >银联闪付.androidPay 不用</div>
+                                <div class="t2" id="ChinaPayAndroidPay">支付储蓄卡或信用卡</div>
+                            </div>
+                            <div class="r"><img src="~/Content/images/icon-aarow1.png" alt="" /></div>
+                        </div>
+                    </a>
+                    <a href="javascript:;"
+                       pay-type="chinaflashpay"
+                       sub-pay-type="2"
+                       data-pay-href="@Url.Action("Direct", "Payment", new { order = ViewBag.OrderNo, channel = "chinaflashpay" })"
+                       data-finishurl="@curPayUrl.completeUrl"
+                       data-successidentifier="@curPayUrl.successIdentifier"
+                       data-failedidentifier="@curPayUrl.failedIdentifier">
+                        <div class="item">
+                            <div class="pic"><img src="http://whfront.b0.upaiyun.com/app/img/pay/icon_china_unionpay.png" alt="" /></div>
+                            <div class="tit">
+                                <div class="t1">银联云闪付</div>
+                                <div class="t2">支付储蓄卡或信用卡</div>
+                            </div>
+                            <div class="r"><img src="~/Content/images/icon-aarow1.png" alt="" /></div>
+                        </div>
+                    </a>
+                    <a href="javascript:;"
+                       pay-type="chinaflashpay"
+                       sub-pay-type="3"
+                       data-pay-href="@Url.Action("Direct", "Payment", new { order = ViewBag.OrderNo, channel = "chinaflashpay" })"
+                       data-finishurl="@curPayUrl.completeUrl"
+                       data-successidentifier="@curPayUrl.successIdentifier"
+                       data-failedidentifier="@curPayUrl.failedIdentifier">
+                        <div class="item">
+                            <div class="pic"><img src="http://whfront.b0.upaiyun.com/app/img/pay/icon_china_unionpay.png" alt="" /></div>
+                            <div class="tit">
+                                <div class="t1">银联闪付.ApplePay</div>
+                                <div class="t2">支付储蓄卡或信用卡</div>
+                            </div>
+                            <div class="r"><img src="~/Content/images/icon-aarow1.png" alt="" /></div>
+                        </div>
+                    </a>
+                    <a href="javascript:;"
+                       pay-type="chinaflashpay"
+                       sub-pay-type="4"
+                       data-pay-href="@Url.Action("Direct", "Payment", new { order = ViewBag.OrderNo, channel = "chinaflashpay" })"
+                       data-finishurl="@curPayUrl.completeUrl"
+                       data-successidentifier="@curPayUrl.successIdentifier"
+                       data-failedidentifier="@curPayUrl.failedIdentifier">
+                        <div class="item">
+                            <div class="pic"><img src="http://whfront.b0.upaiyun.com/app/img/pay/icon_china_unionpay.png" alt="" /></div>
+                            <div class="tit">
+                                <div class="t1">银联闪付.收银台</div>
+                                <div class="t2">支付储蓄卡或信用卡</div>
+                            </div>
+                            <div class="r"><img src="~/Content/images/icon-aarow1.png" alt="" /></div>
+                        </div>
+                    </a>
+                    <a href="javascript:;"
+                       pay-type="chinaflashpay"
+                       sub-pay-type="5"
+                       data-pay-href="@Url.Action("Direct", "Payment", new { order = ViewBag.OrderNo, channel = "chinaflashpay" })"
+                       data-finishurl="@curPayUrl.completeUrl"
+                       data-successidentifier="@curPayUrl.successIdentifier"
+                       data-failedidentifier="@curPayUrl.failedIdentifier">
+                        <div class="item">
+                            <div class="pic"><img src="http://whfront.b0.upaiyun.com/app/img/pay/icon_china_unionpay.png" alt="" /></div>
+                            <div class="tit">
+                                <div class="t1">银联闪付.H5</div>
+                                <div class="t2">支付储蓄卡或信用卡</div>
+                            </div>
+                            <div class="r"><img src="~/Content/images/icon-aarow1.png" alt="" /></div>
+                        </div>
+                    </a>
+                }
+                if (payUrlList.Where(_ => _.payChannelType == "chinapay").Count() > 0)
+                {
+                    curPayUrl = payUrlList.Where(_ => _.payChannelType == "chinapay").First();
+                    if (isInWeixin)
+                    {
+                        <a pay-type="tenpay"
+                           data-pay-href="http://chinapay.zmjiudian.com/OrderScanPay.aspx?orderid=@(ViewBag.OrderNo)&retUrl=@(curPayUrl.completeUrl)"
+                           data-finishurl="@curPayUrl.completeUrl"
+                           data-successidentifier="@curPayUrl.successIdentifier"
+                           data-failedidentifier="@curPayUrl.failedIdentifier">
+                            <div class="item">
+                                <div class="pic"><img src="http://whfront.b0.upaiyun.com/app/img/pay/icon_wechat_pay.png" alt="" /></div>
+                                <div class="tit">
+                                    <div class="t1">微信支付.</div>
+                                    <div class="t2">推荐使用微信支付.</div>
+                                </div>
+                                <div class="r"><img src="~/Content/images/icon-aarow1.png" alt="" /></div>
+                            </div>
+                        </a>
+                    }
+                    else
+                    {
+                        <a pay-type="tenpay"
+                           data-pay-href="http://chinapay.zmjiudian.com/OrderScanPay.aspx?orderid=@(ViewBag.OrderNo)&retUrl=@(curPayUrl.completeUrl)"
+                           data-finishurl="@curPayUrl.completeUrl"
+                           data-successidentifier="@curPayUrl.successIdentifier"
+                           data-failedidentifier="@curPayUrl.failedIdentifier">
+                            <div class="item">
+                                <div class="pic"><img src="http://whfront.b0.upaiyun.com/app/img/pay/icon_china_unionpay.png" alt="" /></div>
+                                <div class="tit">
+                                    <div class="t1">银联支付.</div>
+                                    <div class="t2">支付储蓄卡或信用卡</div>
+                                </div>
+                                <div class="r"><img src="~/Content/images/icon-aarow1.png" alt="" /></div>
+                            </div>
+                        </a>
+                    }
+                }
+
+            }
+
+            if (ViewBag.CID == 150 || ViewBag.CID == 151)
+            {
+                <a href="javascript:;" data-pay-href="@Url.Action("Direct", "Payment", new { order = ViewBag.OrderNo, channel = "chinapay", cid = ViewBag.CID })">
+                    <div class="item">
+                        <div class="pic"><img src="http://whfront.b0.upaiyun.com/app/img/pay/icon_china_unionpay.png" alt="" /></div>
+                        <div class="tit">
+                            <div class="t1">银联支付</div>
+                            <div class="t2">支付储蓄卡或信用卡</div>
+                        </div>
+                        <div class="r"><img src="~/Content/images/icon-aarow1.png" alt="" /></div>
+                    </div>
+                </a>
+
+            }
+            else if (ViewBag.CID == 173)
+            {
+                <a href="javascript:;" data-pay-href="@Url.Action("Direct", "Payment", new { order = ViewBag.OrderNo, channel = "cmbpay", cid = ViewBag.CID })">
+                    <div class="item">
+                        <div class="pic"><img src="http://whfront.b0.upaiyun.com/app/img/pay/icon_cmb_pay.png" alt="" /></div>
+                        <div class="tit">
+                            <div class="t1">招行一网通支付</div>
+                            <div class="t2">支付储蓄卡或信用卡</div>
+                        </div>
+                        <div class="r"><img src="~/Content/images/icon-aarow1.png" alt="" /></div>
+                    </div>
+                </a>
+            }
+            else if (ViewBag.OrderNo != 0)
+            {
+                if (payChannels.Count > 0)
+                {
+                    for (int i = 0; i < payChannels.Count; i++)
+                    {
+                        var pChannel = payChannels[i];
+                        switch (pChannel)
+                        {
+                            case "tenpay":
+                                {
+                                    curPayUrl = payUrlList.Where(_ => _.payChannelType == "tenpay").First();
+                                    if (isInWeixin || isInApp)
+                                    {
+                                        //微信支付
+                                        <a pay-type="tenpay"
+                                           data-pay-href="http://www.zmjiudian.com/order/wxpay?order=@(ViewBag.OrderNo)&userid=@(userid)"
+                                           data-finishurl="@curPayUrl.completeUrl"
+                                           data-successidentifier="@curPayUrl.successIdentifier"
+                                           data-failedidentifier="@curPayUrl.failedIdentifier">
+                                            <div class="item">
+                                                <div class="pic"><img src="http://whfront.b0.upaiyun.com/app/img/pay/icon_wechat_pay.png" alt="" /></div>
+                                                <div class="tit">
+                                                    <div class="t1">微信支付</div>
+                                                    <div class="t2">推荐使用微信支付.</div>
+                                                </div>
+                                                <div class="r"><img src="~/Content/images/icon-aarow1.png" alt="" /></div>
+                                            </div>
+                                        </a>
+
+                                    }
+                                    break;
+                                }
+                            case "alipay":
+                                {
+                                    if (!ViewBag.isInWeixin)
+                                    {
+                                        if (payUrlList.Where(_ => _.payChannelType == "alipay").Count() > 0)
+                                        {
+                                            curPayUrl = payUrlList.Where(_ => _.payChannelType == "alipay").First();
+
+                                            <a href="javascript:;" pay-type="alipay" data-pay-href="@Url.Action("Direct", "Payment", new { order = ViewBag.OrderNo, channel = "alipay" })"
+                                               data-finishurl="@curPayUrl.completeUrl"
+                                               data-successidentifier="@curPayUrl.successIdentifier"
+                                               data-failedidentifier="@curPayUrl.failedIdentifier">
+                                                <div class="item">
+                                                    <div class="pic"><img src="http://whfront.b0.upaiyun.com/app/img/pay/icon_zhifubao_pay.png" alt="" /></div>
+                                                    <div class="tit">
+                                                        <div class="t1">支付宝</div>
+                                                        <div class="t2">请确保支付宝余额充足。</div>
+                                                    </div>
+                                                    <div class="r"><img src="~/Content/images/icon-aarow1.png" alt="" /></div>
+                                                </div>
+                                            </a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <a href="javascript:;" onclick="return click_a('divOne_1');">
+                                            <div class="item">
+                                                <div class="pic"><img src="http://whfront.b0.upaiyun.com/app/img/pay/icon_zhifubao_pay.png" alt="" /></div>
+                                                <div class="tit">
+                                                    <div class="t1">支付宝</div>
+                                                    <div class="t2">请确保支付宝余额充足...</div>
+                                                </div>
+                                                <div class="r"><img src="~/Content/images/icon-aarow1.png" alt="" /></div>
+                                            </div>
+                                        </a>
+                                    }
+                                    break;
+                                }
+                            case "chinapay":
+                                {
+                                    if (payUrlList.Where(_ => _.payChannelType == "chinapay").Count() > 0)
+                                    {
+                                        curPayUrl = payUrlList.Where(_ => _.payChannelType == "chinapay").First();
+
+                                        <a href="javascript:;" pay-type="chinapay" data-pay-href="@(curPayUrl.payUrl)"
+                                           data-finishurl="@curPayUrl.completeUrl"
+                                           data-successidentifier="@curPayUrl.successIdentifier"
+                                           data-failedidentifier="@curPayUrl.failedIdentifier">
+                                            <div class="item">
+                                                <div class="pic"><img src="http://whfront.b0.upaiyun.com/app/img/pay/icon_china_unionpay.png" alt="" /></div>
+                                                <div class="tit">
+                                                    <div class="t1">银联支付</div>
+                                                    <div class="t2">支付储蓄卡或信用卡</div>
+                                                </div>
+                                                <div class="r"><img src="~/Content/images/icon-aarow1.png" alt="" /></div>
+                                            </div>
+                                        </a>
+                                    }
+
+                                    break;
+                                }
+                            case "cmbpay":
+                                {
+                                    if (ViewBag.mobilePhone == "18021036971")
+                                    {
+                                        if (payUrlList.Where(_ => _.payChannelType == "cmbpay").Count() > 0)
+                                        {
+                                            curPayUrl = payUrlList.Where(_ => _.payChannelType == "cmbpay").First();
+
+                                            <a href="javascript:;" pay-type="cmbpay" data-pay-href="@curPayUrl.payUrl"
+                                               data-finishurl="@curPayUrl.completeUrl"
+                                               data-successidentifier="@curPayUrl.successIdentifier"
+                                               data-failedidentifier="@curPayUrl.failedIdentifier">
+                                                <div class="item">
+                                                    <div class="pic"><img src="http://whfront.b0.upaiyun.com/app/img/pay/icon_cmb_pay.png" alt="" /></div>
+                                                    <div class="tit">
+                                                        <div class="t1">招行一网通支付</div>
+                                                        <div class="t2">支付储蓄卡或信用卡</div>
+                                                    </div>
+                                                    <div class="r"><img src="~/Content/images/icon-aarow1.png" alt="" /></div>
+                                                </div>
+                                            </a>
+                                        }
+                                    }
+                                    break;
+                                }
+                                @*case "upay":
+                                {
+                                    <a href="javascript:;" data-pay-href="@Url.Action("Direct", "Payment", new { order = ViewBag.OrderNo, channel = "upay" })">
+                                        <div class="item">
+                                            <div class="pic"><img src="http://whfront.b0.upaiyun.com/app/img/pay/icon_card_pay.png" alt="" /></div>
+                                            <div class="tit">
+                                                <div class="t1">银行卡</div>
+                                                <div class="t2">支付储蓄卡或信用卡</div>
+                                            </div>
+                                            <div class="r"><img src="~/Content/images/icon-aarow1.png" alt="" /></div>
+                                        </div>
+                                    </a>
+                                    break;
+                                }*@
+                        }
+                    }
+                }
+            }
+            else if (ViewBag.SubmitParam != null)
+            {
+                SubmitParam param = ViewBag.SubmitParam;
+                string submitUrl = Url.Action("Submit", "Hotel", new
+                {
+                    hotel = param.HotelId,
+                    package = param.PackageId,
+                    checkIn = param.CheckIn,
+                    checkOut = param.CheckOut
+                });
+
+                <input id="orderFormUrl" type="hidden" value="@string.Format("{0},{1},{2},{3}", param.RoomCount, param.Contact, param.ContactPhone, param.Note)" />
+
+                if (payChannels.Count > 0)
+                {
+                    for (int i = 0; i < payChannels.Count; i++)
+                    {
+                        var pChannel = payChannels[i];
+                        switch (pChannel)
+                        {
+                            case "tenpay":
+                                {
+                                    if (isInWeixin)
+                                    {
+                                        //微信支付
+                                        <a href="http://www.zmjiudian.com/order/wxpay?order=@(ViewBag.OrderNo)&userid=@(userid)">
+                                            <div class="item">
+                                                <div class="pic"><img src="http://whfront.b0.upaiyun.com/app/img/pay/icon_wechat_pay.png" alt="" /></div>
+                                                <div class="tit">
+                                                    <div class="t1">微信支付</div>
+                                                    <div class="t2">推荐使用微信支付.</div>
+                                                </div>
+                                                <div class="r"><img src="~/Content/images/icon-aarow1.png" alt="" /></div>
+                                            </div>
+                                        </a>
+                                    }
+                                    break;
+                                }
+                            case "alipay":
+                                {
+                                    <a href="javascript:;" data-submitorder-href="@submitUrl&amp;channel=alipay">
+                                        <div class="item">
+                                            <div class="pic"><img src="http://whfront.b0.upaiyun.com/app/img/pay/icon_zhifubao_pay.png" alt="" /></div>
+                                            <div class="tit">
+                                                <div class="t1">支付宝</div>
+                                                <div class="t2">请确保支付宝余额充足.</div>
+                                            </div>
+                                            <div class="r"><img src="~/Content/images/icon-aarow1.png" alt="" /></div>
+                                        </div>
+                                    </a>
+                                    break;
+                                }
+                            case "chinapay":
+                                {
+                                    <a href="javascript:;" data-submitorder-href="@Url.Action("Direct", "Payment", new { order = ViewBag.OrderNo, channel = "chinapay", cid = ViewBag.CID })">
+                                        <div class="item">
+                                            <div class="pic"><img src="http://whfront.b0.upaiyun.com/app/img/pay/icon_china_unionpay.png" alt="" /></div>
+                                            <div class="tit">
+                                                <div class="t1">银联支付</div>
+                                                <div class="t2">支付储蓄卡或信用卡</div>
+                                            </div>
+                                            <div class="r"><img src="~/Content/images/icon-aarow1.png" alt="" /></div>
+                                        </div>
+                                    </a>
+                                    break;
+                                }
+
+                                @*case "upay":
+                                {
+                                    <a href="javascript:;" data-submitorder-href="@submitUrl&amp;channel=upay">
+                                        <div class="item">
+                                            <div class="pic"><img src="http://whfront.b0.upaiyun.com/app/img/pay/icon_card_pay.png" alt="" /></div>
+                                            <div class="tit">
+                                                <div class="t1">银行卡</div>
+                                                <div class="t2">支付储蓄卡或信用卡</div>
+                                            </div>
+                                            <div class="r"><img src="~/Content/images/icon-aarow1.png" alt="" /></div>
+                                        </div>
+                                    </a>
+                                    break;
+                                }*@
+                        }
+                    }
+                }
+            }
+        }
+
+    </div>
+} 
+
+<input type="hidden" id="TerminalType" value="@(ViewBag.TerminalType)" />
+<input type="hidden" id="orderid" value="@(ViewBag.OrderNo)" />
+<div class="row visible-xs visible-sm" style="margin-top:2em;">
+    <a href="tel:4000-021-702">
+        <div class="col-xs-12  col-sm-12 text-center">
+            <p class="h5" style="color: #adadad;">支付遇到问题，拨打客服&nbsp;<span class="tel"><i style="font-size:1.2em;">4000-021-702</i></span></p>
+        </div>
+    </a>
+</div>
+
+<script src='~/Content/js/framework/config.js'></script>
+<script src='~/Content/js/framework/zmjiudian.js?ver=6'></script>

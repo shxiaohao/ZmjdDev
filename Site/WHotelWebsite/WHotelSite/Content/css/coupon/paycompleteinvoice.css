@@ -1,0 +1,45 @@
+﻿body {
+}
+
+.fpalert-section {
+    width:100%;
+    height:auto;
+    margin:0 auto 0 auto;
+    padding:5em 0 0.5em 0;
+}
+    .fpalert-section .icon{
+        width:100%;
+        height:auto;
+        margin:0 auto 0 auto;
+        text-align:center;
+        font-size:7em;
+        color:#8DD234;
+    }
+    .fpalert-section .text{
+        width:100%;
+        height:auto;
+        margin:0 auto 0 auto;
+        text-align:center;
+        font-size:1.5em;
+        font-weight:bold;
+        color:#474747;
+    }
+
+.fpfoot-section{
+    width:100%;
+    height:auto;
+    /*margin:3em auto 0 auto;*/
+    bottom: 3em;
+    position:fixed;
+    text-align:center;
+}
+    .fpfoot-section .tel{
+        width:100%;
+        height:auto;
+        text-align:center;
+        font-size:1.2em;
+        font-family:Arial;
+        color:#3E9EC0;
+    }
+
+

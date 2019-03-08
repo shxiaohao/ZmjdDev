@@ -1,0 +1,149 @@
+﻿.inspectorexplainpage {
+    background: url(http://whfront.b0.upaiyun.com/www/img/inspector/inspector1.jpg) no-repeat bottom left;
+    background-size: 100%;
+}
+.explain-body {
+    width: 100%;
+    max-width:660px;
+    margin:0 auto 0 auto;
+    padding:4em 0 3em 0;
+}
+.explain-box {
+    width: 86%;
+    height: auto;
+    margin: 1.5em auto 0 auto;
+    border: none;
+    text-align:center;
+}
+    .explain-box .tit {
+        width: 100%;
+        height:1.2em;
+        line-height:1.2em;
+        margin:0 auto 0 auto;
+        color: rgba(255,255,255,0.6);
+        font-size: 1.1em;
+        text-align:left;
+    }
+    .explain-box .list {
+        width: 100%;
+        height:auto;
+        line-height:1.2em;
+        margin:0 auto 0 auto;
+        color: #fff;
+        font-size: 1.2em;
+        text-align:left;
+        display:inline-table;
+    }
+        .explain-box .list .brief-ul {
+            padding:0 0 0 0;
+            margin:0 0 0 0;
+        }
+            .explain-box .list .brief-ul .brief-li {
+                width:100%;
+                line-height:1.4em;
+                padding:0.5em 0 0.4em 1.5em;
+                margin: 0 0 0 0;
+                list-style:none;
+                color:rgba(255,255,255,0.9);
+                font-size:1.3em;
+                position:relative;
+                z-index:1;
+            }
+            .explain-box .list .brief-ul .brief-li:before {
+            }
+            .explain-box .list .brief-ul .brief-li-none:before {
+                content:"";
+                position:absolute; z-index:-1; top:0; bottom:0; left:0; right:0;
+                background-position:0.3em 0.6em;
+                background-size:1.8em;
+            }
+            .explain-box .list .brief-ul .brief-li-item1:before {
+                content:"";
+                background: url(http://whfront.b0.upaiyun.com/www/img/inspector/icon-ture.png) no-repeat;
+                position:absolute; z-index:-1; top:0; bottom:0; left:0; right:0;
+                background-position:0.2em 0.9em;
+                background-size:0.8em;
+            }
+
+.where-box {
+    width:86%;
+    height:auto;
+    margin:4em auto 0 auto;
+}
+    .where-box fieldset {
+        padding:0 0 0 0;
+        border:1px solid rgba(255,255,255,0.3);
+        border-radius: 5px;
+    }
+    .where-box fieldset legend{
+        width:8em;
+        margin:0 0 0 0;
+        padding:0 0 0 0;
+        text-align:center;
+        font-size:1.2em;
+        color:rgba(255,255,255,0.6);
+        border:none;
+    }
+    .where-box fieldset .info{
+        line-height:1.8em;
+        margin:1em 0 1em 0;
+        padding:0 0 0 0;
+        text-align:center;
+        font-size:1.2em;
+        color:rgba(255,255,255,0.9);
+    }
+        .where-box fieldset .info a{
+            margin:0 0.2em 0 0.2em;
+            font-size:1.1em;
+            color:rgba(255,255,255,0.9);
+            text-decoration:underline;
+        }
+
+.explain-btn-reg {
+    width: 86%;
+    height:2.8em;
+    line-height:2.7em;
+    margin: 1em 0 0 7%;
+    border: none;
+    background-color: #08b4cf;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 1.5em;
+}
+
+.explain-rule {
+    width: 90%;
+    margin: 1em auto 0 auto;
+    text-align: center;
+    border:1px solid rgba(255,255,255,0.3);
+    background: rgba(0,0,0,0.2);
+    border-radius: 2px;
+}
+    .explain-rule .link {
+        width: 100%;
+        margin: 0;
+    }
+    .explain-rule .link div{
+        width: 100%;
+        height:2.5em;
+        line-height:2.5em;
+        border-radius: 2px;
+        color: #fff;
+        font-size: 1.4em;
+        text-align:center;
+    }
+
+.explain-foot {
+    width: 100%;
+    height: auto;
+}
+    .explain-foot img {
+        width: 100%;
+    }
+
+@media (min-width: 768px) {
+}
+
+
+
+

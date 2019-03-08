@@ -1,0 +1,38 @@
+﻿html, body{
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+	background: #fff;
+    -webkit-user-select:none; 
+    user-select: none;
+    overflow-x:hidden;
+}
+
+/*禁止长按链接与图片弹出菜单*/
+a,img { -webkit-touch-callout: none }
+
+.vip-list {
+    width:100%;
+    height:auto;
+    margin:0.8em auto 0 auto;
+}
+    .vip-list ul{
+        width:100%;
+        height:auto;
+        display:table;
+        list-style:none;
+        margin:0 0 0 0;
+        padding:0 0 0 0;
+    }
+        .vip-list ul li{
+            width:100%;
+            height:auto;
+        }
+            .vip-list ul li .cart-item{
+                width:94%;
+                height:auto;
+                margin:0 auto 0.5em auto;
+                padding:0 0 0 0;
+            }
+                .vip-list ul li .cart-item img{
+                    width:100%;
+                }

@@ -1,0 +1,2467 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HJD.Framework.Interface</name>
+    </assembly>
+    <members>
+        <member name="M:HJD.Framework.Interface.CacheManagerFactory.Create(System.String)">
+            <summary>
+            创建ICacheProvider对象
+            </summary>
+            <param name="cacheSet">配置文件中对应的缓存集名称</param>
+            <returns>ICacheProvider对象</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.CacheManagerFactory.Create(System.String,System.String)">
+            <summary>
+            创建ICacheProvider对象
+            </summary>
+            <param name="cacheSet">配置文件中对应的缓存集名称</param>
+            <param name="name">IUnityContainer所配置的type名称</param>
+            <returns>ICacheProvider对象</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.ICacheProvider.Remove(System.String)">
+            <summary>
+            删除缓存
+            </summary>
+            <param name="key">缓存名称</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.ICacheProvider.GetData``1(System.String,System.Func{``0})">
+            <summary>
+            获取缓存
+            </summary>
+            <typeparam name="TResult">返回值</typeparam>
+            <param name="key">缓存名称</param>
+            <param name="func">当缓存不存在时，需要执行的获取数据方法</param>
+            <returns>返回值</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.ICacheProvider.GetData``1(System.String,System.String,System.Func{``0})">
+            <summary>
+            获取缓存
+            </summary>
+            <typeparam name="TResult">返回值</typeparam>
+            <param name="key">缓存标识</param>
+            <param name="prefix">缓存前缀</param>
+            <param name="refreshAction">当缓存不存在时，需要执行的获取数据方法</param>
+            <returns>返回值</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.ICacheProvider.Contains(System.String)">
+            <summary>
+            是否包含指点名称的缓存
+            </summary>
+            <param name="key">缓存名称</param>
+            <returns>true/false</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.ICacheProvider.GetMultiData``2(System.Collections.Generic.List{``0},System.String,System.Func{``0,``1})">
+            <summary>
+            批量获取缓存 Simple版 【获取数据委托refreshAction只支持一个参数，Memcache缓存Key=string.Format("{0}_{1}", prefix, T1.ToString())】
+            </summary>
+            <typeparam name="T1">当缓存不存在时， 执行获取数据方法的第一个参数Type</typeparam>
+            <typeparam name="TResult">单条缓存Type</typeparam>
+            <param name="paramList">获取缓存参数列表</param>
+            <param name="prefix">Memcache Key前缀</param>
+            <param name="refreshAction">当缓存不存在时， 执行获取数据方法</param>
+            <returns>缓存列表</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.ICacheProvider.GetMultiDataEx``2(System.Collections.Generic.List{``0},System.String,System.Func{System.Collections.Generic.List{``0},System.Collections.Generic.List{``1}},System.Linq.Expressions.Expression{System.Func{``1,``0}},``1)">
+            <summary>
+            批量获取缓存 Simple版 【获取数据委托refreshAction只支持一个参数，Memcache缓存Key=string.Format("{0}_{1}", prefix, T1.ToString())】
+            </summary>
+            <typeparam name="T1">当缓存不存在时， 执行获取数据方法的第一个参数Type</typeparam>
+            <typeparam name="TResult">单条缓存Type</typeparam>
+            <param name="paramList">获取缓存参数列表</param>
+            <param name="prefix">Memcache Key前缀</param>
+            <param name="multiRefreshAction">当缓存不存在时， 执行批量获取数据方法</param>
+            <param name="keyExpression">从数据对象中换取key表达式树</param>
+            <param name="defaultValue">默认缓存数据</param>
+            <returns>缓存列表</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.ICacheProvider.Set(System.String,System.Object)">
+            <summary>
+            设置缓存
+            </summary>
+            <param name="key">缓存名称(不能包含空格)</param>
+            <param name="value">缓存值</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.ICacheProvider.Set(System.String,System.String,System.Object)">
+            <summary>
+            设置缓存
+            </summary>
+            <param name="key">缓存标识(不能包含空格)</param>
+            <param name="prefix">缓存前缀</param>
+            <param name="value">缓存值</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.ICacheProvider.Remove(System.String,System.String)">
+            <summary>
+            删除缓存
+            </summary>
+            <param name="key">缓存标识</param>
+            <param name="prefix">缓存前缀</param>
+        </member>
+        <member name="T:HJD.Framework.Interface.DatabaseManagerFactory">
+            <summary>
+            数据库连接管理 Factory
+            </summary>
+        </member>
+        <member name="M:HJD.Framework.Interface.DatabaseManagerFactory.Create(System.String)">
+            <summary>
+            创建IDatabaseManager对象
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.DatabaseManagerFactory.Teardown(HJD.Framework.Interface.IDatabaseManager)">
+            <summary>
+            回收
+            </summary>
+            <param name="dm"></param>
+        </member>
+        <member name="T:HJD.Framework.Interface.DBParameterCollection">
+            <summary>
+            表示 DBCommand 的参数，此类不能被继承。
+            </summary>
+        </member>
+        <member name="M:HJD.Framework.Interface.DBParameterCollection.#ctor">
+            <summary>
+            创建DBParameterCollection对象
+            </summary>
+        </member>
+        <member name="M:HJD.Framework.Interface.DBParameterCollection.AddInParameter(System.String,System.Data.DbType,System.Object)">
+            <summary>
+            添加输入参数(如果该参数已经存在，将被忽略)
+            </summary>
+            <param name="name">参数名称</param>
+            <param name="dbType">参数类型</param>
+            <param name="value">参数值</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.DBParameterCollection.AddOutParameter(System.String,System.Data.DbType,System.Int32)">
+            <summary>
+            添加输出参数(如果该参数已经存在，将被忽略)
+            </summary>
+            <param name="name">参数名称</param>
+            <param name="dbType">参数类型</param>
+            <param name="size">长度</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.DBParameterCollection.AddReturnValueParameter(System.String,System.Data.DbType,System.Int32)">
+            <summary>
+            添加返回值参数(只能用于存储过程)
+            </summary>
+            <param name="name">参数名称</param>
+            <param name="dbType">参数类型</param>
+            <param name="size">长度</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.DBParameterCollection.AddReturnValueParameter(System.String,System.Data.DbType)">
+            <summary>
+            添加返回值参数(只能用于存储过程)
+            </summary>
+            <param name="name">参数名称</param>
+            <param name="dbType">参数类型</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.DBParameterCollection.AddParameter(System.String,System.Data.DbType,System.Data.ParameterDirection,System.Object,System.Int32)">
+            <summary>
+            添加参数
+            </summary>
+            <param name="dbParameter">DBParameter</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.DBParameterCollection.Clear">
+            <summary>
+            清空参数集合
+            </summary>
+        </member>
+        <member name="P:HJD.Framework.Interface.DBParameterCollection.Item(System.String)">
+            <summary>
+            获取参数的值
+            </summary>
+            <param name="Name">参数名称</param>
+        </member>
+        <member name="P:HJD.Framework.Interface.DBParameterCollection.Item(System.Int32)">
+            <summary>
+            获取参数的值
+            </summary>
+            <param name="index">参数索引</param>
+        </member>
+        <member name="T:HJD.Framework.Interface.IDatabaseManager">
+            <summary>
+            数据库操作对象
+            </summary>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.GetConnectString">
+            <summary>
+            获取连接字符串
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteNonQuery(System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            执行存储过程
+            </summary>
+            <param name="storedProcedureName">存储过程名称</param>
+            <param name="parameters">参数集合(key/value)</param>
+            <returns>返回受影响行数</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteNonQueryWithSqlString(System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            执行SQL语句
+            </summary>
+            <param name="selectKey">SQL语句在配置文件中的ID</param>
+            <param name="parameters">参数集合(key/value)</param>
+            <returns>返回受影响行数</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteNonQuery(System.String,System.Object[])">
+            <summary>
+            执行存储过程
+            </summary>
+            <param name="storedProcedureName">存储过程名称</param>
+            <param name="parameterValues">参数数组</param>
+            <returns>返回受影响行数</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteNonQuery(System.String)">
+            <summary>
+            执行commandText
+            </summary>
+            <param name="commandText">存行语句</param>
+            <returns>返回受影响行数</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSqlString``1(System.String)">
+            <summary>
+            执行SQL语句并返回实体对象
+            </summary>
+            <typeparam name="TResult">实体类型</typeparam>
+            <param name="selectKey">SQL语句在配置文件中的ID</param>
+            <returns>返回执行结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSqlString``1(System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            执行SQL语句并返回实体对象
+            </summary>
+            <typeparam name="TResult">实体类型</typeparam>
+            <param name="selectKey">执行语句</param>
+            <param name="parameters">参数集合</param>
+            <returns>返回执行结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSproc``1(System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            执行存储过程并返回实体对象
+            </summary>
+            <typeparam name="TResult">实体类型</typeparam>
+            <param name="storedProcedureName">存储过程名称</param>
+            <param name="parameters">参数集合</param>
+            <returns>返回执行结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSproc``1(System.String,System.Object[])">
+            <summary>
+            执行存储过程并返回实体对象
+            </summary>
+            <typeparam name="TResult">实体类型</typeparam>
+            <param name="storedProcedureName">存储过程名称</param>
+            <param name="parameterValues">参数集</param>
+            <returns>返回执行结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSproc``1(System.String,System.Object@,System.Object[])">
+            <summary>
+            执行存储过程并返回实体对象(带OutPut参数)
+            </summary>
+            <typeparam name="TResult">返回类型</typeparam>
+            <param name="storedProcedureName">存储过程名称</param>
+            <param name="outPutValue">输出参数值</param>
+            <param name="parameterValues">参数集合(默认为null)->当不传该参数时，说明该存储过程不带输入参数</param>
+            <returns>返回结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSqlStringAndReturnSingleField(System.String)">
+            <summary>
+            执行SQL语句返回单个字段值（如果结果集中存在多个返回字段，默认取第一个，其它将被忽略）
+            </summary>
+            <param name="selectKey">SQL语句在配置文件中的ID</param>
+            <returns>返回执行结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSqlStringAndReturnSingleField(System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            执行SQL语句返回单个字段值（如果结果集中存在多个返回字段，默认取第一个，其它将被忽略）
+            </summary>
+            <param name="selectKey">执行语句</param>
+            <param name="parameters">参数集合</param>
+            <returns>返回执行结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSqlStringAndReturnSingleField(System.String,System.String)">
+            <summary>
+            执行SQL语句返回单个字段值（如果结果集中存在多个返回字段，默认取第一个，其它将被忽略）
+            </summary>
+            <param name="selectKey">SQL语句在配置文件中的ID</param>
+            <param name="fieldname">字段名称</param>
+            <returns>返回执行结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSqlStringAndReturnSingleField(System.String,System.Collections.Generic.Dictionary{System.String,System.Object},System.String)">
+            <summary>
+            执行SQL语句返回单个字段值（如果结果集中存在多个返回字段，默认取第一个，其它将被忽略）
+            </summary>
+            <param name="selectKey">执行语句</param>
+            <param name="parameters">参数集合</param>
+            <param name="fieldname">字段名称</param>
+            <returns>返回执行结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSprocAndReturnSingleField(System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            执行存储过程语句返回单个字段值（如果结果集中存在多个返回字段，默认取第一个，其它将被忽略）
+            </summary>
+            <param name="storedProcedureName">存储过程名称</param>
+            <param name="parameters">参数集合</param>
+            <returns>返回执行结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSprocAndReturnSingleField(System.String,System.Object[])">
+            <summary>
+            执行存储过程语句返回单个字段值（如果结果集中存在多个返回字段，默认取第一个，其它将被忽略）
+            </summary>
+            <param name="storedProcedureName">存储过程名称</param>
+            <param name="parameterValues">参数集合</param>
+            <returns>返回执行结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSprocAndReturnSingleField(System.String,System.Collections.Generic.Dictionary{System.String,System.Object},System.String)">
+            <summary>
+            执行存储过程语句返回单个字段值（如果结果集中存在多个返回字段，默认取第一个，其它将被忽略）
+            </summary>
+            <param name="storedProcedureName">存储过程名称</param>
+            <param name="parameters">参数集合</param>
+            <param name="fieldname">列名称</param>
+            <returns>返回执行结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSprocAndReturnSingleField(System.String,System.String,System.Object[])">
+            <summary>
+            执行存储过程语句返回单个字段值（如果结果集中存在多个返回字段，默认取第一个，其它将被忽略）
+            </summary>
+            <param name="storedProcedureName">存储过程名称</param>
+            <param name="fieldname">列名称</param>
+            <param name="parameterValues">参数集合</param>
+            <returns>返回执行结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSqlSingle``1(System.String,System.Collections.Generic.Dictionary{System.String,System.Object},System.String)">
+            <summary>
+            执行SQL语句返回单个字段列表
+            </summary>
+            <typeparam name="TResult">字段类型</typeparam>
+            <param name="selectKey">配置文件id</param>
+            <param name="parameters">参数</param>
+            <param name="fieldname">字段名称(未指定时返回第1列)</param>
+            <returns>返回执行结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSqlSingle``1(System.String,System.String)">
+            <summary>
+            执行SQL语句返回单个字段列表
+            </summary>
+            <typeparam name="TResult">字段类型</typeparam>
+            <param name="selectKey">配置文件id</param>
+            <param name="fieldname">字段名称(未指定时返回第1列)</param>
+            <returns>返回执行结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSprocSingle``1(System.String,System.Collections.Generic.Dictionary{System.String,System.Object},System.String)">
+            <summary>
+            执行存储过程返回单个字段列表
+            </summary>
+            <typeparam name="TResult">字段类型</typeparam>
+            <param name="storedProcedureName">存储过程名称</param>
+            <param name="parameters">参数集合</param>
+            <param name="fieldname">字段名称(未指定时返回第1列)</param>
+            <returns>返回执行结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSproc``1(System.String)">
+            <summary>
+            执行存储过程返回单个字段列表
+            </summary>
+            <typeparam name="TResult">字段类型</typeparam>
+            <param name="storedProcedureName">存储过程名称</param>
+            <returns>返回执行结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSprocSingle``1(System.String,System.Object[])">
+            <summary>
+            执行存储过程返回单个字段列表(返回第一列)
+            </summary>
+            <typeparam name="TResult">字段类型</typeparam>
+            <param name="storedProcedureName">存储过程名称</param>
+            <param name="parameterValues"></param>
+            <returns>返回执行结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteNonQuery(System.String,HJD.Framework.Interface.DBParameterCollection)">
+            <summary>
+            执行存储过程，返回受影响行数
+            </summary>
+            <param name="storedProcedureName">存储过程名称</param>
+            <param name="dbParameterCollection">参数</param>
+            <returns>受影响行数</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteNonQueryWithSqlString(System.String,HJD.Framework.Interface.DBParameterCollection)">
+            <summary>
+            执行SQL语句，返回受影响行数
+            </summary>
+            <param name="selectKey">配置文件id</param>
+            <param name="dbParameterCollection">参数</param>
+            <returns>受影响行数</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSproc``1(System.String,HJD.Framework.Interface.DBParameterCollection)">
+            <summary>
+            执行存储过程，返回列表
+            </summary>
+            <param name="storedProcedureName">存储过程名称</param>
+            <param name="dbParameterCollection">参数</param>
+            <typeparam name="TResult">返回类型</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSqlString``1(System.String,HJD.Framework.Interface.DBParameterCollection)">
+            <summary>
+            执行SQL查询语句，返回列表
+            </summary>
+            <param name="selectKey">配置文件id</param>
+            <param name="dbParameterCollection">参数</param>
+            <typeparam name="TResult">返回类型</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSprocSingle``1(System.String,HJD.Framework.Interface.DBParameterCollection)">
+            <summary>
+            执行存储过程返回结果集的第一列
+            </summary>
+            <param name="storedProcedureName">存储过程名称</param>
+            <param name="dbParameterCollection">参数</param>
+            <typeparam name="TResult">返回类型</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSprocSingle``1(System.String,HJD.Framework.Interface.DBParameterCollection,System.String)">
+            <summary>
+            执行存储过程返回结果集中指定列(为空时默认返回第一列)
+            </summary>
+            <param name="storedProcedureName">存储过程名称</param>
+            <param name="dbParameterCollection">参数</param>
+            <param name="fieldname">列名称</param>
+            <typeparam name="TResult">返回类型</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSprocAndReturnSingleField(System.String,HJD.Framework.Interface.DBParameterCollection)">
+            <summary>
+            执行存储过程，返回结果的第一行第一列
+            </summary>
+            <param name="storedProcedureName">存储过程名称</param>
+            <param name="dbParameterCollection">参数</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSprocAndReturnSingleField(System.String,HJD.Framework.Interface.DBParameterCollection,System.String)">
+            <summary>
+            执行存储过程，返回结果集的第一行指定列(列名称为空时，默认返回第一列)
+            </summary>
+            <param name="storedProcedureName">存储过程名称</param>
+            <param name="dbParameterCollection">参数</param>
+            <param name="fieldname">列名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSqlStringAndReturnSingleField(System.String,HJD.Framework.Interface.DBParameterCollection)">
+            <summary>
+            执行SQL语句，返回结果集的第一行第一列
+            </summary>
+            <param name="selectKey">配置文件ID</param>
+            <param name="dbParameterCollection">参数</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSqlStringAndReturnSingleField(System.String,HJD.Framework.Interface.DBParameterCollection,System.String)">
+            <summary>
+            执行SQL语句，返回结果集的第一行指定列(列名称为空时默认返回第一列)
+            </summary>
+            <param name="selectKey">配置文件ID</param>
+            <param name="dbParameterCollection">参数</param>
+            <param name="fieldname">列名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSqlSingle``1(System.String,HJD.Framework.Interface.DBParameterCollection)">
+            <summary>
+            执行SQL语句，返回结果集第一列
+            </summary>
+            <typeparam name="TResult">类型</typeparam>
+            <param name="selectKey">配置文件ID</param>
+            <param name="dbParameterCollection">参数</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSqlSingle``1(System.String,HJD.Framework.Interface.DBParameterCollection,System.String)">
+            <summary>
+             执行SQL语句，返回结果集指定列(列名称为空时默认返回第一列)
+            </summary>
+            <typeparam name="TResult">列类型</typeparam>
+            <param name="selectKey">配置文件ID</param>
+            <param name="dbParameterCollection">参数</param>
+            <param name="fieldname">列名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSproc``2(System.String,HJD.Framework.Interface.DBParameterCollection)">
+            <summary>
+            执行存储过程，返回多个对象(T1为第一个结果集，T2为第二个结果集)
+            </summary>
+            <typeparam name="T1">结果集1</typeparam>
+            <typeparam name="T2">结果集2</typeparam>
+            <param name="storedProcedureName">存储过程名称</param>
+            <param name="dbParameterCollection">参数集合</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSproc``3(System.String,HJD.Framework.Interface.DBParameterCollection)">
+            <summary>
+            执行存储过程，返回多个对象(T1为第一个结果集，T2为第二个结果集,T3为第三个结果集)
+            </summary>
+            <typeparam name="T1">结果集1</typeparam>
+            <typeparam name="T2">结果集2</typeparam>
+            <typeparam name="T3">结果集3</typeparam>
+            <param name="storedProcedureName">存储过程名称</param>
+            <param name="dbParameterCollection">参数集合</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSqlString``2(HJD.Framework.Interface.QueryTuple)">
+            <summary>
+            执行SQL语句，返回一个子对象
+            </summary>
+            <typeparam name="T1">父对象类型</typeparam>
+            <typeparam name="T2">子对象类型</typeparam>
+            <param name="queryTuple"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSqlString``3(HJD.Framework.Interface.QueryTuple)">
+            <summary>
+            执行SQL语句，返回两个子对象
+            </summary>
+            <typeparam name="T1">父对象类型</typeparam>
+            <typeparam name="T2">子对象类型1</typeparam>
+            <typeparam name="T3">子对象类型2</typeparam>
+            <param name="queryTuple"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IDatabaseManager.ExecuteSp(System.String,HJD.Framework.Interface.DBParameterCollection)">
+            <summary>
+            执行存储过程，返回DataSet
+            </summary>
+            <param name="storedProcedureName">存储过程名</param>
+            <param name="dbParameterCollection">参数</param>
+            <returns></returns>
+        </member>
+        <member name="T:HJD.Framework.Interface.QueryTuple">
+            <summary>
+            无组查询对象(默认查询类型为存储过程,如果需要为SQL可以设置CommandType值)
+            </summary>
+        </member>
+        <member name="M:HJD.Framework.Interface.QueryTuple.#ctor(HJD.Framework.Interface.QueryCommandType)">
+            <summary>
+            QueryTuple构造函数
+            </summary>
+            <param name="commandType">执行语句类型</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.QueryTuple.#ctor">
+            <summary>
+            QueryTuple构造函数
+            </summary>
+        </member>
+        <member name="P:HJD.Framework.Interface.QueryTuple.LeftKey">
+            <summary>
+            主表Key(由子表当外键引用的)
+            </summary>
+        </member>
+        <member name="P:HJD.Framework.Interface.QueryTuple.QueryName">
+            <summary>
+            查询语句1
+            </summary>
+        </member>
+        <member name="P:HJD.Framework.Interface.QueryTuple.CommandType">
+            <summary>
+            查询语句类型
+            </summary>
+        </member>
+        <member name="T:HJD.Framework.Interface.QueryTupleBuilder`1">
+            <summary>
+            创建QueryTuple
+            </summary>
+        </member>
+        <member name="M:HJD.Framework.Interface.QueryTupleBuilder`1.#ctor(HJD.Framework.Interface.QueryCommandType)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="commandType">CommandType</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.QueryTupleBuilder`1.Create(HJD.Framework.Interface.QueryCommandType)">
+            <summary>
+            创建QueryTuple对象
+            </summary>
+            <param name="commandType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.QueryTupleBuilder`1.WithQuery(System.String)">
+            <summary>
+            Sql语句Key
+            </summary>
+            <param name="selectKey">selectKey</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.QueryTupleBuilder`1.WithDbParameterCollection(HJD.Framework.Interface.DBParameterCollection)">
+            <summary>
+            设置参数集合
+            </summary>
+            <param name="dbParameterCollection">参数集合</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.QueryTupleBuilder`1.Build">
+            <summary>
+            创建QueryTuple对象
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.QueryTupleBuilder`1.WithLeftKey``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            设置子表与主表关联的字段
+            </summary>
+            <typeparam name="TTargetEntity">子对象类型</typeparam>
+            <param name="keyExpression">Key表达式</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.QueryTupleBuilder`1.MapDetail(System.Linq.Expressions.Expression{System.Func{HJD.Framework.Interface.DetailModelBuilder{`0},HJD.Framework.Interface.QueryTupleDetail}})">
+            <summary>
+            创建子对象映射关系
+            </summary>
+            <param name="manyExpression">子对象表达式</param>
+            <returns></returns>
+        </member>
+        <member name="T:HJD.Framework.Interface.DetailModelBuilder`1">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HJD.Framework.Interface.DetailModelBuilder`1.WithFieldName``1(System.Linq.Expressions.Expression{System.Func{`0,System.Collections.Generic.List{``0}}})">
+            <summary>
+            设置子对象在父对象中的属性名称
+            </summary>
+            <typeparam name="TTargetEntity">子对象类型</typeparam>
+            <param name="manyExpression">子对象表达式</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.DetailModelBuilder`1.WithParameter(System.String,System.Data.DbType)">
+            <summary>
+            子查询语句中与主表KEY关联的参数名称
+            </summary>
+            <param name="parameterName">参数名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.DetailModelBuilder`1.WithQuery(System.String)">
+            <summary>
+            子对象查询Key
+            </summary>
+            <param name="selectKey">查询Key</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.DetailModelBuilder`1.WithDbParameterCollection(HJD.Framework.Interface.DBParameterCollection)">
+            <summary>
+            参数集合
+            </summary>
+            <param name="dbParameterCollection">参数集合</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.DetailModelBuilder`1.Build">
+            <summary>
+            编译查询对象
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IParallelManager.Deal``1(System.String,System.Func{``0})">
+            <summary>
+            新建Task立即执行
+            </summary>
+            <typeparam name="TResult">返回值类型</typeparam>
+            <param name="token">指定token</param>
+            <param name="function">执行委托</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.IParallelManager.GetStatus(System.String)">
+            <summary>
+            获取Task状态
+            </summary>
+            <param name="token">token</param>
+            <returns>状态</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IParallelManager.GetStatus(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            批量获取Task状态
+            </summary>
+            <param name="tokenList">token列表</param>
+            <returns>对应状态列表</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IParallelManager.GetResult``1(System.String)">
+            <summary>
+            获取返回值
+            </summary>
+            <typeparam name="TResult">返回值类型</typeparam>
+            <param name="token">token</param>
+            <returns>返回值</returns>
+        </member>
+        <member name="T:HJD.Framework.Interface.LPTaskStatus">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.LPTaskStatus.Running">
+            <summary>
+            正在执行
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.LPTaskStatus.RanToCompletion">
+            <summary>
+            执行完毕
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.LPTaskStatus.TimeOut">
+            <summary>
+            超时
+            </summary>
+        </member>
+        <member name="P:HJD.Framework.Interface.TaskTimeoutException.TimeoutTokenList">
+            <summary>
+            当前ParallelManager内所有已经超时Task的Token列表
+            </summary>
+        </member>
+        <member name="T:HJD.Framework.Interface.IMemcacheProvider">
+            <summary>
+            扩展Memcache： 
+                1、实现委托获取数据
+                2、模拟实现企业库缓存机制
+            </summary>
+            <summary>
+            Memcache缓存基础操作
+            </summary>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheProvider.GetMultiData``2(System.Collections.Generic.List{``0},System.String,System.Func{``0,``1})">
+            <summary>
+            批量获取缓存 Simple版 【获取数据委托refreshAction只支持一个参数，Memcache缓存Key=string.Format("{0}_{1}", prefix, T1.ToString())】
+            </summary>
+            <typeparam name="T1">当缓存不存在时， 执行获取数据方法的第一个参数Type</typeparam>
+            <typeparam name="TResult">单条缓存Type</typeparam>
+            <param name="paramList">获取缓存参数列表</param>
+            <param name="prefix">Memcache Key前缀</param>
+            <param name="refreshAction">当缓存不存在时， 执行获取数据方法</param>
+            <returns>缓存列表</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheProvider.GetMultiDataEx``2(System.Collections.Generic.List{``0},System.String,System.Func{System.Collections.Generic.List{``0},System.Collections.Generic.List{``1}},System.Linq.Expressions.Expression{System.Func{``1,``0}},``1)">
+            <summary>
+            批量获取缓存 Simple版 【获取数据委托refreshAction只支持一个参数，Memcache缓存Key=string.Format("{0}_{1}", prefix, T1.ToString())】
+            </summary>
+            <typeparam name="T1">当缓存不存在时， 执行获取数据方法的第一个参数Type</typeparam>
+            <typeparam name="TResult">单条缓存Type</typeparam>
+            <param name="paramList">获取缓存参数列表</param>
+            <param name="prefix">Memcache Key前缀</param>
+            <param name="multiRefreshAction">当缓存不存在时， 执行批量获取数据方法</param>
+            <param name="keyExpression">从数据对象中换取key表达式树</param>
+            <param name="defaultValue">默认缓存数据</param>
+            <returns>缓存列表</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheProvider.GetMultiData``2(HJD.Framework.Interface.MemcacheMultiRequest{``0,``1})">
+            <summary>
+            批量获取缓存
+            </summary>
+            <typeparam name="T1">当缓存不存在时， 执行获取数据方法的第一个参数Type</typeparam>
+            <typeparam name="TResult">单条缓存Type</typeparam>
+            <param name="memcacheMultiRequest">请求对象</param>
+            <returns>缓存列表</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheProvider.GetMultiData``3(HJD.Framework.Interface.MemcacheMultiRequest{``0,``1,``2})">
+            <summary>
+            批量获取缓存
+            </summary>
+            <typeparam name="T1">当缓存不存在时， 执行获取数据方法的第一个参数Type</typeparam>
+            <typeparam name="T2">当缓存不存在时， 执行获取数据方法的第二个参数Type</typeparam>
+            <typeparam name="TResult">单条缓存Type</typeparam>
+            <param name="memcacheMultiRequest">请求对象</param>
+            <returns>缓存列表</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheProvider.GetMultiData``4(HJD.Framework.Interface.MemcacheMultiRequest{``0,``1,``2,``3})">
+            <summary>
+            批量获取缓存
+            </summary>
+            <typeparam name="T1">当缓存不存在时， 执行获取数据方法的第一个参数Type</typeparam>
+            <typeparam name="T2">当缓存不存在时， 执行获取数据方法的第二个参数Type</typeparam>
+            <typeparam name="T3">当缓存不存在时， 执行获取数据方法的第三个参数Type</typeparam>
+            <typeparam name="TResult">单条缓存Type</typeparam>
+            <param name="memcacheMultiRequest">请求对象</param>
+            <returns>缓存列表</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheProvider.GetMultiData``5(HJD.Framework.Interface.MemcacheMultiRequest{``0,``1,``2,``3,``4})">
+            <summary>
+            批量获取缓存
+            </summary>
+            <typeparam name="T1">当缓存不存在时， 执行获取数据方法的第一个参数Type</typeparam>
+            <typeparam name="T2">当缓存不存在时， 执行获取数据方法的第二个参数Type</typeparam>
+            <typeparam name="T3">当缓存不存在时， 执行获取数据方法的第三个参数Type</typeparam>
+            <typeparam name="T4">当缓存不存在时， 执行获取数据方法的第四个参数Type</typeparam>
+            <typeparam name="TResult">单条缓存Type</typeparam>
+            <param name="memcacheMultiRequest">请求对象</param>
+            <returns>缓存列表</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheProvider.GetMultiData``6(HJD.Framework.Interface.MemcacheMultiRequest{``0,``1,``2,``3,``4,``5})">
+            <summary>
+            批量获取缓存
+            </summary>
+            <typeparam name="T1">当缓存不存在时， 执行获取数据方法的第一个参数Type</typeparam>
+            <typeparam name="T2">当缓存不存在时， 执行获取数据方法的第二个参数Type</typeparam>
+            <typeparam name="T3">当缓存不存在时， 执行获取数据方法的第三个参数Type</typeparam>
+            <typeparam name="T4">当缓存不存在时， 执行获取数据方法的第四个参数Type</typeparam>
+            <typeparam name="T5">当缓存不存在时， 执行获取数据方法的第五个参数Type</typeparam>
+            <typeparam name="TResult">单条缓存Type</typeparam>
+            <param name="memcacheMultiRequest">请求对象</param>
+            <returns>缓存列表</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheProvider.AddNX(System.String,System.Object)">
+            <summary>
+            return true if the key not exists on the memcached server, else return false.
+            the option is atomic
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheProvider.CAS(System.String,System.Object,System.UInt64)">
+            <summary>
+            CAS操作 更新Item的时候,同时传入之前获得的该Item的版本号 需要配合Gets方法操作 如果版本号匹配 
+            就是说在做更新操作时 这个版本号没有被其他更新增加 因此更新会成功
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <param name="unique"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheProvider.Delete(System.String)">
+            <summary>
+            将某个键值对应的缓存记录清空
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheProvider.Get(System.String)">
+            <summary>
+            获得key对应的值 如果没有值或者找不到该key则返回nul
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheProvider.Gets(System.String,System.UInt64@)">
+            <summary>
+            获得key对应的值 如果没有值或者找不到该key则返回null 同时返回uniqueID 配合CAS使用 关于此Item的版本号
+            </summary>
+            <param name="key"></param>
+            <param name="unique"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheProvider.Set(System.String,System.Object)">
+            <summary>
+            设置缓存
+            </summary>
+            <param name="key">缓存名称(不能包含空格)</param>
+            <param name="value">缓存值</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheProvider.GetData``1(System.String)">
+            <summary>
+            获取缓存
+            </summary>
+            <typeparam name="TResult">返回值</typeparam>
+            <param name="key">缓存名称</param>
+            <returns>缓存值</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheProvider.GetMultiData``1(System.Collections.Generic.List{System.String})">
+            <summary>
+            批量获取缓存
+            </summary>
+            <typeparam name="TResult">返回值</typeparam>
+            <param name="keys">缓存名称列表(不能包含空格)</param>
+            <returns>缓存值列表</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheProvider.GetData``1(System.String,System.String,System.Func{``0})">
+            <summary>
+            获取缓存
+            </summary>
+            <typeparam name="TResult">返回值</typeparam>
+            <param name="key">缓存标识</param>
+            <param name="prefix">缓存前缀</param>
+            <param name="func">当缓存不存在时，需要执行的获取数据方法</param>
+            <returns>返回值</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheProvider.Set(System.String,System.String,System.Object)">
+            <summary>
+            设置缓存
+            </summary>
+            <param name="key">缓存标识(不能包含空格)</param>
+            <param name="prefix">缓存前缀</param>
+            <param name="value">缓存值</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheProvider.GetData``1(System.String,System.String)">
+            <summary>
+            获取缓存
+            </summary>
+            <typeparam name="TResult">返回值</typeparam>
+            <param name="key">缓存标识</param>
+            <param name="prefix">缓存前缀</param>
+            <returns>缓存值</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheProvider.GetMultiData``1(System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            批量获取缓存
+            </summary>
+            <typeparam name="TResult">返回值</typeparam>
+            <param name="keys">缓存标识列表(不能包含空格)</param>
+            <param name="prefix">缓存前缀</param>
+            <returns>缓存值列表</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheProvider.Contains(System.String,System.String)">
+            <summary>
+            是否包含指点名称的缓存
+            </summary>
+            <param name="key">缓存标识</param>
+            <param name="prefix">缓存前缀</param>
+            <returns>true/false</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheProvider.Remove(System.String,System.String)">
+            <summary>
+            删除缓存
+            </summary>
+            <param name="key">缓存标识</param>
+            <param name="prefix">缓存前缀</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.MemcacheManagerFactory.Create(System.String)">
+            <summary>
+            创建IMemcacheProvider对象
+            </summary>
+            <param name="cacheSet">配置文件中对应的缓存集名称</param>
+            <returns>IMemcacheProvider对象</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.MemcacheManagerFactory.Create(System.String,System.String)">
+            <summary>
+            创建IMemcacheProvider对象
+            </summary>
+            <param name="cacheSet">配置文件中对应的缓存集名称</param>
+            <param name="name">IUnityContainer所配置的type名称</param>
+            <returns>IMemcacheProvider对象</returns>
+        </member>
+        <member name="T:HJD.Framework.Interface.IMemcacheMultiRequest`1">
+            <summary>
+            对 MemcacheMultiRequest 抽象以便简化批量获取缓存的实现
+            </summary>
+            <typeparam name="TResult"></typeparam>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheMultiRequest`1.CheckRequest">
+            <summary>
+            判断批量获取缓存参数合法性
+            非法直接抛异常
+            </summary>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheMultiRequest`1.GetKeyList">
+            <summary>
+            获取所要获取的缓存名称列表
+            </summary>
+            <returns>缓存名称列表</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMemcacheMultiRequest`1.DoRefreshAction(System.String)">
+            <summary>
+            执行获取数据方法
+            </summary>
+            <param name="key">缓存名称</param>
+            <returns>与缓存名称相对应需要缓存的数据</returns>
+        </member>
+        <member name="T:HJD.Framework.Interface.MemcacheMultiRequest`2">
+            <summary>
+            批量获取缓存请求对象
+            </summary>
+            <typeparam name="T1">当缓存不存在时， 执行获取数据方法的第一个参数Type</typeparam>
+            <typeparam name="TResult">返回缓存Type</typeparam>
+        </member>
+        <member name="M:HJD.Framework.Interface.MemcacheMultiRequest`2.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.MemcacheMultiRequest`2.MemcacheRequestItems">
+            <summary>
+            批量获取 缓存请求条件、约定 的列表
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.MemcacheMultiRequest`2.RefreshAction">
+             <summary>
+             当缓存不存在时， 执行获取数据的方法
+             支持1个传入参数
+            （当 MemcacheRequestItem.RefreshActionEx 赋值后，该条缓存优先使用 MemcacheRequestItem.RefreshActionEx 获取数据）
+             </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.MemcacheMultiRequest`2.MultiRefreshAction">
+            <summary>
+            当缓存不存在时， 批量执行获取数据的方法
+            支持1个传入参数
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.MemcacheMultiRequest`2.KeyExpression">
+            <summary>
+            从返回对象中获取key的表达式树
+            </summary>
+        </member>
+        <member name="T:HJD.Framework.Interface.MemcacheMultiRequest`3">
+            <summary>
+            批量获取缓存请求对象
+            </summary>
+            <typeparam name="T1">当缓存不存在时， 执行获取数据方法的第一个参数Type</typeparam>
+            <typeparam name="T2">当缓存不存在时， 执行获取数据方法的第二个参数Type</typeparam>
+            <typeparam name="TResult">返回缓存Type</typeparam>
+        </member>
+        <member name="M:HJD.Framework.Interface.MemcacheMultiRequest`3.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.MemcacheMultiRequest`3.MemcacheRequestItems">
+            <summary>
+            批量获取 缓存请求条件、约定 的列表
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.MemcacheMultiRequest`3.RefreshAction">
+             <summary>
+             当缓存不存在时， 执行获取数据的方法
+             支持2个传入参数
+            （当 MemcacheRequestItem.RefreshActionEx 赋值后，该条缓存优先使用 MemcacheRequestItem.RefreshActionEx 获取数据）
+             </summary>
+        </member>
+        <member name="T:HJD.Framework.Interface.MemcacheMultiRequest`4">
+            <summary>
+            批量获取缓存请求对象
+            </summary>
+            <typeparam name="T1">当缓存不存在时， 执行获取数据方法的第一个参数Type</typeparam>
+            <typeparam name="T2">当缓存不存在时， 执行获取数据方法的第二个参数Type</typeparam>
+            <typeparam name="T3">当缓存不存在时， 执行获取数据方法的第三个参数Type</typeparam>
+            <typeparam name="TResult">返回缓存Type</typeparam>
+        </member>
+        <member name="M:HJD.Framework.Interface.MemcacheMultiRequest`4.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.MemcacheMultiRequest`4.MemcacheRequestItems">
+            <summary>
+            批量获取 缓存请求条件、约定 的列表
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.MemcacheMultiRequest`4.RefreshAction">
+             <summary>
+             当缓存不存在时， 执行获取数据的方法
+             支持3个传入参数
+            （当 MemcacheRequestItem.RefreshActionEx 赋值后，该条缓存优先使用 MemcacheRequestItem.RefreshActionEx 获取数据）
+             </summary>
+        </member>
+        <member name="T:HJD.Framework.Interface.MemcacheMultiRequest`5">
+            <summary>
+            批量获取缓存请求对象
+            </summary>
+            <typeparam name="T1">当缓存不存在时， 执行获取数据方法的第一个参数Type</typeparam>
+            <typeparam name="T2">当缓存不存在时， 执行获取数据方法的第二个参数Type</typeparam>
+            <typeparam name="T3">当缓存不存在时， 执行获取数据方法的第三个参数Type</typeparam>
+            <typeparam name="T4">当缓存不存在时， 执行获取数据方法的第四个参数Type</typeparam>
+            <typeparam name="TResult">返回缓存Type</typeparam>
+        </member>
+        <member name="M:HJD.Framework.Interface.MemcacheMultiRequest`5.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.MemcacheMultiRequest`5.MemcacheRequestItems">
+            <summary>
+            批量获取 缓存请求条件、约定 的列表
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.MemcacheMultiRequest`5.RefreshAction">
+             <summary>
+             当缓存不存在时， 执行获取数据的方法
+             支持4个传入参数
+            （当 MemcacheRequestItem.RefreshActionEx 赋值后，该条缓存优先使用 MemcacheRequestItem.RefreshActionEx 获取数据）
+             </summary>
+        </member>
+        <member name="T:HJD.Framework.Interface.MemcacheMultiRequest`6">
+            <summary>
+            批量获取缓存请求对象
+            </summary>
+            <typeparam name="T1">当缓存不存在时， 执行获取数据方法的第一个参数Type</typeparam>
+            <typeparam name="T2">当缓存不存在时， 执行获取数据方法的第二个参数Type</typeparam>
+            <typeparam name="T3">当缓存不存在时， 执行获取数据方法的第三个参数Type</typeparam>
+            <typeparam name="T4">当缓存不存在时， 执行获取数据方法的第四个参数Type</typeparam>
+            <typeparam name="T5">当缓存不存在时， 执行获取数据方法的第五个参数Type</typeparam>
+            <typeparam name="TResult">返回缓存Type</typeparam>
+        </member>
+        <member name="M:HJD.Framework.Interface.MemcacheMultiRequest`6.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.MemcacheMultiRequest`6.MemcacheRequestItems">
+            <summary>
+            批量获取 缓存请求条件、约定 的列表
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.MemcacheMultiRequest`6.RefreshAction">
+             <summary>
+             当缓存不存在时， 执行获取数据的方法
+             最多支持5个传入参数,超过5个参数建议抽象成请求对象
+            （当 MemcacheRequestItem.RefreshActionEx 赋值后，该条缓存优先使用 MemcacheRequestItem.RefreshActionEx 获取数据）
+             </summary>
+        </member>
+        <member name="T:HJD.Framework.Interface.MemcacheRequestItem">
+            <summary>
+            单条缓存请求对象
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.MemcacheRequestItem.ParamEx">
+            <summary>
+            当缓存不存在时， 执行获取数据的方法的参数
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.MemcacheRequestItem.RefreshActionEx">
+            <summary>
+            当缓存不存在时， 执行获取数据的方法
+            </summary>
+        </member>
+        <member name="P:HJD.Framework.Interface.MemcacheRequestItem.Key">
+            <summary>
+            缓存名称 Key
+            </summary>
+        </member>
+        <member name="T:HJD.Framework.Interface.MemcacheRequestItem`1">
+            <summary>
+            单条缓存请求对象
+            </summary>
+            <typeparam name="T1">当缓存不存在时， 执行获取数据方法的第一个参数Type</typeparam>
+        </member>
+        <member name="F:HJD.Framework.Interface.MemcacheRequestItem`1.Param1">
+            <summary>
+            当缓存不存在时， 执行获取数据方法的第一个参数
+            </summary>
+        </member>
+        <member name="T:HJD.Framework.Interface.MemcacheRequestItem`2">
+            <summary>
+            单条缓存请求对象
+            </summary>
+            <typeparam name="T1">当缓存不存在时， 执行获取数据方法的第一个参数Type</typeparam>
+            <typeparam name="T2">当缓存不存在时， 执行获取数据方法的第二个参数Type</typeparam>
+        </member>
+        <member name="F:HJD.Framework.Interface.MemcacheRequestItem`2.Param2">
+            <summary>
+            当缓存不存在时， 执行获取数据方法的第二个参数
+            </summary>
+        </member>
+        <member name="T:HJD.Framework.Interface.MemcacheRequestItem`3">
+            <summary>
+            单条缓存请求对象
+            </summary>
+            <typeparam name="T1">当缓存不存在时， 执行获取数据方法的第一个参数Type</typeparam>
+            <typeparam name="T2">当缓存不存在时， 执行获取数据方法的第二个参数Type</typeparam>
+            <typeparam name="T3">当缓存不存在时， 执行获取数据方法的第三个参数Type</typeparam>
+        </member>
+        <member name="F:HJD.Framework.Interface.MemcacheRequestItem`3.Param3">
+            <summary>
+            当缓存不存在时， 执行获取数据方法的第三个参数
+            </summary>
+        </member>
+        <member name="T:HJD.Framework.Interface.MemcacheRequestItem`4">
+            <summary>
+            单条缓存请求对象
+            </summary>
+            <typeparam name="T1">当缓存不存在时， 执行获取数据方法的第一个参数Type</typeparam>
+            <typeparam name="T2">当缓存不存在时， 执行获取数据方法的第二个参数Type</typeparam>
+            <typeparam name="T3">当缓存不存在时， 执行获取数据方法的第三个参数Type</typeparam>
+            <typeparam name="T4">当缓存不存在时， 执行获取数据方法的第四个参数Type</typeparam>
+        </member>
+        <member name="F:HJD.Framework.Interface.MemcacheRequestItem`4.Param4">
+            <summary>
+            当缓存不存在时， 执行获取数据方法的第四个参数
+            </summary>
+        </member>
+        <member name="T:HJD.Framework.Interface.MemcacheRequestItem`5">
+            <summary>
+            单条缓存请求对象
+            </summary>
+            <typeparam name="T1">当缓存不存在时， 执行获取数据方法的第一个参数Type</typeparam>
+            <typeparam name="T2">当缓存不存在时， 执行获取数据方法的第二个参数Type</typeparam>
+            <typeparam name="T3">当缓存不存在时， 执行获取数据方法的第三个参数Type</typeparam>
+            <typeparam name="T4">当缓存不存在时， 执行获取数据方法的第四个参数Type</typeparam>
+            <typeparam name="T5">当缓存不存在时， 执行获取数据方法的第五个参数Type</typeparam>
+        </member>
+        <member name="F:HJD.Framework.Interface.MemcacheRequestItem`5.Param5">
+            <summary>
+            当缓存不存在时， 执行获取数据方法的第五个参数
+            </summary>
+        </member>
+        <member name="T:HJD.Framework.Interface.Query">
+            <summary>
+            查询条件Builder
+            </summary>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.EQ(System.String,System.Object)">
+            <summary>
+            查询条件： EQ
+            Sql:where key = value
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="value">值</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.LT(System.String,System.Object)">
+            <summary>
+            查询条件： LT
+            Sql:where key &lt; value
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="value">值</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.LTE(System.String,System.Object)">
+            <summary>
+            查询条件： LTE
+            Sql:where key &lt;= value
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="value">值</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.GT(System.String,System.Object)">
+            <summary>
+            查询条件： GT
+            Sql:where key > value
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="value">值</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.GTE(System.String,System.Object)">
+            <summary>
+            查询条件： GTE
+            Sql:where key >= value
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="value">值</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.All(System.String,System.Object[])">
+            <summary>
+            查询条件: all
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="values">值</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.All``1(System.String,System.Collections.Generic.List{``0})">
+            <summary>
+            查询条件: all
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="values">值</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.Exists(System.String,System.Boolean)">
+            <summary>
+            查询条件: exists
+            exists:true collection中包含key
+            exists:false collection中不包含key
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="exists">判断逻辑</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.Mod(System.String,System.Int32,System.Int32)">
+            <summary>
+            查询条件: mod
+            Sql:where key % modulus = equals
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="modulus">除数</param>
+            <param name="equals">商</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.NE(System.String,System.Object)">
+            <summary>
+            查询条件: ne
+            Sql:where key &lt;> value
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="value">值</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.In(System.String,System.Object[])">
+            <summary>
+            查询条件：in
+            Sql:where key in (value1,value2...)
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="values">值</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.In``1(System.String,System.Collections.Generic.List{``0})">
+            <summary>
+            查询条件：in
+            Sql:where key in (value1,value2...)
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="values">值</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.InWithNoName(System.Object[])">
+            <summary>
+            查询条件：in
+            Sql:where key in (value1,value2...)
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="values">值</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.InWithNoName``1(System.Collections.Generic.List{``0})">
+            <summary>
+            查询条件：in
+            Sql:where key in (value1,value2...)
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="values">值</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.NotIn(System.String,System.Object[])">
+            <summary>
+            查询条件：nin
+            Sql:where key not in (value1,value2...)
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="values">值</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.NotIn``1(System.String,System.Collections.Generic.List{``0})">
+            <summary>
+            查询条件：nin
+            Sql:where key not in (value1,value2...)
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="values">值</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.Nor(HJD.Framework.Interface.QueryCondition[])">
+            <summary>
+            nor结合子查询
+            Sql:where subQuery1 nor subQuery2 nor...
+            </summary>
+            <param name="list">子查询</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.Or(HJD.Framework.Interface.QueryCondition[])">
+            <summary>
+            or结合子查询
+            Sql:where subQuery1 or subQuery2 or...
+            </summary>
+            <param name="list">子查询</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.And(HJD.Framework.Interface.QueryCondition[])">
+            <summary>
+            and结合子查询
+            Sql:where subQuery1 and subQuery2 and...
+            </summary>
+            <param name="list">子查询</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.Size(System.String,System.Int32)">
+            <summary>
+            查询条件：数组长度
+            Sql:where key.length = size
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="size">数组长度</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.ElemMatch(System.String,HJD.Framework.Interface.QueryCondition[])">
+            <summary>
+            查询条件： 数组匹配
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="list">匹配的子查询条件</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.Near(System.String,System.Double,System.Double,System.Double)">
+            <summary>
+            查询条件： 地理位置索引
+            </summary>
+            <param name="key"></param>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="maxDistance"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.WithinRectangle(System.String,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            查询条件： 在某矩形范围内
+            </summary>
+            <param name="key"></param>
+            <param name="lowerLeftX"></param>
+            <param name="lowerLeftY"></param>
+            <param name="upperRightX"></param>
+            <param name="upperRightY"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.Matches(System.String,System.Text.RegularExpressions.Regex)">
+            <summary>
+            查询条件： 正则匹配
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="regex">正则</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.Query.Not(HJD.Framework.Interface.QueryCondition)">
+            <summary>
+            查询条件: not
+            Sql:where query.Key !query.QueryType query.Value
+            query.QueryType 不支持 EQ|AND|OR|NOR
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="query">not的查询条件</param>
+            <returns></returns>
+        </member>
+        <member name="P:HJD.Framework.Interface.Query.Full">
+            <summary>
+            查询条件： {}
+            Sql:where 1 = 1
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:HJD.Framework.Interface.QueryCondition">
+            <summary>
+            查询条件
+            通过Query构造
+            </summary>
+        </member>
+        <member name="P:HJD.Framework.Interface.QueryCondition.SubQuery">
+            <summary>
+            获取子查询
+            </summary>
+        </member>
+        <member name="P:HJD.Framework.Interface.QueryCondition.QueryType">
+            <summary>
+            获取查询运算符
+            </summary>
+        </member>
+        <member name="P:HJD.Framework.Interface.QueryCondition.Key">
+            <summary>
+            获取查询键
+            </summary>
+        </member>
+        <member name="P:HJD.Framework.Interface.QueryCondition.Value">
+            <summary>
+            获取查询值
+            </summary>
+        </member>
+        <member name="T:HJD.Framework.Interface.QueryType">
+            <summary>
+            查询运算符
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.QueryType.Full">
+            <summary>
+            {}
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.QueryType.EQ">
+            <summary>
+            equality
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.QueryType.LT">
+            <summary>
+            $lt
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.QueryType.LTE">
+            <summary>
+            $lte
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.QueryType.GT">
+            <summary>
+            $gt
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.QueryType.GTE">
+            <summary>
+            $gte
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.QueryType.All">
+            <summary>
+            $all
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.QueryType.Exists">
+            <summary>
+            $exist
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.QueryType.Mod">
+            <summary>
+            $mod
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.QueryType.NE">
+            <summary>
+            $ne
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.QueryType.In">
+            <summary>
+            $in
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.QueryType.NotIn">
+            <summary>
+            $nin
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.QueryType.Nor">
+            <summary>
+            nor结合子查询
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.QueryType.Or">
+            <summary>
+            or结合子查询
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.QueryType.And">
+            <summary>
+            and结合子查询
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.QueryType.Size">
+            <summary>
+            $size
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.QueryType.ElemMatch">
+            <summary>
+            $elemMatch
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.QueryType.Matches">
+            <summary>
+            $regex
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.QueryType.Not">
+            <summary>
+            $not
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.QueryType.Near">
+            <summary>
+            $near
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.QueryType.WithinRectangle">
+            <summary>
+            $WithinRectangle
+            </summary>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.Count(System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            获取条数
+            </summary>
+            <param name="collectionName">集合名-相当于表名</param>
+            <param name="queryParam">查询条件</param>
+            <returns>条数</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.Count(System.String,HJD.Framework.Interface.QueryCondition)">
+            <summary>
+            获取条数
+            </summary>
+            <param name="collectionName">集合名-相当于表名</param>
+            <param name="query">查询条件</param>
+            <returns>条数</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.Select``1(System.String,System.Collections.Generic.Dictionary{System.String,System.Object},System.Collections.Generic.Dictionary{System.String,HJD.Framework.Interface.OrderBy},System.Collections.Generic.List{System.String},System.Boolean)">
+            <summary>
+            查询
+            </summary>
+            <typeparam name="TResult">实体类型</typeparam>
+            <param name="collectionName">集合名-相当于表名</param>
+            <param name="queryParam">查询条件</param>
+            <param name="sort">排序</param>
+            <param name="selectColumnName">查询返回字段</param>
+            <param name="include">包含还是排除selectColumnName</param>
+            <returns>查询结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.Select``1(System.String,HJD.Framework.Interface.QueryCondition,System.Collections.Generic.Dictionary{System.String,HJD.Framework.Interface.OrderBy},System.Collections.Generic.List{System.String},System.Boolean)">
+            <summary>
+            查询
+            </summary>
+            <typeparam name="TResult">实体类型</typeparam>
+            <param name="collectionName">集合名-相当于表名</param>
+            <param name="query">查询条件</param>
+            <param name="sort">排序</param>
+            <param name="selectColumnName">查询返回字段</param>
+            <param name="include">包含还是排除selectColumnName</param>
+            <returns>查询结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.Select``1(System.String,System.Collections.Generic.Dictionary{System.String,System.Object},System.Int32,System.Int32,System.Int64@,System.Collections.Generic.Dictionary{System.String,HJD.Framework.Interface.OrderBy},System.Collections.Generic.List{System.String},System.Boolean)">
+            <summary>
+            分页查询
+            </summary>
+            <typeparam name="TResult">实体类型</typeparam>
+            <param name="collectionName">集合名-相当于表名</param>
+            <param name="queryParam">查询条件</param>
+            <param name="pageIndex">第几页</param>
+            <param name="pageCount">每页多少数据</param>
+            <param name="totalCount">返回总结果数</param>
+            <param name="sort">排序</param>
+            <param name="selectColumnName">查询返回字段</param>
+            <param name="include">包含还是排除selectColumnName</param>
+            <returns>查询结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.Select``1(System.String,HJD.Framework.Interface.QueryCondition,System.Int32,System.Int32,System.Int64@,System.Collections.Generic.Dictionary{System.String,HJD.Framework.Interface.OrderBy},System.Collections.Generic.List{System.String},System.Boolean)">
+            <summary>
+            分页查询
+            </summary>
+            <typeparam name="TResult">实体类型</typeparam>
+            <param name="collectionName">集合名-相当于表名</param>
+            <param name="query">查询条件</param>
+            <param name="pageIndex">第几页</param>
+            <param name="pageCount">每页多少数据</param>
+            <param name="totalCount">返回总结果数</param>
+            <param name="sort">排序</param>
+            <param name="selectColumnName">查询返回字段</param>
+            <param name="include">包含还是排除selectColumnName</param>
+            <returns>查询结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.Select``1(System.String,System.Collections.Generic.Dictionary{System.String,System.Object},System.Int32,System.Int32,System.Collections.Generic.Dictionary{System.String,HJD.Framework.Interface.OrderBy},System.Collections.Generic.List{System.String},System.Boolean)">
+            <summary>
+            查询
+            </summary>
+            <typeparam name="TResult">实体类型</typeparam>
+            <param name="collectionName">集合名-相当于表名</param>
+            <param name="queryParam">查询条件</param>
+            <param name="startIndex">开始条数下标：即返回从第一条起时 startIndex设0</param>
+            <param name="returnCount">返回条数</param>
+            <param name="sort">排序</param>
+            <param name="selectColumnName">查询返回字段</param>
+            <param name="include">包含还是排除selectColumnName</param>
+            <returns>查询结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.Select``1(System.String,HJD.Framework.Interface.QueryCondition,System.Int32,System.Int32,System.Collections.Generic.Dictionary{System.String,HJD.Framework.Interface.OrderBy},System.Collections.Generic.List{System.String},System.Boolean)">
+            <summary>
+            查询
+            </summary>
+            <typeparam name="TResult">实体类型</typeparam>
+            <param name="collectionName">集合名-相当于表名</param>
+            <param name="query">查询条件</param>
+            <param name="startIndex">开始条数下标：即返回从第一条起时 startIndex设0</param>
+            <param name="returnCount">返回条数</param>
+            <param name="sort">排序</param>
+            <param name="selectColumnName">查询返回字段</param>
+            <param name="include">包含还是排除selectColumnName</param>
+            <returns>查询结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.SelectTop``1(System.String,System.Collections.Generic.Dictionary{System.String,System.Object},System.Int32,System.Collections.Generic.Dictionary{System.String,HJD.Framework.Interface.OrderBy},System.Collections.Generic.List{System.String},System.Boolean)">
+            <summary>
+            查询Top项
+            </summary>
+            <typeparam name="TResult">实体类型</typeparam>
+            <param name="collectionName">集合名-相当于表名</param>
+            <param name="queryParam">查询条件</param>
+            <param name="topCount">Top数</param>
+            <param name="sort">排序</param>
+            <param name="selectColumnName">查询返回字段</param>
+            <param name="include">包含还是排除selectColumnName</param>
+            <returns>查询结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.SelectTop``1(System.String,HJD.Framework.Interface.QueryCondition,System.Int32,System.Collections.Generic.Dictionary{System.String,HJD.Framework.Interface.OrderBy},System.Collections.Generic.List{System.String},System.Boolean)">
+            <summary>
+            查询Top项
+            </summary>
+            <typeparam name="TResult">实体类型</typeparam>
+            <param name="collectionName">集合名-相当于表名</param>
+            <param name="query">查询条件</param>
+            <param name="topCount">Top数</param>
+            <param name="sort">排序</param>
+            <param name="selectColumnName">查询返回字段</param>
+            <param name="include">包含还是排除selectColumnName</param>
+            <returns>查询结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.SelectOne``1(System.String,System.Collections.Generic.Dictionary{System.String,System.Object},System.Collections.Generic.Dictionary{System.String,HJD.Framework.Interface.OrderBy})">
+            <summary>
+            查询第一项
+            </summary>
+            <typeparam name="TResult">实体类型</typeparam>
+            <param name="collectionName">集合名-相当于表名</param>
+            <param name="queryParam">查询条件</param>
+            <param name="sort">排序</param>
+            <returns>查询结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.SelectOne``1(System.String,HJD.Framework.Interface.QueryCondition,System.Collections.Generic.Dictionary{System.String,HJD.Framework.Interface.OrderBy})">
+            <summary>
+            查询第一项
+            </summary>
+            <typeparam name="TResult">实体类型</typeparam>
+            <param name="collectionName">集合名-相当于表名</param>
+            <param name="query">查询条件</param>
+            <param name="sort">排序</param>
+            <returns>查询结果</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.Insert``1(System.String,``0)">
+            <summary>
+            插入
+            插入失败 throw exception
+            </summary>
+            <typeparam name="T1">实体类型</typeparam>
+            <param name="collectionName">集合名-相当于表名</param>
+            <param name="document">插入的对象</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.Insert``1(System.String,System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            批量插入
+            插入失败 throw exception
+            </summary>
+            <typeparam name="T1">实体类型</typeparam>
+            <param name="collectionName">集合名-相当于表名</param>
+            <param name="documents">批量插入的对象列表</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.Update(System.String,System.Collections.Generic.Dictionary{System.String,System.Object},System.Collections.Generic.Dictionary{System.String,System.Object},System.Boolean)">
+            <summary>
+            更新
+            更新失败 throw exception
+            </summary>
+            <param name="collectionName">集合名-相当于表名</param>
+            <param name="queryParam">更新条件</param>
+            <param name="updateParam">更新内容</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.Update(System.String,HJD.Framework.Interface.QueryCondition,System.Collections.Generic.Dictionary{System.String,System.Object},System.Boolean)">
+            <summary>
+            更新
+            更新失败 throw exception
+            </summary>
+            <param name="collectionName">集合名-相当于表名</param>
+            <param name="query">更新条件</param>
+            <param name="updateParam">更新内容</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.Update``1(System.String,System.Collections.Generic.Dictionary{System.String,System.Object},``0,System.Boolean)">
+            <summary>
+            更新
+            更新失败 throw exception
+            </summary>
+            <typeparam name="T1">实体类型</typeparam>
+            <param name="collectionName">集合名-相当于表名</param>
+            <param name="queryParam">更新条件</param>
+            <param name="updateDocument">更新对象</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.Update``1(System.String,HJD.Framework.Interface.QueryCondition,``0,System.Boolean)">
+            <summary>
+            更新
+            更新失败 throw exception
+            </summary>
+            <typeparam name="TResult">实体类型</typeparam>
+            <param name="collectionName">集合名-相当于表名</param>
+            <param name="query">更新条件</param>
+            <param name="updateDocument">更新对象</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.Update(System.String,System.Collections.Generic.Dictionary{System.String,System.Object},HJD.Framework.Interface.UpdateCondition,System.Boolean)">
+            <summary>
+            更新
+            更新失败 throw exception
+            </summary>
+            <typeparam name="T1">实体类型</typeparam>
+            <param name="collectionName">集合名-相当于表名</param>
+            <param name="queryParam">更新条件</param>
+            <param name="update">更新操作</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.Update(System.String,HJD.Framework.Interface.QueryCondition,HJD.Framework.Interface.UpdateCondition,System.Boolean)">
+            <summary>
+            更新
+            更新失败 throw exception
+            </summary>
+            <typeparam name="TResult">实体类型</typeparam>
+            <param name="collectionName">集合名-相当于表名</param>
+            <param name="query">更新条件</param>
+            <param name="update">更新操作</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.Delete(System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            删除
+            删除失败 throw exception
+            </summary>
+            <param name="collectionName">集合名-相当于表名</param>
+            <param name="queryParam">删除条件</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.Delete(System.String,HJD.Framework.Interface.QueryCondition)">
+            <summary>
+            删除
+            删除失败 throw exception
+            </summary>
+            <param name="collectionName">集合名-相当于表名</param>
+            <param name="query">删除条件</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.IMongodbProvider.QueryHelper(HJD.Framework.Interface.QueryCondition)">
+            <summary>
+            转换为mongodb shell条件语句
+            </summary>
+            <param name="query"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.MongodbManagerFactory.Create(System.String)">
+            <summary>
+            创建IMemcacheProvider对象
+            </summary>
+            <param name="mongoConnKey">配置文件中对应的MongoDB连接串Key</param>
+            <returns>IMongodbProvider对象</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.MongodbManagerFactory.Create(System.String,System.String)">
+            <summary>
+            创建IMongodbProvider对象
+            </summary>
+            <param name="unityName">IUnityContainer所配置的type名称</param>
+            <param name="mongoConnKey">配置文件中对应的MongoDB连接串Key</param>
+            <returns>IMongodbProvider对象</returns>
+        </member>
+        <member name="T:HJD.Framework.Interface.UpdateCondition">
+            <summary>
+            更新操作
+            </summary>
+        </member>
+        <member name="M:HJD.Framework.Interface.UpdateCondition.Inc(System.String,System.Object)">
+            <summary>
+            $inc
+            Sql:set key = key + value
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="value">值</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.UpdateCondition.Set(System.String,System.Object)">
+            <summary>
+            $set
+            Sql:set key = value
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.UpdateCondition.Unset(System.String)">
+            <summary>
+            $unset
+            删除该列
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.UpdateCondition.Push(System.String,System.Object)">
+            <summary>
+            $push
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.UpdateCondition.PushAll(System.String,System.Collections.Generic.List{System.Object})">
+            <summary>
+            $pushAll
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.UpdateCondition.AddToSet(System.String,System.Object)">
+            <summary>
+            $addToSet
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.UpdateCondition.PopFirst(System.String)">
+            <summary>
+            $pop -1
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.UpdateCondition.PopLast(System.String)">
+            <summary>
+            $pop 1
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.UpdateCondition.Pull(System.String,HJD.Framework.Interface.QueryCondition)">
+            <summary>
+            $pull
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="query"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.UpdateCondition.PullAll(System.String,System.Collections.Generic.List{System.Object})">
+            <summary>
+            $pullAll
+            </summary>
+            <param name="key">键（相当于sql列名）</param>
+            <param name="values"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.UpdateCondition.Rename(System.String,System.String)">
+            <summary>
+            $rename
+            更改列明
+            </summary>
+            <param name="oldKeyName">键（相当于sql列名）</param>
+            <param name="newKeyName">键（相当于sql列名）</param>
+            <returns></returns>
+        </member>
+        <member name="P:HJD.Framework.Interface.UpdateCondition.UpdateList">
+            <summary>
+            获取更新操作列表
+            </summary>
+        </member>
+        <member name="P:HJD.Framework.Interface.UpdateCondition.UpdateType">
+            <summary>
+            获取更新运算符
+            </summary>
+        </member>
+        <member name="P:HJD.Framework.Interface.UpdateCondition.Key">
+            <summary>
+            获取更新键
+            </summary>
+        </member>
+        <member name="P:HJD.Framework.Interface.UpdateCondition.Value">
+            <summary>
+            获取更新值
+            </summary>
+        </member>
+        <member name="T:HJD.Framework.Interface.UpdateType">
+            <summary>
+            更新运算符
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.UpdateType.Inc">
+            <summary>
+            $inc
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.UpdateType.Set">
+            <summary>
+            $set
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.UpdateType.Unset">
+            <summary>
+            $unset
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.UpdateType.Push">
+            <summary>
+            $push
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.UpdateType.PushAll">
+            <summary>
+            $pushAll
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.UpdateType.AddToSet">
+            <summary>
+            $addToSet
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.UpdateType.PopFirst">
+            <summary>
+            $pop -1
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.UpdateType.PopLast">
+            <summary>
+            $pop 1
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.UpdateType.Pull">
+            <summary>
+            $pull
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.UpdateType.PullAll">
+            <summary>
+            $pullAll
+            </summary>
+        </member>
+        <member name="F:HJD.Framework.Interface.UpdateType.Rename">
+            <summary>
+            $rename
+            </summary>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.StringSet(System.String,System.String,System.Nullable{System.TimeSpan})">
+            <summary>
+            保存单个key value（如果 key 已存在，则覆盖值）
+            </summary>
+            <param name="key">Key</param>
+            <param name="value">保存的值</param>
+            <param name="expiry">过期时间</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.StringSet``1(System.String,``0,System.Nullable{System.TimeSpan})">
+            <summary>
+            保存一个简单对象,（如果 key 已存在，则覆盖值）
+            </summary>
+            <param name="key">Key</param>
+            <typeparam name="T">值</typeparam>
+            <param name="obj"></param>
+            <param name="expiry"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.StringGet(System.String)">
+            <summary>
+            获取单个key的值
+            </summary>
+            <param name="key">Key</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.StringGet``1(System.String)">
+            <summary>
+            获取单个key的值
+            </summary>
+            <param name="key">Key</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.StringGetObject``1(System.String)">
+            <summary>
+            获取单个key的值
+            </summary>
+            <param name="key">Key</param>
+            <typeparam name="T">实体对象</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.StringIncrement(System.String,System.Double)">
+            <summary>
+            为数字增长val, key不存先创建key，并为key赋值为val
+            </summary>
+            <param name="key"></param>
+            <param name="val">可以为负</param>
+            <returns>增长后的值</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.StringDecrement(System.String,System.Double)">
+            <summary>
+            为数字减少val,key不存先创建key，并为key赋值为减少后的值
+            </summary>
+            <param name="key"></param>
+            <param name="val">可以为负</param>
+            <returns>减少后的值</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.HashExists(System.String,System.String)">
+            <summary>
+            判断某个数据是否已经被缓存
+            </summary>
+            <param name="key">Key</param>
+            <param name="hashField">字段</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.HashSet(System.String,System.String,System.String)">
+            <summary>
+            存储单个字段到hash表
+            </summary>
+            <param name="key">Key</param>
+            <param name="hashField">字段</param>
+            <param name="hashValue">值</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.HashSet``1(System.String,System.String,``0)">
+            <summary>
+            Hash存储单个字段,把实体对象序列号存储在value上
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="key"></param>
+            <param name="hashField"></param>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.HashSetObject``1(System.String,``0)">
+            <summary>
+            Hash存储简单实体对象，hashField对应属性名，hashValue对应属性值
+            </summary>
+            <param name="key">Key</param>
+            <param name="t">简单实体对象</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.HashSetDictionary(System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            把Dictionary存储到Hash,hashField对应字典KEY，hashValue对应字典VALUE
+            </summary>
+            <param name="key">Key</param>
+            <param name="dictionary">字典</param>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.HashDelete(System.String,System.String)">
+            <summary>
+            移除hash中的某个值
+            </summary>
+            <param name="key">Key</param>
+            <param name="hashField">字段</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.HashDelete(System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            移除hash中的多个值
+            </summary>
+            <param name="key">Key</param>
+            <param name="hashFields">字段集合</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.HashGet``1(System.String,System.String)">
+            <summary>
+            从hash表获取某个字段数据
+            </summary>
+            <typeparam name="T">返回值</typeparam>
+            <param name="key">key</param>
+            <param name="hashField">字段</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.HashGetAll``1(System.String)">
+            <summary>
+            从hash表获取单个KEY所有字段数据
+            </summary>
+            <typeparam name="T">返回值</typeparam>
+            <param name="key">key</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.HashGetAllToList``1(System.Collections.Generic.List{System.String})">
+            <summary>
+            从hash表获取指定KEY所有字段数据集合
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="keys">keys集合</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.HashGetAllToDictionary(System.String)">
+            <summary>
+            从hash表获取单个KEY所有字段数据集合
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.HashIncrement(System.String,System.String,System.Double)">
+            <summary>
+            为数字增长指定值，hashField不存先创建hashField，并为hashField赋值为val
+            </summary>
+            <param name="key">key</param>
+            <param name="hashField">字段</param>
+            <param name="val">可以为负</param>
+            <returns>增长后的值</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.HashDecrement(System.String,System.String,System.Double)">
+            <summary>
+            为数字减少val,hashField不存先创建hashField，并为hashField赋值为减少后的值
+            </summary>
+            <param name="key">key</param>
+            <param name="hashField">字段</param>
+            <param name="val">可以为负</param>
+            <returns>减少后的值</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.ListRemove(System.String,System.String)">
+            <summary>
+            删除List的值
+            </summary>
+            <param name="key">Key</param>
+            <param name="value">要删除的value</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.ListRange``1(System.String)">
+            <summary>
+            获取List所有元素
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.ListRange``1(System.String,System.Int64,System.Int64)">
+            <summary>
+            根据小标获取List元素
+            </summary>
+            <param name="key">Key</param>
+            <param name="start">开始下标</param>
+            <param name="end">结束下标</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.ListRightPush(System.String,System.String)">
+            <summary>
+            从尾部插入一个元素
+            </summary>
+            <param name="key">Key</param>
+            <param name="value">元素</param>
+            <returns>返回队列长度</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.ListRightPush(System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            从尾部插入多个元素
+            </summary>
+            <param name="key">Key</param>
+            <param name="redisValues">元素值集合</param>
+            <returns>返回队列长度</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.ListRightPush``1(System.String,``0)">
+            <summary>
+            从尾部插入一个对象元素
+            </summary>
+            <param name="key">Key</param>
+            <param name="value">对象元素</param>
+            <returns>返回队列长度</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.ListRightPop(System.String)">
+            <summary>
+            从尾部弹出一个元素,并返回该元素
+            </summary>
+            <param name="key"></param>
+            <returns>返回弹出元素</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.ListRightPop``1(System.String)">
+            <summary>
+            从尾部弹出一个元素,并返回该元素
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="key"></param>
+            <returns>返回弹出元素</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.ListLeftPush(System.String,System.String)">
+            <summary>
+            从头部插入一个元素，返回队列长度
+            </summary>
+            <param name="key">Key</param>
+            <param name="value">元素</param>
+            <returns>返回队列长度</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.ListLeftPush``1(System.String,``0)">
+            <summary>
+            从头部插入一个对象元素，返回队列长度
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="key">Key</param>
+            <param name="value">元素</param>
+            <returns>返回队列长度</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.ListLeftPop(System.String)">
+            <summary>
+            从头部弹出一个元素,并返回该元素
+            </summary>
+            <param name="key"></param>
+            <returns>返回弹出元素</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.ListLeftPop``1(System.String)">
+            <summary>
+            从头部弹出一个元素,并返回该元素
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="key"></param>
+            <returns>返回弹出元素</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.ListLength(System.String)">
+            <summary>
+            获取集合中的数量
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.SetAdd(System.String,System.String)">
+            <summary>
+            添加一个元素到Set集合，元素存在则不添加，返回false
+            </summary>
+            <param name="key">Key</param>
+            <param name="value">值</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.SetAdd(System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            添加多个元素到Set集合，元素存在则不添加
+            </summary>
+            <param name="key">Key</param>
+            <param name="values">值集合</param>
+            <returns>返回设置成功元素的个数</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.SetRemove(System.String,System.String)">
+            <summary>
+            删除Set集合中的一个元素
+            </summary>
+            <param name="key">Key</param>
+            <param name="value">删除的元素</param>
+            <returns> </returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.SetRemove(System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            删除Set集合中的多个元素元素
+            </summary>
+            <param name="key">Key</param>
+            <param name="redisValues">删除的元素集合</param>
+            <returns>返回删除元素的个数</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.SetMembers``1(System.String)">
+            <summary>
+            获取全部元素
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.SetLength(System.String)">
+            <summary>
+            获取集合中的数量
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.SortedSetAdd(System.String,System.String,System.Double)">
+            <summary>
+            向SortedSet集合中添加元素,元素存在则更新score,返回false
+            </summary>
+            <param name="key">Key</param>
+            <param name="memeber">元素</param>
+            <param name="score">分数</param>
+            <returns></returns>
+        </member>
+        <!-- 对于成员“M:HJD.Framework.Interface.IRedisProvider.SortedSetAdd(System.String,System.Collections.Generic.IDictionary{System.String,System.Double})”忽略有格式错误的 XML 注释 -->
+        <member name="M:HJD.Framework.Interface.IRedisProvider.SortedSetRemove(System.String,System.String)">
+            <summary>
+            删除SortedSet集合中一个元素
+            </summary>
+            <param name="key"></param>
+            <param name="memeber"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.SortedSetRemove(System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            删除SortedSet集合中元素
+            </summary>
+            <param name="key"></param>
+            <param name="redisValues"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.SortedSetRangeByRank``1(System.String,HJD.Framework.Interface.RedisOrderBy)">
+            <summary>
+            获取SortedSet集合中全部元素
+            </summary>
+            <param name="key"></param>
+            <param name="order">排序方式，默认降序</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.SortedSetRangeByRank``1(System.String,System.Int64,System.Int64,HJD.Framework.Interface.RedisOrderBy)">
+            <summary>
+            按下标获取SortedSet集合中的元素
+            </summary>
+            <typeparam name="T">参数类型</typeparam>
+            <param name="key">Key</param>
+            <param name="start">开始下标</param>
+            <param name="end">结束下标</param>
+            <param name="order">排序方式，默认降序</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.SortedSetRangeByRankWithScores(System.String,System.Int64,System.Int64,HJD.Framework.Interface.RedisOrderBy)">
+            <summary>
+            按下标获取SortedSet集合中的元素,并返回score
+            </summary>
+            <param name="key">Key</param>
+            <param name="start">开始下标</param>
+            <param name="end">结束下标</param>
+            <param name="order">排序方式，默认降序</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.SortedSetRangeByScore``1(System.String,System.Double,System.Double,HJD.Framework.Interface.RedisOrderBy)">
+            <summary>
+            按分数区间获取元素
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="key">Key</param>
+            <param name="start">开始分数</param>
+            <param name="end">结束分数</param>
+            <param name="order">排序方式，默认降序</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.SortedSetRangeByScoreWithScores(System.String,System.Double,System.Double,HJD.Framework.Interface.RedisOrderBy)">
+            <summary>
+            按分数区间获取元素,并返回Score
+            </summary>
+            <param name="key">Key</param>
+            <param name="start">开始分数</param>
+            <param name="end">结束分数</param>
+            <param name="order">排序方式，默认降序</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.SortedSetScore(System.String,System.String)">
+            <summary>
+            获取某个元素的分数
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.SortedSetRemoveRangeByRank(System.String,System.Int64,System.Int64)">
+            <summary>
+            先按score从小到大排序，删除下标范围内元素
+            </summary>
+            <param name="key">Key</param>
+            <param name="start">开始下标</param>
+            <param name="end">结束下标</param>
+            <returns>删除元素个数</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.SortedSetRemoveRangeByScore(System.String,System.Double,System.Double)">
+            <summary>
+            按分数删除元素
+            </summary>
+            <param name="key">Key</param>
+            <param name="start">开始分数</param>
+            <param name="end">结束分数</param>
+            <returns>删除元素个数</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.SortedSetLength(System.String)">
+            <summary>
+            获取SortedSet集合中的数量
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.KeyDelete(System.String)">
+            <summary>
+            删除单个key
+            </summary>
+            <param name="key">redis key</param>
+            <returns>是否删除成功</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.KeyDelete(System.Collections.Generic.List{System.String})">
+            <summary>
+            删除多个key
+            </summary>
+            <param name="keys">rediskey</param>
+            <returns>成功删除的个数</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.KeyExists(System.String)">
+            <summary>
+            判断key是否存在
+            </summary>
+            <param name="key">redis key</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.KeyRename(System.String,System.String)">
+            <summary>
+            重新命名key
+            </summary>
+            <param name="key">就的redis key</param>
+            <param name="newKey">新的redis key</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.IRedisProvider.KeyExpire(System.String,System.Nullable{System.TimeSpan})">
+            <summary>
+            设置Key的时间
+            </summary>
+            <param name="key">redis key</param>
+            <param name="expiry"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.RedisManagerFactory.Create(System.String)">
+            <summary>
+            创建IRedisProvider对象
+            </summary>
+            <param name="redisConnKey">配置文件中对应的Redis连接串Key</param>
+            <returns>IRedisProvider对象</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.RedisManagerFactory.Create(System.String,System.String)">
+            <summary>
+            创建IRedisProvider对象
+            </summary>
+            <param name="unityName">IUnityContainer所配置的type名称</param>
+            <param name="redisConnKey">配置文件中对应的Redis连接串Key</param>
+            <returns>IRedisProvider对象</returns>
+        </member>
+        <member name="M:HJD.Framework.Interface.UnityContainerManager.Create">
+            <summary>
+            创建UnityContianer对象
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

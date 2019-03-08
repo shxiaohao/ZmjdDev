@@ -1,0 +1,253 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D7F4862A-DB88-43C3-8C36-D21922BCE1CE}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HJD.AccessServiceTask</RootNamespace>
+    <AssemblyName>HJD.AccessServiceTask</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>D:\HJD\OtaCrawlerTask\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <AutorunEnabled>true</AutorunEnabled>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>8EFAE30A4F7733CA08AD9F2FC604496DE75DF766</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>HJD.OtaCrawlerTask_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HJD.Framework.DataAccess">
+      <HintPath>..\..\..\Library\HJD.Framework.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Contracts\HJD.Framework.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\HJD.Framework.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.Log">
+      <HintPath>..\..\..\Library\HJD.Framework.Log.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.WCF, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Contracts\HJD.Framework.WCF.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.WCF.BaseServiceHostFactory">
+      <HintPath>..\..\..\Library\HJD.Framework.WCF.BaseServiceHostFactory.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.HotelPrice.Contract">
+      <HintPath>..\..\..\Contracts\HJD.HotelPrice.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.HotelServices.Contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Contracts\HJD.HotelServices.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.OtaCrawlerService.Contract">
+      <HintPath>..\..\..\Contracts\HJD.OtaCrawlerService.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.PhotoServices.Contracts">
+      <HintPath>..\..\..\Contracts\HJD.PhotoServices.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.PhotoSyncServices.Contracts">
+      <HintPath>..\..\..\Contracts\HJD.PhotoSyncServices.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Search.CommonLibrary">
+      <HintPath>..\..\..\Contracts\HJD.Search.CommonLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.WeixinService.Contract">
+      <HintPath>..\..\..\Contracts\HJD.WeixinService.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="HJDAPI.APIProxy">
+      <HintPath>..\..\..\Library\HJDAPI.APIProxy.dll</HintPath>
+    </Reference>
+    <Reference Include="HJDAPI.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\HJDAPI.Models.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\..\..\Library\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="MessageService">
+      <HintPath>..\..\..\Contracts\MessageService.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RabbitMQ.Client, Version=3.4.3.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\RabbitMQ.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="RobotRules">
+      <HintPath>..\..\..\Library\RobotRules.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Entity\Config.cs" />
+    <Compile Include="Helper\WeixinHelper.cs" />
+    <Compile Include="Helper\DownloadHelper.cs" />
+    <Compile Include="Helper\MailHelper.cs" />
+    <Compile Include="Helper\DatabaseHelper.cs" />
+    <Compile Include="Helper\AcountHelper.cs" />
+    <Compile Include="Helper\RabbitMqContext.cs" />
+    <Compile Include="Helper\TimeHelper.cs" />
+    <Compile Include="Job\Acount\GenUserRecommendRelJob.cs" />
+    <Compile Include="Job\Acount\SendRedPackJob.cs" />
+    <Compile Include="Job\BaseJob.cs" />
+    <Compile Include="Job\Acount\GenBehaviorCsvJob.cs" />
+    <Compile Include="Job\Acount\DownloadBehaviorQueueJob.cs" />
+    <Compile Include="Job\Fund\GenVipUserFundJob.cs" />
+    <Compile Include="Job\Fund\GenUserFundJob.cs" />
+    <Compile Include="Job\Hotel\ClearHotelPriceSlot.cs" />
+    <Compile Include="Job\Hotel\UpdateZmjdPackagePrice.cs" />
+    <Compile Include="Job\Hotel\FillHotelPricePlanExJob.cs" />
+    <Compile Include="Job\Hotel\HotelPriceSlotListenerForBg.cs" />
+    <Compile Include="Job\Hotel\InitHotelBasePrice.cs" />
+    <Compile Include="Job\Hotel\HotelPriceSlotListener.cs" />
+    <Compile Include="Job\Hotel\HotelPriceSlotEngine.cs" />
+    <Compile Include="Job\Search\BuildQaIndexJob.cs" />
+    <Compile Include="Job\Search\HotelIndexSourceListener.cs" />
+    <Compile Include="Job\Search\IndexActionListener.cs" />
+    <Compile Include="Job\Search\HanlpDemoJob.cs" />
+    <Compile Include="Job\Search\BuildHotelIndexJob.cs" />
+    <Compile Include="Job\Tool\CustomSmsSendJob.cs" />
+    <Compile Include="Job\Weixin\DownLoadWexinLiuwaMaterialJob.cs" />
+    <Compile Include="Job\Weixin\DownLoadWexinMaterialJob.cs" />
+    <Compile Include="Job\Weixin\GenActiveGemListener.cs" />
+    <Compile Include="Job\Weixin\SendServiceTemplateMsgLiuwaWX_Job.cs" />
+    <Compile Include="Job\Weixin\SendServiceTemplateMsgLiuwa_Job.cs" />
+    <Compile Include="Job\Weixin\SendServiceTemplateMsgShanglvzm_Job.cs" />
+    <Compile Include="Job\Weixin\SendServiceTemplateMsgSZ_Job.cs" />
+    <Compile Include="Job\Weixin\DownLoadWexinUserInfoJob.cs" />
+    <Compile Include="Job\Weixin\GenActiveLuckCodeListener.cs" />
+    <Compile Include="Job\Weixin\DownloadWeixinChatRecoedJob.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Config\Database.config" />
+    <Content Include="Config\Log.config" />
+    <Content Include="Config\Memcache.config" />
+    <Content Include="Config\MemcacheSet.config" />
+    <Content Include="Config\Mongodb.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Config\wcf_bindings.config" />
+    <None Include="Config\wcf_client.config" />
+    <None Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 和 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Job\Report\" />
+    <Folder Include="Params\" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="MSScriptControl">
+      <Guid>{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HJD.AccessService.Contract\HJD.AccessService.Contract.csproj">
+      <Project>{c63748c9-501d-472a-aeff-36c4c77814b6}</Project>
+      <Name>HJD.AccessService.Contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HJD.AccessService.Implement\HJD.AccessService.Implement.csproj">
+      <Project>{a79489b2-6067-4673-9cdb-332cfdac7f48}</Project>
+      <Name>HJD.AccessService.Implement</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

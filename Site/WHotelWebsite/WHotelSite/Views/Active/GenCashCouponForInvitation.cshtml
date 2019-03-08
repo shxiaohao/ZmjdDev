@@ -1,0 +1,252 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params.Hotel
+@using HJD.CommentService.Contract
+@model CommentInfoModel3
+@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    ViewBag.Title = "周末酒店";
+
+    var isApp = ViewBag.IsApp;
+
+    var sourceId = ViewBag.SourceId;
+
+    //分享者信息
+    var shareUserInfo = ViewBag.ShareUserInfo;
+    
+    //分享者的扩展信息
+    UserInfoResult shareUserInfoEx = ViewBag.ShareUserInfoEx;
+}
+
+@section styles 
+{
+    <link href="~/Content/css/framework/zmjd.swiper.min.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css/active/gencashcouponforinvitation.css?v=" + (Helpers.curAppVer()))
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+}
+
+<div id="page2">
+    <div class="main-panel" id="onestep">
+        <div class="top">
+            <img src="http://whfront.b0.upaiyun.com/app/img/fund/invitation-top-bigpic.png" alt="" />
+        </div>
+        <div class="middle">
+            <div class="shareuser">
+                @*<div class="tip2">@(shareUserInfo.NickName)送了你50积分</div>*@
+                <div class="tip2">@(shareUserInfo.NickName)邀你注册</div>
+            </div>
+            <div class="invitationcode">
+                邀请码：@(shareUserInfoEx.InvitationCode)
+            </div>
+            <div class="btn">
+                <a href1="#go-reg" href="javascript:;" class="go-getcash-btn">立即注册</a>
+            </div>
+        </div>
+        <div class="middle" style="display:none;">  
+            <div class="phone">
+                <input type="tel" id="user-phone" placeholder="输入11位手机号" />
+            </div>
+            <div class="btn">
+                <input type="button" value="注册" id="getcashcoupon" />
+            </div>
+        </div>
+    </div>
+    
+    <div id="flashDealsSection" class="section-seat" style="display:none;">
+        <div class="home-tit home-tit-big-height">
+            <div class="left">{{AlbumsInfo.albumTitle}}</div>
+            <div class="right"></div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="swiper-container home-hlist-panel">
+            <ul class="swiper-wrapper">
+                <li class="swiper-slide" v-for="hotItem in AlbumsInfo.HotelList" onclick="gourl('http://www.zmjiudian.com/Hotel/Package/{{hotItem.PID}}?userid=0&userlat={userlat}&userlng={userlat}&usercity={usercity}')">
+                    <div class="item">
+                        <div class="h-img">
+                            <img v-if="$index<2" src="{{hotItem.HotelPicUrl.replace('theme', '640x426')}}" alt="" />
+                            <img v-else data-orisrc="{{hotItem.HotelPicUrl.replace('theme', '640x426')}}" src="http://whfront.b0.upaiyun.com/app/img/home/home-load2-3x2.png" alt="" />
+                            <div class="h-tit-tip-price3">
+                                <div class="v-price">
+                                    <span>￥</span>{{hotItem.TotalVIPPrice}}<span>起</span>
+                                    <div class="v-icon"><span class="zmjd-iconfont">&#xe623;</span></div>
+                                </div>
+                                <div class="d-price"><span>￥</span>{{hotItem.TotalHotelPrice}}<span>起</span></div>
+                            </div>
+                        </div>
+                        <div class="hname-info">
+                            <div class="hotel-name">{{hotItem.HotelName}}</div>
+                            <div class="hotel-packagebrief">{{hotItem.PackageBrief}}</div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="foot-panel">
+        <img src="http://whfront.b0.upaiyun.com/app/img/fund/invitation-pagebottom-slogan.png" alt="" />
+    </div>
+
+    <div class="main-panel2" id="twostep" style="display:none;">
+        <div class="middle"><img src="http://whfront.b0.upaiyun.com/www/img/Active/coupon/cash-coupon-50-2.png" alt="" /></div>
+        <div class="bottom">
+            <div class="btn">
+                <input type="button" value="下载周末酒店APP" id="downloadapp" />
+            </div>
+            <div class="tip">
+                @*积分已放入您的周末酒店APP账户<br /><span id="tip-phone-span"></span>中*@
+                <span id="tip-phone-span"></span>已注册成功
+            </div>
+        </div>
+        <div class="foot"><img src="http://whfront.b0.upaiyun.com/app/img/fund/invitation-pagebottom-slogan.png" alt="" /></div>
+    </div>
+</div>
+
+<input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+<input type="hidden" id="sourceId" value="@(sourceId)" />
+<input type="hidden" id="userId" value="@(shareUserInfo.UserID)" />
+<input type="hidden" id="nickName" value="@(shareUserInfo.NickName)" />
+<input type="hidden" id="invitationCode" value="@(shareUserInfoEx.InvitationCode)" />
+<input type="hidden" id="hidWxUnionid" value="@(ViewBag.Unionid)" />
+@section scripts
+{
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/framework/zmjd.swiper.min.js"></script>
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/login.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/active/gencashcouponforinvitation.js?v=@(Helpers.curAppVer())"></script>
+    <script>
+
+        function gourl(url) {
+            location.href = url;
+        }
+
+        //var bgLoopTime = 9500;
+        //var loopShowBgTip = function () {
+        //    var bgItemObj = $(".bg-panel").find(".item");
+        //    if (bgItemObj) {
+        //        //bgItemObj.fadeIn(1000);
+
+        //        var tipObj1 = bgItemObj.find(".tip1");
+        //        var tipObj2 = bgItemObj.find(".tip2");
+        //        var tipObj3 = bgItemObj.find(".tip3");
+        //        tipObj1.fadeOut(500);
+        //        tipObj2.fadeOut(500);
+        //        tipObj3.fadeOut(500);
+
+        //        //1
+        //        showTip(tipObj1, 500, 1500);
+        //        //hideTip(tipObj1, 2800);
+
+        //        //2
+        //        showTip(tipObj2, 2000, 1500);
+        //        //hideTip(tipObj2, 5800);
+
+        //        //3
+        //        showTip(tipObj3, 3500, 1500);
+        //        //hideTip(tipObj3, 8300);
+
+        //        //btn
+        //        showTip($(".join-btn"), 5000, 800);
+
+        //        //all
+        //        //showTip(tipObj1, 9300, 100);
+        //        //showTip(tipObj2, 9600, 100);
+        //        //showTip(tipObj3, 9900, 100);
+        //    }
+        //};
+        //setTimeout(loopShowBgTip, 0);
+        //var loopBgTime = setInterval(loopShowBgTip, bgLoopTime);
+        var showTip = function (showTipObj, timeNum, showTime) {
+            setTimeout(function () {
+                if (showTipObj) {
+                    showTipObj.fadeIn(showTime);
+                }
+            }, timeNum);
+        };
+        var showTip2 = function (showTipObj, timeNum, showTime) {
+            setTimeout(function () {
+                if (showTipObj) {
+                    showTipObj.slideDown(showTime);
+                }
+            }, timeNum);
+        };
+        var hideTip = function (showTipObj, timeNum) {
+            setTimeout(function () {
+                if (showTipObj) {
+                    showTipObj.fadeOut(800);
+                }
+            }, timeNum);
+        };
+
+        //【启动页】加入周末酒店
+        $(".join-btn").click(function () {
+            $("#page1").fadeOut(300);
+            $("#page2").fadeIn(00);
+        });
+        $(".bg-panel").click(function () { $(".join-btn").click(); });
+
+        $(function () {
+            
+            //领取
+            $("#getcashcoupon").click(function ()
+            {
+                var phone = $("#user-phone").val();
+
+                if (phone == "") {
+                    alert("请输入手机号码");
+                    return;
+                }
+
+                if (!phone || phone.length != 11) {
+                    alert("手机号码输入有误");
+                    return;
+                }
+
+                var dic = {};
+                dic["phone"] = phone;
+                dic["sourceId"] = $("#sourceId").val();
+
+                $.get('/Active/JoinZmjdGetCoupon', dic, function (content) {
+
+                    var msg = content.Message;
+                    var suc = content.Success;
+
+                    switch (suc) {
+                        case "0":
+                        case "2":
+                            {
+                                $("#onestep").hide();
+                                $(".foot-panel").hide();
+                                $(".foot-panel2").show();
+
+                                $("#tip-phone-span").html(phone);
+                                $("#twostep").show();
+                                $(".right-top-panel").show();
+                                break;
+                            }
+                        default:
+                            {
+                                alert(msg);
+                                break;
+                            }
+                    }
+                });
+
+            });
+
+            //下载
+            $("#downloadapp").click(function ()
+            {
+                gourl('/Inspector/Jump?jumpurl=whotelapp://www.zmjiudian.com');
+            });
+
+        });
+    </script>
+}

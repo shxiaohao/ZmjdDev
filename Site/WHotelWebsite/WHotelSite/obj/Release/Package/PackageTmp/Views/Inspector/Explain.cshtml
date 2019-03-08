@@ -1,0 +1,44 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+
+    InspectorParam param = ViewBag.param;
+
+    ViewBag.Title = string.Format("成为品鉴师-周末酒店");
+    ViewBag.Keywords = string.Format("品鉴师，成为品鉴师，品鉴师报名");
+    ViewBag.Description = string.Format("品鉴师");
+
+    ViewBag.BodyStyle = "overflow-x:hidden;";
+    ViewBag.BodyClass = "inspectorexplainpage";
+}
+
+@section styles
+{
+    <style>
+        html, body {
+            height: 100%;margin:0;
+        }
+    </style>
+}
+
+<div class="explain-body">
+    <section class="explain-top">
+        <div class="explain-box">
+            <img class="logotxt" src="~/Content/images/inspector/brown/text01.png"><br />
+            <img class="logoimg" src="~/Content/images/inspector/brown/bed.png"><br />
+            <div class="info">为了更好地聚合群智，分享经验，为大家推荐有特色、好口碑的度假酒店，从今天起，我们将长期招募酒店品鉴师。 成为周末酒店品鉴师，可免费品鉴各地酒店，参与分享和发现特色酒店的乐趣哦！</div>
+        </div>
+        <button type="button" class="explain-btn-reg" data-userid="@param.UserId">我要加入</button>
+        <div class="explain-rule">
+            <a class="link" href="/inspector/rules?userid=@param.UserId">成为品鉴师的条件及福利 ></a>
+        </div>
+    </section>
+    <footer class="explain-foot"><img src="~/Content/images/inspector/bottom.png"></footer>
+</div>
+<!--  -->
+
+@section scripts
+{
+    @Scripts.Render("~/Content/js/inspector/inspector.js")
+}

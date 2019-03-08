@@ -1,0 +1,249 @@
+﻿body {
+    background:url(http://whfront.b0.upaiyun.com/www/img/Active/coupon/cash-bg-wh.png) no-repeat left top;
+    background-size:100%;
+    background-color:#e1e1e1;
+}
+
+.main-panel {
+    width:88%;
+    height:auto;
+    margin:1.8em auto 0 auto;
+}
+    .main-panel .top{
+        width:100%;
+        height:auto;
+        margin:0 0 0 0;
+        display:table;
+    }
+        .main-panel .top img{
+            width:100%;
+            vertical-align:bottom;
+        }
+    .main-panel .middle{
+        width:100%;
+        height:auto;
+        margin:0 0 0 0;
+        background:url(http://whfront.b0.upaiyun.com/www/img/Active/coupon/cash-content-middle2.png) repeat-y left top;
+        background-size:100%;
+        display:table;
+    }
+        .main-panel .middle .tit{
+            width:100%;
+            height:auto;
+            line-height:1.3em;
+            margin:1.2em 0 1.5em 0;
+            text-align:center;
+            font-size:1.2em;
+            color:#3e9ec0;
+        }
+        .main-panel .middle .phone{
+            width:100%;
+            height:auto;
+            text-align:center;
+            margin:1.5em 0 0.3em 0;
+        }
+            .main-panel .middle .phone input{
+                width:85%;
+                height:auto;
+                margin:0 auto 0 auto;
+                padding-left:0.2em;
+                border:none;
+                border-bottom:1px solid #ddd;
+                text-align:left;
+                font-size:0.9em;
+                border-radius:0;
+            }
+        .main-panel .middle .btn{
+            width:100%;
+            height:auto;
+            margin:0.8em auto 1em auto;
+            text-align:center;
+        }
+            .main-panel .middle .btn input{
+                width:85%;
+                height:auto;
+                line-height:2.5em;
+                margin:0 auto 0 auto;
+                background:#72cedb;
+                border:none;
+                border-radius:3px;
+                text-align:center;
+                font-size:1em;
+                color:#fff;
+            }
+                .main-panel .middle .btn input:hover{
+                    background:#5dcad9;
+                }
+        .main-panel .middle .shareuser {
+            width:100%;
+            height:auto;
+            margin:2.5em auto 2.2em auto;
+            text-align:center;
+        }
+            .main-panel .middle .shareuser .head{
+                width:100%;
+                height:auto;
+                margin:0 auto 0.2em auto;
+            }
+                .main-panel .middle .shareuser .head img{
+                    width:3.3em;
+                    border-radius: 3.5em;
+                }
+            .main-panel .middle .shareuser .nick{
+                width:100%;
+                height:auto;
+                line-height:1.6em;
+                margin:0 auto 0 auto;
+                text-align:center;
+                font-size:0.8em;
+                color:#888;
+            }
+            .main-panel .middle .shareuser .tip{
+                width:100%;
+                height:auto;
+                line-height:1.4em;
+                margin:0 auto 0 auto;
+                text-align:center;
+                font-size:0.9em;
+                color:#000;
+            }
+            .main-panel .middle .shareuser .tip-big{
+                width:100%;
+                height:auto;
+                line-height:1.3em;
+                margin:0.5em auto 0.5em auto;
+                text-align:center;
+                font-size:1.8em;
+                color:#000;
+            }
+        .main-panel .middle-bar{
+            width:100%;
+            height:auto;
+            line-height:0.1em;
+            margin:0 0 0 0;
+            padding:0 0 0 0;
+            display:table;
+        }
+            .main-panel .middle-bar img{
+                width:100%;
+                margin:0 0 0 0;
+                padding:0 0 0 0;
+            }
+    .main-panel .bottom{
+        width:100%;
+        height:auto;
+        display:table;
+    }
+        .main-panel .bottom img{
+            width:100%;
+            vertical-align:top;
+        }
+.foot-panel {
+    width:100%;
+    height:auto;
+    margin:1.5em 0 0 0;
+    padding:0 0 1em 0;
+    line-height:0.1em;
+    text-align:center;
+}
+    .foot-panel img{
+        width:94%;
+        margin:0 auto 0 auto;
+        vertical-align:bottom;
+    }
+    
+.main-panel2 {
+    width:88%;
+    height:auto;
+    position:absolute;
+    left:6%;
+    top:5em;
+    z-index:2;
+}
+    .main-panel2 .middle{
+        width:100%;
+        height:auto;
+        margin:0 0 0 0;
+        padding:0 0 0 0;
+        display:table;
+    }
+        .main-panel2 .middle img{
+            width:100%;
+            vertical-align:bottom;
+        }
+    .main-panel2 .bottom{
+        width:100%;
+        height:auto;
+        margin:0 0 0 0;
+        background:url(http://whfront.b0.upaiyun.com/www/img/Active/coupon/cash-content-middle2.png) repeat-y left top;
+        background-size:100%;
+        display:table;
+        
+    }
+        .main-panel2 .bottom .btn{
+            width:100%;
+            height:auto;
+            margin:1.2em 0 0.8em 0;
+            text-align:center;
+        }
+            .main-panel2 .bottom .btn input{
+                width:85%;
+                height:auto;
+                line-height:2.5em;
+                margin:0 auto 0 auto;
+                background:#72cedb;
+                border:none;
+                border-radius:3px;
+                text-align:center;
+                font-size:1em;
+                color:#fff;
+            }
+                .main-panel2 .bottom .btn input:hover{
+                    background:#5dcad9;
+                }
+        .main-panel2 .bottom .tip{
+            width:100%;
+            height:auto;
+            margin:0 0 0 0;
+            text-align:center;
+            font-size:0.8em;
+            color:#888;
+        }
+    .main-panel2 .foot{
+        width:100%;
+        height:auto;
+        display:table;
+    }
+        .main-panel2 .foot img{
+            width:100%;
+            vertical-align:top;
+        }
+.right-top-panel {
+    width:8em;
+    height:auto;
+    position:fixed;
+    right:2em;
+    top:2em;
+    z-index:1;
+}
+    .right-top-panel img{
+        width:100%;
+    }
+.foot-panel2 {
+    width:100%;
+    height:auto;
+    margin:0 0 0 0;
+    padding:0 0 1em 0;
+    line-height:0.1em;
+    text-align:center;
+    position:fixed;
+    left:0;
+    bottom:0;
+    z-index:1;
+}
+    .foot-panel2 img{
+        width:94%;
+        margin:0 auto 0 auto;
+        vertical-align:bottom;
+    }
+

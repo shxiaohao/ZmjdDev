@@ -1,0 +1,303 @@
+﻿html, body{
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+	background: #fff;
+    -webkit-user-select:none; 
+    user-select: none;
+    overflow-x: hidden;
+}
+
+/*禁止长按链接与图片弹出菜单*/
+a,img { -webkit-touch-callout: none }
+
+/**/
+.main {
+    width: auto;
+    height: auto;
+}
+
+    .main .photo {
+        width: 100%;
+        max-width: 600px;
+        height: auto;
+        padding:0 0 0 0;
+        margin: 0 0 0 0;
+    }
+
+        .main .photo img {
+            width: 100%;
+        }
+
+    .main .list {
+        width: 88%;
+        max-width: 600px;
+        height: auto;
+        margin: 1.4em auto 0 auto;
+        display:table;
+    }
+
+        .main .list .item {
+            width: 100%;
+            height: auto;
+            margin: 0 0 1.8em 0;
+            padding: 0 0 1em 0;
+            background: #fff;
+            display: table;
+            overflow: hidden;
+            text-align: left;
+            border-bottom:1px solid #e0e0e0;
+        }
+
+            .main .list .item .h-img {
+                width: 100%;
+                height: auto;
+                margin: 0 0% 0 0%;
+                position: relative;
+            }
+
+                .main .list .item .h-img img {
+                    width: 100%;
+                }
+
+                .main .list .item .h-img .h-tit-tip-mode {
+                    width: 100%;
+                    height: 10em;
+                    margin: 0 0 0 0;
+                    padding: 0 0 0 1.1em;
+                    position: absolute;
+                    left: 0px;
+                    top: 0px;
+                    z-index: 4;
+                    font-size: 0.8em;
+                    background: url(http://whfront.b0.upaiyun.com/app/img/home/tip-top-mode-bg.png) repeat-x left top;
+                    background-size: 100% 5em;
+                }
+
+                .main .list .item .h-img .h-tit-tip-txt {
+                    width: auto;
+                    height: auto;
+                    margin: 0 0 0 0;
+                    position: absolute;
+                    left: 0;
+                    top: 1em;
+                    z-index: 5;
+                }
+
+                    .main .list .item .h-img .h-tit-tip-txt .state {
+                        width: auto;
+                        height: auto;
+                        margin: 0 0 0 0;
+                        padding: 0 0 0 0;
+                        color: rgba(255,255,255,1);
+                        font-size: 16px;
+                        font-family:Arial;
+                        text-shadow: rgba(0,0,0,.5) 0px 1px 1px;
+                    }
+
+                .main .list .item .h-img .h-tit-tip-price {
+                    width: auto;
+                    height: auto;
+                    margin: 0 0 0 0;
+                    padding: 0.1em 0.6em 0.1em 0.5em !important;
+                    position: absolute;
+                    left: 0;
+                    bottom: 1.5em;
+                    z-index: 5;
+                    background: rgba(0,0,0,.6) !important;
+                    text-align: center;
+                    font-size: 1.1em;
+                    font-family: Arial;
+                    color: #fff;
+                    display:table;
+                }
+
+                .main .list .item .h-img .h-tit-tip-price .p-un {
+                    font-size: 0.95em;
+                    letter-spacing: -2px;
+                }
+
+                .main .list .item .h-img .h-tit-tip-price .flash-tag {
+                    width:100%;
+                    max-width: 10em;
+                    height: auto;
+                    margin: 0 0 0 0;
+                    padding: 0.1em 0 0.1em 0 !important;
+                    /*position: relative;*/
+                    background: #FFD05F !important;
+                    font-size: 0.7em;
+                    color: #000;
+                    display:inline-table;
+                    vertical-align:top;
+                }
+
+                .main .list .item .h-img .h-tit-tip-price2 {
+                    width: auto;
+                    height: auto;
+                    margin: 0 0 0 0;
+                    padding: 0 0 0 0 !important;
+                    position: absolute;
+                    left: 0;
+                    bottom: 1.6em;
+                    z-index: 5;
+                    font-size: 0.95em;
+                }
+
+                    .main .list .item .h-img .h-tit-tip-price2 .p-left {
+                        margin: 0 0 0 0;
+                        padding: 0 0 0.5em 0;
+                        background: rgba(0, 0, 0, 0.8) !important;
+                        float: left;
+                        text-align: right;
+                    }
+
+                        .main .list .item .h-img .h-tit-tip-price2 .p-left .vip-line {
+                            height: 1em;
+                            line-height: 1em;
+                            padding: 0.3em 0.6em 0.3em 0.6em !important;
+                            font-family: Arial;
+                            color: #000;
+                            background: #FFD05F !important;
+                        }
+
+                        .main .list .item .h-img .h-tit-tip-price2 .p-left .def-line {
+                            height: 1em;
+                            line-height: 1em;
+                            padding: 0.3em 0.6em 0 0.6em !important;
+                            font-family: Arial;
+                            color: rgba(255, 255, 255, 0.8);
+                        }
+
+                        .main .list .item .h-img .h-tit-tip-price2 .p-left .p-lab-0 {
+                            letter-spacing: 0px;
+                        }
+
+                        .main .list .item .h-img .h-tit-tip-price2 .p-left .p-un {
+                            margin: 0 0 0 0.5em;
+                            font-size: 0.8em;
+                            letter-spacing: -1px;
+                        }
+
+                    .main .list .item .h-img .h-tit-tip-price2 .p-right {
+                        margin: 0 0 0 1px;
+                        padding: 0.6em 0 0.5em 0;
+                        background: rgba(0, 0, 0, 0.8) !important;
+                        float: right;
+                    }
+
+                        .main .list .item .h-img .h-tit-tip-price2 .p-right .v-lab {
+                            height: 1em;
+                            line-height: 1em;
+                            padding: 0 0.6em 0.3em 0.6em !important;
+                            font-family: Arial;
+                            color: rgba(255, 255, 255, 0.8);
+                            text-align: center;
+                        }
+
+                        .main .list .item .h-img .h-tit-tip-price2 .p-right .v-line {
+                            height: 1em;
+                            line-height: 1em;
+                            padding: 0 0.6em 0 0.6em !important;
+                            font-family: Arial;
+                            color: #fff;
+                            text-align: center;
+                        }
+
+                            .main .list .item .h-img .h-tit-tip-price2 .p-right .v-line .p-un {
+                                margin: 0 0 0 0;
+                                font-size: 0.7em;
+                                letter-spacing: -1px;
+                            }
+
+                .main .list .item .h-img .h-tit-tip-price3 {
+					width: auto;
+					height: auto;
+					margin: 0 0 0 0;
+					padding: 0.5em 0.6em 0.2em 1.9em;
+					position: absolute;
+					left: 0;
+					bottom: 1.8em;
+					z-index: 5;
+					font-family: Arial;
+					display:table;
+					background: rgba(0, 0, 0, 0.6);
+				}
+					.main .list .item .h-img .h-tit-tip-price3 .v-icon{
+						width: 2em;
+						height: auto;
+						margin: 0 0 0 0;
+						padding: 0 0 0 0;
+						float: left;
+						font-size: 1.6em;
+						color: #fe8000;
+						position: absolute;
+						left:0.3em;
+						bottom:0.18em;
+					}
+					.main .list .item .h-img .h-tit-tip-price3 .d-price{
+						width: 100%;
+						height: auto;
+						line-height: 1em;
+						margin: 0 0 0 0;
+						padding: 0 0 0 0 !important;
+						font-size: 0.7em;
+						color: #e0e0e0;
+						text-align: right;
+					}
+					.main .list .item .h-img .h-tit-tip-price3 .d-price span{
+						margin: 0 0 0 0;
+						font-size: 0.7em;
+						/*letter-spacing: -1px;*/
+					}
+					.main .list .item .h-img .h-tit-tip-price3 .v-price{
+						width: 100%;
+						height: auto;
+						line-height: 1.1em;
+						margin: 0 0 0 0;
+						padding: 0 0 0 0 !important;
+						font-size: 1.1em;
+						color: #fe8000;
+						text-align: right;
+					}
+					.main .list .item .h-img .h-tit-tip-price3 .v-price span{
+						margin: 0 0 0 0;
+						font-size: 0.7em;
+						/*letter-spacing: -1px;*/
+					}
+
+            .main .list .item .hname-info {
+                width: 100%;
+                height: auto;
+                margin: 0 auto 0 auto;
+                padding: 0 0 0 0;
+            }
+
+                .main .list .item .hname-info .hotel-name {
+                    width: 97%;
+                    height: 1.1em;
+                    line-height: 1.2em;
+                    margin: 0.6em 0 0.1em 0;
+                    font-size: 1.1em;
+                    font-weight: 500;
+                    color: #555;
+                    overflow: hidden;
+                }
+
+                .main .list .item .hname-info .hotel-packagebrief {
+                    width: 90%;
+                    height: 1.08em;
+                    line-height: 1.2em;
+                    margin: 0.5em 0 0.8em 0;
+                    font-size: 0.9em;
+                    font-weight: 500;
+                    color: #919191;
+                    overflow: hidden;
+                }
+#homeVipBanner {
+    width: 88%;
+	height: auto;
+	margin: 1em auto 0.5em auto;
+	padding: 0 0 0 0;
+}
+    #homeVipBanner img{
+        width:100%;
+    }

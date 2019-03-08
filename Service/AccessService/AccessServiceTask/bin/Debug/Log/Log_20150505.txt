@@ -1,0 +1,131 @@
+
+[2015/5/5 9:08:45] Start Job [PreProxyDataJob]
+[2015/5/5 9:08:55] Ip Count:91
+[2015/5/5 9:08:58] Delete Old Proxy
+[2015/5/5 9:11:15] Start Job [PreProxyDataJob]
+[2015/5/5 9:11:20] Ip Count:91
+[2015/5/5 9:11:22] Delete Old Proxy
+[2015/5/5 9:12:38] Start Job [PreProxyDataJob]
+[2015/5/5 9:19:31] Ip Count:96
+[2015/5/5 9:19:32] Delete Old Proxy
+[2015/5/5 9:20:09] Job [PreProxyDataJob] Error:远程服务器返回错误: (500) 内部服务器错误。
+[2015/5/5 9:20:21] Ip Count:96
+[2015/5/5 9:20:22] Delete Old Proxy
+[2015/5/5 9:37:42] Start Job [PreProxyDataJob]
+[2015/5/5 9:45:34] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 9:45:41] HotelID：344981 Night:2015-05-22
+[2015/5/5 9:46:19] Hotel 344981 Is Null
+[2015/5/5 9:52:51] HotelID：378770 Night:2015-05-22
+[2015/5/5 9:53:17] Hotel 378770 Is Null
+[2015/5/5 9:53:18] HotelID：375498 Night:2015-05-22
+[2015/5/5 9:53:24] Hotel 375498 Is Null
+[2015/5/5 9:53:26] HotelID：437020 Night:2015-05-22
+[2015/5/5 10:46:12] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 10:46:33] HotelID：393115 Night:2015-05-22
+[2015/5/5 10:48:05] Start Job [PreProxyDataJob]
+[2015/5/5 10:48:10] Ip Count:74
+[2015/5/5 10:48:12] Delete Old Proxy
+[2015/5/5 10:48:24] Stop Job [PreProxyDataJob]
+[2015/5/5 10:48:47] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 10:48:53] HotelID：450707 Night:2015-05-22
+[2015/5/5 10:58:34] Start Job [PreProxyDataJob]
+[2015/5/5 10:58:42] Ip Count:171
+[2015/5/5 10:58:43] Delete Old Proxy
+[2015/5/5 10:58:57] Stop Job [PreProxyDataJob]
+[2015/5/5 10:59:39] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 10:59:42] HotelID：373059 Night:2015-05-22
+[2015/5/5 10:59:54] Hotel 373059 Is Null
+[2015/5/5 11:52:57] HotelID：445274 Night:2015-05-22
+[2015/5/5 11:53:47] Hotel 445274 Can't Find Room
+[2015/5/5 11:53:47] HotelID：1706857 Night:2015-05-22
+[2015/5/5 11:54:03] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 11:54:10] HotelID：435826 Night:2015-05-22
+[2015/5/5 12:07:57] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 12:08:02] HotelID：1015662 Night:2015-05-22
+[2015/5/5 12:11:23] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 12:12:08] HotelID：716091 Night:2015-05-22
+[2015/5/5 12:12:24] Hotel 716091 Is Null
+[2015/5/5 12:12:25] HotelID：716091 Night:2015-05-22
+[2015/5/5 12:13:37] Hotel 716091 Is Null
+[2015/5/5 12:13:38] HotelID：981775 Night:2015-05-22
+[2015/5/5 12:15:19] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 12:15:36] HotelID：981775 Night:2015-05-22
+[2015/5/5 12:17:52] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 12:17:58] HotelID：425692 Night:2015-05-22
+[2015/5/5 12:18:36] Hotel 425692 Is Null
+[2015/5/5 12:18:37] HotelID：416261 Night:2015-05-22
+[2015/5/5 12:20:22] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 12:20:25] HotelID：430075 Night:2015-05-22
+[2015/5/5 12:20:29] Hotel 430075 Is Null
+[2015/5/5 12:20:31] HotelID：512513 Night:2015-05-22
+[2015/5/5 12:20:55] Hotel 512513 Is Null
+[2015/5/5 12:20:56] HotelID：430322 Night:2015-05-22
+[2015/5/5 12:22:36] Hotel 430322 Is Null
+[2015/5/5 12:22:37] HotelID：435447 Night:2015-05-22
+[2015/5/5 12:22:56] Hotel 435447 Is Null
+[2015/5/5 12:22:57] HotelID：427475 Night:2015-05-22
+[2015/5/5 12:23:38] Hotel 427475 Is Null
+[2015/5/5 12:23:39] HotelID：346302 Night:2015-05-22
+[2015/5/5 12:25:49] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 12:25:51] HotelID：345041 Night:2015-05-22
+[2015/5/5 12:26:00] Hotel 345041 Is Null
+[2015/5/5 12:26:01] HotelID：369754 Night:2015-05-22
+[2015/5/5 12:27:42] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 12:27:44] HotelID：1303176 Night:2015-05-22
+[2015/5/5 12:27:49] Hotel 1303176 Is Null
+[2015/5/5 12:27:51] HotelID：440999 Night:2015-05-22
+[2015/5/5 12:30:04] Hotel 440999 Is Null
+[2015/5/5 12:30:05] HotelID：425378 Night:2015-05-22
+[2015/5/5 12:33:16] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 12:33:35] HotelID：375549 Night:2015-05-22
+[2015/5/5 12:33:37] Hotel 375549 Is Null
+[2015/5/5 12:33:39] HotelID：440919 Night:2015-05-22
+[2015/5/5 12:37:26] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 12:37:28] HotelID：441621 Night:2015-05-22
+[2015/5/5 12:43:44] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 12:43:57] HotelID：378858 Night:2015-05-22
+[2015/5/5 12:47:03] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 12:47:06] HotelID：437937 Night:2015-05-22
+[2015/5/5 13:01:33] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 13:01:34] HotelID：469149 Night:2015-05-22
+[2015/5/5 13:01:58] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 13:02:14] HotelID：453437 Night:2015-05-22
+[2015/5/5 13:02:40] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 13:02:42] HotelID：417508 Night:2015-05-22
+[2015/5/5 13:02:57] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 13:03:22] HotelID：419382 Night:2015-05-22
+[2015/5/5 14:11:15] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 14:12:05] HotelID：369731 Night:2015-05-22
+[2015/5/5 14:12:20] Hotel 369731 Is Null
+[2015/5/5 14:12:22] HotelID：449005 Night:2015-05-22
+[2015/5/5 14:13:29] Hotel 449005 Is Null
+[2015/5/5 14:13:30] HotelID：485097 Night:2015-05-22
+[2015/5/5 14:20:55] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 14:20:56] HotelID：416241 Night:2015-05-22
+[2015/5/5 14:22:58] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 14:23:18] HotelID：346732 Night:2015-05-22
+[2015/5/5 14:25:14] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 14:25:15] HotelID：432950 Night:2015-05-22
+[2015/5/5 14:25:35] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 14:25:36] HotelID：439197 Night:2015-05-22
+[2015/5/5 14:28:07] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 14:28:09] HotelID：396970 Night:2015-05-22
+[2015/5/5 14:29:26] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 14:29:28] HotelID：369769 Night:2015-05-22
+[2015/5/5 15:04:32] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 15:04:36] HotelID：440914 Night:2015-05-22
+[2015/5/5 16:12:44] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 17:00:28] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 17:00:39] HotelID：452239 Night:2015-05-22
+[2015/5/5 17:02:41] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 17:02:44] HotelID：433966 Night:2015-05-22
+[2015/5/5 17:06:51] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 17:08:49] HotelID：346286 Night:2015-05-22
+[2015/5/5 17:09:12] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 17:09:14] HotelID：346336 Night:2015-05-22
+[2015/5/5 17:20:29] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 17:20:31] HotelID：440997 Night:2015-05-22
+[2015/5/5 17:32:45] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 17:32:48] HotelID：435398 Night:2015-05-22
+[2015/5/5 17:33:32] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/5 17:33:33] HotelID：470563 Night:2015-05-22

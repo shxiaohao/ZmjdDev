@@ -1,0 +1,97 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    
+    Layout = null;
+
+    var isApp = ViewBag.IsApp;
+    var aid = ViewBag.Aid;
+    CouponActivityDetailModel coupondetail = ViewBag.CouponDetail;
+    var activity = coupondetail.activity;
+    var package = coupondetail.package;
+    var pItems = coupondetail.DailyItems;
+    var noticeItems = coupondetail.NoticeItems;
+
+    //平日价
+    var priceLabel = "平日券";
+    var sellPrice = 0;
+
+    var pingri = coupondetail.package.PackagePrice.First(_ => _.Price > 0);
+    if (pingri != null && pingri.PID > 0)
+    {
+        priceLabel = pingri.TypeName;
+        sellPrice = pingri.Price;
+    }
+
+    ViewBag.Title = activity.EDMTitle;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@activity.EDMTitle</title>
+</head>
+<body style="padding: 0; margin: 0; overflow-x: hidden; background: #f0f0f0; ">
+
+    <style type="text/css">
+        body {
+            padding: 0;
+            margin: 0;
+            overflow-x: hidden;
+            background:#f3f3f3;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+
+    <div style="width: 100%;height: auto;text-align:center;">
+        <div style="width: 100%;height:auto;margin:1.5em 0 0.2em 0;text-align:center;">
+            <div style="width: 92%; max-width: 660px; height: 3em;margin:0 auto 0 auto; text-align: center; *width: 660px; border-bottom: 1px solid #ccc; ">
+                <table cellpadding="0" cellspacing="0" border="0" style="width:100%;">
+                    <tr>
+                        <td valign="top">
+                            <img src="http://www.zmjiudian.com/Content/images/active/top20hotel/logotxt.png" style="width: 4.8em;margin:0 0.5em 0 0;" alt="" />
+                        </td>
+                        <td valign="top" style="line-height:1.3em;font-size:0.9em;text-align:left;color:#888;">
+                            专业提供有特色、好口碑、价格优惠的度假酒店推荐和预订服务
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div style="width: 100%;height:auto;text-align:center;">
+            <center>
+                <div style="width: 92%; max-width: 660px; height: auto; padding: 0 0 1em 0; margin: 0 auto 0 auto; *width: 660px;">
+                    <div style="width: 100%; height: 3em; line-height: 3em; font-size: 0.9em; color: #000; text-align: center; ">本期抢购</div>
+                    <div style="width:100%;height:auto;line-height:1.5em;color:#000;font-size:1.3em;text-align:center;"><span style="color:#333;font-family:Arial;">￥@sellPrice</span> @package.HotelName</div>
+                    <div style="width:100%;height:auto;line-height:1.5em;color:#000;text-align:center;"><span style="color:#333;font-family:Arial;">@package.PackageBrief</span></div>
+                    <div id="couponshop-title" style="display:none;">@activity.EDMTitle</div>
+                </div>
+                <div style="width: 92%; max-width: 660px; height: auto; padding: 0; margin: 0 auto 0 auto; *width: 660px;">
+                    <img src="@activity.PicPath" alt="" style="width:100%;" />
+                </div>
+                <div style="width: 90%; max-width: 660px; height: auto; padding: 0; margin: 0.5em auto 1em auto; *width: 660px; ">
+                    <div style="width: 100%; height: 2.2em; line-height: 2.5em; color: #000; font-size: 1.3em; text-align: left; ">推荐理由</div>
+                    <div style="width: 100%; height: auto; line-height: 1.8em; color: #333; font-size: 0.9em; text-align: left;">@activity.Description</div>
+                </div>
+                <div style="width: 88%; max-width: 200px; height: auto; padding: 0; margin: 3em auto 3.2em auto; *width: 200px; ">
+                    <a href="http://www.zmjiudian.com/coupon/shop/@(activity.ID)" style="display:inline-table;width:100%;height:2.4em;line-height:2.4em;font-size:1.3em;text-align:center;color:#fff;background:#ff9f00;border-radius: 0px;text-decoration:none;">去购买</a>
+                </div>
+            </center>
+        </div>
+        <div style="width: 100%; line-height: 1.3em; text-align: center; color: #333;margin:2em 0 0.2em 0;">
+            更多特价优惠<br />下载周末酒店APP
+        </div>
+        <div style="width:12.5em;height:auto;margin:0 auto 0 auto;"><img src="http://www.zmjiudian.com/Content/images/qrcode-wx-big-4.0.jpg" style="width:100%;" alt="" /></div>
+        <div style="width: 12em; height: auto; margin: 0.3em auto 2em auto;">
+            <div style="float: left; width: 50%; text-align: left;"><a href="http://www.zmjiudian.com/aboutus" style="color: #999; text-decoration: underline;">关于周末酒店</a></div>
+            <div style="float: right; width: 50%; text-align: right;"><a href="http://www.zmjiudian.com/mail/EUserManager?idx={IDX}&state={STATE}" style="color: #999; text-decoration: underline; ">取消订阅</a></div>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+</body>
+</html>

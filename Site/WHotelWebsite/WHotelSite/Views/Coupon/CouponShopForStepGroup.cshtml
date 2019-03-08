@@ -1,0 +1,568 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    var requestCID = ViewBag.RequestCID;
+    var skuid = ViewBag.SKUID;
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.IsInWeixin;
+
+    //当前环境 (1wap/2web/3app/4weixin)
+    ProductService.Contracts.Entity.ProductServiceEnums.SceneType stype = ViewBag.SType;
+
+    var AppType = ViewBag.AppType;
+    var AppVerForIOS = ViewBag.AppVerForIOS;
+    var AppVerForAndroid = ViewBag.AppVerForAndroid;
+    var IsLatestVerApp = ViewBag.IsLatestVerApp;
+
+    //用户信息（包含会员身份）
+    UserInfoResult userInfo = ViewBag.UserInfo;
+    var userid = ViewBag.UserId;
+
+    //是否VIP
+    var isVip = ViewBag.IsVip;
+
+    SKUCouponActivityDetailModel couponSkuInfo = ViewBag.CouponSkuInfo;
+    HJD.CouponService.Contracts.Entity.CouponActivityEntity activity = couponSkuInfo.activity;
+
+    //当前用户的度假伙伴身份
+    HJD.HotelManagementCenter.Domain.RetailerInvateEntity partnerResult = ViewBag.PartnerResult;
+    HJD.HotelManagementCenter.Domain.RetailerInvateState partnerState = (HJD.HotelManagementCenter.Domain.RetailerInvateState)partnerResult.State;
+
+    //当前要展示的分销CID（为0表示没有分销身份）
+    var pcid = ViewBag.PCID;
+
+    //当前产品是否为分销产品
+    var isRetailerProduct = couponSkuInfo.SKUInfo.SKU.IsDistributable;  // ViewBag.IsRetailerProduct;
+
+    //产品店铺信息
+    HJD.HotelManagementCenter.Domain.RetailerShopEntity productShopInfo = ViewBag.ProductShopInfo;
+
+    //是否显示店铺信息
+    var showShop = false;
+
+    //头bar
+    var retailerLinkUrl = string.Format("http://partner.zmjiudian.com/Channel/ProductDetail?cid={0}&pid=", pcid);    //string.Format("http://192.168.1.188:8082/Channel/ProductDetail?cid={0}&pid=", pcid);//
+    var showRetailerLink = false;
+    var headBarUrl = "/Account/WxMenuTransfer?menu=7";
+    var headLogoUrl = "http://whfront.b0.upaiyun.com/app/img/home/zmjd-logo-256x256.png";
+    var headLogoName = "周末酒店";
+    if (isApp)
+    {
+        headBarUrl = "whotelapp://www.zmjiudian.com";
+    }
+    else
+    {
+        //是否显示分销店铺
+        if (productShopInfo != null && !string.IsNullOrEmpty(productShopInfo.ShopName) && isRetailerProduct)
+        {
+            headBarUrl = string.Format("/Channel/ShopDetail?cid={0}", requestCID);
+            headLogoUrl = !string.IsNullOrEmpty(productShopInfo.AvatarUrl) ? productShopInfo.AvatarUrl.Replace("_jupiter", "_290x290") : "";
+            headLogoName = productShopInfo.ShopName;
+        }
+
+        //是否显示分销入口
+        if (isRetailerProduct && pcid > 0)
+        {
+            showRetailerLink = true;
+        }
+    }
+
+    //产品图
+    var productImgFirstSrc = "http://whfront.b0.upaiyun.com/app/img/pic-null-3x2.png";
+    if (activity.PicList != null && activity.PicList.Count > 0)
+    {
+        productImgFirstSrc = activity.PicList[0].Replace("p1.test.sl.corp", "p1.zmjiudian.com");
+    }
+
+    //价格
+    var sellPrice = isVip ? couponSkuInfo.SKUInfo.SKU.VIPPrice : couponSkuInfo.SKUInfo.SKU.Price;
+
+    ////查询券的状态
+    //BuyCouponCheckNumResult buyResult = ViewBag.BuyResult;
+
+    ////开售日
+    //var selldate = activity.EffectiveTime;
+
+    ////抢购结束日
+    //var closedate = activity.SaleEndDate;
+
+    //标识是否来自微信公众号
+    var fromWxno = ViewBag.FromWxno;
+
+    //来自哪个微信用户分享
+    var fromwxuid = ViewBag.FromWxUid;
+
+    //当前用户的openid和wxuid
+    var openid = ViewBag.Openid;
+    var wxuid = ViewBag.WeixinUid;
+
+    //是否弹出去微信报名的提示
+    var showSignWeixin = ViewBag.ShowSignWeixin;
+
+    //关联的微信报名活动
+    var weixinActiveEntity = ViewBag.WeixinActiveEntity;
+
+    //购买按钮的状态
+    var canShop = true;
+    var noCanTxt = "立即购买";
+
+    ////最小购买数量
+    //var minBuyNum = activity.MinBuyNum;
+
+    ////价格label
+    //var priceLabel = activity.PriceLabel;
+
+    //当前时间（服务器时间）
+    var now = DateTime.Now;
+
+    //页面标题
+    var pageTitle = !string.IsNullOrEmpty(activity.PageTitle) ? activity.PageTitle : "周末酒店";
+    ViewBag.Title = pageTitle;
+
+    //分享标题
+    var shareTitle = string.Format("仅￥{0} {1}", sellPrice, couponSkuInfo.activity.PageTitle.Replace("·", " ").Replace("¥", "￥"));
+    if (couponSkuInfo.SKUInfo.Category.PayType == 1)
+    {
+        if (couponSkuInfo.SKUInfo.SKU.Points == 0)
+        {
+            shareTitle = string.Format("免费领取！{1}", sellPrice, couponSkuInfo.activity.PageTitle.Replace("·", " ").Replace("¥", "￥"));
+        }
+        else
+        {
+            shareTitle = string.Format("仅{0}积分 {1}", couponSkuInfo.SKUInfo.SKU.Points, couponSkuInfo.activity.PageTitle.Replace("·", " ").Replace("¥", "￥"));
+        }
+    }
+    shareTitle = shareTitle.Replace("	", "");
+
+    //分享内容
+    var shareDesc = couponSkuInfo.SKUInfo.SKU.Name;
+
+    //分享链接
+    var shareLink = ViewBag.ShareLink;
+
+    //分享小图
+    var shareImgUrl = productImgFirstSrc.Replace("_jupiter", "_290x290s").Replace("_theme", "_290x290s").Replace("_appdetail1s", "_290x290s");
+
+    //打开原生分享bar
+    var shareResultUrl = "";    //"http://192.168.1.188:8081/Active/ProductAlbumActive?userid={userid}&toget=1";
+    var shareLink_Native = "whfriend://comment?title={0}&photoUrl={1}&shareLink={2}&nextUrl={3}&content={4}&shareType={5}";
+    shareLink_Native = string.Format(shareLink_Native, HttpUtility.UrlEncode(shareTitle), HttpUtility.UrlEncode(shareImgUrl), HttpUtility.UrlEncode(shareLink), HttpUtility.UrlEncode(shareResultUrl), HttpUtility.UrlEncode(shareDesc), "0");
+
+    //是否使用新分享政策（6.1新版微信将不在支持分享成功后回调）
+    var isNewShare = DateTime.Now > DateTime.Parse("2018-06-01");
+
+    //分享跟踪参数的分享人对象
+    HJD.AccountServices.Entity.MemberProfileInfo shareUserInfo = ViewBag.ShareUserInfo;
+}
+
+@section styles
+{
+    <link href="~/Content/css/framework/zmjd.modal.min.css" rel="stylesheet" />
+    <link href="~/Content/css/framework/zmjd.swiper.min.css" rel="stylesheet" />
+<script src="~/Content/js/geetest/gt.js?v=@(Helpers.curAppVer())"></script>
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/content/css/coupon/couponshopforstepgroup.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .login-section {
+            font-size: 0.8em;
+        }
+    </style>
+}
+
+    <div id="product-detail">
+        @if (!isApp)
+        {
+            <div class="page-head-bar">
+                <div class="_logo-section">
+                    <div class="_logo"><img src="@(headLogoUrl)" alt="" /></div>
+                    <div class="_name">@(headLogoName)</div>
+                    <div style="clear:both;"></div>
+                </div>
+                <div class="_home-section"><span class="zmjd-iconfont _icon" onclick="gourl('@(headBarUrl)')">&#xe67b;</span></div>
+                <div style="clear:both;"></div>
+            </div>
+        }
+        @*<div style="margin:0 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3a%2f%2fwww.zmjd100.com%2fcoupon%2fstepgroup%2fproduct%2f9930%3fcid%3d0%26userid%3d4688764%26distributioncid%3d0">GO APP (Local) >>></a></div>*@
+        <div class="main">
+            <div class="photo product-photo" v-if="productDetail.activity.PicList&&productDetail.activity.PicList.length>0" style="display:none;">
+                <div v-for="_loadNum in productDetail.loadNumList">
+                    <div id="product-img-list-{{_loadNum}}" class="swiper-container product-img-list" v-if="$index==productDetail.loadNum&&productDetail.activity.PicList&&productDetail.activity.PicList.length>1">
+                        <ul class="swiper-wrapper">
+                            <li class="swiper-slide product-img-item" v-for="imgsrc in productDetail.activity.PicList">
+                                <img class="product-img" data-num="{{$index}}" :src='imgsrc.replace("_jupiter", "_640x426").replace("_theme", "_640x426").replace("_appdetail1", "_640x426")' data-showsrc='{{imgsrc.replace("_jupiter", "_640x426").replace("_theme", "_640x426").replace("_appdetail1", "_640x426")}}' src1="{{productDetail.productDefImg}}" alt="" />
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="pagination2 pagination-{{_loadNum}}" v-if="$index==productDetail.loadNum&&productDetail.activity.PicList&&productDetail.activity.PicList.length>1"></div>
+                </div>
+                <img class="product-single-img" v-if="productDetail.activity.PicList&&productDetail.activity.PicList.length==1" :src='productDetail.activity.PicList[0].replace("p1.test.sl.corp", "p1.zmjiudian.com").replace("_jupiter", "_640x426").replace("_theme", "_640x426").replace("_appdetail1", "_640x426")' alt="" />
+                <div v-cloak class="group-info-banner">
+                    <span class="tag-txt" v-if="productDetail.SKUInfo.SKU.MarketPrice>productDetail.SKUInfo.SKU.VIPPrice">支付¥{{productDetail.SKUInfo.SKU.VIPPrice}}抵{{productDetail.SKUInfo.SKU.MarketPrice}}，多人参团享更低价</span>
+                    <span class="tag-txt" v-else>定金¥{{productDetail.SKUInfo.SKU.VIPPrice}}，多人参团享更低价</span>
+                    <div class="active-time">
+                        <div class="tit">{{productDetail.activity.sTit}}</div>
+                        <div class="time activity-timer"
+                             data-year1="{{productDetail.activity.y1}}"
+                             data-month1="{{productDetail.activity.mo1}}"
+                             data-day1="{{productDetail.activity.d1}}"
+                             data-hour1="{{productDetail.activity.h1}}"
+                             data-minute1="{{productDetail.activity.mi1}}"
+                             data-second1="{{productDetail.activity.s1}}"
+                             data-year2="{{productDetail.activity.y2}}"
+                             data-month2="{{productDetail.activity.mo2}}"
+                             data-day2="{{productDetail.activity.d2}}"
+                             data-hour2="{{productDetail.activity.h2}}"
+                             data-minute2="{{productDetail.activity.mi2}}"
+                             data-second2="{{productDetail.activity.s2}}"><span class="v">{{productDetail.activity.sH}}</span>:<span class="v">{{productDetail.activity.sM}}</span>:<span class="v">{{productDetail.activity.sS}}</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="photo def-photo">
+                <img src="http://whfront.b0.upaiyun.com/app/img/pic-def-3x2.png" alt="" />
+            </div>
+            <div v-cloak class="activity">
+                <div class="tit">{{productDetail.activity.PageTitle}}</div>
+                <div class="brief" v-if="productDetail.activity.Tags">{{productDetail.activity.Tags}}</div>
+                <div class="sml-line"></div>
+                <div id="price-detail" class="detail">
+
+                    <div class="price-group" v-if="productDetail.SKUInfo.StepGroup">
+                        <span class="group-info">团购价低至<span class="_p">¥{{productDetail.SKUInfo.StepGroup.MinPrice}}</span></span><span class="def-info">原价 ¥{{productDetail.SKUInfo.StepGroup.MarketPrice}}</span>
+                    </div>
+                    <div class="price-line">
+                        <span class="zmjd-iconfont vip-icon">&#xe683;</span><span class="p-un">¥</span><span class="p-val">{{productDetail.SKUInfo.SKU.VIPPrice}}</span><span class="p-better-price" v-if="productDetail.SKUInfo.SKU.MarketPrice>productDetail.SKUInfo.SKU.VIPPrice">可抵扣¥{{productDetail.SKUInfo.SKU.MarketPrice}}</span>
+                    </div>
+                    <div v-cloak class="retailer-share-section clearfloat" v-if="!productDetail.IsApp&&productDetail.PCID&&productDetail.SKUInfo.SKU.IsDistributable">
+                        <div class="info">
+                            <span>佣金：¥<span class="val">{{productDetail.SKUInfo.SKU.ManualCommission>=0?productDetail.SKUInfo.SKU.ManualCommission:productDetail.SKUInfo.SKU.AutoCommission}}</span></span>
+                        </div>
+                        <div class="ctrl">
+                            <a href="javascript:;" class="link" onclick="gourl('@(retailerLinkUrl){{productDetail.SKUInfo.SKU.ID}}')">分享赚</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div v-cloak class="stepgroup" v-if="productDetail.SKUInfo.StepGroup">
+                <div class="step-status">
+                    <div class="_sell">已售：{{productDetail.activity.SellNum}}份</div>
+                    <div v-if="productDetail.SKUInfo.StepGroup.CurrentPrice">
+                        <div v-if="productDetail.SKUInfo.StepGroup.NextPrice">
+                            <div class="_info">当前价<span class="_p">¥{{productDetail.SKUInfo.StepGroup.CurrentPrice}}</span>，还差{{productDetail.SKUInfo.StepGroup.ShortPeopleCount}}份享团购价<span class="_p1111">¥{{productDetail.SKUInfo.StepGroup.NextPrice}}</span></div>
+                        </div>
+                        <div v-else>
+                            <div class="_info">团购已达标，享团购价<span class="_p">¥{{productDetail.SKUInfo.StepGroup.CurrentPrice}}</span></div>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <div class="_info">还差{{productDetail.SKUInfo.StepGroup.ShortPeopleCount}}份享团购价<span class="_p">¥{{productDetail.SKUInfo.StepGroup.NextPrice}}</span></div>
+                    </div>
+                    <div class="_step">
+                        <div v-for="sitem in productDetail.SKUInfo.StepGroup.GradientPriceList" class="_s_item {{productDetail.SKUInfo.StepGroup.StepItemClass}}">
+                            <div v-if="$index==0">
+                                <div class="_num">{{sitem.GroupCount}}</div>
+                                <div class="_line"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/stepgroup/stepgroup-status-start.png" alt="" /></div>
+                            </div>
+                            <div v-else>
+                                <div class="_tip {{sitem.IsThis?'_tv':''}}">¥{{sitem.Price}}</div>
+                                <div class="_num">{{sitem.GroupCount}}</div>
+                                <div class="_line" v-if="sitem.IsHigh"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/stepgroup/stepgroup-status-1.png" alt="" /></div>
+                                <div class="_line" v-else><img src="http://whfront.b0.upaiyun.com/app/img/coupon/stepgroup/stepgroup-status-0.png" alt="" /></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ctrl">
+                    <a class="rule-link" href="http://www.zmjiudian.com/active/activepage?pageid=117&_newpage=1" target="_blank">查看活动说明</a>
+                </div>
+            </div>
+        </div>
+        <div v-cloak class="main" v-if="productDetail.activity.PackageInfoList&&productDetail.activity.PackageInfoList.length">
+            <div class="package">
+                <div class="tit">套餐内容</div>
+                <div class="tit-border"></div>
+                <div class="info">
+                    <div class="packageList">
+                        <table border="0" cellpadding="0" cellspacing="0">
+                            <tr v-for="pitem in productDetail.activity.PackageInfoList" track-by="$index"><td class="td-num" valign="top">{{pitem.indexOf('#')==0||!pitem?'':'&bull;'}}</td><td class="td-info" valign="top">{{pitem.indexOf('#')==0?pitem.replace('#',''):pitem}}</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div v-cloak class="main" v-if="productDetail.activity.Description">
+            <div class="tuijian">
+                <div class="tit">推荐理由</div>
+                <div class="tit-border"></div>
+                <div class="info">{{{productDetail.activity.Description}}}</div>
+                @*<div class="link" v-if="productDetail.activity.MoreDetailUrl"><a href='{{productDetail.activity.MoreDetailUrl.replace("mp.weixin.qq.com/s?", "mp.weixin.qq.com/s?_newpage=1&")}}'>查看图文详情>></a></div>*@
+            </div>
+        </div>
+
+
+        <div class="main">
+            <div v-cloak class="shopread">
+                <div class="tit">购买须知</div>
+                <div class="tit-border"></div>
+                <div class="info">
+                    <table border="0" cellpadding="0" cellspacing="0">
+                        <tbody>
+                            <tr v-for="nitem in productDetail.activity.NoticeList" track-by="$index"><td class="td-num" valign="top">{{nitem.indexOf('#')==0||!nitem?'':'&bull;'}}</td><td class="td-info" valign="top">{{{nitem.indexOf('#')==0?nitem.replace('#',''):nitem}}}</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @if (!isRetailerProduct)
+            {
+                <div v-cloak class="hotel" v-if="productDetail.hotelPackageInfo&&productDetail.hotelPackageInfo.HotelID" onclick="goto('hotel/{{productDetail.hotelPackageInfo.HotelID}}')">
+                    <div class="left"><img src="{{productDetail.hotelPackageInfo.HotelPicUrl.replace('_theme', '_140X140')}}" alt="" /></div>
+                    <div class="right">
+                        <div class="hn">{{productDetail.hotelPackageInfo.HotelName}}</div>
+                        <div class="hlink">查看酒店信息>></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+            }
+            <div v-cloak class="other-info" v-if="productDetail.activity.DicProperties">
+                <div v-for="item in productDetail.activity.otherObjList">
+                    <div class="item" v-if="item.istel">{{item.lab}}：<a href="tel:{{item.tel}}" class="tel">{{item.tel}}</a> {{item.telex}}</div>
+                    <div class="item" v-else>{{item.lab}}：{{item.val}}</div>
+                </div>
+            </div>
+        </div>
+        <div v-cloak class="main" v-if="productDetail.activity.MoreDetailUrl">
+            <div class="tuwen">
+                <div class="tit">图文详情</div>
+                <div class="tit-border"></div>
+                <div class="body" id="hotel-source-body">
+                    <img class="loading_img" src="http://whfront.b0.upaiyun.com/app/img/loading-changes.gif" alt="" />
+                </div>
+
+                <div class="source-more-btn" style="display:none;">
+                    <div class="mask"></div>
+                    <div class="btn">查看更多<span class="zmjd-iconfont _icon">&#xe65c;</span></div>
+                </div>
+            </div>
+        </div>
+
+        @*<div style="margin:2em 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3a%2f%2f192.168.1.22%3a8081%2fcoupon%2fproduct%2f31%3fuserid%3d%7buserid%7d%26_dorpdown%3d1%26_newtitle%3d1">GO APP (Local) >>></a></div>
+        <a href="https://mp.weixin.qq.com/mp/homepage?__biz=MzA5NTIwODUzMQ==&hid=6&sn=038d01db6fb248170e0d6e9854077096&_newpage=1#wechat_redirect">weixin</a>*@
+        <div style="margin:0 0 4em 0;"></div>
+        <div v-cloak class="sub" v-if="productDetail.SKUInfo.StepGroup">
+            <div v-if="productDetail.activity.IsStart">
+                <div v-if="productDetail.activity.IsOver">
+                    <div v-if="productDetail.SKUInfo.StepGroup.IsSuccessBuy&&productDetail.SKUInfo.StepGroup.StepGroupState==1&&productDetail.SKUInfo.StepGroup.SingleBuyTimeIsOk">
+                        <div class="ctrl clearfloat">
+                            <a href="javascript:;" class="sub1" id="single-buy">¥{{productDetail.GroupSKU.VIPPrice}} 直接购买</a><a href="javascript:;" class="sub0">团购已结束</a>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <a href="javascript:;" class="single-over">团购已结束</a>
+                    </div>
+                </div>
+                <div v-else>
+                    <a href="javascript:;" class="single-btn submit">¥{{productDetail.SKUInfo.SKU.VIPPrice}} 支付定金</a>
+                </div>
+            </div>
+        </div>
+        <div class="pubAlertTip" style="display:none;">
+            <div class="tipinfo"></div>
+        </div>
+        <footer>
+            <input type="hidden" id="skuid" value="@skuid" />
+            <input type="hidden" id="thisskuid" v-model="productDetail.SKUID" />
+            <input type="hidden" id="aid" v-model="productDetail.activity.ID" />
+            <input type="hidden" id="atype" v-model="productDetail.activity.Type" />
+            <input type="hidden" id="sellPrice" v-model="productDetail.IsVip?productDetail.SKUInfo.SKU.VIPPrice:productDetail.SKUInfo.SKU.Price" />
+            <input type="hidden" id="skuPrice" v-model="productDetail.SKUInfo.SKU.Price" />
+            <input type="hidden" id="skuVipPrice" v-model="productDetail.SKUInfo.SKU.VIPPrice" />
+            <input type="hidden" id="isNewVipProduct" v-model="productDetail.activity.PageTitle" />
+            <input type="hidden" id="_name" v-model="productDetail.activity.PageTitle" />
+
+            <input type="hidden" id="hidCurUserCID" value="@(ViewBag.CID)" />
+            <input type="hidden" id="hidWxUnionid" value="@(ViewBag.Unionid)" />
+            <input type="hidden" id="pcid" value="@(pcid)" />
+            <input type="hidden" id="userid" value="@userid" />
+            <input type="hidden" id="customerType" value="@userInfo.CustomerType" />
+            <input type="hidden" id="fromwxuid" value="@fromwxuid" />
+            <input type="hidden" id="openid" value="@openid" />
+            <input type="hidden" id="wxuid" value="@wxuid" />
+            <input type="hidden" id="isvip" value="@(isVip ? 1 : 0)" />
+            <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+            <input type="hidden" id="isInWeixin" value="@(isInWeixin ? 1 : 0)" />
+            <input type="hidden" id="stype" value="@(Convert.ToInt32(stype))" />
+            <input type="hidden" id="cansell" value="@(canShop ? 1 : 0)" />
+            <input type="hidden" id="showShop" value="@(showShop ? 1 : 0)" />
+            <input type="hidden" id="shareNativeLink" value="@shareLink_Native" />
+
+            <input type="hidden" id="year0" value="@now.Year" />
+            <input type="hidden" id="month0" value="@(now.Month)" />
+            <input type="hidden" id="day0" value="@now.Day" />
+            <input type="hidden" id="hour0" value="@now.Hour" />
+            <input type="hidden" id="minute0" value="@now.Minute" />
+            <input type="hidden" id="second0" value="@now.Second" />
+
+            <input type="hidden" id="shareTitle" value="@(shareTitle)" />
+            <input type="hidden" id="shareDesc" value="@(shareDesc)" />
+            <input type="hidden" id="shareLink" value="@(shareLink)" />
+            <input type="hidden" id="shareImgUrl" value="@(shareImgUrl)" />
+            <input type="hidden" id="isNewShare" value="@(isNewShare ? 1 : 0)" />
+
+            <form style="display:none;">
+                <input type="text" id="loginput" value="0" />
+            </form>
+        </footer>
+
+        <script>
+        try {
+            onAppShareCall = function () {
+                var title = "@(shareTitle)";
+                var Content = "@(shareDesc)";
+                var photoUrl = "@(shareImgUrl)";
+                var shareLink = "@(shareLink)";
+                try { whotel.appShareData(title, Content, photoUrl, shareLink); } catch (e) { }
+                var returnStr = '{"title":"{0}","Content":"{1}","photoUrl":"{2}","shareLink":"{3}"}';
+                return returnStr.format(title, Content, photoUrl, shareLink);
+            }
+            onAppShareCall();
+        }
+        catch (e) { }
+        </script>
+
+    </div>
+@section scripts
+{
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/framework/zmjd.modal.min.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjd.swiper.min.js"></script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/login.js?v=@(Helpers.curAppVer())"></script>
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js?v=@(Helpers.curAppVer())" type="text/javascript"></script>
+        <script>
+
+            var loadWechat = function(_shareTitle,_shareDesc,_shareLink,_shareImgUrl, _shareSucessFunc){
+
+                GetWeixinApiConfig();//注册
+
+                function GetWeixinApiConfig() {
+
+                    var url = location.href.split("#")[0];
+                    $.ajax({
+                        url: '/Coupon/GetWeixinConfigInfo',
+                        type: 'POST',
+                        data: { url: url },
+                        dataType: 'json',
+                        //async: false,
+                        error: function () {
+                            console.log("网络服务错误");
+                        },
+                        success: function (result) {
+                            if (typeof (result.Success) != undefined && result.Success == 1) {
+                                return false;
+                            }
+                            else {
+                                //得到微信config的值
+                                var array = [
+                                    'checkJsApi',
+                                    'onMenuShareTimeline',
+                                    'onMenuShareAppMessage',
+                                    'onMenuShareQQ',
+                                    'onMenuShareQZone',
+                                    'hideOptionMenu'
+                                ];
+                                if (result.jsApiList) {
+                                    var jsArray = result.jsApiList.split(',');
+                                    for (var key in jsArray) {
+                                        array.push("" + jsArray[key]);
+                                    }
+                                }
+
+                                wx.config({
+                                    debug: false,
+                                    appId: result.appId,
+                                    timestamp: "" + result.timestamp,
+                                    nonceStr: result.nonceStr,
+                                    signature: result.signature,
+                                    jsApiList: array
+                                });
+
+                                wx.ready(function () {
+
+                                    wx.onMenuShareTimeline({
+                                        title: _shareTitle,
+                                        desc: _shareDesc,
+                                        link: _shareLink,
+                                        imgUrl: _shareImgUrl,
+                                        success: function (res) {
+                                            _shareSucessFunc(res)
+                                        },
+                                        cancel: function (res) {
+                                        }
+                                    });
+
+                                    wx.onMenuShareAppMessage({
+                                        title: _shareTitle,
+                                        desc: _shareDesc,
+                                        link: _shareLink,
+                                        imgUrl: _shareImgUrl,
+                                        success: function (res) {
+                                            _shareSucessFunc(res)
+                                        },
+                                        cancel: function (res) {
+                                        }
+                                    });
+
+                                    wx.onMenuShareQQ({
+                                        title: _shareTitle,
+                                        desc: _shareDesc,
+                                        link: _shareLink,
+                                        imgUrl: _shareImgUrl,
+                                        success: function (res) {
+                                        },
+                                        cancel: function (res) {
+                                        }
+                                    });
+
+                                    wx.onMenuShareQZone({
+                                        title: _shareTitle,
+                                        desc: _shareDesc,
+                                        link: _shareLink,
+                                        imgUrl: _shareImgUrl,
+                                        success: function (res) {
+                                        },
+                                        cancel: function (res) {
+                                        }
+                                    });
+
+                                });
+
+                                wx.error(function (res) {
+                                    console.log(res.errMsg);  //打印错误消息。及把 debug:false,设置为debug:ture就可以直接在网页上看到弹出的错误提示
+                                });
+                            }
+                        }
+                    });
+                }
+
+            }
+            loadWechat('@shareTitle','@shareDesc','@shareLink','@shareImgUrl', function(){});
+
+        </script>
+    }
+    <script src="~/Content/js/coupon/couponshopforstepgroup.js?v=@(Helpers.curAppVer())"></script>   
+}

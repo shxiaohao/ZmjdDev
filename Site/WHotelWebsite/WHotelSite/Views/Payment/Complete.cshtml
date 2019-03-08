@@ -1,0 +1,451 @@
+﻿@using WHotelSite
+@using WHotelSite.Params.Hotel
+@using WHotelSite.Params.Payment
+
+@{
+    ViewBag.Title = "支付成功";
+
+    PackageOrderInfo20 order = ViewBag.order;
+    HotelItem3 hotel = ViewBag.hotel;
+    GeneralParam param = ViewBag.param;
+
+    var isMobile = ViewBag.IsMobile;
+
+    var isInWeixin = ViewBag.IsInWeixin;
+    var bodyMarginTop = isInWeixin ? 0 : 40;
+
+    var isApp = ViewBag.IsApp;
+
+    string checkIn = Utils.FormatDate(order.CheckIn);
+    string checkOut = Utils.FormatDate(order.CheckIn.AddDays(order.NightCount));
+
+    //是否可以发红包
+    var canShareRedCoupon = ViewBag.CanShareRedCoupon;
+
+    //发红包配置对象
+    RedOrderInfoEntity shareRedEntity = ViewBag.ShareRedEntity;
+
+    //分享配置
+    var s_poto_url = "";
+    var s_url = "";
+    var s_title = "";
+    var s_content = "";
+    var shareTitle_Timeline = "";
+    var shareDesc_Timeline = "";
+    var shareCallBackUrl = "";
+    var shareCallBackUrlForApp = "";
+
+    //红包分享链接
+    if (canShareRedCoupon)
+    {
+        //s_poto_url = "http://whfront.b0.upaiyun.com/app/img/coupon/redcoupon/redcoupon-share-icon.png";
+        //s_url = shareRedCouponUrl;
+        //s_title = "恭喜你获得一个大红包";
+        //s_content = "度假选酒店，红包送不停！";
+        //shareTitle_Timeline = "度假选酒店，红包送不停！";
+        //shareDesc_Timeline = "";
+
+        s_poto_url = shareRedEntity.RedShare.photoUrl;
+        s_url = shareRedEntity.RedShare.shareLink;
+        s_title = shareRedEntity.RedShare.title;
+        s_content = shareRedEntity.RedShare.Content;
+        shareTitle_Timeline = shareRedEntity.RedShare.Content;
+        shareDesc_Timeline = "";
+
+        shareCallBackUrl = shareRedEntity.RedShare.returnApiUrl;
+        shareCallBackUrlForApp = shareRedEntity.RedShare.returnUrl;
+
+        //微信环境修改红包领取提示
+        if (isInWeixin)
+        {
+            shareRedEntity.Description = "分享成功后在“我的”-“我的券”里查看已获得的红包";
+        }
+    }
+
+    //原生分享链接
+    var _shareLink = "whfriend://comment?title={0}&photoUrl={1}&shareLink={2}&nextUrl={3}&content={4}&shareType={5}";
+    _shareLink = string.Format(_shareLink, HttpUtility.UrlEncode(s_title), HttpUtility.UrlEncode(s_poto_url), HttpUtility.UrlEncode(s_url), HttpUtility.UrlEncode(shareCallBackUrlForApp), HttpUtility.UrlEncode(s_content), "{0}");
+    var appShareLink = string.Format(_shareLink, 0);
+}
+
+@section breadcrumbs
+{
+    @Helpers.BreadCrumbs(Url, hotel)
+}
+
+@if (isMobile)
+{
+    <link href="~/Content/css/framework/zmjd.modal.min.css" rel="stylesheet" />
+    <link href="~/Content/css/payment/complete.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style>
+        ._modal-section ._close {
+            width: 2.2rem;
+            height: 2.2rem;
+            line-height: 2.2rem;
+            padding: 0 0 0 0;
+            position: absolute;
+            right: -0.8rem;
+            top: -0.8rem;
+            z-index: 1002;
+            font-size: 2em;
+            border-radius: 3em;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+            ._modal-section ._close img {
+                width: 2rem;
+            }
+    </style>
+
+    <div class="alert-section">
+        <div class="icon zmjd-iconfont">&#xe62f;</div>
+        <div class="text">下单成功</div>
+        @if (!isInWeixin)
+        {
+            <div class="text2">请到“我的”页面查看订单详情</div>
+        }
+    </div>
+
+    <div class="main">
+        <div class="hotel hotel-bor">
+            <div class="left">已购商品</div>
+            <div class="right">@string.Format("{0} - {1}", order.HotelName, order.PackageName)</div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="hotel">
+            <div class="left">订单号</div>
+            <div class="right">@order.OrderID</div>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+
+    if (isApp)
+    {
+        <div class="btn-section">
+            <div class="row">
+                <a href="whotelapp://www.zmjiudian.com/personal/order/@param.OrderId" class="order-btn">查看订单</a>
+            </div>
+            <div class="row">
+                <a href="whotelapp://www.zmjiudian.com" class="download-app">返回首页</a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="btn-section">
+            <div class="row">
+                @if (isInWeixin)
+                {
+                    <div class="wxqrcode-section">
+                        <div class="_tip">长按二维码关注<span class="_h1">“周末酒店服务号”</span><br />点击<span class="_h2">“我的->订单->酒店订单”</span>查看订单详情</div>
+                        <div class="_qrcode">
+                            <img src="http://whfront.b0.upaiyun.com/app/img/qrcode-wx-zmjdservice-346x346.png" alt="" />
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <a href="/Account/WxMenuTransfer?menu=1&orderid=@param.OrderId" class="order-btn">查看订单</a>
+                }
+            </div>
+            <div class="row">
+                <a href="http://app.zmjiudian.com" class="download-app" target="_blank">下载周末酒店APP</a>
+            </div>
+        </div>
+    }
+    <div class="foot-section">
+        <a href="tel:4000021702" class="tel">客服电话：4000-021-702</a>
+    </div>
+
+    <div class="group-share-tip" style="display:none;">
+        <img data-orisrc="http://whfront.b0.upaiyun.com/www/img/Active/vipactive/genvip-share-tip.png?v=2017111601" src="" alt="点击右上角分享哦" />
+    </div>
+
+    if (canShareRedCoupon && shareRedEntity != null)
+    {
+        <div id="send-red-coupon-template" style="display:none;">
+            <div class="get-coupon-info">
+                <div class="img"><img src="@(shareRedEntity.BigPicture)" alt="" /></div>
+                <div class="txt">@(shareRedEntity.ResultTitle)</div>
+                <div class="txt2">@(shareRedEntity.Description)</div>
+            </div>
+        </div>
+        <div class="send-red-coupon-float" style="display:none;">
+            <img src="@(shareRedEntity.SmallPicture)" alt="" />
+        </div>
+    }
+    else
+    {
+        <div id="send-red-coupon-template" style="display:none;">
+            <div class="get-coupon-info">
+                <div class="img"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/redcoupon/red-coupon-big.png" alt="" /></div>
+                <div class="txt">恭喜你获得一个大红包</div>
+                <div class="txt2">分享给好友立即领取</div>
+            </div>
+        </div>
+        <div class="send-red-coupon-float" style="display:none;">
+            <img src="http://whfront.b0.upaiyun.com/app/img/coupon/redcoupon/red-coupon-sml.png" alt="" />
+        </div>
+    }
+
+    <input type="hidden" id="canShareRedCoupon" value="@(canShareRedCoupon ? 1 : 0)" />
+}
+else
+{
+    <!-- HotelName -->
+    <div class="fullscreen">
+        <div class="container mainbody">
+            <div class="row">
+                <div class="col-md-1">
+                </div>
+                <div class="col-md-10">
+                    <div class="row hidden-xs">
+                        <div class="col-md-6 hotelname">
+                            @order.HotelName
+                        </div>
+                        <div class="col-md-6 hotelstar">
+                            @Helpers.StarImage(Url, hotel.Star, null)
+                        </div>
+                    </div>
+
+                    <div class="row mbhead hidden">
+                        <div class="col-xs-12 text-left">
+                            <button type="button" class="btn btn-default btn-sm">返回</button>
+                        </div>
+                    </div>
+
+                    <div class="container visible-xs" style="margin-bottom:-1px;">
+                        <div class="row toolbar2 ">
+                            <header class="hotel-head @(isInWeixin ? " hidden" : "")">
+                                <div class="col-xs-3">
+                                    <button type="button" onclick="history.back()" class="btn btn-sm  btn-img01"><img src="@Url.Content("~/content/images/icon-back.png")" class="mobilepic" alt="" /></button>
+                                </div>
+                                <div class="col-xs-6 text-center listtitle">
+                                    预订
+                                </div>
+                                <div class="col-sm-2 col-xs-3 text-right">
+                                </div>
+                            </header>
+                        </div>
+                    </div>
+                    <!--  mobile header 结束 -->
+                    <!--
+                        <h6>地址: 上海佘山大道1000号  &nbsp;&nbsp;  电话: 021-54334333<h6>
+                    -->
+                    <div class="row">
+                        <!-- Hotel Left -->
+                        <div class="col-md-8 zmpanel2">
+
+                            <div class="panel panel-default date">
+                                <div class="panel-heading hidden-xs">
+                                    <div class="row">
+                                        <div class="title col-xs-12">
+                                            预订
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-body forma">
+                                    <div class="ddalert text-center row">
+                                        <div class="col-xs-12">
+                                            <img src="@Url.Content("~/Content/images/ddsuccess.png")" alt="" />
+                                        </div>
+                                    </div>
+                                    <form role="form">
+                                        <div class="row">
+                                            <div class="result-row">
+                                                <div class="left text-right">订单状态：</div>
+                                                <div class="right text-left"><span class="State1" style="font-size:1em;">等待确认</span></div>
+                                                <div style="clear:both;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="result-row">
+                                                <div class="left text-right">订单号：</div>
+                                                <div class="right text-left"><span>@param.OrderId</span></div>
+                                                <div style="clear:both;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="result-row">
+                                                <div class="left text-right">总价：</div>
+                                                <div class="right text-left"><span class="price">￥<strong>@order.Amount.ToString("0")</strong></span></div>
+                                                <div style="clear:both;"></div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="panel">
+                                <div style="width:94%;margin:1em auto 0 auto;display:table;">
+                                    <div class="ddinfo">
+                                        <h4>@order.HotelName</h4>
+                                    </div>
+                                    <h5>套餐</h5>
+                                    <dl>
+                                        <dd>@order.PackageName</dd>
+                                    </dl>
+                                    <h5>入住日期</h5>
+                                    <dl>
+                                        <dd>@checkIn - @checkOut</dd>
+                                    </dl>
+                                    <h5>房间数</h5>
+                                    <dl>
+                                        <dd>@(order.RoomCount)间</dd>
+                                    </dl>
+                                    @foreach (OrderDetailDailyEntity entity in order.DailyItems)
+                                    {
+                                        <h5>@Utils.ChineseNumber(order.NightCount)晚 @order.RoomDescription</h5>
+                                        <dl>
+                                            @foreach (OrderDetailItem item in entity.Items)
+                                            {
+                                                if (item.Type == 1)
+                                                {
+                                                    <dd>
+                                                        @item.Description
+                                                        @if (item.Price > 0)
+                                                        {
+                                                            <small>（值￥@(item.Price)）</small>
+                                                        }
+                                                    </dd>
+                                                }
+                                            }
+                                        </dl>
+                                            break;
+                                    }
+
+                                    <h5>注意事项</h5>
+                                    <dl>
+                                        @foreach (OrderDetailItem item in order.Notice)
+                                        {
+                                            if (item.Type != 1)
+                                            {
+                                                <dd>@Html.Raw(item.Description.Replace("&gt;", ">").Replace("&lt;", "<").Replace("&quot;", "\""))</dd>
+                                            }
+                                        }
+                                    </dl>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Hotel Right -->
+                        <div class="col-md-4 visible-md visible-lg zmrightpanel">
+                            @Helpers.QRCodes(Url)
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-1">
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<footer>
+    <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+    <input type="hidden" id="isInWeixin" value="@(isInWeixin ? 1 : 0)" />
+    <input type="hidden" id="appShareLink" value="@(appShareLink)" />
+</footer>
+
+@section scripts
+{
+    <script src="~/Content/js/framework/zmjd.modal.min.js"></script>
+    <script src="~/Content/js/payment/complete.js?v=@(Helpers.curAppVer())"></script>
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+        <script>
+
+                GetWeixinApiConfig();//注册
+
+                wx.ready(function () {
+
+                    var _shareCallBack = '@(shareCallBackUrl)';
+
+                    wx.onMenuShareTimeline({
+                        title: '@shareTitle_Timeline',
+                        desc: '@(shareDesc_Timeline)',
+                        link: '@(s_url)',
+                        imgUrl: '@(s_poto_url)',
+                        success: function (res) {
+                            if (_shareCallBack) {
+                                $.get(_shareCallBack, {}, function (_data) {
+
+                                });
+                            }
+                        },
+                        cancel: function (res) {
+
+                        }
+                    });
+
+                    wx.onMenuShareAppMessage({
+                        title: '@s_title',
+                        desc: '@(s_content)',
+                        link: '@(s_url)',
+                        imgUrl: '@(s_poto_url)',
+                        success: function (res) {
+                            if (_shareCallBack) {
+                                $.get(_shareCallBack, {}, function (_data) {
+
+                                });
+                            }
+                        },
+                        cancel: function (res) {
+
+                        }
+                    });
+
+                });
+
+                function GetWeixinApiConfig() {
+
+                    var url = location.href.split("#")[0];
+                    $.ajax({
+                        url: '/Coupon/GetWeixinConfigInfo',
+                        type: 'POST',
+                        data: { url: url },
+                        dataType: 'json',
+                        async: false,
+                        error: function () {
+                            console.log("网络服务错误");
+                        },
+                        success: function (result) {
+                            if (typeof (result.Success) != undefined && result.Success == 1) {
+                                return false;
+                            }
+                            else {
+                                //得到微信config的值
+                                var array = [
+                                    'checkJsApi',
+                                    'onMenuShareTimeline',
+                                    'onMenuShareAppMessage',
+                                    'onMenuShareQQ',
+                                    'onMenuShareQZone',
+                                    'hideOptionMenu'
+                                ];
+                                if (result.jsApiList) {
+                                    var jsArray = result.jsApiList.split(',');
+                                    for (var key in jsArray) {
+                                        array.push("" + jsArray[key]);
+                                    }
+                                }
+
+                                wx.config({
+                                    debug: false,
+                                    appId: result.appId,
+                                    timestamp: "" + result.timestamp,
+                                    nonceStr: result.nonceStr,
+                                    signature: result.signature,
+                                    jsApiList: array
+                                });
+                            }
+                        }
+                    });
+                }
+
+        </script>
+    }
+}

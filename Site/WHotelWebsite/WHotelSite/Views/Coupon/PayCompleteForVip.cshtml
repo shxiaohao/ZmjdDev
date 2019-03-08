@@ -1,0 +1,118 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    ViewBag.Title = "购买VIP成功";
+    
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.isInWeixin;
+    var channel = ViewBag.Channel;
+
+    RoomCouponOrderEntity couponOrder = ViewBag.CouponOrder;
+    var magicallUrl = ViewBag.MagiCallUrl;
+    var userid = ViewBag.UserId;
+    var isLogin = ViewBag.IsLogin;
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    if (isApp)
+    {
+        ViewBag.LoadHmBaidu = false;
+    }
+}
+
+@section styles
+{
+    <link href="~/Content/css/framework/zmjd.modal.min.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="/content/css/coupon/paycompleteforvip.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+}
+
+@if (true || couponOrder.State == 2)
+{
+    var _showTxt = "您即可享受千余家VIP专享酒店至少9折优惠<br />并获得¥500元现金券，请到周末酒店app<br />“我的”-“钱包”里面查看";
+    
+    <div class="top">
+        <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-ok-top-new-2.png" alt="" />
+        <div class="tit">恭喜你成为<br />周末酒店<span class="h">VIP会员</span></div>
+        <div class="linear"></div>
+        <div class="brief @(isApp ? "brief-nobr" : "")">
+            <div class="t2">@Html.Raw(_showTxt)</div>
+        </div>
+    </div>
+    <div class="ctrl">
+        <div class="btns">
+            @*<div class="showviphotel" onclick="gourl('/App/MorePackageList?userid=@(userid)&albumId=10&_newpage=1')">查看专属优惠酒店</div>*@
+            @if (isApp)
+            {
+                <div class="showviphotel" onclick="gourl('/App/MorePackageList?userid=@(userid)&albumId=41&grid=1&_newpage=1')">查看VIP专享酒店</div>
+            }
+            else
+            {
+                <div class="showviphotel" onclick="gourl('http://app.zmjiudian.com')">下载周末酒店APP</div>
+            }
+        </div>
+    </div>
+}
+
+@if (isInWeixin)
+{
+    <div class="vip-qrcode">
+        <div class="tit">长按关注“周末酒店服务号”<br />查看VIP相关权益及问题</div>
+        <div class="qrcode">
+            <img src="http://whfront.b0.upaiyun.com/app/img/qrcode-wx-zmjdservice-346x346.png" alt="周末酒店服务号" />
+        </div>
+    </div>
+}
+<footer>
+    <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+    <input type="hidden" id="userid" value="@(userid)" />
+    <input type="hidden" id="islogin" value="@(isLogin ? 1 : 0)" />
+</footer>
+@*<div style="margin:2em 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http://192.168.1.22:8081/vip/paycomplete/all/150650">GO APP (Local) >>></a></div>*@
+@section scripts
+{
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/framework/config.js?v=1@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjd.modal.min.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=1@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/login.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/coupon/paycompleteforvip.js?v=1@(Helpers.curAppVer())"></script>
+    <script type="text/javascript">
+        function goto(param) {
+            var url = "@(ViewBag.AccessProtocal)" + param;
+            this.location = url;
+        }
+
+        function openHotel(hotelid) {
+            var isapp = $("#isapp").val() == "1";
+            if (isapp) {
+                goto('hotel/' + hotelid);
+            }
+            else {
+                location.href = "http://www.zmjiudian.com/hotel/" + hotelid;
+            }
+        }
+
+        function gourl(url) {
+            location.href = url;
+        }
+
+        function click_a(divDisplay) {
+            if (document.getElementById(divDisplay).style.display != "block") {
+                document.getElementById(divDisplay).style.display = "block";
+            }
+            else {
+                document.getElementById(divDisplay).style.display = "none";
+            }
+        }
+
+    </script>
+}

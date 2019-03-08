@@ -1,0 +1,22 @@
+﻿body {
+}
+
+.submitbtn {
+    width: 80%;
+    margin: 10px auto 10px auto;
+    background-color: #FE8000 !important;
+    height: 30px;
+    color: white !important;
+    font-size: 20px !important;
+    border: none !important;
+    text-align: center;
+}
+
+.div-code {
+    width: 80%;
+    margin: 10px auto 10px auto;
+}
+
+.input-code {
+    height: 27px !important;
+}

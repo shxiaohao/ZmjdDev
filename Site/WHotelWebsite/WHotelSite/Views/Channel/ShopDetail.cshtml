@@ -1,0 +1,307 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    ViewBag.Title = "店铺详情";
+
+    var isMobile = ViewBag.IsMobile;
+
+    var cid = ViewBag.CID;
+
+    //产品店铺信息
+    HJD.HotelManagementCenter.Domain.RetailerShopEntity productShopInfo = ViewBag.ProductShopInfo;
+
+    var shareTitle = System.Text.RegularExpressions.Regex.Replace(productShopInfo.ShopName, @"\p{Cs}", "").Replace("\r\n", " ").Replace("\n", " ");
+    var shareDesc = System.Text.RegularExpressions.Regex.Replace(productShopInfo.ShopProfile, @"\p{Cs}", "").Replace("\r\n", " ").Replace("\n", " ");
+    var shareLink = string.Format("http://www.zmjiudian.com/Channel/ShopDetail?cid={0}", cid);
+    var shareImgUrl = productShopInfo.AvatarUrl;
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    ViewBag.LoadHmBaidu = false;
+}
+
+@section styles
+{
+    <link href="/content/css/channel/shopdetail.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+}
+
+<div class="shop-head">
+    <div class="head-img"><img src="@(productShopInfo.AvatarUrl)" alt="头像" /></div>
+    <div class="name">@(productShopInfo.ShopName)</div>
+    <div class="brief">@(productShopInfo.ShopProfile)</div>
+    @*<div class="line"><img src="http://whfront.b0.upaiyun.com/www/img/channel/line-product-all.png" alt="所有商品" /></div>*@
+</div>
+<div class="filter" id="filter">
+
+    <div class="items">
+        <div class="f_l">
+            <input type="text" id="searchText" class="s-inp zmjd-iconfont" placeholder="&#xe65e; 搜索" />
+            <div id="searchGlass" class="s-inp-glass"></div>
+            <div class="s-inp-clear zmjd-iconfont" style="display:none;"><img src="http://whfront.b0.upaiyun.com/www/img/channel/btn_close.png" alt="" /></div>
+        </div>
+        <div class="f_c1">
+            <div class="f-item f-hot" data-op="0"><span class="name">爆款推荐</span><span class="zmjd-iconfont _icon">&#xe690;</span></div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="f_c">
+            <div class="f-item f-sort" data-op="0"><span class="name">默认排序</span><span class="zmjd-iconfont _icon">&#xe65c;</span></div>
+            @*<div class="f-item f-filter" data-op="0"><span class="name">筛选</span><span class="zmjd-iconfont _icon">&#xe65d;</span></div>*@
+            <div style="clear:both;"></div>
+        </div>
+        <div class="f_r">
+            <div class="f-item f-city"><span class="name">{{searchDic.DistrictName}}</span><span class="zmjd-iconfont _icon">&#xe68a;</span></div>
+            <div style="clear:both;"></div>
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="split"></div>
+    <div id="wrapper" v-cloak class="scroll-list">
+        <div class="_scroller">
+            <div class="scrollLine">
+                <div v-for="item in filterData.SearScreen" class="t-item " data-sel="{{$index==0?'1':'0'}}" data-num="{{item.Values}}" data-num1="{{$index}}" data-t="{{item.Type}}" data-name="{{item.Name}}">
+                    <span class="{{$index==0?'scroll-seled':''}}">{{item.Name}}</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="filter-search" style="display:none;">
+        <div class="_l">
+            <input type="text" id="searchText2" class="s-inp2 zmjd-iconfont" placeholder="&#xe65e; 输入关键字搜索" />
+        </div>
+        <div class="_r">
+            <a class="search-btn">搜索</a>
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="f-sort-options" style="display:none;">
+        <div class="_list">
+            <div v-for="item in filterData.SearchSort" class="_item sort-item {{$index==0?'_item-seled':''}}" data-sel="{{$index==0?'1':'0'}}" data-num="{{item.Values}}" data-name="{{item.Name}}">{{item.Name}}<span class="zmjd-iconfont _icon">&#xe660;</span></div>
+        </div>
+    </div>
+    <div class="f-filter-options" style="display:none;">
+        <div class="options">
+            <div class="group">
+                <div class="tit">产品类型</div>
+                <div class="list">
+                    <div v-for="item in filterData.SearScreen" class="item filter-item {{$index==0?'item-seled':''}}" data-sel="{{$index==0?'1':'0'}}" data-num="{{item.Values}}" data-t="{{item.Type}}" data-name="{{item.Name}}">{{item.Name}}</div>
+                    <div style="clear:both;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="ctrls" style="display:none;">
+            <div class="clear"><a href="javascript:;" class="btn">清除筛选</a></div>
+            <div class="confirm">确定</div>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+</div>
+<div class="filter-space" style="display:none;"></div>
+@*<div class="filter-search" style="display:none;">
+        <div class="_l">
+            <input type="text" id="searchText2" class="s-inp2 zmjd-iconfont" placeholder="&#xe65e; 输入关键字搜索" />
+        </div>
+        <div class="_r">
+            <a class="search-btn">搜索</a>
+        </div>
+        <div style="clear:both;"></div>
+    </div>*@
+<div class="filter-bg" style="display:none;"></div>
+<div id="productList" class="list _hide">
+    <div v-cloak v-if="listEntity.list&&listEntity.list.length">
+        <div v-if="listEntity.type==1">
+            <div class="p-item" v-for="item in listEntity.list" onclick="gourl('/Hotel/{{item.HotelId}}?cid=@(cid)')">
+                <div class="p-info">
+                    <div class="l">
+                        <img v-if="item.AlbumSkuRank!=1000000" class="icon_tuijian" src="http://whfront.b0.upaiyun.com/bg/channel/productlist/icon_tuijian.png" />
+                        <img class="productpic" src="{{item.HotelPic.replace('p1.test.sl.corp','p1.zmjiudian.com').replace('_theme','_290x290').replace('_small','_290x290')}}" alt="" />
+                    </div>
+                    <div class="r">
+                        <div class="name">{{item.HotelName}}</div>
+                        <div class="items">
+                            <div class="item item-price"><span>￥{{item.MinVipPrice}}</span></div>
+                            <div style="clear:both;"></div>
+                        </div>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+            </div>
+        </div>
+        <div v-else>
+            <div class="p-item" v-for="item in listEntity.list" onclick="gourl('/Coupon/Product/{{item.SKUIDS[0]}}?cid=@(cid)')">
+                <div class="p-info">
+                    <div class="l">
+                        <img v-if="item.AlbumSkuRank!=1000000" class="icon_tuijian" src="http://whfront.b0.upaiyun.com/bg/channel/productlist/icon_tuijian.png" />
+                        <img class="productpic" src="{{item.OnePicUrl.replace('p1.test.sl.corp','p1.zmjiudian.com').replace('_small','_290x290')}}" alt="" />
+                    </div>
+                    <div class="r">
+                        <div class="name">{{item.Name}}</div>
+                        <div class="items">
+                            <div class="item item-price"><span v-for="_p in item.Price" v-if="$index<1">￥{{_p}}</span><span class="lab" v-if="item.Price.length>1">起</span></div>
+                            <div style="clear:both;"></div>
+                        </div>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="p-null" style="display:none;">没有找到任何商品</div>
+</div>
+<div class="more-packages-foot"></div>
+<div class="scrollpageloading"><img src="http://whfront.b0.upaiyun.com/app/img/loading.gif" alt="" /></div>
+
+<div class="space"></div>
+
+<!---城市筛选-->
+<div class="_selector-model" style="display:none;"></div>
+<div class="_selector" style="display:none;" id="city-selector">
+    <div class="_head">
+        <div class="_line">
+            <div class="_tit">城市筛选</div>
+            <div class="zmjd-iconfont _close">&#xe673;</div>
+            <div class="_clear">清空</div>
+        </div>
+    </div>
+    <div class="_list">
+        <div class="parent-item parent-item-br">
+            <div class="option option-space" data-subid="-1" data-hot="1">热门度假地</div>
+            <div class="sub-items clearfloat _item-nobr" style="padding-bottom:.5em;" data-hot="1">
+                <div v-for="item in hotCityData.ContentList" class="sub-item-col {{item.Code==cityData.districtId?'_item-col-seled':''}}" data-did="{{item.Code}}" data-dname="{{item.Name}}">{{item.Name}}</div>
+            </div>
+        </div>
+        <div class="parent-item parent-item-br" v-for="item in cityData.DestinationList">
+            <div class="option option-space" data-subid="{{$index}}">{{item.RootName}}<div class="zmjd-iconfont _icon _right_icon" style="{{$index>-1?'':'display:none;'}}">&#xe648;</div><div class="zmjd-iconfont _icon _up_icon" style="{{$index>-1?'display:none;':''}}">&#xe64f;</div></div>
+            <div class="sub-items clearfloat _item-nobr sub-items-{{$index}}" v-if="item.DestinationList&&item.DestinationList.length" data-open="{{$index>-1?0:1}}" style="padding-bottom:.5em;{{$index>-1?'display:none;':''}}">
+                <div v-for="subitem in item.DestinationList" class="sub-item-col {{subitem.Values==cityData.districtId?'_item-col-seled':''}} {{$index+1==item.DestinationList.length?'_item-nobr':''}}" data-did="{{subitem.Values}}" data-dname="{{subitem.Name}}">{{subitem.Name}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <input type="hidden" id="isMobile" value="@(isMobile ? "1" : "0")" />
+    <input type="hidden" id="cid" value="@(cid)" />
+</footer>
+
+@section scripts
+{
+    <script src="~/Content/js/framework/iscroll.js"></script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/framework/config.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/channel/shopdetail.js?v=@(Helpers.curAppVer())"></script>
+    <script>
+        var gourl = function (url) {
+            location.href = url;
+        }
+    </script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js?v=@(Helpers.curAppVer())" type="text/javascript"></script>
+    <script>
+
+            GetWeixinApiConfig();//注册
+
+            wx.ready(function () {
+
+                wx.onMenuShareTimeline({
+                    title: '@(shareTitle)',
+                    desc: '@(shareDesc)',
+                    link: '@(shareLink)',
+                    imgUrl: '@(shareImgUrl)',
+                    success: function (res) {
+                    },
+                    cancel: function (res) {
+                    }
+                });
+
+                wx.onMenuShareAppMessage({
+                    title: '@(shareTitle)',
+                    desc: '@(shareDesc)',
+                    link: '@(shareLink)',
+                    imgUrl: '@(shareImgUrl)',
+                    success: function (res) {
+                    },
+                    cancel: function (res) {
+                    }
+                });
+
+                wx.onMenuShareQQ({
+                    title: '@(shareTitle)',
+                    desc: '@(shareDesc)',
+                    link: '@(shareLink)',
+                    imgUrl: '@(shareImgUrl)',
+                    success: function (res) {
+                    },
+                    cancel: function (res) {
+                    }
+                });
+
+                wx.onMenuShareQZone({
+                    title: '@(shareTitle)',
+                    desc: '@(shareDesc)',
+                    link: '@(shareLink)',
+                    imgUrl: '@(shareImgUrl)',
+                    success: function (res) {
+                    },
+                    cancel: function (res) {
+                    }
+                });
+
+                });
+
+                function GetWeixinApiConfig() {
+
+                    var url = location.href.split("#")[0];
+                    $.ajax({
+                        url: '/Coupon/GetWeixinConfigInfo',
+                        type: 'POST',
+                        data: { url: url },
+                        dataType: 'json',
+                        async: false,
+                        error: function () {
+                            console.log("网络服务错误");
+                        },
+                        success: function (result) {
+                            if (typeof (result.Success) != undefined && result.Success == 1) {
+                                return false;
+                            }
+                            else {
+                                //得到微信config的值
+                                var array = [
+                                    'checkJsApi',
+                                    'onMenuShareTimeline',
+                                    'onMenuShareAppMessage',
+                                    'onMenuShareQQ',
+                                    'onMenuShareQZone',
+                                    'hideOptionMenu'
+                                ];
+                                if (result.jsApiList) {
+                                    var jsArray = result.jsApiList.split(',');
+                                    for (var key in jsArray) {
+                                        array.push("" + jsArray[key]);
+                                    }
+                                }
+
+                                wx.config({
+                                    debug: false,
+                                    appId: result.appId,
+                                    timestamp: "" + result.timestamp,
+                                    nonceStr: result.nonceStr,
+                                    signature: result.signature,
+                                    jsApiList: array
+                                });
+                            }
+                        }
+                    });
+                }
+
+    </script>
+}

@@ -1,0 +1,278 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.IsInWeixin;
+    var userid = ViewBag.UserId; //userid = 4512064;
+    var userPhone = ViewBag.UserPhone;
+    var magicallUrl = ViewBag.MagiCallUrl;
+
+    ViewBag.Title = "成为VIP";
+
+    var shareTitle = "高端酒店天天特价";
+    var shareDesc = "精选高端酒店、口碑亲子酒店、小众特色酒店，5-50%深度折扣，尽在周末酒店APP！";
+    var shareLink = ViewBag.ShareLink; //var shareLink = "http://www.zmjiudian.com/Coupon/VipShopInfo?CID=0";
+    if (isApp)
+    {
+        shareLink = Server.UrlEncode(shareLink);
+    }
+    var shareImgUrl = "http://whphoto.b0.upaiyun.com/117aPDL0_small";
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    if (isApp)
+    {
+        ViewBag.LoadHmBaidu = false;
+    }
+}
+
+@section styles
+{
+    <link href="/content/css/coupon/vipshopinfo.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+}
+
+<div class="block-top">
+    <div class="block"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/vip/vipshopinfo-new-banner-temp2.png" alt="" /></div>
+    <div class="txt">如果你一年总有几次度假，而且品质与性价比都要好，那么成为周末酒店VIP会员就是一个聪明的选择！只要花¥199/年，就能享受三大权益，现在就去开启又好又划算的度假体验。</div>
+</div>
+
+<div class="vip-table">
+    <div class="option">
+        <div class="l option-199 sel" data-sel="1">金牌会员</div>
+        <div class="r option-599" data-sel="0">铂金会员</div>
+        <div style="clear:both;"></div>
+        <div class="op-bg"></div>
+    </div>
+    <div class="table t-199">
+        <img onclick="goVipHotelList()" src="http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-199-01.png?v=2017061602" alt="199" />
+        <img onclick="openMagiCall()" src="http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-199-02.png?v=2017061602" alt="199" />
+        <img onclick="gourl('https://mp.weixin.qq.com/mp/homepage?__biz=MzA5NTIwODUzMQ==&hid=6&sn=038d01db6fb248170e0d6e9854077096&_newpage=1#wechat_redirect')" src="http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-199-03.png?v=2017062201" alt="199" />
+        <img onclick="gourl('http://www.zmjiudian.com/active/activepage?pageid=43&defbg=1&_newpage=1')" src="http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-199-04.png?v=2017061602" alt="199" />
+    </div>
+    <div class="table t-599" style="display:none;">
+        <img onclick="goVipHotelList()" src="http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-599-01.png?v=2017061602" alt="599" />
+        <img onclick="openMagiCall()" src="http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-599-02.png?v=2017061602" alt="599" />
+        <img onclick="gourl('https://mp.weixin.qq.com/mp/homepage?__biz=MzA5NTIwODUzMQ==&hid=6&sn=038d01db6fb248170e0d6e9854077096&_newpage=1#wechat_redirect')" src="http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-599-03.png?v=2017062201" alt="599" />
+        <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-599-04.png?v=2017071703" alt="599" />
+        <img onclick="gourl('http://www.zmjiudian.com/active/activepage?pageid=43&defbg=1&_newpage=1')" src="http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-599-05.png?v=2017061602" alt="599" />
+    </div>
+</div>
+@*<div style="margin:1em 0 1em 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http://192.168.1.22:8081/Coupon/VipShopInfo">GO APP (Local) >>></a></div>*@
+<div class="more-packages-tit">&diams; 精选会员价酒店 &diams;</div>
+<div class="more-packages more-hlist-panel"></div>
+<div class="more-packages-foot"></div>
+<div class="scrollpageloading more-hide"><img src="http://whfront.b0.upaiyun.com/app/img/loading.gif" alt="" /></div>
+<div class="more-packages-bottom"></div>
+
+<div class="ctrl-bottom">
+    <div class="btns">
+        <div class="l">购买VIP 省心省钱</div>
+        <div class="r">
+            <a class="go-buy go-buy-199" href="javascript:;">￥199 &bull; 支付</a>
+            <a class="go-buy go-buy-599" href="javascript:;" style="display:none;">￥599 &bull; 支付</a>
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+</div>
+
+<div class="_modal-bg" style="display:none;"></div>
+<div class="_modal-panel" style="display:none;">
+    <div class="_close zmjd-iconfont">&#xe615;</div>
+    <div class="_tit">购买VIP</div>
+    <div class="_body">
+        <div class="vip-phone">
+            @if (userid <= 0)
+            {
+                <div class="name-line">
+                    <input type="text" id="userName" class="userName" placeholder="输入姓名" />
+                </div>
+                <div class="phone-line">
+                    <input type="tel" id="userPhone" class="userPhone" placeholder="输入手机号" />
+                </div>
+                <div class="vcode-line">
+                    <input type="number" id="vCode" class="vCode" placeholder="输入验证码" /><button type="button" class="vCodeBtn">获取验证码</button>
+                </div>
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(userPhone))
+                {
+                    <div class="name-line">
+                        <input type="text" id="userName" class="userName" placeholder="输入姓名" />
+                    </div>
+                    <div class="phone-line onlyone-line">
+                        <input type="tel" id="userPhone" class="userPhone2" placeholder="输入手机号" value="@userPhone" disabled="disabled" />
+                    </div>
+                }
+                else
+                {
+                    <div class="name-line onlyone-line">
+                        <input type="text" id="userName" class="userName" placeholder="输入姓名" />
+                    </div>
+                }
+            }
+        </div>
+        <div class="_err" style="display:none;"></div>
+    </div>
+    <div class="_btns">
+        <a href="javascript:;" class="_buy">购买</a>
+    </div>
+    <div class="_rules">
+        <div class="info">&bull; 会员自购买之日起即时生效，有效期1年</div>
+        <div class="info">&bull; 点击购买即视为同意<a href="http://www.zmjiudian.com/active/activepage?pageid=86&_newpage=1" target="_blank">《周末酒店VIP会员协议》</a></div>
+    </div>
+</div>
+
+<footer>
+    <input type="hidden" id="aid199" value="100929" />
+    <input type="hidden" id="aid599" value="100398" />
+    <input type="hidden" id="atype" value="400" />
+    <input type="hidden" id="pid" value="0" />
+    <input type="hidden" id="pricetype" value="0" />
+    <input type="hidden" id="userid" value="@userid" />
+    <input type="hidden" id="albumId" value="10" />
+    <input type="hidden" id="t" value="0" />
+    <input type="hidden" id="userlat" value="-1" />
+    <input type="hidden" id="userlng" value="-1" />
+    <input type="hidden" id="isApp" value="@(isApp ? "1" : "0")" />
+    <input type="hidden" id="sellnum" value="1" />
+    <input type="hidden" id="magicallUrl" value="@(magicallUrl)" />
+</footer>
+
+@section scripts
+{
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script src="~/Content/js/VerifyInput.js"></script>
+    <script src="~/Content/js/framework/jquery.lazyload.min.js"></script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/coupon/vipshopinfo.js?v=@(Helpers.curAppVer())"></script>
+    <script type="text/javascript" charset="utf-8">
+
+        function gourl(url) {
+            location.href = url;
+        }
+
+    </script>
+    <script>
+        try {
+            onAppShareCall = function () {
+                var title = "@(shareTitle)";
+                var Content = "@(shareDesc)";
+                var photoUrl = "@(shareImgUrl)";
+                var shareLink = "@(shareLink)";
+                try { whotel.appShareData(title, Content, photoUrl, shareLink); } catch (e) { }
+                var returnStr = '{"title":"{0}","Content":"{1}","photoUrl":"{2}","shareLink":"{3}"}';
+                return returnStr.format(title, Content, photoUrl, shareLink);
+            }
+            onAppShareCall();
+        }
+        catch (e) { }
+    </script>
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js?v=@(Helpers.curAppVer())" type="text/javascript"></script>
+        <script>
+
+        GetWeixinApiConfig();//注册
+
+        wx.ready(function () {
+
+            wx.onMenuShareTimeline({
+                title: '@(shareTitle)',
+                desc: '@(shareDesc)',
+                link: '@(shareLink)',
+                imgUrl: '@(shareImgUrl)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareAppMessage({
+                title: '@(shareTitle)',
+                desc: '@(shareDesc)',
+                link: '@(shareLink)',
+                imgUrl: '@(shareImgUrl)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareQQ({
+                title: '@(shareTitle)',
+                desc: '@(shareDesc)',
+                link: '@(shareLink)',
+                imgUrl: '@(shareImgUrl)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareQZone({
+                title: '@(shareTitle)',
+                desc: '@(shareDesc)',
+                link: '@(shareLink)',
+                imgUrl: '@(shareImgUrl)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            });
+
+            function GetWeixinApiConfig() {
+
+                var url = location.href.split("#")[0];
+                $.ajax({
+                    url: '/Coupon/GetWeixinConfigInfo',
+                    type: 'POST',
+                    data: { url: url },
+                    dataType: 'json',
+                    async: false,
+                    error: function () {
+                        console.log("网络服务错误");
+                    },
+                    success: function (result) {
+                        if (typeof (result.Success) != undefined && result.Success == 1) {
+                            return false;
+                        }
+                        else {
+                            //得到微信config的值
+                            var array = [
+                                'checkJsApi',
+                                'onMenuShareTimeline',
+                                'onMenuShareAppMessage',
+                                'onMenuShareQQ',
+                                'onMenuShareQZone',
+                                'hideOptionMenu'
+                            ];
+                            if (result.jsApiList) {
+                                var jsArray = result.jsApiList.split(',');
+                                for (var key in jsArray) {
+                                    array.push("" + jsArray[key]);
+                                }
+                            }
+
+                            wx.config({
+                                debug: false,
+                                appId: result.appId,
+                                timestamp: "" + result.timestamp,
+                                nonceStr: result.nonceStr,
+                                signature: result.signature,
+                                jsApiList: array
+                            });
+                        }
+                    }
+                });
+            }
+
+        </script>
+    }
+}

@@ -1,0 +1,160 @@
+.calendar {
+	/*bottom: -360px;*/
+	bottom: 0;
+	width: 100%;
+	background-color: #fff;
+	z-index: 2;
+	position: fixed;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-o-user-select: none;
+	user-select: none;
+	/*-webkit-transition: bottom 0.3s ease-out;*/
+}
+.calendar a {
+	text-decoration: none;
+}
+.calendar.anchored {
+	position: absolute;
+	margin-top: 5px;
+	width: 320px;
+	height: 360px;
+	border: 1px solid #aaa;
+	border-radius: 2px;
+	box-shadow: 0 0 5px #aaa;
+}
+.calendar .ctrls {
+	padding: 10px;
+}
+.calendar .ctrls.top {
+	/*padding-bottom: 6px;*/
+}
+.calendar .ctrls.bottom {
+	/*padding-top: 6px;*/
+}
+.calendar .ctrls li {
+	display: inline-block;
+	width: 50%;
+}
+.calendar .ctrls a {
+	display: block;
+	background-color: #f2f8ff;
+	height: 37px;
+	line-height: 37px;
+	font-size: 15px;
+	color: #3f9aff;
+	text-align: center;
+}
+.calendar .ctrls a.disabled {
+	color: #ccc;
+}
+.calendar .ctrls li:first-child a{
+	margin-right: 5px;
+}
+.calendar .ctrls li:last-child a{
+	margin-left: 5px;
+}
+.calendar .weekdays {
+	padding: 0 6px 5px;
+}
+.calendar b {
+	font-weight: normal;
+}
+.calendar .months {
+	height: 270px;
+	overflow: hidden;
+	position: relative;
+}
+.calendar .days {
+	padding: 0 6px;
+}
+.calendar .weekdays b {
+	display: inline-block;
+	width: 14.28%;
+	height: 22px;
+	line-height: 22px;
+	font-size: 12px;
+	text-align: center;
+}
+.calendar .days a {
+	display: inline-block;
+	width: 14.28%;
+	height: 40px;
+	position: relative;
+	font-size: 18px;
+	line-height: 40px;
+	text-align: center;
+	color: #808080;
+}
+.calendar .days i {
+	height: 16px;
+	line-height: 16px;
+	position: absolute;
+	width: 100%;
+	left: 0;
+	top: 0;
+	font-size: 12px;
+	font-style: normal;
+	color: #666;
+	-webkit-transform: scale(0.75);
+	-o-transform: scale(1);
+}
+
+.calendar .days a.pre {
+	background-color: #808080;
+	color: #fff;
+}
+.calendar .days a.on, .calendar .days a.gray.on {
+	background-color: #33b4ff;
+	color: #fff;
+}
+.calendar .days a.pre i, .calendar .days a.on i {
+	color: #eee;
+}
+
+/* changes 20140305 */
+.calendar .tip {
+	color: #929292;
+	font-size: 12px; line-height: 12px;
+}
+.calendar .cap {
+	border-top: 9px solid #e6e6e6;
+	line-height: 30px;
+	font-size: 14px;
+	color: #242424;
+	text-align: center;
+}
+.calendar .days {
+	padding-bottom: 6px;
+}
+.calendar .days a {
+	font-size: 17px;
+	color: #333;
+}
+.calendar a.active {
+	background: #f1f1f1;
+}
+.calendar .days a.ex {
+	color: #fff;
+	background: #fff;
+}
+.calendar .days a.gray {
+	color: #aaa;
+	background: #fff;
+}
+
+.calendar .days a.ci, .calendar .days a.co {
+	line-height: 30px;
+	vertical-align: 5px;
+}
+.calendar .days a.on:after{
+	font-size: 12px; line-height: 12px;
+	position: absolute; bottom: 3px; left: 0; right: 0; text-align: center;
+}
+.calendar .days a.ci:after {
+	content: '入住';
+}
+.calendar .days a.co:after {
+	content: '离店';
+}

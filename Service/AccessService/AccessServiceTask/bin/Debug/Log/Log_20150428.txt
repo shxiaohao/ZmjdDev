@@ -1,0 +1,41 @@
+
+[2015/4/28 11:02:40] Start Job [PackagePriceContrastReport]
+[2015/4/28 11:02:42] GetPackageMatchReport Count:362
+[2015/4/28 11:14:58] Send Mail Fail
+[2015/4/28 11:14:58] Stop Job [PackagePriceContrastReport]
+[2015/4/28 11:15:40] Start Job [PackagePriceContrastReport]
+[2015/4/28 11:15:40] GetPackageMatchReport Count:759
+[2015/4/28 11:15:46] Send Mail OK!
+[2015/4/28 11:15:46] Stop Job [PackagePriceContrastReport]
+[2015/4/28 11:26:33] Start Job [PackagePriceContrastReport]
+[2015/4/28 11:26:34] GetPackageMatchReport Count:1099
+[2015/4/28 11:26:40] Send Mail OK!
+[2015/4/28 11:26:40] Stop Job [PackagePriceContrastReport]
+[2015/4/28 11:27:30] Start Job [PackagePriceContrastReport]
+[2015/4/28 11:27:30] GetPackageMatchReport Count:1134
+[2015/4/28 11:27:51] Send Mail OK!
+[2015/4/28 11:27:51] Stop Job [PackagePriceContrastReport]
+[2015/4/28 11:40:12] Start Job [WaitMatchRoomReport]
+[2015/4/28 11:40:16] GetRoomMatchRateReport Count:302
+[2015/4/28 11:40:29] Send Mail OK!
+[2015/4/28 11:40:29] Stop Job [WaitMatchRoomReport]
+[2015/4/28 11:42:04] Start Job [WaitMatchRoomReport]
+[2015/4/28 11:42:05] GetRoomMatchRateReport Count:302
+[2015/4/28 11:42:06] Send Mail OK!
+[2015/4/28 11:42:06] Stop Job [WaitMatchRoomReport]
+[2015/4/28 16:30:29] Start Job [CtripHotelSingleCrawlerJob]
+[2015/4/28 16:31:12] HotelID：440919 Night:2015-05-23
+[2015/4/28 16:35:01] Start Job [CtripHotelSingleCrawlerJob]
+[2015/4/28 16:35:03] HotelID：440919 Night:2015-05-23
+[2015/4/28 16:36:08] GetHotel Err:未将对象引用设置到对象的实例。
+[2015/4/28 16:36:08] Hotel 440919 Can't Find Room
+[2015/4/28 16:36:10] GetPreHotel Is Null
+[2015/4/28 16:36:10] Stop Job [CtripHotelSingleCrawlerJob]
+[2015/4/28 16:36:13] Start Job [CtripHotelSingleCrawlerJob]
+[2015/4/28 16:36:15] HotelID：440919 Night:2015-05-23
+[2015/4/28 16:41:50] Start Job [CtripHotelSingleCrawlerJob]
+[2015/4/28 16:41:56] HotelID：440919 Night:2015-05-23
+[2015/4/28 17:13:13] Start Job [PackagePriceContrastReport]
+[2015/4/28 17:13:32] GetPackageMatchReport Count:2606
+[2015/4/28 17:13:38] Send Mail OK!
+[2015/4/28 17:13:38] Stop Job [PackagePriceContrastReport]

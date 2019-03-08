@@ -1,0 +1,7 @@
+
+[18/7/30 16:24:22] Start Job [SendServiceTemplateMsgShanglvzm_Job]
+[18/7/30 16:29:53] Start Job [SendServiceTemplateMsgShanglvzm_Job]
+[18/7/30 16:39:38] Start Job [SendServiceTemplateMsgShanglvzm_Job]
+[18/7/30 16:40:09] 指定了测试Openid：okg6-uKb1ir15j4Ok9TfKzN3P1XY
+[18/7/30 16:40:53] Start Job [SendServiceTemplateMsgShanglvzm_Job]
+[18/7/30 16:40:59] 指定了测试Openid：okg6-uEYii2Y0VZSLWkIG58lBfJg

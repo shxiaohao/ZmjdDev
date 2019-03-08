@@ -1,0 +1,430 @@
+﻿body {
+}
+
+.divbody {
+    margin: auto;
+}
+
+    .divbody .invoice {
+        background-color: #FFFFFF;
+    }
+
+        .divbody .invoice .invoice-desc-url {
+            padding: 1em 0 1em 0;
+            width: 90%;
+            margin: auto;
+        }
+
+            .divbody .invoice .invoice-desc-url span {
+                vertical-align: middle;
+                color: #919191;
+            }
+
+            .divbody .invoice .invoice-desc-url .invoice-desc {
+                font-size: 0.8em;
+                /*color: #919191;*/
+            }
+
+
+
+        .divbody .invoice .invoice-content {
+            width: 90%;
+            margin: auto;
+        }
+
+            .divbody .invoice .invoice-content .invoice-type {
+                /*height: 3em;*/
+                margin: 1em auto;
+                text-align: center;
+                width: 70%;
+            }
+
+                .divbody .invoice .invoice-content .invoice-type .invoice-type-left {
+                    width: 50%;
+                    float: left;
+                    border: 1px solid #3E9EC0;
+                    padding: 0.5em 0;
+                    border-right: none;
+                    border-top-left-radius: 2em;
+                    border-bottom-left-radius: 2em;
+                    color: #3E9EC0;
+                }
+
+                .divbody .invoice .invoice-content .invoice-type .invoice-type-right {
+                    width: 50%;
+                    float: left;
+                    border: 1px solid #3E9EC0;
+                    padding: 0.5em 0;
+                    border-left: none;
+                    border-top-right-radius: 2em;
+                    border-bottom-right-radius: 2em;
+                    color: #3E9EC0;
+                }
+
+                .divbody .invoice .invoice-content .invoice-type .invoice-type-select {
+                    background-color: #3E9EC0;
+                    color: #FFFFFF;
+                }
+
+            .divbody .invoice .invoice-content .invoice-item {
+                /*margin: 1em auto;*/
+                padding: 1em 0;
+                /*border-bottom: 1px solid #D5D5D5;*/
+            }
+
+
+                .divbody .invoice .invoice-content .invoice-item .invoice-form {
+                    display: inline-block;
+                    width: 73%;
+                }
+
+                    .divbody .invoice .invoice-content .invoice-item .invoice-form .invoice-ele {
+                        text-align: center;
+                        width: 48%;
+                        float: left;
+                        border: 1px solid #3E9EC0;
+                        border-radius: 4px;
+                        margin: 0 8px 0 0;
+                        padding: 5px 0 5px 0;
+                    }
+
+                    .divbody .invoice .invoice-content .invoice-item .invoice-form .invoice-paper {
+                        text-align: center;
+                        width: 48%;
+                        float: left;
+                        border: 1px solid #DDDDDD;
+                        border-radius: 4px;
+                        padding: 5px 0 5px 0;
+                    }
+
+                    .divbody .invoice .invoice-content .invoice-item .invoice-form .invoice-form-tit {
+                        font-size: 0.9em;
+                        color: #919191;
+                    }
+
+
+                    .divbody .invoice .invoice-content .invoice-item .invoice-form .for-tit-selected {
+                        color: #3E9EC0;
+                    }
+
+                    .divbody .invoice .invoice-content .invoice-item .invoice-form .invoice-form-desc {
+                        font-size: 0.6em;
+                        color: #919191;
+                    }
+
+
+    .divbody .div-tips {
+        width: 90%;
+        margin: auto;
+        color: #919191;
+    }
+
+        .divbody .div-tips .tip1 {
+            display: block;
+            margin: 0.8em auto;
+        }
+
+        .divbody .div-tips span {
+            font-size: 0.7em;
+        }
+
+    .divbody .div-btn {
+        width: 90%;
+        margin: auto;
+        margin: 1em auto;
+    }
+
+        .divbody .div-btn .btn {
+            width: 100%;
+            font-size: 1em;
+            padding: 0.5em 0 0.5em 0;
+            background-color: #919191;
+            color: #FFFFFF;
+        }
+
+        .divbody .div-btn .btncanbg {
+            background-color: #3E9EC0;
+        }
+
+.span-invoiceform {
+    vertical-align: 22px;
+}
+
+
+.email, .taxnumber {
+    border: none;
+    width: 70%;
+}
+
+    .taxnumber::-webkit-input-placeholder {
+        /* placeholder颜色  */
+        color: #aab2bd;
+        /* placeholder字体大小  */
+        font-size: 0.9em;
+    }
+
+    .email::-webkit-input-placeholder {
+        /* placeholder颜色  */
+        color: #aab2bd;
+        /* placeholder字体大小  */
+        font-size: 0.9em;
+    }
+
+.span-tit {
+    color: #919191;
+    width: 25%;
+    display: inline-block;
+    font-size: 0.9em;
+}
+
+.span-mid {
+    font-size: 0.9em;
+}
+
+.bordernone {
+    border: none;
+}
+
+.icon-arrow-right {
+    color: #919191;
+    float: right;
+}
+
+.fn {
+    height: 0.5em;
+    background-color: #efeff4;
+}
+
+.clear {
+    clear: both;
+}
+
+hr {
+    margin: 0px;
+    height: 1px;
+    border: none;
+    border-top: 1px solid #D5D5D5;
+}
+
+._selector-model {
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10000;
+}
+
+._selector {
+    width: 100%;
+    height: auto;
+    font-family: Arial;
+    background: #fff;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 10001;
+    overflow: auto;
+}
+
+    ._selector ._head {
+        width: 100%;
+        height: auto;
+        margin: 0 0 0 0;
+        padding: 0.8em 0 0.8em 0;
+        border-bottom: 1px solid #d5d5d5;
+        position: relative;
+    }
+
+        ._selector ._head ._tit {
+            width: 100%;
+            height: auto;
+            margin: 0 0 0 0;
+            text-align: center;
+            font-size: 0.9em;
+            color: #2c2c2c;
+        }
+
+        ._selector ._head ._close {
+            width: 1.8em;
+            height: auto;
+            margin: 0 0 0 0;
+            text-align: center;
+            font-size: 1.6em;
+            position: absolute;
+            top: 0.35em;
+            left: 0;
+        }
+
+        ._selector ._head ._clear {
+            width: 2em;
+            height: auto;
+            margin: 0 0 0 0;
+            text-align: center;
+            font-size: 0.9em;
+            color: #3E9EC0;
+            position: absolute;
+            top: 0.8em;
+            right: 1em;
+        }
+
+    ._selector ._list {
+        width: 100%;
+        height: auto;
+        margin: 0 0 0 0;
+        padding: 0 0 2em 0;
+        display: table;
+    }
+
+        ._selector ._list ._item {
+            width: 90%;
+            height: auto;
+            margin: 0 auto 0 auto;
+            padding: 1.1em 0 1.1em 0;
+            font-size: 0.9em;
+            color: #000;
+            border-bottom: 1px solid #d5d5d5;
+            position: relative;
+        }
+
+            ._selector ._list ._item ._icon {
+                display: none;
+            }
+
+        ._selector ._list ._item-seled {
+        }
+
+            ._selector ._list ._item-seled ._icon {
+                width: 2em;
+                height: auto;
+                position: absolute;
+                top: 0.8em;
+                right: 0;
+                font-size: 1.3em;
+                font-weight: bold;
+                color: #3E9EC0;
+                text-align: center;
+                display: inline-block;
+            }
+
+._selectorTitel-model {
+    width: 100%;
+    height: 100%;
+    background: #FFFFFF;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10000;
+}
+    ._selectorTitel-model ._head {
+        width: 100%;
+        height: auto;
+        margin: 0 0 0 0;
+        padding: 0.8em 0 0.8em 0;
+        border-bottom: 1px solid #d5d5d5;
+        position: relative;
+    }
+
+        ._selectorTitel-model ._head ._tit {
+            width: 100%;
+            height: auto;
+            margin: 0 0 0 0;
+            text-align: center;
+            font-size: 0.9em;
+            color: #2c2c2c;
+        }
+
+        ._selectorTitel-model ._head ._close {
+            width: 1.8em;
+            height: auto;
+            margin: 0 0 0 0;
+            text-align: center;
+            font-size: 1.6em;
+            position: absolute;
+            top: 0.35em;
+            left: 0;
+        }
+
+        ._selectorTitel-model ._head ._clear {
+            width: 2em;
+            height: auto;
+            margin: 0 0 0 0;
+            text-align: center;
+            font-size: 0.9em;
+            color: #3E9EC0;
+            position: absolute;
+            top: 0.8em;
+            right: 1em;
+        }
+    /*._selectorTitel-model ._head {
+        width: 90%;
+    }
+
+    ._selectorTitel-model ._list {
+        width: 90%;
+    }*/
+
+    ._selectorTitel-model ._list {
+        width: 100%;
+        height: auto;
+        margin: 0 0 0 0;
+        padding: 0 0 1em 0;
+        display: table;
+    }
+
+        ._selectorTitel-model ._list ._item {
+            width: 90%;
+            height: auto;
+            margin: 0 auto 0 auto;
+            padding: 1.1em 0 1.1em 0;
+            font-size: 0.9em;
+            color: #000;
+            border-bottom: 1px solid #d5d5d5;
+            position: relative;
+        }
+
+            ._selectorTitel-model ._list ._item ._icon {
+                display: none;
+            }
+
+        ._selectorTitel-model ._list ._item-seled {
+        }
+
+            ._selectorTitel-model ._list ._item-seled ._icon {
+                width: 2em;
+                height: auto;
+                position: absolute;
+                top: 0.8em;
+                right: 0;
+                font-size: 1.3em;
+                font-weight: bold;
+                color: #3E9EC0;
+                text-align: center;
+                display: inline-block;
+            }
+    ._selectorTitel-model ._addtit {
+        width: 90%;
+        margin:auto;
+    }
+        ._selectorTitel-model ._addtit .invoicetit {
+            border: none;
+        }
+        ._selectorTitel-model ._addtit .btnaddtit {
+            height: 2em;
+            line-height: 0em;
+            background-color: #3E9EC0;
+            float: right;
+            color:#FFFFFF;
+            border:1px solid #3E9EC0;
+        }
+
+.invoicetit::-webkit-input-placeholder {
+    /* placeholder颜色  */
+    color: #aab2bd;
+    /* placeholder字体大小  */
+    font-size: 0.9em;
+}
+input {
+    -webkit-user-select: auto;
+}

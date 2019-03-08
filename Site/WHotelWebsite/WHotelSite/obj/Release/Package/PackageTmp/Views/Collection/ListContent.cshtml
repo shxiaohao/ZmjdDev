@@ -1,0 +1,61 @@
+﻿@model IEnumerable<CollectListItem>
+@{
+    Layout = null;
+}
+
+@foreach (CollectListItem hotel in Model)
+{
+    <a href="@Url.Action("Detail", "Hotel", new { hotel = hotel.Id })" target="_self" class="collectRef">
+    <div class="row hotellist">
+        <div class="col-sm-5 hotelpic">
+            <img src="@hotel.Picture" class="img-responsive" alt="" />            
+            @if (hotel.PriceType == 2)
+            {
+                <div class="tehui visible-xs">特惠·专享</div>
+            }
+            else if (hotel.PriceType == 3)
+            {
+                <div class="tehui visible-xs">特惠·套餐</div>
+            }
+        </div>
+        <div class="col-sm-7 col-xs-12 hotelinfo">
+            <div class="titlehead hidden-xs"></div>
+            <h2>@hotel.Name</h2>
+            <h6>@(hotel.Score.ToString("0.0"))分 | @(hotel.ReviewCount)条点评</h6>
+            <h6>
+                @foreach (FeaturedEntity t in hotel.FeaturedList)
+                {
+                    @t.Name@:&nbsp;&nbsp;
+                }
+            </h6>
+            @if (hotel.PriceType == 2)
+            {
+                <div class="tehui hidden-xs">特惠·专享</div>
+            }
+            else if (hotel.PriceType == 3)
+            {
+                <div class="tehui hidden-xs">特惠·套餐</div>
+            }
+			<a href="javascript:;" class="collectUrl hidden"><div class="delcollect hidden-xs">取消收藏</div></a>
+        </div>
+        @if (hotel.MinPrice == 0)
+        {
+            <div class="price hidden-xs">
+                暂无价格
+            </div>
+            <div class="price price2 visible-xs">
+                暂无价格
+            </div>
+        }
+        else
+        {
+            <div class="price hidden-xs">
+                ￥<strong>@( (int)hotel.MinPrice)</strong><i>起</i>
+            </div>
+            <div class="price price2 visible-xs">
+                ￥<strong>@( (int)hotel.MinPrice)</strong><i>起</i>
+            </div>
+        }
+    </div>
+    </a>
+}

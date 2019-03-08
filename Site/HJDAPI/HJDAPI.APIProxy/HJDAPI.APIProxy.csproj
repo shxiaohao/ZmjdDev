@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{914C1E3B-6509-4B5F-A6E8-900F9D377325}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HJDAPI.APIProxy</RootNamespace>
+    <AssemblyName>HJDAPI.APIProxy</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HJD.AccessService.Contract">
+      <HintPath>..\..\..\Contracts\HJD.AccessService.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.AccountServices.Contracts">
+      <HintPath>..\..\..\Contracts\HJD.AccountServices.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.AccountServices.Entity">
+      <HintPath>..\..\..\Contracts\HJD.AccountServices.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.ADServices.Contract">
+      <HintPath>..\..\..\Contracts\HJD.ADServices.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.CommentService.Contract">
+      <HintPath>..\..\..\Contracts\HJD.CommentService.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.CouponService.Contracts">
+      <HintPath>..\..\..\Contracts\HJD.CouponService.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.DestServices.Contract, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Contracts\HJD.DestServices.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.EMailService.Contracts">
+      <HintPath>..\..\..\Contracts\HJD.EMailService.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.BulkCopy, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\HJD.Framework.BulkCopy.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.Cache, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\HJD.Framework.Cache.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.DataAccess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\HJD.Framework.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.Encrypt, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\HJD.Framework.Encrypt.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.Entity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\HJD.Framework.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\HJD.Framework.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.Key, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\HJD.Framework.Key.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.Log, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\HJD.Framework.Log.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.Utility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\HJD.Framework.Utility.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.WCF, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\HJD.Framework.WCF.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.HotelManagementCenter.Domain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Contracts\HJD.HotelManagementCenter.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.HotelPrice.Contract, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Contracts\HJD.HotelPrice.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.HotelQuery.Contract">
+      <HintPath>..\..\..\Contracts\HJD.HotelQuery.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.HotelServices.Contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Contracts\HJD.HotelServices.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.OtaCrawlerService.Contract">
+      <HintPath>..\..\..\Contracts\HJD.OtaCrawlerService.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.PhotoServices.Contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Contracts\HJD.PhotoServices.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.PhotoSyncServices.Contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Contracts\HJD.PhotoSyncServices.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.ProductService.Contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Contracts\HJD.ProductService.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.WeixinService.Contract">
+      <HintPath>..\..\..\Contracts\HJD.WeixinService.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="MagiCallService.Contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Contracts\MagiCallService.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="MessageService, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Contracts\MessageService.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PersonalServices.Contracts">
+      <HintPath>..\..\..\Contracts\PersonalServices.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="account.cs" />
+    <Compile Include="Activity.cs" />
+    <Compile Include="App.cs" />
+    <Compile Include="attraction.cs" />
+    <Compile Include="BaseProxy.cs" />
+    <Compile Include="Channel.cs" />
+    <Compile Include="Partner.cs" />
+    <Compile Include="QRCode.cs" />
+    <Compile Include="Shop.cs" />
+    <Compile Include="Collect.cs" />
+    <Compile Include="Comment.cs" />
+    <Compile Include="AD.cs" />
+    <Compile Include="Coupon.cs" />
+    <Compile Include="Dest.cs" />
+    <Compile Include="EasternAirLinesPoints.cs" />
+    <Compile Include="Fund.cs" />
+    <Compile Include="MagiCall.cs" />
+    <Compile Include="EMChat.cs" />
+    <Compile Include="Hotel.cs" />
+    <Compile Include="Inspector.cs" />
+    <Compile Include="Interest.cs" />
+    <Compile Include="Notice.cs" />
+    <Compile Include="Order.cs" />
+    <Compile Include="Access.cs" />
+    <Compile Include="Price.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="product.cs" />
+    <Compile Include="TemplateSMS.cs" />
+    <Compile Include="ThirdParty.cs" />
+    <Compile Include="Version.cs" />
+    <Compile Include="hoteltheme.cs" />
+    <Compile Include="OtaCrawler.cs" />
+    <Compile Include="Mail.cs" />
+    <Compile Include="Weixin.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <Content Include="Config\AppSetting_Dev.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Config\Cache.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\CacheSet.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Log.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\wcf_bindings.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\wcf_client.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HJDAPI.Common\HJDAPI.Common.csproj">
+      <Project>{d48f6732-7a6f-43dd-9593-191289c021bf}</Project>
+      <Name>HJDAPI.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HJDAPI.Controllers\HJDAPI.Controllers.csproj">
+      <Project>{6143c4f3-a45d-4746-88a7-b8a14cbbb8a6}</Project>
+      <Name>HJDAPI.Controllers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HJDAPI.Models\HJDAPI.Models.csproj">
+      <Project>{6ecd133e-440c-4751-896d-975902da1ac5}</Project>
+      <Name>HJDAPI.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy HJDAPI.*.dll  ..\..\..\..\..\Library\ /s/y/f/r</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

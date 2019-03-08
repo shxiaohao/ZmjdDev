@@ -1,0 +1,323 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params.Hotel
+@using HJD.CommentService.Contract
+@model CommentInfoModel3
+@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    var cssVersion = "190001010000";
+    try
+    {
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex) { }
+
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.isInWeixin;
+    var cmid = ViewBag.CmId;
+    CommentInfoModel3 commentInfo = ViewBag.CommentInfo;
+
+    ViewBag.Title = string.Format("{0}玩点介绍_优惠价格_用户评价-{0}附近好玩_好吃美食-周末酒店", commentInfo.hotelName);
+    ViewBag.Keywords = string.Format("{0}{1}{2}点击查看更多{3}网友点评、玩点，特色、优惠价格，发现更适合你的酒店。", commentInfo.minPrice > 0 ? "参考价格￥" + commentInfo.minPrice.ToString("0") + "起，" : string.Empty, commentInfo.hotelScore > 0 ? "平均点评分" + commentInfo.hotelScore.ToString("0.0") + "分（总分5分），" : string.Empty, string.Empty, commentInfo.hotelName);
+    ViewBag.Description = string.Format("{0}玩点介绍_优惠价格_用户评价-{0}附近好玩_好吃美食", commentInfo.hotelName);
+    ViewBag.BodyClass = "share-commentdetail-page";
+
+    bool isShowWrite = UserState.UserID != 0 ? true : false;
+
+    var score = (commentInfo.commentScore == 0 ? 5 : commentInfo.commentScore);
+    string scoreStar = "~/Content/images/star2-" + score + ".png";
+
+    var hotelScore = (int)commentInfo.hotelScore;
+    string hotelScoreStar = hotelScore > 0 ? "~/Content/images/star2-" + hotelScore + ".png" : "";
+
+    //commentInfo.commentTitle = "酒店个性化服务很好";// 酒店个性化服务很好 酒店个性化服务很好 酒店个性化服务很好";
+
+    double photosHidenHeight = 0.0;
+
+    //分享配置
+    var sharePageData = ViewBag.SharePageData;
+    var busniessId = ViewBag.BusniessId;
+    var userId = ViewBag.UserId;
+    var appVersion = ViewBag.AppVersion;
+
+    //分享者信息
+    HJD.AccountServices.Entity.MemberProfileInfo shareUserInfo = ViewBag.ShareUserInfo;
+
+    //随机开放一部分用户“加入周末酒店，获得50元现金券”
+    var joinZmjd = false;
+    var rnum = new Random().Next(10000);
+    if (rnum % 2 == 0)
+    {
+        joinZmjd = true;
+    }
+    joinZmjd = true;
+}
+@section styles {
+    @Styles.Render("~/Content/css/comment/commentsharedetail.css?v=" + cssVersion)
+    @Styles.Render("~/Content/css/swiper.css")
+    <style>
+        html, body {
+            overflow-x: hidden;
+        }
+
+        .download-footbanner {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            margin: auto;
+            padding: 0;
+            vertical-align: bottom;
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2;
+        }
+
+            .download-footbanner img {
+                width: 100%;
+                vertical-align: bottom;
+            }
+    </style>
+}
+<div class="share-body">
+    <div class="share-tit-pic"><img src="http://whfront.b0.upaiyun.com/www/img/comment/sharecomment-tit-pic.png" alt="酒店即度假" /></div>
+    <div class="share-hotelname"><img src="/Content/images/comment/local.png" class="local-icon" alt="" />@commentInfo.hotelName</div>
+    <div class="share-member">
+        <img src="@Url.Content(scoreStar)" class="starimg" alt="" />
+        @if (commentInfo.isRecommend)
+        {<span class="h">推荐</span><img src="/Content/images/comment/good2.png" class="goodimg" alt="" />}
+        <span class="member">by @(commentInfo.nickName)</span>
+    </div>
+    <div class="share-photos" style="overflow:hidden;">
+        @if (commentInfo.commentPics != null && commentInfo.commentPics.Count > 0)
+        {
+            int forNum = 0;
+            int c = 0;
+
+            var pUrls = commentInfo.commentPics;
+            var pUrls2 = commentInfo.bigCommentPics; //bigCommentPics
+            var pCount = pUrls.Count; //pCount = 22;
+
+            for (int i = 0; i < pCount; i++)
+            {
+                if (c >= 4) { c = 0; forNum++; } c++;
+
+                var url = pUrls[i];
+                var url2 = pUrls2.Count > i ? pUrls2[i] : url;
+
+                var height = "11em"; if (c == 2 || c == 3) { height = "17em"; }
+
+                int topNum1 = 6 * forNum, topNum2 = 6 * forNum + 6;
+                var top = "-" + topNum1 + "em"; if (c == 3) { top = "-" + topNum2 + "em"; }
+                <div class="pic-item" style="height:@height;top:@top;background:url(@Url.Content(url2)) center no-repeat;background-size: cover"><img src="~/Content/images/transparency.png" /></div>
+
+                photosHidenHeight += (c == 1 ? 11.31 : c == 2 ? 6.31 : c == 3 ? 11.31 : 0.0);
+            }
+        }
+    </div>
+    <div style="position:relative;">
+        <div class="share-comment-tit">@commentInfo.commentTitle</div>
+        @if (!string.IsNullOrEmpty(commentInfo.commentContent))
+        {
+            <div class="share-comment-info">
+                @Html.Raw(commentInfo.commentContent)
+                @if (commentInfo.addSections != null && commentInfo.addSections.Count > 0)
+                {
+                    foreach (var item in commentInfo.addSections)
+                    {
+                        <div style="margin-top:1em;">@Html.Raw(item.Brief)</div>
+                    }
+                }
+                @if (!string.IsNullOrEmpty(commentInfo.additionalContent))
+                {
+                    <div style="margin-top:1em;">@Html.Raw(commentInfo.additionalContent)</div>
+                }
+            </div>
+            <div class="share-comment-showmore" style="display:none;" data-op="0">查看全部<span class="arrow">&or;</span></div>
+        }
+        <div class="share-member-head">
+            <div class="member-head"><img src="@(shareUserInfo.AvatarUrl)" alt="@(shareUserInfo.NickName)" /></div>
+            <div class="member-nick">@(shareUserInfo.NickName)<br />@(string.IsNullOrEmpty(shareUserInfo.NickName) ? "" : "正在用")周末酒店App</div>
+            @if (joinZmjd)
+            {
+                <div class="ad-tip">邀请您</div>
+            }
+            else
+            {
+                <div class="ad-tip">发现度假酒店口碑王</div>
+            }
+        </div>
+        <div class="share-btns">
+            @if (joinZmjd)
+            {
+                <div class="join-zmjd" onclick="testClickFun(2)" data-op="0">使用周末酒店 获得50元现金券</div>
+            }
+            else
+            {
+                <div class="download" onclick="testClickFun(1)" data-op="0">下载周末酒店APP</div>
+                <div class="signup" onclick="gourl('/inspector/explain')" data-op="0" style="display:none;">我也报名</div>
+            }
+        </div>
+        <div class="share-bottom-logo">
+            <img src="http://whfront.b0.upaiyun.com/www/img/comment/zmjd-bottom-logo.png" alt="周末酒店" />
+        </div>
+    </div>
+</div>
+<input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+<input type="hidden" id="shareuserid" value="@(shareUserInfo.UserID)" />
+@section scripts
+{
+    <script src="~/Content/js/swipe.js"></script>
+    <script src="~/Content/js/comment/commentdetail.js"></script>
+    <script>
+
+        function goto(param) {
+            var url = "@(ViewBag.AccessProtocal)" + param;
+            this.location = url;
+        }
+        function openHotel(hotelid) {
+            var isapp = $("#isapp").val() == "1";
+            if (isapp) {
+                goto('hotel/' + hotelid);
+            }
+            else {
+                location.href = "http://www.zmjiudian.com/hotel/" + hotelid;
+            }
+        }
+
+        function gourl(url) {
+            location.href = url;
+        }
+
+        function testClickFun(type) {
+            switch (type) {
+                case 1:
+                    {
+                        _hmt.push(['_trackEvent', 'ShareComment', 'downloadzmjd', "@commentInfo.hotelName" + "_CommId", "@cmid"]);
+                        gourl('/Inspector/Jump?jumpurl=whotelapp://www.zmjiudian.com/personal/comments/@cmid');
+                        break;
+                    }
+                case 2:
+                    {
+                        var sourceId = $("#shareuserid").val();
+
+                        //debugger;
+                        _hmt.push(['_trackEvent', 'ShareComment', 'joinzmjd', "@commentInfo.hotelName" + "_CommId", "@cmid"]);
+                        gourl('/Active/GenCashCouponForInvitation?sourceId=' + sourceId);
+                        break;
+                    }
+            }
+        }
+    </script>
+    <script>
+        $(".share-photos").css("height", "@(photosHidenHeight)em");
+
+        var comInfoHeight = $(".share-comment-info")[0].offsetHeight;
+        if (comInfoHeight > 150) {
+            $(".share-comment-info").addClass("share-comment-info-hidemore");
+            $(".share-comment-showmore").show();
+
+            $(".share-comment-showmore").click(function () {
+                gourl("/personal/comments/@cmid");
+
+                //var op = $(this).data("op");
+                //if (op == "0") {
+                //    $(".share-comment-info").removeClass("share-comment-info-hidemore");
+                //    $(this).html("收起<span class='arrow'>&and;</span>").data("op", "1");
+                //}
+                //else {
+                //    $(".share-comment-info").addClass("share-comment-info-hidemore");
+                //    $(this).html("查看全部<span class='arrow'>&or;</span>").data("op", "0");
+                //}
+            });
+        }
+
+    </script>
+    <script type="text/javascript">
+        var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+        document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F3566e9570ddbe6722a51adedffbf065b' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    @if (isInWeixin && commentInfo.shareModel != null)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+        <script>
+
+            GetWeixinApiConfig();//注册
+
+            wx.ready(function () {
+
+                wx.onMenuShareTimeline({
+                    title: '@commentInfo.shareModel.title',
+                    desc: '@commentInfo.shareModel.Content',
+                    link: '@commentInfo.shareModel.shareLink',
+                    imgUrl: '@(commentInfo.shareModel.photoUrl)',
+                    success: function (res) {
+                    },
+                    cancel: function (res) {
+                    }
+                });
+
+                wx.onMenuShareAppMessage({
+                    title: '@commentInfo.shareModel.title',
+                    desc: '@commentInfo.shareModel.Content',
+                    link: '@commentInfo.shareModel.shareLink',
+                    imgUrl: '@(commentInfo.shareModel.photoUrl)',
+                    success: function (res) {
+                    },
+                    cancel: function (res) {
+                    }
+                });
+
+            });
+
+            function GetWeixinApiConfig() {
+
+                var url = location.href.split("#")[0];
+                $.ajax({
+                    url: '/Coupon/GetWeixinConfigInfo',
+                    type: 'POST',
+                    data: { url: url },
+                    dataType: 'json',
+                    async: false,
+                    error: function () {
+                        console.log("网络服务错误");
+                    },
+                    success: function (result) {
+                        if (typeof (result.Success) != undefined && result.Success == 1) {
+                            return false;
+                        }
+                        else {
+                            //得到微信config的值
+                            var array = [
+                                'checkJsApi',
+                                'onMenuShareTimeline',
+                                'onMenuShareAppMessage',
+                                'hideOptionMenu'
+                            ];
+                            if (result.jsApiList) {
+                                var jsArray = result.jsApiList.split(',');
+                                for (var key in jsArray) {
+                                    array.push("" + jsArray[key]);
+                                }
+                            }
+
+                            wx.config({
+                                debug: false,
+                                appId: result.appId,
+                                timestamp: "" + result.timestamp,
+                                nonceStr: result.nonceStr,
+                                signature: result.signature,
+                                jsApiList: array
+                            });
+                        }
+                    }
+                });
+            }
+
+        </script>
+    }
+}

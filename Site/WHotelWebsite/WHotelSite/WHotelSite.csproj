@@ -1,0 +1,1467 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3E5149E9-EA93-4A08-BEF6-C0ABB9A6AB90}</ProjectGuid>
+    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WHotelSite</RootNamespace>
+    <AssemblyName>WHotelSite</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FiftyOne.Foundation">
+      <HintPath>..\packages\51Degrees.mobi.3.1.2.3\lib\NET40\FiftyOne.Foundation.dll</HintPath>
+    </Reference>
+    <Reference Include="Framework.Apollo.Client">
+      <HintPath>..\..\..\Library\Framework.Apollo.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="GeetestSDK">
+      <HintPath>..\..\..\Library\GeetestSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.AccessService.Contract">
+      <HintPath>..\..\..\Contracts\HJD.AccessService.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.AccountServices.Contracts">
+      <HintPath>..\..\..\Contracts\HJD.AccountServices.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.AccountServices.Entity">
+      <HintPath>..\..\..\Contracts\HJD.AccountServices.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.ADServices.Contract">
+      <HintPath>..\..\..\Contracts\HJD.ADServices.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.CommentService.Contract">
+      <HintPath>..\..\..\Contracts\HJD.CommentService.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.CouponService.Contracts">
+      <HintPath>..\..\..\Contracts\HJD.CouponService.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.DestServices.Contract">
+      <HintPath>..\..\..\Contracts\HJD.DestServices.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.Encrypt">
+      <HintPath>..\..\..\Library\HJD.Framework.Encrypt.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.HotelManagementCenter.Domain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Contracts\HJD.HotelManagementCenter.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.HotelPrice.Contract">
+      <HintPath>..\..\..\Contracts\HJD.HotelPrice.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.HotelServices.Contracts">
+      <HintPath>..\..\..\Contracts\HJD.HotelServices.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.OtaCrawlerService.Contract">
+      <HintPath>..\..\..\Contracts\HJD.OtaCrawlerService.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.PhotoServices.Contracts">
+      <HintPath>..\..\..\Contracts\HJD.PhotoServices.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.ProductService.Contracts">
+      <HintPath>..\..\..\Contracts\HJD.ProductService.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.WeixinService.Contract">
+      <HintPath>..\..\..\Contracts\HJD.WeixinService.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="HJDAPI.APIProxy, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\HJDAPI.APIProxy.dll</HintPath>
+    </Reference>
+    <Reference Include="HJDAPI.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\HJDAPI.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="HJDAPI.Controllers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\HJDAPI.Controllers.dll</HintPath>
+    </Reference>
+    <Reference Include="HJDAPI.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\HJDAPI.Models.dll</HintPath>
+    </Reference>
+    <Reference Include="MagiCallService.Contracts">
+      <HintPath>..\..\..\Contracts\MagiCallService.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\..\..\Library\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\..\..\Library\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\..\..\Library\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>..\..\..\Library\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="Pay, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\Pay.dll</HintPath>
+    </Reference>
+    <Reference Include="PersonalServices.Contracts">
+      <HintPath>..\..\..\Contracts\PersonalServices.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Mvc.FixedDisplayModes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.FixedDisplayModes.1.0.0\lib\net40\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.30506.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.4.0.30506.0\lib\net40\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.30506.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.30506.0\lib\net40\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.0.0\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.30506.0\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="WebMatrix.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.Data.2.0.30506.0\lib\net40\WebMatrix.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebPages.OAuth, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.OAuth.2.0.30506.0\lib\net40\Microsoft.Web.WebPages.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="WebMatrix.WebData, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.WebData.2.0.30506.0\lib\net40\WebMatrix.WebData.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.AspNet, Version=4.1.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\DotNetOpenAuth.AspNet.4.1.4.12333\lib\net45-full\DotNetOpenAuth.AspNet.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.Core, Version=4.1.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\DotNetOpenAuth.Core.4.1.4.12333\lib\net45-full\DotNetOpenAuth.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OAuth.Consumer, Version=4.1.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\DotNetOpenAuth.OAuth.Consumer.4.1.4.12333\lib\net45-full\DotNetOpenAuth.OAuth.Consumer.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OAuth, Version=4.1.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\DotNetOpenAuth.OAuth.Core.4.1.4.12333\lib\net45-full\DotNetOpenAuth.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId, Version=4.1.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\DotNetOpenAuth.OpenId.Core.4.1.4.12333\lib\net45-full\DotNetOpenAuth.OpenId.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId.RelyingParty, Version=4.1.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\DotNetOpenAuth.OpenId.RelyingParty.4.1.4.12333\lib\net45-full\DotNetOpenAuth.OpenId.RelyingParty.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.OData, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.OData.4.0.30506\lib\net40\System.Web.Http.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Edm, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Data.Edm.5.2.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Data.OData.5.2.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Spatial, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\System.Spatial.5.2.0\lib\net40\System.Spatial.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.3.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.3.0\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Adapter\CouponAdapter.cs" />
+    <Compile Include="Alipay\AlipayConfig.cs" />
+    <Compile Include="Alipay\AlipayCore.cs" />
+    <Compile Include="Alipay\AlipayNotify.cs" />
+    <Compile Include="Alipay\AlipaySubmit.cs" />
+    <Compile Include="Alipay\MD5.cs" />
+    <Compile Include="Alipay\RSA.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Common\AccountHelper.cs" />
+    <Compile Include="Common\ClientHelper.cs" />
+    <Compile Include="Common\Config.cs" />
+    <Compile Include="Common\EncryptMethod.cs" />
+    <Compile Include="Common\HotelHelper.cs" />
+    <Compile Include="Common\OrderHelper.cs" />
+    <Compile Include="Common\PayHelper.cs" />
+    <Compile Include="Common\PaymentMethod.cs" />
+    <Compile Include="Common\TimeHelper.cs" />
+    <Compile Include="Common\LogHelper.cs" />
+    <Compile Include="Common\WeiXinHelper.cs" />
+    <Compile Include="Controllers\AppController.cs" />
+    <Compile Include="Controllers\QrcodeController.cs" />
+    <Compile Include="Controllers\ChannelController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ShopController.cs" />
+    <Compile Include="Controllers\CollectionController.cs" />
+    <Compile Include="Controllers\CommentController.cs" />
+    <Compile Include="Controllers\CouponController.cs" />
+    <Compile Include="Controllers\AdController.cs" />
+    <Compile Include="Controllers\FundController.cs" />
+    <Compile Include="Controllers\MagiCallAPIController.cs" />
+    <Compile Include="Controllers\MagiCallController.cs" />
+    <Compile Include="Controllers\MailController.cs" />
+    <Compile Include="Controllers\InspectorController.cs" />
+    <Compile Include="Filters\CrossSiteAttribute.cs" />
+    <Compile Include="Filters\GlobalExceptionAttribute.cs" />
+    <Compile Include="Models\CustomerServiceHelperViewModel.cs" />
+    <Compile Include="Models\CityListEntity.cs" />
+    <Compile Include="Models\MagiCallClientViewModel.cs" />
+    <Compile Include="Models\MagiCallUserInfo.cs" />
+    <Compile Include="Models\PayOrderInfoEntity.cs" />
+    <Compile Include="Models\WeixinUserInfo.cs" />
+    <Compile Include="Models\AppDownloadViewModel.cs" />
+    <Compile Include="Models\CommentTagAddInfo.cs" />
+    <Compile Include="Models\GotoURLModel.cs" />
+    <Compile Include="Models\WeixinAccessToken.cs" />
+    <Compile Include="Params\Inspector.cs" />
+    <Compile Include="ViewModels\CommentViewModel.cs" />
+    <Compile Include="ViewModels\PersonalInfo.cs" />
+    <Compile Include="ViewReturnValueHelper.cs" />
+    <Content Include="App_Code\UrlHelperExtension.cs" />
+    <Compile Include="App_Start\AuthConfig.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ActiveController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\PaymentController.cs" />
+    <Compile Include="Mapper.cs" />
+    <Compile Include="Controllers\HotelController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Models\HotelModel.cs" />
+    <Compile Include="Models\HotPackageModel.cs" />
+    <Compile Include="Models\InterestModel.cs" />
+    <Compile Include="Params\Comment.cs" />
+    <Compile Include="Params\Order.cs" />
+    <Compile Include="UserState.cs" />
+    <Compile Include="ViewModels\SearchListViewModel.cs" />
+    <Compile Include="Models\SightCategoryModel.cs" />
+    <Compile Include="Models\SimpleDistrictModel.cs" />
+    <Compile Include="Models\DistrictSuggestModel.cs" />
+    <Compile Include="Params\Hotel.cs" />
+    <Compile Include="Params\ParamBase.cs" />
+    <Compile Include="Controllers\PortalController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Params\Payment.cs" />
+    <Compile Include="Params\Portal.cs" />
+    <Compile Include="Params\Account.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="ViewModels\InterestListSelectViewModel.cs" />
+    <Compile Include="ViewModels\HomeViewModel.cs" />
+    <Compile Include="ViewModels\InterestListViewModel.cs" />
+    <Content Include="Content\css\acount\IdentifyCode.css" />
+    <Content Include="Content\css\acount\invitebuyvip.css" />
+    <Content Include="Content\css\acount\invitefriend.css" />
+    <Content Include="Content\css\acount\wxmenutransfer.css" />
+    <Content Include="Content\css\acount\viprights.css" />
+    <Content Include="Content\css\active\genvipforinvitation.css" />
+    <Content Include="Content\css\active\productalbumactive.css" />
+    <Content Include="Content\css\active\redpackunionshare.css" />
+    <Content Include="Content\css\active\redpackunionhome.css" />
+    <Content Include="Content\css\active\supervoteluckrecord.css" />
+    <Content Include="Content\css\active\supervoteuserreg.css" />
+    <Content Include="Content\css\active\supervoteuser.css" />
+    <Content Include="Content\css\active\supervoteitem.css" />
+    <Content Include="Content\css\active\supervote.css" />
+    <Content Include="Content\css\active\voteresult.css" />
+    <Content Include="Content\css\active\vipactiveforgift.css" />
+    <Content Include="Content\css\active\gencashcouponforinvitation.css" />
+    <Content Include="Content\css\active\smsforweixinuser.css" />
+    <Content Include="Content\css\active\weixinactive_hotellist.css" />
+    <Content Include="Content\css\app\AlbumGroup.css" />
+    <Content Include="Content\css\app\order.css" />
+    <Content Include="Content\css\app\search.css" />
+    <Content Include="Content\css\app\around.css" />
+    <Content Include="Content\css\app\well.css" />
+    <Content Include="Content\css\channel\applypartner.css" />
+    <Content Include="Content\css\channel\partners.css" />
+    <Content Include="Content\css\channel\shopdetail.css" />
+    <Content Include="Content\css\coupon\albumproductinfo.css" />
+    <Content Include="Content\css\coupon\exchangecouponsearchandbook.css" />
+    <Content Include="Content\css\coupon\couponsales.css" />
+    <Content Include="Content\css\coupon\orderlistforsupplier.css" />
+    <Content Include="Content\css\coupon\couponreserve.css" />
+    <Content Include="Content\css\coupon\couponbook.css" />
+    <Content Include="Content\css\coupon\couponshopforstepgroup.css" />
+    <Content Include="Content\css\coupon\groupproductfortree.css" />
+    <Content Include="Content\css\coupon\couponshopforgroupproduct.css" />
+    <Content Include="Content\css\coupon\couponshopforproduct.css" />
+    <Content Include="Content\css\coupon\exchangepackages.css" />
+    <Content Include="Content\css\coupon\couponshopforfruitday.css" />
+    <Content Include="Content\css\coupon\flyerbuild.css" />
+    <Content Include="Content\css\coupon\exchangepackage.css" />
+    <Content Include="Content\css\coupon\couponactivecenter.css" />
+    <Content Include="Content\css\coupon\paycompleteinvoice.css" />
+    <Content Include="Content\css\coupon\redcashcouponlist.css" />
+    <Content Include="Content\css\coupon\walletvoucher.css" />
+    <Content Include="Content\css\coupon\walletcashcoupon.css" />
+    <Content Include="Content\css\coupon\moreproductlist.css" />
+    <Content Include="Content\css\coupon\paycompleteforfruitday.css" />
+    <Content Include="Content\css\coupon\redcashcoupon.css" />
+    <Content Include="Content\css\coupon\redcashcouponresult.css" />
+    <Content Include="Content\css\coupon\vipareainfo.css" />
+    <Content Include="Content\css\coupon\vipshopinfo.css" />
+    <Content Include="Content\css\coupon\wallet_productcoupon.css" />
+    <Content Include="Content\css\coupon\wallet_roomcoupon.css" />
+    <Content Include="Content\css\framework\barrager.css" />
+    <Content Include="Content\css\framework\zmjd.modal.min.css" />
+    <Content Include="Content\css\framework\zmjd.modal.css" />
+    <Content Include="Content\css\framework\iscroll.css" />
+    <Content Include="Content\css\framework\zmjd.picker.css" />
+    <Content Include="Content\css\framework\zmjd.picker.min.css" />
+    <Content Include="Content\css\framework\zmjd.refresh.css" />
+    <Content Include="Content\css\framework\zmjd.swiper.min.css" />
+    <Content Include="Content\css\hotel\collectionpackageforholiday.css" />
+    <Content Include="Content\css\hotel\detail.css" />
+    <Content Include="Content\css\hotel\list.css" />
+    <Content Include="Content\css\login.min.css" />
+    <Content Include="Content\css\order\couponorderdetail.css" />
+    <Content Include="Content\css\order\detail.css" />
+    <Content Include="Content\css\order\list.css" />
+    <Content Include="Content\css\order\allorders.css" />
+    <Content Include="Content\css\order\openinvoice.css" />
+    <Content Include="Content\css\payment\complete.css" />
+    <Content Include="Content\css\product\packagebook.css" />
+    <Content Include="Content\css\product\packageconfirm.css" />
+    <Content Include="Content\css\product\packageproduct.css" />
+    <Content Include="Content\css\Shop\coupon.css" />
+    <Content Include="Content\css\Shop\shoplogin.css" />
+    <Content Include="Content\fonts\zmjd.eot" />
+    <Content Include="Content\fonts\zmjd.ttf" />
+    <Content Include="Content\fonts\zmjd.woff" />
+    <Content Include="Content\images\download-footbanner_noclose.png" />
+    <Content Include="Content\images\hotel\radio_btn_normal.png" />
+    <Content Include="Content\images\hotel\radio_btn_select.png" />
+    <Content Include="Content\images\img_hongbao.png" />
+    <Content Include="Content\images\img_hongbao_1.jpg" />
+    <Content Include="Content\images\img_hongbao_2.jpg" />
+    <Content Include="Content\images\seat\home-hotel-load-16x9.png" />
+    <Content Include="Content\images\seat\home-hotel-load-1x1.png" />
+    <Content Include="Content\images\seat\img-home-seat-banner2.png" />
+    <Content Include="Content\images\seat\img-theme-list-seat.png" />
+    <Content Include="Content\images\seat\img-viparea-item-3x2.png" />
+    <Content Include="Content\images\seat\img-viparea-seat-list.png" />
+    <Content Include="Content\images\seat\seat-def-slide.png" />
+    <Content Include="Content\images\seat\seat-double-table.png" />
+    <Content Include="Content\js\acount\IdentifyCode.js" />
+    <Content Include="Content\js\acount\invitebuyvip.js" />
+    <Content Include="Content\js\acount\invitefriend.js" />
+    <Content Include="Content\js\active\genvipforinvitation.js" />
+    <Content Include="Content\js\active\productalbumactive.js" />
+    <Content Include="Content\js\active\redpackunionshare.js" />
+    <Content Include="Content\js\active\redpackunionhome.js" />
+    <Content Include="Content\js\active\supervoteluckrecord.js" />
+    <Content Include="Content\js\active\supervoteuserreg.js" />
+    <Content Include="Content\js\active\supervoteuser.js" />
+    <Content Include="Content\js\active\supervoteitem.js" />
+    <Content Include="Content\js\active\supervote.js" />
+    <Content Include="Content\js\active\voteresult.js" />
+    <Content Include="Content\js\active\vipactiveforgift.js" />
+    <Content Include="Content\js\active\holiday.js" />
+    <Content Include="Content\js\app\AlbumGroup.js" />
+    <Content Include="Content\js\app\order.js" />
+    <Content Include="Content\js\app\around.js" />
+    <Content Include="Content\js\channel\applypartner.js" />
+    <Content Include="Content\js\channel\partners.js" />
+    <Content Include="Content\js\channel\shopdetail.js" />
+    <Content Include="Content\js\coupon\albumproductinfo.js" />
+    <Content Include="Content\js\coupon\exchangecouponsearchandbook.js" />
+    <Content Include="Content\js\coupon\couponsales.js" />
+    <Content Include="Content\js\coupon\orderlistforsupplier.js" />
+    <Content Include="Content\js\coupon\couponreserve.js" />
+    <Content Include="Content\js\coupon\couponbook.js" />
+    <Content Include="Content\js\coupon\couponshopforstepgroup.js" />
+    <Content Include="Content\js\coupon\groupproductfortree.js" />
+    <Content Include="Content\js\coupon\couponshopforgroupproduct.js" />
+    <Content Include="Content\js\coupon\couponactivecenter.js" />
+    <Content Include="Content\js\coupon\moreproductlist.js" />
+    <Content Include="Content\js\coupon\redcashcoupon.js" />
+    <Content Include="Content\js\coupon\redcashcouponlist.js" />
+    <Content Include="Content\js\coupon\redcashcouponresult.js" />
+    <Content Include="Content\js\coupon\vipareainfo.js" />
+    <Content Include="Content\js\coupon\vipshopinfo.js" />
+    <Content Include="Content\js\coupon\walletvoucher.js" />
+    <Content Include="Content\js\coupon\walletcashcoupon.js" />
+    <Content Include="Content\js\framework\html2canvas.js" />
+    <Content Include="Content\js\framework\html2canvas.min.js" />
+    <Content Include="Content\js\framework\jquery.barrager.js" />
+    <Content Include="Content\js\framework\jquery.barrager.min.js" />
+    <Content Include="Content\js\framework\picker\package.json" />
+    <None Include="Content\scss\app\aboutapp.scss" />
+    <None Include="Content\scss\app\citymenu.scss" />
+    <None Include="Content\scss\app\discountcollection.scss" />
+    <None Include="Content\scss\app\find.scss" />
+    <None Include="Content\scss\app\home.scss" />
+    <None Include="Content\scss\app\home2.scss" />
+    <None Include="Content\scss\app\hotpackage.scss" />
+    <None Include="Content\scss\app\morepackagelist.scss" />
+    <None Include="Content\scss\app\reccomments.scss" />
+    <None Include="Content\scss\app\searchhotel.scss" />
+    <None Include="Content\scss\app\themelist.scss" />
+    <None Include="Content\scss\coupon\couponexchange.scss" />
+    <None Include="Content\scss\coupon\couponshop.scss" />
+    <None Include="Content\scss\coupon\couponshopforgroup.scss" />
+    <None Include="Content\scss\coupon\couponshopforvip.scss" />
+    <None Include="Content\scss\coupon\couponshopforvip2.scss" />
+    <None Include="Content\scss\coupon\couponshoplist.scss" />
+    <None Include="Content\scss\coupon\couponshoplist1212.scss" />
+    <None Include="Content\scss\coupon\paycomplete.scss" />
+    <None Include="Content\scss\coupon\paycompleteforvip.scss" />
+    <None Include="Content\scss\coupon\vipcartlist.scss" />
+    <None Include="Content\scss\coupon\wallet.scss" />
+    <Content Include="Content\css\framework\util.css" />
+    <Content Include="Content\fonts\zmjd.css" />
+    <Content Include="Content\fonts\zmjd.svg" />
+    <Content Include="Content\images\seat\img-find-seat-comment.png" />
+    <Content Include="Content\images\seat\img-find-seat-theme.png" />
+    <Content Include="Content\images\seat\img-home-seat-slider.png" />
+    <Content Include="Content\images\seat\img-home-seat-slider1031.png" />
+    <Content Include="Content\images\seat\img-home-seat-slider2.png" />
+    <Content Include="Content\images\seat\img-hotellist-seat-slider.png" />
+    <Content Include="Content\js\acount\wxmenutransfer.js" />
+    <Content Include="Content\js\active\gencashcouponforinvitation.js" />
+    <Content Include="Content\js\active\smsforweixinuser.js" />
+    <Content Include="Content\js\active\weixinactive_hotellist.js" />
+    <Content Include="Content\js\app\search.js" />
+    <Content Include="Content\js\app\well.js" />
+    <Content Include="Content\js\coupon\couponshopforproduct.js" />
+    <Content Include="Content\js\coupon\exchangepackages.js" />
+    <Content Include="Content\js\coupon\couponshopforfruitday.js" />
+    <Content Include="Content\js\coupon\flyerbuild.js" />
+    <Content Include="Content\js\coupon\exchangepackage.js" />
+    <Content Include="Content\js\coupon\paycompleteforfruitday.js" />
+    <Content Include="Content\js\framework\iscroll.js" />
+    <Content Include="Content\js\framework\picker\css\mui.dtpicker.css" />
+    <Content Include="Content\js\framework\picker\css\mui.picker.css" />
+    <Content Include="Content\js\framework\picker\css\mui.poppicker.css" />
+    <Content Include="Content\js\framework\picker\dist\css\mui.picker.all.css" />
+    <Content Include="Content\js\framework\picker\dist\css\mui.picker.min.css" />
+    <Content Include="Content\js\framework\picker\dist\js\mui.picker.all.js" />
+    <Content Include="Content\js\framework\picker\dist\js\mui.picker.min.js" />
+    <Content Include="Content\js\framework\picker\gulpfile.js" />
+    <Content Include="Content\js\framework\picker\js\mui.dtpicker.js" />
+    <Content Include="Content\js\framework\picker\js\mui.picker.js" />
+    <Content Include="Content\js\framework\picker\js\mui.poppicker.js" />
+    <Content Include="Content\js\framework\zmjd.statistic.min.js" />
+    <Content Include="Content\js\framework\zmjd.statistic.js" />
+    <Content Include="Content\js\framework\zmjd.modal.min.js" />
+    <Content Include="Content\js\framework\zmjd.modal.js" />
+    <Content Include="Content\js\framework\zmjd.picker.js" />
+    <Content Include="Content\js\framework\zmjd.picker.min.js" />
+    <Content Include="Content\js\framework\zmjd.qrcode.min.js" />
+    <Content Include="Content\js\framework\zmjd.refresh.js" />
+    <Content Include="Content\js\framework\zmjd.swiper.min.js" />
+    <Content Include="Content\js\framework\config.js" />
+    <Content Include="Content\js\geetest\gt.js" />
+    <Content Include="Content\js\login.min.js" />
+    <Content Include="Content\js\order\couponorderdetail.js" />
+    <Content Include="Content\js\order\allorders.js" />
+    <Content Include="Content\js\order\openinvoice.js" />
+    <Content Include="Content\js\payment\complete.js" />
+    <Content Include="Content\js\product\packagebook.js" />
+    <Content Include="Content\js\product\packageconfirm.js" />
+    <Content Include="Content\js\product\packageproduct.js" />
+    <Content Include="Content\js\Shop\Coupon.js" />
+    <Content Include="Content\js\Shop\Shop.js" />
+    <Content Include="WebIM\demo.html" />
+    <Content Include="WebIM\easemob.js" />
+    <Content Include="WebIM\gulpfile.js" />
+    <Content Include="WebIM\im.html" />
+    <Content Include="WebIM\static\css\font\iconfont.css" />
+    <Content Include="WebIM\static\css\font\iconfont.svg" />
+    <Content Include="WebIM\static\css\im.css" />
+    <Content Include="WebIM\static\css\src\im.css" />
+    <Content Include="WebIM\static\css\src\whim.css" />
+    <Content Include="WebIM\static\css\whim.css" />
+    <Content Include="WebIM\static\img\avatar2.png" />
+    <Content Include="WebIM\static\img\default_avatar.png" />
+    <Content Include="WebIM\static\img\drag.png" />
+    <Content Include="WebIM\static\img\faces\ee_1.png" />
+    <Content Include="WebIM\static\img\faces\ee_10.png" />
+    <Content Include="WebIM\static\img\faces\ee_11.png" />
+    <Content Include="WebIM\static\img\faces\ee_12.png" />
+    <Content Include="WebIM\static\img\faces\ee_13.png" />
+    <Content Include="WebIM\static\img\faces\ee_14.png" />
+    <Content Include="WebIM\static\img\faces\ee_15.png" />
+    <Content Include="WebIM\static\img\faces\ee_16.png" />
+    <Content Include="WebIM\static\img\faces\ee_17.png" />
+    <Content Include="WebIM\static\img\faces\ee_18.png" />
+    <Content Include="WebIM\static\img\faces\ee_19.png" />
+    <Content Include="WebIM\static\img\faces\ee_2.png" />
+    <Content Include="WebIM\static\img\faces\ee_20.png" />
+    <Content Include="WebIM\static\img\faces\ee_21.png" />
+    <Content Include="WebIM\static\img\faces\ee_22.png" />
+    <Content Include="WebIM\static\img\faces\ee_23.png" />
+    <Content Include="WebIM\static\img\faces\ee_24.png" />
+    <Content Include="WebIM\static\img\faces\ee_25.png" />
+    <Content Include="WebIM\static\img\faces\ee_26.png" />
+    <Content Include="WebIM\static\img\faces\ee_27.png" />
+    <Content Include="WebIM\static\img\faces\ee_28.png" />
+    <Content Include="WebIM\static\img\faces\ee_29.png" />
+    <Content Include="WebIM\static\img\faces\ee_3.png" />
+    <Content Include="WebIM\static\img\faces\ee_30.png" />
+    <Content Include="WebIM\static\img\faces\ee_31.png" />
+    <Content Include="WebIM\static\img\faces\ee_32.png" />
+    <Content Include="WebIM\static\img\faces\ee_33.png" />
+    <Content Include="WebIM\static\img\faces\ee_34.png" />
+    <Content Include="WebIM\static\img\faces\ee_35.png" />
+    <Content Include="WebIM\static\img\faces\ee_4.png" />
+    <Content Include="WebIM\static\img\faces\ee_5.png" />
+    <Content Include="WebIM\static\img\faces\ee_6.png" />
+    <Content Include="WebIM\static\img\faces\ee_7.png" />
+    <Content Include="WebIM\static\img\faces\ee_8.png" />
+    <Content Include="WebIM\static\img\faces\ee_9.png" />
+    <Content Include="WebIM\static\img\file_download.png" />
+    <Content Include="WebIM\static\img\loading.gif" />
+    <Content Include="WebIM\static\img\map%402x.png" />
+    <Content Include="WebIM\static\img\map.png" />
+    <Content Include="WebIM\static\img\notify.png" />
+    <Content Include="WebIM\static\js\em-open.js" />
+    <Content Include="WebIM\static\js\em-transfer.js" />
+    <Content Include="WebIM\static\js\main.js" />
+    <Content Include="WebIM\static\js\src\easemob.js" />
+    <Content Include="WebIM\static\js\src\main.js" />
+    <Content Include="WebIM\static\js\src\modules\ajax.js" />
+    <Content Include="WebIM\static\js\src\modules\api.js" />
+    <Content Include="WebIM\static\js\src\modules\autogrow.js" />
+    <Content Include="WebIM\static\js\src\modules\chat.js" />
+    <Content Include="WebIM\static\js\src\modules\common.js" />
+    <Content Include="WebIM\static\js\src\modules\const.js" />
+    <Content Include="WebIM\static\js\src\modules\eventsEnum.js" />
+    <Content Include="WebIM\static\js\src\modules\iframe.js" />
+    <Content Include="WebIM\static\js\src\modules\imgview.js" />
+    <Content Include="WebIM\static\js\src\modules\leaveMessage.js" />
+    <Content Include="WebIM\static\js\src\modules\message.js" />
+    <Content Include="WebIM\static\js\src\modules\notify.js" />
+    <Content Include="WebIM\static\js\src\modules\paste.js" />
+    <Content Include="WebIM\static\js\src\modules\satisfaction.js" />
+    <Content Include="WebIM\static\js\src\modules\site.js" />
+    <Content Include="WebIM\static\js\src\modules\titleSlide.js" />
+    <Content Include="WebIM\static\js\src\modules\transfer.js" />
+    <Content Include="WebIM\static\js\src\modules\uploadShim.js" />
+    <Content Include="WebIM\static\js\src\modules\utils.js" />
+    <Content Include="WebIM\static\js\src\modules\wechat.js" />
+    <Content Include="WebIM\static\js\src\modules\whchat.js" />
+    <Content Include="WebIM\static\js\src\sdk\easemob.im-1.0.8.js" />
+    <Content Include="WebIM\static\js\src\sdk\easemob.im-1.1.1.js" />
+    <Content Include="WebIM\static\js\src\sdk\strophe.js" />
+    <Content Include="WebIM\static\js\swfupload.swf" />
+    <Content Include="WebIM\static\js\swfupload\swfupload.cookie.js" />
+    <Content Include="WebIM\static\js\swfupload\swfupload.min.js" />
+    <Content Include="WebIM\static\js\swfupload\swfupload.swf" />
+    <Content Include="WebIM\static\mp3\msg.m4a" />
+    <Content Include="WebIM\static\mp3\msg.mp3" />
+    <Content Include="WebIM\static\tpl\im.html" />
+    <Content Include="WebIM\ReadMe.txt" />
+    <Content Include="WebIM\transfer.html" />
+    <Content Include="Views\Active\Weixin_LuckActive_HotelList.cshtml" />
+    <Content Include="Views\Active\GetRedPackets.cshtml" />
+    <Content Include="Views\Coupon\VipShopInfo.cshtml" />
+    <Content Include="Views\Account\VipRights.cshtml" />
+    <Content Include="Views\Active\SmsForWeixinUser.cshtml" />
+    <Content Include="Views\Account\WxMenuTransfer.cshtml" />
+    <Content Include="Views\Active\GenCashCouponForInvitation.cshtml" />
+    <Content Include="Views\App\Well.cshtml" />
+    <Content Include="Views\Hotel\Book.cshtml" />
+    <Content Include="Views\Hotel\CollectionHotel.cshtml" />
+    <Content Include="Views\Hotel\CollectionPackage.cshtml" />
+    <Content Include="Views\Hotel\CollectionPackageForHoliday.cshtml" />
+    <Content Include="Views\Hotel\Detail.cshtml" />
+    <Content Include="Views\Hotel\List.cshtml" />
+    <Content Include="Views\Hotel\List2.cshtml" />
+    <Content Include="Views\Hotel\ListContent.cshtml" />
+    <Content Include="Views\Hotel\ListContent2.cshtml" />
+    <Content Include="Views\Hotel\ListMobile.cshtml" />
+    <Content Include="Views\Hotel\ListMobileContent.cshtml" />
+    <Content Include="Views\Hotel\ListZoneMobile.cshtml" />
+    <Content Include="Views\Hotel\Map.cshtml" />
+    <Content Include="Views\Hotel\OtaTransfer.cshtml" />
+    <Content Include="Views\Hotel\Package.cshtml" />
+    <Content Include="Views\Hotel\PackageContent.cshtml" />
+    <Content Include="Views\Hotel\Packages.cshtml" />
+    <Content Include="Views\Hotel\Photos.cshtml" />
+    <Content Include="Views\Hotel\Reviews.cshtml" />
+    <Content Include="Views\Hotel\ReviewsContent.cshtml" />
+    <Content Include="Views\Hotel\Strategy.cshtml" />
+    <Content Include="Views\Hotel\Transfer.cshtml" />
+    <Content Include="Views\Coupon\FlyerBuild.cshtml" />
+    <Content Include="Views\Coupon\CouponShopForFruitDay.cshtml" />
+    <Content Include="Views\Coupon\PayCompleteForFruitDay.cshtml" />
+    <Content Include="Views\App\Search.cshtml" />
+    <Content Include="Views\Coupon\ExchangePackages.cshtml" />
+    <Content Include="Views\Coupon\ExchangePackageContent.cshtml" />
+    <Content Include="Views\Coupon\ExchangePackage.cshtml" />
+    <Content Include="Views\Coupon\CouponShopForProduct.cshtml" />
+    <Content Include="Views\Shop\Coupon.cshtml" />
+    <Content Include="Views\Shop\ShopLogin.cshtml" />
+    <Content Include="Views\Coupon\CouponShopForProductContent.cshtml" />
+    <Content Include="Views\Coupon\CouponShopForGroupProduct.cshtml" />
+    <Content Include="Views\Coupon\RedCashCoupon.cshtml" />
+    <Content Include="Views\Coupon\RedCashCouponResult.cshtml" />
+    <Content Include="Views\Coupon\RedNonExistent.cshtml" />
+    <Content Include="Views\Coupon\MoreProductList.cshtml" />
+    <Content Include="Views\Coupon\MoreProduct_SKU.cshtml" />
+    <Content Include="Views\Product\PackageProduct.cshtml" />
+    <Content Include="Views\Product\PackageConfirm.cshtml" />
+    <Content Include="Views\Product\PackageBook.cshtml" />
+    <Content Include="Views\Active\GenVipForInvitation.cshtml" />
+    <Content Include="Views\Active\VipActiveForGift.cshtml" />
+    <Content Include="Views\Channel\ShopDetail.cshtml" />
+    <Content Include="Views\Account\IdentifyCode.cshtml" />
+    <Content Include="Views\Coupon\VipAreaInfo.cshtml" />
+    <Content Include="Views\Coupon\CouponReserve.cshtml" />
+    <Content Include="Views\Coupon\GroupProductForTree.cshtml" />
+    <Content Include="Views\Coupon\CouponBook.cshtml" />
+    <Content Include="Views\Coupon\WalletCashCoupon.cshtml" />
+    <Content Include="Views\Coupon\WalletVoucher.cshtml" />
+    <Content Include="Views\MagiCall\MagiCallClientTestVisitor.cshtml" />
+    <Content Include="Views\Account\InviteFriend.cshtml" />
+    <Content Include="Views\Account\InviteBuyVip.cshtml" />
+    <Content Include="Views\App\Order.cshtml" />
+    <Content Include="Views\App\Around.cshtml" />
+    <Content Include="Views\Active\RedpackUnionHome.cshtml" />
+    <Content Include="Views\Active\RedpackUnionShare.cshtml" />
+    <Content Include="Views\Order\AllOrders.cshtml" />
+    <Content Include="Views\Channel\Partners.cshtml" />
+    <Content Include="Views\Channel\ApplyPartner.cshtml" />
+    <Content Include="Views\App\AlbumGroup.cshtml" />
+    <Content Include="Views\Active\ProductAlbumActive.cshtml" />
+    <Content Include="Views\Coupon\AlbumProductInfo.cshtml" />
+    <Content Include="Views\Coupon\CouponShopForStepGroup.cshtml" />
+    <Content Include="Views\Shared\_LayoutLite.cshtml" />
+    <Content Include="Views\Coupon\CouponActiveCenter.cshtml" />
+    <Content Include="Views\Order\CouponOrderDetail.cshtml" />
+    <Content Include="Views\Qrcode\Entrance.cshtml" />
+    <Content Include="Views\Coupon\OrderListForSupplier.cshtml" />
+    <Content Include="Views\Coupon\RedCashCouponList.cshtml" />
+    <Content Include="Views\Active\VoteResult.cshtml" />
+    <Content Include="Views\Coupon\PayCompleteInvoice.cshtml" />
+    <Content Include="Views\Coupon\ExchangeCouponSearchAndBook.cshtml" />
+    <Content Include="Views\Account\WxAccountInfo.cshtml" />
+    <Content Include="Views\Active\SuperVote.cshtml" />
+    <Content Include="Views\Active\SuperVoteItem.cshtml" />
+    <Content Include="Views\Active\SuperVoteUserReg.cshtml" />
+    <Content Include="Views\Active\SuperVoteUser.cshtml" />
+    <Content Include="Views\Coupon\PayCompleteInvoice.cshtml" />
+    <Content Include="Views\Active\SuperVoteLuckRecord.cshtml" />
+    <Content Include="Views\Active\SuperVoteEnd.cshtml" />
+    <Content Include="Views\Coupon\CouponSales.cshtml" />
+    <Content Include="Views\Order\OpenInvoice.cshtml" />
+    <Content Include="Views\Active\HolidayContent.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\css\acount\usertag.css" />
+    <Content Include="Content\css\activepage.css" />
+    <Content Include="Content\css\activepageie.css" />
+    <Content Include="Content\css\active\customactive.css" />
+    <Content Include="Content\css\active\gencashcoupon-ex.css" />
+    <Content Include="Content\css\active\gencashcoupon.css" />
+    <Content Include="Content\css\active\weixinactive_luck.css" />
+    <Content Include="Content\css\active\weixinactive_signup.css" />
+    <Content Include="Content\css\active\toptuijian.css" />
+    <Content Include="Content\css\adbanner.css" />
+    <Content Include="Content\css\ad\adbox.css" />
+    <Content Include="Content\css\app\citymenu.css" />
+    <Content Include="Content\css\app\discountcollection.css" />
+    <Content Include="Content\css\app\morepackagelist.css" />
+    <Content Include="Content\css\app\aboutapp.css" />
+    <Content Include="Content\css\app\themelist.css" />
+    <Content Include="Content\css\app\find.css" />
+    <Content Include="Content\css\app\home.css" />
+    <Content Include="Content\css\app\searchhotel.css" />
+    <Content Include="Content\css\app\home2.css" />
+    <Content Include="Content\css\app\hotpackage.css" />
+    <Content Include="Content\css\app\reccomments.css" />
+    <Content Include="Content\css\bootstrap-theme.css" />
+    <Content Include="Content\css\bootstrap-theme.min.css" />
+    <Content Include="Content\css\bootstrap.css" />
+    <Content Include="Content\css\bootstrap.min.css" />
+    <Content Include="Content\css\login.css" />
+    <Content Include="Content\css\calendar_price.css" />
+    <Content Include="Content\css\calendar.css" />
+    <Content Include="Content\css\cash_list_reset.css" />
+    <Content Include="Content\css\comment\commentsharedetail.css" />
+    <Content Include="Content\css\comment\commentdetail.css" />
+    <Content Include="Content\css\comment\commentsubcompleted.css" />
+    <Content Include="Content\css\comment\commentrules.css" />
+    <Content Include="Content\css\coupon\couponexchange.css" />
+    <Content Include="Content\css\coupon\vipcartlist.css" />
+    <Content Include="Content\css\coupon\couponshopforvip2.css" />
+    <Content Include="Content\css\coupon\couponshopforvip.css" />
+    <Content Include="Content\css\coupon\couponshopforgroup.css" />
+    <Content Include="Content\css\coupon\couponshoplist1212.css" />
+    <Content Include="Content\css\coupon\couponshoplist.css" />
+    <Content Include="Content\css\coupon\paycompleteforvip.css" />
+    <Content Include="Content\css\coupon\paycomplete.css" />
+    <Content Include="Content\css\coupon\couponshop.css" />
+    <Content Include="Content\css\coupon\wallet.css" />
+    <Content Include="Content\css\css_2.css" />
+    <Content Include="Content\css\css_cash_list_5.css" />
+    <Content Include="Content\css\css_chaikaihongbao6.css" />
+    <Content Include="Content\css\css_chaikaihongbao60.css" />
+    <Content Include="Content\css\css_chaikaihongbao7.css" />
+    <Content Include="Content\css\css_hongbao.css" />
+    <Content Include="Content\css\css_shuoming.css" />
+    <Content Include="Content\css\framework\amazeui.min.css" />
+    <Content Include="Content\css\framework\mui.css" />
+    <Content Include="Content\css\framework\mui.min.css" />
+    <Content Include="Content\css\framework\scrolldate\scrolldate.css" />
+    <Content Include="Content\css\framework\scrolldate\scrolldate.min.css" />
+    <Content Include="Content\css\fund\recommendrule.css" />
+    <Content Include="Content\css\fund\userrecommend2.css" />
+    <Content Include="Content\css\fund\userrecommend.css" />
+    <Content Include="Content\css\hotel\book.css" />
+    <Content Include="Content\css\hotel\collection.css" />
+    <Content Include="Content\css\hotel\packages.css" />
+    <Content Include="Content\css\hotel\package.css" />
+    <Content Include="Content\css\inspector\explain.css" />
+    <Content Include="Content\css\inspector\jump.css" />
+    <Content Include="Content\css\inspector\hotel.css" />
+    <Content Include="Content\css\magicall\kfuserbind.css" />
+    <Content Include="Content\css\mail\mail.css" />
+    <Content Include="Content\css\order\pay.css" />
+    <Content Include="Content\css\photoswipe.css" />
+    <Content Include="Content\css\reset.css" />
+    <Content Include="Content\css\otatransfer.css" />
+    <Content Include="Content\css\swiper.css" />
+    <Content Include="Content\css\tehui.css" />
+    <Content Include="Content\css\xsth.css" />
+    <Content Include="Content\css\strategy.css" />
+    <Content Include="Content\css\yuandan.css" />
+    <Content Include="Content\css\zmjiudian-list.css" />
+    <Content Include="Content\css\zmjiudian-ex.css" />
+    <Content Include="Content\css\zmjiudian.css" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\images\404.png" />
+    <Content Include="Content\images\aarow.png" />
+    <Content Include="Content\images\active\top20hotel\banner.png" />
+    <Content Include="Content\images\active\top20hotel\item-bottom.png" />
+    <Content Include="Content\images\active\top20hotel\item-head.png" />
+    <Content Include="Content\images\active\top20hotel\item-mid.png" />
+    <Content Include="Content\images\active\top20hotel\item-no-list-25.png" />
+    <Content Include="Content\images\active\top20hotel\item-no-list.png" />
+    <Content Include="Content\images\active\top20hotel\item-no-list2.png" />
+    <Content Include="Content\images\active\top20hotel\logotxt.png" />
+    <Content Include="Content\images\active\top20hotel\main-tit-25.png" />
+    <Content Include="Content\images\active\top20hotel\main-tit.png" />
+    <Content Include="Content\images\active\top20hotel\no-1.png" />
+    <Content Include="Content\images\active\top20hotel\no-10.png" />
+    <Content Include="Content\images\active\top20hotel\no-11.png" />
+    <Content Include="Content\images\active\top20hotel\no-12.png" />
+    <Content Include="Content\images\active\top20hotel\no-13.png" />
+    <Content Include="Content\images\active\top20hotel\no-14.png" />
+    <Content Include="Content\images\active\top20hotel\no-15.png" />
+    <Content Include="Content\images\active\top20hotel\no-16.png" />
+    <Content Include="Content\images\active\top20hotel\no-17.png" />
+    <Content Include="Content\images\active\top20hotel\no-18.png" />
+    <Content Include="Content\images\active\top20hotel\no-19.png" />
+    <Content Include="Content\images\active\top20hotel\no-2.png" />
+    <Content Include="Content\images\active\top20hotel\no-20.png" />
+    <Content Include="Content\images\active\top20hotel\no-3.png" />
+    <Content Include="Content\images\active\top20hotel\no-4.png" />
+    <Content Include="Content\images\active\top20hotel\no-5.png" />
+    <Content Include="Content\images\active\top20hotel\no-6.png" />
+    <Content Include="Content\images\active\top20hotel\no-7.png" />
+    <Content Include="Content\images\active\top20hotel\no-8.png" />
+    <Content Include="Content\images\active\top20hotel\no-9.png" />
+    <Content Include="Content\images\active\top20hotel\top-bg.png" />
+    <Content Include="Content\images\adbg.png" />
+    <Content Include="Content\images\addpic.png" />
+    <Content Include="Content\images\bg-icon-notice.png" />
+    <Content Include="Content\images\bg2.png" />
+    <Content Include="Content\images\browserTip.png" />
+    <Content Include="Content\images\beijing.jpg" />
+    <Content Include="Content\images\browserTipOpen.png" />
+    <Content Include="Content\images\browserTipOpenPay.png" />
+    <Content Include="Content\images\chunjie.jpg" />
+    <Content Include="Content\images\coin.png" />
+    <Content Include="Content\images\comment\good2.png" />
+    <Content Include="Content\images\comment\local.png" />
+    <Content Include="Content\images\comment\love%402x.png" />
+    <Content Include="Content\images\comment\pen.png" />
+    <Content Include="Content\images\congratulation.png" />
+    <Content Include="Content\images\congratulation2.png" />
+    <Content Include="Content\images\congratulations2.png" />
+    <Content Include="Content\images\coupon\fanxian.png" />
+    <Content Include="Content\images\coupon\icon-arrow-right.png" />
+    <Content Include="Content\images\coupon\jifen.png" />
+    <Content Include="Content\images\coupon\pay\icon-warning.png" />
+    <Content Include="Content\images\coupon\pay\icon-yes.png" />
+    <Content Include="Content\images\coupon\pay\yes-wire.png" />
+    <Content Include="Content\images\coupon\question.png" />
+    <Content Include="Content\images\coupon\roomcoupon.png" />
+    <Content Include="Content\images\coupon\shoplist\1212\shoplistbanner1212.jpg" />
+    <Content Include="Content\images\coupon\shoplist\icon-arrow-right.png" />
+    <Content Include="Content\images\coupon\shoplist\top-banner.png" />
+    <Content Include="Content\images\coupon\tuijianjiangli.png" />
+    <Content Include="Content\images\coupon\xianjinquan.png" />
+    <Content Include="Content\images\date1.png" />
+    <Content Include="Content\images\ddsuccess.png" />
+    <Content Include="Content\images\default-avatar1.png" />
+    <Content Include="Content\images\default-avatar2.png" />
+    <Content Include="Content\images\desc.png" />
+    <Content Include="Content\images\dot.png" />
+    <Content Include="Content\images\download-footbanner.jpg" />
+    <Content Include="Content\images\download-footbanner.png" />
+    <Content Include="Content\images\download-footbanner_201511.png" />
+    <Content Include="Content\images\download-footbanner_201512.png" />
+    <Content Include="Content\images\download-footbanner_new.jpg" />
+    <Content Include="Content\images\download-footbanner_new2.jpg" />
+    <Content Include="Content\images\good.png" />
+    <Content Include="Content\images\hb.png" />
+    <Content Include="Content\images\hb04.png" />
+    <Content Include="Content\images\hongbao.png" />
+    <Content Include="Content\images\hongbaowenzi.png" />
+    <Content Include="Content\images\hongbaox.png" />
+    <Content Include="Content\images\hongbaoxiao.png" />
+    <Content Include="Content\images\hongbao\bg.jpg" />
+    <Content Include="Content\images\hongbao\bg2.png" />
+    <Content Include="Content\images\hongbao\button01.png" />
+    <Content Include="Content\images\hongbao\button02.png" />
+    <Content Include="Content\images\hongbao\congratulations.png" />
+    <Content Include="Content\images\hongbao\hb002.png" />
+    <Content Include="Content\images\hongbao\hb01.png" />
+    <Content Include="Content\images\hongbao\hb02.png" />
+    <Content Include="Content\images\hongbao\hb03.png" />
+    <Content Include="Content\images\hongbao\hb04.png" />
+    <Content Include="Content\images\hotelphoto.jpg" />
+    <Content Include="Content\images\hotelpic2.png" />
+    <Content Include="Content\images\hotelsumlink.png" />
+    <Content Include="Content\images\hotel\arrow-circle.png" />
+    <Content Include="Content\images\hotel\check-blue1.png" />
+    <Content Include="Content\images\hotel\check-blue2.png" />
+    <Content Include="Content\images\hotel\icon-guide.png" />
+    <Content Include="Content\images\hotel\loading-jumper.gif" />
+    <Content Include="Content\images\hotel\logo-jumper-agoda.png" />
+    <Content Include="Content\images\hotel\logo-jumper-booking.png" />
+    <Content Include="Content\images\hotel\logo-jumper-ctrip.png" />
+    <Content Include="Content\images\hotel\no_package_icon.png" />
+    <Content Include="Content\images\huodebeijing.jpg" />
+    <Content Include="Content\images\huodebeijing.png" />
+    <Content Include="Content\images\icon-aarow1.png" />
+    <Content Include="Content\images\icon-aarow2.png" />
+    <Content Include="Content\images\icon-aarow3.png" />
+    <Content Include="Content\images\icon-aarow4.png" />
+    <Content Include="Content\images\icon-aarow5.png" />
+    <Content Include="Content\images\icon-aarow6.png" />
+    <Content Include="Content\images\icon-aarow7.png" />
+    <Content Include="Content\images\icon-arrow-right.png" />
+    <Content Include="Content\images\icon-back-blue.png" />
+    <Content Include="Content\images\icon-back.png" />
+    <Content Include="Content\images\icon-error.png" />
+    <Content Include="Content\images\icon-menu.png" />
+    <Content Include="Content\images\icon-quan.png" />
+    <Content Include="Content\images\icon-search.png" />
+    <Content Include="Content\images\icon-topsearch.png" />
+    <Content Include="Content\images\icon-yes.png" />
+    <Content Include="Content\images\iconaarow.png" />
+    <Content Include="Content\images\iconcaleft.png" />
+    <Content Include="Content\images\iconcaright.png" />
+    <Content Include="Content\images\icon_back1.png" />
+    <Content Include="Content\images\icon_collect1.png" />
+    <Content Include="Content\images\icon_collect2.png" />
+    <Content Include="Content\images\icon_dp.png" />
+    <Content Include="Content\images\indexpic.jpg" />
+    <Content Include="Content\images\inspector\201512\ccode.png" />
+    <Content Include="Content\images\inspector\201512\hotel01.png" />
+    <Content Include="Content\images\inspector\201512\hotel02.png" />
+    <Content Include="Content\images\inspector\201512\inspector0.jpg" />
+    <Content Include="Content\images\inspector\201512\inspector1.jpg" />
+    <Content Include="Content\images\inspector\201512\mail.png" />
+    <Content Include="Content\images\inspector\201512\rule-ck0.png" />
+    <Content Include="Content\images\inspector\201512\rule-ck1.png" />
+    <Content Include="Content\images\inspector\201512\tel.png" />
+    <Content Include="Content\images\inspector\201512\text.png" />
+    <Content Include="Content\images\inspector\201512\user.png" />
+    <Content Include="Content\images\inspector\arrow-right.png" />
+    <Content Include="Content\images\inspector\arrow-right2.png" />
+    <Content Include="Content\images\inspector\bed.png" />
+    <Content Include="Content\images\inspector\bg02.png" />
+    <Content Include="Content\images\inspector\bottom.png" />
+    <Content Include="Content\images\inspector\bottom02.png" />
+    <Content Include="Content\images\inspector\brown\arrow-right.png" />
+    <Content Include="Content\images\inspector\brown\ask.png" />
+    <Content Include="Content\images\inspector\brown\bed.png" />
+    <Content Include="Content\images\inspector\brown\bottom.png" />
+    <Content Include="Content\images\inspector\brown\bottom2.png" />
+    <Content Include="Content\images\inspector\brown\hongbao01.png" />
+    <Content Include="Content\images\inspector\brown\mail.png" />
+    <Content Include="Content\images\inspector\brown\rulesbottom.png" />
+    <Content Include="Content\images\inspector\brown\tel.png" />
+    <Content Include="Content\images\inspector\brown\text01.png" />
+    <Content Include="Content\images\inspector\brown\text02.png" />
+    <Content Include="Content\images\inspector\brown\text03.png" />
+    <Content Include="Content\images\inspector\brown\user.png" />
+    <Content Include="Content\images\inspector\Concise\arrow-right.png" />
+    <Content Include="Content\images\inspector\Concise\ask.png" />
+    <Content Include="Content\images\inspector\Concise\atv-bg2.png" />
+    <Content Include="Content\images\inspector\Concise\ccode.png" />
+    <Content Include="Content\images\inspector\Concise\chair.png" />
+    <Content Include="Content\images\inspector\Concise\hongbao01.png" />
+    <Content Include="Content\images\inspector\Concise\hotel01.png" />
+    <Content Include="Content\images\inspector\Concise\hotel02.png" />
+    <Content Include="Content\images\inspector\Concise\ins-huodong-banner.jpg" />
+    <Content Include="Content\images\inspector\Concise\ins-huodong1.jpg" />
+    <Content Include="Content\images\inspector\Concise\ins-huodong2.jpg" />
+    <Content Include="Content\images\inspector\Concise\logotxt.png" />
+    <Content Include="Content\images\inspector\Concise\mail.png" />
+    <Content Include="Content\images\inspector\Concise\mask-list.png" />
+    <Content Include="Content\images\inspector\Concise\pass.png" />
+    <Content Include="Content\images\inspector\Concise\rule-ck0.png" />
+    <Content Include="Content\images\inspector\Concise\rule-ck1.png" />
+    <Content Include="Content\images\inspector\Concise\tel.png" />
+    <Content Include="Content\images\inspector\Concise\text.png" />
+    <Content Include="Content\images\inspector\Concise\user.png" />
+    <Content Include="Content\images\inspector\hongbao01.png" />
+    <Content Include="Content\images\inspector\logo-bg.png" />
+    <Content Include="Content\images\inspector\logo.png" />
+    <Content Include="Content\images\inspector\mail.png" />
+    <Content Include="Content\images\inspector\rulesbottom.png" />
+    <Content Include="Content\images\inspector\rulestext.png" />
+    <Content Include="Content\images\inspector\tel.png" />
+    <Content Include="Content\images\inspector\text01.png" />
+    <Content Include="Content\images\inspector\text02.png" />
+    <Content Include="Content\images\inspector\user.png" />
+    <Content Include="Content\images\jq1.png" />
+    <Content Include="Content\images\jq2.png" />
+    <Content Include="Content\images\jq3.png" />
+    <Content Include="Content\images\jq4.png" />
+    <Content Include="Content\images\jq5.png" />
+    <Content Include="Content\images\jq6.png" />
+    <Content Include="Content\images\jq7.png" />
+    <Content Include="Content\images\jq8.png" />
+    <Content Include="Content\images\late.png" />
+    <Content Include="Content\images\lian.png" />
+    <Content Include="Content\images\local.png" />
+    <Content Include="Content\images\logo.png" />
+    <Content Include="Content\images\minizt1.png" />
+    <Content Include="Content\images\minizt2.png" />
+    <Content Include="Content\images\minizt3.png" />
+    <Content Include="Content\images\minizt4.png" />
+    <Content Include="Content\images\minizt5.png" />
+    <Content Include="Content\images\minizt6.png" />
+    <Content Include="Content\images\minizt7.png" />
+    <Content Include="Content\images\minizt8.png" />
+    <Content Include="Content\images\nav1bg.png" />
+    <Content Include="Content\images\notice03.png" />
+    <Content Include="Content\images\pic-loading.png" />
+    <Content Include="Content\images\ps_error.gif" />
+    <Content Include="Content\images\ps_icons%402x.png" />
+    <Content Include="Content\images\ps_icons.png" />
+    <Content Include="Content\images\ps_loader.gif" />
+    <Content Include="Content\images\qrcode-app.png" />
+    <Content Include="Content\images\qrcode-app1.png" />
+    <Content Include="Content\images\qrcode-wx-big-4.0.jpg" />
+    <Content Include="Content\images\qrcode-wx-big.png" />
+    <Content Include="Content\images\qrcode-wx-new.jpg" />
+    <Content Include="Content\images\qrcode-wx.jpg" />
+    <Content Include="Content\images\slide1.jpg" />
+    <Content Include="Content\images\spinner.gif" />
+    <Content Include="Content\images\squaredot.png" />
+    <Content Include="Content\images\star1.png" />
+    <Content Include="Content\images\star2-1.5.png" />
+    <Content Include="Content\images\star2-1.png" />
+    <Content Include="Content\images\star2-2.5.png" />
+    <Content Include="Content\images\star2-2.png" />
+    <Content Include="Content\images\star2-3.5.png" />
+    <Content Include="Content\images\star2-3.png" />
+    <Content Include="Content\images\star2-4.5.png" />
+    <Content Include="Content\images\star2-4.png" />
+    <Content Include="Content\images\star2-5.png" />
+    <Content Include="Content\images\star2.png" />
+    <Content Include="Content\images\star3.png" />
+    <Content Include="Content\images\star4.png" />
+    <Content Include="Content\images\star5.png" />
+    <Content Include="Content\images\tehui3.png" />
+    <Content Include="Content\images\th1.png" />
+    <Content Include="Content\images\th2.png" />
+    <Content Include="Content\images\th3.png" />
+    <Content Include="Content\images\th4.png" />
+    <Content Include="Content\images\tiaoxiao.png" />
+    <Content Include="Content\images\tiaoda.png" />
+    <Content Include="Content\images\toolbar2bg.png" />
+    <Content Include="Content\images\transparency.png" />
+    <Content Include="Content\images\transparency2.png" />
+    <Content Include="Content\images\tu.png" />
+    <Content Include="Content\images\wenzi.png" />
+    <Content Include="Content\images\WhiteStar.png" />
+    <Content Include="Content\images\YellowStar.png" />
+    <Content Include="Content\images\yes-right-gay.png" />
+    <Content Include="Content\images\yes-wire.png" />
+    <Content Include="Content\images\yuandan.png" />
+    <Content Include="Content\images\zi.png" />
+    <Content Include="Content\js\account.js" />
+    <Content Include="Content\js\acount\usertag.js" />
+    <Content Include="Content\js\active\gencashcoupon.js" />
+    <Content Include="Content\js\active\customactive.js" />
+    <Content Include="Content\js\active\weixinactive_luck.js" />
+    <Content Include="Content\js\active\weixinactive_signup.js" />
+    <Content Include="Content\js\ad\adbox.js" />
+    <Content Include="Content\js\app\citymenu.js" />
+    <Content Include="Content\js\app\discountcollection.js" />
+    <Content Include="Content\js\app\find-hoterechotel.js" />
+    <Content Include="Content\js\app\home-group.js" />
+    <Content Include="Content\js\app\home-flash.js" />
+    <Content Include="Content\js\app\morepackagelist.js" />
+    <Content Include="Content\js\app\themelist.js" />
+    <Content Include="Content\js\app\find.js" />
+    <Content Include="Content\js\app\home.js" />
+    <Content Include="Content\js\app\searchhotel.js" />
+    <Content Include="Content\js\app\home2.js" />
+    <Content Include="Content\js\app\hotpackage.js" />
+    <Content Include="Content\js\app\reccomments.js" />
+    <Content Include="Content\js\bootbox.js" />
+    <Content Include="Content\js\bootstrap.min.js" />
+    <Content Include="Content\js\login.js" />
+    <Content Include="Content\js\calendar_price.js" />
+    <Content Include="Content\js\calendar.js" />
+    <Content Include="Content\js\comment.js" />
+    <Content Include="Content\js\comment\commentdetail.js" />
+    <Content Include="Content\js\common.js" />
+    <Content Include="Content\js\Coupon.js" />
+    <Content Include="Content\js\coupon\couponexchange.js" />
+    <Content Include="Content\js\coupon\couponshopforvip2.js" />
+    <Content Include="Content\js\coupon\couponshopforvip.js" />
+    <Content Include="Content\js\coupon\couponshopforgroup.js" />
+    <Content Include="Content\js\coupon\couponshoplist1212.js" />
+    <Content Include="Content\js\coupon\couponshoplist.js" />
+    <Content Include="Content\js\coupon\paycompleteforvip.js" />
+    <Content Include="Content\js\coupon\paycomplete.js" />
+    <Content Include="Content\js\coupon\couponshop.js" />
+    <Content Include="Content\js\coupon\wallet.js" />
+    <Content Include="Content\js\ctrip_calendar.js" />
+    <Content Include="Content\js\ctrip_cquery.js" />
+    <Content Include="Content\js\framework\amazeui.min.js" />
+    <Content Include="Content\js\framework\angular.min.js" />
+    <Content Include="Content\js\framework\jquery-1.10.2-min.js" />
+    <Content Include="Content\js\framework\jquery.lazyload.min.js" />
+    <Content Include="Content\js\framework\mui.js" />
+    <Content Include="Content\js\framework\mui.min.js" />
+    <Content Include="Content\js\framework\scrolldate\scrolldate.js" />
+    <Content Include="Content\js\framework\scrolldate\scrolldate.min.js" />
+    <Content Include="Content\js\framework\vue.min.js" />
+    <Content Include="Content\js\framework\zmjiudian.js" />
+    <Content Include="Content\js\fund\userrecommend2.js" />
+    <Content Include="Content\js\fund\userrecommend.js" />
+    <Content Include="Content\js\home.js" />
+    <Content Include="Content\js\hotel\book.js" />
+    <Content Include="Content\js\hotel\collection.js" />
+    <Content Include="Content\js\hotel\package.js" />
+    <Content Include="Content\js\hotel\detail.js" />
+    <Content Include="Content\js\hotel\list.js" />
+    <Content Include="Content\js\hotel\map.js" />
+    <Content Include="Content\js\hotel\packages.js" />
+    <Content Include="Content\js\hotel\photos.js" />
+    <Content Include="Content\js\hotel\reviews.js" />
+    <Content Include="Content\js\hotel\search.js" />
+    <Content Include="Content\js\hotel\sizzle.js" />
+    <Content Include="Content\js\icheck.min.js" />
+    <Content Include="Content\js\inspector\register.js" />
+    <Content Include="Content\js\inspector\hotel.js" />
+    <Content Include="Content\js\inspector\inspector.js" />
+    <Content Include="Content\js\iscroll-lite.js" />
+    <Content Include="Content\js\jquery-1.10.2-min.js" />
+    <Content Include="Content\js\jquery.lazyload.min.js" />
+    <Content Include="Content\js\jquery.scrollstop.min.js" />
+    <Content Include="Content\js\json2.js" />
+    <Content Include="Content\js\klass.min.js" />
+    <Content Include="Content\js\magicall\kfuserbind.js" />
+    <Content Include="Content\js\mail\mail.js" />
+    <Content Include="Content\js\order\detail.js" />
+    <Content Include="Content\js\order\list.js" />
+    <Content Include="Content\js\order\pay.js" />
+    <Content Include="Content\js\photoswipe.js" />
+    <Content Include="Content\js\srollpage.js" />
+    <Content Include="Content\js\swipe.js" />
+    <Content Include="Content\js\underscore-min.js" />
+    <Content Include="Content\js\underscore.string.min.js" />
+    <Content Include="Content\js\Upload\async.js" />
+    <Content Include="Content\js\Upload\spark-md5.js" />
+    <Content Include="Content\js\Upload\Upload.js" />
+    <Content Include="Content\js\Upload\upyun-mu.js" />
+    <Content Include="Content\js\VerifyInput.js" />
+    <Content Include="Content\magicall_static\css\font\iconfont.eot" />
+    <Content Include="Content\magicall_static\css\font\iconfont.svg" />
+    <Content Include="Content\magicall_static\css\whim.css" />
+    <Content Include="Content\magicall_static\css\im.css" />
+    <Content Include="Content\magicall_static\css\whim.css" />
+    <Content Include="Content\magicall_static\img\avatar.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_1.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_10.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_11.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_12.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_13.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_14.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_15.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_16.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_17.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_18.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_19.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_2.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_20.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_21.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_22.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_23.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_24.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_25.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_26.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_27.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_28.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_29.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_3.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_30.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_31.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_32.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_33.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_34.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_35.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_4.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_5.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_6.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_7.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_8.png" />
+    <Content Include="Content\magicall_static\img\faces\ee_9.png" />
+    <Content Include="Content\magicall_static\img\loading.gif" />
+    <Content Include="Content\magicall_static\img\notify.png" />
+    <Content Include="Content\magicall_static\js\testeasemob.js" />
+    <Content Include="Content\magicall_static\js\testim.js" />
+    <Content Include="Content\magicall_static\js\testwhchat.js" />
+    <Content Include="Content\magicall_static\js\whchat.js" />
+    <Content Include="Content\magicall_static\js\easemob.js" />
+    <Content Include="Content\magicall_static\js\im.js" />
+    <Content Include="Content\magicall_static\mp3\msg.mp3" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="App_Code\Helpers.cshtml" />
+    <Content Include="Views\MagiCall\CustomerServiceHelper.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\MagiCall\MagiCallClient.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Payment\Complete.cshtml" />
+    <Content Include="51Degrees.config" />
+    <Content Include="Content\magicall_static\css\font\iconfont.ttf" />
+    <Content Include="Content\magicall_static\css\font\iconfont.woff" />
+    <Content Include="Content\magicall_static\mp3\msg.m4a" />
+    <Content Include="Content\css\fonts\mui.ttf" />
+    <Content Include="Content\fonts\mui.ttf" />
+    <None Include="Properties\PublishProfiles\localHost.pubxml" />
+    <None Include="Properties\PublishProfiles\Localhost_WHotelSite1.pubxml" />
+    <None Include="Properties\PublishProfiles\TestPublish.pubxml" />
+    <None Include="Properties\PublishProfiles\website113.pubxml" />
+    <None Include="Properties\PublishProfiles\WHotelSiteHttps_Publish_Test.pubxml" />
+    <None Include="Properties\PublishProfiles\WHotelSite_Publish.pubxml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Portal\Aboutus.cshtml" />
+    <Content Include="Views\Portal\Contact.cshtml" />
+    <Content Include="Views\Portal\Home.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\Portal\InterestList.cshtml" />
+    <Content Include="Views\Shared\_Layout0.cshtml" />
+    <Content Include="Views\Portal\OurTeam.cshtml" />
+    <Content Include="Views\Portal\ContactUs.cshtml" />
+    <Content Include="Views\Portal\MobileThemeList.cshtml" />
+    <Content Include="Views\Portal\MobileSightList.cshtml" />
+    <Content Include="Views\Portal\SearchList.cshtml" />
+    <Content Include="Views\Active\Active101.cshtml" />
+    <Content Include="Views\Active\WeekendPackages.cshtml" />
+    <Content Include="Views\Active\SpecialDeal.cshtml" />
+    <Content Include="Views\Active\NewYearDay2015.cshtml" />
+    <Content Include="Views\Account\Info.cshtml" />
+    <Content Include="Views\Collection\List.cshtml" />
+    <Content Include="Views\Collection\ListContent.cshtml" />
+    <Content Include="Views\Comment\Detail.cshtml" />
+    <Content Include="Views\Comment\DoneListContent.cshtml" />
+    <Content Include="Views\Comment\Finish.cshtml" />
+    <Content Include="Views\Comment\List.cshtml" />
+    <Content Include="Views\Comment\Section.cshtml" />
+    <Content Include="Views\Comment\UndoneListContent.cshtml" />
+    <Content Include="Views\Order\Detail.cshtml" />
+    <Content Include="Views\Order\List.cshtml" />
+    <Content Include="Views\Order\ListContent.cshtml" />
+    <Content Include="Views\Order\Pay.cshtml" />
+    <Content Include="Views\Coupon\Detail.cshtml" />
+    <Content Include="Views\Coupon\DashList.cshtml" />
+    <Content Include="Views\Coupon\Grab.cshtml" />
+    <Content Include="Views\Coupon\Download.cshtml" />
+    <Content Include="Views\Coupon\Wallet.cshtml" />
+    <Content Include="Views\Coupon\CashIntroduction.cshtml" />
+    <Content Include="Views\Coupon\CouponIntroduction.cshtml" />
+    <Content Include="Views\Coupon\Late.cshtml" />
+    <Content Include="Views\Coupon\ShareResult.cshtml" />
+    <Content Include="Views\Coupon\Result2.cshtml" />
+    <None Include="Properties\PublishProfiles\WHotelSite_PublishToTestEnv.pubxml" />
+    <Content Include="Views\Shared\_Layout1.cshtml" />
+    <Content Include="Views\Active\Test.cshtml" />
+    <Content Include="Views\Active\SpringFestival2015.cshtml" />
+    <Content Include="Views\Inspector\Explain.cshtml" />
+    <Content Include="Views\Inspector\Register.cshtml" />
+    <Content Include="Views\Inspector\Rules.cshtml" />
+    <Content Include="Views\Inspector\HotelList.cshtml" />
+    <Content Include="Views\Inspector\HotelListContent.cshtml" />
+    <Content Include="Views\Inspector\Hotel.cshtml" />
+    <Content Include="Views\Inspector\Jump.cshtml" />
+    <Content Include="Views\Active\Qingming.cshtml" />
+    <Content Include="Views\Account\ContractDescription.cshtml" />
+    <Content Include="Views\Comment\PointsRule.cshtml" />
+    <Content Include="Views\Active\Top20Deals.cshtml" />
+    <Content Include="Views\Coupon\CouponShop.cshtml" />
+    <Content Include="Views\Coupon\PayComplete.cshtml" />
+    <Content Include="Views\Active\Top20DealsForMail.cshtml" />
+    <Content Include="Views\Mail\EUserManager.cshtml" />
+    <Content Include="Views\Coupon\CouponShopList.cshtml" />
+    <Content Include="Error404.html" />
+    <Content Include="Views\Coupon\CouponShopForMail.cshtml" />
+    <Content Include="Views\Active\Holiday.cshtml" />
+    <Content Include="Views\Inspector\RulesDoc.cshtml" />
+    <Content Include="Views\Inspector\RegisterCompleted.cshtml" />
+    <Content Include="Views\Inspector\RecruitInspector.cshtml" />
+    <Content Include="Views\Comment\CommentRule.cshtml" />
+    <Content Include="Views\Comment\DoneCommentList.cshtml" />
+    <Content Include="Views\Coupon\CouponExchange.cshtml" />
+    <Content Include="Views\Inspector\RecruitInspectorForMail.cshtml" />
+    <Content Include="Views\Coupon\CouponShopListFor1212.cshtml" />
+    <Content Include="Views\Active\ScopeDemo1.cshtml" />
+    <Content Include="Views\Coupon\CouponShopForGroup.cshtml" />
+    <Content Include="Views\Active\Weixin_SignupActive_ShareDone.cshtml" />
+    <Content Include="Views\Active\Weixin_SignupActive_Reg.cshtml" />
+    <Content Include="Views\Active\Weixin_SignupActive_RegDone.cshtml" />
+    <Content Include="Views\Active\Weixin_SignupActive_SendMoreFd.cshtml" />
+    <Content Include="Views\Active\Weixin_SignupActive_End.cshtml" />
+    <Content Include="Views\Comment\CommentSubCompleted.cshtml" />
+    <Content Include="Views\Comment\ShareDetail.cshtml" />
+    <Content Include="Views\App\Home2.cshtml" />
+    <Content Include="Views\App\HotPackage.cshtml" />
+    <Content Include="Views\App\RecComments.cshtml" />
+    <Content Include="Views\App\HotPackage.cshtml" />
+    <Content Include="Views\Active\GenCashCoupon.cshtml" />
+    <Content Include="Views\Shared\_LayoutApp.cshtml" />
+    <Content Include="Views\App\HomeSms.cshtml" />
+    <Content Include="Views\Fund\RecommendRule.cshtml" />
+    <Content Include="Views\Fund\UserRecommend.cshtml" />
+    <Content Include="Views\Fund\UserRecommend2.cshtml" />
+    <Content Include="Views\Coupon\CouponShopForVip.cshtml" />
+    <Content Include="Views\Account\UserTag.cshtml" />
+    <Content Include="Views\Coupon\PayCompleteForVip.cshtml" />
+    <Content Include="Views\Active\Weixin_LuckActive_Reg.cshtml" />
+    <Content Include="Views\Active\Weixin_LuckActive_RegDone.cshtml" />
+    <Content Include="Views\Active\Weixin_LuckActive_ShareDone.cshtml" />
+    <Content Include="Views\Active\Weixin_LuckActive_End.cshtml" />
+    <Content Include="Views\Active\Weixin_LuckActive_SharePartner.cshtml" />
+    <Content Include="Views\Coupon\CouponShopForVip2.cshtml" />
+    <Content Include="Views\Coupon\CouponShopForVip2Result.cshtml" />
+    <Content Include="Views\MagiCall\MagiCallClientTest.cshtml" />
+    <Content Include="Views\MagiCall\KFUserBind.cshtml" />
+    <Content Include="Views\Ad\AdBox.cshtml" />
+    <Content Include="Views\Active\CustomActive_Reg.cshtml" />
+    <Content Include="Views\App\SearchHotel.cshtml" />
+    <Content Include="Views\Order\WXPay.cshtml" />
+    <Content Include="Views\App\Home.cshtml" />
+    <Content Include="Views\App\CityMenu.cshtml" />
+    <Content Include="Views\App\SearchCityList.cshtml" />
+    <Content Include="Views\App\AroundCityList.cshtml" />
+    <Content Include="Views\App\HomeHotelPackageList.cshtml" />
+    <Content Include="Views\App\DiscountCollection.cshtml" />
+    <Content Include="Views\App\DiscountDistrictCollection.cshtml" />
+    <Content Include="Views\Order\PayComplete.cshtml" />
+    <Content Include="Views\App\Find.cshtml" />
+    <Content Include="Views\App\FindNewComments.cshtml" />
+    <Content Include="Views\App\ThemeList.cshtml" />
+    <Content Include="Views\App\FindTheme.cshtml" />
+    <Content Include="Views\App\FindHotRecommendHotel.cshtml" />
+    <Content Include="Views\App\HomeGroupDeals.cshtml" />
+    <Content Include="Views\App\HomeFlashDeals.cshtml" />
+    <Content Include="Views\App\HomeTop.cshtml" />
+    <Content Include="Views\App\HomeAlbumPackage.cshtml" />
+    <Content Include="Views\App\More_AlbumPackages.cshtml" />
+    <Content Include="Views\App\MorePackageList.cshtml" />
+    <Content Include="Views\App\More_Flash.cshtml" />
+    <Content Include="Views\App\More_Group.cshtml" />
+    <Content Include="Views\App\HomeFriendRecHotels.cshtml" />
+    <Content Include="Views\App\HomeRecentSeeHotels.cshtml" />
+    <Content Include="Views\App\More_FriendRec.cshtml" />
+    <Content Include="Views\App\More_RecentSee.cshtml" />
+    <Content Include="Views\App\HomeDistrictSearchHistory.cshtml" />
+    <Content Include="Views\App\AboutApp.cshtml" />
+    <Content Include="Views\Coupon\VipCartList.cshtml" />
+    <Content Include="WebIM\.gitignore" />
+    <Content Include="WebIM\.travis.yml" />
+    <Content Include="WebIM\LICENSE" />
+    <Content Include="WebIM\package.json" />
+    <Content Include="WebIM\README.md" />
+    <Content Include="WebIM\static\css\font\iconfont.eot" />
+    <Content Include="WebIM\static\css\font\iconfont.ttf" />
+    <Content Include="WebIM\static\css\font\iconfont.woff" />
+    <Content Include="Views\MagiCall\MagiCallClientVer1.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>8730</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:8780/</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost:8780/</IISAppRootUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

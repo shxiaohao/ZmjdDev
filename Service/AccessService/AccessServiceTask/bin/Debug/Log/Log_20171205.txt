@@ -1,0 +1,11 @@
+
+[17/12/5 15:36:42] Start Job [DownLoadWexinUserInfoJob]
+[17/12/5 15:36:57] 指定了测试Openid：oHGzlw-sdix9G__-S4IzfTsYRqC8
+[17/12/5 15:47:29] Start Job [DownLoadWexinUserInfoJob]
+[17/12/5 15:47:52] 指定了测试Openid：oHGzlw-sdix9G__-S4IzfTsYRqC8
+[17/12/5 15:48:39] Start Job [DownLoadWexinUserInfoJob]
+[17/12/5 15:48:46] 指定了测试Openid：oHGzlw-sdix9G__-S4IzfTsYRqC8
+[17/12/5 15:49:16] Start Job [DownLoadWexinUserInfoJob]
+[17/12/5 15:49:26] 指定了测试Openid：oHGzlw-sdix9G__-S4IzfTsYRqC8
+[17/12/5 16:05:27] Start Job [DownLoadWexinUserInfoJob]
+[17/12/5 16:05:37] 指定了测试Openid：oHGzlw-sdix9G__-S4IzfTsYRqC8

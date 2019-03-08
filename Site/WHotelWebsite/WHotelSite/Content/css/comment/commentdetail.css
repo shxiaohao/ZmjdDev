@@ -1,0 +1,697 @@
+/* 2015-04 dianping css */
+.comment-detail-member {
+    width:92%;
+    height:auto;
+    border-bottom:1px solid #ddd;
+    margin:0 auto 0 auto;
+    padding:1.8em 0 0.6em 0;
+    text-align:left;
+}
+    .comment-detail-member table{
+        width:100%;
+    }
+    .comment-detail-member .member-img{
+        width:2.8em;
+        border-radius: 5em;
+        margin:0 0 0 0.5em;
+    }
+    .comment-detail-member .member-info{
+        font-size:1.4em;
+        color:#000;
+        margin:0 0 0.3em 0;
+    }
+    .comment-detail-member .member-comment-date{
+        font-size:1.2em;
+        color:#888;
+        margin:0 0.5em 0 0;
+    }
+    .comment-detail-member .member-comment-follow{
+        margin:0 0.5em 0 0;
+        padding:0.3em 1.1em 0.3em 1.1em;
+        background:#fff;
+        border:1px solid #ddd;
+        font-size:1.2em;
+        color:#000;
+        border-radius: 5px;
+    }
+@media (min-width: 750px) {
+    .comment-detail-member .member-comment-follow{
+        display:none;
+    }
+}
+.comment-detail-title {
+    width:92%;
+    height:auto;
+    margin:2.7em auto 0.5em auto;
+}
+    .comment-detail-title .hotel-name {
+        width:100%;
+        height:auto;
+        line-height:1.7em;
+        font-size:1.5em;
+        text-align:center;
+        color:#000;
+    }
+    .comment-detail-title .hotel-brief {
+        width:100%;
+        height:auto;
+        line-height:1.8em;
+        font-size:1.2em;
+        color:#666;
+        text-align:center;
+    }
+    .comment-detail-title .local-icon {
+        width:1.1em;
+        margin:0.2em 0.1em 0 0;
+        vertical-align:text-top;
+    }
+    .comment-detail-title .star {
+        width:100%;
+        height:2em;
+        line-height:2.5em;
+        margin:0 0 0 0;
+        text-align:center;
+    }
+    .comment-detail-title .h {
+        color:#ff8c01;
+        font-size:1.2em;
+        font-family:Arial;
+        margin:0 0.4em 0 0;
+    }
+    .comment-detail-title .starimg {
+        width:7.5em;
+        margin:0 0.3em 0.4em 0;
+        vertical-align:middle;
+    }
+    .comment-detail-title .goodimg {
+        width:1em;
+        margin:0 0.4em 0 0.6em;
+        vertical-align:text-top;
+    }
+.comment-detail-pic {
+    width:95%;
+    height:auto;
+    margin:0 auto 0 auto;
+}
+.comment-detail-pic2 {
+    width:92%;
+    height:auto;
+    margin:0 auto 0 auto;
+}
+    .comment-detail-pic2 table{
+        width:100%;
+        height:auto;
+        margin:0 0 0 0;
+    }
+        .comment-detail-pic2 table td{
+            width:6.5em;
+            min-width:6.5em;
+            height:auto;
+            padding:0 0.5em 0 0;
+        }
+    .comment-detail-pic2 .pic-item{
+        width:100%;
+        height:100%;
+        border:none;
+    }
+        .comment-detail-pic2 .pic-item img{
+            width:100%;
+            border:none;
+        }
+    .comment-detail-pic2 .pic-item-not{
+        opacity:0.6;
+        filter: alpha(opacity=60);
+    }
+@media (min-width: 750px) {
+    
+}
+
+.comment-detail-photolist {
+    margin-top:0.5em;
+}
+    .comment-detail-photolist a{
+        width:100%;
+        display:table;
+    }
+    .comment-detail-photolist a img{
+        width:100%;
+    }
+.comment-detail-showpic {
+    width:100% !important;
+    height:100% !important;
+    position:fixed !important;
+    top:0% !important;
+    left:0% !important;
+    z-index:1000;
+}
+
+.comment-detail-brief {
+    width:99%;
+    height:auto;
+    padding:0.8em 0 0 0;
+    margin:0 auto 0 auto;
+}
+    .comment-detail-brief .star {
+        width:92%;
+        height:2.8em;
+        line-height:3em;
+        margin:0 auto 0 auto;
+        text-align:left;
+        border-bottom:0px solid #ccc;
+    }
+    .comment-detail-brief .starimg {
+        width:7.8em;
+        margin:0 0.3em 0.4em 0;
+        vertical-align:middle;
+    }
+    .comment-detail-brief .brief {
+        width:92%;
+        height:auto;
+        font-size:1.2em;
+        color:#888888;
+        text-align:left;
+        margin:0 auto 0 auto;
+        padding:0 0 0.8em 0;
+        border-bottom:1px solid #ddd;
+    }
+    .comment-detail-brief .h {
+        font-size:1em;
+        color:#888888;
+        margin:0 0.2em 0 0;
+    }
+    .comment-detail-brief .goodimg {
+        width:1.3em;
+        margin:0em 0 0.05em 0;
+        vertical-align:text-top;
+    }
+    .comment-detail-brief .cdate {
+        font-size: 1.1em; 
+        color: #888888;
+        margin:0em 0em 0 1em;
+    }
+
+.comment-detail-info {
+    width:99%;
+    height:auto;
+    padding:0.8em 0 0em 0;
+    margin:0 auto 0 auto;
+}
+    .comment-detail-info .some{
+        width:92%;
+        height:auto;
+        margin:0 auto 0.8em auto;
+    }
+    .comment-detail-info .some dl{
+        width:100%;
+        height:auto;
+        margin:0.5em 0 1em 0;
+    }
+    .comment-detail-info .some dt{
+        width:100%;
+        height:auto;
+        line-height:1.4em;
+        font-size:1.2em;
+        font-weight:normal;
+        text-align:left;
+        color:#333;
+        display:inline-table;
+        margin:1em 0 0.5em 0;
+    }
+    .comment-detail-info .some dd{
+        width:100%;
+        height:auto;
+        line-height:1.4em;
+        font-size:1.2em;
+        color:#888888;
+    }
+    .comment-detail-info .additionalContent{
+        width:92%;
+        height:auto;
+        font-size:1.2em;
+        background:#fff;
+        border:1px solid #ededed;
+        margin:0 auto 1.3em auto;
+        padding:1em 0 1.2em 0;
+    }
+        .comment-detail-info .additionalContent .at{
+            width:92%;
+            height:auto;
+            line-height:1.4em;
+            font-size:1em;
+            color:#888;
+            margin:0 auto 0.5em auto;
+        }
+        .comment-detail-info .additionalContent .ai{
+            width:88%;
+            height:auto;
+            line-height:1.4em;
+            font-size:1em;
+            color:#888;
+            margin:0 auto 0 auto;
+        }
+
+.comment-content {
+    width:100%;
+    height:auto;
+    margin:0 auto 0 auto;
+}
+    .comment-content .item{
+        width:92%;
+        height:auto;
+        margin:0 auto 1.8em auto;
+    }
+        .comment-content .item .cp{
+            width:100%;
+            height:auto;
+            margin:0 auto 0 auto;
+            position:relative;
+        }
+            .comment-content .item .cp img{
+                width:100%;
+            }
+            .comment-content .item .cp .arrow-up{
+                width:0; 
+                height:0; 
+                border-left:0.8em solid transparent;
+                border-right:0.8em solid transparent;
+                border-bottom:0.6em solid #fff;
+                position:absolute;
+                left:4em;
+                bottom:0px;
+            }
+        .comment-content .item .ci{
+            width:100%;
+            height:auto;
+            line-height:1.3em;
+            margin:0.7em auto 0 auto;
+            font-size:1.2em;
+            color:#888;
+        }
+
+.comment-clickitems {
+    width:99%;
+    height:auto;
+    margin:0 auto 0 auto;
+    padding:0 0 1.5em 0;
+}
+    .comment-clickitems .comment-date {
+        width:92%;
+        height:auto;
+        margin:1.8em auto 0em auto;
+        padding:0 0 1.5em 0;
+    }
+        .comment-clickitems .comment-date .left{
+            width:49%;
+            height:auto;
+            line-height:1.2em;
+            font-size:1.2em;
+            color:#999;
+            text-align:left;
+            float:left;
+        }
+            .comment-clickitems .comment-date .left .visit{
+                font-size:1em;
+                color:#888;
+            }
+                .comment-clickitems .comment-date .left .visit .visitimg{
+                    width:1.1em;
+                    margin:0.18em 0.2em 0 0;
+                    vertical-align:text-top;
+                }
+        .comment-clickitems .comment-date .right{
+            width:49%;
+            height:auto;
+            line-height:1.4em;
+            font-size:1.1em;
+            text-align:right;
+            float:right;
+            padding:0 0.6em 0 0;
+        }
+            .comment-clickitems .comment-date .right .yes{
+                font-size:1em;
+                color:#3e9ec0;
+            }
+                .comment-clickitems .comment-date .right .yes .loveimg {
+                    width:1.1em;
+                    margin:0.09em 0.2em 0 0;
+                    vertical-align:text-top;
+                }
+            .comment-clickitems .comment-date .right .nonecolor{
+                color:#999;
+            }
+            .comment-clickitems .comment-date .right .write{
+                font-size:1em;
+                margin:0 0 0 1em;
+            }
+                .comment-clickitems .comment-date .right .write a{
+                    font-size:1em;
+                    color:#3e9ec0;
+                }
+                    .comment-clickitems .comment-date .right .write a img{
+                        width:1.2em;
+                        margin:0em 0 0 0;
+                        vertical-align:text-top;
+                    }
+    .comment-clickitems .comment-clickusers {
+        width:92%;
+        height:auto;
+        margin:0.6em auto 0 auto;
+        border:1px solid #ededed;
+    }
+        .comment-clickitems .comment-clickusers ul{
+            width:100%;
+            height:auto;
+            margin:0 0 0 0;
+            padding:0 0 0 0;
+            list-style:none;
+            display:inline-table;
+        }
+            .comment-clickitems .comment-clickusers ul li{
+                width:auto;
+                height:3em;
+                line-height:3.3em;
+                float:left;
+                margin:0 0.5em 0 0.5em;
+                color:#888;
+                font-size:1em;
+            }
+                .comment-clickitems .comment-clickusers ul li .haveimg{
+                    width:1em;
+                    margin:0.15em 0.2em 0 0;
+                    vertical-align:text-top;
+                }
+@media (min-width: 750px) {
+    .comment-clickitems .comment-date .right .write{
+        display:none;
+    }
+}
+.comment-detail-hoteltitle{
+    width:92%;
+    height:2.8em;
+    line-height:3.5em;
+    margin:0 auto 0 auto;
+    color:#999;
+    font-size:1.2em;
+    border-bottom:1px solid #e4e4e4;
+}
+.comment-detail-hotelinfo {
+    width:92%;
+    height:auto;
+    padding:1.4em 0 1.5em 0;
+    margin:0 auto 0 auto;
+    border:0px solid red;
+}
+.comment-detail-hotelinfo .name{
+    color:#000;
+    font-size:1.4em;
+}
+.comment-detail-hotelinfo .packagge{
+    line-height:1.2em;
+    font-size:1.2em;
+    overflow:hidden;
+    color:#999;
+}
+.comment-detail-hotelinfo .starpanel{
+    height:auto;
+    overflow:hidden;
+    color:#999;
+}
+    .comment-detail-hotelinfo .starpanel .h {
+        color:#ff8c01;
+        font-size:1.2em;
+        font-family:Arial;
+        margin:0 0.4em 0 0;
+    }
+    .comment-detail-hotelinfo .starpanel .starimg {
+        width:7em;
+        margin:0 0.3em 0.4em 0;
+        vertical-align:middle;
+    }
+.comment-detail-hotelinfo .price{
+    text-align:right;
+    padding-right:0.1em;
+}
+.comment-detail-hotelinfo .price a{
+    font-size:1.3em;
+    color:#ff8c01;
+    display:table;
+}
+.comment-detail-hotelinfo .aarow{
+    height:1em;
+    margin-bottom:0.2em;
+    vertical-align:middle;
+}
+
+.comment-comments-panel{
+    width:100%;
+    height:auto;
+    display:inline-table;
+}
+.comment-comments-title{
+    width:92%;
+    height:2.6em;
+    line-height:3.1em;
+    margin:0 auto 0 auto;
+    color:#333;
+    font-size:1.2em;
+    /*border-bottom:1px solid #e4e4e4;*/
+}
+.comment-comments-list {
+    width:92%;
+    height:auto;
+    margin:0 0 0.5em 4%;
+    display:inline-table;
+}
+    .comment-comments-list ul{
+        width:100%;
+        height:auto;
+        margin:0 0 0 0;
+        padding:0 0 0 0;
+        list-style:none;
+    }
+        .comment-comments-list ul li{
+            width:100%;
+            height:auto;
+            padding:1em 0 0.8em 0;
+            margin:0.4em 0 0 0;
+            float:left;
+            border-top:1px solid #ededed;
+        }
+            .comment-comments-list ul li .review-pic{
+                width:15%;
+                height:auto;
+                float:left;
+            }
+                .comment-comments-list ul li .review-pic img{
+                    width:75%;
+                    border-radius: 5em;
+                    margin:0 0 0 0.5em;
+                }
+            .comment-comments-list ul li .review-info{
+                width:84%;
+                height:auto;
+                float:right;
+            }
+        .comment-comments-list ul li .sub-list{
+            width:100%;
+            height:auto;
+            padding:1em 0 0.2em 0;
+            margin:0.5em 0 0 0;
+            float:left;
+            border-top:1px solid #eee;
+        }
+        .comment-comments-list ul li .review-t{
+            width:99%;
+            height:auto;
+            font-size:1.2em;
+        }
+        .comment-comments-list ul li .review-c{
+            width:99%;
+            height:auto;
+            font-size:1.2em;
+        }
+        .comment-comments-list ul li .review-d{
+            width:99%;
+            height:auto;
+            line-height:1.5em;
+            color:#888;
+            font-size:1em;
+        }
+
+
+.pic-window {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+    background: #fff;
+    margin: 0 auto 0 auto;
+}
+@media (min-width: 750px) {
+    .pic-window {
+        position: relative;
+        overflow: auto;
+        width: 100%;
+        height: auto;
+        background: #fff;
+        margin: 0 auto 0 auto;
+    }
+}
+
+.pic-dragme {
+    position: relative;
+    background: #fff;
+    width: auto;
+    height: auto;
+    padding: 0;
+    display: inline-table;
+    left:0px;
+}
+
+.swipe {
+    overflow: hidden;
+    visibility: hidden;
+    position: relative;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+.swipe-wrap {
+    overflow: hidden;
+    position: relative;
+}
+
+    .swipe-wrap > figure {
+        float: left;
+        width: 100%;
+        position: relative;
+    }
+
+.erweima {
+    text-align: center;
+}
+
+    .erweima img {
+        border: 6px solid #FFF;
+        margin-right: 20px;
+    }
+
+.title {
+    background-color: #222;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    font-size: 12px;
+    font-family: Verdana, Geneva, sans-serif;
+    z-index: 99999;
+}
+
+    .title a {
+        color: #999;
+        text-decoration: none;
+        line-height: 24px;
+        padding: 0 10px;
+        letter-spacing: 1px;
+    }
+
+.title_r {
+    float: right;
+}
+
+.title_l {
+    float: left;
+}
+
+.title a:hover {
+    background: #000;
+}
+
+/* 分享点评底部的分享人&领取现金券相关 */
+.share-member-head {
+    width:94%;
+    height:auto;
+    margin:4.5em auto 0 auto;
+    text-align:center;
+    font-size:1em;
+}
+    .share-member-head .member-head{
+        width:100%;
+        height:auto;
+        margin:0 auto 0.6em auto;
+    }
+        .share-member-head .member-head img{
+            width:3.5em;
+            border-radius: 4em;
+        }
+    .share-member-head .member-nick{
+        width:100%;
+        height:auto;
+        line-height:1.2em;
+        margin:0 auto 0 auto;
+        text-align:center;
+        font-size:0.9em;
+        color:#888;
+    }
+    .share-member-head .ad-tip{
+        width:100%;
+        height:auto;
+        line-height:1.3em;
+        margin:0 auto 0 auto;
+        text-align:center;
+        font-size:1.1em;
+        color:#000;
+    }
+.share-btns {
+    width:100%;
+    height:auto;
+    margin:2.5em auto 2.2em auto;
+    text-align:center;
+}
+    .share-btns .download{
+        width:13em;
+        height:2.5em;
+        line-height:2.5em;
+        margin:0 auto 0 auto;
+        font-size:1.2em;
+        text-align:center;
+        color:#3e9ec0;
+        background:#fff;
+        border:1px solid #3e9ec0;
+        border-radius: 5px;
+    }
+    .share-btns .signup{
+        width:13em;
+        height:2.5em;
+        line-height:2.5em;
+        margin:0 auto 0 auto;
+        font-size:1.2em;
+        text-align:center;
+        color:#3e9ec0;
+        background:#fff;
+        border:1px solid #3e9ec0;
+        border-radius: 5px;
+    }
+    .share-btns .join-zmjd{
+        width:15.5em;
+        height:2.5em;
+        line-height:2.5em;
+        margin:0 auto 0 auto;
+        font-size:1.2em;
+        text-align:center;
+        color:#3e9ec0;
+        background:#fff;
+        border:1px solid #3e9ec0;
+        border-radius: 5px;
+    }
+.share-bottom-logo {
+    width:92%;
+    height:auto;
+    margin:4em auto 2em auto;
+    text-align:center;
+}
+    .share-bottom-logo img{
+        width:100%;
+    }

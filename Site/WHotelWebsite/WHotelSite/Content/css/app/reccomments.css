@@ -1,0 +1,104 @@
+html, body {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  background: #f0f0f0; }
+
+.rec-comments-panel {
+  width: 100%;
+  height: auto;
+  margin: 0 0 0 0;
+  padding: 0.5em 0 0 0;
+  font-size: 1em; }
+
+.rec-comments-panel .items {
+  width: 98%;
+  height: auto;
+  margin: 0 auto 0 auto; }
+
+.rec-comments-panel .items .item-ul {
+  width: 100%;
+  height: auto;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  display: inline-table; }
+
+.rec-comments-panel .items .item-ul .item-li {
+  width: 48% !important;
+  height: auto;
+  margin: 0 0 0.5em 1.5%;
+  background: #fff;
+  float: left;
+  border-radius: 5px;
+  position: relative;
+  z-index: 3; }
+
+.rec-comments-panel .items .item-ul .item-li .top-img {
+  width: 92%;
+  height: auto;
+  margin: 0.5em auto 0 auto;
+  position: relative; }
+
+.rec-comments-panel .items .item-ul .item-li .top-img .img {
+  width: 100%;
+  height: 9em;
+  border: none;
+  border-radius: 5px; }
+
+.rec-comments-panel .items .item-ul .item-li .top-img img {
+  width: 100%;
+  border-radius: 5px; }
+
+.rec-comments-panel .items .item-ul .item-li .top-img .top-name {
+  width: 94%;
+  height: 2.5em;
+  line-height: 2.5em;
+  margin: 0 0 0 0;
+  padding: 0 0 0 1em;
+  position: absolute;
+  left: 3%;
+  bottom: 0px;
+  z-index: 5;
+  color: #fff;
+  font-size: 0.7em;
+  background: url(http://whfront.b0.upaiyun.com/app/img/home/h-local.png) no-repeat left 0.85em;
+  background-size: 0.9em;
+  overflow: hidden; }
+
+.rec-comments-panel .items .item-ul .item-li .top-img .top-name-mode {
+  width: 100%;
+  height: 4em;
+  line-height: 4em;
+  margin: 0 0 0 0;
+  padding: 0 0 0 1.1em;
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  z-index: 4;
+  font-size: 0.8em;
+  background: -webkit-gradient(linear, 40% 40%, 40% 100%, from(transparent), to(#333));
+  border-radius: 5px; }
+
+.rec-comments-panel .items .item-ul .item-li .top-brief {
+  width: 88%;
+  height: 2.8em;
+  line-height: 1.2em;
+  margin: 0 0 0 6%;
+  padding: 0.5em 0 0.5em 0;
+  color: #666;
+  font-size: 0.8em;
+  overflow: hidden; }
+
+.rec-comments-panel .items .item-ul .item-li .top-member {
+  width: 85%;
+  height: auto;
+  margin: 0.6em auto 0 auto;
+  padding: 0.5em 0 0.7em 0;
+  border-top: 1px solid #eee;
+  color: #888;
+  font-size: 0.9em; }
+
+.rec-comments-panel .items .item-ul .item-li .top-member img {
+  width: 1.8em;
+  margin: 0 0.6em 0 0;
+  border-radius: 1.8em;
+  vertical-align: middle; }

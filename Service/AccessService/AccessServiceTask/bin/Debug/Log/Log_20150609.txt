@@ -1,0 +1,33 @@
+
+[2015/6/9 10:09:43] Start Job [BuildHotelIndexJob]
+[2015/6/9 10:09:52] Stop Job [BuildHotelIndexJob]
+[2015/6/9 11:35:24] Start Job [BuildHotelIndexJob]
+[2015/6/9 11:35:24] Job [BuildHotelIndexJob] Error:无法绑定由多个部分组成的标识符 "dis.Name"。
+无法绑定由多个部分组成的标识符 "dis.EName"。
+[2015/6/9 11:35:24] Stop Job [BuildHotelIndexJob]
+[2015/6/9 11:37:27] Start Job [BuildHotelIndexJob]
+[2015/6/9 11:37:36] Stop Job [BuildHotelIndexJob]
+[2015/6/9 15:36:11] Start Job [BuildHotelIndexJob]
+[2015/6/9 15:36:21] Stop Job [BuildHotelIndexJob]
+[2015/6/9 16:25:50] Start Job [BuildHotelIndexJob]
+[2015/6/9 16:25:51] Job [BuildHotelIndexJob] Error:输入字符串的格式不正确。
+[2015/6/9 16:25:51] Stop Job [BuildHotelIndexJob]
+[2015/6/9 16:27:40] Start Job [BuildHotelIndexJob]
+[2015/6/9 16:27:41] Job [BuildHotelIndexJob] Error:输入字符串的格式不正确。
+[2015/6/9 16:27:41] Stop Job [BuildHotelIndexJob]
+[2015/6/9 16:45:28] Start Job [BuildHotelIndexJob]
+[2015/6/9 16:46:07] Job [BuildHotelIndexJob] Error:输入字符串的格式不正确。
+[2015/6/9 16:46:07] Stop Job [BuildHotelIndexJob]
+[2015/6/9 16:46:29] Start Job [BuildHotelIndexJob]
+[2015/6/9 16:46:34] Job [BuildHotelIndexJob] Error:输入字符串的格式不正确。
+[2015/6/9 16:46:34] Stop Job [BuildHotelIndexJob]
+[2015/6/9 16:49:19] Start Job [BuildHotelIndexJob]
+[2015/6/9 16:49:53] Stop Job [BuildHotelIndexJob]
+[2015/6/9 17:25:53] Start Job [BuildHotelIndexJob]
+[2015/6/9 17:26:03] Stop Job [BuildHotelIndexJob]
+[2015/6/9 17:30:58] Start Job [BuildHotelIndexJob]
+[2015/6/9 17:33:45] Stop Job [BuildHotelIndexJob]
+[2015/6/9 18:05:22] Start Job [BuildHotelIndexJob]
+[2015/6/9 18:05:51] Stop Job [BuildHotelIndexJob]
+[2015/6/9 18:40:15] Start Job [BuildHotelIndexJob]
+[2015/6/9 18:40:23] Stop Job [BuildHotelIndexJob]

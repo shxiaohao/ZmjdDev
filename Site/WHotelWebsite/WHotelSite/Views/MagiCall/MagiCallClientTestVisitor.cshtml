@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>用户体系集成</title>
+</head>
+<body>
+    <script>
+        window.easemobim = window.easemobim || {};
+        easemobim.config = {
+
+            tenantId: '10249',
+            //orgName#appName
+            appKey: 'zmjiudian#zmjd100',
+            //手机App绑定的IM号
+            to: 'kevincai',
+            //集成用户体系，验证的方式二选一，必填，另一项为空即可
+            user: {
+                //指定用户名，集成时必填
+                username: 'zmjdappuser4744326',
+                //password验证方式
+                password: 'zmjdappuserpwd4744326',
+                //token验证方式
+                token: ''
+            },
+
+            visitor: {
+                trueName: '竹子',
+                qq: '567**34',
+                phone: '188****8888',
+                companyName: '环信',
+                userNickname: 'hx',
+                description: '描述信息',
+                email: '123456@("@xx.com")'
+    }
+};
+</script>
+<script src='//kefu.easemob.com/webim/easemob.js'></script>
+</body>
+</html>

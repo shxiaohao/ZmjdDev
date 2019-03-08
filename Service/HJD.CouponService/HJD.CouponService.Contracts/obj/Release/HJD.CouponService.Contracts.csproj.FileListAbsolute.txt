@@ -1,0 +1,6 @@
+D:\Dev\WHotelDev\Dev\Service\HJD.CouponService\HJD.CouponService.Contracts\bin\HJD.CouponService.Contracts.dll
+D:\Dev\WHotelDev\Dev\Service\HJD.CouponService\HJD.CouponService.Contracts\bin\HJD.CouponService.Contracts.pdb
+D:\Dev\WHotelDev\Dev\Service\HJD.CouponService\HJD.CouponService.Contracts\bin\HJD.Framework.Entity.dll
+D:\Dev\WHotelDev\Dev\Service\HJD.CouponService\HJD.CouponService.Contracts\bin\HJD.Framework.Entity.pdb
+D:\Dev\WHotelDev\Dev\Service\HJD.CouponService\HJD.CouponService.Contracts\obj\Release\HJD.CouponService.Contracts.dll
+D:\Dev\WHotelDev\Dev\Service\HJD.CouponService\HJD.CouponService.Contracts\obj\Release\HJD.CouponService.Contracts.pdb

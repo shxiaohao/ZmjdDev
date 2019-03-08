@@ -1,0 +1,171 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    Layout = null;
+    
+    ViewBag.Title = "双12限时抢购";
+    
+    var isApp = ViewBag.IsApp;
+    var userid = ViewBag.UserId;
+
+    var list = ViewBag.ShowList;
+
+    var topBannerCount = 10;
+    if (list != null && list.Items != null && list.Items.Count > 0)
+    {
+        topBannerCount = list.Items.Count;
+    }
+}
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>双12限时抢购</title>
+    <link href="/content/css/coupon/couponshoplist1212.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <link href="~/Content/css/bootstrap.css" rel="stylesheet" />
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .modal {
+            top: 24%;
+        }
+
+        .modal-content {
+            width: 90%;
+            margin: auto;
+        }
+
+        .modal-body {
+            padding: 2.6em 0.8em 1.7em 0.8em;
+        }
+
+        .modal-footer {
+            margin-top: 0;
+            padding: 0.7em 0.9em;
+            text-align: center;
+        }
+
+        .btn-default, .btn-primary {
+            width: auto;
+            min-width: 4em;
+            border: none;
+            color: #3e9ec0;
+            font-size: 1.2em;
+        }
+
+        .btn-default0 {
+            color: #333;
+        }
+
+        .box-big-btn {
+            width: 96%;
+        }
+
+        .box-btn-bottomborder {
+            padding-bottom: 0.7em;
+            margin-bottom: 0.3em;
+            border-bottom: 1px solid #eeeded;
+            border-radius: 0;
+        }
+    </style>
+    <script type="text/javascript">
+        function goto(param) {
+            var url = "@(ViewBag.AccessProtocal)" + param;
+            this.location = url;
+        }
+
+        function openHotel(hotelid) {
+            var isapp = $("#isapp").val() == "1";
+            if (isapp) {
+                goto('hotel/' + hotelid);
+            }
+            else {
+                location.href = "http://www.zmjiudian.com/hotel/" + hotelid;
+            }
+        }
+
+        function gourl(url) {
+            location.href = url;
+        }
+
+        function loginCallback(userid) {
+            checkUserPartActiveState(userid);
+        }
+    </script>
+</head>
+<body>
+    @*<div>
+            <a href="whotelapp://www.zmjiudian.com/gotopage?url=http://192.168.1.22:8081/coupon/CouponShopListFor1212">GO APP >>>></a>
+        </div>*@
+    <div class="main" style="@(isApp ? "" : "margin-bottom:5em;")">
+        <div class="photo"><img src="~/Content/images/coupon/shoplist/1212/shoplistbanner1212.jpg" alt="" /></div>
+        <div class="list">
+            @if (list != null && list.Items != null && list.Items.Count > 0)
+            {
+                for (int i = 0; i < list.Items.Count; i++)
+                {
+                    var item = list.Items[i];
+                    var id = item.ActivityID;
+                    var img = item.PicUrl;
+                    var name = item.HotelName;
+                    var packageBrief = item.PackageBrief;
+                    var price = item.Price; //price = 1999;
+                    var mkprice = item.MarketPrice; //mkprice = 9999;
+                    var label = item.PriceDateType;
+                    var tag = "双12抢购";
+                    var tagCss = string.IsNullOrEmpty(tag) ? "_0" : "";
+                    <div class="item" data-shopid="@id" onclick="gourl('/coupon/shop/@id')">
+                        <table cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td class="imgTd">
+                                    <img src="@img" alt="" />
+                                </td>
+                                <td class="infoTd">
+                                    <div class="names">@name</div>
+                                    <div class="briefs"><div>@packageBrief</div></div>
+                                    <div class="prices">
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td style="text-align:right;"><span class="tag@(tagCss)" style="margin:0 0.2em 0 0;">@tag</span></td>
+                                                <td style="width: 3.8em; text-align: right;padding-top:0.2em;" valign="bottom">
+                                                    <span class="t">￥</span><span class="value" style="@(price > 999 ? "margin:0.1em 0.1em 0 0;" : "margin:0.1em 0.1em 0 0;")">@price</span>
+                                                </td>
+                                                <td style="width: 2.5em; text-align: right;" valign="bottom"><del><span class="mkprice">@mkprice</span></del></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    @if (!isApp)
+    {
+        <div class="download-footbanner" onclick="gourl('/Inspector/Jump?jumpurl=whotelapp://www.zmjiudian.com/')"><img src="/Content/images/download-footbanner_201511.png" alt="下载周末酒店" /></div>
+    }
+    <footer>
+        <input type="hidden" id="userid" value="@userid" />
+        <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+    </footer>
+    <script src="~/Content/js/jquery-1.10.2-min.js"></script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/coupon/couponshoplist1212.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/bootstrap.min.js"></script>
+    <script src="~/Content/js/bootbox.js"></script>
+    <script type="text/javascript">
+        var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+        document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F3566e9570ddbe6722a51adedffbf065b' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+</body>
+</html>
+

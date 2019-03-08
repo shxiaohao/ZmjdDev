@@ -1,0 +1,55 @@
+﻿@model  List<HJD.HotelServices.Contracts.CanSaleHotelInfoEntity>
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<script type="text/javascript">
+    function goto(hotelid)
+    {
+        this.location = "http://m1.zmjiudian.com/" + hotelid;
+    }
+
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Active101</title>
+    <link href="/content/css/bootstrap.css" rel="stylesheet">
+    <link href="/content/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+
+        <div class="row topimg">
+            <div class="col-xs-12">
+                <img src="/content/images//101ad.png" class="img-responsive" alt="" />
+            </div>
+        </div>
+        @{
+            DateTime EndDate = DateTime.Parse("2014-10-7").Date;
+            DateTime StartDate = DateTime.Now.AddHours(6).Date;
+           
+                 
+            if (DateTime.Now.Date < EndDate)
+            {
+
+                for (DateTime curDate =  StartDate; curDate < EndDate; curDate = curDate.AddDays(1))
+                {
+                    var curList = @Model.Where(l => l.Night == curDate).OrderBy(l=>l.DataPathName);
+
+                    <div class="title2">  <h5>@(curDate.Month)月@(curDate.Day)日</h5> </div>
+                    <ul>
+                        @foreach (HJD.HotelServices.Contracts.CanSaleHotelInfoEntity h in curList)
+{
+    <li> <a href="javascript:;" onclick="goto(@(h.HotelId))">@( h.HotelName)  ￥@((int)h.Businessprice)</a></li>
+}
+                    </ul>
+                }
+            }
+        }
+    </div>
+</body>
+</html>

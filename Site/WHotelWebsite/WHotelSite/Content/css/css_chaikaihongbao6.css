@@ -1,0 +1,250 @@
+﻿@charset "utf-8";
+/* CSS Document */
+html, body {
+	background-size: cover;
+	position: relative;
+	background: rgb(197, 52, 49);
+
+
+}si
+a:hover{text-decoration: none;
+	}
+	
+
+	
+.hb-bg{
+	width: 100%;
+	background-image: url(/Content/images/hongbao/bg.jpg);
+	background-size: 100%;
+	height: 100%;
+	background-repeat: no-repeat;
+}
+
+.hb {
+position: relative;
+z-index: -1;
+width: 80%;
+position: relative;
+bottom: -45%;
+text-align: center;
+}
+	
+.button01 {
+width: 80%;
+background-repeat: no-repeat;
+text-align: center;
+margin: 0 auto;
+top: -18.5em;
+position: relative;
+}
+	
+.brook1 {
+height: auto;
+line-height: 30px;
+color: #F1D5AF;
+font-family: 微软雅黑;
+margin-left: 10%;
+margin-right: 10%;
+padding: 20px 10px 5px 10px;
+border-radius: 5px;
+font-size: 1.2em;
+text-align: center;
+background-size: 100%;
+top: -15.5em;
+position: relative;
+}
+        
+span {
+color: #FEE1AF;
+font-size: 1.2em;
+font-weight: bold;
+margin: 0 .2em 0 .2em;
+text-align: center;
+}
+        
+        
+a.brook4 {
+text-decoration: none;
+text-shadow: 1px 1px 0px rgba(50, 50, 50, .2);
+}
+        
+.brook4 {
+position: relative;
+display: block;
+width: 80%;
+height: 40px;
+line-height: 40px;
+text-align: center;
+font-size: 2em;
+font-weight: bold;
+color: #ffffff;
+margin: 0 auto;
+background: #ffca00;
+margin-top: 1em;
+background: -webkit-gradient(linear, 0 0, 0 100%, from(#ffb500), to(#ffd100));
+box-shadow: 0px 4px 4px 0px #ffb500 inset;
+border-radius: 5px;
+box-shadow: 0px 4px 4px 0px rgba(50, 50, 50, .3);
+}
+		.brook4:before{
+	position: absolute;
+    content: "";
+    width: 100px;
+    height: 80px;
+	right:-50px;
+    top: -20px;
+	background-size: contain;
+    z-index: -1;
+			
+			}
+        
+        .brook5
+        {
+            position: absolute;
+            top: 120px;
+            left: 170px;
+            z-index: -1;
+        }
+        
+        .brook6
+        {
+            margin-top: 40px;
+        }
+        
+ .brook6 p {
+margin-left: 10%;
+margin-right: 10%;
+height: auto;
+line-height: 25px;
+color: rgba(255, 255, 255, .8);
+font-size: 14px;
+text-shadow: 1px 2px 2px rgba(50, 50, 50, .3);
+text-align: center;
+}
+.container {
+	position: relative;
+}
+
+.container .content {
+display: block;
+height: 50%;
+width: 100%;
+z-index: 1;
+}
+
+.container .content .zi {
+	color: #f9eb0b;
+	line-height:60px;
+	font-size:16px;
+	}
+.container .content .zi strong{
+	font-size:30px;
+	padding:0 14px 0 14px;
+	
+	} 
+.container .content .zi span {
+	font-size:22px;
+	padding:0 80px 0 80px;
+	 margin: 0 5px;
+    display: inline-block;
+    position: relative;
+	}
+.container .content .zi span:before {
+    position: absolute;
+    content: "";
+    width: 80%;
+    height: 80px;
+    left: 0;
+    top:-10px;
+    background: url(./images/tiaoda.png) ;
+    background-size: cover;
+    z-index: -1;
+	}
+.container .content .form-box {
+	text-align: center;
+	
+}
+
+.container .content .aa1{
+	color: #f9eb0b;
+	opacity:0.7;
+	font-size:14px;
+	line-height:30px;
+	margin:5% 0 0 10%;
+	}
+.form-box .input-phone input {
+	border: 0 none;
+	outline: 0;
+	box-shadow: 0px 1px 2px 0px #000 inset;
+	height: 40px;
+	text-align: center;
+	font-size: 14px;
+	width: 55%;
+	border-radius: 3px;
+}
+.form-box .button-open {
+	margin-top:2%;
+}
+.form-box .button-open a {
+	
+	display: inline-block;
+    line-height: 38px;
+    color: #fff;
+    background-color: #ff8b00;
+    width: 100%;
+}
+.form-box .button-open button {
+	border: 0 none;
+	outline: 0;
+	background: -webkit-gradient(linear, 0 0, 0 100%, from(#ffb500), to(#ffd100));
+	height: 40px;
+	text-align: center;
+	font-size: 20px;
+	width: 55%;
+	color: #fff;
+	font-weight: bold;
+	border-radius: 3px;
+	box-shadow: 0px 4px 4px 0px #ffb500 inset;
+	border-top: 1px solid #ffdd8b;
+	border-bottom: 1px solid #997e00;
+	box-sizing: border-box;
+}
+.container .content .hb-introduce {
+	width: 85%;
+	margin: 3% auto 0;
+	color: #f9eb0b;
+}
+.container .content .hb-introduce h1 {
+	line-height: 40px;
+	font-size: 18px;
+}
+.container .content .hb-introduce p {
+	text-indent: 2em;
+	line-height: 24px;
+	
+}
+.container .content .hb-introduce .aa2{
+	width:100%;
+    background:rgba(255,255,255,0.2);
+	padding: 10px;
+	border-radius:10px;
+	}
+
+ @media all and (min-width: 736px) {
+.form-box .input-phone input {
+	font-size: 36px;
+	height: 80px;
+}
+.form-box .button-open button {
+	font-size: 44px;
+	height: 80px;
+}
+.container .content .hb-introduce h1 {
+	font-size: 34px;
+	line-height: 80px;
+}
+.container .content .hb-introduce p {
+	font-size: 26px;
+	line-height: 44px;
+}
+}

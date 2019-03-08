@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HJD.JobAssistant.Contracts</name>
+    </assembly>
+    <members>
+        <member name="T:HJD.Entity.JobAssistantEntity">
+            <summary>
+            job工作指示，WELCOME：启动，BYE：离开
+            </summary>
+        </member>
+        <member name="F:HJD.Entity.JobAssistantEntity.WELCOME">
+            <summary>
+            启动吧
+            </summary>
+        </member>
+        <member name="F:HJD.Entity.JobAssistantEntity.BYE">
+            <summary>
+            已经在运行了，退出吧
+            </summary>
+        </member>
+        <member name="T:HJD.Contracts.IJobAssistantService">
+            <summary>
+            job助理 Contract
+            </summary>
+        </member>
+        <member name="M:HJD.Contracts.IJobAssistantService.Begin(System.String,System.String)">
+            <summary>
+            启动
+            </summary>
+            <param name="jobName">job名称</param>
+            <param name="remark">备注，可空</param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Contracts.IJobAssistantService.Done(System.String,System.String)">
+            <summary>
+            结束
+            </summary>
+            <param name="jobName">job名称</param>
+            <param name="remark">备注，可空</param>
+        </member>
+        <member name="M:HJD.Contracts.IJobAssistantService.Heartbeat(System.String,System.String)">
+            <summary>
+            心跳记录
+            </summary>
+            <param name="jobName">job名称</param>
+            <param name="remark">备注，可空</param>
+        </member>
+        <member name="M:HJD.Contracts.IJobAssistantService.Error(System.String,System.String)">
+            <summary>
+            出错
+            </summary>
+            <param name="jobName">job名称</param>
+            <param name="remark">备注，可空</param>
+        </member>
+        <member name="M:HJD.Contracts.IJobAssistantService.GetParameter(System.String)">
+            <summary>
+            返回job参数
+            </summary>
+            <param name="jobName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HJD.Contracts.IJobAssistantService.SetParameter(System.String,System.String,System.String)">
+            <summary>
+            设置job参数
+            </summary>
+            <param name="jobName"></param>
+            <param name="p"></param>
+        </member>
+        <member name="T:HJD.Entity.JobAssistantParameterEntity">
+            <summary>
+            job参数
+            </summary>
+        </member>
+    </members>
+</doc>

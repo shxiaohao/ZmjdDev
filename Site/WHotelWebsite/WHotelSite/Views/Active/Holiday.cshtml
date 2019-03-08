@@ -1,0 +1,69 @@
+﻿
+@{
+    Layout = null;
+
+    var recmHotelResult = ViewBag.RecmHotelResult;
+    RecommendPackageDetailResult packageEntity = ViewBag.PackageEntity;
+    SameSerialPackageItem thisPackageRoomInfo = ViewBag.ThisPackageRoomInfo;
+
+    var isApp = ViewBag.IsApp;
+    var userid = ViewBag.UserId;
+
+    var AppType = ViewBag.AppType;
+
+    //页面标题
+    var pageTitle = ViewBag.PageTitle;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>@pageTitle</title>
+    <link href="~/Content/css/framework/util.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/Content/css/framework/zmjd.modal.min.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="/content/css/hotel/package.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <link href="/content/css/calendar_price.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <link href="/content/css/yuandan.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <link href="/content/css/framework/iscroll.css" rel="stylesheet">
+</head>
+<body>
+    <script type="text/javascript">
+        var pub_userid = "@userid";
+        var pub_isapp = "@(isApp ? "1" : "0")" == "1";
+    </script>
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script src="~/Content/js/jquery-1.10.2-min.js"></script>
+    <script src="~/Content/js/framework/config.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjd.modal.min.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/geetest/gt.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/login.js?v=@(Helpers.curAppVer())"></script>
+
+    <div id="holiday-content">@Html.Partial("HolidayContent")</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="HJD.HotelServices.Contracts.HotelReviewExEntity">
+    <Position X="5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAABEBAFQgDwABAQABAAEAhAAAIAAAEEAgAACBAEgAA=</HashCode>
+      <FileName>HotelReviewExEntity.cs</FileName>
+      <NewMemberFileName>HotelReviewWritingEntity.cs</NewMemberFileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HJD.HotelServices.Contracts.HotelReviewSummaryEntity">
+    <Position X="7.25" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAACAABgAQAQAEAAAAAAABAAAAEAAAAAAAAEAAg=</HashCode>
+      <FileName>HotelReviewSummaryEntity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HJD.HotelServices.Contracts.HotelInfoExEntity">
+    <Position X="0.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAghAAAAACBAAAAAAJIEgAgAACCAAABDgIAAABAFgAA=</HashCode>
+      <FileName>HotelInfoExEntity.cs</FileName>
+      <NewMemberFileName>HotelInfoEntity.cs</NewMemberFileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HJD.HotelServices.Contracts.HotelReviewTop3Entity" Collapsed="true">
+    <Position X="7.25" Y="3.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAAAAAAAAAAAAAAAAAAEEAAAAAAAEgAA=</HashCode>
+      <FileName>HotelReviewTop3Entity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HJD.HotelServices.Contracts.NewestHotelReviewEntity" Collapsed="true">
+    <Position X="9.75" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAgACAAAAABAAAAAAIABAABAQEABAAAAA=</HashCode>
+      <FileName>NewestHotelReviewEntity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HJD.HotelServices.Contracts.ArguHotelReview" Collapsed="true">
+    <Position X="9.25" Y="4.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAAAAEABgAAAAACIAAQAAAAAAEAQA=</HashCode>
+      <FileName>ArguHotelReview.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HJD.HotelServices.Contracts.RatingEntity" Collapsed="true">
+    <Position X="9.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAIAAAEAAAAAAAAEAAA=</HashCode>
+      <FileName>RatingEntity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="HJD.HotelServices.Contracts.IHotelService">
+    <Position X="2.5" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAQABAACEBAgQAAAAAAAABAFAQAKGYD5AAwABAAA=</HashCode>
+      <FileName>IHotelService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="HJD.HotelServices.Contracts.HotelReviewOrderType" Collapsed="true">
+    <Position X="9.75" Y="1.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>EAAAAACAAAAAAAAAAAAAAQAAAAAAAEAACAAAAAAAACA=</HashCode>
+      <FileName>ArguHotelReview.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="HJD.HotelServices.Contracts.UserIdentityType" Collapsed="true">
+    <Position X="9.75" Y="2" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAEAAEAAAAAAAAAAAACAAAAAAAAACIAAAAAABAA=</HashCode>
+      <FileName>UserIdentityEntity.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="HJD.HotelServices.Contracts.RatingType" Collapsed="true">
+    <Position X="9.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAoAAgIAAAAAIAAAAAAAAE=</HashCode>
+      <FileName>RatingEntity.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="HJD.HotelServices.Contracts.PlaceType">
+    <Position X="7.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAIAAAAAAAAAAAAAAQIAAAAAAAAAAAA=</HashCode>
+      <FileName>PlaceType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="微软雅黑" Size="9" />
+</ClassDiagram>

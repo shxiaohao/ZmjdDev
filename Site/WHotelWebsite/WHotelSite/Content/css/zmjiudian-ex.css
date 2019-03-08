@@ -1,0 +1,338 @@
+.hotelphoto a {
+    display: block;
+    height: 0;
+    padding-bottom: 48.4375%;
+    position: relative;
+}
+
+.hotelphoto img {
+    position: absolute;
+    width: 100%;
+}
+
+.zmpanel .list1 div {
+    margin-top: 1em;
+}
+
+.city-suggest {
+    background: white;
+    position: absolute;
+    font-size: 12px;
+    width: 380px;
+    border: 1px solid #999;
+    z-index: 999;
+    padding: 10px 10px 20px 10px;
+    display: none;
+}
+
+    .city-suggest ul {
+        margin: 0;
+        padding: 0;
+        display: block;
+    }
+
+        .city-suggest ul li {
+            float: left;
+            list-style-type: none;
+        }
+
+.city-suggest-hd .close {
+    float: right;
+    color: black;
+}
+
+.city-suggest-hd .title {
+    font-weight: normal;
+    color: #999;
+}
+.city-suggest-bd{clear:both;}
+.city-suggest-bd .nearby {
+    margin: 10px 0px;
+    margin-bottom:10px;
+    margin-right:10px;
+    clear:both;
+}
+
+    .city-suggest-bd .nearby li {
+        
+        cursor: pointer; 
+        padding:5px 10px;
+        font-size:1.1em;
+        border:1px solid #cecece;
+        margin-right:-1px;
+        margin-top:-1px;
+        color:#3d3d3d;
+    }
+
+        .city-suggest-bd .nearby li:hover {
+            background: #21afe8;
+            color: white;
+        border:1px solid #21afe8;
+        }
+
+        .city-suggest-bd .nearby li:last-child {
+            margin-right: 0px;
+        }
+
+.city-suggest-bd .tab li {
+    padding: 5px 10px;
+    cursor: pointer;
+    border-bottom: 2px solid #bbb;
+}
+.city-suggest-bd .tab li:hover {
+    color: #0f8abc;
+    border-bottom: 2px solid #21afe8;
+    background:#21afe8;
+    color:white;
+}
+
+.city-suggest-bd .tab .active {
+    color: #0f8abc;
+    border-bottom: 2px solid #21afe8;
+    background:#21afe8;
+    color:white;
+}
+
+.city-suggest-bd .item .letter {
+    float: left;
+    clear: left;
+    margin: 10px 0 0 0;
+    color: #E56700;
+    width: 30px;
+    text-align: center;
+}
+
+.city-suggest-bd .item {
+    display: none;
+}
+
+.city-suggest-bd .active {
+    display: block;
+}
+
+.city-suggest-bd .item ul {
+    float: left;
+    width: 350px;
+    margin: 5px 0px;
+}
+
+    .city-suggest-bd .item ul li {
+        padding: 5px;
+        width: 65px;
+        cursor: pointer;
+        white-space:nowrap;
+        text-overflow:ellipsis;
+        -o-text-overflow:ellipsis;
+        overflow: hidden;
+    }
+
+        .city-suggest-bd .item ul li:hover {
+            background: #21afe8;
+            color: white;
+        }
+
+.actionsheet, .spinner {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 4;
+}
+
+.spinner {
+    background-color: transparent;
+}
+
+    .spinner.dark {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+
+    .spinner a {
+        position: absolute;
+        width: 48px;
+        height: 48px;
+        left: 50%;
+        top: 50%;
+        margin-left: -24px;
+        margin-top: -24px;
+        background-color: #fff;
+        opacity: 0.95;
+        border-radius: 5px;
+    }
+
+        .spinner a:after {
+            position: absolute;
+            content: url(../images/spinner.gif);
+            left: 50%;
+            top: 50%;
+            width: 32px;
+            height: 32px;
+            margin-left: -16px;
+            margin-top: -16px;
+        }
+
+
+
+.interest-suggest {
+    background: white;
+    position: absolute;
+    font-size: 12px;
+    width: 300px;
+    border: 1px solid #999;
+    z-index: 999;
+    padding: 10px 10px 20px 10px;
+    display: none;
+}
+
+    .interest-suggest ul {
+        margin: 0;
+        padding: 0;
+        display: block;
+    }
+
+        .interest-suggest ul li {
+            float: left;
+            list-style-type: none;
+        }
+
+.interest-suggest-hd .close {
+    float: right;
+    color: black;
+}
+
+.interest-suggest-bd .tab li {
+    padding: 5px 53px;
+    cursor: pointer;
+    border-bottom: 2px solid #bbb;
+}
+
+.interest-suggest-bd .tab .active {
+    color: white;
+    border-bottom: 2px solid #21afe8;
+            background: #21afe8;
+            color: white;
+}
+
+.interest-suggest-bd .item {
+    display: none;
+}
+
+.interest-suggest-bd .active {
+    display: block;
+}
+
+.interest-suggest-bd .item ul {
+    float: left;
+    width: 300px;
+    margin: 5px 0;
+}
+
+    .interest-suggest-bd .item ul li {
+        padding: 5px;
+        width: 95px;
+        cursor: pointer;
+    }
+
+        .interest-suggest-bd .item ul li:hover {background: #21afe8;
+            color: white;
+        }
+
+/* package button patch */
+.zmpanel2 .btn.unavailable {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-size: 12px;
+    background-color: #dcdcdc;
+    color: #272727;
+}
+
+/* calendar patch */
+.calendar1 {
+    margin-top: 4px;
+    box-shadow: 0 0 4px #cccccc;
+}
+
+    .calendar1 .col-xs-6:last-child {
+        padding-left: 0;
+    }
+
+    .calendar1 .btn-prev, .calendar1 .btn-next {
+        position: absolute;
+        top: 10px;
+        width: 37px;
+        height: 25px;
+        background-image: transparent none left top no-repeat;
+    }
+
+    .calendar1 .btn-prev {
+        left: 10px;
+        background-image: url(../images/iconcaleft.png);
+    }
+
+    .calendar1 .btn-next {
+        right: 15px;
+        background-image: url(../images/iconcaright.png);
+    }
+
+/* bootbox z-index fix */
+.modal-backdrop {
+    z-index: 98;
+}
+
+.modal {
+    z-index: 99;
+}
+
+/* ota panels */
+.ota-panel .panel-body {
+    display: block;
+    background: transparent url(../images/icon-aarow1.png) right center no-repeat;
+    padding-right: 2.5em;
+    margin-right: 1em;
+}
+
+.ota-name {
+    font-size: 16px;
+    line-height: 20px;
+    float: left;
+    padding-top: 4px;
+}
+
+.ota-price {
+    text-align: right;
+    color: #ff8c01;
+    font-size: 20px;
+    line-height: 20px;
+    padding-top: 4px;
+}
+
+    .ota-price b {
+        font-weight: normal;
+        color: #ff8c01;
+    }
+
+.custom-dropdown-menu {
+    right: auto;
+    min-width: 0;
+}
+
+.dialog-container {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+}
+
+    .dialog-container .modal-dialog {
+        position: absolute;
+        width: 600px;
+        height: 278px;
+        left: 50%;
+        top: 50%;
+        margin-left: -300px;
+        margin-top: -139px;
+    }

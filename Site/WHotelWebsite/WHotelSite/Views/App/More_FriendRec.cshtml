@@ -1,0 +1,46 @@
+﻿@model RecommendHotelResult
+@{
+    Layout = null;
+
+    var isApp = ViewBag.IsApp;
+    var userid = ViewBag.UserId;
+}
+@if (Model != null && Model.HotelList.Count > 0)
+{
+    <ul>
+        @for (int i = 0; i < Model.HotelList.Count; i++)
+        {
+            var hotelEntity = Model.HotelList[i];
+
+            if (string.IsNullOrEmpty(hotelEntity.HotelPicUrl))
+            {
+                hotelEntity.HotelPicUrl = "http://whfront.b0.upaiyun.com/app/img/home/home-load2-3x2.png";
+            }
+            
+            <li class="li-line" onclick="goto('hotel/@(hotelEntity.HotelID)')">
+                <div class="h-img">
+                    <img @(i == 0 ? string.Format(" src={0} ", hotelEntity.HotelPicUrl) : string.Format(" data-original={0} data-lazyload-id={1} ", hotelEntity.HotelPicUrl, i)) alt="">
+                    <div class="h-tit-tip-price3">
+                        @if (hotelEntity.VIPPrice > 0)
+                        {
+                            <div class="v-price">
+                                <span>￥</span>@hotelEntity.VIPPrice<span>起</span>
+                                <div class="v-icon"><span class="zmjd-iconfont">&#xe623;</span></div>
+                            </div>
+                            <div class="d-price"><span>￥</span>@hotelEntity.HotelPrice<span>起</span></div>
+                        }
+                        else
+                        {
+                            <div class="d-price"><span>查询价格</span></div>
+                        }
+                    </div>
+                    <div class="h-user-img"><img src="@hotelEntity.AvatarUrl" alt="" /></div>
+                </div>
+                <div class="hname-info">
+                    <div class="hotel-name2">@hotelEntity.HotelName</div>
+                    <div class="hotel-packagebrief2">@hotelEntity.PackageBrief</div>
+                </div>
+            </li>
+        }
+    </ul>
+}

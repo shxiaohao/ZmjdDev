@@ -1,0 +1,63 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+    //ViewBag.Title = "ExchangeCouponSearchAndBook";
+    ViewBag.Title = "查询并预约";
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+}
+
+@*<h2>exchangecouponsearchandbook</h2>*@
+@section styles{
+    <link href="~/Content/css/framework/zmjd.modal.min.css" rel="stylesheet" />
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/Content/css/coupon/exchangecouponsearchandbook.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+}
+
+<div id="couponinfo">
+    <div class="div-head">
+        <div class="head-img-txt">
+            <img src="http://whfront.b0.upaiyun.com/www/img/coupon/exchangecouponsearchandbook/img-background.png" />
+            <div class="head-txt">
+                <div class="tit">查询与预约</div>
+                <div class="desc">输入券码查询并预约你的游玩时间</div>
+            </div>
+        </div>
+    </div>
+    <div class="div-search">
+        <input placeholder="输入券码" id="exchangeno" class="exchangeno" />
+        <span></span>
+        <a class="searchbtn" v-on:click="vueSearchExchangeNO">查询</a>
+    </div>
+
+    <div class="coupon" v-if="couponinfo.State!=-1">
+        <div class="coupon-border" v-if="couponinfo.State==0">
+            <div class="coupondetail">
+                <div class="detail-tit">{{couponinfo.PageTitle}}</div>
+                <div class="detail-desc">{{couponinfo.SKUName}}</div>
+                <div class="detail-expiretime">有效期至{{couponinfo.ExpireTime}}</div>
+                <div v-if="couponinfo.BookState==0" class="detail-bookinfo">已预约：{{couponinfo.BookTime}} {{couponinfo.BookPlayNum}}</div>
+                <div class="detail-button">
+                    <a v-if="couponinfo.BookState==1" class="btngobook" v-on:click="vueGoBook">去预约</a>
+                    <a v-if="couponinfo.BookState==0" class="btncancelbook" v-on:click="vueCanceBook">取消预约</a>
+                </div>
+            </div>
+        </div>
+        <div class="no_exchangeno" v-if="couponinfo.State>0">
+            {{couponinfo.StateName}}
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="userid" value="@ViewBag.UserID" />
+<input type="hidden" id="isapp" value="@(ViewBag.IsApp ? 1 : 0)" />
+
+@section scripts{
+    <script src="~/Content/js/framework/zmjd.modal.min.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/login.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/coupon/exchangecouponsearchandbook.js?v=@(Helpers.curAppVer())"></script>
+}

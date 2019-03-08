@@ -1,0 +1,545 @@
+﻿@charset "UTF-8";
+
+html, body {
+    margin: 0 0 0 0;
+	    padding: 0 0 0 0;
+        -webkit-user-select:none; 
+        user-select: none;
+        overflow-x: hidden;
+}
+
+/* 消费券 */
+
+.productcoupon-section {
+    width:100%;
+    height:auto;
+    display:inline-table;
+}
+
+.productcoupon-section .detail {
+    width: 100%;
+    height: auto;
+}
+
+    .productcoupon-section .detail .null {
+        width: 100%;
+        height: auto;
+        margin: 5em auto 1em auto;
+        padding: 0 0 0 0;
+        text-align: center;
+    }
+
+        .productcoupon-section .detail .null img {
+            width: 55%;
+        }
+
+        .productcoupon-section .detail .null .txt {
+            padding: 1em 0 0 0;
+            font-size: 1.1em;
+            color: #919191;
+        }
+
+.productcoupon-item {
+    width: 90%;
+    margin: 1.6em auto 0 auto;
+    background: #fff;
+    border-top:1px dashed #e0e0e0;
+    border-bottom:2px solid #fe8000;
+}
+
+    .productcoupon-item a {
+        color: #000;
+    }
+
+    .productcoupon-item .hotel {
+        width: 90%;
+        margin: 0 auto 0 auto;
+        padding: 0 0 0 0;
+    }
+        .productcoupon-item .hotel .hotelname {
+            margin:0 0 1.2em 0;
+            padding:1.5em 0 1em 0;
+            line-height: 1.4em;
+            font-size: 1.3em;
+            color:#474747;
+            border-bottom:1px solid #e0e0e0;
+        }
+        .productcoupon-item .hotel .left {
+            width: 70%;
+            float: left;
+        }
+            .productcoupon-item .hotel .left .packagename {
+                line-height: 1.3em;
+                font-size: 1.4em;
+                color:#474747;
+            }
+
+            .productcoupon-item .hotel .left .timeinfo {
+                line-height: 2.2em;
+                font-size: 1.2em;
+                color:#919191;
+            }
+
+        .productcoupon-item .hotel .right {
+            width: 30%;
+            height: auto;
+            line-height: 1.5em;
+            float: right;
+            text-align: right;
+        }
+
+            .productcoupon-item .hotel .right .price {
+                font-size: 1.5em;
+                color: #fe8000;
+            }
+
+                .productcoupon-item .hotel .right .price .t {
+                    padding: 0;
+                    font-size: 0.9em;
+                    color: #fe8000;
+                    letter-spacing:-3px;
+                }
+
+    .productcoupon-item .otherinfo {
+        width:90%;
+        margin:0 auto 0 auto;
+        padding:0.1em 0 0 0;
+        line-height:1.5em;
+        font-size: 1.2em;
+        color:#919191;
+        text-align:justify;
+    }
+        .productcoupon-item .otherinfo .h{
+            color:#fe8000;
+        }
+
+    .productcoupon-item .time {
+        width: 80%;
+        margin: 0 auto 0 auto;
+        padding: 1em 0 1em 0;
+        border-bottom: 1px solid #dcdcdc;
+        color: #666;
+        font-size: 1.2em;
+    }
+
+    .productcoupon-item .quanlist {
+        width: 90%;
+        margin: 0 auto 0 auto;
+        padding: 0.8em 0 0.5em 0;
+        font-size: 1.2em;
+    }
+
+        .productcoupon-item .quanlist ul {
+            width: 100%;
+            padding: 0 0 0 0;
+            margin: 0 0 0 auto;
+            list-style: none;
+        }
+
+            .productcoupon-item .quanlist ul li {
+                width: 100%;
+                height: 1.6em;
+                line-height: 1.6em;
+                margin: 0 0 0 0;
+                padding:0.8em 0 0.8em 0;
+                display: inline-table;
+                border-top:1px dashed #e0e0e0;
+            }
+
+                .productcoupon-item .quanlist ul li .left {
+                    width: 70%;
+                    float: left;
+                    padding: 0;
+                }
+
+                    .productcoupon-item .quanlist ul li .left .label {
+                        margin-right: 0.3em;
+                        padding: 0;
+                        color: #666;
+                        font-size: 1em;
+                    }
+
+                    .productcoupon-item .quanlist ul li .left .value {
+                        color: #474747;
+                        font-size: 1em;
+                        font-family: Arial;
+                    }
+                    .productcoupon-item .quanlist ul li .left .note {
+                        margin:0 0 0 0.6em;
+                        color: #474747;
+                        font-size: 0.9em;
+                        font-family: Arial;
+                    }
+                    .productcoupon-item .quanlist ul li .left .no-v {
+                        color: #919191;
+                    }
+
+                .productcoupon-item .quanlist ul li .right {
+                    width: 5.2em;
+                    float: right;
+                    text-align: right;
+                    margin-right: 0;
+                }
+
+                    .productcoupon-item .quanlist ul li .right .use0 {
+                        font-size: 1em;
+                        color: #0096cf;
+                    }
+
+                    .productcoupon-item .quanlist ul li .right .use1 {
+                        font-size: 1em;
+                        color: #999;
+                    }
+
+                    .productcoupon-item .quanlist ul li .right .paybtn {
+                        width: 4.8em;
+                        height: 2em;
+                        line-height: 2.1em;
+                        margin: 0 0 0 0;
+                        font-size: 1em;
+                        text-align: center;
+                        color: #fff;
+                        background: #fe8000;
+                        border-radius: 3px;
+                        display: inline-table;
+                    }
+
+                    .productcoupon-item .quanlist ul li .right .return-policy-btn {
+                        width: 4.8em;
+                        height: 1.9em;
+                        line-height: 1.9em;
+                        margin: 0 0 0 0;
+                        font-size: 1em;
+                        text-align: center;
+                        color: #fe8000;
+                        background: #fff;
+                        border: 1px solid #fe8000;
+                        border-radius: 3px;
+                        display: inline-table;
+                    }
+                .productcoupon-item .quanlist ul li .photo-ctrl {
+                    margin:0.8em 0 0 0;
+                    padding: 1em 0 0 0;
+                    border-top:1px dashed #e0e0e0;
+                }
+                    .productcoupon-item .quanlist ul li .photo-ctrl .label{
+                        margin-right: 0.3em;
+                        padding: 0;
+                        color: #666;
+                        font-size: 1em;
+                    }
+                    .productcoupon-item .quanlist ul li .photo-ctrl .photo{
+                        margin-right: 0.3em;
+                        padding: 0;
+                        color: #666;
+                        font-size: 1em;
+                    }
+                        .productcoupon-item .quanlist ul li .photo-ctrl .photo img{
+                            width:2.5em;
+                        }
+                    .productcoupon-item .quanlist ul li .photo-ctrl .photo-upload{
+                        margin: 0.3em 0 0 0;
+                        padding: 0;
+                        font-size: 1em;
+                        color:#0096cf;
+                        text-decoration:underline;
+                        float:right;
+                    }
+                    .productcoupon-item .quanlist ul li .photo-ctrl .uploadlodding{
+                        margin: 0.3em 0 0 0;
+                        padding: 0;
+                        font-size: 1em;
+                        color:#919191;
+                        float:right;
+                    }
+
+        .productcoupon-item .couponitem-ctrl {
+            width: 100%;
+            margin: 0 auto 0 auto;
+            padding: 0.8em 0 0.8em 0;
+            text-align:right;
+            border-top:1px solid #e0e0e0;
+            display:table;
+        }
+            .productcoupon-item .couponitem-ctrl .use-coupon{
+                width: 4.8em;
+                height: 2.2em;
+                line-height: 2.2em;
+                margin: 0 5% 0 0;
+                font-size: 1.2em;
+                text-align: center;
+                color: #fff;
+                background: #fe8000;
+                border: 1px solid #fe8000;
+                border-radius: 3px;
+                display: inline-table;
+            }
+            .productcoupon-item .couponitem-ctrl .reserve-coupon{
+                width: 4.8em;
+                height: 2.2em;
+                line-height: 2.2em;
+                margin: 0 5% 0 0;
+                font-size: 1.2em;
+                text-align: center;
+                color: #fff;
+                background: #fe8000;
+                border: 1px solid #fe8000;
+                border-radius: 3px;
+                display: inline-table;
+            }
+            .productcoupon-item .couponitem-ctrl .reserve-cancel{
+                width: 4.8em;
+                height: 2.2em;
+                line-height: 2.2em;
+                margin: 0 5% 0 0;
+                font-size: 1.2em;
+                text-align: center;
+                color: #555;
+                background: #fff;
+                border: 1px solid #555;
+                border-radius: 3px;
+                display: inline-table;
+            }
+            .productcoupon-item .couponitem-ctrl .go-group-detail{
+                width: 5.6em;
+                height: 2.2em;
+                line-height: 2.2em;
+                margin: 0 1em 0 0;
+                font-size: 1.2em;
+                text-align: center;
+                color: #fe8000;
+                background: #fff;
+                border: 1px solid #fe8000;
+                border-radius: 3px;
+                display: inline-table;
+            }
+            .productcoupon-item .couponitem-ctrl .left-info{
+                width: auto;
+                height: 2.4em;
+                line-height: 2.4em;
+                margin: 0 0 0 5%;
+                font-size: 1em;
+                text-align: left;
+                color: #ff7800;
+                display: inline-table;
+                float:left;
+            }
+            .productcoupon-item .couponitem-ctrl .go-stepgroup-detail{
+                width: auto;
+                height: 2.2em;
+                line-height: 2.2em;
+                margin: 0 1em 0 0;
+                padding:0 0.5em 0 0.5em;
+                font-size: 1.2em;
+                text-align: center;
+                color: #fe8000;
+                background: #fff;
+                border: 1px solid #fe8000;
+                border-radius: 3px;
+                display: inline-table;
+            }
+            .productcoupon-item .couponitem-ctrl .stepgroup-ing{
+                width: auto;
+                height: 2.2em;
+                line-height: 2.2em;
+                margin: 0 0.5em 0 0;
+                padding:0 0.5em 0 0.5em;
+                font-size: 1.2em;
+                text-align: center;
+                color: #919191;
+                background: #fff;
+                border: 1px solid #919191;
+                border-radius: 3px;
+                display: inline-table;
+            }
+            .productcoupon-item .couponitem-ctrl .pay-stepgroup{
+                width: auto;
+                height: 2.2em;
+                line-height: 2.2em;
+                margin: 0 0.5em 0 0;
+                padding:0 0.5em 0 0.5em;
+                font-size: 1.2em;
+                text-align: center;
+                color: #fff;
+                background: #fe8000;
+                border: 1px solid #fe8000;
+                border-radius: 3px;
+                display: inline-table;
+            }
+
+        .productcoupon-item .use-section {
+            width: 80%;
+            height:auto;
+            margin: 0 auto 0 auto;
+            padding: 0 0 0 0;
+            border:none;
+            background:#fff;
+            position:absolute;
+            top:4%;
+            left:10%;
+            z-index:10;
+            overflow:hidden;
+            /*height:90%;
+            overflow-x:hidden;
+            overflow-y:auto;
+            -webkit-box-sizing : border-box;
+            -webkit-overflow-scrolling : touch;*/
+        }
+            .productcoupon-item .use-section .tit{
+                width: 90%;
+                height:auto;
+                margin: 0 auto 0 auto;
+                padding: 1.6em 0 0.3em 0;
+                font-size:1.2em;
+                color:#2c2c2c;
+                font-weight:bold;
+                text-align:center;
+            }
+            .productcoupon-item .use-section .rules{
+                width: 82%;
+                height:auto;
+                margin: 0 auto 0 auto;
+                padding: 1em 0 1em 0;
+            }
+                .productcoupon-item .use-section .rules .item{
+                    width: 100%;
+                    height:auto;
+                    line-height:1.6em;
+                    margin: 0 auto 0 auto;
+                    padding: 0 0 0 0;
+                    font-size:1em;
+                    font-family:Arial;
+                    color:#555;
+                }
+            .productcoupon-item .use-section .hr{
+                width: 100%;
+                height:auto;
+                margin: 1em auto 0 auto;
+                padding: 0 0 0 0;
+                position:relative;
+            }
+                .productcoupon-item .use-section .hr .line{
+                    width: 90%;
+                    height:auto;
+                    margin: 0 auto 0 auto;
+                    padding: 0 0 0 0;
+                    border-top:2px dashed #555; 
+                }
+                .productcoupon-item .use-section .hr .l{
+                    width: 2em;
+                    height:2em;
+                    background:rgba(0,0,0,0.8);
+                    border-radius:2em;
+                    position:absolute;
+                    left:-1.3em;
+                    top:-1em;
+                    overflow:hidden;
+                }
+                .productcoupon-item .use-section .hr .r{
+                    width: 2em;
+                    height:2em;
+                    background:rgba(0,0,0,0.8);
+                    border-radius:2em;
+                    position:absolute;
+                    right:-1.3em;
+                    top:-1em;
+                    overflow:hidden;
+                }
+            .productcoupon-item .use-section .c-nos{
+                width: 90%;
+                height:auto;
+                margin: 0 auto 0 auto;
+                padding: 0.8em 0 1.5em 0;
+            }
+                .productcoupon-item .use-section .c-nos .item{
+                    width: 100%;
+                    height:auto;
+                    margin: 0 auto 0 auto;
+                    padding: 0.5em 0 0.5em 0;
+                    font-size:1.3em;
+                    font-family:Arial;
+                    color:#474747;
+                    text-align:center;
+                }
+                    .productcoupon-item .use-section .c-nos .item del{
+                        color:#919191;
+                    }
+                    .productcoupon-item .use-section .c-nos .item .showQ{
+                        width:1.3em;
+                        margin:-3px 0 0 0.5em;
+                        color:#0096cf;
+                        display:inline-table;
+                        position:relative;
+                    }
+                        .productcoupon-item .use-section .c-nos .item .showQ img{
+                            width:100%;
+                        }
+            .productcoupon-item .use-section .tel{
+                width: 88%;
+                height:auto;
+                margin: 0 auto 0.6em auto;
+                padding: 0.5em 0 1em 0;
+                color:#fff;
+            }
+                .productcoupon-item .use-section .tel .link{
+                    width: 100%;
+                    height:auto;
+                    margin: 0 auto 0 auto;
+                    padding: 1em 0 1em 0;
+                    background:#fe8000;
+                    color:#fff;
+                    font-size:1.1em;
+                    font-family:Arial;
+                    text-align:center;
+                    border-radius:2px;
+                    display:inline-table;
+                }
+
+.preview-img-bg {
+    width:100%;
+    height:100%;
+    position:fixed;
+    left:0;
+    top:0;
+    z-index:9;
+    background: rgba(0,0,0,0.6);
+}
+
+.preview-img-alert {
+    width:74%;
+    height:100%;
+    position:fixed;
+    top:20%;
+    left:14%;
+    z-index:1000001;
+}
+    .preview-img-alert img{
+        width:100%;
+    }
+
+.product-model-bg {
+    width:100%;
+    height:100%;
+    position:fixed;
+    left:0;
+    top:0;
+    z-index:9;
+    background: rgba(0,0,0,0.8);
+}
+
+.qrcode-section {
+    width:100%;
+    height:100%;
+    background:rgba(255, 255, 255, .99);
+    border:1px solid rgba(0, 0, 0, .1);
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:1000001;
+}
+    .qrcode-section img{
+        width:50%;
+        margin:10em auto 0 auto;
+    }
+
+/**********/

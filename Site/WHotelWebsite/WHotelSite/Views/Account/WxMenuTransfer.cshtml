@@ -1,0 +1,84 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+    
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.isInWeixin;
+    var userid = ViewBag.UserId; //userid = 4512064;
+    var isErrPage = ViewBag.IsErrPage;
+    var isClearCache = ViewBag.IsClearCache;
+    var isLogin = ViewBag.IsLogin;
+    var isRedUrl = ViewBag.IsRedUrl;
+    var redirectUrl = ViewBag.RedirectUrl;
+
+    ViewBag.Title = "周末酒店";
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    if (isApp)
+    {
+        ViewBag.LoadHmBaidu = false;
+    }
+}
+
+@section styles
+{
+    <link href="/content/css/acount/wxmenutransfer.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer()) " rel="stylesheet" />
+}
+
+@if (isClearCache)
+{
+    <center><br /><br /><b>您的账号已退出登录</b></center>
+}
+else
+{ 
+    if (isErrPage)
+    {
+        <div class="err">
+            非法访问
+        </div>
+    }
+    else
+    {
+        <div class="err">
+            <b>跳转中..</b>
+        </div>
+    }
+}
+
+<input type="hidden" id="isLogin" value="@(isLogin ? "1" : "0")" />
+<input type="hidden" id="isErrPage" value="@(isErrPage ? "1" : "0")" />
+<input type="hidden" id="isClearCache" value="@(isClearCache ? "1" : "0")" />
+<input type="hidden" id="isRedUrl" value="@(isRedUrl ? "1" : "0")" />
+<input type="hidden" id="redirectUrl" value="@(redirectUrl)" />
+<input type="hidden" id="hidWxUnionid" value="@(ViewBag.Unionid)" />
+
+@section scripts
+{
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/acount/wxmenutransfer.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/login.js?v=@(Helpers.curAppVer())"></script>
+
+    @if (isClearCache)
+    {
+        <script>
+
+            //清除登录缓存
+            Store.Set("zmjd_login_cache", {'token':''});
+            var _z = Store.Get("zmjd_login_cache")
+            console.log(_z)
+
+            //清楚领取红包手机号
+            var redPhoneKey = "red_phone_key";
+            Store.Set(redPhoneKey, "");
+            var _redphone = Store.Get(redPhoneKey)
+            console.log(_redphone)
+
+        </script>
+    }
+}

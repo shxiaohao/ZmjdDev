@@ -1,0 +1,47 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+
+    InspectorJumpParam param = ViewBag.param;
+    
+    ViewBag.Title = string.Format("周末酒店");
+    ViewBag.Keywords = string.Format("周末酒店，下载，安装");
+    ViewBag.Description = string.Format("周末酒店");
+
+    ViewBag.BodyStyle = "overflow-x:hidden;";
+    ViewBag.BodyClass = "inspectorjumppage";
+}
+@section styles
+{
+    <style>
+        html, body {
+                height: 100%;
+                margin: 0;
+            }
+    </style>
+}
+<script>
+    function goto(param) {
+        var url = "@(ViewBag.AccessProtocal)" + param;
+        this.location = url;
+    }
+</script>
+<header class="jump-logo">
+    <img src="~/Content/images/inspector/logo.png" class="logo-img" />
+</header>
+<section class="jump-body">
+    <a href="http://app.zmjiudian.com"><div class="jump-btn jump-btn-download">下载周末酒店APP</div></a><br />
+    <a href="@param.JumpUrl"><div class="jump-btn jump-btn-open">打开周末酒店APP</div></a><br />
+</section>
+<footer class="jump-foot">
+    <p>2014-2015 &copy;周末酒店版权所有</p>
+    <p>WWW.ZMJIUDIAN.COM</p>
+    <p class="hidden">@param.JumpUrl</p>
+    <iframe id="jumpiframe" src="@param.JumpUrl" class="hidden"></iframe>
+</footer>
+<!--  -->
+@section scripts
+{
+    @Scripts.Render("~/Content/js/bootbox.js", "~/Content/js/inspector/hotel.js")
+}

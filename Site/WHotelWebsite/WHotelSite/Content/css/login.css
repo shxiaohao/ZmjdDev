@@ -1,0 +1,330 @@
+/* login model */
+.login-model {
+    width:100%;
+    height:100%;
+    background:rgba(255,255,255,0.9);
+    position:fixed;
+    left:0;
+    top:0;
+    z-index:10000;
+}
+@media (min-width: 768px) {
+    .login-model {
+        width:100%;
+        height:100%;
+        background:rgba(0,0,0,0.4);
+        position:fixed;
+        left:0;
+        top:0;
+        z-index:10000;
+    }
+}
+.login-section {
+    width:100%;
+    height:100%;
+    border:1px #fff solid;
+    background:#fff;
+    position:fixed;
+    left:0%;
+    top:0%;
+    z-index:10001;
+    overflow:auto;
+}
+.login-hide {
+    display:none;
+}
+@media (min-width: 768px) {
+    .login-section {
+        width:35%;
+        height:50%;
+        top:18%;
+        left:35%;
+    }
+}
+@media (min-width: 1000px) {
+    .login-section {
+        width:35%;
+        height:53%;
+        top:18%;
+        left:35%;
+    }
+}
+@media (min-width: 1300px) {
+    .login-section {
+        width:30%;
+        height:52%;
+        top:18%;
+        left:40%;
+    }
+}
+@media (min-width: 1400px) {
+    .login-section {
+        width:23%;
+        height:52%;
+        top:18%;
+        left:40%;
+    }
+}
+    .login-section .titbar {
+        padding:0.5em 0 0.5em 0;
+        display:flex;
+    }
+        .login-section .titbar ._login_close{
+            width:2.6em;
+            height:2.6em;
+            margin:0 0 0 1em;
+            background:url(http://whfront.b0.upaiyun.com/app/img/login/icon-close-x.png) no-repeat;
+            background-size:2.5em;
+            border:none;
+        }
+        .login-section .titbar ._login_back{
+            width:2.6em;
+            height:2.6em;
+            margin:0 0 0 1em;
+            background:url(http://whfront.b0.upaiyun.com/app/img/login/icon-back.png) no-repeat;
+            background-size:2.5em;
+            border:none;
+        }
+        .login-section .titbar ._login_goreg{
+            flex:1;
+            margin:0.3em 1em 0 0;
+            text-align:right;
+        }
+            .login-section .titbar ._login_goreg a{
+                color:#474747;
+                font-size:1.2em;
+                text-decoration:none;
+            }
+    .login-section ._logo{
+        width:50%;
+        height:auto;
+        margin:4em auto 4em auto;
+        display:table;
+    }
+        .login-section ._logo img{
+            width:100%;
+        }
+    .login-section ._tit{
+        width:80%;
+        height:auto;
+        margin:1em auto 2.5em auto;
+        padding:0 0 0 0;
+        text-align:left;
+        font-size:2.7em;
+        color:#474747;
+        display:table;
+    }
+    .login-section ._tit2{
+        width:80%;
+        height:auto;
+        margin:1.3em auto 1.3em auto;
+        padding:0 0 0 0;
+        text-align:left;
+        font-size:2.7em;
+        color:#474747;
+        display:table;
+    }
+        .login-section ._tit2 ._t2{
+            width:100%;
+            height:auto;
+            margin:1em auto 0em auto;
+            padding:0 0 0 0;
+            text-align:left;
+            font-size:0.6em;
+            color:#474747;
+            display:table;
+        }
+    .login-section ._row{
+        width:80%;
+        height:auto;
+        margin:0.6em auto 0.6em auto;
+        padding:0 0 0 0;
+        text-align:center;
+        display:table;
+    }
+        .login-section ._row ._input_def{
+            width:100%;
+            height:auto;
+            margin:0.5em auto 0.5em auto;
+            padding:0.6em 0 0.6em 0em;
+            text-align:left;
+            font-size:1.2em;
+            background:#fff;
+            border:none;
+            border-bottom:1px solid #e0e0e0;
+            border-radius:0;
+        }
+        .login-section ._row ._input_def2{
+            width:100%;
+            height:auto;
+            margin:0em auto 0.5em auto;
+            padding:0.6em 0 0.6em 0em;
+            text-align:left;
+            font-size:1.2em;
+            background:#fff;
+            border:none;
+            border-bottom:1px solid #e0e0e0;
+            border-radius:0;
+        }
+        .login-section ._row ._input_code{
+            width:67%;
+            height:auto;
+            padding:0.6em 0 0.6em 0em;
+            text-align:left;
+            font-size:1.2em;
+            border:none;
+            border-bottom:1px solid #e0e0e0;
+            border-radius:0;
+        }
+        .login-section ._row ._getcode{
+            width:32%;
+            height:auto;
+            margin:0 0 0 0;
+            padding:0.75em 0 0.45em 0em;
+            color:#3e9ec0;
+            font-size:1.1em;
+            text-align:right;
+            display:inline-table;
+        }
+        .login-section ._row ._text{
+            width:100%;
+            height:auto;
+            margin:0em auto 0em auto;
+            padding:0 0 0 0;
+            text-align:left;
+            font-size:0.9em;
+            color:#919191;
+            display:table;
+        }
+        .login-section ._row ._alert-t1{
+            width:100%;
+            padding:0.8em 0 0.5em 0;
+            text-align:center;
+            color:#919191;
+            font-size:1.3em;
+            font-weight:bold;
+            display:table;
+        }
+        .login-section ._row ._alert-t2{
+            width:100%;
+            padding:0 0 1em 0;
+            text-align:center;
+            font-size:1em;
+            color:#919191;
+            display:table;
+        }
+        .login-section ._row ._top_img{
+            width:70%;
+            margin:1.5em 0 0 0;
+        }
+    .login-section ._ctrl{
+        width:80%;
+        height:auto;
+        margin:1em auto 1em auto;
+        padding:0 0 0 0;
+        text-align:left;
+        display:table;
+    }
+        .login-section ._ctrl ._ck{
+            margin:0 0.2em 0 0;
+            background-color:#3e9ec0;
+            vertical-align:middle;
+        }
+        .login-section ._ctrl .label{
+            color:#474747;
+        }
+    .login-section ._btns{
+        width:100%;
+        height:auto;
+        margin:4em auto 0 auto;
+        padding:0 0 0 0;
+        text-align:center;
+        font-size:1em;
+        display:table;
+    }
+        .login-section ._btns ._login_btn{
+            width:80%;
+            height:2.5em;
+            padding:0 0 0 0;
+            background:#3e9ec0;
+            border:1px solid #3e9ec0;
+            border-radius:5px;
+            box-shadow: 0 2px 0 #2782a3;
+            color:#fff;
+            font-size:1.5em;
+            text-align:center;
+        }
+        .login-section ._btns ._defult_btn{
+            width:80%;
+            height:2.5em;
+            margin:0.5em 0 0 0;
+            padding:0 0 0 0;
+            background:#fff;
+            border:1px solid #3e9ec0;
+            border-radius:5px;
+            color:#3e9ec0;
+            font-size:1.5em;
+            text-align:center;
+        }
+        .login-section ._btns ._downapp_btn{
+            width:80%;
+            margin:0 auto 0 auto;
+            padding:0.8em 0 0.8em 0;
+            background:#3e9ec0;
+            border:1px solid #3e9ec0;
+            border-radius:4px;
+            color:#fff;
+            font-size:1.2em;
+            text-align:center;
+            display:table;
+        }
+        .login-section ._btns ._look_btn{
+            width:80%;
+            margin:0 auto 0 auto;
+            padding:0.8em 0 0.8em 0;
+            background:#fff;
+            border:1px solid #3e9ec0;
+            border-radius:4px;
+            color:#3e9ec0;
+            font-size:1.2em;
+            text-align:center;
+            display:table;
+        }
+    .login-section ._btns2{
+        width:100%;
+        height:auto;
+        margin:1.5em auto 0 auto;
+        padding:0 0 0 0;
+        text-align:center;
+        font-size:1em;
+        display:table;
+    }
+    .login-section ._foot{
+        width:100%;
+        height:auto;
+        margin:2.5em auto 0 auto;
+        text-align:center;
+        display:table;
+    }
+        .login-section ._foot ._blue_link1{
+            margin:0em auto 0 auto;
+            color:#3e9ec0;
+            font-size:1.2em;
+            display:table;
+        }
+        .login-section ._foot ._blue_link2{
+            margin:0 auto 0 auto;
+            color:#3e9ec0;
+            font-size:1.1em;
+            display:table;
+        }
+
+/**/
+.alert-rulesmsg {
+  width: 100%;
+  height: auto;
+  line-height: 1.5em;
+  margin:1.5em 0 0 0;
+  text-align: center;
+  font-size: 1.3em;
+}

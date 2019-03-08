@@ -1,0 +1,64 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    var userid = ViewBag.UserId;
+    var districtId = ViewBag.DistrictId;
+    var districtName = ViewBag.DistrictName;
+    var userlat = ViewBag.Userlat;
+    var userlng = ViewBag.Userlng;
+    var geoScopeType = ViewBag.GeoScopeType;
+    
+    var isInWeixin = ViewBag.isInWeixin;
+    var isApp = ViewBag.IsApp;
+    var isMobile = ViewBag.IsMobile;
+    var isThanVer46 = ViewBag.IsThanVer46;
+    var appType = ViewBag.AppType;
+    
+    ViewBag.Title = "发现";
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    ViewBag.LoadHmBaidu = false;
+}
+
+@section styles
+{
+    <link href="~/Content/css/framework/amazeui.min.css" rel="stylesheet" />
+    <link href="~/Content/css/app/find.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style type="text/css">
+    </style>
+}
+    <div id="find-theme-panel"><img src="http://whfront.b0.upaiyun.com/app/img/home/home-load2-16x9.png" class="img-loading" alt="" /></div>
+
+    <div id="find-rechotel-panel"><img src="http://whfront.b0.upaiyun.com/app/img/home/home-load2-16x9.png" class="img-loading" alt="" /></div>
+
+    <div class="find-tit find-tit-big-height find-hide" id="cmts-tit">
+        @*<div class="center">－ 大家正在推荐 －</div>*@
+        <div class="left">大家正在推荐</div>
+        <div class="right"></div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="find-hot-cmts"></div>
+    <div class="find-hot-cmts-foot"></div>
+    <div class="scrollpageloading find-hide"><img src="http://whfront.b0.upaiyun.com/app/img/loading.gif" alt="" /></div>
+
+    <input type="hidden" id="userid" value="@userid" />
+    <input type="hidden" id="districtId" value="@districtId" />
+    <input type="hidden" id="districtName" value="@districtName" />
+    <input type="hidden" id="userlat" value="@userlat" />
+    <input type="hidden" id="userlng" value="@userlng" />
+    <input type="hidden" id="geoScopeType" value="@geoScopeType" />
+    <input type="hidden" id="isApp" value="@(isApp ? "1" : "0")" />
+    <input type="hidden" id="isThanVer46" value="@(isThanVer46 ? "1" : "0")" />
+    @if (userid == 88888888)
+    {
+        <div style="margin:2em 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3A%2F%2Fwww.zmjiudian.com%2Fapp%2Fhome%3Fuserid%3D%7Buserid%7D%26userlat%3D%7Buserlat%7D%26userlng%3D%7Buserlng%7D">GO APP >>></a></div>
+        <div style="margin:2em 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http://192.168.1.22:8081/App/Find?userid=0&districtId=0&lat=0&lng=0&geoScopeType=0">GO APP (Local) >>></a></div>
+    }
+
+@section scripts
+{
+    <script src="~/Content/js/framework/jquery.lazyload.min.js"></script>
+    <script src="~/Content/js/framework/amazeui.min.js"></script>
+    <script src="~/Content/js/app/find.js?v=@(Helpers.curAppVer())"></script>
+}

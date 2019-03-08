@@ -1,0 +1,345 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    InspectorRegisterParam param = ViewBag.param;
+    HJD.WeixinServices.Contracts.WeixinActivityEntity weixinActiveEntity = ViewBag.WeixinActiveEntity;
+
+    var title = "周末酒店";
+    var jsConfigApi = "/Coupon/GetWeixinConfigInfo";
+    
+    if (weixinActiveEntity.WeixinAcountId == 1)
+    {
+        title = string.Format("周末酒店");
+        jsConfigApi = "/Coupon/GetWeixinConfigInfo";
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 2)
+    {
+        title = string.Format("周末酒店");
+        jsConfigApi = "/Coupon/GetWeixinConfigInfo";
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 3)
+    {
+        title = string.Format("尚旅游");
+        jsConfigApi = "/Coupon/GetWeixinConfigInfoSly";
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 4)
+    {
+        title = string.Format("尚旅游成都");
+        jsConfigApi = "/Coupon/GetWeixinConfigSlycd";
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 5)
+    {
+        title = string.Format("美味至尚");
+        jsConfigApi = "/Coupon/GetWeixinConfigMwzs";
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 6)
+    {
+        //title = string.Format("尚旅游北京");
+        jsConfigApi = "/Coupon/GetWeixinConfigSlybj";
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 11)
+    {
+        title = string.Format("遛娃指南");
+        jsConfigApi = "/Coupon/GetWeixinConfigInfoSly";
+    }
+
+    title = weixinActiveEntity.WeixinSignUpShareTitle;
+
+    //“限时抢购”活动报名填写信息类型
+    if (weixinActiveEntity.Type == 2)
+    {
+        title = "填写信息";
+    }
+    
+    ViewBag.Title = title;
+    
+    ViewBag.BodyStyle = "overflow-x:hidden;";
+    ViewBag.BodyClass = "weixinreg_xmas_body";
+
+    var isApp = ViewBag.IsApp;
+    var openid = ViewBag.Openid;
+    var code = ViewBag.Code;
+    var state = ViewBag.State;
+    var appid = ViewBag.AppId;
+    var appSecret = ViewBag.AppSecret;
+    var snsapi_base = ViewBag.Snsapi_base;
+    var snsapi_userinfo = ViewBag.Snsapi_userinfo;
+
+    var activeid = ViewBag.ActiveId;
+    var partnerid = ViewBag.PartnerId;
+    var shareTitle = ViewBag.ShareTitle;
+    var shareLink = ViewBag.ShareLink;
+    var shareImgUrl = ViewBag.ShareImgUrl;
+    var topBannerUrl = ViewBag.TopBannerUrl;
+    topBannerUrl = topBannerUrl.Replace("_jupiter", "_640x360");
+
+    var username = ViewBag.NickName;
+    var subscribe = ViewBag.Subscribe;
+    var unid = ViewBag.Unid;
+
+    var showKeyword = ViewBag.ShowKeyword;
+
+    var needPaySign = weixinActiveEntity.NeedPaySign == 1;
+
+    var weixinDraw = ViewBag.WeixinDraw;
+    var regName = (weixinDraw != null && !string.IsNullOrEmpty(weixinDraw.UserName)) ? weixinDraw.UserName : ViewBag.NickName;
+    var regPhone = (weixinDraw != null && !string.IsNullOrEmpty(weixinDraw.Phone)) ? weixinDraw.Phone : "";
+}
+@section styles
+{
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .modal-content {
+            width: 90%;
+            margin: auto;
+        }
+
+        .modal-body {
+            padding: 2.6em 0.8em 1.7em 0.8em;
+        }
+
+        .modal-footer {
+            margin-top: 0;
+            padding: 0.7em 0.9em;
+        }
+
+        .btn-default, .btn-primary {
+            width: auto;
+            min-width: 4em;
+            border: none;
+            color: #3e9ec0;
+            font-size: 1.4em;
+        }
+
+        .box-big-btn {
+            width: 96%;
+        }
+
+        .box-btn-bottomborder {
+            padding-bottom: 0.7em;
+            margin-bottom: 0.3em;
+            border-bottom: 1px solid #eeeded;
+            border-radius: 0;
+        }
+    </style>
+    <link href="~/Content/css/active/weixinactive_luck.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+}
+
+<div class="weixinreg_xmas_body2"></div>
+<div class="reg-body">
+    <section class="reg-top">
+        <div class="regtitpic">
+            <img src="@topBannerUrl" alt="" />
+        </div>
+        <div class="main-element">
+            @if (weixinActiveEntity.Type == 1)
+            {
+                if (needPaySign)
+                {
+                    <div class="regform">
+                        <ul class="form">
+                            <li style="margin-top:6%;display:none;"><input type="text" class="input" id="regName" placeholder="请输入姓名" autocomplete="off" value="@regName" /></li>
+                            <li style="margin-top:6%;"><input type="tel" class="input" id="regtell" placeholder="请输入手机号" autocomplete="off" inputscope="Number" value="@regPhone" /></li>
+                            <li style="margin-top:4%;">
+                                <input type="text" class="vcode-input" id="vCode" placeholder="请输入验证码" autocomplete="off" value="" />
+                                <button type="button" class="vCodeBtn">获取验证码</button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bottom-tip">您支付成功后，所获得的5元回报将会注入到周末酒店APP中与您手机关联的账户。</div>
+                    <div><button class="subpay" data-isapp="@isApp">下一步</button></div>
+                }
+                else
+                { 
+                    <div class="regform">
+                        <ul class="form">
+                            <li style="margin-top:4%;"><input type="tel" class="input" id="regtell" placeholder="请输入手机号" autocomplete="off" inputscope="Number" value="@regPhone" /></li>
+                        </ul>
+                    </div>
+                    <div class="bottom-tip">您中奖后，我们将通过手机号与您取得联系并发放奖品，请您认真核实手机号</div>
+                    <div><button class="submit" data-isapp="@isApp">下一步</button></div>   
+                }
+            }
+            else if (weixinActiveEntity.Type == 2)
+            {
+                <div class="regform">
+                    <ul class="form">
+                        <li style="margin-top:6%;display:none;"><input type="text" class="input" id="regName" placeholder="请输入姓名" autocomplete="off" value="@regName" /></li>
+                        <li style="margin-top:6%;"><input type="tel" class="input" id="regtell" placeholder="请输入手机号" autocomplete="off" inputscope="Number" value="@regPhone" /></li>
+                        <li style="margin-top:4%;">
+                            <input type="text" class="vcode-input" id="vCode" placeholder="请输入验证码" autocomplete="off" value="" />
+                            <button type="button" class="vCodeBtn">获取验证码</button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bottom-tip">您预约成功后，您的手机号码将记作为您的抢购信息，请认真核实。</div>
+                <div><button class="subpay" data-isapp="@isApp">立即预约</button></div>
+            }
+            else if (weixinActiveEntity.Type == 3)
+            {
+                var _RegNamePlaceholder = "请输入姓名";
+                var _RegTip = "您中奖后，我们将通过手机号与您取得联系并发放奖品，请您认真核实手机号和姓名";
+                if (weixinActiveEntity.ActivityID == 829)
+                {
+                    _RegNamePlaceholder = "请输入公司名/姓名";
+                    _RegTip = "您中奖后，我们将通过手机号与您取得联系并发放奖品，请您认真核实手机号和公司名/姓名";
+                }
+
+                <div class="regform">
+                    <ul class="form">
+                        <li style="margin-top:6%;"><input type="text" class="input" id="regName" placeholder="@_RegNamePlaceholder" autocomplete="off" /></li>
+                        <li style="margin-top:4%;"><input type="tel" class="input" id="regtell" placeholder="请输入手机号" autocomplete="off" inputscope="Number" value="@regPhone" /></li>
+                    </ul>
+                </div>
+                <div class="bottom-tip">@(_RegTip)</div>
+                <div><button class="submit" data-isapp="@isApp">下一步</button></div>
+            }
+        </div>
+    </section>
+    <div class="sharedone-panel">
+        <div class="logo">
+            @if (weixinActiveEntity.WeixinAcountId == 1)
+            {
+                <img src="http://whfront.b0.upaiyun.com/www/img/Active/luck/activity-bottom-logo.png?v=20101009" alt="" />
+            }
+            else if (weixinActiveEntity.WeixinAcountId == 2)
+            {
+                <img src="http://whfront.b0.upaiyun.com/www/img/Active/luck/activity-bottom-logo.png?v=20101009" alt="" />
+            }
+            else if (weixinActiveEntity.WeixinAcountId == 3)
+            {
+                <img src="http://whfront.b0.upaiyun.com/www/img/Active/activity-bottom-logo-sly.png" alt="" />
+            }
+            else if (weixinActiveEntity.WeixinAcountId == 4)
+            {
+                <img src="http://whfront.b0.upaiyun.com/www/img/Active/activity-bottom-logo-slycd.png" alt="" />
+            }
+            else if (weixinActiveEntity.WeixinAcountId == 5)
+            {
+                <img src="http://whfront.b0.upaiyun.com/www/img/Active/activity-bottom-logo-meiweizhishang2.png" alt="" />
+            }
+            else if (weixinActiveEntity.WeixinAcountId == 6)
+            {
+                <img src="http://whfront.b0.upaiyun.com/www/img/Active/activity-bottom-logo-slybj2.png" alt="" />
+            }
+            else if (weixinActiveEntity.WeixinAcountId == 11)
+            {
+                <img src="http://whfront.b0.upaiyun.com/www/img/Active/luck/activity-bottom-logo-liuwazhinan.png" alt="" />
+            }
+        </div>
+    </div>
+</div>
+
+<div class="mustfollow-md" style="@(subscribe == "0" ? "display:none;" : "display:none;")"></div>
+<div class="mustfollow-panel" style="@(subscribe == "0" ? "display:none;" : "display:none;")">
+    <div class="top">
+        <div class="info">长按二维码关注“周末酒店”，回复“@(showKeyword)”，完成报名</div>
+    </div>
+    <div class="img-div">
+        <img src="http://whfront.b0.upaiyun.com/www/img/Active/luck/mustfollow-bg.png" alt="" />
+    </div>
+</div>
+
+<input type="hidden" id="isapptxt" value="@(isApp?"1":"0")" />
+<input type="hidden" id="openid" value="@openid" />
+<input type="hidden" id="activeid" value="@activeid" />
+<input type="hidden" id="partnerid" value="@partnerid" />
+<input type="hidden" id="username" value="@username" />
+<input type="hidden" id="subscribe" value="@subscribe" />
+<input type="hidden" id="unid" value="@unid" />
+<input type="hidden" id="code" value="@code" />
+<input type="hidden" id="needpaysign" value="@weixinActiveEntity.NeedPaySign" />
+<input type="hidden" id="payprice" value="@weixinActiveEntity.PayPrice" />
+<input type="hidden" id="returnprice" value="@weixinActiveEntity.ReturnPrice" />
+<input type="hidden" id="type" value="@weixinActiveEntity.Type" />
+<!--  -->
+@section scripts
+{
+    <script src="~/Content/js/VerifyInput.js"></script>
+    <script src="~/Content/js/bootbox.js?v=@(Helpers.curAppVer())" type="text/javascript"></script>
+    <script src="~/Content/js/active/weixinactive_luck.js?v=@(Helpers.curAppVer())" type="text/javascript"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+    <script>
+
+        GetWeixinApiConfig();//注册
+
+        wx.ready(function () {
+
+            wx.onMenuShareTimeline({
+                title: '@shareTitle',
+                link: '@shareLink',
+                imgUrl: '@shareImgUrl',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareAppMessage({
+                title: '@shareTitle',
+                link: '@shareLink',
+                imgUrl: '@shareImgUrl',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+        });
+
+        function GetWeixinApiConfig() {
+
+            var url = location.href.split("#")[0];
+            $.ajax({
+                url: '@(jsConfigApi)',
+                type: 'POST',
+                data: { url: url },
+                dataType: 'json',
+                async: false,
+                error: function () {
+                    console.log("网络服务错误");
+                },
+                success: function (result) {
+                    if (typeof (result.Success) != undefined && result.Success == 1) {
+                        return false;
+                    }
+                    else {
+                        //得到微信config的值
+                        var array = [
+                            'checkJsApi',
+                            'onMenuShareTimeline',
+                            'onMenuShareAppMessage',
+                            'hideOptionMenu'
+                        ];
+                        if (result.jsApiList) {
+                            var jsArray = result.jsApiList.split(',');
+                            for (var key in jsArray) {
+                                array.push("" + jsArray[key]);
+                            }
+                        }
+
+                        wx.config({
+                            debug: false,
+                            appId: result.appId,
+                            timestamp: "" + result.timestamp,
+                            nonceStr: result.nonceStr,
+                            signature: result.signature,
+                            jsApiList: array
+                        });
+                    }
+                }
+            });
+        }
+
+    </script>
+    <script>
+            window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+            window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+            window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+}

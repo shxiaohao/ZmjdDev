@@ -1,0 +1,64 @@
+﻿@{
+    
+}
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>@(String.IsNullOrEmpty(ViewBag.PageTitle) ? ViewBag.Title : ViewBag.PageTitle)</title>
+    <meta name="keywords" content="@ViewBag.PageKeywords" />
+    <meta name="description" content="@ViewBag.PageDescription" />
+    <meta name="copyright" content="2013, zmjiudian.com" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <link href="~/Content/css/framework/util.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    @if (ViewBag.UseMuiCss == null || ViewBag.UseMuiCss)
+    {
+        <link href="~/Content/css/framework/mui.min.css" rel="stylesheet" />
+    }
+    @RenderSection("styles", false)
+    <script>window.PointerEvent = void 0</script>
+</head>
+<body>
+    @RenderBody()
+
+
+    <input type="hidden" id="hidCurUserCID" value="@(ViewBag.CID)" />
+
+    <script>
+        //声明_czc对象:
+        var _czc = _czc || [];
+        try {
+
+            //绑定siteid
+            _czc.push(["_setAccount", "1275441729"]);
+
+        } catch (e) {
+
+        }
+    </script>
+
+    <script src="~/Content/js/framework/jquery-1.10.2-min.js"></script>
+    <script src="~/Content/js/framework/config.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjiudian.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/geetest/gt.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/framework/zmjd.statistic.js?v=@(Helpers.curAppVer())"></script>
+    @if (ViewBag.UseMuiJs == null || ViewBag.UseMuiJs)
+    {
+        <script src="~/Content/js/framework/mui.min.js"></script>
+    }
+    @if (ViewBag.LoadHmBaidu == null || ViewBag.LoadHmBaidu)
+    {
+        @*<script type="text/javascript">
+            var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F3566e9570ddbe6722a51adedffbf065b' type='text/javascript'%3E%3C/script%3E"));
+            </script>*@
+    }
+    @RenderSection("scripts", false)
+    @if (true)
+    {
+        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://"); document.write(unescape("%3Cspan id='cnzz_stat_icon_1275441729'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s23.cnzz.com/z_stat.php%3Fid%3D1275441729%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+    }
+</body>
+</html>

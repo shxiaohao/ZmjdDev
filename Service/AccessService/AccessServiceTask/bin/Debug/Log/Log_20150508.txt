@@ -1,0 +1,4 @@
+
+[2015/5/8 11:32:50] Start Job [CtripPackageCrawlerJob]
+[2015/5/8 11:33:39] HotelID£º441036 Night:2015-06-17
+[2015/5/8 11:34:37] Updated contyped:-5484

@@ -1,0 +1,69 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout0.cshtml";
+
+    HotelAdapter.HotelItem2Result result = Model;
+    HotelItem hotel = result.hotel;
+    ViewBag.Title = string.Format("{0}地图-如何去{0}-周末酒店", hotel.Name);
+    ViewBag.Keywords = string.Format("点击查看更多{0}网友点评、玩点、特色、美食、优惠价格。",hotel.Name);
+    ViewBag.Description = string.Format("{0}地图-如何去{0}", hotel.Name);
+
+}
+
+@section styles
+{
+    <style>
+    html, body {
+        height: 100%;
+    }
+    .a-map {
+        position:absolute;
+        top:0;
+        bottom:0;
+        width:100%;
+    }
+    .BMap_bubble_content h2 {
+        font-size: 15px;
+        margin: 0;
+        margin-bottom: 1em;
+        padding: 0
+    }
+    .BMap_bubble_content p {
+        font-size: 13px;
+        margin: 0; padding: 0;
+    }
+    </style>
+}
+
+@section scripts
+{
+@Scripts.Render("http://api.map.baidu.com/api?v=1.5&ak=A9941e4625e1f42f8608afe140703784")
+<script>
+    var map = new BMap.Map("map_canvas");
+    var glon = @hotel.GLon, glat = @hotel.GLat;
+    map.centerAndZoom(new BMap.Point(glon, glat), 14);
+
+    $.ajax({
+        url: 'http://api.map.baidu.com/ag/coord/convert',
+        data: { from: 2, to: 4, x: glon, y: glat },
+        dataType: 'jsonp',
+        jsonp: 'callback'
+    }).then(function (result) {
+        if (!result) {
+            alert('请求地图服务失败');
+            return;
+        }
+        var marker = new BMap.Marker(new BMap.Point(result.x, result.y));
+        map.addOverlay(marker);
+        @{
+            string infoHtml = "<h2>" + hotel.Name + "</h2><p class=\"addr\">" + hotel.Address + "</p>";
+        }
+        var infoWindow = new BMap.InfoWindow(@Html.Raw(infoHtml.ToJson()));
+        marker.addEventListener('click', function () { this.openInfoWindow(infoWindow); });
+        marker.openInfoWindow(infoWindow);
+    }).fail(function () {
+        alert('请求地图服务失败');
+    });
+</script>
+}
+
+<div id="map_canvas" class="a-map"></div>

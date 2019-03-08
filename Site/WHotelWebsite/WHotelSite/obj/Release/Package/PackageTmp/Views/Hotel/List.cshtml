@@ -1,0 +1,380 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params.Hotel
+@{
+
+    WapInterestHotelsResult3 result = Model;
+    ListParam param = ViewBag.param;
+    DistrictInfoEntity city = ViewBag.city;
+    var theme = result.filters.ThemeInterestList.FirstOrDefault(p => p.ID == param.Interest);
+    var sight = result.filters.SightInterestList.FirstOrDefault(p => p.ID == param.Interest);
+    ViewBag.BodyClass = "hotellistpage";
+    if (sight != null)
+    {
+        if (param.ScType == 2)
+        {
+            ViewBag.Title = string.Format("{0}附近景区{1}附近酒店_住宿-{0}周边景区{1}周边酒店_住宿-周末酒店", city.Name, sight.Name);
+            ViewBag.Keywords = string.Format("发现{0}周边景区{1}附近{2}家适合度假酒店，点击查看更多酒店住、吃、玩信息、网友点评、优惠价格，发现最适合你的酒店。", city.Name, sight.Name, result.TotalCount);
+            ViewBag.Description = string.Format("{0}附近景区{1}附近酒店_住宿-{0}周边景区{1}周边酒店_住宿", city.Name, sight.Name);
+        }
+        else
+        {
+            ViewBag.Title = string.Format("{0}附近{1}酒店_住宿-{0}{1}周边酒店_住宿-周末酒店", city.Name, sight.Name);
+            ViewBag.Keywords = string.Format("发现{0}附近{1}{2}家适合度假酒店，点击查看更多酒店住、吃、玩信息、网友点评、优惠价格，发现最适合你的酒店。", city.Name, sight.Name, result.TotalCount);
+            ViewBag.Description = string.Format("{0}附近{1}酒店_住宿-{0}{1}周边酒店_住宿", city.Name, sight.Name);
+        }
+    }
+    else if (theme != null)
+    {
+        if (param.ScType == 2)
+        {
+            ViewBag.Title = string.Format("{0}附近{1}酒店_住宿-{0}{1}周边酒店_住宿-周末酒店", city.Name, theme.Name);
+            ViewBag.Keywords = string.Format("发现{0}附近{1}{2}家适合度假酒店，点击查看更多酒店住、吃、玩信息、网友点评、优惠价格，发现最适合你的酒店。", city.Name, theme.Name, result.TotalCount);
+            ViewBag.Description = string.Format("{0}附近{1}酒店_住宿-{0}{1}周边酒店_住宿", city.Name, theme.Name);
+        }
+        else
+        {
+            ViewBag.Title = string.Format("{0}附近{1}酒店_住宿-{0}{1}周边酒店_住宿-周末酒店", city.Name, theme.Name);
+            ViewBag.Keywords = string.Format("发现{0}附近{1}{2}家适合度假酒店，点击查看更多酒店住、吃、玩信息、网友点评、优惠价格，发现最适合你的酒店。", city.Name, theme.Name, result.TotalCount);
+            ViewBag.Description = string.Format("{0}附近{1}酒店_住宿-{0}{1}周边酒店_住宿", city.Name, theme.Name);
+        }
+    }
+    else
+    {
+        if (param.ScType == 2)
+        {
+            ViewBag.Title = string.Format("{0}附近景区酒店-{0}周边景点附近酒店-周末酒店", city.Name);
+            ViewBag.Keywords = string.Format("发现{0}周边景点景区酒店，点击查看更多酒店住、吃、玩信息、网友点评、优惠价格，发现最适合你的酒店。", city.Name);
+            ViewBag.Description = string.Format("{0}附近景区酒店-{0}周边景点附近酒店-周末酒店", city.Name);
+        }
+        else
+        {
+            ViewBag.Title = string.Format("{0}景区酒店-{0}景点附近酒店-周末酒店", city.Name);
+            ViewBag.Keywords = string.Format("发现{0}景点附近酒店，点击查看更多酒店住、吃、玩信息、网友点评、优惠价格，发现最适合你的酒店。", city.Name);
+            ViewBag.Description = string.Format("{0}附近景区酒店-{0}周边景点附近酒店-周末酒店", city.Name);
+        }
+    }
+
+    foreach (List<InterestEntity> list in new List<InterestEntity>[] {
+        result.filters.ThemeInterestList,
+        result.filters.SightInterestList
+    })
+    {
+        InterestEntity entity = new InterestEntity();
+        entity.ID = 0;
+        entity.Name = "全部";
+        entity.HotelCount = result.filters.TotalNum;
+        list.Insert(0, entity);
+    }
+
+}
+@section breadcrumbs
+{
+    @Helpers.BreadCrumbs(Url, city.DistrictID, city.Name, 0, "", param.ScType)
+}
+@helper InterestPanel(string title, List<InterestEntity> list, ListParam param, string field, int selected, string type)
+{
+    if (list.Count > 1)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">@title</h3>
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal" style="overflow: hidden;@(list.Count>10?"height: 210px;":string.Empty)">
+                    @foreach (InterestEntity t in list)
+                    {
+                        string klass = t.ID == selected ? "cur" : "";
+                        var url = Url.ListUrl(param.City, t.ID.ToString(), param.Star.ToString(), param.Price, param.Sort.ToString(), param.ScType, type);
+                        <dt class="@klass"><a href="@url">@t.Name</a></dt>
+                        <dd class="@klass"><a href="@url">@(t.HotelCount > 0 ? t.HotelCount.ToString() : "")</a></dd>
+                    }
+                </dl>
+                @if (list.Count > 10)
+                {
+                    <div class="text-center"><button type="button" class="btn btn-more1 more">@(title == "按景区找" ? "更多景区" : "更多主题")</button></div>
+                }
+
+            </div>
+        </div>
+    }
+}
+@helper FilterPanel(string title, List<FilterItem> items, ListParam param, string field, string selected)
+{
+    if (items.Count > 0)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">@title</h3>
+            </div>
+            <div class="panel-body">
+                <ul class="list-unstyled">
+                    @foreach (FilterItem t in items)
+                    {
+                        string klass = t.Value == selected ? "cur" : "";
+                        var url = field == "price" ? @Url.ListUrl(param.City, param.Interest.ToString(), param.Star.ToString(), t.Value, param.Sort.ToString(), param.ScType)
+                            : @Url.ListUrl(param.City, param.Interest.ToString(), t.Value, param.Price, param.Sort.ToString(), param.ScType);
+                        <li class="@klass"><a href="@url">@t.Name</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+}
+@helper InterestPanelMobile(string title, List<InterestEntity> list, ListParam param, string field, int selected)
+{
+    if (list.Count > 0)
+    {
+        <div class="form-group col-sm-6 ">
+            <label for="zt" class="col-xs-2 control-label text-center">@title</label>
+            <div class="col-xs-10">
+                <select class="form-control input-sm">
+                    @foreach (InterestEntity t in list)
+                    {
+                        string prop = t.ID == selected ? "selected" : "";
+                        <option value="@t.ID" @prop>@t.Name</option>
+                    }
+                </select>
+            </div>
+        </div>
+    }
+}
+@helper FilterPanelMobile(string title, List<FilterItem> items, ListParam param, string field, string selected)
+{
+    <div class="form-group col-sm-6 ">
+        <label for="zt" class="col-xs-2 control-label text-center">@title</label>
+        <div class="col-xs-10">
+            <select class="form-control input-sm">
+                @foreach (FilterItem t in items)
+                {
+                    string prop = t.Value == selected ? "selected" : "";
+                    <option value="@t.Value" @prop>@t.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+}
+@helper BadgeButton(ListParam param, List<InterestEntity> list, string field, int selected)
+{
+    if (selected == 0)
+    {
+        return;
+    }
+    InterestEntity entity = null;
+    foreach (InterestEntity t in list)
+    {
+        if (t.ID == selected)
+        {
+            entity = t;
+            break;
+        }
+    }
+    if (entity != null)
+    {
+        var url = string.Empty;
+        if (field == "interest")
+        {
+            url = Url.ListUrl(param.City, string.Empty, param.Star.ToString(), param.Price, param.Sort.ToString(), param.ScType);
+        }
+        else if (field == "price")
+        {
+            url = Url.ListUrl(param.City, param.Interest.ToString(), param.Star.ToString(), string.Empty, param.Sort.ToString(), param.ScType);
+        }
+        else if (field == "star")
+        {
+            url = Url.ListUrl(param.City, param.Interest.ToString(), string.Empty, param.Price, param.Sort.ToString(), param.ScType);
+        }
+        <a class="btn btn-sm btn-bq" href="@url">
+            @entity.Name <span class="badge">&times;</span>
+        </a>
+    }
+}
+@helper BadgeButton(ListParam param, List<FilterItem> items, string field, string selected)
+{
+    if (String.IsNullOrEmpty(selected))
+    {
+        return;
+    }
+    FilterItem entity = null;
+    foreach (FilterItem t in items)
+    {
+        if (t.Value == selected)
+        {
+            entity = t;
+            break;
+        }
+    }
+    if (entity != null)
+    {
+        var url = string.Empty;
+        if (field == "interest")
+        {
+            url = Url.ListUrl(param.City, string.Empty, param.Star.ToString(), param.Price, param.Sort.ToString(), param.ScType);
+        }
+        else if (field == "price")
+        {
+            url = Url.ListUrl(param.City, param.Interest.ToString(), param.Star.ToString(), string.Empty, param.Sort.ToString(), param.ScType);
+        }
+        else if (field == "star")
+        {
+            url = Url.ListUrl(param.City, param.Interest.ToString(), string.Empty, param.Price, param.Sort.ToString(), param.ScType);
+        }
+        <a class="btn btn-sm btn-bq" href="@url">
+            @entity.Name <span class="badge">&times;</span>
+        </a>
+    }
+}
+<!-- HotelName -->
+<div class="container mainbody">
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            <div class="row">
+                <!-- Hotel Left -->
+                <div class="col-md-3 col-sm-3 Screening hidden-xs">
+                    @InterestPanel("按主题找", result.filters.ThemeInterestList, param, "interest", param.Interest, "theme")
+                    @*@FilterPanel("按距离找", result.filters.DistanceFilters, param, "distance", param.Distance)*@
+                    @InterestPanel("按景区找", result.filters.SightInterestList, param, "interest", param.Interest, "sight")
+                    @FilterPanel("按价格找", result.filters.PriceFilters, param, "price", param.Price)
+                    @FilterPanel("按星级找", result.filters.StarFilters, param, "star", param.Star.ToString())
+                </div>
+                <!-- Hotel Right -->
+                <div class="col-md-9 col-sm-9">
+                    <!-- 手机分辨率下表单筛选 开始 -->
+                    <div class="row form3 hidden">
+                        <form role="form">
+                            @InterestPanelMobile("按主题", result.filters.ThemeInterestList, param, "interest", param.Interest)
+                            @*@FilterPanelMobile("按距离", result.filters.DistanceFilters, param, "distance", param.Distance)*@
+                            @InterestPanelMobile("按景区", result.filters.SightInterestList, param, "interest", param.Interest)
+                            @FilterPanelMobile("按价格", result.filters.PriceFilters, param, "price", param.Price)
+                            @FilterPanelMobile("按星级", result.filters.StarFilters, param, "star", param.Star.ToString())
+                            <div class="clear">
+                            </div>
+                            <div class="text-right col-sm-12">
+                                <button type="button" class="btn btn-primary" style="margin-bottom:10px;">筛选</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- 手机分辨率下表单筛选 结束 -->
+                    @{
+                        List<String[]> options = new List<string[]>
+                                            {
+                                                new String[] {"0", "默认推荐"},
+                                                new String[] {"1", "按口碑排序"},
+                                                //new String[] {"2", "距离"},
+                                                new String[] {"3", "按价格由低到高"},
+                                                new String[] {"4", "按价格由高到低"}
+                                            };
+                    }
+                    <!-- 条件选择栏 开始 -->
+                    <div class="row toolbar hidden-xs">
+                        <div class="col-sm-1 hidden-xs">
+                            筛选：
+                        </div>
+                        <div class="col-xs-8 visible-xs">
+                            <button type="button" class="btn btn-default btn-sm">返回</button>
+                        </div>
+                        <div class="col-sm-9 hidden-xs">
+                            @BadgeButton(param, result.filters.ThemeInterestList, "interest", param.Interest)
+                            @BadgeButton(param, result.filters.SightInterestList, "interest", param.Interest)
+                            @*@BadgeButton(param, result.filters.DistanceFilters, "distance", param.Distance)*@
+                            @BadgeButton(param, result.filters.PriceFilters, "price", param.Price)
+                            @BadgeButton(param, result.filters.StarFilters, "star", param.Star.ToString())
+                        </div>
+                        <div class="col-sm-2 col-xs-4 text-right">
+                            <ul class="nav navbar-right nav3 dd01">
+                                <li id="fat-menu" class="dropdown">
+                                    <a href="javascript:;" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown"><img src="@Url.Content("~/Content/Images/desc.png")" class="mobilepic" alt="">排序</a>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
+
+                                        @foreach (string[] o in options)
+                                        {
+                                            <li role="presentation" @(param.Sort.ToString() == o[0] ? "class=cur" : string.Empty)><a role="menuitem" tabindex="-1" href="@Url.ListUrl(param.City, param.Interest.ToString(), param.Star.ToString(), param.Price, o[0], param.ScType)">@Html.Raw(o[1])</a></li>
+                                        }
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- 条件选择栏 结束 -->
+                    <!-- 条件选择栏 mobile 开始 -->
+
+                    <div class="row toolbar2 visible-xs">
+                        <div class="col-xs-3">
+                            <button type="button" onclick="history.back()" class="btn btn-sm  btn-img01"><img src="@Url.Content("~/Content/Images/icon-back.png")" class="mobilepic" alt="" /></button>
+                        </div>
+
+                        <div class="col-xs-6 text-center listtitle">
+                            @(sight != null ? sight.Name : (theme != null ? theme.Name : city.Name))
+                        </div>
+                        <div class="col-sm-2 col-xs-3 text-right">
+                            <ul class="nav navbar-right nav2 dd01">
+                                <li id="fat-menu" class="dropdown">
+                                    <a href="javascript:;" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown"><img src="@Url.Content("~/Content/Images/desc.png")" class="mobilepic" alt="" /></a>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
+                                        @foreach (string[] o in options)
+                                        {
+                                            <li role="presentation" @(param.Sort.ToString() == o[0] ? "class=cur" : string.Empty)><a role="menuitem" tabindex="-1" href="@Url.ListUrl(param.City, param.Interest.ToString(), param.Star.ToString(), param.Price, o[0], param.ScType)">@Html.Raw(o[1])</a></li>
+                                        }
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+
+                    <!-- 条件选择栏 mobile 结束 -->
+                    <!-- 酒店列表 开始 -->
+                    @if (result.Result.Any())
+                    {
+                        @Html.Partial("ListContent", result.Result)
+                        <div class="pager1 text-right">
+                            @Helpers.Pagination(Url, param, result.TotalCount, param.Count, param.Start)
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="nullalert text-center">
+                            <h5>对不起！没有找到符合您要求的酒店！</h5>
+                        </div>
+
+                    }
+
+
+                    <!-- 酒店列表 结束 -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>
+<!-- linker -->
+<div class="container linker">
+    <div class="row">
+        <div class="col-sm-1">
+        </div>
+        <div class="col-sm-10">
+            <div class="row">
+                @foreach (InterestEntity t in result.filters.ThemeInterestList)
+                {
+                    if (t.ID == 0)
+                    {
+                        continue;
+                    }
+                    <div class="col-md-2 col-sm-3 col-xs-6">
+                        <a href="@Url.ListUrl(param.City, t.ID.ToString(), string.Empty, string.Empty, string.Empty, param.ScType)">@(city.Name)附近@(t.Name)酒店</a>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-sm-1">
+        </div>
+    </div>
+</div>
+@section scripts
+{
+    @Scripts.Render("~/Content/js/srollpage.js", "~/Content/js/hotel/list.js")
+}

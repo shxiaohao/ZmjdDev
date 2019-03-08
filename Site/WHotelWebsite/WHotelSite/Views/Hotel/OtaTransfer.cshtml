@@ -1,0 +1,86 @@
+﻿@{
+    Layout = null;
+
+    ViewBag.Title = string.Format("为您跳转..");
+    ViewBag.Description = string.Format("为您跳转..");
+
+    HotelPrice2 hotelPrice = ViewBag.HotelPrice;
+    var sType = ViewBag.SType;
+    List<OTAInfo2> otaList = hotelPrice.OTAList;
+    var checkIn = hotelPrice.CheckIn;
+    var checkOut = hotelPrice.CheckOut;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <title>为您跳转..</title>
+    <link rel="stylesheet" href="~/Content/css/otatransfer.css?v=@(Helpers.curAppVer())" />
+    <script src="~/Content/js/jquery-1.10.2-min.js" type="text/javascript"></script>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="format-detection" content="telephone=no">
+</head>
+<body>
+
+    @if (otaList.Count > 0)
+    {
+        if (otaList.Count > 100)
+        {
+            //当有1个以上的OTA的时候，显示一个OTA的列表展示，供用户自己选择去向
+            
+        }
+        else
+        { 
+            var otaEntity = otaList[0];
+            var channelSiteName = "Booking.com";
+            var channelLogoPath = "logo-jumper-booking.png";
+            var channelUrl = WHotelSite.Utils.BuildOTALink(otaEntity.AccessURL, checkIn, checkOut);
+            
+            switch (otaEntity.ChannelID)
+            {
+                case 1: channelSiteName = "Booking.com"; channelLogoPath = "logo-jumper-booking.png"; break;
+                case 27: channelSiteName = "Agoda.com"; channelLogoPath = "logo-jumper-agoda.png"; break;
+                case 103:
+                case 2: channelSiteName = "Ctrip.com"; channelLogoPath = "logo-jumper-ctrip.png"; break;
+            }
+
+            if (otaEntity.ChannelID != 27 && (sType.ToLower() == "wap" || sType.ToLower() == "app"))
+            {
+                channelUrl = channelUrl.Replace("http://www.", "http://m.");
+            }
+            
+            //当只有一个OTA的时候，显示中转提示，然后2-3秒钟以后自动跳转至渠道页面
+            <div class="ota-transfer-load">
+                <div class="info">
+                    您正在离开周末酒店<br />
+                    我们将带您前往@(channelSiteName) 预订
+                </div>
+                <div class="logo">
+                    <img alt="@channelSiteName" src="~/Content/images/hotel/@channelLogoPath" />
+                </div>
+                <div class="load">
+                    <img alt="加载中" src="~/Content/images/hotel/loading-jumper.gif" />
+                </div>
+            </div>
+            <script type="text/javascript">
+                setTimeout(function(){
+                    window.location = @Html.Raw("\"" + channelUrl + "\"") ;
+                }, 1000);
+            </script>
+        }
+    }
+    else
+    { 
+        
+    }
+
+</body>
+</html>
+<script>
+
+</script>

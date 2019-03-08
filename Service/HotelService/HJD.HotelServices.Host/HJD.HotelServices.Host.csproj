@@ -1,0 +1,266 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5169FBFE-95F2-4F1B-B859-3E5B6DDB232F}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HJD.HotelServices.Host</RootNamespace>
+    <AssemblyName>HJD.HotelServices.Host</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HJD.AccountServices.Contracts">
+      <HintPath>..\..\..\Contracts\HJD.AccountServices.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.AccountServices.Entity">
+      <HintPath>..\..\..\Contracts\HJD.AccountServices.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.Cache">
+      <HintPath>..\..\..\Library\HJD.Framework.Cache.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.DataAccess">
+      <HintPath>..\..\..\Library\HJD.Framework.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\HJD.Framework.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.Log">
+      <HintPath>..\..\..\Library\HJD.Framework.Log.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.Mongodb">
+      <HintPath>..\..\..\Library\HJD.Framework.Mongodb.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.WCF">
+      <HintPath>..\..\..\Library\HJD.Framework.WCF.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.Framework.WCF.BaseServiceHostFactory">
+      <HintPath>..\..\..\Library\HJD.Framework.WCF.BaseServiceHostFactory.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.HotelManagementCenter.Domain">
+      <HintPath>..\..\..\Contracts\HJD.HotelManagementCenter.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.HotelManagementCenter.IServices">
+      <HintPath>..\..\..\Contracts\HJD.HotelManagementCenter.IServices.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.JobAssistant.Contracts">
+      <HintPath>..\..\..\Contracts\HJD.JobAssistant.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.OtaCrawlerService.Contract">
+      <HintPath>..\..\..\Contracts\HJD.OtaCrawlerService.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.UGCRule.Contacts">
+      <HintPath>..\..\..\Contracts\HJD.UGCRule.Contacts.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Bson, Version=1.4.4323.28994, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=1.4.4323.28994, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Config\CtripDB.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Config\DestinationDB.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\HotelBizDB.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\HotelDB.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Config\CommDB.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ScheduleHotel.aspx" />
+    <Content Include="ScheduleReview.aspx" />
+    <Content Include="ScheduleVacationJob.aspx" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HotelcommentCacheJob.aspx" />
+    <Content Include="WebForm1.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScheduleHotel.aspx.cs">
+      <DependentUpon>ScheduleHotel.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ScheduleHotel.aspx.designer.cs">
+      <DependentUpon>ScheduleHotel.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ScheduleReview.aspx.cs">
+      <DependentUpon>ScheduleReview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ScheduleReview.aspx.designer.cs">
+      <DependentUpon>ScheduleReview.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="HotelcommentCacheJob.aspx.cs">
+      <DependentUpon>HotelcommentCacheJob.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HotelcommentCacheJob.aspx.designer.cs">
+      <DependentUpon>HotelcommentCacheJob.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ScheduleVacationJob.aspx.cs">
+      <DependentUpon>ScheduleVacationJob.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ScheduleVacationJob.aspx.designer.cs">
+      <DependentUpon>ScheduleVacationJob.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebForm1.aspx.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebForm1.aspx.designer.cs">
+      <DependentUpon>WebForm1.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Config\AppSettings.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Database.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Log.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Config\Memcache.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\MemcacheSet.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Mongodb.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Config\Cache.config" />
+    <Content Include="Config\CacheSet.config" />
+    <None Include="Properties\PublishProfiles\HotelService.pubxml" />
+    <None Include="Properties\PublishProfiles\TestPub.pubxml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HJD.HotelServices.Contract\HJD.HotelServices.Contracts.csproj">
+      <Project>{c56f6f4e-023f-4a96-b570-8583c78c160d}</Project>
+      <Name>HJD.HotelServices.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HJD.HotelServices.Implement\HJD.HotelServices.Implement.csproj">
+      <Project>{135e6295-fcb9-4353-8030-bd95f48e295b}</Project>
+      <Name>HJD.HotelServices.Implement</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Config\Cache.config" />
+    <Content Include="Config\CacheSet.config" />
+    <None Include="Properties\PublishProfiles\HotelService.pubxml" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>False</AutoAssignPort>
+          <DevelopmentServerPort>54741</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:54742/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

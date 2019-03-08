@@ -1,0 +1,144 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+    
+    var isApp = ViewBag.IsApp;
+    var aid = ViewBag.Aid;
+    var userid = ViewBag.UserId; //userid = "4512064";
+    
+    CouponActivityDetailModel coupondetail = ViewBag.CouponDetail;
+    
+    var activity = coupondetail.activity;
+    var pItems = coupondetail.DailyItems;
+    var noticeItems = coupondetail.NoticeItems;
+    
+    //开售日
+    var selldate = activity.EffectiveTime; //selldate = DateTime.Parse("2015-07-08 12:43:15");
+    
+    //购买按钮的状态
+    var canShop = true;
+
+    var AppType = ViewBag.AppType;
+    var AppVerForIOS = ViewBag.AppVerForIOS;
+    var AppVerForAndroid = ViewBag.AppVerForAndroid;
+    var IsLatestVerApp = ViewBag.IsLatestVerApp;
+    
+    //最小购买数量
+    var minBuyNum = activity.MinBuyNum;
+    
+    //价格label
+    var priceLabel = activity.PriceLabel;
+
+    //页面标题
+    ViewBag.Title = "周末酒店会员预约";
+
+    //是否可以预约 0预约结束 1可预约
+    var canreserve = ViewBag.CanReserve;
+    
+    //分享跟踪参数的分享人对象
+    HJD.AccountServices.Entity.MemberProfileInfo shareUserInfo = ViewBag.ShareUserInfo;
+}
+
+@section styles
+{
+    <link href="/content/css/coupon/couponshopforvip2.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <style type="text/css">
+    </style>
+}
+
+@if (canreserve == 0)
+{
+    <div id ="step3" style="display:block;">
+        <div class="vip-top2">
+            <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-reserve-over-bg.png" alt="" />
+        </div>
+        @if (!isApp)
+        {
+            <div class="vip-bottom2">
+                <div class="download" onclick="gourl('/Inspector/Jump?jumpurl=whotelapp://www.zmjiudian.com/')">下载周末酒店APP</div>
+                <div class="tip">度假酒店精选 会员专享优惠</div>
+            </div>
+        }
+    </div>   
+}
+else 
+{
+    <div id="step1" style="display:block;">
+        <div class="vip-top">
+            <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip-brief-bg.jpg" alt="" />
+        </div>
+        @if (userid == "0")
+        {
+            <div class="vip-phone">
+                <div class="phone-line">
+                    <input type="tel" id="userPhone" class="userPhone" placeholder="输入手机号" /><button type="button" class="vCodeBtn">发送验证码</button>
+                </div>
+                <div class="vcode-line">
+                    <input type="text" id="vCode" class="vCode" placeholder="输入短信验证码" />
+                </div>
+            </div>
+        }
+        <div class="vip-btns">
+            <div class="submit">预约</div>
+        </div>
+    </div>
+    <div id="step2" style="display:none;">
+        <div class="vip-top2">
+            <img src="http://whfront.b0.upaiyun.com/app/img/coupon/vip/vip_yuyue_ok.png" alt="" />
+        </div>
+        @if (!isApp)
+        {
+            <div class="vip-bottom2">
+                <div class="download" onclick="gourl('/Inspector/Jump?jumpurl=whotelapp://www.zmjiudian.com/')">下载周末酒店APP</div>
+                <div class="tip">度假酒店精选 会员专享优惠</div>
+            </div>
+        }
+    </div>
+}
+
+@*<a href="whotelapp://www.zmjiudian.com/gotopage?url=http://192.168.1.22:8081/custom/reserve/vip/100250">~~</a><br />
+    <a href="whotelapp://www.zmjiudian.com/gotopage?url=http://www.zmjiudian.com/custom/reserve/vip/100250">~~</a>*@
+<footer>
+    <input type="hidden" id="aid" value="@aid" />
+    <input type="hidden" id="atype" value="@activity.Type" />
+    <input type="hidden" id="pid" value="0" />
+    <input type="hidden" id="pricetype" value="0" />
+    <input type="hidden" id="userid" value="@userid" />
+    <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+    <input type="hidden" id="cansell" value="@(canShop ? 1 : 0)" />
+    <input type="hidden" id="sellnum" value="@minBuyNum" />
+    <form style="display:none;">
+        <input type="text" id="loginput" value="0" />
+    </form>
+</footer>
+
+    @section scripts
+{
+        <script src="~/Content/js/framework/jquery.lazyload.min.js"></script>
+        <script src="~/Content/js/VerifyInput.js"></script>
+        <script src="~/Content/js/coupon/couponshopforvip2.js?v=@(Helpers.curAppVer())"></script>
+        <script type="text/javascript">
+            var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F3566e9570ddbe6722a51adedffbf065b' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script>
+            window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+            window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+            window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+        </script>
+        <script type="text/javascript" charset="utf-8">
+            function goto(param) {
+                var url = "@(ViewBag.AccessProtocal)" + param;
+                this.location = url;
+            }
+
+            function gourl(url) {
+                location.href = url;
+            }
+
+            function loginCallback(userid) {
+                location.replace(location.pathname + "?userid=" + userid);
+            }
+
+            var pub_userid = "@userid";
+        </script>
+    }

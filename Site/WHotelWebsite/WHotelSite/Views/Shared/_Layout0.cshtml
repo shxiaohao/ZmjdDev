@@ -1,0 +1,35 @@
+﻿<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>@(String.IsNullOrEmpty(ViewBag.PageTitle) ? ViewBag.Title : ViewBag.PageTitle)</title>
+    <meta name="keywords" content="@ViewBag.PageKeywords" />
+    <meta name="description" content="@ViewBag.PageDescription" />
+    <meta name="copyright" content="2013, zmjiudian.com" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <link href="~/Content/css/framework/util.css" rel="stylesheet" />
+    @RenderSection("styles", false)
+    
+    @*<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?3566e9570ddbe6722a51adedffbf065b";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+    </script>*@
+</head>
+<body>
+@RenderBody()
+
+
+    <input type="hidden" id="hidCurUserCID" value="@(ViewBag.CID)" />
+
+@Scripts.Render("~/Content/js/jquery-1.10.2-min.js")
+@RenderSection("scripts", false)
+
+</body>
+</html>

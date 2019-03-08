@@ -1,0 +1,179 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+
+    var userId = ViewBag.UserId;
+    var regname = ViewBag.RegName;
+    var regtell = ViewBag.RegTell;
+
+    List<UserTagOption> userTags = ViewBag.UserTags;
+    UserTagOption workTag = ViewBag.WorkTag;
+    UserTagOption hotelTag = ViewBag.HotelTag;
+    UserTagOption levelTag = ViewBag.LevelTag;
+    UserTagOption travelTag = ViewBag.TravelTag;
+    
+    ViewBag.Title = string.Format("个性签名");
+    ViewBag.BodyStyle = "overflow-x:hidden;";
+}
+
+@section styles
+{
+    <link href="~/Content/css/acount/usertag.css" rel="stylesheet" />
+}
+
+<div class="option-panel">
+    <div class="option-item option-item-work" data-type="work" data-saveinfo="">
+        <div class="left"><span class="lab">所属行业</span></div>
+        <div class="right"><span class="val">选择</span></div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="option-item option-item-hotel" data-type="hotel" data-saveinfo="">
+        <div class="left"><span class="lab">酒店喜好</span></div>
+        <div class="right"><span class="val">选择酒店类型</span></div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="option-item option-item-level" data-type="level" data-saveinfo="">
+        <div class="left"><span class="lab">价格倾向</span></div>
+        <div class="right"><span class="val">选择</span></div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="option-item option-item-travel option-item-noborder" data-type="travel" data-saveinfo="">
+        <div class="left"><span class="lab">出游类型</span></div>
+        <div class="right"><span class="val">选择</span></div>
+        <div style="clear:both;"></div>
+    </div>
+</div>
+<div class="sub-panel">
+    <button type="button" class="sub">提交</button>
+</div>
+
+<div class="select-panel-model" style="display:none;">&nbsp;</div>
+@if (workTag != null)
+{
+    var tags = workTag.Tags;
+    var mulsel = workTag.MaxCount <= 1 ? 0 : workTag.MaxCount; 
+    <div class="select-panel select-panel-work" data-typeid="@workTag.TypeId" data-mulsel="@mulsel" style="display:none;">
+        <div class="tit">@workTag.TypeName</div>
+        <div class="options">
+            @if (tags != null && tags.Count > 0)
+            {
+                for (int t = 0; t < tags.Count; t++)
+                {
+                    var tag = tags[t];
+                    if (tag.TagID == 0)
+                    {
+                        <div>
+                            <div class="item custom-item" data-s="0" data-id="@tag.TagID" data-val="@tag.TagName"><input type="text" value="" placeholder="@tag.TagName" /></div>
+                        </div>
+                    }
+                    else
+                    { 
+                        <div class="item" data-s="0" data-id="@tag.TagID" data-val="@tag.TagName">@tag.TagName</div>
+                    }
+                }
+            }
+        </div>
+        <div class="btns">
+            <button type="button" data-optionitem="option-item-work" class="ok">确定</button>
+        </div>
+    </div>
+}
+@if (hotelTag != null)
+{
+    var tags = hotelTag.Tags;
+    var mulsel = hotelTag.MaxCount <= 1 ? 0 : hotelTag.MaxCount;
+    <div class="select-panel select-panel-hotel" data-typeid="@hotelTag.TypeId" data-mulsel="@mulsel" style="display:none;">
+        <div class="tit">@hotelTag.TypeName</div>
+        <div class="options">
+            @if (tags != null && tags.Count > 0)
+            {
+                for (int t = 0; t < tags.Count; t++)
+                {
+                    var tag = tags[t];
+                    if (tag.TagID == 0)
+                    {
+                        <div>
+                            <div class="item custom-item" data-s="0" data-id="@tag.TagID" data-val="@tag.TagName"><input type="text" value="" placeholder="@tag.TagName" /></div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="item" data-s="0" data-id="@tag.TagID" data-val="@tag.TagName">@tag.TagName</div>
+                    }
+                }
+            }
+        </div>
+        <div class="btns">
+            <button type="button" data-optionitem="option-item-hotel" class="ok">确定</button>
+        </div>
+    </div>
+}
+@if (levelTag != null)
+{
+    var tags = levelTag.Tags;
+    var mulsel = levelTag.MaxCount <= 1 ? 0 : levelTag.MaxCount;
+    <div class="select-panel select-panel-level" data-typeid="@levelTag.TypeId" data-mulsel="@mulsel" style="display:none;">
+        <div class="tit">@levelTag.TypeName</div>
+        <div class="options">
+            @if (tags != null && tags.Count > 0)
+            {
+                for (int t = 0; t < tags.Count; t++)
+                {
+                    var tag = tags[t];
+                    if (tag.TagID == 0)
+                    {
+                        <div>
+                            <div class="item custom-item" data-s="0" data-id="@tag.TagID" data-val="@tag.TagName"><input type="text" value="" placeholder="@tag.TagName" /></div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="item item-long" data-s="0" data-id="@tag.TagID" data-val="@tag.TagName">@tag.TagName</div>
+                    }
+                }
+            }
+        </div>
+        <div class="btns">
+            <button type="button" data-optionitem="option-item-level" class="ok">确定</button>
+        </div>
+    </div>
+}
+@if (travelTag != null)
+{
+    var tags = travelTag.Tags;
+    var mulsel = travelTag.MaxCount <= 1 ? 0 : travelTag.MaxCount;
+    <div class="select-panel select-panel-travel" data-typeid="@travelTag.TypeId" data-mulsel="@mulsel" style="display:none;">
+        <div class="tit">@travelTag.TypeName</div>
+        <div class="options">
+            @if (tags != null && tags.Count > 0)
+            {
+                for (int t = 0; t < tags.Count; t++)
+                {
+                    var tag = tags[t];
+                    if (tag.TagID == 0)
+                    {
+                        <div>
+                            <div class="item custom-item" data-s="0" data-id="@tag.TagID" data-val="@tag.TagName"><input type="text" value="" placeholder="@tag.TagName" /></div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="item" data-s="0" data-id="@tag.TagID" data-val="@tag.TagName">@tag.TagName</div>
+                    }
+                }
+            }
+        </div>
+        <div class="btns">
+            <button type="button" data-optionitem="option-item-travel" class="ok">确定</button>
+        </div>
+    </div>
+}
+
+<input type="hidden" id="userId" value="@userId" />
+<input type="hidden" id="regname" value="@regname" />
+<input type="hidden" id="regtell" value="@regtell" />
+@section scripts
+{
+    @Scripts.Render("~/Content/js/acount/usertag.js")
+}

@@ -1,0 +1,46 @@
+﻿@using HJD.CouponService.Contracts.Entity
+@model List<AcquiredCoupon>
+@{
+    //ViewBag.Title = "Late";
+    Layout = null;
+    DateTime date = DateTime.Now;
+    var cssSuffix = string.Format("?suffix={0}{1}{2}{3}{4}", date.Year, date.Month, date.Day, date.Hour, date.Minute);
+}
+
+<head>
+    <meta charset="utf-8">
+    <title>来晚了</title>
+    <link rel="stylesheet" href="~/Content/css/cash_list_reset.css" />
+    <link rel="stylesheet" href="~/Content/css/css_chaikaihongbao7.css@(cssSuffix)" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="format-detection" content="telephone=no">
+</head>
+
+@*<div style="text-align:center">
+    <h2>您来晚了，下次早点来哦</h2>
+    @if(Model != null){
+        <div class="aa1">
+            @foreach (AcquiredCoupon coupon in Model)
+            {
+                <p>@coupon.PhoneNo 获得了@(coupon.TotalMoney) 元现金券</p>
+            }
+        </div>
+    }
+    <div class="rule">
+        <h3>使用规则</h3>
+        <p>1、您获得的现金券有效期为两年，在有效期间，您可以使用现金券抵扣您在周末酒店预订酒店的消费金额。</p>
+        <p>2、不同的酒店产品所适用的现金券金额会有所不同。预订的时候，系统会自动提示可抵用金额。</p>
+    </div>
+</div>*@
+
+<div class="container">
+    <div class="hb-bg">
+        <img src="@Url.Content("~/Content/images/hb.png")" />
+    </div>
+    <div class="content">
+        <div class="brook1">
+        </div>
+    </div>
+</div>

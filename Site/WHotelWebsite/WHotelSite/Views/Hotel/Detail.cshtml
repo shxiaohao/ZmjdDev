@@ -1,0 +1,1316 @@
+﻿@using WHotelSite
+@using WHotelSite.Params.Hotel
+@using HJD.HotelServices
+@{
+    var isApp = ViewBag.IsApp;
+    var isMobile = ViewBag.IsMobile;
+    var isInWeixin = ViewBag.isInWeixin;
+    var isVip = ViewBag.IsVip;
+    var cid = ViewBag.CID;
+    var requestCID = ViewBag.RequestCID;
+    var userId = ViewBag.UserId;
+
+    DetailParam param = ViewBag.param;
+    HotelItem5 hotelEntity = ViewBag.HotelEntity;
+    HotelItem6 hotelEntityNew = ViewBag.HotelEntityNew;
+
+    string priceTypeName = hotelEntity.PriceType == 2 ? "特惠专享" : hotelEntity.PriceType == 3 ? "特惠套餐" : "酒店套餐";
+    List<PDayItem> calendar = ViewBag.calendar;
+
+    if (isMobile)
+    {
+        ViewBag.Title = string.Format("{0}-周末酒店", hotelEntityNew.HotelName.Replace("·", " "));
+    }
+    else
+    {
+        ViewBag.Title = string.Format("{0}玩点介绍_优惠价格_用户评价-{0}附近好玩_好吃美食-周末酒店", hotelEntity.HotelName.Replace("·", " "));
+    }
+
+    ViewBag.Keywords = string.Format("{0}{1}{2}点击查看更多{3}网友点评、玩点，特色、优惠价格，发现更适合你的酒店。", hotelEntity.MinPrice > 0 ? "参考价格￥" + hotelEntity.MinPrice.ToString("0") + "起，" : string.Empty, hotelEntity.Score > 0 ? "平均点评分" + hotelEntity.Score.ToString("0.0") + "分（总分5分），" : string.Empty, hotelEntity.Featrues != null && hotelEntity.Featrues.Count > 0 ? "适合" + string.Join("_", hotelEntity.Featrues.Select(p => p)) + "，" : string.Empty, hotelEntity.HotelName.Replace("·", " "));
+    ViewBag.Description = string.Format("{0}玩点介绍_优惠价格_用户评价-{0}附近好玩_好吃美食", hotelEntity.HotelName.Replace("·", " "));
+    ViewBag.BodyClass = "hoteldetailpage";
+
+    string fullHeart = ViewBag.showFullHeart ? "" : "display: none";
+    string airHeart = ViewBag.showAirHeart ? "" : "display: none";
+    bool isShowWrite = UserState.UserID != 0 ? true : false;
+    string zmjdWB = "@周末酒店";
+
+    int pid = 0;
+    string firstPic = "";
+    string oldPicUrl = "";
+    string newPicUrl = "";
+
+    //OtaList处理，如果是移动端，则显示OTA中最便宜的一个
+    var minOta = new OTAInfo2 { Price = 0 };
+
+    //mobile objs
+    string hotelPicUrl = "";
+
+    //最低价格套餐对象
+    PackageItem minPriceEntity = null;
+
+    //跳转套餐页对应的checkIn & checkOut
+    var priceCheckIn = param.CheckIn;
+    var priceCheckOut = param.CheckIn;
+
+    var nightCount = 1;
+    
+    var shareInfoPrice = 0;
+    var shareInfoPackageInfo = "";
+    
+    if (isMobile)
+    {
+        //头图
+        if (hotelEntityNew.Pics != null && hotelEntityNew.Pics.Count > 0)
+        {
+            hotelPicUrl = hotelEntityNew.Pics[0];
+        }
+
+        //最低价格套餐
+        if (hotelEntityNew.PackageList != null && hotelEntityNew.PackageList.Count > 0)
+        {
+            minPriceEntity = hotelEntityNew.PackageList[0];
+            shareInfoPrice = minPriceEntity.VIPPrice;
+            shareInfoPackageInfo = minPriceEntity.Brief;
+            nightCount = minPriceEntity.NightCount;
+        }
+
+        priceCheckIn = hotelEntityNew.PriceCinDate.ToString("yyyy-MM-dd");
+        priceCheckOut = hotelEntityNew.PriceCouDate.ToString("yyyy-MM-dd");
+    }
+    else
+    {
+        firstPic = hotelEntity.Pics != null && hotelEntity.Pics.Count != 0 ? hotelEntity.Pics[0] : "";
+        oldPicUrl = WHotelSite.Utils.GetFitPicUrl(firstPic); oldPicUrl = oldPicUrl.Replace("theme", "appdetail1");
+        Enums.AppPhotoSize s1 = HJDAPI.Common.Helpers.Enums.AppPhotoSize.small;
+        newPicUrl = oldPicUrl != "" ? oldPicUrl.Replace("appdetail1s", s1.ToString()).Replace("theme", s1.ToString()) : "";
+
+        if (hotelEntity.PackageList != null && hotelEntity.PackageList.Count != 0)
+        {
+            var _p = hotelEntity.PackageList[0];
+            pid = _p.PID;
+            shareInfoPrice = Convert.ToInt32(hotelEntity.MinPrice);
+            shareInfoPackageInfo = _p.Brief;
+            nightCount = _p.NightCount;
+        }
+
+        //OtaList处理，如果是移动端，则显示OTA中最便宜的一个
+        if (hotelEntity.OTAList != null && hotelEntity.OTAList.Count > 0 && hotelEntity.OTAList.Exists(o => o.Price > 0))
+        {
+            minOta = hotelEntity.OTAList.Where(o => o.Price > 0).OrderBy(o => o.Price).First() ?? new OTAInfo2 { Price = 0 };
+        }
+    }
+    
+    //分享配置
+    var shareTitle = hotelEntityNew.HotelName;
+    shareTitle = shareTitle.Replace("·", " ");
+
+    var shareDesc = "";
+    if (shareInfoPrice > 0 && !string.IsNullOrEmpty(shareInfoPackageInfo))
+    {
+        shareDesc = string.Format("这家不错！￥{0} {1}", shareInfoPrice, shareInfoPackageInfo);
+    }
+    
+    var shareLink = string.Format("http://www.zmjiudian.com/hotel/{0}", hotelEntityNew.HotelID);
+    if (requestCID > 0)
+    {
+        shareLink += ("?CID=" + requestCID);
+    }
+    else
+    {
+        shareLink += ("?CID=" + userId);
+    }
+    var shareImgUrl = hotelPicUrl.Replace("_appdetail1s", "_290x290s").Replace("_theme", "_290x290s");
+
+    var dayLimitMin = 0;
+    var dayLimitMax = 0;
+
+    //产品店铺信息
+    HJD.HotelManagementCenter.Domain.RetailerShopEntity productShopInfo = ViewBag.ProductShopInfo;
+    
+    //头bar
+    var headBarUrl = "/Account/WxMenuTransfer?menu=7";
+    var headLogoUrl = "http://whfront.b0.upaiyun.com/app/img/home/zmjd-logo-256x256.png";
+    var headLogoName = "周末酒店";
+    if (isApp)
+    {
+        headBarUrl = "whotelapp://www.zmjiudian.com";
+    }
+    else
+    {
+        if (productShopInfo != null && !string.IsNullOrEmpty(productShopInfo.ShopName))
+        {
+            headBarUrl = string.Format("/Channel/ShopDetail?cid={0}", requestCID);
+            headLogoUrl = !string.IsNullOrEmpty(productShopInfo.AvatarUrl) ? productShopInfo.AvatarUrl.Replace("_jupiter", "_290x290") : "";
+            headLogoName = productShopInfo.ShopName;
+        }
+    }
+}
+
+@section styles
+{
+    @Styles.Render("~/Content/css/calendar.css")
+    @if (isMobile)
+    {
+        @Styles.Render("~/Content/css/hotel/detail.css?v=" + Helpers.curAppVer(), "~/Content/css/framework/util.css")
+    }
+    <style type="text/css">
+        html, body {
+            overflow-x: hidden;
+        }
+
+        .bg-white {
+            background: #fff;
+        }
+
+        .download-footbanner {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            margin: auto;
+            padding: 0;
+            vertical-align: bottom;
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2;
+        }
+
+            .download-footbanner img {
+                width: 100%;
+                vertical-align: bottom;
+            }
+    </style>
+}
+
+@section scripts
+{
+    <script>
+        var gourl = function (url) {
+            location.href = url;
+        }
+    </script>
+
+    @if (!isMobile)
+    {
+        @Scripts.Render(
+            "~/Content/js/ctrip_cquery.js",
+            "~/Content/js/ctrip_calendar.js",
+            "~/Content/js/calendar.js"
+        )
+        @Helpers.CalendarOptions(Html, calendar, dayLimitMin, dayLimitMax)
+    }
+    @Scripts.Render("~/Content/js/hotel/detail.js?v=" + Helpers.curAppVer())
+
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js?v=@(Helpers.curAppVer())" type="text/javascript"></script>
+        <script>
+
+            GetWeixinApiConfig();//注册
+
+            wx.ready(function () {
+
+                wx.onMenuShareTimeline({
+                    title: '@(shareTitle)',
+                    desc: '@(shareDesc)',
+                    link: '@(shareLink)',
+                    imgUrl: '@(shareImgUrl)',
+                    success: function (res) {
+                    },
+                    cancel: function (res) {
+                    }
+                });
+
+                wx.onMenuShareAppMessage({
+                    title: '@(shareTitle)',
+                    desc: '@(shareDesc)',
+                    link: '@(shareLink)',
+                    imgUrl: '@(shareImgUrl)',
+                    success: function (res) {
+                    },
+                    cancel: function (res) {
+                    }
+                });
+
+                wx.onMenuShareQQ({
+                    title: '@(shareTitle)',
+                    desc: '@(shareDesc)',
+                    link: '@(shareLink)',
+                    imgUrl: '@(shareImgUrl)',
+                    success: function (res) {
+                    },
+                    cancel: function (res) {
+                    }
+                });
+
+                wx.onMenuShareQZone({
+                    title: '@(shareTitle)',
+                    desc: '@(shareDesc)',
+                    link: '@(shareLink)',
+                    imgUrl: '@(shareImgUrl)',
+                    success: function (res) {
+                    },
+                    cancel: function (res) {
+                    }
+                });
+
+                });
+
+                function GetWeixinApiConfig() {
+
+                    var url = location.href.split("#")[0];
+                    $.ajax({
+                        url: '/Coupon/GetWeixinConfigInfo',
+                        type: 'POST',
+                        data: { url: url },
+                        dataType: 'json',
+                        async: false,
+                        error: function () {
+                            console.log("网络服务错误");
+                        },
+                        success: function (result) {
+                            if (typeof (result.Success) != undefined && result.Success == 1) {
+                                return false;
+                            }
+                            else {
+                                //得到微信config的值
+                                var array = [
+                                    'checkJsApi',
+                                    'onMenuShareTimeline',
+                                    'onMenuShareAppMessage',
+                                    'onMenuShareQQ',
+                                    'onMenuShareQZone',
+                                    'hideOptionMenu'
+                                ];
+                                if (result.jsApiList) {
+                                    var jsArray = result.jsApiList.split(',');
+                                    for (var key in jsArray) {
+                                        array.push("" + jsArray[key]);
+                                    }
+                                }
+
+                                wx.config({
+                                    debug: false,
+                                    appId: result.appId,
+                                    timestamp: "" + result.timestamp,
+                                    nonceStr: result.nonceStr,
+                                    signature: result.signature,
+                                    jsApiList: array
+                                });
+                            }
+                        }
+                    });
+                }
+
+        </script>
+    }
+}
+
+@section header
+{
+    <!-- Header -->
+    <div class="container header hidden-xs hidden-sm">
+        <div class="row">
+            <div class="col-md-1 col-sm-12 col-xs-12"></div>
+            <div class="col-md-6 col-sm-8 col-xs-8">
+                <a style="width:224px;" href="@Url.Action("Home", "Portal")">
+                    <img src="@Url.Content("~/Content/images/logo.png")" style="float:left;" alt="周末酒店" />
+                </a>
+                <div class="topsearch" id="topSearchDiv">
+                    <input type="email" class="form-control" id="topSearchInput" placeholder="请输入酒店名称关键字">
+                    <div class="searchbtn">
+                        <a id="topSearch"><img src="@Url.Content("~/Content/images/icon-topsearch.png")" alt="" /></a>
+                    </div>
+                </div>
+            </div>
+            @*<div class="col-md-5 col-sm-5 col-xs-12">
+                    @Helpers.BreadCrumbs(Url, hotel)
+                </div>*@
+            <div class="col-md-5 col-sm-4 col-xs-12 headright hidden-xs">
+                @Helpers.DLLinks(Url)
+            </div>
+        </div>
+    </div>
+}
+
+@if (isMobile)
+{
+    if(!isApp)
+    {
+        <div class="page-head-bar">
+            <div class="_logo-section">
+                <div class="_logo"><img src="@(headLogoUrl)" alt="" /></div>
+                <div class="_name">@(headLogoName)</div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="_home-section"><span class="zmjd-iconfont _icon" onclick="gourl('@(headBarUrl)')">&#xe67b;</span></div>
+            <div style="clear:both;"></div>
+        </div>
+    }
+    <div class="hotel-pic-section">
+        <a href="@Url.Action("Photos")" target="_blank">
+            <img src="@hotelPicUrl.Replace("_appdetail1s", "_640x426").Replace("_theme", "_640x426")" alt="" />
+            @if (hotelEntityNew.Pics != null && hotelEntityNew.Pics.Any())
+            {
+                <div class="photonum">
+                    @hotelEntityNew.PicCount 张照片
+                </div>
+            }
+        </a>
+    </div>
+    
+    <div class="hotel-section">
+        <div class="hotel-info">
+            <div class="n">@hotelEntityNew.HotelName</div>
+            @if (hotelEntityNew.Score > 0)
+            {
+                <div class="other" onclick="gourl('/hotel/@(hotelEntityNew.HotelID)/allreviews')"><span class="star zmjd-iconfont" id="hotel-star-span"></span>@(hotelEntityNew.Score)分 / <a class="all-review-link" href="javascript:;" target="_blank">全部@(hotelEntityNew.ReviewCount)点评>></a></div>
+            }
+            else
+            {
+                <div class="other" onclick="gourl('/hotel/@(hotelEntityNew.HotelID)/allreviews')">暂无点评</div>
+            }
+            <div class="time-info">
+                @(hotelEntityNew.OpenYear)@(!string.IsNullOrEmpty(hotelEntityNew.ReBuildInfo) ? string.Format(" / {0}", hotelEntityNew.ReBuildInfo) : "")
+            </div>
+        </div>
+        <div class="address">
+            <div class="info" onclick="gourl('/hotel/@(hotelEntityNew.HotelID)/map')">
+                <div class="left">
+                    地址：@(hotelEntityNew.AddressInfo.Address)
+                </div>
+                <div class="right">
+                    <div class="zmjd-iconfont _icon">&#xe66c;</div>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="hotel-section">
+        @if (minPriceEntity != null && minPriceEntity.VIPPrice > 0)
+        {
+            if (isVip)
+            {
+                <div class="price-info">
+                    <div class="price-top-bar-base">
+                        <div class="price-top-bar" onclick="gourl('@Url.Action("Packages", new { hotel = hotelEntityNew.HotelID, checkIn = priceCheckIn, checkOut = priceCheckOut, pid = 0 })')">
+                            <div class="l">@(minPriceEntity.Title)</div>
+                            <div class="r zmjd-iconfont" onclick="gourl('@Url.Action("Packages", new { hotel = hotelEntityNew.HotelID, checkIn = priceCheckIn, checkOut = priceCheckOut, pid = 0 })')"></div>
+                            <div style="clear:both;"></div>
+                        </div>
+                    </div>
+                    <div class="other-price"><span class="zmjd-iconfont vip-icon">&#xe65f;</span><span class="h-price">￥@(minPriceEntity.VIPPrice)/@(nightCount)晚</span>普通价:￥@(minPriceEntity.Price)/@(nightCount)晚</div>
+                </div>
+            }
+            else
+            {
+                <div class="price-info">
+                    <div class="price-top-bar-base">
+                        <div class="price-top-bar" onclick="gourl('@Url.Action("Packages", new { hotel = hotelEntityNew.HotelID, checkIn = priceCheckIn, checkOut = priceCheckOut, pid = 0 })')">
+                            <div class="l">@(minPriceEntity.Title)</div>
+                            <div class="r zmjd-iconfont"></div>
+                            <div style="clear:both;"></div>
+                        </div>
+                    </div>
+                    @*<div class="other-price"><span class="h-price">￥@(minPriceEntity.Price)/@(nightCount)晚</span><span class="zmjd-iconfont vip-icon-2">&#xe65f;</span>￥@(minPriceEntity.VIPPrice)/@(nightCount)晚</div>*@
+                    <div class="other-price"><span class="zmjd-iconfont vip-icon">&#xe65f;</span><span class="h-price">￥@(minPriceEntity.VIPPrice)/@(nightCount)晚</span>普通价:￥@(minPriceEntity.Price)/@(nightCount)晚</div>
+                </div>
+                <div class="buyvip" onclick="goBuyVip()">
+                    <span class="zmjd-iconfont _vipicon">&#xe671;</span>付199元年费可<span class="go">成为VIP>></span>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="price-info">
+                <div class="price-top-bar-base">
+                    <div class="price-top-bar" onclick="gourl('@Url.Action("Packages", new { hotel = hotelEntityNew.HotelID, checkIn = priceCheckIn, checkOut = priceCheckOut, pid = 0 })')">
+                        <div class="l"></div>
+                        <div class="r zmjd-iconfont">查询价格&#xe601;</div>
+                        <div style="clear:both;"></div>
+                    </div>
+                </div>
+                <div class="other-price"></div>
+                <div class="info"></div>
+            </div>
+        }
+
+        @if (minPriceEntity != null && minPriceEntity.packageContent != null && minPriceEntity.packageContent.Count > 0)
+	    {
+		    <div class="package">
+                <div class="tit">套餐内容：</div>
+                <div class="info">
+                    <div class="packageList">
+                        <table border="0" cellpadding="0" cellspacing="0">
+                            @for (int i = 0; i < minPriceEntity.packageContent.Count; i++)
+                            {
+                                var pitem = minPriceEntity.packageContent[i];
+                                if (!string.IsNullOrEmpty(pitem))
+                                {
+                                    <tr><td class="td-num" valign="top">&bull;</td><td class="td-info" valign="top">@(pitem)</td></tr>
+                                }
+                            }
+                        </table>
+                    </div>
+                </div>
+                @*<div class="package-more-btn" style="display:none;">
+                    <div class="mask"></div>
+                    <div class="btn">查看更多<span class="zmjd-iconfont _icon">&#xe65c;</span></div>
+                </div>*@
+            </div>
+	    }
+        @if (minPriceEntity != null)
+        {
+            <div class="shopread-btn">
+                <div class="_btn">购买须知</div>
+            </div>
+            <div class="shopread" style="display:none;">
+                <div class="tit" data-open="1">购买须知</div>
+                <div class="tit-border" style="display:block;"></div>
+                <div class="info" style="display:block;">
+                    <table border="0" cellpadding="0" cellspacing="0">
+                        @for (int i = 0; i < minPriceEntity.packageNotice.Count; i++)
+                        {
+                            var notice = minPriceEntity.packageNotice[i];
+                            <tr><td class="td-num" valign="top">&bull;</td><td class="td-info" valign="top">@(notice)</td></tr>
+                        }
+                    </table>
+                </div>
+            </div>   
+        }
+    </div>
+    
+    <div class="hotel-section">
+        @if (hotelEntityNew.IntroNew != null && !string.IsNullOrEmpty(hotelEntityNew.IntroNew.Description))
+        {
+            <div class="rel-remark">
+                <div class="tit">推荐理由</div>
+                <div class="tit-border"></div>
+                @if (!string.IsNullOrEmpty(hotelEntityNew.IntroNew.ActionUrl))
+                {
+                    <div class="desc">
+                        @Html.Raw(hotelEntityNew.IntroNew.Description.Replace("\r\n", "<br>").Replace("\r", "<br>").Replace("\n", "<br>"))
+                    </div>
+                    @*<div class="link" onclick="gourl('@hotelEntityNew.IntroNew.ActionUrl')">@(!string.IsNullOrEmpty(hotelEntityNew.IntroNew.Text) ? hotelEntityNew.IntroNew.Text : "全文")</div>*@
+                }
+                else
+                {
+                    <div class="desc">
+                        @(hotelEntityNew.IntroNew.Description)
+                    </div>
+
+                }
+            </div>
+        }
+
+        @if (hotelEntityNew.FollowingCommentCount > 0)
+        {
+            //hotelEntityNew.FriendComment = hotelEntityNew.NewComment;
+            
+            <div class="rel-comment">
+                @if (hotelEntityNew.FriendComment != null && !string.IsNullOrEmpty(hotelEntityNew.FriendComment.Text))
+                {
+                    <div class="tit">好友的点评</div>
+                    <div class="tit-border"></div>
+                    <div class="desc" onclick="gourl('/hotel/@(hotelEntityNew.HotelID)/allreviews')">
+                        <div class="c-tit">
+                            @(hotelEntityNew.FriendComment.CommentTitle)
+                        </div>
+                        <div class="c-info">
+                            @(hotelEntityNew.FriendComment.Text)
+                        </div>
+                        <div class="c-user">
+                            <div class="user-info">
+                                <img class="uimg" src="http://p1.zmjiudian.com/4526219BOXi_small" alt="" /><span class="nickname">@(hotelEntityNew.FriendComment.Author)</span>
+                            </div>
+                            <div class="detail-link zmjd-iconfont">点评详情&#xe648;</div>
+                            <div style="clear:both;"></div>
+                        </div>
+                        <div class="arrow-up"></div>
+                    </div>
+                }
+                @if (hotelEntityNew.RelComments != null && hotelEntityNew.RelComments.Count > 0)
+                {
+                    <div class="friends">
+                        <div class="a-list">
+                            @for (int i = 0; i < hotelEntityNew.RelComments.Count; i++)
+			                {
+                                var _relInfo = hotelEntityNew.RelComments[i];
+                                <img class="a-img" src="@(_relInfo.AvatarUrl)" alt="" />
+			                }
+                        </div>
+                        <div class="c-link"><a class="link zmjd-iconfont">全部@(hotelEntityNew.FollowingCommentCount)位朋友的点评&#xe648;</a></div>
+                        <div style="clear:both;"></div>
+                    </div>
+                }
+                @*<div class="tit-big" onclick="gourl('/hotel/@(hotelEntityNew.HotelID)/allreviews')">
+                    住过客人的点评（@(hotelEntityNew.ReviewCount)条）
+                </div>*@
+            </div>
+        }
+    </div>
+
+    if(hotelEntityNew.IntroNew != null && !string.IsNullOrEmpty(hotelEntityNew.IntroNew.ActionUrl))
+    {
+        <div class="hotel-section hotel-source">
+            <div class="tit">图文详情</div>
+            <div class="tit-border"></div>
+            <div class="body" id="hotel-source-body">
+                @*<img src="/Content/images/seat/img-home-seat-banner2.png" alt="" />*@
+                <img class="loading_img" src="http://whfront.b0.upaiyun.com/app/img/loading-changes.gif" alt="" />
+            </div>
+            <div class="source-more-btn" style="display:none;">
+                <div class="mask"></div>
+                <div class="btn">查看更多<span class="zmjd-iconfont _icon">&#xe65c;</span></div>
+            </div>
+        </div>
+    }
+
+    if (!string.IsNullOrEmpty(hotelEntityNew.Tel) || (hotelEntityNew.AddressInfo.ArrivalAndDeparture != null && !string.IsNullOrEmpty(hotelEntityNew.AddressInfo.ArrivalAndDeparture.Description)))
+    {
+        <div class="hotel-section">
+            @if (!string.IsNullOrEmpty(hotelEntityNew.Tel))
+            {
+                <div class="def-item" onclick="gourl('tel:@(hotelEntityNew.Tel)')">电话：@(hotelEntityNew.Tel)</div>
+            }
+            @if (hotelEntityNew.AddressInfo.ArrivalAndDeparture != null && !string.IsNullOrEmpty(hotelEntityNew.AddressInfo.ArrivalAndDeparture.Description))
+            {
+                <div class="def-item @(!string.IsNullOrEmpty(hotelEntityNew.Tel) ? "def-item-bor" : "")">交通：@(hotelEntityNew.AddressInfo.ArrivalAndDeparture.Description)</div>
+            }
+        </div>
+    }
+    
+    if (hotelEntityNew.RecommendHotelList != null && hotelEntityNew.RecommendHotelList.Count > 0)
+    {
+        <div class="hotel-section">
+        <div class="rel-hotel">
+            <div class="tit">为你推荐</div>
+            <div class="tit-border"></div>
+            <div class="b-list">
+            @for (int i = 0; i < hotelEntityNew.RecommendHotelList.Count; i++)
+            {
+                var relHotelEntity = hotelEntityNew.RecommendHotelList[i];
+                <div class="b-item @(i%2==0?"":"b-item-r")" onclick="gourl('/hotel/@(relHotelEntity.HotelID)?userid=@(userId)&_newpage=1&_dorpdown=1&_newtitle=1')">
+                    @if(i > 1)
+                    {
+                        <div class="top-br"></div>
+                    }
+                    <div class="i-img">
+                        @if (!string.IsNullOrEmpty(relHotelEntity.PicUrl))
+                        {
+                            <img src="@(relHotelEntity.PicUrl.Replace("_appdetail1s", "_640x426").Replace("_theme", "_640x426"))" alt="" />
+                        }
+                        else
+                        {
+                            <img src="http://whfront.b0.upaiyun.com/app/img/home/home-load2-3x2.png" alt="" />
+                        }
+                    </div>
+                    <div class="i-name">@relHotelEntity.HotelName</div>
+                    <div class="i-tag">@(relHotelEntity.Brief)</div>
+                    <div class="i-price1">@(relHotelEntity.Price > 0 ? string.Format("￥{0}起", relHotelEntity.Price) : "查询价格")</div>
+                </div>
+            }
+            </div>
+            <div class="hotels" style="display:none;">
+                @for (int i = 0; i < hotelEntityNew.RecommendHotelList.Count; i++)
+                {
+                    var relHotelEntity = hotelEntityNew.RecommendHotelList[i];
+
+                    <div class="item" onclick="gourl('/hotel/@(relHotelEntity.HotelID)')">
+                        <div class="l">
+                            @if (!string.IsNullOrEmpty(relHotelEntity.PicUrl))
+                            {
+                                <img src="@(relHotelEntity.PicUrl.Replace("_appdetail1s", "_640x426").Replace("_theme", "_640x426"))" alt="" />
+                            }
+                            else
+                            {
+                                <img src="http://whfront.b0.upaiyun.com/app/img/home/home-load2-3x2.png" alt="" />
+                            }
+                        </div>
+                        <div class="r">
+                            <div class="h-n">@(relHotelEntity.HotelName)</div>
+                            <div class="h-b">@(relHotelEntity.Brief)</div>
+                            <div class="h-p">@(relHotelEntity.Price > 0 ? string.Format("￥{0}", relHotelEntity.Price) : "查询价格")</div>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                }
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+        </div>
+    }
+    
+    <div class="bottom-space"></div>
+    <div class="bottom-ctrl">
+        @if (minPriceEntity != null)
+        {
+            if (!string.IsNullOrEmpty(minPriceEntity.PackageUrl))
+            {
+                <div class="left">
+                    <div class="morepackage-btn" onclick="gourl('@Url.Action("Packages", new { hotel = hotelEntityNew.HotelID, checkIn = priceCheckIn, checkOut = priceCheckOut, pid = 0 })')">查看更多套餐</div>
+                </div>
+                <div class="right">
+                    <div class="gopay" onclick="gourl('@(minPriceEntity.PackageUrl)')">立即订购</div>
+                </div>
+                <div style="clear:both;"></div>
+            }
+            else
+            {
+                <div class="go-morepackage" onclick="gourl('@Url.Action("Packages", new { hotel = hotelEntityNew.HotelID, checkIn = priceCheckIn, checkOut = priceCheckOut, pid = 0 })')">查看更多套餐</div>
+            }
+        }
+        else
+        { 
+            <div class="look-morepackage" onclick="gourl('@Url.Action("Packages", new { hotel = hotelEntityNew.HotelID, checkIn = priceCheckIn, checkOut = priceCheckOut, pid = 0 })')">查询价格</div>
+        }
+    </div>
+    
+    <input type="hidden" id="hotelScore" value="@(hotelEntityNew.Score)" />
+}
+else
+{
+
+                        <!-- Add -->
+    <div class="container mainbody hidden-xs">
+        <div class="row">
+            <div class="col-md-1">
+            </div>
+            <div class="col-md-10">
+                @Helpers.BreadCrumbs(Url, hotelEntity)
+            </div>
+            <div class="col-md-1">
+            </div>
+        </div>
+    </div>
+
+                        <!-- HotelName -->
+    <div class="container mainbody">
+        <div class="row">
+            <div class="col-md-1">
+            </div>
+            <div class="col-md-10">
+                <div class="row hidden-xs hidden-sm">
+                    <div class="col-md-6 hotelname">
+                        @hotelEntity.HotelName
+                    </div>
+                    <div class="col-md-6 hotelstar">
+                        @Helpers.StarImage(Url, hotelEntity.Star, null)
+                    </div>
+                    <div style="float:right">
+                        <div class="bdsharebuttonbox" data-tag="share_1">
+                            <a class="bds_weixin" data-cmd="weixin"></a>
+                            <a class="bds_tsina" data-cmd="tsina"></a>
+                            @*<wb:share-button addition="number" type="icon" count="y" url="@Request.Url.AbsoluteUri" size="small" pic="@newPicUrl" language="zh_cn" appkey="2410638867" title="@zmjdWB @Model.ShareDesc"></wb:share-button>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- Hotel Left -->
+                    <div class="col-md-8 zmpanel">
+                        @*照片头*@
+                        <div class="hotelphoto">
+                            <div>
+                                <a href="@Url.Action("Photos")"><img src="@oldPicUrl" class="img-responsive" alt="@hotelEntity.HotelName" /></a>
+                            </div>
+                            @if (isShowWrite)
+                            {
+                                @*@Url.Action("Section", "Comment", new { hotel = hotel.HotelID, section = 0, order = 0 })*@
+                                <div class="collect" style="right:59px;">
+                                    <a href="javascript:;" style="color:white;font-size:13px" id="writeComment" data-value="@hotelEntity.HotelID" title="写点评"><img src="@Url.Content("~/Content/images/icon_dp.png")" alt="" /></a>
+                                </div>
+                            }
+                            <div class="collect" id="addCollectDiv" style="@airHeart" title="添加收藏"><a id="addCollect"><img src="@Url.Content("~/Content/images/icon_collect1.png")" alt="" /></a><input type="hidden" id="interestId" value="@hotelEntity.InterestID" /></div>
+                            <div class="collect" id="removeCollectDiv" style="@fullHeart" title="取消收藏"><a id="removeCollect"><img src="@Url.Content("~/Content/images/icon_collect2.png")" alt="" /></a></div>
+                            <div class="back visible-xs visible-sm" onclick="javascript: window.close();">
+                                <a><img src="@Url.Content("~/Content/images/icon_back1.png")" alt="" /></a>
+                            </div>
+                            @if (hotelEntity.Pics != null && hotelEntity.Pics.Any())
+                            {
+                                <div class="photonum">
+                                    @hotelEntity.PicCount 张照片
+                                </div>
+                            }
+                        </div>
+
+                        @*手机版套餐列表*@
+                        <div class="panel panel-default reserve3 visible-xs visible-sm">
+                            <div class="panel-body">
+                                <table cellspacing="0" cellpadding="0" border="0" class="" width="100%">
+                                    <tr>
+                                        <td class="title hidden-xs">
+                                            <b>@hotelEntity.HotelName</b><br />@Helpers.StarImage(Url, hotelEntity.Star, "starsmall")
+                                        </td>
+                                        <td class="visible-xs t-t1" style="background:white;height:50px;" valign="top">
+                                            <div class="title2"><b>@hotelEntity.HotelName</b></div>@Helpers.StarImage(Url, hotelEntity.Star, "starsmall")
+                                        </td>
+                                        @if (hotelEntity.MinPrice > 0)
+                                        {
+                                            <td width="20%">
+                                                <a href="@Url.Action("Packages", new { hotel = hotelEntity.HotelID, checkIn = param.CheckIn, checkOut = param.CheckOut, pid = 0 })">
+                                                    <table border="0" width="100%" height="100%">
+                                                        <tr>
+                                                            <td class="text-center pricetd">
+                                                                ￥<strong>@hotelEntity.MinPrice.ToString("0")</strong>
+                                                                起<br />
+                                                                @priceTypeName
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </a>
+                                            </td>
+                                            <td width="5%" class="aarow">
+                                                <a href="@Url.Action("Packages", new { hotel = hotelEntity.HotelID, checkIn = param.CheckIn, checkOut = param.CheckOut, pid = 0 })">
+                                                    <img src="@Url.Content("~/Content/Images/icon-aarow2.png")" alt="" />
+                                                </a>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            if (minOta.Price > 0)
+                                            {
+                                                <td width="20%">
+                                                    <a href="/hotel/OtaTransfer?hotelId=@(hotelEntity.HotelID)&checkIn=@(param.CheckIn)&checkOut=@(param.CheckOut)&sType=wap" target="_blank">
+                                                        <table border="0" width="100%" height="100%">
+                                                            <tr>
+                                                                <td class="text-center pricetd">
+                                                                    ￥<strong>@minOta.Price.ToString("0")</strong>起
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </a>
+                                                </td>
+                                                <td width="5%" class="aarow">
+                                                    <a href="/hotel/OtaTransfer?hotelId=@(hotelEntity.HotelID)&checkIn=@(param.CheckIn)&checkOut=@(param.CheckOut)&sType=wap" target="_blank">
+                                                        <img src="@Url.Content("~/Content/Images/icon-aarow2.png")" alt="" />
+                                                    </a>
+                                                </td>
+                                            }
+                                        }
+                                    </tr>
+                                </table>
+                            </div>
+                            @if (hotelEntity.PackageList != null && hotelEntity.PackageList.Count != 0)
+                            {
+                                <div class="panel-body bg-white">
+                                    @for (int i = 0; i < hotelEntity.PackageList.Count; i++)
+                                    {
+                                        PackageItem pi = hotelEntity.PackageList[i];
+                                        <table cellspacing="0" cellpadding="0" border="0" class="t-t2" style="width:100%;">
+                                            <thead>
+                                                <tr>
+                                                    <td style="background:white;width:58%" valign="top">
+                                                        <div class="title" style="font-size:1.2em">@pi.Title</div>
+                                                    </td>
+                                                    <td style="background: white;color:#ff8c01" align="right"></td>
+                                                    <td width="4%" class="text-right" style="background-color:white"></td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td style="background:white;width:58%" valign="top">
+                                                        <a href="@Url.Action("Packages", new { hotel = hotelEntity.HotelID, checkIn = param.CheckIn, checkOut = param.CheckOut, pid = pi.PID })">
+                                                            <div class="title" style="font-size:1.15em;color:#666666">@pi.Brief</div>
+                                                        </a>
+                                                    </td>
+                                                    <td style="background: white;color:#ff8c01" align="right">
+                                                        ￥
+                                                        <a href="@Url.Action("Packages", new { hotel = hotelEntity.HotelID, checkIn = param.CheckIn, checkOut = param.CheckOut, pid = pi.PID })">
+                                                            <span style="font-size: 1.7em; color: #ff8c01;">@pi.Price.ToString("0")</span>
+                                                            <img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" />
+                                                        </a>
+                                                    </td>
+                                                    <td width="4%" class="text-right" style="background-color:white"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        if (i != hotelEntity.PackageList.Count - 1)
+                                        {
+                                        @*<hr class="linedotted" />*@
+                                        }
+                                    }
+                                    <table cellspacing="0" cellpadding="0" border="0" class="tstable t-t3" style="width:100%;">
+                                        <tr>
+                                            <td style="background:white;width:45%" valign="top"></td>
+                                            <td style="background: white;color:#ff8c01" class="text-right">
+                                                <a href="@Url.Action("Packages", new { hotel = hotelEntity.HotelID, checkIn = param.CheckIn, checkOut = param.CheckOut, pid = 0 })">更多特惠套餐<img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" /></a>
+                                            </td>
+                                            <td width="4%" class="text-right" style="background-color:white"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            }
+
+                            @if (minOta.Price > 0)
+                            {
+                                <div class="panel-body bg-white">
+                                    <table cellspacing="0" cellpadding="0" border="0" class="t-t2" style="width:100%;">
+                                        <thead>
+                                            <tr>
+                                                <td style="background:white;width:58%" valign="top">
+                                                    <div class="title" style="font-size:1.2em">@minOta.PriceName</div>
+                                                </td>
+                                                <td style="background: white;color:#ff8c01" align="right"></td>
+                                                <td width="4%" class="text-right" style="background-color:white"></td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="background:white;width:58%" valign="top">
+                                                    <a href="/hotel/OtaTransfer?hotelId=@(hotelEntity.HotelID)&checkIn=@(param.CheckIn)&checkOut=@(param.CheckOut)&sType=wap" target="_blank">
+                                                        <div class="title" style="font-size:1.15em;color:#666666">@minOta.PriceBrief</div>
+                                                    </a>
+                                                </td>
+                                                <td style="background: white;color:#ff8c01" align="right">
+                                                    ￥
+                                                    <a href="/hotel/OtaTransfer?hotelId=@(hotelEntity.HotelID)&checkIn=@(param.CheckIn)&checkOut=@(param.CheckOut)&sType=wap" target="_blank">
+                                                        <span style="font-size: 1.7em; color: #ff8c01;">@minOta.Price.ToString("0")</span>
+                                                        <img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" />
+                                                    </a>
+                                                </td>
+                                                <td width="4%" class="text-right" style="background-color:white"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+
+                        </div>
+
+                        @*点评汇总*@
+                        @if (hotelEntity.ReviewCount > 0)
+                        {
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <table cellspacing="0" cellpadding="0" border="0" class="tstable" width="100%">
+                                        <tr>
+                                            <td width="20%" class="title">点评汇总</td>
+                                            <td class="tag">
+                                                <span class="score1">@hotelEntity.Score.ToString("0.0")</span><span class="score2">/ 5分</span>&nbsp;&nbsp;&nbsp;
+                                                @if (hotelEntity.ReviewCount > 0)
+                                                {
+                                                    <a href="@Url.Action("Reviews")">共@(hotelEntity.ReviewCount)点评</a>
+                                                }
+                                            </td>
+                                            <td width="10%" class="text-right"><a href="@Url.Action("Reviews")"><img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" /></a></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        }
+
+                        @*特色*@
+                        @if (hotelEntity.FeatureList != null && hotelEntity.FeatureList.Count > 0)
+                        {
+                            int count = hotelEntity.FeatureList.Count;
+                            <div class="panel panel-default">
+                                <div class="panel-heading">特色</div>
+                                <div class="panel-body">
+                                    @if (count != 1)
+                                    {
+                                        @*<ul class="list1">
+                                                @foreach (FeaturedCommentEntity fce in hotelEntity.FeatureList)
+                                                {
+                                                    <li>
+                                                        @fce.FeaturedName
+                                                        @if (!String.IsNullOrEmpty(item.pic))
+                                                        {
+                                                            <div class="text-center">
+                                                                <img src="@item.pic" class="img-responsive2" alt="" />
+                                                            </div>
+                                                        }
+                                                    </li>
+                                                }
+                                            </ul>*@
+                                        <table cellspacing="0" cellpadding="0" border="0" class="tstable" width="100%">
+                                            @foreach (FeaturedCommentEntity fce in hotelEntity.FeatureList)
+                                            {
+                                                <tr>
+                                                    <td width="20%" valign="top" align="left" class="title">@fce.FeaturedName</td>
+                                                    <td style="text-justify:auto" class="tag">
+                                                        @fce.Comment
+                                                    </td>
+                                                    <td width="10%" class="text-right"><a href="@Url.Action("Reviews", new { hotel = param.HotelId, feature = fce.FeaturedID, tftType = fce.CategoryID })"><img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" /></a></td>
+                                                </tr>
+                                            }
+                                        </table>
+                                    }
+                                    else
+                                    {
+                                        @Html.Raw("   ") @hotelEntity.FeatureList[0].Comment
+                                    }
+                                    <div class="text-right"><a href="@Url.Action("Reviews", new { hotel = param.HotelId, feature = hotelEntity.FeatureList[0].FeaturedID, tftType = hotelEntity.FeatureList[0].CategoryID })">更多关于酒店特色的点评<img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" /></a></div>
+                                </div>
+                            </div>
+                        }
+
+                        @*位置*@
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <a href="@Url.Action("map")">
+                                    <table cellspacing="0" cellpadding="0" border="0" class="tstable" width="100%">
+                                        <tr>
+                                            <td width="20%" class="title">位置</td>
+                                            <td class="tag">
+                                                @hotelEntity.AddressInfo.Address
+                                            </td>
+                                            <td width="10%" class="text-right">
+                                                <img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </a>
+                            </div>
+                        </div>
+                        @helper InfoHelper(HotelInfo info)
+                        {
+                            if (String.IsNullOrEmpty(info.Description) && info.Items.Count == 1)
+                            {
+                                info.Description = info.Items[0].content.Replace("\n", "<br>");
+                                info.Items.Clear();
+                            }
+                            if (!String.IsNullOrEmpty(info.Description))
+                            {
+                                <p>
+                                    @Html.Raw(info.Description)
+                                </p>
+                            }
+                            if (info.Items.Count > 0)
+                            {
+                                <ul class="list1">
+                                    @foreach (Item item in info.Items)
+                                    {
+                                        <li>
+                                            @Html.Raw(item.content.Replace("\n", "<br>"))
+                                            @if (!String.IsNullOrEmpty(item.pic))
+                                            {
+                                                <div class="text-center">
+                                                    <img src="@item.pic" class="img-responsive2" alt="" />
+                                                </div>
+                                            }
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        }
+
+                        @*房间*@
+                        @if (hotelEntity.RoomComment != null && hotelEntity.RoomComment.singleComments != null && hotelEntity.RoomComment.singleComments.Count != 0)
+                        {
+                            int count = hotelEntity.RoomComment.singleComments.Count;
+                            FeaturedCommentEntity firstRoom = hotelEntity.RoomComment.singleComments[0];
+                            if (firstRoom != null && firstRoom.Comment != null)
+                            {
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">房间</div>
+                                    <div class="panel-body">
+                                        @if (count > 1)
+                                        {
+                                            <table cellspacing="0" cellpadding="0" border="0" class="tstable" width="100%">
+                                                @foreach (FeaturedCommentEntity fce in hotelEntity.RoomComment.singleComments)
+                                                {
+                                                    <tr>
+                                                        <td width="20%" valign="top" align="left" class="title">@fce.FeaturedName</td>
+                                                        <td style="text-justify:auto" class="tag">
+                                                            @fce.Comment
+                                                        </td>
+                                                        <td width="10%" class="text-right"><a href="@Url.Action("Reviews", new { hotel = param.HotelId, feature = fce.FeaturedID, tftType = fce.CategoryID })"><img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" /></a></td>
+                                                    </tr>
+                                                }
+                                            </table>
+                                        }
+                                        else
+                                        {
+                                            @Html.Raw("   ") @Html.Raw(firstRoom.Comment.Replace("\n", "<br />"))
+                                        }
+                                        <div class="text-right"><a href="@Url.Action("Reviews", new { hotel = param.HotelId, feature = firstRoom.FeaturedID, tftType = firstRoom.CategoryID })">更多关于房间的点评<img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" /></a></div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        @*玩点*@
+                        @if (hotelEntity.EntertainmentList != null && hotelEntity.EntertainmentList.Count != 0)
+                        {
+                            int count = hotelEntity.EntertainmentList.Count;
+                            FeaturedCommentEntity firstEntertain = hotelEntity.EntertainmentList[0];
+                            if (firstEntertain != null && firstEntertain.Comment != null)
+                            {
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">玩点</div>
+                                    <div class="panel-body">
+                                        @if (count > 1)
+                                        {
+                                            <table cellspacing="0" cellpadding="0" border="0" class="tstable" width="100%">
+                                                @foreach (FeaturedCommentEntity fce in hotelEntity.EntertainmentList)
+                                                {
+                                                    <tr>
+                                                        <td width="20%" valign="top" align="left" class="title">@fce.FeaturedName</td>
+                                                        <td style="text-justify:auto" class="tag">
+                                                            @fce.Comment
+                                                        </td>
+                                                        <td width="10%" class="text-right"><a href="@Url.Action("Reviews", new { hotel = param.HotelId, feature = fce.FeaturedID, tftType = fce.CategoryID })"><img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" /></a></td>
+                                                    </tr>
+                                                }
+                                            </table>
+                                        }
+                                        else
+                                        {
+                                            @Html.Raw("   ") @Html.Raw(firstEntertain.Comment.Replace("\n", "<br />"))
+                                        }
+                                        <div class="text-right"><a href="@Url.Action("Reviews", new { hotel = param.HotelId, feature = firstEntertain.FeaturedID, tftType = firstEntertain.CategoryID })">更多关于玩点的点评<img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" /></a></div>
+                                    </div>
+                                </div>
+                            }
+                        }
+
+                        @*美食*@
+                        @if (hotelEntity.FoodComment != null && hotelEntity.FoodComment.Count != 0)
+                        {
+                            int count = hotelEntity.FoodComment.Count;
+                            FeaturedCommentEntity firstFood = hotelEntity.FoodComment[0];
+                            <div class="panel panel-default meishi">
+                                <div class="panel-heading">美食</div>
+                                <div class="panel-body">
+                                    @if (count > 1)
+                                    {
+                                        <table cellspacing="0" cellpadding="0" border="0" class="tstable" width="100%">
+                                            @foreach (FeaturedCommentEntity fce in hotelEntity.FoodComment)
+                                            {
+                                                <tr>
+                                                    <td width="20%" valign="top" align="left" class="title">@fce.FeaturedName</td>
+                                                    <td style="text-justify:auto" class="tag">
+                                                        @fce.Comment
+                                                    </td>
+                                                    <td width="10%" class="text-right"><a href="@Url.Action("Reviews", new { hotel = param.HotelId, feature = fce.FeaturedID, tftType = fce.CategoryID })"><img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" /></a></td>
+                                                </tr>
+                                            }
+                                        </table>
+                                    }
+                                    else if (firstFood.Comment != null)
+                                    {
+                                        @Html.Raw("   ") @Html.Raw(firstFood.Comment.Replace("\n", "<br />"))
+                                    }
+                                    <div class="text-right"><a href="@Url.Action("Reviews", new { hotel = param.HotelId, feature = firstFood.FeaturedID, tftType = firstFood.CategoryID })">更多关于美食的点评<img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" /></a></div>
+                                </div>
+                                @if (hotelEntity.RestaurentList.Count > 0)
+                                {
+                                    int outFoodMax = 3;
+                                    <div class="panel-heading">餐馆推荐</div>
+                                    <div class="panel-body">
+                                        <ul class="list1" style="padding-left:1px">
+                                            @foreach (HotelRestaurantEntity entity in hotelEntity.RestaurentList)
+                                            {
+                                                @*14-12-17 tracy 酒店内餐厅不显示*@
+                                                if (!entity.IsInner && !(entity.Distance == "0") && outFoodMax-- > 0)
+                                                {
+                                                    <a href="@entity.DPURL">
+                                                        <li class="reslist2" style="list-style:none;">
+                                                            @entity.Name @((entity.IsInner || entity.Distance == "0") ? "(酒店内)" : ("（距酒店" + entity.Distance.ToString() + "米)"))
+                                                            <p>
+                                                                @if (entity.Fee > 0)
+                                                                {
+                                                                    @Html.Raw("人均消费 ￥") @entity.Fee @Html.Raw("&nbsp;&nbsp;")
+                                                                }
+                                                                口味 @entity.Taste &nbsp;&nbsp; 环境 @entity.Environment &nbsp;&nbsp; 服务 @entity.Service
+                                                            </p>
+
+                                                            @if (!String.IsNullOrEmpty(entity.Tag))
+                                                            {
+                                                                <p>标签：@entity.Tag</p>
+                                                            }
+                                                        </li>
+                                                    </a>
+                                                }
+                                            }
+                                        </ul>
+
+                                    </div>
+                                }
+                            </div>
+                        }
+                        @{
+                        List<string[]> items = new List<string[]>();
+                        if (!String.IsNullOrEmpty(hotelEntity.OpenYear))
+                        {
+                            items.Add(new string[] { "开业", hotelEntity.OpenYear, null });
+                        }
+                        if (!String.IsNullOrEmpty(hotelEntity.AddressInfo.Address))
+                        {
+                            items.Add(new string[] { "地址", hotelEntity.AddressInfo.Address, Url.Action("Map") });
+                        }
+                        if (!String.IsNullOrEmpty(hotelEntity.Tel))
+                        {
+                            items.Add(new string[] { "电话", hotelEntity.Tel, "tel:" + hotelEntity.Tel });
+                        }
+                        bool hasLocation = hotelEntity.GLat != 0 || hotelEntity.GLon != 0;
+                        }
+                        @if (!string.IsNullOrEmpty(hotelEntity.OpenYear))
+                        {
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <table cellspacing="0" cellpadding="0" border="0" class="tstable" width="100%">
+                                        <tr>
+                                            <td width="15%" class="title">开业：</td>
+                                            <td class="tag">@hotelEntity.OpenYear</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        }
+                        @if (!string.IsNullOrEmpty(hotelEntity.ReBuildInfo))
+                        {
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <table cellspacing="0" cellpadding="0" border="0" class="tstable" width="100%">
+                                        <tr>
+                                            <td width="15%" class="title">新装修：</td>
+                                            <td class="tag">@hotelEntity.ReBuildInfo</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        }
+                        @if (!string.IsNullOrEmpty(hotelEntity.Tel))
+                        {
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <a href="@("tel:" + hotelEntity.Tel)">
+                                        <table cellspacing="0" cellpadding="0" border="0" class="tstable" width="100%">
+                                            <tr>
+                                                <td width="15%" class="title">电话：</td>
+                                                <td class="tag">@hotelEntity.Tel</td>
+                                                <td width="10%" class="text-right"><img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" /></td>
+                                            </tr>
+                                        </table>
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <!-- Hotel Right -->
+                    <div class="col-md-4 visible-md visible-lg zmrightpanel">
+                        <div class="panel panel-default date">
+                            <div class="panel-body">
+                                <form role="form">
+                                    <table cellspacing="0" cellpadding="3" border="0" class="" width="100%">
+                                        <tr>
+                                            <td width="45%" class="text-center">
+                                                <b>入住时间</b>
+                                            </td>
+                                            <td></td>
+                                            <td width="45%" class="text-center">
+                                                <b>退房时间</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control text-center btndate" id="checkIn" value="@param.CheckIn">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <img src="@Url.Content("~/Content/images/date1.png")" alt="" />
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control text-center btndate" id="checkOut" value="@param.CheckOut">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </form>
+                            </div>
+                        </div>
+
+                        @if (hotelEntity.MinPrice > 0 || (hotelEntity.OTAList != null && hotelEntity.OTAList.Count > 0))
+                        {
+                            if (hotelEntity.MinPrice > 0)
+                            {
+                                <div class="panel panel-default reserve2">
+                                    <div class="panel-body">
+                                        <table cellspacing="0" cellpadding="0" border="0" class="" width="100%">
+                                            <tr>
+                                                <td class="title">
+                                                    <b>@priceTypeName</b>
+                                                </td>
+                                                <td width="40%" class="text-center pricetd">
+                                                    ￥<a href="@Url.Action("Packages", new { hotel = hotelEntity.HotelID, checkIn = param.CheckIn, checkOut = param.CheckOut })">
+                                                        <strong>@hotelEntity.MinPrice.ToString("0")</strong>
+                                                    </a>起
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+                            if (hotelEntity.OTAList != null)
+                            {
+                                foreach (OTAInfo2 otaInfo in hotelEntity.OTAList)
+                                {
+                                    if (otaInfo.Price == 0)
+                                    {
+                                        continue;
+                                    }
+                                    <div class="panel panel-default reserve2">
+                                        <div class="panel-body">
+                                            <table cellspacing="0" cellpadding="0" border="0" class="" width="100%">
+                                                <tr>
+                                                    <td class="title">
+                                                        <b>@otaInfo.Name</b>
+                                                    </td>
+                                                    <td width="40%" class="text-center pricetd">
+                                                        ￥ <a href="@Utils.BuildOTALink(otaInfo.AccessURL, param.CheckInDate, param.CheckOutDate)" target="_blank">
+                                                            <strong>@otaInfo.Price.ToString("0")</strong>
+                                                        </a>起
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                }
+                            }    
+                        }
+                        else
+                        { 
+                            <div class="panel panel-default reserve2">
+                                <div class="panel-body">
+                                    <table cellspacing="0" cellpadding="0" border="0" class="" width="100%">
+                                        <tr>
+                                            <td class="title">
+                                                <b></b>
+                                            </td>
+                                            <td class="text-center pricetd" style="width: 40%; padding-top: 1.3em; padding-bottom: 1.2em;">
+                                                <a href="@Url.Action("Packages", new { hotel = hotelEntity.HotelID, checkIn = param.CheckIn, checkOut = param.CheckOut })">
+                                                    <strong style="font-size:1.3em;">查询价格</strong>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        }
+
+                        @Helpers.QRCodes(Url)
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+            </div>
+            @*<wb:publish action="pubilish" type="web" language="zh_cn" button_type="red" button_size="middle" refer="y" default_text="@ViewBag.Title" default_image="@WHotelSite.Utils.GetFitPicUrl(hotelEntity.Pics[0])"></wb:publish>*@
+        </div>
+    </div>
+
+}
+
+@if (!isApp && cid <= 0 && false)
+{
+    <div class="visible-xs" style="margin:70px 0 0 0;"></div>
+    <div class="download-footbanner visible-xs" onclick="gourl('/Inspector/Jump?jumpurl=whotelapp://www.zmjiudian.com/hotel/@hotelEntity.HotelID')"><img src="/Content/images/download-footbanner_noclose.png" alt="下载周末酒店" /></div>
+}
+
+<input type="hidden" id="userid" value="@(userId)" />
+<input type="hidden" id="_name" value="@hotelEntityNew.HotelName" />
+<input type="hidden" id="_hotelSourceUrl" value="@(hotelEntityNew.IntroNew != null ? hotelEntityNew.IntroNew.ActionUrl : "")" />

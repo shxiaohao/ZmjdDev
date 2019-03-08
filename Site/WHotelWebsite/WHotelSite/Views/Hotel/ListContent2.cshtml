@@ -1,0 +1,38 @@
+﻿@model IEnumerable<ListHotelItemV43>
+@{
+    Layout = null;
+    bool isMobile = WHotelSite.Utils.IsMobile();
+}
+
+@foreach (ListHotelItemV43 hotel in Model)
+{
+    string firstHotel = hotel.PictureList != null && hotel.PictureList.Count != 0 ? hotel.PictureList[0] : "";
+    <a onclick="gourl('@Url.Action("Detail", new { hotel = hotel.Id })')" href="javascript:;" target="_self">
+        <div class="m-hotel">
+            <div class="photo">
+                <img src="@firstHotel" alt="@hotel.Name" />
+                <div class="name"><span>@hotel.Name</span></div>
+            </div>
+            <div class="priceinfo">
+                <div class="left">
+                    <span class="starIcon"><img src="http://whfront.b0.upaiyun.com/www/img/hotel/list/icon-star.png" /></span><span class="starTxt1">@hotel.Score</span><span class="starTxt2">/5</span>
+                    <span class="reviewIcon" style="margin-left:0.6em;"><img src="http://whfront.b0.upaiyun.com/www/img/hotel/list/icon-reviews.png" /></span><span class="reviewCount">@hotel.ReviewCount</span>
+                </div>
+                <div class="right">
+                    @if (hotel.MinPrice == 0)
+                    {
+                        <span>查询价格</span>
+                    }
+                    else
+                    {
+                        <span class="l">￥</span><span class="val">@((int)hotel.MinPrice)</span><span class="r">起</span>
+                    }
+                </div>
+                <div style="clear:none;"></div>
+            </div>
+            <div class="hotelbrief">
+                @hotel.InterestComment
+            </div>
+        </div>
+    </a>
+}

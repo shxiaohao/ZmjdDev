@@ -1,0 +1,80 @@
+﻿html, body {
+    height: 100%;
+    margin: 0;
+}
+.jump-bg2 {
+    z-index: -1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: url(http://whfront.b0.upaiyun.com/app/img/jump/app-jump-bg.jpg) no-repeat bottom left;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+}
+
+.jump-logo {
+    width:100%;
+    height:11em;
+    margin-bottom:0;
+    text-align:center;
+}
+    .jump-logo .logo-img {
+        height:2.3em;
+        margin:8.5em 0 0 0;
+    }
+    .jump-logo .tip {
+        width:100%;
+        height:auto;
+        line-height:1.3em;
+        margin:1em 0 0 0;
+        font-size:1.1em;
+        color:#fff;
+        text-align:center;
+    }
+.jump-body {
+    width:100%;
+    height:auto;
+    /*min-height:65%;*/
+    margin:10.5em 0 5em;
+}
+.jump-btn {
+    width:80%;
+    height:3em;
+    line-height:3em;
+    margin:0 0 0 10%;
+    background:rgba(0,0,0,0.1);
+    border:1px solid rgba(255,255,255,0.2);
+    border-radius: 3px;
+    color:#fff;
+    font-size:1.5em;
+    text-align:center;
+}
+.jump-btn-open {
+    margin-bottom:1.3em;
+}
+.jump-btn-download {
+    margin-bottom:0.3em;
+}
+.jump-foot {
+    width:100%;
+    height:auto;
+    margin-top:1em;
+    text-align:center;
+}
+    .jump-foot p {
+        line-height:1em;
+        color:#8D8D8D;
+    }
+
+
+
+
+
+
+
+
+
+

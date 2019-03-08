@@ -1,0 +1,605 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Ctrip.APICall.BaseLib</name>
+    </assembly>
+    <members>
+        <member name="F:Ctrip.APICall.BaseLib.Comm.Const.DllPath">
+            <summary>
+            库访问路径
+            </summary>
+        </member>
+        <member name="F:Ctrip.APICall.BaseLib.Comm.Const.XMLPath">
+            <summary>
+            XML访问路径
+            </summary>
+        </member>
+        <member name="F:Ctrip.APICall.BaseLib.Comm.Const.PluginXML">
+            <summary>
+            插件XML
+            </summary>
+        </member>
+        <member name="T:Ctrip.APICall.BaseLib.EnunCtripCallFunction">
+            <summary>
+            Ctrip请求接口枚举
+            </summary>
+        </member>
+        <member name="F:Ctrip.APICall.BaseLib.EnunCtripCallFunction.OTA_Ping">
+            <summary>
+            酒店接口枚举集合
+            </summary>
+        </member>
+        <member name="F:Ctrip.APICall.BaseLib.EnunCtripCallFunction.OTA_FlightSearch">
+            <summary>
+            机票接口枚举集合
+            </summary>        
+        </member>
+        <member name="F:Ctrip.APICall.BaseLib.EnunCtripCallFunction.OTA_IntlFlightSearch">
+            <summary>
+            国际机票查询
+            </summary>
+        </member>
+        <member name="F:Ctrip.APICall.BaseLib.EnunCtripCallFunction.OTA_FltSaveOrder">
+            <summary>
+            国内机票订单生产
+            </summary>
+        </member>
+        <member name="F:Ctrip.APICall.BaseLib.EnunCtripCallFunction.OTA_FltCancelOrder">
+            <summary>
+            国内机票订单取消
+            </summary>
+        </member>
+        <member name="F:Ctrip.APICall.BaseLib.EnunCtripCallFunction.OTA_FltOrderList">
+            <summary>
+            用户订单列表
+            </summary>
+        </member>
+        <member name="F:Ctrip.APICall.BaseLib.EnunCtripCallFunction.OTA_FltViewOrder">
+            <summary>
+            用户订单查询
+            </summary>
+        </member>
+        <member name="F:Ctrip.APICall.BaseLib.EnunCtripCallFunction.OTA_GetStatusChangedOrders">
+            <summary>
+            获取发生状态变更的订单基础信息
+            </summary>
+        </member>
+        <member name="F:Ctrip.APICall.BaseLib.EnunCtripCallFunction.OTA_UserUniqueID">
+            <summary>
+            用户接口枚举集合
+            </summary>        
+        </member>
+        <member name="F:Ctrip.APICall.BaseLib.EnunCtripCallFunction.GroupProductList">
+            <summary>
+            团购接口枚举集合
+            </summary>
+        </member>
+        <member name="F:Ctrip.APICall.BaseLib.Comm.MessageQueueProxy._Queue">
+            <summary>
+            消息队列实体
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.MessageQueueProxy.#cctor">
+            <summary>
+            消息队列代理构造函数
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.MessageQueueProxy.SendMessage(Ctrip.APICall.BaseLib.BaseClass.BaseAPICallEntity)">
+            <summary>
+            发送消息
+            </summary>
+            <param name="messageEntity">消息实体</param>
+        </member>
+        <member name="F:Ctrip.APICall.BaseLib.Comm.EnumAPICallType.TaoBaoAPICallType">
+            <summary>
+            淘宝API集群类型
+            </summary>
+        </member>
+        <member name="T:Ctrip.APICall.BaseLib.Comm.DataEntityXMLSerialize">
+            <summary>
+            数据实体对象序列化
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.BaseClass.ISerialize`2.Serialize(`0)">
+            <summary>
+            序列化
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.BaseClass.ISerialize`2.Deserialize(`1)">
+            <summary>
+            反序列化
+            </summary>
+            <param name="serialize"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.DataEntityXMLSerialize.#ctor">
+            <summary>
+            构造函数(不可用)
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.DataEntityXMLSerialize.#ctor(System.Type)">
+            <summary>
+            带类型参数 构造函数
+            </summary>
+            <param name="type">类型必须可序列化</param>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.DataEntityXMLSerialize.Serialize(System.Object)">
+            <summary>
+            序列化
+            </summary>
+            <param name="entity">实例,必须是可序列化的对象</param>
+            <returns>XML文档</returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.DataEntityXMLSerialize.Deserialize(System.Xml.XmlDocument)">
+            <summary>
+            反序列化
+            </summary>
+            <param name="serialize">XML文档</param>
+            <returns>object实例</returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.DataEntityXMLSerialize.Deserialize(System.String)">
+            <summary>
+            反序列化
+            </summary>
+            <param name="serialize">XML文档</param>
+            <returns>object实例</returns>
+        </member>
+        <member name="T:Ctrip.APICall.BaseLib.BaseClass.BaseAPICallEntity">
+            <summary>
+            API集群回调实体基类
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.BaseClass.BaseAPICallEntity.#ctor(System.String)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="APICallType">集群</param>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.BaseClass.BaseAPICallEntity.#ctor(System.String,Ctrip.APICall.BaseLib.EnunCtripCallFunction,System.String)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="APICallType">集群</param>
+            <param name="callFunction">求函数接口</param>
+        </member>
+        <member name="P:Ctrip.APICall.BaseLib.BaseClass.BaseAPICallEntity.Header">
+            <summary>
+            头信息 
+            </summary>
+        </member>
+        <member name="P:Ctrip.APICall.BaseLib.BaseClass.BaseAPICallEntity.pluginKey">
+            <summary>
+            插件Key
+            </summary>
+        </member>
+        <member name="P:Ctrip.APICall.BaseLib.BaseClass.BaseAPICallEntity.CallFunction">
+            <summary>
+            函数Call
+            </summary>
+        </member>
+        <member name="P:Ctrip.APICall.BaseLib.BaseClass.BaseAPICallEntity.APICallTypes">
+            <summary>
+            API集群类型
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.APIXMLSerializer.Serialize(System.Object)">
+            <summary>
+            将指定对象序列化成XML格式的字符串,采用UTF8编码，该方法可能会出序列化异常
+            </summary>
+            <param name="ob">需要序列化的对象</param>
+            <returns>返回XML格式的字符串</returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.APIXMLSerializer.Serialize(System.Object,System.Type)">
+            <summary>
+            将指定对象序列化成XML格式的字符串,可指定类型,采用UTF8编码，该方法可能会出序列化异常
+            </summary>
+            <param name="ob">需要序列化的对象</param>
+            <param name="type">对象类型</param>
+            <returns>返回XML格式的字符串</returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.APIXMLSerializer.SerializeUTF8(System.Object,System.Type)">
+            <summary>
+            将指定对象序列化成XML格式的字符串,采用UTF8编码，该方法可能会出序列化异常
+            </summary>
+            <param name="ob">需要序列化的对象</param>
+            <param name="type">对象类型</param>
+            <returns>返回XML格式的字符串</returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.APIXMLSerializer.Serialize(System.Object,System.Type,System.Text.Encoding)">
+            <summary>
+            将指定对象序列化成XML格式的字符串,采用指定类型,指定编码,指定根节点名，该方法可能会出序列化异常
+            </summary>
+            <param name="ob">需要序列化的对象</param>
+            <param name="type">对象类型</param>
+            <param name="encode">指定编码</param>
+            <returns>返回XML格式的字符串</returns>
+            <history>
+                <date>2010-03-18</date>
+                <programmer>ZZX</programmer>
+                <document>解决XmlSerialize内存泄露问题,序列化前对实体类校验,去除string root参数,注释root相关代码</document>
+            </history>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.APIXMLSerializer.DeSerialize(System.String,System.Type)">
+            <summary>
+            将XML格式的字符串反序列化成指定类型的对象,采用UTF8编码,该方法可能会抛出反序列化异常
+            </summary>
+            <param name="xml">XML格式的字符串</param>
+            <param name="type">对象类型</param>
+            <returns>返回的对象</returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.APIXMLSerializer.DeSerializeUTF8(System.String,System.Type)">
+            <summary>
+            将XML格式的字符串反序列化成指定类型的对象,采用UTF8编码,该方法可能会抛出反序列化异常
+            </summary>
+            <param name="xml">XML格式的字符串</param>
+            <param name="type">对象类型</param>
+            <returns>返回的对象</returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.APIXMLSerializer.DeSerialize(System.String,System.Type,System.Text.Encoding)">
+            <summary>
+            将XML格式的字符串反序列化成指定类型的对象,采用指定编码,指定根节点名,该方法可能会抛出反序列化异常
+            </summary>
+            <param name="xml">XML格式的字符串</param>
+            <param name="type">对象类型</param>
+            <param name="encode">指定编码</param>
+            <param name="root">根节点名</param>
+            <returns>返回的对象</returns>
+            <history>
+                <date>2010-03-18</date>
+                <programmer>ZZX</programmer>
+                <document>解决XmlSerialize内存泄露问题,去除string root参数,注释root相关代码</document>
+            </history>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.APIXMLSerializer.DeSerialize(System.String,System.Type,System.Text.Encoding,System.Boolean)">
+            <summary>
+            将XML格式的字符串反序列化成指定类型的对象,采用指定编码,指定根节点名
+            </summary>
+            <param name="xml">XML格式的字符串</param>
+            <param name="type">对象类型</param>
+            <param name="encode">指定编码</param>
+            <param name="needException">true:反序列化失败则抛出异常;false:反序列化失败返回null</param>
+            <returns></returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.APIXMLSerializer.SerializeToFile(System.Object,System.Type,System.String)">
+            <summary>
+            将指定对象序列化成XML文件
+            </summary>
+            <param name="ob">需要序列化的对象</param>
+            <param name="type">对象类型</param>
+            <param name="filepath">XML文件路径</param>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.APIXMLSerializer.DeSerializeFromFile(System.String,System.Type)">
+            <summary>
+            将XML格式文件内容反序列化成指定类型的对象
+            </summary>
+            <param name="filepath">XML文件路径</param>
+            <param name="type">对象类型</param>
+            <returns>返回的对象</returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.GetSignature(Ctrip.APICall.BaseLib.BaseClass.BaseAPICallEntity,System.Int32,System.Int32,System.String)">
+            <summary>
+            获取权限信息
+            </summary>
+            <param name="timeStamp">时间戳</param>
+            <param name="signature">权限</param>
+            <param name="requestType">服务类型</param>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.GetTraditionalChinese(System.String)">
+            <summary>
+            转换为繁体字符串
+            </summary>
+            <param name="inputString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertBoolToTOrF(System.Boolean)">
+            <summary>
+            转换Boolen值为T、F，true：T，false：F
+            </summary>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertToWeek``1(``0)">
+            <summary>
+            转换为星期信息，周一－周日依次为1－7
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertToWeek(System.DayOfWeek)">
+            <summary>
+             转换DayOfWeek为int数值，周一－周日依次为1－7
+            </summary>
+            <param name="week"></param>
+            <returns></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertDateTimeOrNull``1(``0)" -->
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertToBool``1(``0)">
+            <summary>
+            转换为Boolean
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.FormatCantonName(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.IsNumeric(System.String)">
+            <summary>
+            判断字符串是否为数字
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertToEnum``2(``0)">
+            <summary>
+            转换为指定类型的Enum
+            </summary>
+            <typeparam name="T">数据源类型</typeparam>
+            <typeparam name="V">结果类型的Enum</typeparam>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertObjectToInt``1(``0)" -->
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertToByte``1(``0)">
+            <summary>
+            转换为Byte
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.RoundToInt``1(``0)">
+            <summary>
+            四舍五入
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertObjectToDecimal``1(``0)" -->
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertObjectToDecimalSingle``1(``0)">
+            <summary>
+            转换数据为Decimal
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertObjectToInt32``1(``0)">
+            <summary>
+            转换数据为int型
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertDateTime``1(``0)">
+            <summary>
+            转换数据为DateTime型
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertToSingle``1(``0)">
+            <summary>
+            转换数据为Float型
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertToRoundNegative``1(``0)">
+            <summary>
+            不为空并且为-1时，返回font color='red' X /font
+            为null或空，返回ConvertToRound的返回值 
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.CheckIsIntAndConvertToInt(System.String)">
+            <summary>
+            检查是否为整数还是小数。
+            如果是整数，去掉保留两位小数(如:111.00 => 111)
+            反则，保留两位小数(如:111.12 => 111.12)
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertToRound``1(``0)">
+            <summary>
+            不为空时，四舍五入保留两位小数
+            为空时，返回空字符
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertToPercentDecimal``1(``0)">
+            <summary>
+            转换百分数为小数
+            如：15%=>0.15
+            为Null或空时，返回空字符
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertToPercentString``1(``0)">
+            <summary>
+            转换百分数
+            如：15=>15%
+            为Null或空时，返回空字符
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertToNull``1(``0)">
+            <summary>
+            为-1时，返回为空
+            不为空时，保留两位小数
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Ctrip.APICall.BaseLib.Comm.CommonFunc.CovertNBSP(System.String)" -->
+        <!-- Badly formed XML comment ignored for member "M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertToEmptyOrSymbolX(System.String)" -->
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertSymbolPercent(System.String)">
+            <summary>
+            转换包含“%"
+            如：12% => 12
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertToZero``1(``0)">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertObjectToNullableInt``1(``0)">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertToFormatInt``1(``0,System.Int32)">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="provider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.CommonFunc.ConvertToTrimString``1(``0)">
+            <summary>
+            去除字符串中空格
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Ctrip.APICall.BaseLib.BaseClass.IAPICallAdepterPlugIn">
+            <summary>
+            API集群适配器插件接口
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.BaseClass.IAPICallAdepterPlugIn.CallAPIAsyn(Ctrip.APICall.BaseLib.BaseClass.BaseAPICallEntity)">
+            <summary>
+            异步请求 应用于平台请求
+            </summary>
+            <param name="APICallEntity">Api请求实体</param>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.BaseClass.IAPICallAdepterPlugIn.CallAPISyn(Ctrip.APICall.BaseLib.BaseClass.BaseAPICallEntity)">
+            <summary>
+            同步请求 应用于引擎请求
+            </summary>
+            <param name="APICallEntity">Api请求实体</param>
+        </member>
+        <member name="T:Ctrip.APICall.BaseLib.BaseClass.BaseReturnEntity">
+            <summary>
+            API集群返回实体基类
+            </summary>
+        </member>
+        <member name="P:Ctrip.APICall.BaseLib.BaseClass.BaseReturnEntity.ResponseXML">
+            <summary>
+            返回结果的XML
+            </summary>
+        </member>
+        <member name="P:Ctrip.APICall.BaseLib.BaseClass.BaseReturnEntity.RequestXML">
+            <summary>
+            序列化后请求的XML
+            </summary>
+        </member>
+        <member name="P:Ctrip.APICall.BaseLib.BaseClass.BaseReturnEntity.ReturnVal">
+            <summary>
+            同步默认返回值
+            </summary>
+        </member>
+        <member name="P:Ctrip.APICall.BaseLib.BaseClass.BaseReturnEntity.CallSuccess">
+            <summary>
+            接口调用成功标记 true成功 false失败
+            </summary>
+        </member>
+        <member name="P:Ctrip.APICall.BaseLib.BaseClass.BaseReturnEntity.ErrorMessage">
+            <summary>
+            错误消息
+            </summary>
+        </member>
+        <member name="T:Ctrip.APICall.BaseLib.BaseClass.HeaderEntity">
+            <summary>
+            请求体Header描述
+            </summary>
+        </member>
+        <member name="P:Ctrip.APICall.BaseLib.BaseClass.HeaderEntity.SecretKey">
+            <summary>
+            私钥
+            </summary>
+        </member>
+        <member name="P:Ctrip.APICall.BaseLib.BaseClass.HeaderEntity.RequestType">
+            <summary>
+            访问类型
+            </summary>
+        </member>
+        <member name="P:Ctrip.APICall.BaseLib.BaseClass.HeaderEntity.Signature">
+            <summary>
+            签名
+            </summary>
+        </member>
+        <member name="P:Ctrip.APICall.BaseLib.BaseClass.HeaderEntity.TimeStamp">
+            <summary>
+            时间戳
+            </summary>
+        </member>
+        <member name="P:Ctrip.APICall.BaseLib.BaseClass.HeaderEntity.SID">
+            <summary>
+            站点ID
+            </summary>
+        </member>
+        <member name="P:Ctrip.APICall.BaseLib.BaseClass.HeaderEntity.AllianceID">
+            <summary>
+            分销联盟ID
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.DataEntityBinarySerialize.#ctor">
+            <summary>
+            构造函数(不可用)
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.DataEntityBinarySerialize.#ctor(System.Type)">
+            <summary>
+            带类型参数 构造函数
+            </summary>
+            <param name="type">类型必须可序列化</param>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.DataEntityBinarySerialize.Serialize(System.Object)">
+            <summary>
+            序列化
+            </summary>
+            <param name="entity">实例,必须是可序列化的对象</param>
+            <returns>XML文档</returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.DataEntityBinarySerialize.SerializeToBase64String(System.Object)">
+            <summary>
+            序列化
+            </summary>
+            <param name="entity">实例,必须是可序列化的对象</param>
+            <returns>XML文档</returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.DataEntityBinarySerialize.Deserialize(System.Byte[])">
+            <summary>
+            反序列化
+            </summary>
+            <param name="serialize">XML文档</param>
+            <returns>object实例</returns>
+        </member>
+        <member name="M:Ctrip.APICall.BaseLib.Comm.DataEntityBinarySerialize.Deserialize(System.String)">
+            <summary>
+            反序列化
+            </summary>
+            <param name="serialize">XML文档</param>
+            <returns>object实例</returns>
+        </member>
+    </members>
+</doc>

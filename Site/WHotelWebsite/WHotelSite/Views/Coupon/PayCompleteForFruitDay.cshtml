@@ -1,0 +1,73 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    ViewBag.Title = "购买成功";
+    
+    var isApp = ViewBag.IsApp;
+    var channel = ViewBag.Channel;
+
+    RoomCouponOrderEntity couponOrder = ViewBag.CouponOrder;
+    var magicallUrl = ViewBag.MagiCallUrl;
+    var userid = ViewBag.UserId;
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    if (isApp)
+    {
+        ViewBag.LoadHmBaidu = false;
+    }
+}
+
+@section styles
+{
+    <link href="/content/css/coupon/paycompleteforfruitday.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <style type="text/css">
+    </style>
+}
+
+@if (true || couponOrder.State == 2)
+{
+    <div class="top"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/fruitday/img_complate_1.png?v=2017031701" alt="" /></div>
+    <div class="top"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/fruitday/img_complate_2.png?v=2017031701" alt="" /></div>
+    <div class="top" onclick="gourl('http://www.zmjiudian.com/active/activepage?pageid=59')"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/fruitday/img_complate_rule_link.png?v=2017031701" alt="" /></div>
+    <div class="top" onclick="gourl('http://app.zmjiudian.com')"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/fruitday/img_complate_3.png?v=2017031701" alt="" /></div>
+}
+
+@section scripts
+{
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/coupon/paycompleteforfruitday.js?v=@(Helpers.curAppVer())"></script>
+    <script type="text/javascript">
+        function goto(param) {
+            var url = "@(ViewBag.AccessProtocal)" + param;
+            this.location = url;
+        }
+
+        function openHotel(hotelid) {
+            var isapp = $("#isapp").val() == "1";
+            if (isapp) {
+                goto('hotel/' + hotelid);
+            }
+            else {
+                location.href = "http://www.zmjiudian.com/hotel/" + hotelid;
+            }
+        }
+
+        function gourl(url) {
+            location.href = url;
+        }
+
+        function click_a(divDisplay) {
+            if (document.getElementById(divDisplay).style.display != "block") {
+                document.getElementById(divDisplay).style.display = "block";
+            }
+            else {
+                document.getElementById(divDisplay).style.display = "none";
+            }
+        }
+
+    </script>
+}

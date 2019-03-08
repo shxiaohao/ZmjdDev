@@ -1,0 +1,1101 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Ctrip.APICall.ImplementLib</name>
+    </assembly>
+    <members>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelAvail.OTA_HotelAvail">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelAvail.OTA_HotelAvail.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelAvail.OTA_HotelAvail.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelAvail.OTA_HotelAvail.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelAvail.OTA_HotelAvail.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelAvail.OTA_HotelAvail.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelAvail.OTA_HotelAvail.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelAvail.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelAvail.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelAvail.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Flight_OTA_GetStatusChangedOrders.OTA_GetStatusChangedOrders">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_GetStatusChangedOrders.OTA_GetStatusChangedOrders.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_GetStatusChangedOrders.OTA_GetStatusChangedOrders.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_GetStatusChangedOrders.OTA_GetStatusChangedOrders.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_GetStatusChangedOrders.OTA_GetStatusChangedOrders.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_GetStatusChangedOrders.OTA_GetStatusChangedOrders.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Flight_OTA_GetStatusChangedOrders.OTA_GetStatusChangedOrders.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Flight_OTA_GetStatusChangedOrders.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Flight_OTA_GetStatusChangedOrders.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Flight_OTA_GetStatusChangedOrders.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.FltOrderListImplement">
+            <summary>
+            某一用户订单列表业务
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.FltOrderListImplement.WebServiceTransaction(Ctrip.APICall.EntityLib.CtripSDK.OTA_FltOrderListCallEntity)">
+            <summary>
+            发送查询请求，并处理返回结果
+            </summary>
+            <param name="requestEntity">请求实体</param>
+            <returns>返回请求结果</returns>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.FltOrderListImplement.GetRequestBody(Ctrip.APICall.EntityLib.CtripSDK.OTA_FltOrderListCallEntity)">
+            <summary>
+            序列化
+            </summary>
+            <param name="requestEntity">请求实体</param>
+            <returns>序列化后的xml</returns>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupProductChange.GroupProductChange">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupProductChange.GroupProductChange.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupProductChange.GroupProductChange.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupProductChange.GroupProductChange.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupProductChange.GroupProductChange.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupProductChange.GroupProductChange.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Group_GroupProductChange.GroupProductChange.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupProductChange.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupProductChange.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Group_GroupProductChange.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.FltViewOrderImplement">
+            <summary>
+            查询某一用户的国内机票订单详情业务
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.FltViewOrderImplement.WebServiceTransaction(Ctrip.APICall.EntityLib.CtripSDK.OTA_FltViewOrderCallEntity)">
+            <summary>
+            发送查询请求，并处理返回结果
+            </summary>
+            <param name="requestEntity">请求实体</param>
+            <returns>返回请求结果</returns>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.FltViewOrderImplement.GetRequestBody(Ctrip.APICall.EntityLib.CtripSDK.OTA_FltViewOrderCallEntity)">
+            <summary>
+            序列化
+            </summary>
+            <param name="requestEntity">请求实体</param>
+            <returns>序列化后的xml</returns>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.User_OTA_UserUniqueID.OTA_UserUniqueID">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.User_OTA_UserUniqueID.OTA_UserUniqueID.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.User_OTA_UserUniqueID.OTA_UserUniqueID.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.User_OTA_UserUniqueID.OTA_UserUniqueID.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.User_OTA_UserUniqueID.OTA_UserUniqueID.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.User_OTA_UserUniqueID.OTA_UserUniqueID.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.User_OTA_UserUniqueID.OTA_UserUniqueID.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.User_OTA_UserUniqueID.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.User_OTA_UserUniqueID.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.User_OTA_UserUniqueID.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelDescriptiveInfo.OTA_HotelDescriptiveInfo">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelDescriptiveInfo.OTA_HotelDescriptiveInfo.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelDescriptiveInfo.OTA_HotelDescriptiveInfo.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelDescriptiveInfo.OTA_HotelDescriptiveInfo.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelDescriptiveInfo.OTA_HotelDescriptiveInfo.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelDescriptiveInfo.OTA_HotelDescriptiveInfo.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelDescriptiveInfo.OTA_HotelDescriptiveInfo.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelDescriptiveInfo.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelDescriptiveInfo.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelDescriptiveInfo.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelRatePlan.OTA_HotelRatePlan">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelRatePlan.OTA_HotelRatePlan.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelRatePlan.OTA_HotelRatePlan.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelRatePlan.OTA_HotelRatePlan.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelRatePlan.OTA_HotelRatePlan.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelRatePlan.OTA_HotelRatePlan.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelRatePlan.OTA_HotelRatePlan.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelRatePlan.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelRatePlan.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelRatePlan.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Flight_OTA_IntlFlightSearch.OTA_IntlFlightSearch">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_IntlFlightSearch.OTA_IntlFlightSearch.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_IntlFlightSearch.OTA_IntlFlightSearch.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_IntlFlightSearch.OTA_IntlFlightSearch.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_IntlFlightSearch.OTA_IntlFlightSearch.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_IntlFlightSearch.OTA_IntlFlightSearch.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Flight_OTA_IntlFlightSearch.OTA_IntlFlightSearch.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Flight_OTA_IntlFlightSearch.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Flight_OTA_IntlFlightSearch.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Flight_OTA_IntlFlightSearch.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelResNotif.OTA_HotelResNotif">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelResNotif.OTA_HotelResNotif.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelResNotif.OTA_HotelResNotif.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelResNotif.OTA_HotelResNotif.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelResNotif.OTA_HotelResNotif.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelResNotif.OTA_HotelResNotif.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelResNotif.OTA_HotelResNotif.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelResNotif.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelResNotif.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelResNotif.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.GetStatusChangedOrdersImplement">
+            <summary>
+            获取发生状态变更的订单基础信息业务
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.GetStatusChangedOrdersImplement.WebServiceTransaction(Ctrip.APICall.EntityLib.CtripSDK.OTA_GetStatusChangedOrdersCallEntity)">
+            <summary>
+            发送查询请求，并处理返回结果
+            </summary>
+            <param name="requestEntity">请求实体</param>
+            <returns>返回请求结果</returns>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.GetStatusChangedOrdersImplement.GetRequestBody(Ctrip.APICall.EntityLib.CtripSDK.OTA_GetStatusChangedOrdersCallEntity)">
+            <summary>
+            序列化
+            </summary>
+            <param name="requestEntity">请求实体</param>
+            <returns>序列化后的xml</returns>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelRes.OTA_HotelRes">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelRes.OTA_HotelRes.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelRes.OTA_HotelRes.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelRes.OTA_HotelRes.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelRes.OTA_HotelRes.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelRes.OTA_HotelRes.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelRes.OTA_HotelRes.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelRes.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelRes.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelRes.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupProductList.GroupProductList">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupProductList.GroupProductList.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupProductList.GroupProductList.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupProductList.GroupProductList.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupProductList.GroupProductList.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupProductList.GroupProductList.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Group_GroupProductList.GroupProductList.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupProductList.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupProductList.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Group_GroupProductList.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupOrderChange.GroupOrderChange">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupOrderChange.GroupOrderChange.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupOrderChange.GroupOrderChange.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupOrderChange.GroupOrderChange.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupOrderChange.GroupOrderChange.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupOrderChange.GroupOrderChange.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Group_GroupOrderChange.GroupOrderChange.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupOrderChange.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupOrderChange.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Group_GroupOrderChange.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_D_HotelDetail.D_HotelDetail">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelDetail.D_HotelDetail.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelDetail.D_HotelDetail.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelDetail.D_HotelDetail.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelDetail.D_HotelDetail.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelDetail.D_HotelDetail.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Hotel_D_HotelDetail.D_HotelDetail.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_D_HotelDetail.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_D_HotelDetail.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Hotel_D_HotelDetail.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Flight_OTA_FltCancelOrder.OTA_FltCancelOrder">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_FltCancelOrder.OTA_FltCancelOrder.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_FltCancelOrder.OTA_FltCancelOrder.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_FltCancelOrder.OTA_FltCancelOrder.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_FltCancelOrder.OTA_FltCancelOrder.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_FltCancelOrder.OTA_FltCancelOrder.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Flight_OTA_FltCancelOrder.OTA_FltCancelOrder.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Flight_OTA_FltCancelOrder.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Flight_OTA_FltCancelOrder.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Flight_OTA_FltCancelOrder.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_D_HotelOrderList.D_HotelOrderList">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelOrderList.D_HotelOrderList.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelOrderList.D_HotelOrderList.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelOrderList.D_HotelOrderList.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelOrderList.D_HotelOrderList.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelOrderList.D_HotelOrderList.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Hotel_D_HotelOrderList.D_HotelOrderList.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_D_HotelOrderList.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_D_HotelOrderList.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Hotel_D_HotelOrderList.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_Read.OTA_Read">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_Read.OTA_Read.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_Read.OTA_Read.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_Read.OTA_Read.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_Read.OTA_Read.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_Read.OTA_Read.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Hotel_OTA_Read.OTA_Read.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_Read.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_Read.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Hotel_OTA_Read.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_Cancel.OTA_Cancel">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_Cancel.OTA_Cancel.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_Cancel.OTA_Cancel.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_Cancel.OTA_Cancel.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_Cancel.OTA_Cancel.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_Cancel.OTA_Cancel.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Hotel_OTA_Cancel.OTA_Cancel.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_Cancel.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_Cancel.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Hotel_OTA_Cancel.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Flight_OTA_FltViewOrder.OTA_FltViewOrder">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_FltViewOrder.OTA_FltViewOrder.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_FltViewOrder.OTA_FltViewOrder.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_FltViewOrder.OTA_FltViewOrder.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_FltViewOrder.OTA_FltViewOrder.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_FltViewOrder.OTA_FltViewOrder.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Flight_OTA_FltViewOrder.OTA_FltViewOrder.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Flight_OTA_FltViewOrder.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Flight_OTA_FltViewOrder.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Flight_OTA_FltViewOrder.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.IntlFlightSearchImplement">
+            <summary>
+            国际机票查询业务
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.IntlFlightSearchImplement.WebServiceTransaction(Ctrip.APICall.EntityLib.CtripSDK.OTA_IntlFlightSearchCallEntiy)">
+            <summary>
+            发送查询请求，并处理返回结果
+            </summary>
+            <param name="requestEntity">请求实体</param>
+            <returns>返回请求结果</returns>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.IntlFlightSearchImplement.GetRequestBody(Ctrip.APICall.EntityLib.CtripSDK.OTA_IntlFlightSearchCallEntiy)">
+            <summary>
+            序列化
+            </summary>
+            <param name="requestEntity">请求实体</param>
+            <returns>序列化后的xml</returns>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelCacheChange.OTA_HotelCacheChange">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelCacheChange.OTA_HotelCacheChange.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelCacheChange.OTA_HotelCacheChange.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelCacheChange.OTA_HotelCacheChange.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelCacheChange.OTA_HotelCacheChange.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelCacheChange.OTA_HotelCacheChange.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelCacheChange.OTA_HotelCacheChange.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelCacheChange.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelCacheChange.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelCacheChange.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_D_HotelOrderDetail.D_HotelOrderDetail">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelOrderDetail.D_HotelOrderDetail.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelOrderDetail.D_HotelOrderDetail.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelOrderDetail.D_HotelOrderDetail.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelOrderDetail.D_HotelOrderDetail.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelOrderDetail.D_HotelOrderDetail.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Hotel_D_HotelOrderDetail.D_HotelOrderDetail.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_D_HotelOrderDetail.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_D_HotelOrderDetail.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Hotel_D_HotelOrderDetail.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Flight_OTA_FltOrderList.OTA_FltOrderList">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_FltOrderList.OTA_FltOrderList.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_FltOrderList.OTA_FltOrderList.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_FltOrderList.OTA_FltOrderList.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_FltOrderList.OTA_FltOrderList.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_FltOrderList.OTA_FltOrderList.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Flight_OTA_FltOrderList.OTA_FltOrderList.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Flight_OTA_FltOrderList.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Flight_OTA_FltOrderList.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Flight_OTA_FltOrderList.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.FltSaveOrderImplement">
+            <summary>
+            国内机票订单生产业务
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.FltSaveOrderImplement.WebServiceTransaction(Ctrip.APICall.EntityLib.CtripSDK.OTA_FltSaveOrderCallEntity)">
+            <summary>
+            发送查询请求，并处理返回结果
+            </summary>
+            <param name="requestEntity">请求实体</param>
+            <returns>返回请求结果</returns>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.FltSaveOrderImplement.GetRequestBody(Ctrip.APICall.EntityLib.CtripSDK.OTA_FltSaveOrderCallEntity)">
+            <summary>
+            序列化
+            </summary>
+            <param name="requestEntity">请求实体</param>
+            <returns>序列化后的xml</returns>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_Ping.OTA_Ping">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_Ping.OTA_Ping.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_Ping.OTA_Ping.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_Ping.OTA_Ping.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_Ping.OTA_Ping.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_Ping.OTA_Ping.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Hotel_OTA_Ping.OTA_Ping.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_Ping.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_Ping.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Hotel_OTA_Ping.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelSearch.OTA_HotelSearch">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelSearch.OTA_HotelSearch.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelSearch.OTA_HotelSearch.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelSearch.OTA_HotelSearch.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelSearch.OTA_HotelSearch.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelSearch.OTA_HotelSearch.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelSearch.OTA_HotelSearch.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelSearch.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelSearch.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Hotel_OTA_HotelSearch.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupQueryTickets.GroupQueryTickets">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupQueryTickets.GroupQueryTickets.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupQueryTickets.GroupQueryTickets.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupQueryTickets.GroupQueryTickets.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupQueryTickets.GroupQueryTickets.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupQueryTickets.GroupQueryTickets.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Group_GroupQueryTickets.GroupQueryTickets.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupQueryTickets.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupQueryTickets.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Group_GroupQueryTickets.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Flight_OTA_FltSaveOrder.OTA_FltSaveOrder">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_FltSaveOrder.OTA_FltSaveOrder.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_FltSaveOrder.OTA_FltSaveOrder.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_FltSaveOrder.OTA_FltSaveOrder.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_FltSaveOrder.OTA_FltSaveOrder.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Flight_OTA_FltSaveOrder.OTA_FltSaveOrder.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Flight_OTA_FltSaveOrder.OTA_FltSaveOrder.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Flight_OTA_FltSaveOrder.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Flight_OTA_FltSaveOrder.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Flight_OTA_FltSaveOrder.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupOrderList.GroupOrderList">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupOrderList.GroupOrderList.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupOrderList.GroupOrderList.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupOrderList.GroupOrderList.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupOrderList.GroupOrderList.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupOrderList.GroupOrderList.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Group_GroupOrderList.GroupOrderList.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupOrderList.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupOrderList.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Group_GroupOrderList.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupCreateOrder.GroupCreateOrder">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupCreateOrder.GroupCreateOrder.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupCreateOrder.GroupCreateOrder.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupCreateOrder.GroupCreateOrder.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupCreateOrder.GroupCreateOrder.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupCreateOrder.GroupCreateOrder.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Group_GroupCreateOrder.GroupCreateOrder.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupCreateOrder.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupCreateOrder.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Group_GroupCreateOrder.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupCancelTickets.GroupCancelTickets">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupCancelTickets.GroupCancelTickets.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupCancelTickets.GroupCancelTickets.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupCancelTickets.GroupCancelTickets.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupCancelTickets.GroupCancelTickets.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupCancelTickets.GroupCancelTickets.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Group_GroupCancelTickets.GroupCancelTickets.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupCancelTickets.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupCancelTickets.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Group_GroupCancelTickets.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.FltCancelOrderImplement">
+            <summary>
+            国内机票订单取消业务
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.FltCancelOrderImplement.WebServiceTransaction(Ctrip.APICall.EntityLib.CtripSDK.OTA_FltCancelOrderCallEntity)">
+            <summary>
+            发送查询请求，并处理返回结果
+            </summary>
+            <param name="requestEntity">请求实体</param>
+            <returns>返回请求结果</returns>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.FltCancelOrderImplement.GetRequestBody(Ctrip.APICall.EntityLib.CtripSDK.OTA_FltCancelOrderCallEntity)">
+            <summary>
+            序列化
+            </summary>
+            <param name="requestEntity">请求实体</param>
+            <returns>序列化后的xml</returns>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_D_HotelCommentList.D_HotelCommentList">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelCommentList.D_HotelCommentList.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelCommentList.D_HotelCommentList.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelCommentList.D_HotelCommentList.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelCommentList.D_HotelCommentList.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelCommentList.D_HotelCommentList.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Hotel_D_HotelCommentList.D_HotelCommentList.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_D_HotelCommentList.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_D_HotelCommentList.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Hotel_D_HotelCommentList.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupTicketChange.GroupTicketChange">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupTicketChange.GroupTicketChange.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupTicketChange.GroupTicketChange.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupTicketChange.GroupTicketChange.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupTicketChange.GroupTicketChange.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupTicketChange.GroupTicketChange.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Group_GroupTicketChange.GroupTicketChange.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupTicketChange.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupTicketChange.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Group_GroupTicketChange.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.OTA_FlightSearch">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.OTA_FlightSearch.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.OTA_FlightSearch.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.OTA_FlightSearch.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.OTA_FlightSearch.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.OTA_FlightSearch.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.OTA_FlightSearch.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_D_HotelSearch.D_HotelSearch">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelSearch.D_HotelSearch.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelSearch.D_HotelSearch.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelSearch.D_HotelSearch.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelSearch.D_HotelSearch.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Hotel_D_HotelSearch.D_HotelSearch.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Hotel_D_HotelSearch.D_HotelSearch.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_D_HotelSearch.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Hotel_D_HotelSearch.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Hotel_D_HotelSearch.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupProductInfo.GroupProductInfo">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupProductInfo.GroupProductInfo.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupProductInfo.GroupProductInfo.Request(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupProductInfo.GroupProductInfo.RequestAsync(System.String)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupProductInfo.GroupProductInfo.RequestAsync(System.String,System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.Group_GroupProductInfo.GroupProductInfo.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="E:Ctrip.APICall.ImplementLib.Group_GroupProductInfo.GroupProductInfo.RequestCompleted">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupProductInfo.RequestCompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.Group_GroupProductInfo.RequestCompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Ctrip.APICall.ImplementLib.Group_GroupProductInfo.RequestCompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Ctrip.APICall.ImplementLib.FlightSearchImplement">
+            <summary>
+            国内机票查询业务
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.FlightSearchImplement.WebServiceTransaction(Ctrip.APICall.EntityLib.CtripSDK.OTA_FlightSearchCallEntity)">
+            <summary>
+            发送查询请求，并处理返回结果
+            </summary>
+            <param name="requestEntity">请求实体</param>
+            <returns>返回请求结果</returns>
+        </member>
+        <member name="M:Ctrip.APICall.ImplementLib.FlightSearchImplement.GetRequestBody(Ctrip.APICall.EntityLib.CtripSDK.OTA_FlightSearchCallEntity)">
+            <summary>
+            序列化
+            </summary>
+            <param name="requestEntity">请求实体</param>
+            <returns>序列化后的xml</returns>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,152 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    var userid = ViewBag.UserId;
+
+    var isInWeixin = ViewBag.isInWeixin;
+    var isApp = ViewBag.IsApp;
+    var isMobile = ViewBag.IsMobile;
+    var appType = ViewBag.AppType;
+    var appVerCode = ViewBag.AppVerCode;
+    var appBundleVer = ViewBag.AppBundleVer;
+
+    //当前默认选中的菜单类型 -1全部 28遛娃卡 0酒店 1机酒 2邮轮 15房券 20玩乐 14美食
+    var selectedtype = ViewBag.SelectedType;
+
+    //当前时间
+    var now = DateTime.Now;
+    
+    ViewBag.Title = "订单";
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    ViewBag.LoadHmBaidu = false;
+}
+
+@section styles
+{
+    <link href="/content/css/framework/iscroll.css" rel="stylesheet">
+    <link href="~/Content/css/framework/zmjd.refresh.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/Content/css/order/allorders.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+        .minirefresh-wrap {
+            top: 3em;
+        }
+        .minirefresh-scroll {
+            background: #eee;
+        }
+    </style>
+
+}
+
+    <div id="tabs" v-cloak class="tab-list">
+        <div class="_scroller">
+            <div class="scrollLine">
+                <div class="t-item" v-for="item in tabDetailList" id="t-item-{{item.id}}" data-relid="{{item.id}}" data-reltype="{{item.type}}" data-num="{{$index}}">{{item.name}}</div>
+            </div>
+        </div>
+    </div>
+    @*<div style="width:100%;height:auto;background:#fff;position:fixed;top:3.011em;left:0;z-index:999;">全部</div>*@
+
+<!-- minirefresh开头的class请勿修改 -->
+<div id="more-vue-obj" v-cloak>
+    <div v-for="listItem in tabDetailList" id="minirefresh_{{listItem.id}}" class="minirefresh-wrap">
+        <div class="minirefresh-scroll scroll-div" id="scroll_{{listItem.id}}" data-relid="{{listItem.id}}" data-reltype="{{listItem.type}}">
+            <div id="more-packages" class="more-olist-panel">
+                <div v-cloak class="order-item" v-if="listItem.orderList&&listItem.orderList.length" v-for="orderEntity in listItem.orderList">
+                    <div class="date-info" v-if="$index==0||orderEntity.SubmitOrderDate!=listItem.orderList[$index-1].SubmitOrderDate">{{orderEntity.SubmitOrderDate}}</div>
+                    <div class="item-info" id="order-item-{{listItem.id}}-{{orderEntity.OrderId}}">
+                        <div class="tit" onclick="gourl('{{orderEntity.url}}')">
+                            <div class="_icon"><img :src="orderEntity.Icon" alt="" /></div>
+                            {{orderEntity.OrderProductName}}
+                        </div>
+                        <div class="package clearfloat" onclick="gourl('{{orderEntity.url}}')">
+                            <div class="name">{{orderEntity.OrderProductDesc}}</div>
+                            <div class="price" v-if="orderEntity.TotalPoints">{{orderEntity.TotalPoints}}积分</div>
+                            <div class="price" v-else>¥{{orderEntity.TotalAmount}}</div>
+                        </div>
+                        <div class="others" v-if="orderEntity.ShowOthers&&orderEntity.Others" onclick="gourl('{{orderEntity.url}}')">{{{orderEntity.Others}}}</div>
+                        <div class="ctrl clearfloat">
+                            <div class="state {{orderEntity.StateAddCss}}">{{orderEntity.OrderStateName}}</div>
+                            <div class="btns">
+                                <a class="go-pay-btn {{orderEntity.GoPayClass}}" v-if="orderEntity.ShowGoPay" data-orderid="{{orderEntity.OrderId}}" data-payid="{{orderEntity.PayID}}" href="javascript:;">支付</a>
+                                <a class="go-pay-btn {{orderEntity.RepairPayClass}}" v-if="orderEntity.ShowRepairPay" href="{{orderEntity.OrderAddPayURL}}" target="_blank">补汇款</a>
+                                <a class="go-pay-btn" v-if="orderEntity.ShowFinalPay" onclick="goCouponBook('{{orderEntity.StepGroup.BookPosition}}', '{{orderEntity.StepGroup.TailSKUID}}', 1, 0, '{{orderEntity.FinalNeedCouponOrderId}}')" href="javascript:;">{{orderEntity.ShowFinalTxt}}</a>
+                                <a class="go-exchange-btn" v-if="orderEntity.ShowExchange&&orderEntity.ActivityType==200" href="/coupon/exchange/{{orderEntity.OrderId}}?userid={{orderEntity.UserID}}" target="_blank">兑换</a>
+                                <a class="go-exchange-btn" v-if="orderEntity.ShowExchange&&orderEntity.ActivityType==500" href="javascript:;" onclick="goCouponExchangeActivityType500('{{orderEntity.UserID}}', '{{orderEntity.OrderId}}', '{{orderEntity.RelPackageAlbumsID}}')" target="_blank">兑换</a>
+                                <a class="go-reserve-btn" v-if="orderEntity.ShowReserve" href="/Coupon/CouponReserve?skuid={{orderEntity.SKUID}}&exid={{orderEntity.ReserveExId}}&userid={{orderEntity.UserID}}&_newpage=1" target="_blank">预约</a>
+                                <a class="go-detail-btn" v-if="!orderEntity.ShowDetailList" href="{{orderEntity.url}}" target="_blank">详情</a>
+                            </div>
+                        </div>
+                        <div class="more-detail" id="more-detail-{{listItem.id}}-{{orderEntity.OrderId}}" v-if="orderEntity.ShowDetailList" style="display:none;">
+                            <div class="item-info item-info-child" v-for="subOrder in orderEntity.DetailOrderList">
+                                <div class="top-right-tag" v-if="subOrder.TopRightTag"><img :src="subOrder.TopRightTag" alt="" /></div>
+                                <div class="tit" onclick="gourl('{{subOrder.url}}')">
+                                    <div class="_icon"><img :src="subOrder.Icon" alt="" /></div>
+                                    {{subOrder.OrderProductName}}
+                                </div>
+                                <div class="package clearfloat" onclick="gourl('{{subOrder.url}}')">
+                                    <div class="name">{{subOrder.OrderProductDesc}}</div>
+                                    <div v-if="!subOrder.IsPromotion">
+                                        <div class="price" v-if="subOrder.TotalPoints">{{subOrder.TotalPoints}}积分</div>
+                                        <div class="price" v-else>¥{{subOrder.TotalAmount}}</div>
+                                    </div>
+                                </div>
+                                <div class="others" v-if="subOrder.ShowEndDate" onclick="gourl('{{subOrder.url}}')">有效期至：{{subOrder.EndDate}}</div>
+                                <div class="ctrl clearfloat">
+                                    <div class="state {{subOrder.StateAddCss}}" v-if="subOrder.OrderStateName">{{subOrder.OrderStateName}}</div>
+                                    <div class="btns">
+                                        <a class="go-exchange-btn" v-if="subOrder.ShowExchange&&subOrder.ActivityType==200" href="/coupon/exchange/{{subOrder.OrderId}}?userid={{subOrder.UserID}}" target="_blank">兑换</a>
+                                        <a class="go-exchange-btn" v-if="subOrder.ShowExchange&&subOrder.ActivityType==500" href="javascript:;" onclick="goCouponExchangeActivityType500('{{subOrder.UserID}}', '{{subOrder.OrderId}}', '{{subOrder.RelPackageAlbumsID}}')" target="_blank">兑换</a>
+                                        <a class="go-reserve-btn" v-if="subOrder.ShowReserve" href="/Coupon/CouponReserve?skuid={{orderEntity.SKUID}}&exid={{subOrder.ReserveExId}}&userid={{subOrder.UserID}}&_newpage=1" target="_blank">预约</a>
+                                        <a class="go-detail-btn" v-if="subOrder.SubSkuType!=1" href="{{subOrder.url}}" target="_blank">详情</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="more-ctrl" v-if="orderEntity.ShowDetailList">
+                            <a href="javascript:;" class="zmjd-iconfont more-detail-btn" data-open="0" data-orderitemid="order-item-{{listItem.id}}-{{orderEntity.OrderId}}" data-moreid="more-detail-{{listItem.id}}-{{orderEntity.OrderId}}">展开&#xe650;</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="null-list" style="display:none;" id="null-list_{{listItem.id}}">
+                    <img src="http://whfront.b0.upaiyun.com/app/img/nothing-pic.png" alt="" />
+                    <div class="_txt">暂无此类订单</div>
+                </div>
+            </div>
+            <div class="more-packages-foot" id="more-packages-foot-{{listItem.id}}"></div>
+            <div class="scrollpageloading more-hide" id="scrollpageloading-{{listItem.id}}"><img src="http://whfront.b0.upaiyun.com/app/img/loading-changes.gif" alt="" /></div>
+
+            <div style="margin:1em 0 0 0;"></div>
+
+        </div>
+    </div>
+</div>
+
+
+<footer>
+    <input type="hidden" id="userid" value="@userid" />
+    <input type="hidden" id="selectedtype" value="@selectedtype" />
+    <input type="hidden" id="isApp" value="@(isApp ? "1" : "0")" />
+
+    <input type="hidden" id="year0" value="@now.Year" />
+    <input type="hidden" id="month0" value="@(now.Month)" />
+    <input type="hidden" id="day0" value="@now.Day" />
+    <input type="hidden" id="hour0" value="@now.Hour" />
+    <input type="hidden" id="minute0" value="@now.Minute" />
+    <input type="hidden" id="second0" value="@now.Second" />
+</footer>
+
+@*<div style="margin:1em 0 5em 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3a%2f%2f192.168.1.22%3a8081%2fApp%2fOrder%3fuserid%3d%7buserid%7d">GO APP (Local) >>></a></div>*@
+
+@section scripts
+{
+    <script src="~/Content/js/framework/jquery.lazyload.min.js"></script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js//framework/iscroll.js"></script>
+    <script src="~/Content/js/framework/zmjd.refresh.js"></script>
+    <script src="~/Content/js/order/allorders.js?v=@(Helpers.curAppVer())"></script>
+}

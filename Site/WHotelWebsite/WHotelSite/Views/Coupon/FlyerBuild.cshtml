@@ -1,0 +1,76 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+    
+    var isApp = ViewBag.IsApp;
+    var userid = ViewBag.UserId; //userid = 4512064;
+
+    ViewBag.Title = "绑定会员卡";
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+    if (isApp)
+    {
+        ViewBag.LoadHmBaidu = false;
+    }
+}
+
+@section styles
+{
+    <link href="~/Content/css/zmjiudian-ex.css" rel="stylesheet" />
+    <link href="/content/css/coupon/flyerbuild.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <style type="text/css">
+    </style>
+}
+
+<div class="top">
+    <img src="http://whfront.b0.upaiyun.com/app/img/coupon/wallet/donghang-card-sml.png" alt="" />
+</div>
+<div class="form">
+    <div class="row">
+        <div class="l">会员名</div>
+        <div class="r"><input type="tel" class="inp" placeholder="12位卡号，字母除外" id="accountNo" /></div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="row">
+        <div class="l">姓</div>
+        <div class="r"><input type="text" class="inp" placeholder="请输入拼音" id="otherName" /></div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="row">
+        <div class="l">名</div>
+        <div class="r"><input type="text" class="inp" placeholder="请输入拼音" id="preName" /></div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="sub-section">
+        <a href="javascript:;" class="sub" style="display:none;" id="sub-link">确认</a>
+        <a href="javascript:;" class="sub sub0" id="sub-link0">确认</a>
+    </div>
+</div>
+
+<footer>
+    <input type="hidden" id="userid" value="@userid" />
+    <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+</footer>
+
+@section scripts
+{
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/coupon/flyerbuild.js?v=@(Helpers.curAppVer())"></script>
+    <script type="text/javascript" charset="utf-8">
+        function goto(param) {
+            var url = "@(ViewBag.AccessProtocal)" + param;
+            this.location = url;
+        }
+
+        function gourl(url) {
+            location.href = url;
+        }
+
+        function loginCallback(userid) {
+            location.replace(location.pathname + "?userid=" + userid);
+        }
+
+        var pub_userid = "@userid";
+    </script>
+}

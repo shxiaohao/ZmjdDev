@@ -1,0 +1,104 @@
+﻿@{
+    ViewBag.Title = "我们的团队";
+}
+
+@section header
+{
+    <!-- Header -->
+    <div class="container header hidden-xs">
+        <div class="row">
+            <div class="col-md-1 col-sm-12 col-xs-12"></div>
+            <div class="col-md-6 col-sm-8 col-xs-8">
+                <a style="width:224px;" href="@Url.Action("Home","Portal")">
+                    <img src="@Url.Content("~/Content/images/logo.png")" style="float:left;" />
+                </a>
+                <div class="topsearch" id="topSearchDiv">
+                    <input type="email" class="form-control" id="topSearchInput" placeholder="请输入酒店名称关键字">
+                    <div class="searchbtn">
+                        <a href="javascript:;" id="topSearch"><img src="@Url.Content("~/Content/images/icon-topsearch.png")" alt="" /></a>
+                    </div>
+                </div>
+            </div>
+            @*<div class="col-md-5 col-sm-5 col-xs-12">
+                @Helpers.BreadCrumbs(Url, ViewBag.Title)
+            </div>*@
+            <div class="col-md-5 col-sm-4 col-xs-12 headright hidden-xs">
+                @Helpers.DLLinks(Url)
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Add -->
+<div class="container mainbody hidden-xs">
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            @Helpers.BreadCrumbs(Url, ViewBag.Title)
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>
+<!-- HotelName -->
+<div class="fullscreen">
+    <div class="container mainbody">
+        <div class="row">
+            <div class="col-md-1">
+            </div>
+            <div class="col-md-10">
+
+                <div class="row mbhead hidden">
+                    <div class="col-xs-12 text-left">
+                        <button type="button" class="btn btn-default btn-sm">返回</button>
+                    </div>
+                </div>
+
+                <div class="row hidden-xs">
+                    <div class="col-md-6 articlename">
+                        我们的团队
+                    </div>
+                </div>
+
+                <!-- mobile header 开始 -->
+                <div class="container visible-xs" style="margin-bottom:-1px;">
+                    <div class="row toolbar2 ">
+                        <div class="col-xs-3">
+                            <button type="button" onclick="history.back()" class="btn btn-sm  btn-img01"><img src="@Url.Content("~/content/images/icon-back.png")" class="mobilepic" alt="" /></button>
+                        </div>
+                        <div class="col-xs-6 text-center listtitle">
+                            我们的团队
+                        </div>
+                        <div class="col-sm-2 col-xs-3 text-right">
+                        </div>
+                    </div>
+                </div>
+                <!--  mobile header 结束 -->
+
+                <div class="row">
+                    <!-- Hotel Left -->
+                    <div class="col-md-8">
+                        <div class="panel panel-default">
+                            <div class="panel-body articledetail">
+                                周末酒店是上海尚旅网络科技有限公司旗下网站及APP。 公司成立于2013年11月，创始成员均来自知名旅游及互联网公司，拥有10年以上的相关经验。 我们的团队有着多样的背景，因为共同的爱好和目标走到一起。 <br /><br />
+                                <ul>
+                                    <li>我们认为工作是一种乐趣，相信并热爱自己所做的事情</li>
+                                    <li>我们喜欢简单、务实并快乐地工作</li>
+                                    <li>我们坚持以用户为中心，致力于提供极致体验和服务</li>
+                                </ul>
+                                <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Hotel Right -->
+                    <div class="col-md-4 visible-md visible-lg zmrightpanel">
+                        @Helpers.QRCodes(Url)
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+            </div>
+        </div>
+    </div>
+</div>

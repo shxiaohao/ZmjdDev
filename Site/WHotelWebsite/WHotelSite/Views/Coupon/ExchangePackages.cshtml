@@ -1,0 +1,106 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    Layout = null;
+
+    var isApp = ViewBag.IsApp;
+    var userid = ViewBag.UserId;
+    var cid = ViewBag.Cid;
+    var exchangeid = ViewBag.ExchangeId;
+    var isInWeixin = ViewBag.isInWeixin;
+    var appType = ViewBag.AppType;
+    
+    PackageAlbumDetail albumDetail = ViewBag.AlbumDetail;
+
+    var pageTitle = "适用酒店列表";
+
+    ViewBag.Title = pageTitle;
+}
+
+<!DOCTYPE html>
+
+<script type="text/javascript">
+
+    function openHotel(hotelid) {
+        var isapp = $("#isapp").val() == "1";
+        if (isapp) {
+            goto('hotel/' + hotelid);
+        }
+        else {
+            location.href = "http://www.zmjiudian.com/hotel/" + hotelid;
+        }
+    }
+
+    function gourl(url) {
+        location.href = url;
+    }
+    
+    function loginCallback(userid) {
+        location.replace(location.pathname + "?userid=" + userid);
+    }
+
+    var pub_userid = "@userid";
+</script>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>@pageTitle</title>
+    <link href="/content/css/coupon/exchangepackages.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+</head>
+<body>
+    <div class="collection-panel">
+        <div class="tit">房券兑换适用酒店</div>
+        <div class="tit-line"></div>
+    </div>
+    @if (albumDetail.packageList != null && albumDetail.packageList.Count > 0)
+    {
+        <div class="list-panel">
+            <div class="list">
+                @for (int i = 0; i < albumDetail.packageList.Count; i++)
+                {
+                    var packageEntity = albumDetail.packageList[i];
+
+                    var url = string.Format("/coupon/exchangepackage/{0}?userid={1}&exchangeid={2}&_newpage=1&_dorpdown=1&_newtitle=1", packageEntity.PID, userid, exchangeid);
+
+                    var exchangeUrl = string.Format("/coupon/exchange/{0}?userid={1}&hotelid={2}&pid={3}&_newpage=1", exchangeid, userid, packageEntity.HotelID, packageEntity.PID);
+                    
+                    <div class="item">
+                        <div class="around">
+                            <div class="pic" onclick="gourl('@url')"><img src="@(!string.IsNullOrEmpty(packageEntity.RecommendPicUrl) ? packageEntity.RecommendPicUrl : packageEntity.HotelPicUrl)" alt="" /></div>
+                            <div class="left" onclick="gourl('@url')">
+                                <div class="tit1">@packageEntity.HotelName</div>
+                                <div class="brief1">@packageEntity.PackageBrief</div>
+                            </div>
+                            <div class="right">
+                                <div class="go" onclick="gourl('@exchangeUrl')">兑换</div>
+                            </div>
+                            <div style="clear:both;"></div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>   
+    }
+
+    <footer>
+        <input type="hidden" id="userid" value="@userid" />
+        <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+    </footer>
+    <div style="margin: 2em 0 0 0; display: none; "><a href="whotelapp://www.zmjiudian.com/gotopage?url=http://192.168.1.22:8081/hotel/collection/1?userid=4512657">GO APP (Local) >>></a></div>
+    <script src="~/Content/js/jquery-1.10.2-min.js"></script>
+    <script src="~/Content/js/framework/config.js"></script>
+    <script src="~/Content/js/framework/zmjiudian.js"></script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/coupon/exchangepackages.js?v=@(Helpers.curAppVer())"></script>
+</body>
+</html>

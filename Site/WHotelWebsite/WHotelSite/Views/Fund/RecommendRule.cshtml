@@ -1,0 +1,37 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    ViewBag.Title = "住基金规则";
+}
+
+@section styles
+{
+    <link href="~/Content/css/fund/recommendrule.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style type="text/css">
+    </style>
+}
+
+<div class="rec-rule-panel">
+    <div class="group">
+        <div class="tit">如何获取奖励基金</div>
+        1、推荐您的朋友使用周末酒店APP可以获得奖励基金，您邀请的朋友一旦注册成功，您将获得其通过周末酒店APP平台预订并成功入住的订单金额的1%奖励基金。<br />
+        2、参加周末酒店官方举办的众筹活动，可获得相应回报的奖励基金。<br />
+    </div>
+    <div class="group">
+        <div class="tit">如何推荐朋友</div>
+        您可以在APP登录状态下，从首页的“推荐给好友 奖励住基金”页面进入，分享给朋友。您的朋友可领取50元现金券。
+    </div>
+    <div class="group">
+        <div class="tit">如何使用奖励基金</div>
+        1、您获得的奖励可以用于全额或按您所希望的金额抵扣您在周末酒店APP平台所产生的订单费用。<br />
+        2、您所获得的奖励基金永久有效，但只能用于购买周末酒店APP平台的产品。<br />
+    </div>
+    <div class="group">
+        <div class="tit">隐私保护</div>
+        出于个人隐私保护的考虑，您将只能查阅到被您成功邀请的朋友数量及奖励的金额，您将无法查询到具体朋友姓名或订单相关信息（比如酒店名称、入住日期等）。<br />
+    </div>
+    <div class="group">
+        <div class="tit">免责声明</div>
+        奖励基金系周末酒店官方举办的阶段性市场营销活动，周末酒店有权无理由随时终止此活动，已经获得并未使用的奖励基金持续有效。<br />
+    </div>
+</div>

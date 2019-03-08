@@ -1,0 +1,311 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params.Hotel
+@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    ViewBag.Title = "航空里程大放送";
+
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.isInWeixin;
+    var isMobile = ViewBag.IsMobile;
+    var userId = ViewBag.UserId;
+    var activeId = ViewBag.ActiveId;
+    var toget = ViewBag.ToGet;
+
+    var activeBannerPic = "http://whfront.b0.upaiyun.com/www/img/Active/productalbumactive/active-top-banner-1.jpg?v=1";
+    var activeRulePic = "http://whfront.b0.upaiyun.com/www/img/Active/productalbumactive/active-top-rules.jpg";
+
+    var shareTitle = "冰点特价住Top亲子酒店，领千元大礼包，还赚免费机票！";
+    var shareDesc = "全年罕见特价，双重叠加优惠，买到即赚到。";
+    var shareLink = string.Format("http://www.zmjiudian.com/Active/ProductAlbumActive?activeid={0}", activeId);
+    var shareImgUrl = "http://whfront.b0.upaiyun.com/www/img/Active/productalbumactive/active-share-banner.png";
+
+    //打开原生分享bar
+    var shareResultUrl = "";    //"http://192.168.1.188:8081/Active/ProductAlbumActive?userid={userid}&toget=1";
+    var shareLink_Native = "whfriend://comment?title={0}&photoUrl={1}&shareLink={2}&nextUrl={3}&content={4}&shareType={5}";
+    shareLink_Native = string.Format(shareLink_Native, HttpUtility.UrlEncode(shareTitle), HttpUtility.UrlEncode(shareImgUrl), HttpUtility.UrlEncode(shareLink), HttpUtility.UrlEncode(shareResultUrl), HttpUtility.UrlEncode(shareDesc), "0");
+    
+    //是否使用新分享政策（6.1新版微信将不在支持分享成功后回调）
+    var isNewShare = DateTime.Now > DateTime.Parse("2018-06-01");
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+}
+
+@section styles
+{
+    <link href="/content/css/framework/iscroll.css" rel="stylesheet">
+    <link href="~/Content/css/login.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <link href="~/Content/css/active/productalbumactive.css?v=@Helpers.curAppVer()" rel="stylesheet" />
+    <style>
+        .login-section {
+            font-size: 0.8em;
+        }
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+}
+
+<div class="active-seaction" id="active-seaction-obj">
+    <div class="banner">
+        <img src="@activeBannerPic" alt="" />
+    </div>
+    <div class="rules" onclick="gourl('/active/activepage?pageid=104&_newpage=1')">
+        <img src="@activeRulePic" alt="" />
+    </div>
+    <div id="tabs" class="tab-list" style="display:none;">
+        <div class="_scroller">
+            <div class="scrollLine">
+                <div class="t-item sel" id="t-item-26" data-relid="26" data-listtype="0" data-seled="0">酒店</div>
+                <div class="t-item" id="t-item-27" data-relid="27" data-listtype="1" data-seled="1">机+酒</div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-detail-list tab-detail-list-sel" id="t-list-26">
+        <div v-cloak class="item" v-for="item in tabDetail.SKUCouponList" onclick="gobuy(0, {{item.SKUID}})">
+            <div class="pic">
+                <img src="{{item.PicList[0]}}" alt="" />
+            </div>
+            <div class="active-tip">
+                <div class="icon"><img src="http://whfront.b0.upaiyun.com/www/img/Active/productalbumactive/active-detail-tip-1.png" alt="送里程" /></div>
+                <div class="tip tip-red">{{item.CouponDefineTip}}</div>
+            </div>
+            <div class="name-1">{{item.PageTitle}}</div>
+            <div class="name-2">{{item.Tags}}</div>
+            <div class="price" v-if="item.UserCouponDefineList&&item.UserCouponDefineList.length">
+                <span class="atv-price"><span class="p-lab">券后价&nbsp;</span><span class="p-un">¥ &nbsp;</span>{{item.SKUVipPrice-item.UserCouponDefineList[0].DiscountAmount}}</span>
+            </div>
+            <div class="price" v-else>
+                <span class="atv-price"><span class="p-un">¥</span>{{item.SKUVipPrice}}</span>
+            </div>
+        </div>
+        <div class="scrollpageloading" id="scrollpageloading-26"><img src="http://whfront.b0.upaiyun.com/app/img/loading-changes.gif" alt="" /></div>
+    </div>
+    <div class="tab-detail-list tab-detail-list-hid" id="t-list-27">
+        <div v-cloak class="item" v-for="item in tabDetail.SKUCouponList" onclick="gobuy(0, {{item.SKUID}})">
+            <div class="pic">
+                <img src="{{item.PicList[0]}}" alt="" />
+            </div>
+            <div class="active-tip">
+                <div class="icon"><img src="http://whfront.b0.upaiyun.com/www/img/Active/productalbumactive/active-detail-tip-1.png" alt="送里程" /></div>
+                <div class="tip tip-red">{{item.CouponDefineTip}}</div>
+            </div>
+            <div class="name-1">{{item.PageTitle}}</div>
+            <div class="desc-1">{{item.Tags}}</div>
+            <div class="short-line"></div>
+            <div class="buy-section clearfloat">
+                <div class="_l">
+                    <div class="price-info" v-if="item.UserCouponDefineList&&item.UserCouponDefineList.length">
+                        <span class="p"><span class="p-lab">券后价&nbsp;</span><span class="p-un">¥ &nbsp;</span>{{item.SKUVipPrice-item.UserCouponDefineList[0].DiscountAmount}}</span>
+                    </div>
+                    <div class="price-info" v-else>
+                        <span class="p"><span class="p-un">¥</span>{{item.SKUVipPrice}}起</span>
+                    </div>
+                </div>
+                <div class="_r">
+                    <div class="gobuy">点击预订</div>
+                </div>
+            </div>
+        </div>
+        <div class="scrollpageloading" id="scrollpageloading-27"><img src="http://whfront.b0.upaiyun.com/app/img/loading-changes.gif" alt="" /></div>
+    </div>
+</div>
+
+<div class="gift-coupon-list-model" style="display:none;"></div>
+<div id="gift-coupon-list" class="gift-coupon-list" style="display:none;">
+    <div class="close"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/viparea-welcome-close.png" /></div>
+    <div class="top-panel"><img src="http://whfront.b0.upaiyun.com/www/img/Active/productalbumactive/donghang-coupon-gift-banner.jpg" alt="" /></div>
+    <div class="top-tip">已领取红包<span class="p">¥{{AlbumsInfo.getedCouponAmount}}</span>，还有<span class="p">¥{{AlbumsInfo.getCouponAmount}}</span>待领取</div>
+    <div class="coupon-list middle-panel">
+
+        <div class="item" v-for="couponItem in AlbumsInfo.list">
+            <div class="top"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-top.png" alt="" /></div>
+            <div class="middle">
+                <div class="state-icon" v-if="couponItem.UsedCount"><img src="http://whfront.b0.upaiyun.com/www/img/Active/productalbumactive/icon-coupon-geted.png" alt="" /></div>
+                <div class="money"><span class="val-sml {{couponItem.UsedCount?'val-sml-0':''}}">¥{{couponItem.DiscountAmount}}</span></div>
+                <div class="info">
+                    <div class="tit {{couponItem.UsedCount?'tit-0':''}}">{{couponItem.Name}}</div>
+                    <div class="time" v-if="couponItem.ExpirationType==0">有效期{{couponItem.ExpirationDay}}天</div>
+                    <div class="time" v-if="couponItem.ExpirationType==1">{{couponItem.StartUseDate}}至{{couponItem.ValidUntilDate}}可用</div>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="line"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-line.png" alt="" /></div>
+            <div class="middle">
+                <div class="rule">{{couponItem.Description}}</div>
+            </div>
+            <div class="bottom"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-bottom.png" alt="" /></div>
+        </div>
+
+        <div style="clear:both;"></div>
+    </div>
+    <div class="foot-panel">
+        <div class="get-ctrl">
+            <img src="http://whfront.b0.upaiyun.com/www/img/Active/productalbumactive/btn-coupon-get.png" v-if="AlbumsInfo.getCouponList.length" class="get-gift-coupon" alt="" />
+            <img src="http://whfront.b0.upaiyun.com/www/img/Active/productalbumactive/btn-coupon-gouse.png" v-else class="geted-gift-coupon" alt="" />
+        </div>
+    </div>
+</div>
+<div id="gift-coupon-one" class="gift-coupon-one" style="display:none;">
+    <div class="close"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/vipshopinfo/viparea-welcome-close.png" /></div>
+    <div class="info"><img src="http://whfront.b0.upaiyun.com/www/img/Active/productalbumactive/coupon-bg-one-bg.png" onclick="gourl('javascript:;')" alt="" /></div>
+    <div class="info2">
+        <div class="discount-tip">分享领<span id="span-coupon-amount">千元</span>红包，赚免费机票</div>
+        <img src="http://whfront.b0.upaiyun.com/www/img/Active/productalbumactive/coupon-bg-one-btn.png" alt="" />
+    </div>
+    
+</div>
+<div id="gift-coupon-ball" class="gift-coupon-ball" style="display:none;"><img src="http://whfront.b0.upaiyun.com/www/img/Active/productalbumactive/donghang-coupon-gift-ball.png" alt="" /></div>
+
+<div class="weixin-share-tip" style="display:none;">
+    <img data-orisrc="http://whfront.b0.upaiyun.com/www/img/Active/productalbumactive/weixin-share-tip-img.png" src="" alt="点击右上角分享哦" />
+</div>
+
+
+@*<div style="margin:2em 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3a%2f%2f192.168.1.188%3a8081%2fActive%2fProductAlbumActive%3fuserid%3d%7buserid%7d">GO APP (Local) >>></a></div>*@
+
+<footer>
+    <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+    <input type="hidden" id="isInWeixin" value="@(isInWeixin ? 1 : 0)" />
+    <input type="hidden" id="userId" value="@(userId)" />
+    <input type="hidden" id="activeId" value="@(activeId)" />
+    <input type="hidden" id="shareNativeLink" value="@shareLink_Native" />
+    <input type="hidden" id="toget" value="@(toget)" />
+    <input type="hidden" id="shareTitle" value="@(shareTitle)" />
+    <input type="hidden" id="shareDesc" value="@(shareDesc)" />
+    <input type="hidden" id="shareLink" value="@(shareLink)" />
+    <input type="hidden" id="shareImgUrl" value="@(shareImgUrl)" />
+    <input type="hidden" id="isNewShare" value="@(isNewShare ? 1 : 0)" />
+</footer>
+
+@section scripts
+{
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+    <script src="~/Content/js/framework/jquery.lazyload.min.js"></script>
+    <script src="~/Content/js//framework/iscroll.js"></script>
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    <script src="~/Content/js/login.js?v=@(Helpers.curAppVer())"></script>
+
+    @if (isApp)
+    {
+        <script>
+            try {
+                onAppShareCall = function () {
+                    var title = "@(shareTitle)";
+                    var Content = "@(shareDesc)";
+                    var photoUrl = "@(shareImgUrl)";
+                    var shareLink = "@(shareLink)";
+                    try { whotel.appShareData(title, Content, photoUrl, shareLink); } catch (e) { }
+                    var returnStr = '{"title":"{0}","Content":"{1}","photoUrl":"{2}","shareLink":"{3}"}';
+                    return returnStr.format(title, Content, photoUrl, shareLink);
+                }
+                onAppShareCall();
+            }
+            catch (e) { }
+        </script>
+    }
+
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js?v=@(Helpers.curAppVer())" type="text/javascript"></script>
+        <script>
+
+            var loadWechat = function(_shareTitle,_shareDesc,_shareLink,_shareImgUrl, _shareSucessFunc){
+
+                GetWeixinApiConfig();//注册
+
+                function GetWeixinApiConfig() {
+
+                    var url = location.href.split("#")[0];
+                    $.ajax({
+                        url: '/Coupon/GetWeixinConfigInfo',
+                        type: 'POST',
+                        data: { url: url },
+                        dataType: 'json',
+                        async: false,
+                        error: function () {
+                            console.log("网络服务错误");
+                        },
+                        success: function (result) {
+                            if (typeof (result.Success) != undefined && result.Success == 1) {
+                                return false;
+                            }
+                            else {
+                                //得到微信config的值
+                                var array = [
+                                    'checkJsApi',
+                                    'onMenuShareTimeline',
+                                    'onMenuShareAppMessage',
+                                    'onMenuShareQQ',
+                                    'onMenuShareQZone',
+                                    'hideOptionMenu'
+                                ];
+                                if (result.jsApiList) {
+                                    var jsArray = result.jsApiList.split(',');
+                                    for (var key in jsArray) {
+                                        array.push("" + jsArray[key]);
+                                    }
+                                }
+
+                                wx.config({
+                                    debug: false,
+                                    appId: result.appId,
+                                    timestamp: "" + result.timestamp,
+                                    nonceStr: result.nonceStr,
+                                    signature: result.signature,
+                                    jsApiList: array
+                                });
+
+                                wx.ready(function () {
+
+                                    wx.onMenuShareTimeline({
+                                        title: _shareTitle,
+                                        desc: _shareDesc,
+                                        link: _shareLink,
+                                        imgUrl: _shareImgUrl,
+                                        success: function (res) {
+                                            _shareSucessFunc(res)
+                                        },
+                                        cancel: function (res) {
+                                        }
+                                    });
+
+                                    wx.onMenuShareAppMessage({
+                                        title: _shareTitle,
+                                        desc: _shareDesc,
+                                        link: _shareLink,
+                                        imgUrl: _shareImgUrl,
+                                        success: function (res) {
+                                            _shareSucessFunc(res)
+                                        },
+                                        cancel: function (res) {
+                                            //alert("取消分享")
+                                        }
+                                    });
+
+                                });
+
+                                wx.error(function (res) {
+                                    console.log(res.errMsg);  //打印错误消息。及把 debug:false,设置为debug:ture就可以直接在网页上看到弹出的错误提示
+                                });
+                            }
+                        }
+                    });
+                }
+
+            }
+            loadWechat('@shareTitle','@shareDesc','@shareLink','@shareImgUrl', function(){});
+
+</script>
+    }
+    
+    <script src="~/Content/js/active/productalbumactive.js?v22=@(Helpers.curAppVer())"></script>
+}

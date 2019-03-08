@@ -1,0 +1,79 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    var cssVersion = "190001010000";
+    try
+    {
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex) { }
+
+    var userid = ViewBag.UserId;
+    var districtId = ViewBag.DistrictId;
+    var districtName = ViewBag.DistrictName;
+    var userlat = ViewBag.Userlat;
+    var userlng = ViewBag.Userlng;
+    var geoScopeType = ViewBag.GeoScopeType;
+
+    //专题列表
+    InterestModel3 themeList = ViewBag.ThemeList;
+    
+    var isInWeixin = ViewBag.isInWeixin;
+    var isApp = ViewBag.IsApp;
+    var appType = ViewBag.AppType;
+    
+    ViewBag.Title = "更多专题";
+
+    ViewBag.UseMuiCss = false;
+    ViewBag.UseMuiJs = false;
+}
+
+@section styles
+{
+    <link href="~/Content/css/app/themelist.css?v=@cssVersion" rel="stylesheet" />
+    <style type="text/css">
+    </style>
+}
+    
+<div class="theme-list-panel">
+    <div class="list">
+        <ul>
+            @if (themeList != null && themeList.ICONList != null && themeList.ICONList.Count > 0)
+            {
+                for (int tnum = 0; tnum < themeList.ICONList.Count; tnum++)
+                {
+                    var iconEntity = themeList.ICONList[tnum];
+                    iconEntity.ImageUrl = !string.IsNullOrEmpty(iconEntity.ImageUrl) ? iconEntity.ImageUrl : iconEntity.LogoURL;
+                    if (string.IsNullOrEmpty(iconEntity.ImageUrl))
+                    {
+                        iconEntity.ImageUrl = "http://whfront.b0.upaiyun.com/app/img/home/home-load-1x1.png";
+                    }
+
+                    var goUrl = iconEntity.ActionUrl;
+                    var showName = iconEntity.Name;
+                    var imgSrc = iconEntity.ImageUrl.Replace("_290x290", "_240x240").Replace("_jupiter", "_290x290");
+                    
+                    <li>
+                        <div class="t-item" onclick="gourl('@(goUrl)')">
+                            <img @(tnum < 6 ? string.Format(" src={0} ", imgSrc) : string.Format(" data-original={0} data-lazyload-id={1} ", imgSrc, tnum)) alt="">
+                            <div class="tname">@(showName)</div>
+                        </div>
+                    </li>
+                }
+            }
+        </ul>
+</div>
+</div>
+
+<input type="hidden" id="userid" value="@userid" />
+<input type="hidden" id="userlat" value="@userlat" />
+<input type="hidden" id="userlng" value="@userlng" />
+<input type="hidden" id="isApp" value="@(isApp ? "1" : "0")" />
+
+@section scripts
+{
+    <script src="~/Content/js/framework/jquery.lazyload.min.js"></script>
+    <script src="~/Content/js/app/themelist.js?v=@cssVersion"></script>
+}

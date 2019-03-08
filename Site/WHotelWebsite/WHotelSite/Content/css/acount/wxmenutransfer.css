@@ -1,0 +1,22 @@
+﻿@charset "UTF-8";
+html, body {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  background: #fff;
+  -webkit-user-select: none;
+  user-select: none;
+  overflow-x: hidden; 
+  font-family:Arial;
+  font-size:0.85em;
+}
+
+/*禁止长按链接与图片弹出菜单*/
+a, img {
+  -webkit-touch-callout: none; }
+
+.err {
+    width:100%;
+    height:auto;
+    text-align:center;
+    padding:1em 0 1em 0;
+}

@@ -1,0 +1,61 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+
+    InspectorParam param = ViewBag.param;
+
+    ViewBag.Title = string.Format("品鉴师的条件及福利-周末酒店");
+    ViewBag.Keywords = string.Format("品鉴师，品鉴师的条件及福利，条件，福利");
+    ViewBag.Description = string.Format("品鉴师条件与福利");
+
+    ViewBag.BodyStyle = "overflow-x:hidden;";
+    ViewBag.BodyClass = "inspectorrulespage";
+}
+@section styles
+{
+    <style>
+        html, body {
+                height: 100%;
+                margin: 0;
+            }
+    </style>
+}
+<script>
+    function goto(param) {
+        var url = "@(ViewBag.AccessProtocal)" + param;
+        this.location = url;
+    }
+
+    function gotopage(param) {
+        var url = "@(ViewBag.AccessProtocalPage)" + param;
+        this.location = url;
+    }
+</script>
+<div class="rules-body">
+    <div class="rules-top">
+        <div class="logobgcolor"></div>
+        <img class="logotxt" src="~/Content/images/inspector/brown/text02.png"><br />
+        <img class="logoimg" src="~/Content/images/inspector/brown/bed.png"><br />
+        <section class="rule-wherebox">
+            <div class="tit">品鉴师条件</div>
+            <p>1、在过去的一年中，通过周末酒店成功预定并入住过三家不同的酒店</p>
+            <p>2、在过去的一年中，成功发表三篇以上不同酒店的高质量点评（如：每篇点评必须图文并茂，至少包含400个字和5张图片）</p>
+            <p>3、经过周末酒店官方审核通过成为品鉴师</p>
+        </section>
+        <a href="/inspector/hotellist?userid=@param.UserId"><div class="rules-btn-inspectorhotels">去看看可供品鉴酒店<img src="~/Content/images/inspector/arrow-right.png"></div></a>
+        <section class="rule-hongbaobox">
+            <div class="tit">品鉴师福利</div>
+            <p>1、不定期收到官方邀请，免费品鉴各地酒店</p>
+            <p>2、品鉴师通过社媒（微信、微博等平台）分享的点评，可拥有专属链接，通过该链接产生的预订，品鉴师可获得订单价值1%的现金奖励。</p>
+            <p>举例：品鉴师分享点评到微信朋友圈，该分享会带有品鉴师的专属链接，品鉴师的朋友看到分享之后，点击进入页面，并继续浏览酒店信息（在此过程中，不要关闭浏览器），提交并完成预订。此订单金额的1%将作为品鉴师的现金奖励。朋友入住完成之后，可在“我的钱包”领取奖励。</p>
+        </section>
+    </div>
+    <footer class="rules-foot"><img src="~/Content/images/inspector/brown/rulesbottom.png"><div class="foottext">*品鉴师项目解释权归属上海尚旅网络科技有限公司</div></footer>
+</div>
+<!--  -->
+
+@section scripts
+{
+    @Scripts.Render("~/Content/js/inspector/inspector.js")
+}

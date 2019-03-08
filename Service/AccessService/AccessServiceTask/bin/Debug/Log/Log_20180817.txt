@@ -1,0 +1,24 @@
+
+[18/8/17 13:12:29] Start Job [SendServiceTemplateMsgLiuwa_Job]
+[18/8/17 13:13:56] Start Job [SendServiceTemplateMsgLiuwa_Job]
+[18/8/17 13:14:08] 指定了测试Openid：o7nB80Q7CbiK9vvxo4mAx-xCOA8A
+[18/8/17 13:17:00] Start Job [SendServiceTemplateMsgLiuwa_Job]
+[18/8/17 13:17:10] 指定了测试Openid：o7nB80Q7CbiK9vvxo4mAx-xCOA8A
+[18/8/17 13:17:53] Start Job [SendServiceTemplateMsgLiuwa_Job]
+[18/8/17 13:18:14] 指定了测试Openid：o7nB80Q7CbiK9vvxo4mAx-xCOA8A
+[18/8/17 13:19:29] Start Job [SendServiceTemplateMsgLiuwa_Job]
+[18/8/17 13:19:38] 指定了测试Openid：o7nB80Q7CbiK9vvxo4mAx-xCOA8A
+[18/8/17 13:20:34] Start Job [SendServiceTemplateMsgLiuwa_Job]
+[18/8/17 13:20:39] 指定了测试Openid：o7nB80Q7CbiK9vvxo4mAx-xCOA8A
+[18/8/17 13:31:37] Start Job [SendServiceTemplateMsgLiuwa_Job]
+[18/8/17 13:31:43] 指定了测试Openid：o7nB80Q7CbiK9vvxo4mAx-xCOA8A
+[18/8/17 13:56:32] Start Job [SendServiceTemplateMsgLiuwa_Job]
+[18/8/17 13:56:33] 指定了测试Openid：o7nB80Q7CbiK9vvxo4mAx-xCOA8A
+[18/8/17 13:56:34] 结果：{"errcode":0,"errmsg":"ok","msgid":417637285631213568}
+[18/8/17 13:56:34] Stop Job [SendServiceTemplateMsgLiuwa_Job]
+[18/8/17 16:31:35] Start Job [SendServiceTemplateMsgLiuwaWX_Job]
+[18/8/17 16:34:16] 指定了测试Openid：oh_y70R5LYS3kRc4JElY3r0FbsKU
+[18/8/17 16:35:42] Start Job [SendServiceTemplateMsgLiuwaWX_Job]
+[18/8/17 16:38:47] 指定了测试Openid：oh_y70R5LYS3kRc4JElY3r0FbsKU
+[18/8/17 16:48:17] Start Job [SendServiceTemplateMsgLiuwaWX_Job]
+[18/8/17 16:48:24] 指定了测试Openid：oh_y70R5LYS3kRc4JElY3r0FbsKU

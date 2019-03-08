@@ -1,0 +1,58 @@
+﻿html, body {
+    height: 100%;
+    margin: 0;
+    background:#E6E6E6;
+}
+.btn-default, .btn-primary {
+    width: 48%;
+    border: none;
+    color: #6294D1;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+.box-big-btn {
+    width: 90%;
+}
+.calendar {
+    z-index: 100 !important;
+}
+.calendar {
+    top: 0 !important;
+}
+    .calendar .ctrls.top {
+        border-top: 9px solid #e6e6e6 !important;
+    }
+    .calendar .cap {
+        width: 90% !important;
+        margin: 0 auto 0.2em auto !important;
+        color: #16A1DD !important;
+        border-top: none !important;
+        border-bottom: 1px solid #e5e3e3 !important;
+    }
+    .calendar .months {
+        height: 282px !important;
+    }
+@media (min-height: 450px) {
+    .calendar .months {
+        height: 362px !important;
+    }
+}
+@media (min-height: 480px) {
+    .calendar .months {
+        height: 412px !important;
+    }
+}
+    .calendar .days {
+        border-bottom: 9px solid #e6e6e6 !important;
+    } 
+    .calendar .ctrls.bottom {
+        width: 100% !important;
+        border-top: 1px solid #e5e3e3;
+        background: #fff !important;
+        position: absolute !important;
+        bottom: 0 !important;
+    }
+    .calendar .ctrls a {
+        background: #16A1DD !important;
+        color: #fff !important;
+    }

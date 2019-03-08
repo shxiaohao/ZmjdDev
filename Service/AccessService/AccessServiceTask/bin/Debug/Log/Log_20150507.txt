@@ -1,0 +1,53 @@
+
+[2015/5/7 9:09:02] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/7 9:10:02] HotelID£º435447 Night:2015-05-08
+[2015/5/7 9:11:33] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/7 9:11:37] HotelID£º435447 Night:2015-05-08
+[2015/5/7 9:14:28] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/7 9:14:30] HotelID£º435447 Night:2015-05-08
+[2015/5/7 9:15:22] Insert BaseRoom
+[2015/5/7 9:15:26] Insert Room
+[2015/5/7 9:15:29] Insert Room
+[2015/5/7 9:15:29] Insert BaseRoom
+[2015/5/7 9:15:29] Insert Room
+[2015/5/7 9:15:29] Insert Room
+[2015/5/7 9:15:30] Insert Room
+[2015/5/7 9:15:30] Insert Room
+[2015/5/7 9:15:30] Insert BaseRoom
+[2015/5/7 9:15:30] Insert Room
+[2015/5/7 9:15:31] Insert Room
+[2015/5/7 9:15:31] Insert BaseRoom
+[2015/5/7 9:15:31] Insert Room
+[2015/5/7 9:15:31] Insert Room
+[2015/5/7 9:15:32] Insert Room
+[2015/5/7 9:15:32] Insert BaseRoom
+[2015/5/7 9:15:32] Insert Room
+[2015/5/7 9:15:32] Insert BaseRoom
+[2015/5/7 9:15:32] Insert Room
+[2015/5/7 9:15:33] Insert BaseRoom
+[2015/5/7 9:15:33] Insert Room
+[2015/5/7 9:15:33] Insert Room
+[2015/5/7 9:15:33] Insert Room
+[2015/5/7 9:15:33] Insert BaseRoom
+[2015/5/7 9:15:33] Insert Room
+[2015/5/7 9:15:33] Insert BaseRoom
+[2015/5/7 9:15:33] Insert Room
+[2015/5/7 9:15:34] Insert BaseRoom
+[2015/5/7 9:15:34] Insert Room
+[2015/5/7 9:15:34] Insert Room
+[2015/5/7 9:15:34] Insert Room
+[2015/5/7 9:15:34] Insert BaseRoom
+[2015/5/7 9:15:34] Insert Room
+[2015/5/7 9:15:35] Insert BaseRoom
+[2015/5/7 9:15:35] Insert Room
+[2015/5/7 9:15:35] Insert BaseRoom
+[2015/5/7 9:15:35] Insert Room
+[2015/5/7 9:15:35] Insert BaseRoom
+[2015/5/7 9:15:35] Insert Room
+[2015/5/7 9:15:36] Insert Room
+[2015/5/7 10:47:42] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/7 10:47:57] HotelID£º1119058 Night:2015-07-03
+[2015/5/7 10:48:34] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/7 10:48:36] HotelID£º1119058 Night:2015-07-03
+[2015/5/7 10:49:34] Start Job [CtripHotelSingleCrawlerJob]
+[2015/5/7 10:49:36] HotelID£º1119058 Night:2015-07-03

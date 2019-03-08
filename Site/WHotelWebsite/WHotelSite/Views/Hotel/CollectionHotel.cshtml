@@ -1,0 +1,209 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    Layout = null;
+
+    var isApp = ViewBag.IsApp;
+    var userid = ViewBag.UserId;
+    var cid = ViewBag.Cid;
+    var isInWeixin = ViewBag.isInWeixin;
+    
+    PackageAlbumDetail albumDetail = ViewBag.AlbumDetail;
+
+    var pageTitle = isInWeixin ? albumDetail.albumEntity.SubTitle : "";
+    ViewBag.Title = pageTitle;
+}
+
+<!DOCTYPE html>
+
+<script type="text/javascript">
+
+    function openHotel(hotelid) {
+        var isapp = $("#isapp").val() == "1";
+        if (isapp) {
+            goto('hotel/' + hotelid);
+        }
+        else {
+            location.href = "http://www.zmjiudian.com/hotel/" + hotelid;
+        }
+    }
+
+    function gourl(url) {
+        location.href = url;
+    }
+    
+    function loginCallback(userid) {
+        location.replace(location.pathname + "?userid=" + userid);
+    }
+
+    var pub_userid = "@userid";
+</script>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta name="format-detection" content="telephone=no" />
+    <title>@pageTitle</title>
+    <link href="/content/css/hotel/collection.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+        window.httpsWebUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(System.Configuration.ConfigurationManager.AppSettings["HttpsWebSiteUrl"]));
+    </script>
+</head>
+<body>
+    <div class="collection-panel">
+        <div class="tit">@albumDetail.albumEntity.SubTitle</div>
+        <div class="desc">@albumDetail.albumEntity.Description</div>
+    </div>
+    @if (albumDetail.packageList != null && albumDetail.packageList.Count > 0)
+    {
+        <div class="list-panel">
+            <div class="list">
+                @for (int i = 0; i < albumDetail.packageList.Count; i++)
+                {
+                    var packageEntity = albumDetail.packageList[i];
+
+                    var url = string.Format("http://www.zmjiudian.com/Hotel/Package/{0}", packageEntity.PID);
+                    if (isApp)
+                    {
+                        url += string.Format("?userid={{userid}}");
+                        url = string.Format("whotelapp://www.zmjiudian.com/gotopage?url={0}", HttpUtility.UrlEncode(url));
+                    }
+                    else
+                    {
+                        url += string.Format("?userid={0}", userid);
+
+                    }
+                    <div class="item" onclick="gourl('@url')">
+                        <div class="around">
+                            <div class="t1">@packageEntity.HotelName</div>
+                            <div class="t2">
+                                @(packageEntity.HotelScore)/5分 @(packageEntity.HotelReviewCount)条点评
+                            </div>
+                            <div class="pic"><img src="@packageEntity.HotelPicUrl" alt="" /></div>
+                            <div class="info">@packageEntity.RecomemndWord</div>
+                            <div class="shop-info">
+                                <span class="p">参考价：@(packageEntity.HotelPrice)起</span>
+                                <a href="@url" class="lnk">直达链接>></a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>   
+    }
+
+    <footer>
+        <input type="hidden" id="userid" value="@userid" />
+        <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+    </footer>
+    <div style="margin: 2em 0 0 0; display: none; "><a href="whotelapp://www.zmjiudian.com/gotopage?url=http://192.168.1.22:8081/hotel/collection/1?userid=4512657">GO APP (Local) >>></a></div>
+    <script src="~/Content/js/jquery-1.10.2-min.js"></script>
+    <script src="~/Content/js/framework/config.js"></script>
+    <script src="~/Content/js/framework/zmjiudian.js"></script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/hotel/collection.js?v=@(Helpers.curAppVer())"></script>
+
+    <script type="text/javascript">
+        var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+        document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F3566e9570ddbe6722a51adedffbf065b' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+        <script>
+
+            GetWeixinApiConfig();//注册
+
+            wx.ready(function () {
+
+                wx.onMenuShareTimeline({
+                    title: '@albumDetail.shareModel.title',
+                    link: '@albumDetail.shareModel.shareLink',
+                    imgUrl: '@(albumDetail.shareModel.photoUrl)',
+                    success: function (res) {
+                    },
+                    cancel: function (res) {
+                    }
+                });
+
+                wx.onMenuShareAppMessage({
+                    title: '@albumDetail.shareModel.title',
+                    link: '@albumDetail.shareModel.shareLink',
+                    imgUrl: '@(albumDetail.shareModel.photoUrl)',
+                    success: function (res) {
+                    },
+                    cancel: function (res) {
+                    }
+                });
+
+            });
+
+            function GetWeixinApiConfig() {
+
+                var url = location.href.split("#")[0];
+                $.ajax({
+                    url: '/Coupon/GetWeixinConfigInfo',
+                    type: 'POST',
+                    data: { url: url },
+                    dataType: 'json',
+                    async: false,
+                    error: function () {
+                        console.log("网络服务错误");
+                    },
+                    success: function (result) {
+                        if (typeof (result.Success) != undefined && result.Success == 1) {
+                            return false;
+                        }
+                        else {
+                            //得到微信config的值
+                            var array = [
+                              'checkJsApi',
+                              'onMenuShareTimeline',
+                              'onMenuShareAppMessage',
+                              'hideOptionMenu'
+                            ];
+                            if (result.jsApiList) {
+                                var jsArray = result.jsApiList.split(',');
+                                for (var key in jsArray) {
+                                    array.push("" + jsArray[key]);
+                                }
+                            }
+
+                            wx.config({
+                                debug: false,
+                                appId: result.appId,
+                                timestamp: "" + result.timestamp,
+                                nonceStr: result.nonceStr,
+                                signature: result.signature,
+                                jsApiList: array
+                            });
+                        }
+                    }
+                });
+            }
+
+        </script>
+    }
+    else if (isApp)
+    {
+        <script>
+            try {
+                onAppShareCall = function () {
+                    var title = "@(albumDetail.shareModel.title)";
+                    var Content = "@(albumDetail.shareModel.Content)";
+                    var photoUrl = "@(albumDetail.shareModel.photoUrl)";
+                    var shareLink = "@(albumDetail.shareModel.shareLink)";
+                    try { whotel.appShareData(title, Content, photoUrl, shareLink); } catch (e) { }
+                    var returnStr = '{"title":"{0}","Content":"{1}","photoUrl":"{2}","shareLink":"{3}"}';
+                    return returnStr.format(title, Content, photoUrl, shareLink);
+                }
+                onAppShareCall();
+            }
+            catch (e) { }
+        </script>
+    }
+</body>
+</html>

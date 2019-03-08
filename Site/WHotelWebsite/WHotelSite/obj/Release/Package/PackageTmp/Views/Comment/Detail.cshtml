@@ -1,0 +1,582 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params.Hotel
+@using HJD.CommentService.Contract
+@model CommentInfoModel
+@{    
+    DateTime dateCheckIn = ViewBag.CheckInDate;
+    DateTime dateCheckOut = ViewBag.CheckOutDate;
+    string CheckIn = ViewBag.CheckIn;
+    string CheckOut = ViewBag.CheckOut;
+    
+    HotelItem4 hotel = ViewBag.hotel;
+
+    HotelPrice2 price = ViewBag.price;
+    string priceTypeName = hotel.PriceType == 2 ? "特惠专享" : hotel.PriceType == 3 ? "特惠套餐" : "";
+    List<PDayItem> calendar = ViewBag.calendar;
+    ViewBag.Title = string.Format("{0}玩点介绍_优惠价格_用户评价-{0}附近好玩_好吃美食-周末酒店", hotel.Name);
+    ViewBag.Keywords = string.Format("{0}{1}{2}点击查看更多{3}网友点评、玩点，特色、优惠价格，发现最适合你的酒店。", hotel.MinPrice > 0 ? "参考价格￥" + @hotel.MinPrice.ToString("0") + "起，" : string.Empty, hotel.Score > 0 ? "平均点评分" + hotel.Score.ToString("0.0") + "分（总分5分），" : string.Empty, hotel.Featrues != null && hotel.Featrues.Count > 0 ? "适合" + string.Join("_", hotel.Featrues.Select(p => p)) + "，" : string.Empty, hotel.Name);
+    ViewBag.Description = string.Format("{0}玩点介绍_优惠价格_用户评价-{0}附近好玩_好吃美食", hotel.Name);
+    ViewBag.BodyClass = "hoteldetailpage";
+
+    string fullHeart = ViewBag.showFullHeart ? "" : "display: none";
+    string airHeart = ViewBag.showAirHeart ? "" : "display: none";
+    bool isShowWrite = UserState.UserID != 0 ? true : false;
+    //string zmjdWB = "@周末酒店";
+
+    CommentInfoEntity info = Model.commentInfo;
+    string hotelRate = ViewReturnValueHelper.CommentInfoConcat(1, 1, info);
+    string roomRate = ViewReturnValueHelper.CommentInfoConcat(3, 2, info);
+    string playRate = ViewReturnValueHelper.CommentInfoConcat(4, 3, info);
+    string eatRate = ViewReturnValueHelper.CommentInfoConcat(5, 4, info);
+    string scoreStar = "~/Content/images/star2-" + (info.Comment.Score == 0 ? 5 : info.Comment.Score).ToString() + ".png";
+
+    string firstPic = hotel.Pics != null && hotel.Pics.Count != 0 ? hotel.Pics[0] : "";
+    string oldPicUrl = WHotelSite.Utils.GetFitPicUrl(firstPic);
+    
+    //string firstPic = hotel != null && hotel.PicCount != 0 ? hotel.Pics[0] : "";
+    //string shareContent = hotel.ShareDesc;
+    //CommentShareModel shareModel = Model.shareModel;
+
+    //string firstPic = hotel.Pics != null && hotel.Pics.Count != 0 ? hotel.Pics[0] : "";
+    //string oldPicUrl = WHotelSite.Utils.GetFitPicUrl(firstPic);
+    //Enums.AppPhotoSize s1 = HJDAPI.Common.Helpers.Enums.AppPhotoSize.small;
+    //string s2 = "appdetail1s"; //Enums.AppPhotoSize s2 = HJDAPI.Common.Helpers.Enums.AppPhotoSize.appdetail;
+    //string newPicUrl = oldPicUrl != "" ? oldPicUrl.Replace(s2, s1.ToString()) : "";
+}
+
+<!-- HotelName -->
+<div class="container mainbody">
+    <div class="row">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            <div class="row hidden-xs hidden-sm">
+                <div class="col-md-6 hotelname">
+                    @hotel.Name
+                </div>
+                <div class="col-md-6 hotelstar">
+                    @Helpers.StarImage(Url, hotel.Star, null)
+                </div>
+                <div style="float:right">                    
+                    <div class="bdsharebuttonbox" data-tag="share_1">
+	                    <a class="bds_weixin" data-cmd="weixin"></a>
+	                    <a class="bds_tsina" data-cmd="tsina"></a>
+                        @*<wb:share-button addition="number" type="icon" count="y" url="@Request.Url.AbsoluteUri" size="small" pic="@newPicUrl" language="zh_cn" appkey="2410638867" title="@zmjdWB @Model.ShareDesc"></wb:share-button>*@
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <!-- Hotel Left -->
+                <div class="col-md-8 zmpanel">
+                    @*照片头*@
+                    <div class="hotelphoto">
+                        <div>
+                            <a href="@Url.Action("Photos", "Hotel", new { hotel = hotel.HotelID})"><img src="@oldPicUrl" class="img-responsive" alt="暂无酒店相关图片" /></a>
+                        </div>
+                        @if (isShowWrite)
+                        {
+                            <div class="collect" style="right:59px;">
+                                <a href="@Url.Action("Section", "Comment", new { hotel = hotel.HotelID, section = 0, order = 0 })" style="color:white;font-size:13px" id="writeComment" data-value="@hotel.HotelID" title="写点评"><img src="@Url.Content("~/Content/images/icon_dp.png")"></a>
+                            </div>
+                        }
+                        <div class="collect" id="addCollectDiv" style="@airHeart" title="添加收藏"><a id="addCollect"><img src="@Url.Content("~/Content/images/icon_collect1.png")"></a><input type="hidden" id="interestId" value="@hotel.InterestID" /></div>
+                        <div class="collect" id="removeCollectDiv" style="@fullHeart" title="取消收藏"><a id="removeCollect"><img src="@Url.Content("~/Content/images/icon_collect2.png")"></a></div>						    
+                        <div class="back visible-xs visible-sm" onclick="javascript: window.close();">
+                            <a><img src="@Url.Content("~/Content/images/icon_back1.png")"></a>
+                        </div>
+                        @if (hotel.Pics != null && hotel.Pics.Any())
+                        {
+                            <div class="photonum">
+                                @hotel.PicCount 张照片
+                            </div>
+                        }
+                    </div>
+
+                    @*手机版套餐列表*@
+                    <div class="panel panel-default reserve3 visible-xs visible-sm">
+                        <div class="panel-body">
+                            <table cellspacing="0" cellpadding="0" border="0" class="" width="100%">
+                                <tr>
+                                    <td class="title hidden-xs">
+                                        <b>@hotel.Name</b><br />@Helpers.StarImage(Url, hotel.Star, "starsmall")
+                                    </td>
+                                    <td class="visible-xs" style="background:white;height:50px;" valign="top">
+                                        <div class="title2"><b>@hotel.Name</b></div>@Helpers.StarImage(Url, hotel.Star, "starsmall")
+                                    </td>
+                                    <td width="20%">                                        
+                                        <a href="@Url.Action("Packages", "Hotel", new { hotel = hotel.HotelID, checkIn = CheckIn, checkOut = CheckOut, pid = 0 })">
+                                            <table border="0" width="100%" height="100%">
+                                                <tr>
+                                                    <td class="text-center pricetd">
+                                                        ￥<strong>@hotel.MinPrice.ToString("0")</strong>
+                                                        起<br />
+                                                        @priceTypeName
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </a>
+                                    </td>
+                                    <td width="5%" class="aarow"><img src="@Url.Content("~/Content/Images/icon-aarow1.png")" alt="" /></td>
+                                </tr>
+                            </table>
+                        </div>
+                        @if (hotel.PackageList != null && hotel.PackageList.Count != 0)
+                        {
+                            <div class="panel-body">
+                                @for(int i = 0; i < hotel.PackageList.Count; i++) { 
+                                    PackageItem pi = hotel.PackageList[i];
+                                    <table cellspacing="0" cellpadding="0" border="0" class="" width="100%">
+                                        <tr>
+                                            <td style="background:white;width:58%" valign="top">
+                                                <div class="title" style="font-size:1.2em">@pi.Brief</div>
+                                            </td>
+                                            <td style="background: white;color:#ff8c01" align="right">
+                                                ￥<span style="font-size: 1.7em; color: #ff8c01;">@pi.Price.ToString("0")</span>
+                                                <a href="@Url.Action("Packages", "Hotel", new { hotel = hotel.HotelID, checkIn = CheckIn, checkOut = CheckOut, pid = pi.PID })">
+                                                    <img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" />
+                                                </a>
+                                            </td>
+                                            <td width="4%" class="text-right" style="background-color:white"></td>
+                                        </tr>
+                                    </table>
+                                    if (i != hotel.PackageList.Count - 1)
+                                    {
+                                        @*<hr class="linedotted" />*@
+                                    }
+                                }
+                                <table cellspacing="0" cellpadding="0" border="0" class="tstable" width="100%">
+                                    <tr>
+                                        <td style="background:white;width:45%" valign="top"></td>
+                                        <td style="background: white;color:#ff8c01" class="text-right">
+                                            <a href="@Url.Action("Packages", "Hotel", new { hotel = hotel.HotelID, checkIn = CheckIn, checkOut = CheckOut, pid = 0 })">更多特惠套餐<img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" /></a>
+                                        </td>
+                                        <td width="4%" class="text-right" style="background-color:white"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        }
+                    </div>
+
+                    @*待修改*@
+                    <div class="panel panel-default">
+	                    <div class="panel-heading">@Model.nickName 的点评</div>
+	                    <div class="panel-body">
+		                    <p>总体印象： <img src="@Url.Content(@scoreStar)" class="dpstar" alt="" /></p>
+		                    <div class="photolist">
+			                    @foreach (string url in @Model.photoInfo)
+			                    {
+				                    <a><img src="@Url.Content(url)" class="dpphoto" alt="" /></a>
+			                    }
+		                    </div>
+		                    <dl class="dl-horizontal detailinfo3">
+			                    <dt>综合评价：</dt>
+			                    <dd>@hotelRate</dd>
+			                    <dt>房间的设施：</dt>
+			                    <dd>@roomRate</dd>
+			                    <dt>玩点：</dt>
+			                    <dd>@playRate </dd>
+			                    <dt>美食：</dt>
+			                    <dd>@eatRate</dd>
+		                    </dl>
+	                    </div>
+                    </div>
+
+                    @*点评汇总*@
+                    @if (hotel.ReviewCount > 0)
+                    {
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <table cellspacing="0" cellpadding="0" border="0" class="tstable" width="100%">
+                                    <tr>
+                                        <td width="20%" class="title">点评汇总</td>
+                                        <td class="tag">
+                                            <span class="score1">@hotel.Score.ToString("0.0")</span><span class="score2">/ 5分</span>&nbsp;&nbsp;&nbsp;
+                                            @if (hotel.ReviewCount > 0)
+                                            {
+                                                <a href="@Url.Action("Reviews", "Hotel", new { hotel = hotel.HotelID })">共@(hotel.ReviewCount)点评</a>
+                                            }
+                                        </td>
+                                        <td width="10%" class="text-right"><a href="@Url.Action("Reviews", "Hotel", new { hotel = hotel.HotelID })"><img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" /></a></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                    
+                    @*特色*@
+                    @if (hotel.FeatureList != null && hotel.FeatureList.Count > 0)
+                    {
+                        int count = hotel.FeatureList.Count;
+                        <div class="panel panel-default">
+                            <div class="panel-heading">特色</div>
+                            <div class="panel-body">
+                                @if (count != 1)
+                                {
+                                    @*<ul class="list1">
+                                        @foreach (FeaturedCommentEntity fce in hotel.FeatureList)
+                                        {
+                                            <li>
+                                                @fce.FeaturedName
+                                                @if (!String.IsNullOrEmpty(item.pic))
+                                                {
+                                                    <div class="text-center">
+                                                        <img src="@item.pic" class="img-responsive2" />
+                                                    </div>
+                                                }
+                                            </li>
+                                        }
+                                    </ul>*@
+                                    <table cellspacing="0" cellpadding="0" border="0" class="tstable" width="100%">
+                                        @foreach (FeaturedCommentEntity fce in hotel.FeatureList)
+                                        {
+                                            <tr>
+                                                <td width="20%" valign="top" align="left" class="title">@fce.FeaturedName</td>
+                                                <td style="text-justify:auto" class="tag">
+                                                    @fce.Comment
+                                                </td>
+                                                <td width="10%" class="text-right"><a href="@Url.Action("Reviews", "Hotel", new { hotel = hotel.HotelID, feature = fce.FeaturedID, tftType = fce.CategoryID })"><img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" /></a></td>
+                                            </tr>
+                                        }
+                                    </table>                                    
+                                }
+                                else
+                                {
+                                    @Html.Raw("   ") @hotel.FeatureList[0].Comment
+                                }
+                                <div class="text-right"><a href="@Url.Action("Reviews", "Hotel", new { hotel = hotel.HotelID, feature = hotel.FeatureList[0].FeaturedID, tftType = hotel.FeatureList[0].CategoryID })">更多关于酒店特色的点评<img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" /></a></div>
+                            </div>
+                        </div>
+                    }
+                    
+                    @*位置*@
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <a href="@Url.Action("map", "Hotel", new { hotel = hotel.HotelID })">
+                                <table cellspacing="0" cellpadding="0" border="0" class="tstable" width="100%">
+                                    <tr>
+                                        <td width="20%" class="title">位置</td>
+                                        <td class="tag">
+                                            @hotel.Address
+                                        </td>
+                                        <td width="10%" class="text-right">
+                                            <img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </a>
+                        </div>
+                    </div>
+                    @helper InfoHelper(HotelInfo info)
+                    {
+                        if (String.IsNullOrEmpty(info.Description) && info.Items.Count == 1)
+                        {
+                            info.Description = info.Items[0].content.Replace("\n", "<br>");
+                            info.Items.Clear();
+                        }
+                        if (!String.IsNullOrEmpty(info.Description))
+                        {
+                            <p>
+                                @Html.Raw(info.Description)
+                            </p>
+                        }
+                        if (info.Items.Count > 0)
+                        {
+                            <ul class="list1">
+                                @foreach (Item item in info.Items)
+                                {
+                                    <li>
+                                        @Html.Raw(item.content.Replace("\n", "<br>"))
+                                        @if (!String.IsNullOrEmpty(item.pic))
+                                        {
+                                            <div class="text-center">
+                                                <img src="@item.pic" class="img-responsive2" />
+                                            </div>
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    }
+
+                    @*房间*@
+                    @if (hotel.RoomComment != null && hotel.RoomComment.Count != 0)
+                    {
+                        int count = hotel.RoomComment.Count;
+                        FeaturedCommentEntity firstRoom = hotel.RoomComment[0];
+                        <div class="panel panel-default">
+                            <div class="panel-heading">房间</div>
+                            <div class="panel-body">
+                                @if (count > 1)
+                                {
+                                    <table cellspacing="0" cellpadding="0" border="0" class="tstable" width="100%">
+                                        @foreach (FeaturedCommentEntity fce in hotel.FeatureList)
+                                        {
+                                            <tr>
+                                                <td width="20%" valign="top" align="left" class="title">@fce.FeaturedName</td>
+                                                <td style="text-justify:auto" class="tag">
+                                                    @fce.Comment
+                                                </td>
+                                                <td width="10%" class="text-right"><a href="@Url.Action("Reviews", "Hotel", new { hotel = hotel.HotelID, feature = fce.FeaturedID, tftType = fce.CategoryID })"><img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" /></a></td>
+                                            </tr>
+                                        }
+                                    </table>
+                                }
+                                else{
+                                    @Html.Raw("   ") @Html.Raw(firstRoom.Comment.Replace("\n", "<br />"))
+                                }
+                                <div class="text-right"><a href="@Url.Action("Reviews", "Hotel", new { hotel = hotel.HotelID, feature = firstRoom.FeaturedID, tftType = firstRoom.CategoryID })">更多关于房间的点评<img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" /></a></div>
+                            </div>
+                        </div>
+                    }
+                    @*玩点*@
+                    @if (hotel.EntertainmentList != null && hotel.EntertainmentList.Count != 0)
+                    {
+                        int count = hotel.EntertainmentList.Count;
+                        FeaturedCommentEntity firstEntertain = hotel.EntertainmentList[0];
+                        <div class="panel panel-default">
+                            <div class="panel-heading">玩点</div>
+                            <div class="panel-body">
+                                @if (count > 1)
+                                {
+                                    <table cellspacing="0" cellpadding="0" border="0" class="tstable" width="100%">
+                                        @foreach (FeaturedCommentEntity fce in hotel.EntertainmentList)
+                                        {
+                                            <tr>
+                                                <td width="20%" valign="top" align="left" class="title">@fce.FeaturedName</td>
+                                                <td style="text-justify:auto" class="tag">
+                                                    @fce.Comment
+                                                </td>
+                                                <td width="10%" class="text-right"><a href="@Url.Action("Reviews", "Hotel", new { hotel = hotel.HotelID, feature = fce.FeaturedID, tftType = fce.CategoryID })"><img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" /></a></td>
+                                            </tr>
+                                        }
+                                    </table>
+                                }
+                                else{
+                                    @Html.Raw("   ") @Html.Raw(firstEntertain.Comment.Replace("\n", "<br />"))
+                                }
+                                <div class="text-right"><a href="@Url.Action("Reviews", "Hotel", new { hotel = hotel.HotelID, feature = firstEntertain.FeaturedID, tftType = firstEntertain.CategoryID })">更多关于玩点的点评<img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" /></a></div>
+                            </div>
+                        </div>
+                    }
+                    
+                    @*附近玩点*@
+                    @*@if(hotel.Interest != null && hotel.Interest.Items != null && hotel.Interest.Items.Count != 0){
+                       <div class="panel panel-default">
+                           <div class="panel-heading">附近玩点</div>
+                           <div class="panel-body">
+                               <ul class="list1">
+                                   @foreach (Item item in hotel.Interest.Items)
+                                   {
+                                       <li>@item.content.Replace("\n", "<br />")</li>
+                                   }
+                               </ul>
+                           </div>
+                        </div>
+                    }*@
+                    
+                    @*美食*@
+                    @if (hotel.FoodComment != null && hotel.FoodComment.Count != 0)
+                    {
+                        int count = hotel.FoodComment.Count;
+                        FeaturedCommentEntity firstFood = hotel.FoodComment[0];
+                           <div class="panel panel-default meishi">
+                               <div class="panel-heading">美食</div>
+                               <div class="panel-body">
+                                   @if (count > 1)
+                                   {
+                                       <table cellspacing="0" cellpadding="0" border="0" class="tstable" width="100%">
+                                       @foreach (FeaturedCommentEntity fce in hotel.FoodComment)
+                                       {
+                                            <tr>
+                                                <td width="20%" valign="top" align="left" class="title">@fce.FeaturedName</td>
+                                                <td style="text-justify:auto" class="tag">
+                                                    @fce.Comment
+                                                </td>
+                                                <td width="10%" class="text-right"><a href="@Url.Action("Reviews", "Hotel", new { hotel = hotel.HotelID, feature = fce.FeaturedID, tftType = fce.CategoryID })"><img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" /></a></td>
+                                            </tr>
+                                       }
+                                       </table>
+                                   }
+                                   else { 
+                                        @Html.Raw("   ") @Html.Raw(firstFood.Comment.Replace("\n", "<br />"))
+                                   }
+                                   <div class="text-right"><a href="@Url.Action("Reviews", "Hotel", new { hotel = hotel.HotelID, feature = firstFood.FeaturedID, tftType = firstFood.CategoryID })">更多关于美食的点评<img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" /></a></div>
+                               </div>
+                               @if (hotel.RestaurentList.Count > 0){
+                                   int outFoodMax = 3;
+                                   <div class="panel-heading">餐馆推荐</div>
+                                   <div class="panel-body">
+                                       <ul class="list1">
+                                            @foreach (HotelRestaurantEntity entity in hotel.RestaurentList)
+                                            {
+                                                @*14-12-17 tracy 酒店内餐厅不显示*@
+                                                if (!entity.IsInner && !(entity.Distance == "0") && outFoodMax-- > 0)
+                                                {
+                                                    <a href="@entity.DPURL">
+                                                        <li class="reslist2">
+                                                            @entity.Name @((entity.IsInner || entity.Distance == "0") ? "(酒店内)" : ("（距酒店" + entity.Distance.ToString() + "米)"))
+                                                            <p>
+                                                                @if (entity.Fee > 0)
+                                                                {
+                                                                    @Html.Raw("人均消费 ￥") @entity.Fee @Html.Raw("&nbsp;&nbsp;")
+                                                                }
+                                                                口味 @entity.Taste &nbsp;&nbsp; 环境 @entity.Environment &nbsp;&nbsp; 服务 @entity.Service
+                                                            </p>
+
+                                                            @if (!String.IsNullOrEmpty(entity.Tag))
+                                                            {
+                                                                <p>标签：@entity.Tag</p>
+                                                            }
+                                                            @*<p class="text-right more1"><a href="@entity.DPURL">来自大众点评</a></p>*@
+                                                        </li>
+                                                    </a>
+                                                }
+                                            }
+                                       </ul>
+                                   </div>
+                                }
+                            </div>
+                       }
+                    @{
+                        List<string[]> items = new List<string[]>();
+                        if (!String.IsNullOrEmpty(hotel.OpenYear))
+                        {
+                            items.Add(new string[] { "开业", hotel.OpenYear, null });
+                        }
+                        if (!String.IsNullOrEmpty(hotel.Address))
+                        {
+                            items.Add(new string[] { "地址", hotel.Address, Url.Action("Map", "Hotel", new { hotel = hotel.HotelID }) });
+                        }
+                        if (!String.IsNullOrEmpty(hotel.Tel))
+                        {
+                            items.Add(new string[] { "电话", hotel.Tel, "tel:" + hotel.Tel });
+                        }
+                        bool hasLocation = hotel.GLat != 0 || hotel.GLon != 0;
+                    }
+                    @if (!string.IsNullOrEmpty(hotel.OpenYear))
+                    {
+                        <div class="panel panel-default zmts">
+                            <div class="panel-body">
+                                <table cellspacing="0" cellpadding="0" border="0" class="tstable" width="100%">
+                                    <tr>
+                                        <td width="15%" class="title">开业：</td>
+                                        <td class="tag">@hotel.OpenYear</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(hotel.ReBuildInfo))
+                    {
+                        <div class="panel panel-default zmts">
+                            <div class="panel-body">
+                                <table cellspacing="0" cellpadding="0" border="0" class="tstable" width="100%">
+                                    <tr>
+                                        <td width="15%" class="title">新装修：</td>
+                                        <td class="tag">@hotel.ReBuildInfo</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(hotel.Tel))
+                    {
+                        <div class="panel panel-default zmts">
+                            <div class="panel-body">
+                                <a href="@("tel:" + hotel.Tel)">
+                                    <table cellspacing="0" cellpadding="0" border="0" class="tstable" width="100%">
+                                        <tr>
+                                            <td width="15%" class="title">电话：</td>
+                                            <td class="tag">@hotel.Tel</td>
+                                            <td width="10%" class="text-right"><img src="@Url.Content("~/Content/Images/icon-aarow3.png")" alt="" /></td>
+                                        </tr>
+                                    </table>
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <!-- Hotel Right -->
+                <div class="col-md-4 visible-md visible-lg zmrightpanel">
+                    <div class="panel panel-default date">
+                        <div class="panel-body">
+                            <form role="form">
+                                <table cellspacing="0" cellpadding="3" border="0" class="" width="100%">
+                                    <tr>
+                                        <td width="45%" class="text-center">
+                                            <b>入住时间</b>
+                                        </td>
+                                        <td></td>
+                                        <td width="45%" class="text-center">
+                                            <b>退房时间</b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control text-center btndate" id="checkIn" value="@CheckIn">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <img src="@Url.Content("~/Content/images/date1.png")" alt="" />
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control text-center btndate" id="checkOut" value="@CheckOut">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                    @if (!String.IsNullOrEmpty(priceTypeName))
+                    {
+                        <div class="panel panel-default reserve2">
+                            <div class="panel-body">
+                                <table cellspacing="0" cellpadding="0" border="0" class="" width="100%">
+                                    <tr>
+                                        <td class="title">
+                                            <b>@priceTypeName</b>
+                                        </td>
+                                        <td width="40%" class="text-center pricetd">
+                                            ￥<a href="@Url.Action("Packages", "Hotel", new { hotel = hotel.HotelID, checkIn = CheckIn, checkOut = CheckOut, pid = 0 })">
+                                            <strong>@hotel.MinPrice.ToString("0")</strong></a>起
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                    @foreach (OTAInfo2 otaInfo in price.OTAList)
+                    {
+                        if (otaInfo.Price == 0)
+                        {
+                            continue;
+                        }
+                        <div class="panel panel-default reserve2">
+                            <div class="panel-body">
+                                <table cellspacing="0" cellpadding="0" border="0" class="" width="100%">
+                                    <tr>
+                                        <td class="title">
+                                            <b>@otaInfo.Name</b>
+                                        </td>
+                                        <td width="40%" class="text-center pricetd">
+                                            ￥ <a href="@Utils.BuildOTALink(otaInfo.AccessURL, dateCheckIn, dateCheckOut)" target="_blank">
+                                               <strong>@otaInfo.Price.ToString("0")</strong>
+                                            </a>起
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                    @Helpers.QRCodes(Url)
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>

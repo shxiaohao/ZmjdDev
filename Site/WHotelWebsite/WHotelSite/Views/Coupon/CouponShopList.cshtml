@@ -1,0 +1,177 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    Layout = null;
+    
+    var isApp = ViewBag.IsApp;
+    var isVip = ViewBag.IsVip;
+    var userid = ViewBag.UserId;
+    var activetag = ViewBag.ActiveTag;
+    var onlyVip = ViewBag.OnlyVip;
+    var groupNo = ViewBag.GroupNo;
+    var showBuyVip = !isVip;
+
+    var topBannerCount = 10;
+    RoomCouponActivityListModel list = ViewBag.ShowList;
+    if (list != null && list.Items != null && list.Items.Count > 0)
+    {
+        topBannerCount = list.Items.Count;
+    }
+
+    var title = "VIP专享优惠";
+    var topPicUrl = "http://whphoto.b0.upaiyun.com/116LTWJ0_640x360";
+
+    //groupNo==123123 超值团列表
+    if (groupNo == 123123)
+    {
+        title = "超值团";
+        topPicUrl = "http://whphoto.b0.upaiyun.com/116JPUz0_640x360";
+
+        showBuyVip = false;
+    }
+    else
+    {
+        if (activetag == 1)
+        {
+            title = "双十一VIP专场";
+            topPicUrl = "http://whphoto.b0.upaiyun.com/116CKoQ1_640x360";
+        }   
+    }
+    
+    ViewBag.Title = title;
+    if (!string.IsNullOrEmpty(topPicUrl)) { list.TopPicUrl = topPicUrl; }
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+    <title>@(ViewBag.Title)</title>
+    <link href="/content/css/coupon/couponshoplist.css?v=@(Helpers.curAppVer())" rel="stylesheet">
+    <link href="~/Content/css/framework/util.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+</head>
+<body>
+    <div class="main">
+
+        @if (!string.IsNullOrEmpty(list.TopPicUrl))
+        {
+            <div class="photo"><img src="@list.TopPicUrl" alt="" /></div>   
+        }
+
+        @if (showBuyVip)
+        {
+            <div id="homeVipBanner" class="home-hide" onclick="gourl('/Coupon/VipShopInfo?_newpage=1')"><img src="http://whfront.b0.upaiyun.com/app/img/home/home-vip-banner.png?v-20161102.1" alt="vip" /></div>   
+        }
+
+        <div class="list">
+        @if (list != null && list.Items != null && list.Items.Count > 0)
+        {
+            for (int i = 0; i < list.Items.Count; i++)
+            {
+                var item = list.Items[i];
+                var id = item.ActivityID;
+                var img = item.PicUrl.Replace("_applist", "_640x427");
+                var name = item.HotelName;
+                var packageBrief = item.PackageBrief;
+                var price = item.Price;// = 99999;
+                var marketPrice = item.MarketPrice;
+                var label = item.PriceDateType;
+                var tag = item.PriceType;
+                var tagCss = string.IsNullOrEmpty(tag) ? "_0" : "";
+
+                var nowTimeObj = DateTime.Now;
+                var endTimeObj = item.StartSellTime;
+                var closeTimeObj = item.EndSellTime;
+
+                var _v = marketPrice - price;
+                
+                <div class="item" onclick="gourl('/coupon/shop/@id?userid=@(userid)&realuserid=1&_newpage=1&_dorpdown=1')">
+                    <div class="h-img">
+                        @if (i < 2)
+                        {
+                            <img src="@img" alt="" />
+                        }
+                        else
+                        {
+                            <img data-original="@img" data-lazyload-id="@i" alt="" />
+                        }
+                        <div class="h-tit-tip-mode"></div>
+                        <div class="h-tit-tip-txt" style="left: 0.7em;top: 0.6em;">
+                            <span class="state timer-tag"
+                                  data-year0="@nowTimeObj.Year"
+                                  data-month0="@(nowTimeObj.Month-1)"
+                                  data-day0="@nowTimeObj.Day"
+                                  data-hour0="@nowTimeObj.Hour"
+                                  data-minute0="@nowTimeObj.Minute"
+                                  data-second0="@nowTimeObj.Second"
+                                  data-year1="@endTimeObj.Year"
+                                  data-month1="@(endTimeObj.Month-1)"
+                                  data-day1="@endTimeObj.Day"
+                                  data-hour1="@endTimeObj.Hour"
+                                  data-minute1="@endTimeObj.Minute"
+                                  data-second1="@endTimeObj.Second"
+                                  data-year2="@closeTimeObj.Year"
+                                  data-month2="@(closeTimeObj.Month - 1)"
+                                  data-day2="@closeTimeObj.Day"
+                                  data-hour2="@closeTimeObj.Hour"
+                                  data-minute2="@closeTimeObj.Minute"
+                                  data-second2="@closeTimeObj.Second"></span>
+                        </div>
+                        @if (onlyVip == 1)
+                        {
+                            <div class="h-tit-tip-price3">
+							    <div class="d-price"><del><span>￥</span>@(marketPrice)起</del></div>
+							    <div class="v-price"><span>￥</span>@(price)起</div>
+							    <div class="v-icon"><span class="zmjd-iconfont">&#xe623;</span></div>
+						    </div>
+                        }
+                        else
+                        { 
+                            <div class="h-tit-tip-price"><span class="p-un">￥</span>@price</div>
+                        }
+                    </div>
+                    <div class="hname-info">
+                        <div class="hotel-name">@name</div>
+                        <div class="hotel-packagebrief">@packageBrief</div>
+                    </div>
+                </div>
+            }
+        }
+        </div>
+    </div>
+    <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+
+    <script src="~/Content/js/jquery-1.10.2-min.js"></script>
+    <script src="~/Content/js/jquery.lazyload.min.js"></script>
+    <script src="~/Content/js/framework/config.js"></script>
+    <script src="~/Content/js/framework/zmjiudian.js"></script>
+    <script src="~/Content/js/common.js"></script>
+    <script src="~/Content/js/coupon/couponshoplist.js?v=@(Helpers.curAppVer())"></script>
+    @if (!isApp)
+    {
+        <script type="text/javascript">
+            var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+            document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F3566e9570ddbe6722a51adedffbf065b' type='text/javascript'%3E%3C/script%3E"));
+        </script>   
+    }
+    <script>
+    try {
+        onAppShareCall = function () {
+            var title = "@(title)-周末酒店";
+            var Content = "@(title)";
+            var photoUrl = "@(topPicUrl.Replace("_jupiter", "_290x290s").Replace("_640x360", "_290x290s"))";
+            var shareLink = "http://www.shangjiudian.com/coupon/shoplist?onlyvip=@(onlyVip)&userid=0&activetag=@(activetag)&groupNo=@(groupNo)";
+            try { whotel.appShareData(title, Content, photoUrl, shareLink); } catch (e) { }
+            var returnStr = '{"title":"{0}","Content":"{1}","photoUrl":"{2}","shareLink":"{3}"}';
+            return returnStr.format(title, Content, photoUrl, shareLink);
+        }
+        onAppShareCall();
+    }
+    catch (e) { }
+    </script>
+</body>
+</html>

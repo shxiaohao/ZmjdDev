@@ -1,0 +1,118 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout0.cshtml";
+
+    //HotelAdapter.HotelItem2Result result = Model;
+    //HotelItem hotel = result.hotel;
+
+    HotelMapBasicInfo mapInfo = Model;
+
+    ViewBag.Title = string.Format("{0}地图-如何去{0}-周末酒店", mapInfo.HotelName);
+    ViewBag.Keywords = string.Format("点击查看更多{0}网友点评、玩点、特色、美食、优惠价格。", mapInfo.HotelName);
+    ViewBag.Description = string.Format("{0}地图-如何去{0}", mapInfo.HotelName);
+
+}
+
+@section styles
+{
+    <style type="text/css">
+        html, body {
+            height: 100%;
+        }
+        .a-map {
+            position:absolute;
+            top:0;
+            bottom:0;
+            width:100%;
+        }
+        .BMap_bubble_content h2 {
+            font-size: 15px;
+            margin: 0;
+            margin-bottom: 1em;
+            padding: 0
+        }
+        .BMap_bubble_content p {
+            font-size: 13px;
+            margin: 0; padding: 0;
+        }
+    </style>
+
+    <style type="text/css">
+        html, body, #map-canvas {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+}
+
+@section scripts
+{
+    @*国内地图*@
+    @if(mapInfo.InChina){
+        @Scripts.Render("http://api.map.baidu.com/api?v=1.5&ak=A9941e4625e1f42f8608afe140703784")
+        <script>
+            var map = new BMap.Map("map_canvas");
+            var glon = @mapInfo.Glon, glat = @mapInfo.Glat;
+            map.centerAndZoom(new BMap.Point(glon, glat), 14);
+
+            $.ajax({
+                url: 'http://api.map.baidu.com/ag/coord/convert',
+                data: { from: 2, to: 4, x: glon, y: glat },
+                dataType: 'jsonp',
+                jsonp: 'callback'
+            }).then(function (result) {
+                if (!result) {
+                    alert('请求地图服务失败');
+                    return;
+                }
+                var marker = new BMap.Marker(new BMap.Point(result.x, result.y));
+                map.addOverlay(marker);
+                @{
+                    string infoHtml = "<h2>" + mapInfo.HotelName + "</h2><p class=\"addr\">" + mapInfo.HotelName + "</p>";
+                }
+                var infoWindow = new BMap.InfoWindow(@Html.Raw(infoHtml.ToJson()));
+                marker.addEventListener('click', function () { this.openInfoWindow(infoWindow); });
+                marker.openInfoWindow(infoWindow);
+            }).fail(function () {
+                alert('请求地图服务失败');
+            });
+        </script>
+    }
+    else
+    {
+        @Scripts.Render("http://ditu.google.cn/maps/api/js?sensor=false&language=zh-CN&libraries=drawing")
+        <script>
+            var map;
+            function initialize() {
+                var mapOptions = {
+                    center: new google.maps.LatLng(@mapInfo.Glat, @mapInfo.Glon),
+                    zoom: 14,
+                    disableDefaultUI:true
+                };
+
+                map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+                addMark();
+            }
+
+            function addMark(){
+                var marker = new google.maps.Marker({
+                    position: {lat: @mapInfo.Glat, lng: @mapInfo.Glon},
+                    map: map,
+                    //label:"这是个啥",
+                    animation: google.maps.Animation.DROP//添加动画
+                });
+                var infowindow = new google.maps.InfoWindow({
+                    content: '@mapInfo.HotelName'
+                });
+                infowindow.open(map, marker);
+                google.maps.event.addListener(marker, 'click', function() {
+                    infowindow.open(map,marker);
+                });            
+            }
+            google.maps.event.addDomListener(window, 'load', initialize);
+        </script>
+    }
+}
+
+<div id="map_canvas" class="a-map"></div>
+<div id="map-canvas"></div>

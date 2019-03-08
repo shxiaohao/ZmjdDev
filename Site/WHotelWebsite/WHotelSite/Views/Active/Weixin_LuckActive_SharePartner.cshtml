@@ -1,0 +1,170 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    var cssVersion = "190001010000";
+    try
+    {
+        //var last = this.GetType().Assembly.Location;
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex)
+    {
+    }
+
+    HJD.WeixinServices.Contracts.WeixinActivityEntity weixinActiveEntity = ViewBag.WeixinActiveEntity;
+    if (weixinActiveEntity.WeixinAcountId == 1)
+    {
+        ViewBag.Title = string.Format("周末酒店");
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 2)
+    {
+        ViewBag.Title = string.Format("周末酒店");
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 3)
+    {
+        ViewBag.Title = string.Format("尚旅游");
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 4)
+    {
+        ViewBag.Title = string.Format("尚旅游成都");
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 5)
+    {
+        ViewBag.Title = string.Format("美味至尚");
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 11)
+    {
+        ViewBag.Title = string.Format("遛娃指南");
+    }
+
+    ViewBag.BodyStyle = "overflow-x:hidden;";
+    ViewBag.BodyClass = "weixinreg_partner_body";
+
+    var isApp = ViewBag.IsApp;
+    var uid = ViewBag.Uid;
+    var openid = ViewBag.Openid;
+
+    var activeid = ViewBag.ActiveId;
+    var shareTitle = ViewBag.ShareTitle;
+    var shareLink = ViewBag.ShareLink;
+    shareLink = string.Format("http://www.zmjiudian.com/active/Weixin_LuckActive/{0}12345{1}", activeid, uid);
+    var shareImgUrl = ViewBag.ShareImgUrl;
+    var topBannerUrl = ViewBag.TopBannerUrl;
+
+    var luckCodeList = ViewBag.LuckCodeList;
+    List<int> hasPartnerIdList = ViewBag.HasPartnerIdList;
+    List<HJD.WeixinServices.Contracts.ActiveWeixinPartner> allPartnerList = ViewBag.AllPartnerList;
+    List<HJD.WeixinServices.Contracts.ActiveWeixinPartner> relPartnerList = ViewBag.RelPartnerList;
+
+    var showKeyword = ViewBag.ShowKeyword;
+}
+@section styles
+{
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .modal-content {
+            width: 90%;
+            margin: auto;
+        }
+
+        .modal-body {
+            padding: 2.6em 0.8em 1.7em 0.8em;
+        }
+
+        .modal-footer {
+            margin-top: 0;
+            padding: 0.7em 0.9em;
+        }
+
+        .btn-default, .btn-primary {
+            width: auto;
+            min-width: 4em;
+            border: none;
+            color: #3e9ec0;
+            font-size: 1.4em;
+        }
+
+        .box-big-btn {
+            width: 96%;
+        }
+
+        .box-btn-bottomborder {
+            padding-bottom: 0.7em;
+            margin-bottom: 0.3em;
+            border-bottom: 1px solid #eeeded;
+            border-radius: 0;
+        }
+    </style>
+}
+<script>
+
+
+</script>
+<link href="~/Content/css/active/weixinactive_luck.css?v=@cssVersion" rel="stylesheet" />
+<div class="weixin-partner-top">
+    <div class="t1">本期活动与以下公众号联合发布</div>
+    <div class="t2">长按二维码关注以下任一公众号， 回复“@(showKeyword)”，将额外获得3个抽奖码，提高中奖机会</div>
+</div>
+<div class="weixin-partner-list">
+    @if (relPartnerList != null)
+    {
+        for (int i = 0; i < relPartnerList.Count; i++)
+        {
+            var pObj = relPartnerList[i];
+            <div class="partner-item">
+                <div class="p-vcode">
+                    <img src="@(pObj.QrCodeUrl)" alt="" />
+                    
+                </div>
+                <div class="p-name">@(pObj.Name)@if (hasPartnerIdList.Contains(pObj.Id)){<span class="has-tip"> &bull; 已领取</span>}
+                </div>
+                <div class="p-line">&nbsp;</div>
+                <div class="p-info">@(pObj.Brief)</div>
+            </div>
+        }
+    }
+</div>
+<div class="weixin-partner-logo">
+    @if (weixinActiveEntity.WeixinAcountId == 1)
+    {
+        <img src="http://whfront.b0.upaiyun.com/www/img/Active/luck/activity-bottom-logo.png?v=20101009" alt="" />
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 2)
+    {
+        <img src="http://whfront.b0.upaiyun.com/www/img/Active/luck/activity-bottom-logo.png?v=20101009" alt="" />
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 3)
+    {
+        <img src="http://whfront.b0.upaiyun.com/www/img/Active/activity-bottom-logo-sly.png" alt="" />
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 4)
+    {
+        <img src="http://whfront.b0.upaiyun.com/www/img/Active/activity-bottom-logo-slycd.png" alt="" />
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 5)
+    {
+        <img src="http://whfront.b0.upaiyun.com/www/img/Active/activity-bottom-logo-meiweizhishang2.png" alt="" />
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 6)
+    {
+        <img src="http://whfront.b0.upaiyun.com/www/img/Active/activity-bottom-logo-slybj2.png" alt="" />
+    }
+    else if (weixinActiveEntity.WeixinAcountId == 11)
+    {
+        <img src="http://whfront.b0.upaiyun.com/www/img/Active/luck/activity-bottom-logo-liuwazhinan.png" alt="" />
+    }
+</div>
+
+<input type="hidden" id="isapptxt" value="@(isApp?"1":"0")" />
+<!--  -->
+@section scripts
+{
+    @Scripts.Render("~/Content/js/bootbox.js?v=" + cssVersion, "~/Content/js/active/weixinactive_luck.js?v=" + cssVersion)
+}

@@ -1,0 +1,4 @@
+
+[18/5/16 18:39:36] Start Job [DownLoadWexinLiuwaMaterialJob]
+[18/5/16 18:40:12] LastOffset已经存储至本地！1
+[18/5/16 18:40:13] 起始：Offset【1】 Count【10】

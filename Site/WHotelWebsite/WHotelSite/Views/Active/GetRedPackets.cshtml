@@ -1,0 +1,224 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params.Hotel
+@using HJD.CommentService.Contract
+@model CommentInfoModel3
+@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+    
+    var cssVersion = "190001010000";
+    try
+    {
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex) { }
+
+    ViewBag.Title = "周末酒店";
+
+    var isApp = ViewBag.IsApp;
+
+    var sourceId = ViewBag.SourceId;
+
+    var shareUserInfo = ViewBag.ShareUserInfo;
+}
+@section styles {
+    @Styles.Render("~/Content/css/active/gencashcoupon.css?v=" + cssVersion, "~/Content/css/active/gencashcoupon-ex.css?v=" + cssVersion)
+    <style>
+    </style>
+}
+
+<div id="page1" style="display:none;">
+    <div class="bg-panel">
+        <div class="item" id="bg-obj" style="">
+            <img src="http://whfront.b0.upaiyun.com/www/img/Active/coupon/cash-bg2.jpg" />
+            <div class="tip tip1" style="display: none;">更令人向往的<div class="sml">1000+度假酒店和精品民宿</div></div>
+            <div class="tip tip2" style="display: none;">更具性价比的<div class="sml">超低优惠</div></div>
+            <div class="tip tip3" style="display: none;">更有人情味的<div class="sml">管家式客服</div></div>
+        </div>
+    </div>
+    <div class="btn-panel">
+        <div class="join-btn" style="display:none;">领取现金券</div>
+    </div>
+</div>
+<div id="page2">
+    <div class="main-panel" id="onestep">
+        <div class="top"><img src="http://whfront.b0.upaiyun.com/www/img/Active/coupon/cash-content-top2.png" alt="" /></div>
+        <div class="middle">
+            <div class="shareuser">
+                @if (shareUserInfo.UserID > 0)
+                {
+                    <div class="head"><img src="@(shareUserInfo.AvatarUrl)" alt="@(shareUserInfo.NickName)" /></div>
+                    <div class="nick">@(shareUserInfo.NickName)</div>
+                }
+                <div class="tip">邀请你使用周末酒店</div>
+                <div class="tip-big">立获50元现金券</div>
+            </div>
+        </div>
+        <div class="middle-bar"><img src="http://whfront.b0.upaiyun.com/www/img/Active/coupon/cash-content-middle-bar.png" alt="" /></div>
+        <div class="middle">
+            <div class="phone">
+                <input type="tel" id="user-phone" placeholder="输入11位手机号" />
+            </div>
+            <div class="btn">
+                <input type="button" value="领取现金券" id="getcashcoupon" />
+            </div>
+        </div>
+        <div class="bottom"><img src="http://whfront.b0.upaiyun.com/www/img/Active/coupon/cash-content-bottom2.png" alt="" /></div>
+    </div>
+    <div class="foot-panel">
+        <img src="http://whfront.b0.upaiyun.com/www/img/Active/coupon/cash-bg-foot2.png" alt="" />
+    </div>
+
+    <div class="main-panel2" id="twostep" style="display:none;">
+        <div class="middle"><img src="http://whfront.b0.upaiyun.com/www/img/Active/coupon/cash-coupon-50-2.png" alt="" /></div>
+        <div class="bottom">
+            <div class="btn">
+                <input type="button" value="下载周末酒店APP" id="downloadapp" />
+            </div>
+            <div class="tip">
+                现金券已放入您的周末酒店APP账户<br /><span id="tip-phone-span"></span>中
+            </div>
+        </div>
+        <div class="foot"><img src="http://whfront.b0.upaiyun.com/www/img/Active/coupon/cash-content-bottom2.png" alt="" /></div>
+    </div>
+    <div class="foot-panel2" style="display: none;">
+        <img src="http://whfront.b0.upaiyun.com/www/img/Active/coupon/cash-bg-foot2.png" alt="" />
+    </div>
+</div>
+
+<input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+<input type="hidden" id="sourceId" value="@(sourceId)" />
+@section scripts
+{
+    <script src="~/Content/js/active/gencashcoupon.js"></script>
+    <script>
+
+        function gourl(url) {
+            location.href = url;
+        }
+
+        //var bgLoopTime = 9500;
+        //var loopShowBgTip = function () {
+        //    var bgItemObj = $(".bg-panel").find(".item");
+        //    if (bgItemObj) {
+        //        //bgItemObj.fadeIn(1000);
+
+        //        var tipObj1 = bgItemObj.find(".tip1");
+        //        var tipObj2 = bgItemObj.find(".tip2");
+        //        var tipObj3 = bgItemObj.find(".tip3");
+        //        tipObj1.fadeOut(500);
+        //        tipObj2.fadeOut(500);
+        //        tipObj3.fadeOut(500);
+
+        //        //1
+        //        showTip(tipObj1, 500, 1500);
+        //        //hideTip(tipObj1, 2800);
+
+        //        //2
+        //        showTip(tipObj2, 2000, 1500);
+        //        //hideTip(tipObj2, 5800);
+
+        //        //3
+        //        showTip(tipObj3, 3500, 1500);
+        //        //hideTip(tipObj3, 8300);
+
+        //        //btn
+        //        showTip($(".join-btn"), 5000, 800);
+
+        //        //all
+        //        //showTip(tipObj1, 9300, 100);
+        //        //showTip(tipObj2, 9600, 100);
+        //        //showTip(tipObj3, 9900, 100);
+        //    }
+        //};
+        //setTimeout(loopShowBgTip, 0);
+        //var loopBgTime = setInterval(loopShowBgTip, bgLoopTime);
+        var showTip = function (showTipObj, timeNum, showTime) {
+            setTimeout(function () {
+                if (showTipObj) {
+                    showTipObj.fadeIn(showTime);
+                }
+            }, timeNum);
+        };
+        var showTip2 = function (showTipObj, timeNum, showTime) {
+            setTimeout(function () {
+                if (showTipObj) {
+                    showTipObj.slideDown(showTime);
+                }
+            }, timeNum);
+        };
+        var hideTip = function (showTipObj, timeNum) {
+            setTimeout(function () {
+                if (showTipObj) {
+                    showTipObj.fadeOut(800);
+                }
+            }, timeNum);
+        };
+
+        //【启动页】加入周末酒店
+        $(".join-btn").click(function () {
+            $("#page1").fadeOut(300);
+            $("#page2").fadeIn(00);
+        });
+        $(".bg-panel").click(function () { $(".join-btn").click(); });
+
+        $(function () {
+            
+            //领取
+            $("#getcashcoupon").click(function ()
+            {
+                var phone = $("#user-phone").val();
+
+                if (phone == "") {
+                    alert("请输入手机号码");
+                    return;
+                }
+
+                if (!phone || phone.length != 11) {
+                    alert("手机号码输入有误");
+                    return;
+                }
+
+                var dic = {};
+                dic["phone"] = phone;
+                dic["sourceId"] = $("#sourceId").val();
+
+                $.get('/Active/JoinZmjdGetCoupon', dic, function (content) {
+
+                    var msg = content.Message;
+                    var suc = content.Success;
+
+                    switch (suc) {
+                        case "0":
+                        case "2":
+                            {
+                                $("#onestep").hide();
+                                $(".foot-panel").hide();
+                                $(".foot-panel2").show();
+
+                                $("#tip-phone-span").html(phone);
+                                $("#twostep").show();
+                                $(".right-top-panel").show();
+                                break;
+                            }
+                        default:
+                            {
+                                alert(msg);
+                                break;
+                            }
+                    }
+                });
+
+            });
+
+            //下载
+            $("#downloadapp").click(function ()
+            {
+                gourl('/Inspector/Jump?jumpurl=whotelapp://www.zmjiudian.com');
+            });
+
+        });
+    </script>
+}

@@ -1,0 +1,79 @@
+﻿@model IEnumerable<HJD.CommentService.Contract.UserCommentListItemEntity>
+@{
+    Layout = null;
+}
+
+@foreach (HJD.CommentService.Contract.UserCommentListItemEntity comment in Model)
+{
+    <a href="@Url.Action("Detail", "Comment", new { CommentID = comment.CommentID })" target="_self" class="collectRef">
+        <div class="row hotellist">
+            <div class="col-sm-5 hotelpic">
+                <img src= @(string.IsNullOrWhiteSpace(comment.HotelPics.FirstOrDefault()) ? "http://whphoto.b0.upaiyun.com/115eSkS0O6_jupiter": comment.HotelPics.FirstOrDefault()) class="img-responsive" alt="暂无图片" />
+                @*@if (hotel.PriceType == 2)
+                {
+                    <div class="tehui visible-xs">特惠·专享</div>
+                }
+                else if (hotel.PriceType == 3)
+                {
+                    <div class="tehui visible-xs">特惠·套餐</div>
+                }*@
+            </div>
+            <div class="col-sm-7 col-xs-12 hotelinfo">
+                <div class="titlehead hidden-xs"></div>
+                <h2>@comment.HotelName</h2>
+                @if (comment.CommentScore > 0)
+                {
+                    <div style="height: auto; overflow: hidden; ">
+                        <img style="vertical-align: middle; " src="@Url.Content("~/Content/images/star2-" + comment.CommentScore + ".png")" alt="@(comment.CommentScore)分" />
+                        <span style = "color: #ff8c01; font-size: 1.5em; font-family: Arial; vertical-align: middle; ">@(comment.CommentScore)分</span>
+                    </div>
+                }
+                @*<div style="display: inline-block; padding: 10px; width: 120px; height: 30px; border: 1px solid gray; -moz-border-radius: 15px; -webkit-border-radius: 15px; border-radius: 15px; ">
+
+                </div>*@
+
+        @*<div class="titlehead hidden-xs"></div>
+    <h2>@comment.HotelName</h2>
+    <img src="@Url.Content("~/Content/images/star2-" + comment.CommentScore + ".png")" class="starimg" alt="@comment.CommentScore" />
+    <span style="color: #ff8c01; font-size: 1.2em; font-family: Arial;">@(comment.CommentScore)分</span>*@
+
+
+                @*<a href="@Url.Action("Detail", "Comment", new { CommentID = comment.CommentID })" target="_self" class="collectRef">查看点评</a>*@
+                @*<h6>@(hotel.Score.ToString("0.0"))分 | @(hotel.ReviewCount)条点评</h6>*@
+                @*<h6>
+                @foreach (FeaturedEntity t in hotel.FeaturedList)
+                {
+                    @t.Name@:&nbsp;&nbsp;
+                }
+            </h6>*@
+                @*@if (hotel.PriceType == 2)
+            {
+                <div class="tehui hidden-xs">特惠·专享</div>
+            }
+            else if (hotel.PriceType == 3)
+            {
+                <div class="tehui hidden-xs">特惠·套餐</div>
+            }*@
+                @*<a href="javascript:;" class="collectUrl hidden"><div class="delcollect hidden-xs">取消收藏</div></a>*@
+            </div>
+            @*@if (hotel.MinPrice == 0)
+            {
+                <div class="price hidden-xs">
+                    查询价格
+                </div>
+                <div class="price price2 visible-xs">
+                    查询价格
+                </div>
+            }
+            else
+            {
+                <div class="price hidden-xs">
+                    ￥<strong>@( (int)hotel.MinPrice)</strong><i>起</i>
+                </div>
+                <div class="price price2 visible-xs">
+                    ￥<strong>@( (int)hotel.MinPrice)</strong><i>起</i>
+                </div>
+            }*@
+        </div>
+    </a>
+}

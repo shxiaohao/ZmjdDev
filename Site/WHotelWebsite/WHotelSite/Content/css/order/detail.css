@@ -1,0 +1,63 @@
+.get-coupon-info {
+    width:100%;
+    height:auto;
+    margin:0 0 0 0;
+    padding:0 0 0 0;
+    font-family:Arial;
+}
+    .get-coupon-info .img{
+        width:55%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0 0 0 0;
+    }
+        .get-coupon-info .img img{
+            width:100%;
+        }
+    .get-coupon-info .txt{
+        width:88%;
+        height:auto;
+        margin:0.8em auto 0 auto;
+        padding:0 0 0 0;
+        font-size:1.1em;
+        font-weight:bold;
+        color:#2c2c2c;
+        text-align:center;
+    }
+    .get-coupon-info .txt2{
+        width:88%;
+        height:auto;
+        margin:0.2em auto 0 auto;
+        padding:0 0 0 0;
+        font-size:1em;
+        color:#555;
+        text-align:center;
+    }
+
+.send-red-coupon-float {
+    width:4em;
+    height:auto;
+    position:fixed;
+    right:-0.8em;
+    top:10em;
+    cursor:pointer;
+}
+    .send-red-coupon-float img{
+        width:100%;
+    }
+
+.group-share-tip {
+    width:100%;
+    height:100%;
+    position:fixed;
+    left:0;
+    top:0;
+    z-index:210;
+    background: rgba(0,0,0,0.80);
+    overflow-y:auto;
+    -webkit-box-sizing : border-box;
+    -webkit-overflow-scrolling : touch;
+}
+    .group-share-tip img{
+        width:100%;
+    }

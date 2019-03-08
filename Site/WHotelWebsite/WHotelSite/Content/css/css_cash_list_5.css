@@ -1,0 +1,79 @@
+﻿@charset "utf-8";
+/* CSS Document */
+html, body {
+	/*background: url(../images/beijing.jpg) no-repeat;*/
+	background:#e6e6e6;
+	background-size: cover;
+	position: relative;
+	overflow: hidden;
+}
+a:hover{text-decoration: none !important; }
+a:active{background-color: #E76900;}
+
+.container {
+	position: relative;
+}
+.container .list-box {
+width: 100%;
+background: #f9f9f9;
+}
+
+.container .list-box .listItem {
+display: -webkit-box;
+position: relative;
+margin-left: 5%;
+padding-right: 2%;
+border-bottom: 1px solid #E4E4E4;
+}
+.list-box .listItem .info-l{
+    -webkit-box-flex:1;
+}
+.list-box .listItem .info-l p {
+  height: 80px;
+  line-height: 80px;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  padding: 0 5px 0 0px;
+  color: #888888;
+  font-size: 14px;
+}
+.list-box .listItem.disabled .info-l p{
+    color: #888;
+}
+.list-box .listItem .info-r {
+   width: 30%;
+   text-align: center;
+   padding-top: 2em;
+}
+.list-box .listItem .info-r a {
+display: inline-block;
+line-height: 2.4em;
+color: #fff;
+background-color: #ff8c01;
+width: 80%;
+font-size: 1.2em;
+border-radius: 2px;
+text-shadow: 0px 1px 1px rgba(69, 69, 69, 0.2);
+box-shadow: 1px 1px 1px 0px rgba(50, 50, 50, 0.1);
+border: 1px solid rgba(50, 50, 50, 0.1);
+}
+.list-box .listItem.disabled .info-r {
+color: rgb(152, 152, 152);
+background: none;
+border: none;
+box-shadow: none;
+text-shadow: none;
+margin-top: -.2em;
+font-size: 1.2em;
+}
+.list-box .listItem.disabled .info-r p {
+color: #999;
+line-height: 1.8em;
+font-size: .8em;
+}
+
+span.notice01 {
+color: #ff6800;
+}

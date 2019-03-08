@@ -1,0 +1,126 @@
+﻿.bg-panel {
+	width: 100%;
+	height: auto;
+    line-height:0.1em;
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+}
+
+    .bg-panel .item {
+	    width: 100%;
+	    height: auto;
+	    margin: 0 0 0 0;
+	    padding: 0 0 0 0;
+    }
+
+        .bg-panel .item img {
+	        width: 100%;
+        }
+
+    .bg-panel .item .tip1 {
+	    width: 100%;
+	    height: auto;
+        line-height:0.7em;
+	    margin: 0 0 0 0;
+	    padding: 0 0 0 0;
+	    text-align: center;
+	    font-size: 1.4em;
+	    color: #fff;
+	    font-weight:400;
+	    text-shadow: rgba(0, 0, 0, .1) 1px 1px 0;
+	    position: absolute;
+	    top: 3.5em;
+	    left: 0;
+    }
+
+        .bg-panel .item .tip1 .sml {
+	        width: 100%;
+	        height: auto;
+	        margin: 0.8em 0 0 0;
+	        padding: 0 0 0 0;
+	        text-align: center;
+	        font-size: 0.7em;
+	        color: #fff;
+	        font-weight: 400;
+	        text-shadow: rgba(0, 0, 0, .1) 1px 1px 0;
+        }
+
+    .bg-panel .item .tip2 {
+	    width: 100%;
+	    height: auto;
+        line-height:0.7em;
+	    margin: 0 0 0 0;
+	    padding: 0 0 0 0;
+	    text-align: center;
+	    font-size: 1.4em;
+	    color: #fff;
+	    font-weight: 400;
+	    text-shadow: rgba(0, 0, 0, .1) 1px 1px 0;
+	    position: absolute;
+	    top: 7em;
+	    left: 0;
+    }
+
+        .bg-panel .item .tip2 .sml {
+	        width: 100%;
+	        height: auto;
+	        margin: 0.8em 0 0 0;
+	        padding: 0 0 0 0;
+	        text-align: center;
+	        font-size: 0.7em;
+	        color: #fff;
+	        font-weight: 400;
+	        text-shadow: rgba(0, 0, 0, .1) 1px 1px 0;
+        }
+
+    .bg-panel .item .tip3 {
+	    width: 100%;
+	    height: auto;
+        line-height:0.7em;
+	    margin: 0 0 0 0;
+	    padding: 0 0 0 0;
+	    text-align: center;
+	    font-size: 1.4em;
+	    color: #fff;
+	    font-weight: 400;
+	    text-shadow: rgba(0, 0, 0, .1) 1px 1px 0;
+	    position: absolute;
+	    top:10.5em;
+	    left: 0;
+    }
+
+        .bg-panel .item .tip3 .sml {
+	        width: 100%;
+	        height: auto;
+	        margin: 0.8em 0 0 0;
+	        padding: 0 0 0 0;
+	        text-align: center;
+	        font-size: 0.7em;
+	        color: #fff;
+	        font-weight: 400;
+	        text-shadow: rgba(0, 0, 0, .1) 1px 1px 0;
+        }
+
+.btn-panel {
+	width: 100%;
+	height: auto;
+	text-align: center;
+	position: fixed;
+	bottom: 8em;
+	left: 0;
+}
+    .btn-panel .join-btn {
+	    width: 10em;
+	    height: 2.6em;
+	    line-height: 2.5em;
+	    margin: 0 auto 0 auto;
+	    font-size: 1.1em;
+	    text-align: center;
+	    color: rgba(255,255,255,0.95);
+	    background: rgba(0,0,0,0.4);
+	    border: 1px solid rgba(255,255,255,0.4);
+	    border-radius: 3em;
+    }
+        .btn-panel .join-btn:hover {
+	        background: rgba(0,0,0,0.5);
+        }

@@ -1,0 +1,9 @@
+﻿@{
+    ViewBag.Title = "预订跳转";
+}
+
+<h3>正在为您跳转。。。 。。。</h3>
+<script type="text/javascript">
+    window.location = @Html.Raw( "\"" + ViewBag.TransUrl + "\"" ) ;
+</script>
+

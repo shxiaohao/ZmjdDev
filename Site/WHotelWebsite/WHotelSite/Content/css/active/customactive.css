@@ -1,0 +1,200 @@
+﻿body {
+    background:#D1C198;
+    overflow-x:hidden;
+}
+
+/*reg*/
+.reg-body {
+    width:100%;
+    height:auto;
+    margin :0 0 0 0;
+}
+    .reg-body .head-panel{
+        width:100%;
+        height:auto;
+        margin :0 0 0 0;
+    }
+        .reg-body .head-panel img{
+            width:100%;
+            height:auto;
+            margin :0 0 0 0;
+        }
+    .reg-body .member-panel{
+        width:100%;
+        height:auto;
+        line-height:1.8em;
+        margin :0em auto 1.3em auto;
+        text-align:center;
+        font-size:1.3em;
+        color:#95814C;
+    }
+    .reg-body .form-panel{
+        width:88%;
+        height:auto;
+        margin :2em auto 5em auto;
+        display:table;
+    }
+        .reg-body .form-panel .top{
+            width:100%;
+            height:auto;
+            line-height:0.1em;
+            margin:0 0 0 0;
+            padding:0 0 0 0;
+            display:table;
+        }
+            .reg-body .form-panel .top img{
+                width:100%;
+            }
+        .reg-body .form-panel .middle{
+            width:100%;
+            height:auto;
+            margin:0 0 0 0;
+            padding:0 0 0 0;
+            display:table;
+        }
+            .reg-body .form-panel .middle .inp-div{
+                width:81%;
+                height:auto;
+                margin:0 auto 1.5em auto;
+                display:table;
+                text-align:center;
+            }
+                .reg-body .form-panel .middle .inp-div .lab {
+                    margin:0.2em 0 0 0;
+                    font-size:1.2em;
+                    color:#724627;
+                    display:inline-table;
+                }
+                .reg-body .form-panel .middle .inp-div .inp{
+                    width:79%;
+                    height:auto;
+                    line-height:1em;
+                    background-color:transparent;
+                    border:none;
+                    border-bottom:1px solid #95814C;
+                    border-radius:0;
+                    font-size:1.2em;
+                    color:#724627;
+                }
+                .reg-body .form-panel .middle .inp-div .inp-phone{
+                    width:74%;
+                    height:auto;
+                    line-height:1em;
+                    background-color:transparent;
+                    border:none;
+                    border-bottom:1px solid #95814C;
+                    border-radius:0;
+                    font-size:1.2em;
+                    color:#724627;
+                }
+                .reg-body .form-panel .middle .inp-div .inp-code{
+                    width:34%;
+                    height:auto;
+                    line-height:1em;
+                    background-color:transparent;
+                    border:none;
+                    border-bottom:1px solid #95814C;
+                    border-radius:0;
+                    font-size:1.2em;
+                    color:#724627;
+                }
+                .reg-body .form-panel .middle .inp-div .vCodeBtn{
+                    width:38%;
+                    height:auto;
+                    line-height:2.2em;
+                    margin:0em 0 0 2%;
+                    background:#D1C198;
+                    color:#724627;
+                    border:1px solid #724627;
+                    font-size:1.1em;
+                }
+            .reg-body .form-panel .middle .sub-div{
+                width:80%;
+                height:auto;
+                margin:2em auto 0 auto;
+                display:table;
+            }
+                .reg-body .form-panel .middle .submit{
+                    width:100%;
+                    line-height:2.5em;
+                    background:#C8B387;
+                    color:#724627;
+                    border:1px solid #724627;
+                    text-align:center;
+                    font-size:1.3em;
+                }
+
+            .reg-body .form-panel .middle .info{
+                width:100%;
+                height:auto;
+                margin:0 auto 0 auto;
+                display:table;
+            }
+                .reg-body .form-panel .middle .info .i1{
+                    width:100%;
+                    height:auto;
+                    margin:0 0 0.3em 0;
+                    font-size:1.4em;
+                    color:#95814C;
+                    text-align:center;
+                    font-weight:500;
+                }
+                .reg-body .form-panel .middle .info .i2{
+                    width:100%;
+                    height:auto;
+                    font-size:1.3em;
+                    color:#95814C;
+                    text-align:center;
+                }
+            .reg-body .form-panel .middle .btn{
+                width:80%;
+                height:auto;
+                margin:2em auto 0 auto;
+                display:table;
+            }
+                .reg-body .form-panel .middle .btn .look{
+                    width:100%;
+                    line-height:2.4em;
+                    background:#243233;
+                    color:#95814C;
+                    border:1px solid #95814C;
+                    text-align:center;
+                    font-size:1.2em;
+                    display:table;
+                }
+
+        .reg-body .form-panel .bottom{
+            width:100%;
+            height:auto;
+            line-height:0.1em;
+            margin:0 0 0 0;
+            padding:0 0 0 0;
+            display:table;
+        }
+            .reg-body .form-panel .bottom img{
+                width:100%;
+            }
+    .reg-body .result-panel{
+        width:100%;
+        height:auto;
+        margin :1em auto 0 auto;
+        display:table;
+    }
+        .reg-body .result-panel .info{
+                width:100%;
+                height:auto;
+                margin:0 auto 0 auto;
+                display:table;
+            }
+                .reg-body .result-panel .info img{
+                    width:100%;
+                }
+.reg-foot {
+    width:100%;
+    height:auto;
+    margin:0 0 2em 0;
+    text-align:center;
+}
+    .reg-foot img{
+        width:100%;
+    }

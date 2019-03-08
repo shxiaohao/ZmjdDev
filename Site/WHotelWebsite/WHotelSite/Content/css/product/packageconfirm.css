@@ -1,0 +1,118 @@
+﻿@charset "UTF-8";
+
+body {
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    background: #ffffff;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+/**/
+.main {
+    width: 100%;
+    max-width: 660px;
+    height: auto;
+    margin: 0 auto 0 auto;
+    background: #fff;
+}
+
+.date {
+    width:90%;
+    height:auto;
+    margin:0 auto 0 auto;
+    padding:1em 0 0 0;
+}
+
+.person {
+    width:100%;
+    height:auto;
+    margin:1em 0 0 0;
+    padding:1em 0 0 0;
+    border-top:1px solid #e0e0e0;
+}
+    .person .tit{
+        width:90%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0 0 0 0;
+        font-size:1.1em;
+        font-family:Arial;
+        color:#2c2c2c;
+    }
+    .person .tit2{
+        width:90%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0 0 0 0;
+        font-size:0.9em;
+        font-family:Arial;
+        color:#919191;
+    }
+    .person .set-item{
+        width:90%;
+        height:auto;
+        margin:1em auto 0 auto;
+        padding:0.5em 0 0.5em 0;
+        border-bottom:1px solid #e0e0e0;
+    }
+        .person .set-item .l{
+            width:50%;
+            height:auto;
+            float:left;
+            text-align:left;
+            font-size:1.1em;
+            font-family:Arial;
+        }
+        .person .set-item .r{
+            width:50%;
+            height:auto;
+            float:right;
+            text-align:right;
+        }
+            .person .set-item .r .min{
+                font-size:1.8em;
+                text-align:center;
+            }
+            .person .set-item .r .plus{
+                font-size:1.8em;
+                text-align:center;
+            }
+            .person .set-item .r .num{
+                margin:0 0.6em 0 0.6em;
+                padding:0 0 0.3em 0;
+                text-align:center;
+                font-size:1.2em;
+                font-family:Arial;
+                color:#2c2c2c;
+            }
+
+.confirm {
+    width:100%;
+    height:auto;
+    margin:1em 0 0 0;
+    padding:0.3em 0 0.3em 0;
+    border-top:1px solid #e0e0e0;
+    background:#fff;
+    position:fixed;
+    bottom:0;
+    left:0;
+    z-index:101;
+}
+    .confirm .confirm-btn{
+        width:90%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0.5em 0 0.5em 0;
+        text-align:center;
+        font-size:1.1em;
+        font-family:Arial;
+        color:#fff;
+        background: #FE8000;
+        border-radius:2px;
+    }

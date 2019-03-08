@@ -1,0 +1,32 @@
+﻿@model List<QuickSearchSuggestItem>
+@{
+    Layout = null;
+
+    var isApp = ViewBag.IsApp;
+}
+@if (Model != null && Model.Count > 0)
+{
+    <ul>
+        @foreach (var item in Model)
+        {
+            switch (item.Type.ToUpper().Trim())
+            {
+                case "D":
+                    {
+                        if (!item.Name.EndsWith("及周边"))
+                        {
+                            var durl = WHotelSite.App_Code.UrlHelperExtension.CityItemUrl(isApp, item.Id, item.Name);
+                            <li onclick="districtClick('@durl',@item.Id, '@item.Name', 0, 0, true)"><div><img src="@item.Icon" />@item.Name</div></li>   
+                        }
+                        break;
+                    }
+                case "H":
+                    {
+                        var hurl = isApp ? item.ActionUrl : item.ActionUrl.Replace("whotelapp://www.zmjiudian.com", "");
+                        <li onclick="gourl('@hurl')"><div><img src="@item.Icon" />@item.Name</div></li>
+                        break;
+                    }
+            }
+        }
+    </ul>   
+}

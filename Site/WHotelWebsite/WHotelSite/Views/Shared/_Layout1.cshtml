@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>@ViewBag.Title</title>
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="keywords" content="@ViewBag.Keywords">
+    <meta name="description" content="@ViewBag.Description">
+    <meta name="copyright" content="@DateTime.Now.Year, zmjiudian.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no">
+
+    <!-- Bootstrap core CSS -->
+    @Styles.Render("~/Content/css/bootstrap.css", "~/Content/css/zmjiudian.css", "~/Content/css/zmjiudian-ex.css")
+    @RenderSection("styles", false)
+    <script>
+        window.isMobile = @WHotelSite.Utils.JSONEncode(WHotelSite.Utils.IsMobile());
+        window.contentUrl = @Html.Raw(WHotelSite.Utils.JSONEncode(Url.Content("~/Content")));
+    </script>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.0/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?3566e9570ddbe6722a51adedffbf065b";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+</head>
+
+@{
+    var isLogin = WHotelSite.UserState.IsLogin;
+}
+
+<body class="@ViewBag.BodyClass" style="@ViewBag.BodyStyle">
+
+    @RenderBody()
+
+    <!-- Bootstrap core JavaScript -->
+    @Scripts.Render("~/Content/js/jquery-1.10.2-min.js?v=" + (Helpers.curAppVer()), "~/Content/js/common.js?v=" + (Helpers.curAppVer()), "~/Content/js/underscore-min.js?v=" + (Helpers.curAppVer()), "~/Content/js/underscore.string.min.js?v=" + (Helpers.curAppVer()), "~/Content/js/bootstrap.min.js?v=" + (Helpers.curAppVer()), "~/Content/js/account.js?v=" + (Helpers.curAppVer()), "~/Content/js/verifyInput.js?v=" + (Helpers.curAppVer()), "~/Content/js/hotel/search.js?v=" + (Helpers.curAppVer()), "~/Content/js/order/detail.js?v=" + (Helpers.curAppVer()), "~/Content/js/order/pay.js?v=" + (Helpers.curAppVer()), "~/Content/js/comment.js?v=" + (Helpers.curAppVer()), "~/Content/js/Upload/Upload.js?v=" + (Helpers.curAppVer()), "~/Content/js/Upload/upyun-mu.js?v=" + (Helpers.curAppVer()), "~/Content/js/Upload/async.js?v=" + (Helpers.curAppVer()), "~/Content/js/Upload/spark-md5.js?v=" + (Helpers.curAppVer()), "~/Content/js/Coupon.js?v=" + (Helpers.curAppVer()))
+    @RenderSection("scripts", required: false)
+
+  
+
+
+    <input type="hidden" id="hidCurUserCID" value="@(ViewBag.CID)" />
+</body>
+</html>

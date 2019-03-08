@@ -1,0 +1,661 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+    Layout = null;
+
+    var recmHotelResult = ViewBag.RecmHotelResult;
+    RecommendPackageDetailResult packageEntity = ViewBag.PackageEntity;
+    SameSerialPackageItem thisPackageRoomInfo = ViewBag.ThisPackageRoomInfo;
+    PackageInfoEntity relPackageEntity = ViewBag.RelPackageEntity;
+
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.isInWeixin;
+    var hotelId = packageEntity.packageItem.HotelID;
+    var pid = ViewBag.Pid;
+    var userid = ViewBag.UserId;
+    var isVip = ViewBag.IsVip;
+    var albumid = ViewBag.AlbumId;
+    var showcld = ViewBag.ShowCalendar;
+    var requestCID = ViewBag.RequestCID;
+
+    var AppType = ViewBag.AppType;
+    var AppVerForIOS = ViewBag.AppVerForIOS;
+    var AppVerForAndroid = ViewBag.AppVerForAndroid;
+    var IsLatestVerApp = ViewBag.IsLatestVerApp;
+    var isThanVer46 = ViewBag.IsThanVer46;
+    var isThanVer47 = ViewBag.IsThanVer47;
+
+    var defPrice = ViewBag.DefPrice;
+    var checkIn = ViewBag.CheckIn;
+    var checkOut = ViewBag.CheckOut;
+    var showNightCount = (checkOut - checkIn).Days;
+    var calendar = ViewBag.Calendar;
+    var subPriceTip = ViewBag.SubPriceTip;
+
+    var dayLimitMin = ViewBag.DayLimitMin;
+    var dayLimitMax = ViewBag.DayLimitMax;
+    var nightCount = ViewBag.NightCount;
+    var priceDays = (dayLimitMin < 1 ? 1 : dayLimitMin);
+
+    //日期选择类型
+    var isSingleSelectDate = false;
+    switch (packageEntity.packageItem.DateSelectType)
+    {
+        case 1: { break; }  //入住日期
+        case 2: { subPriceTip = string.Format("已选择{0}月{1}日出发", checkIn.Month, checkIn.Day); isSingleSelectDate = true; break; }   //出行日期
+        case 3: { isSingleSelectDate = true; break; }   //入住开始日
+        case 4: { isSingleSelectDate = true; break; }   //消费日期
+        default: { break; }
+    }
+
+    //当前产品是否为分销产品
+    var isRetailerProduct = packageEntity.packageItem.IsDistributable;
+
+    var pageTitle = "周末酒店";
+    if (!string.IsNullOrEmpty(packageEntity.packageItem.HotelName))
+    {
+        pageTitle = string.Format("{0}({1})", packageEntity.packageItem.HotelName, packageEntity.packageItem.PackageName);
+    }
+
+    pageTitle = pageTitle.Replace("·", " ");
+
+    var totalPrice = ViewBag.TotalPrice;
+    var totalVipPrice = ViewBag.TotalVipPrice;
+
+    //分享标题
+    var shareTitle = !string.IsNullOrEmpty(packageEntity.packageItem.ShareTitle) ? packageEntity.packageItem.ShareTitle : (packageEntity.packageItem.HotelName ?? "");
+    shareTitle = shareTitle.Replace("·", " ");
+
+    //分享内容
+    var shareDesc = !string.IsNullOrEmpty(packageEntity.packageItem.ShareDescription) ? packageEntity.packageItem.ShareDescription : string.Format("￥{0} {1}", packageEntity.packageItem.NotVIPPrice, packageEntity.packageItem.PackageBrief);
+
+    //分享链接
+    var shareLink = ViewBag.ShareLink;
+
+    //分享小图
+    var shareImgUrl = "";
+    if (!string.IsNullOrEmpty(packageEntity.packageItem.HotelPicUrl))
+    {
+        shareImgUrl = packageEntity.packageItem.HotelPicUrl.Replace("_jupiter", "_290x290s").Replace("_theme", "_290x290s").Replace("_appdetail1s", "_290x290s");
+    }
+    else
+    {
+        packageEntity.packageItem.HotelPicUrl = "";
+    }
+
+    //产品店铺信息
+    HJD.HotelManagementCenter.Domain.RetailerShopEntity productShopInfo = ViewBag.ProductShopInfo;
+
+    //当前用户的度假伙伴身份
+    HJD.HotelManagementCenter.Domain.RetailerInvateEntity partnerResult = ViewBag.PartnerResult;
+    HJD.HotelManagementCenter.Domain.RetailerInvateState partnerState = (HJD.HotelManagementCenter.Domain.RetailerInvateState)partnerResult.State;
+
+    //当前要展示的分销CID（为0表示没有分销身份）
+    var pcid = ViewBag.PCID;
+
+    //头bar
+    var retailerLinkUrl = string.Format("http://partner.zmjiudian.com/Channel/HotelPackageDetail?cid={0}&checkin={1}&checkout={2}&pid=", pcid, checkIn.ToString("yyyy-MM-dd"), checkOut.ToString("yyyy-MM-dd")); //string.Format("http://192.168.1.188:8082/Channel/HotelPackageDetail?cid={0}&checkin={1}&checkout={2}&pid=", pcid, checkIn.ToString("yyyy-MM-dd"), checkOut.ToString("yyyy-MM-dd"));
+    var showRetailerLink = false;
+    var headBarUrl = "/Account/WxMenuTransfer?menu=7";
+    var headLogoUrl = "http://whfront.b0.upaiyun.com/app/img/home/zmjd-logo-256x256.png";
+    var headLogoName = "周末酒店";
+    if (isApp)
+    {
+        headBarUrl = "whotelapp://www.zmjiudian.com";
+    }
+    else
+    {
+        if (productShopInfo != null && !string.IsNullOrEmpty(productShopInfo.ShopName) && isRetailerProduct)
+        {
+            headBarUrl = string.Format("/Channel/ShopDetail?cid={0}", requestCID);
+            headLogoUrl = !string.IsNullOrEmpty(productShopInfo.AvatarUrl) ? productShopInfo.AvatarUrl.Replace("_jupiter", "_290x290") : "";
+            headLogoName = productShopInfo.ShopName;
+        }
+
+        //是否显示分销入口
+        if (isRetailerProduct && pcid > 0 && !isApp)
+        {
+            showRetailerLink = true;
+        }
+    }
+
+    //套餐活动信息
+    var activeJson = "";// "{\"activeID\":1, \"activeIcon\":\"http://whfront.b0.upaiyun.com/www/img/Active/productalbumactive/active-detail-tip-1.png\",\"activeTip\":\"购买本产品可获赠1080航空里程\",\"activeLink\":\"/active/activepage?pageid=104&_newpage=1\"}";
+}
+
+<style>
+    .login-section {
+        font-size: 0.8em;
+    }
+
+    [v-cloak] {
+        display: none;
+    }
+</style>
+
+@if (!isApp)
+{
+    <div class="page-head-bar">
+        <div class="_logo-section">
+            <div class="_logo"><img src="@(headLogoUrl)" alt="" /></div>
+            <div class="_name">@(headLogoName)</div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="_home-section"><span class="zmjd-iconfont _icon" onclick="gourl('@(headBarUrl)')">&#xe67b;</span></div>
+        <div style="clear:both;"></div>
+    </div>
+}
+<div class="photo" onclick="goto('hotel/@(hotelId)')">
+    <img src="@packageEntity.packageItem.HotelPicUrl.Replace("_theme", "_640x426")" alt="" />
+</div>
+<div class="main">
+    <div class="activity">
+        <div class="tit">@(packageEntity.packageItem.PackageName)</div>
+        <div class="brief">@(packageEntity.packageItem.HotelName)</div>
+        @if (relPackageEntity != null && relPackageEntity.packageBase != null && relPackageEntity.packageBase.ID > 0)
+        {
+            var url = string.Format("/Hotel/Package/{0}", relPackageEntity.packageBase.ID);
+            if (isApp)
+            {
+                url += string.Format("?userid={{userid}}&_newpage=1&_newtitle=1");
+            }
+            else
+            {
+                url += string.Format("?userid={0}", userid);
+            }
+
+            <div class="vippackage-tip" onclick="gourl('@url')">该套餐还有新VIP专享价格 ¥@(relPackageEntity.Price)，<a class="a-txt">现在查看</a></div>
+        }
+        @if (isVip)
+        {
+            if (isSingleSelectDate)
+            {
+                //日期单选的（如机酒的出行日期），不显示几晚
+                <div class="price">
+                    <span class="vip-icon zmjd-iconfont">&#xe65f;</span>￥<span class="val">@(totalVipPrice)</span>起<span class="nvip">普通价￥@(totalPrice)起</span>
+                </div>
+            }
+            else
+            {
+                <div class="price">
+                    <span class="vip-icon zmjd-iconfont">&#xe65f;</span>￥<span class="val">@(totalVipPrice)</span>起@(string.Format("/{0}晚", showNightCount))<span class="nvip">普通价￥@(totalPrice)起@(string.Format("/{0}晚", showNightCount))</span>
+                </div>
+            }
+
+            if (showRetailerLink)
+            {
+                <div class="retailer-share-section clearfloat">
+                    <div class="info">
+                        <span>佣金：¥<span class="val">@(packageEntity.packageItem.ManualCommission >= 0 ? packageEntity.packageItem.ManualCommission : packageEntity.packageItem.AutoCommission)</span></span>
+                        @*<span class="teaminfo">团队佣金<span class="h">@(packageEntity.packageItem.ManualCommission >= 0 ? packageEntity.packageItem.ManualCommission.ToString() : "支付价1%")</span></span>*@
+                    </div>
+                    <div class="share-tag" onclick="gourl('@(retailerLinkUrl)@(packageEntity.packageItem.PID)')"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/product/share-poster-tag.png" alt="" /></div>
+                </div>
+            }
+            if (!string.IsNullOrEmpty(activeJson))
+            {
+                <div v-cloak class="active-section clearfloat" id="active-obj" onclick="gourl('{{activeData.activeLink}}')">
+                    <div class="icon"><img src="{{activeData.activeIcon}}" alt="送里程" /></div>
+                    <div class="tip">{{activeData.activeTip}}</div>
+                    <div class="zmjd-iconfont link-icon">&#xe648;</div>
+                </div>
+            }
+        }
+        else
+        {
+            if (isSingleSelectDate)
+            {
+                @*<div class="price nvip-price">
+                    ￥<span class="val">@(totalPrice)</span>起@(string.Format("/{0}晚", showNightCount))<span class="vip"><span class="vip-icon2 zmjd-iconfont">&#xe627;</span>VIP会员价￥@(totalVipPrice)@(string.Format("/{0}晚", showNightCount))</span>
+                </div>*@
+                <div class="price">
+                    <span class="vip-icon zmjd-iconfont">&#xe65f;</span>￥<span class="val">@(totalVipPrice)</span>起<span class="nvip">普通价￥@(totalPrice)起</span>
+                </div>
+            }
+            else
+            {
+                <div class="price">
+                    <span class="vip-icon zmjd-iconfont">&#xe65f;</span>￥<span class="val">@(totalVipPrice)</span>起@(string.Format("/{0}晚", showNightCount))<span class="nvip">普通价￥@(totalPrice)起@(string.Format("/{0}晚", showNightCount))</span>
+                </div>
+            }
+
+            if (showRetailerLink)
+            {
+                <div class="retailer-share-section clearfloat">
+                    <div class="info">
+                        <span>佣金：¥<span class="val">@(packageEntity.packageItem.ManualCommission >= 0 ? packageEntity.packageItem.ManualCommission : packageEntity.packageItem.AutoCommission)</span></span>
+                        @*<span class="teaminfo">团队佣金<span class="h">@(packageEntity.packageItem.ManualCommission >= 0 ? packageEntity.packageItem.ManualCommission.ToString() : "支付价1%")</span></span>*@
+                    </div>
+                    <div class="share-tag" onclick="gourl('@(retailerLinkUrl)@(packageEntity.packageItem.PID)')"><img src="http://whfront.b0.upaiyun.com/app/img/coupon/product/share-poster-tag.png" alt="" /></div>
+                </div>
+            }
+            if (!string.IsNullOrEmpty(activeJson))
+            {
+                <div v-cloak class="active-section clearfloat" id="active-obj" onclick="gourl('{{activeData.activeLink}}')">
+                    <div class="icon"><img src="{{activeData.activeIcon}}" alt="送里程" /></div>
+                    <div class="tip">{{activeData.activeTip}}</div>
+                    <div class="zmjd-iconfont link-icon">&#xe648;</div>
+                </div>
+            }
+            if (packageEntity.packageItem.NeedVIPGuide)
+            {
+                <div class="govip" onclick="goBuyVip()">
+                    付199元年费可 <span class="link">成为VIP>></span>
+                </div>
+            }
+        }
+    </div>
+</div>
+<div class="main">
+    @if (packageEntity.GroupSerialList.Count > 0)
+    {
+        <div class="group-package">
+            <div class="selectgrouppackage">
+                选择套餐：
+            </div>
+            <div class="group-package-list">
+                @foreach (GroupSerialItem groupItem in packageEntity.GroupSerialList)
+                {
+                    if (groupItem.SerialPackageList.Where(_ => _.pId == pid).Count() > 0)
+                    {
+                        SameSerialPackageItem sameSerialItem = groupItem.SerialPackageList.Where(_ => _.pId == pid).First();
+                        <div class="p-item selecteditem" data-pid="@(sameSerialItem.pId)" data-cid="@requestCID">
+                            @*onclick="onloadSelected(@(sameSerialItem.pId),@requestCID)"*@
+                            <div class="g-icon"><img src="http://whfront.b0.upaiyun.com/app/img/hotel/package/icon-selected-topright.png" /></div>
+                            <div class="seriano selectedseriano">@groupItem.SerialNo</div>
+                            <div class="groupprice">
+                                <div class="vipprice">￥@(Convert.ToInt32(sameSerialItem.VipPrice))</div>
+                                <div class="novipprice">普通价  ￥@(Convert.ToInt32(sameSerialItem.NoVipPrice))</div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        SameSerialPackageItem sameSerialItem = groupItem.SerialPackageList.OrderBy(_ => _.VipPrice).First();
+                        <div class="p-item" data-pid="@(sameSerialItem.pId)" data-cid="@requestCID">
+                            @*onclick="onloadSelected(@(sameSerialItem.pId),@requestCID)"*@
+                            <div class="g-icon hideicon"><img src="http://whfront.b0.upaiyun.com/app/img/hotel/package/icon-selected-topright.png" /></div>
+                            <div class="seriano">@groupItem.SerialNo</div>
+                            <div class="groupprice">
+                                <div class="vipprice">￥@(Convert.ToInt32(sameSerialItem.VipPrice))</div>
+                                <div class="novipprice">普通价  ￥@(Convert.ToInt32(sameSerialItem.NoVipPrice))</div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    }
+    @if (packageEntity.serialPackageList != null && packageEntity.serialPackageList.Count > 0)
+    {
+        <div class="rooms">
+            @if (thisPackageRoomInfo != null)
+            {
+                <div class="tit tit-aarow-right" id="room-tit-sel">已选择“@(thisPackageRoomInfo.roomTypeName)”</div>
+                <div class="tit2 tit-aarow-top hide" id="room-tit-def" data-op="0">选择房型</div>
+                <div class="info hide" id="room-info-def">
+                    <div class="sml-hr"></div>
+                    <div class="room-info">@(!string.IsNullOrEmpty(thisPackageRoomInfo.roomDesc) ? thisPackageRoomInfo.roomDesc : thisPackageRoomInfo.roomTypeName)</div>
+                    @foreach (var item in packageEntity.serialPackageList)
+                    {
+                        <div class="room-item @(item.pId == pid ? "room-item-sel" : "")" data-pid="@item.pId">@item.roomTypeName</div>
+                    }
+                    <div style="clear:both;"></div>
+                </div>
+            }
+            else
+            {
+                <div class="tit tit-aarow-right hide" id="room-tit-sel">选择房型</div>
+                <div class="tit tit-aarow-top" id="room-tit-def" data-op="1">选择房型</div>
+                <div class="info" id="room-info-def">
+                    <div class="room-info"></div>
+                    @foreach (var item in packageEntity.serialPackageList)
+                    {
+                        <div class="room-item @(item.pId == pid ? "room-item-sel" : "")" data-pid="@item.pId">@item.roomTypeName</div>
+                    }
+                    <div style="clear:both;"></div>
+                </div>
+            }
+        </div>
+    }
+    <div class="package">
+        <div class="tit">套餐内容：</div>
+        <div class="info">
+            <div class="packageList">
+                <table border="0" cellpadding="0" cellspacing="0">
+                    @if (thisPackageRoomInfo != null)
+                    {
+                        var showInfo = !string.IsNullOrEmpty(thisPackageRoomInfo.roomDesc) ? thisPackageRoomInfo.roomDesc : thisPackageRoomInfo.roomTypeName;
+                        if (!string.IsNullOrWhiteSpace(showInfo))
+                        {
+                            <tr><td class="td-num" valign="top">@Html.Raw(showInfo.StartsWith("#") ? "" : "&bull;")</td><td class="td-info" valign="top">@(showInfo.StartsWith("#") ? showInfo.Replace("#", "") : showInfo)</td></tr>
+                        }
+                    }
+                    @if (packageEntity.packageItem.packageContent != null)
+                    {
+                        for (int i = 0; i < packageEntity.packageItem.packageContent.Count; i++)
+                        {
+                            var pitem = packageEntity.packageItem.packageContent[i];
+                            if (!string.IsNullOrWhiteSpace(pitem))
+                            {
+                                <tr><td class="td-num" valign="top">@Html.Raw(pitem.StartsWith("#") ? "" : "&bull;")</td><td class="td-info" valign="top">@(pitem.StartsWith("#") ? pitem.Replace("#", "") : pitem)</td></tr>
+                            }
+                        }
+                    }
+                </table>
+            </div>
+        </div>
+        @*<div class="package-more-btn" style="display:none;">
+                <div class="mask"></div>
+                <div class="btn">查看更多<span class="zmjd-iconfont _icon">&#xe65c;</span></div>
+            </div>*@
+    </div>
+    <div class="shopread-btn">
+        <div class="_btn">购买须知</div>
+    </div>
+    <div class="shopread" style="display:none;">
+        <div class="tit" data-open="1">购买须知</div>
+        <div class="tit-border" style="display:block;"></div>
+        <div class="info" style="display:block;">
+            <table border="0" cellpadding="0" cellspacing="0">
+                @if (packageEntity.packageItem.packageNotice != null)
+                {
+                    for (int i = 0; i < packageEntity.packageItem.packageNotice.Count; i++)
+                    {
+                        var notice = packageEntity.packageItem.packageNotice[i];
+                        <tr><td class="td-num" valign="top">&bull;</td><td class="td-info" valign="top">@(notice)</td></tr>
+                    }
+                }
+            </table>
+        </div>
+    </div>
+</div>
+@if (packageEntity.packageItem.Intro != null && packageEntity.packageItem.Intro.Item != null && packageEntity.packageItem.Intro.Item.Count > 0)
+{
+    <div class="main">
+        <div class="tuijian">
+            <div class="tit">推荐理由</div>
+            <div class="tit-border"></div>
+            @if (packageEntity.packageItem.Intro.Item.Count > 1)
+            {
+                <div class="info">
+                    <table border="0" cellpadding="0" cellspacing="0">
+                        @for (int i = 0; i < packageEntity.packageItem.Intro.Item.Count; i++)
+                        {
+                            var intro = packageEntity.packageItem.Intro.Item[i];
+                            <tr><td class="td-num" valign="top">&bull;</td><td class="td-info" valign="top">@(intro)</td></tr>
+                        }
+                    </table>
+                </div>
+            }
+            else
+            {
+                var _singleIntro = packageEntity.packageItem.Intro.Item[0];
+                <div class="info">@_singleIntro</div>
+            }
+        </div>
+    </div>
+}
+@{
+    var reviewsUrl = (isApp && isThanVer47) ? string.Format("whotelapp://www.zmjiudian.com/reviews?Hotel={0}&TFTType＝0&TFTID＝0&title＝酒店点评", hotelId) : string.Format("/hotel/{0}/allreviews", hotelId);
+}
+<div class="main">
+    <div class="hotel">
+        <div class="left-hotel" onclick="goto('hotel/@(hotelId)')">
+            <div class="h-img">
+                <img src="@(packageEntity.packageItem.HotelPicUrl.Replace("_theme", "_140X140"))" alt="" />
+            </div>
+            <div class="h-info">
+                <div class="hn">@(packageEntity.packageItem.HotelName)</div>
+                <div class="hlink">查看酒店信息>></div>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="right-comment" onclick="gourl('@(reviewsUrl)')" id="hotel-comment-div">
+            <div class="c-count" id="hotel-comment-tit">...</div>
+            <div class="c-lab">点评</div>
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="address" data-hid="@(hotelId)" data-lat="@(packageEntity.GLat)" data-lon="@(packageEntity.GLon)">
+        <div class="info">
+            <div class="left">
+                地址：@(packageEntity.AddressInfo.Address)
+            </div>
+            <div class="right">
+                <div class="zmjd-iconfont _icon">&#xe66c;</div>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+</div>
+@*@{
+        var reviewsUrl = (isApp && isThanVer47) ? string.Format("whotelapp://www.zmjiudian.com/reviews?Hotel={0}&TFTType＝0&TFTID＝0&title＝酒店点评", hotelId) : string.Format("/hotel/{0}/allreviews", hotelId);
+        <div class="main" onclick="gourl('@(reviewsUrl)')" id="hotel-comment-div">
+            <div class="comment">
+                <div class="tit" id="hotel-comment-tit">往期点评</div>
+            </div>
+        </div>
+    }*@
+<div class="main hotel-source">
+    <div class="tit">图文详情</div>
+    <div class="tit-border"></div>
+    <div class="body" id="hotel-source-body">
+        @*<img src="/Content/images/seat/img-home-seat-banner2.png" alt="" />*@
+        <img class="loading_img" src="http://whfront.b0.upaiyun.com/app/img/loading-changes.gif" alt="" />
+    </div>
+    <div class="source-more-btn" style="display:none;">
+        <div class="mask"></div>
+        <div class="btn">查看更多<span class="zmjd-iconfont _icon">&#xe65c;</span></div>
+    </div>
+</div>
+@if ((!string.IsNullOrEmpty(packageEntity.HotelTel)) &&
+    (packageEntity.AddressInfo.ArrivalAndDeparture != null && !string.IsNullOrEmpty(packageEntity.AddressInfo.ArrivalAndDeparture.Description)))
+{
+    <div class="main">
+        @if (!string.IsNullOrEmpty(packageEntity.HotelTel))
+        {
+            <div class="def-item" onclick="gourl('tel:@(packageEntity.HotelTel)')">电话：@(packageEntity.HotelTel)</div>
+        }
+        @if (packageEntity.AddressInfo.ArrivalAndDeparture != null && !string.IsNullOrEmpty(packageEntity.AddressInfo.ArrivalAndDeparture.Description))
+        {
+            <div class="def-item @(!string.IsNullOrEmpty(packageEntity.HotelTel) ? "def-item-bor" : "")">交通：@(packageEntity.AddressInfo.ArrivalAndDeparture.Description)</div>
+        }
+    </div>
+}
+<div style="margin-bottom:5.5em;"></div>
+<div class="sub">
+    @*<div style="margin:2em 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3a%2f%2f192.168.1.22%3a8081%2fHotel%2fPackage%2f12606%3fCID%3d4514792%26v%3d1">GO APP (Local) >>></a></div>*@
+    @if (packageEntity.packageItem.PackageState == 1)
+    {
+        if (packageEntity.packageItem.IsSellOut == true)
+        {
+            <div class="downline">已售完</div> 
+        }
+        else
+        {
+            <div id="sub-date" class="submit">¥@(totalVipPrice)起 立即购买</div>
+        }
+    }
+    else
+    {
+        <div class="downline">已下线</div>
+    }
+</div>
+<div class="sub-go" style="display:none;">
+    <div class="left">
+        <div class="price-line">
+            <span class="lab">小计：</span><span class="vipprice"><span class="zmjd-iconfont picon">&#xe65f;</span><span class="pun">¥</span><span class="pval">@(totalVipPrice)</span></span><span class="defprice">普通价¥<span class="pval2">@(totalPrice)</span></span>
+        </div>
+        <div class="tip-line">@subPriceTip</div>
+    </div>
+    <div class="right">
+        <div id="sub-go" class="submit-go">立即购买</div>
+    </div>
+</div>
+
+<footer>
+    <input type="hidden" id="hotelid" value="@hotelId" />
+    <input type="hidden" id="hotelname" value="@packageEntity.packageItem.HotelName" />
+    <input type="hidden" id="pid" value="@pid" />
+    <input type="hidden" id="hidCurUserCID" value="@(ViewBag.CID)" />
+    <input type="hidden" id="hidWxUnionid" value="@(ViewBag.Unionid)" />
+    <input type="hidden" id="pcid" value="@(pcid)" />
+    <input type="hidden" id="userid" value="@userid" />
+    <input type="hidden" id="isVip" value="@(isVip ? 1 : 0)" />
+    <input type="hidden" id="albumid" value="@albumid" />
+    <input type="hidden" id="isapp" value="@(isApp ? 1 : 0)" />
+    <input type="hidden" id="showcld" value="@(showcld)" />
+    <input type="hidden" id="isThanVer46" value="@(isThanVer46 ? 1 : 0)" />
+    <input type="hidden" id="dateSelectType" value="@(packageEntity.packageItem.DateSelectType)" />
+    <input type="hidden" id="isSingleSelectDate" value="@(isSingleSelectDate ? 1 : 0)" />
+    <input type="hidden" id="checkIn" value="@checkIn.ToString("yyyy-MM-dd")" />
+    <input type="hidden" id="checkOut" value="@checkOut.ToString("yyyy-MM-dd")" />
+    <input type="hidden" id="dayLimitMin" value="@dayLimitMin" />
+    <input type="hidden" id="dayLimitMax" value="@dayLimitMax" />
+    <input type="hidden" id="nightCount" value="@nightCount" />
+    <input type="hidden" id="hotelSourceUrl" value="@packageEntity.packageItem.Intro.ActionUrl" />
+    <input type="hidden" id="totalVipPrice" value="@totalVipPrice" />
+    <input type="hidden" id="totalPrice" value="@totalPrice" />
+    <input type="hidden" id="_name" value="@string.Format("{0}-{1}", packageEntity.packageItem.PackageName, packageEntity.packageItem.HotelName)" />
+    <input type="hidden" id="activeJson" value="@(activeJson)" />
+    <form style="display:none;">
+        <input type="text" id="loginput" value="0" />
+    </form>
+</footer>
+@Helpers.CalendarOptions(Html, calendar, dayLimitMin, dayLimitMax)
+<script src="~/Content/js/calendar_price.js?v=@(Helpers.curAppVer())"></script>
+@if (Utils.IsMobile())
+{
+    <script src="~/Content/js/iscroll-lite.js"></script>
+}
+else
+{
+    <script src="~/Content/js/ctrip_cquery.js"></script>
+    <script src="~/Content/js/ctrip_calendar.js"></script>
+}
+<script src="~/Content/js/framework/vue.min.js"></script>
+<script src="~/Content/js/hotel/package.js?v=@(Helpers.curAppVer())"></script>
+<script>
+
+    $(document).attr("title", "@(pageTitle.Replace("\r",""))");
+
+    try {
+        onAppShareCall = function () {
+            var title = "@(shareTitle.Replace("\r", ""))";
+            var Content = "@(shareDesc)";
+            var photoUrl = "@(shareImgUrl)";
+            var shareLink = "@(shareLink)";
+            try { whotel.appShareData(title, Content, photoUrl, shareLink); } catch (e) { }
+            var returnStr = '{"title":"{0}","Content":"{1}","photoUrl":"{2}","shareLink":"{3}"}';
+            return returnStr.format(title, Content, photoUrl, shareLink);
+        }
+        onAppShareCall();
+    }
+    catch (e) { }
+</script>
+
+@if (isInWeixin)
+{
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js?v=@(Helpers.curAppVer())" type="text/javascript"></script>
+    <script>
+
+        GetWeixinApiConfig();//注册
+
+        wx.ready(function () {
+
+            wx.onMenuShareTimeline({
+                title: '@(shareTitle)',
+                desc: '@(shareDesc)',
+                link: '@(shareLink)',
+                imgUrl: '@(shareImgUrl)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareAppMessage({
+                title: '@(shareTitle)',
+                desc: '@(shareDesc)',
+                link: '@(shareLink)',
+                imgUrl: '@(shareImgUrl)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareQQ({
+                title: '@(shareTitle)',
+                desc: '@(shareDesc)',
+                link: '@(shareLink)',
+                imgUrl: '@(shareImgUrl)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+            wx.onMenuShareQZone({
+                title: '@(shareTitle)',
+                desc: '@(shareDesc)',
+                link: '@(shareLink)',
+                imgUrl: '@(shareImgUrl)',
+                success: function (res) {
+                },
+                cancel: function (res) {
+                }
+            });
+
+        });
+
+        function GetWeixinApiConfig() {
+
+            var url = location.href.split("#")[0];
+            $.ajax({
+                url: '/Coupon/GetWeixinConfigInfo',
+                type: 'POST',
+                data: { url: url },
+                dataType: 'json',
+                async: false,
+                error: function () {
+                    console.log("网络服务错误");
+                },
+                success: function (result) {
+                    if (typeof (result.Success) != undefined && result.Success == 1) {
+                        return false;
+                    }
+                    else {
+                        //得到微信config的值
+                        var array = [
+                            'checkJsApi',
+                            'onMenuShareTimeline',
+                            'onMenuShareAppMessage',
+                            'onMenuShareQQ',
+                            'onMenuShareQZone',
+                            'hideOptionMenu'
+                        ];
+                        if (result.jsApiList) {
+                            var jsArray = result.jsApiList.split(',');
+                            for (var key in jsArray) {
+                                array.push("" + jsArray[key]);
+                            }
+                        }
+
+                        wx.config({
+                            debug: false,
+                            appId: result.appId,
+                            timestamp: "" + result.timestamp,
+                            nonceStr: result.nonceStr,
+                            signature: result.signature,
+                            jsApiList: array
+                        });
+                    }
+                }
+            });
+        }
+
+    </script>
+}

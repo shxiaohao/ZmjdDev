@@ -1,0 +1,21 @@
+
+[17/2/23 17:38:10] Start Job [HotelPriceSlotListener]
+[17/2/23 19:17:06] Start Job [HotelPriceSlotListener]
+[17/2/23 19:17:31] Gen【66561】【17/3/1 0:00:00】
+[17/2/23 19:17:32] Hotel 66561 Price.Get32 Err:未能加载文件或程序集“Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed”或它的某一个依赖项。找到的程序集清单定义与程序集引用不匹配。 (异常来自 HRESULT:0x80131040)
+[17/2/23 19:25:07] Start Job [HotelPriceSlotListener]
+[17/2/23 19:25:12] Gen【66561】【17/3/1 0:00:00】
+[17/2/23 19:25:13] Hotel 66561 Price.Get32 Err:未能加载文件或程序集“Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed”或它的某一个依赖项。找到的程序集清单定义与程序集引用不匹配。 (异常来自 HRESULT:0x80131040)
+[17/2/23 19:29:17] Start Job [HotelPriceSlotListener]
+[17/2/23 19:29:35] Gen【66561】【17/3/1 0:00:00】
+[17/2/23 19:29:36] Hotel 66561 Price.Get32 Err:未能加载文件或程序集“Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed”或它的某一个依赖项。找到的程序集清单定义与程序集引用不匹配。 (异常来自 HRESULT:0x80131040)
+[17/2/23 19:30:15] Start Job [HotelPriceSlotListener]
+[17/2/23 19:30:18] Gen【560764】【17/3/11 0:00:00】
+[17/2/23 19:30:18] Hotel 560764 Price.Get32 Err:未能加载文件或程序集“Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed”或它的某一个依赖项。找到的程序集清单定义与程序集引用不匹配。 (异常来自 HRESULT:0x80131040)
+[17/2/23 19:30:42] Start Job [HotelPriceSlotListener]
+[17/2/23 19:30:47] Gen【560764】【17/3/11 0:00:00】
+[17/2/23 19:30:47] Hotel 560764 Price.Get32 Err:未能加载文件或程序集“Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed”或它的某一个依赖项。找到的程序集清单定义与程序集引用不匹配。 (异常来自 HRESULT:0x80131040)
+[17/2/23 19:30:56] Start Job [HotelPriceSlotListener]
+[17/2/23 19:31:02] Gen【560764】【17/3/11 0:00:00】
+[17/2/23 19:35:05] Start Job [HotelPriceSlotListener]
+[17/2/23 19:35:08] Gen【560764】【17/3/11 0:00:00】

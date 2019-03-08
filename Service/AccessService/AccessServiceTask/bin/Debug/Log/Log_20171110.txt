@@ -1,0 +1,21 @@
+
+[17/11/10 10:48:57] Start Job [SendServiceTemplateMsgSZ_Job]
+[17/11/10 10:48:58] 【NextOpenid】:
+[17/11/10 10:51:23] 【0】
+[17/11/10 10:51:24] GetAllWeixinSubscribeUser Count:346
+[17/11/10 11:11:57] Start Job [SendServiceTemplateMsgSZ_Job]
+[17/11/10 11:11:57] 【NextOpenid】:
+[17/11/10 11:12:37] 【0】
+[17/11/10 11:12:37] GetAllWeixinSubscribeUser Count:346
+[17/11/10 13:31:55] Start Job [DownLoadWexinUserInfoJob]
+[17/11/10 13:32:51] 【NextOpenid】:
+[17/11/10 13:32:57] 【0】
+[17/11/10 13:32:57] GetAllWeixinSubscribeUser Count:10000
+[17/11/10 16:12:35] Start Job [DownLoadWexinUserInfoJob]
+[17/11/10 16:12:39] 指定了测试Openid：oWyTLw6I5io9chTFPD7HjW3h6CJg
+[17/11/10 16:12:58] 结果：{"errcode":40003,"errmsg":"invalid openid hint: [IOoFRA0575ge21]"}
+[17/11/10 16:12:58] Stop Job [DownLoadWexinUserInfoJob]
+[17/11/10 16:13:29] Start Job [SendServiceTemplateMsgSZ_Job]
+[17/11/10 16:13:42] 指定了测试Openid：oWyTLw6I5io9chTFPD7HjW3h6CJg
+[17/11/10 16:13:47] 结果：{"errcode":0,"errmsg":"ok","msgid":11901025980104705}
+[17/11/10 16:13:55] Stop Job [SendServiceTemplateMsgSZ_Job]

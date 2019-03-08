@@ -1,0 +1,438 @@
+﻿@charset "UTF-8";
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    background-size: cover;
+    background:#fff;
+    background:url(http://whfront.b0.upaiyun.com/app/img/coupon/redcoupon/red-bg-banner-full.png) top left;
+    background-size:100%;
+}
+
+.margin-space {
+    width:100%;
+    height:7.8em;
+    display:table;
+}
+
+.red-top {
+    width:100%;
+    height:auto;
+    margin:0 0 0 0;
+    padding:0 0 0 0;
+    display:table;
+    font-family:Arial;
+    position:relative;
+}
+    .red-top .banner-section{
+        width:100%;
+    }
+        .red-top .banner-section img{
+            width:100%;
+        }
+    .red-top .form-section{
+        width:80%;
+        height:auto;
+        margin:0 0 0 0;
+        position:absolute;
+        left:10%;
+        bottom:-7em;
+    }
+        .red-top .form-section .bg{
+            width:100%;
+            height:auto;
+            position:relative;
+            z-index:10;
+        }
+            .red-top .form-section .bg img{
+                width:100%;
+            }
+        .red-top .form-section .form{
+            width:80%;
+            height:auto;
+            position:absolute;
+            left:10%;
+            top:0;
+            z-index:11;
+        }
+            .red-top .form-section .form .tit{
+                width:100%;
+                height:auto;
+                margin:0 0 0 0;
+                padding:1.3em 0 0.7em 0;
+                font-size:1.3em;
+                color:#fff;
+                text-align:center;
+                text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+            }
+            .red-top .form-section .form .tit-2 {
+                width: 100%;
+                height: auto;
+                margin: 0 0 0 0;
+                padding: 1.3em 0 0.5em 0;
+                font-size: 0.9em;
+                color: #2c2c2c;
+                text-align: center;
+            }
+            .red-top .form-section .form .tip{
+                width:100%;
+                height:auto;
+                margin:0 0 0 0;
+                padding:0em 0 0.5em 0;
+                font-size:0.7em;
+                color:#fff;
+                text-align:center;
+            }
+            .red-top .form-section .form .gift {
+                width: 100%;
+                height: auto;
+                margin: 0 0 0 0;
+                padding: 0 0 0 0;
+                font-size: 1em;
+                color: #fff;
+                text-align: center;
+            }
+                .red-top .form-section .form .gift .cash-coupon{
+                    margin: 0 0 0 0;
+                    padding: 0.4em 0 0.3em 0;
+                    font-size: 2.3em;
+                    color: #fff;
+                    text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
+                }
+                .red-top .form-section .form .gift .cash-coupon-tip{
+                    margin: 0 0 0 0;
+                    padding: 0em 0 1.2em 0;
+                    font-size: 0.9em;
+                    color: #fff;
+                    text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+                }
+
+@media (max-width: 320px) {
+    .red-top .form-section .form .tit-2 {
+        width: 100%;
+        height: auto;
+        margin: 0 0 0 0;
+        padding: 1.1em 0 0.5em 0;
+        font-size: 0.9em;
+        color: #2c2c2c;
+        text-align: center;
+    }
+    .red-top .form-section .form .tip{
+        width:100%;
+        height:auto;
+        margin:0 0 0 0;
+        padding:0em 0 0.3em 0;
+        font-size:0.7em;
+        color:#fff;
+        text-align:center;
+    }
+    .red-top .form-section .form .gift .cash-coupon{
+        margin: 0 0 0 0;
+        padding: 0.4em 0 0.2em 0;
+        font-size: 1.8em;
+        color: #fff;
+        text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+    }
+    .red-top .form-section .form .gift .cash-coupon-tip{
+        margin: 0 0 0 0;
+        padding: 0em 0 0.7em 0;
+        font-size: 0.8em;
+        color: #fff;
+        text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+    }
+}
+@media (min-width: 400px) {
+    .red-top .form-section .form .gift .cash-coupon{
+        margin: 0 0 0 0;
+        padding: 0.6em 0 0.3em 0;
+        font-size: 2.3em;
+        color: #fff;
+        text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
+    }
+    .red-top .form-section .form .gift .cash-coupon-tip{
+        margin: 0 0 0 0;
+        padding: 0em 0 1.7em 0;
+        font-size: 0.9em;
+        color: #fff;
+        text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+    }
+}
+
+                .red-top .form-section .form .gift .sku{
+                    margin: 0 0 0 0;
+                    padding: 1em 0 1em 0;
+                    font-size: 1.3em;
+                    color: #fff;
+                }
+            .red-top .form-section .form .inp{
+                width:100%;
+                height:auto;
+            }
+                .red-top .form-section .form .inp input{
+                    width:100%;
+                    height:auto;
+                    border:1px solid #ccc;
+                    border-radius:4px;
+                }
+            .red-top .form-section .form .btn{
+                width:100%;
+                height:auto;
+            }
+                .red-top .form-section .form .btn .get-coupon{
+                    width:100%;
+                    height:auto;
+                    margin:0 0 0 0;
+                    padding:0.6em 0 0.6em 0;
+                    display:table;
+                    text-align:center;
+                    font-size:1em;
+                    color:#EA3F39;
+                    background:#FFE2B1;
+                    border:1px solid #FFE2B1;
+                    border-radius:4px;
+
+                }
+                .red-top .form-section .form .btn .download-app{
+                    width: 48%;
+                    height: auto;
+                    margin: 0 0 0 0;
+                    padding: 0.5em 0 0.5em 0;
+                    display: inline-table;
+                    text-align: center;
+                    font-size: 0.9em;
+                    color: #EA3F39;
+                    background: #fff;
+                    border: 1px solid #fff;
+                }
+                .red-top .form-section .form .btn .download-app2{
+                    width: 90%;
+                    height: auto;
+                    margin: 0 auto 0 auto;
+                    padding: 0.5em 0 0.5em 0;
+                    display: inline-table;
+                    text-align: center;
+                    font-size: 0.9em;
+                    color: #EA3F39;
+                    background: #fff;
+                    border: 1px solid #fff;
+                    display:table;
+                }
+                .red-top .form-section .form .btn .open-coupon{
+                    width: 48%;
+                    height: auto;
+                    margin: 0 0 0 0;
+                    padding: 0.5em 0 0.5em 0;
+                    display: inline-table;
+                    text-align: center;
+                    font-size: 0.9em;
+                    color: #EA3F39;
+                    background: #fff;
+                    border: 1px solid #fff;
+                }
+
+
+.red-content {
+    position: absolute;
+    width: 100%;
+    height: 200px;
+    top: 50%;
+    margin-top: -100px;
+}
+.red-word {
+    width: 72.1%;
+    margin :auto;
+}
+.red-big-dis {
+    text-align: center;
+    font-size: 1.91em;
+    color: #FFE2B1;    
+    margin-bottom: 10px;
+}
+.red-small-dis {
+    text-align: center;
+    font-size: 1.178em;
+    color: #FFE2B1;
+    margin-bottom: 20px;
+}
+.red-input {
+    text-align: center;
+}
+.red-phone {
+    width: 74%;
+    border-radius: 3px;
+    border: 0 !important;
+    height: 44px !important;
+    padding: 10px 15px;
+    margin:20px;
+    font-size: 1.178em;
+}
+.red-btn {
+    margin: 15px;
+    width: 74%;
+    border-radius: 3px;
+    border: 0 !important;
+    height: 44px !important;
+    background-color: #FFE2B1;
+    font-size: 1.34em;
+    color: #DA5245;
+    box-shadow: 0px 3px 0px rgba(39,36,36,0.2) !important;
+}
+.red-bottom {
+    bottom: 3%;
+    position: fixed;
+    text-align: center;
+    left: 0px;
+    right: 0px;
+    color:#FDF8F7;
+}
+
+.red-rule {
+    width:100%;
+    height:auto;
+    margin:0 0 1em 0;
+    padding:0 0 0 0;
+    text-align:center;
+}
+    .red-rule a{
+        font-size:0.9em;
+        font-family:Arial;
+        color:#555;
+        text-decoration:none;
+    }
+
+.gift-list {
+    width: 100%;
+    height: auto;
+    margin: 0 0 0 0;
+    padding:0 0 0 0;
+    position:relative;
+}
+    .gift-list .tit{
+        width: 74%;
+        height: auto;
+        margin: 0 auto 0 auto;
+        display:table;
+    }
+        .gift-list .tit img{
+            width: 100%;
+        }
+    .gift-list .list{
+        width: 100%;
+        height: auto;
+        margin: 0 auto 1em auto;
+        display:table;
+    }
+        .gift-list .list .item{
+            width: 86%;
+            height: auto;
+            margin: 0 auto 0 auto;
+            padding:0.8em 0 0.8em 0;
+            display:table;
+            border-bottom:1px solid #e0e0e0;
+        }
+            .gift-list .list .item .l{
+                width: 60%;
+                height: auto;
+                margin: 0 0 0 0;
+                float:left;
+            }
+                .gift-list .list .item .l .h-img{
+                    width: 24%;
+                    height: auto;
+                    margin: 0 0 0 0;
+                    float:left;
+                }
+                    .gift-list .list .item .l .h-img img{
+                        width: 86%;
+                        border-radius:90%;
+                    }
+                .gift-list .list .item .l .name{
+                    width: 76%;
+                    height: auto;
+                    margin: 0 0 0 0;
+                    float:right;
+                }
+                    .gift-list .list .item .l .name .nickname{
+                        width: 100%;
+                        height: auto;
+                        margin: 0 0 0 0;
+                        padding:0 0 0 0;
+                        font-size:0.8em;
+                        color:#2c2c2c;
+                    }
+                    .gift-list .list .item .l .name .time{
+                        width: 100%;
+                        height: auto;
+                        margin: 0 0 0 0;
+                        padding:0 0 0 0;
+                        font-size:0.8em;
+                        color:#919191;
+                    }
+            .gift-list .list .item .r{
+                width: 40%;
+                height: auto;
+                margin: 0 0 0 0;
+                float:right;
+            }
+                .gift-list .list .item .r .gift-name{
+                    width: 100%;
+                    height: auto;
+                    margin: 0.6em 0 0 0;
+                    text-align:right;
+                    font-size:0.9em;
+                    color:#EA3F39;
+                }
+    .gift-list .more-gift-list{
+        width: 74%;
+        height: auto;
+        margin: 0 auto 0 auto;
+        padding:0.2em 0 1.3em 0;
+        font-size:0.9em;
+        color:#EA3F39;
+        text-align:center;
+        display:table;
+        cursor:pointer;
+    }
+.vip-section {
+    width:100%;
+    height:auto;
+    margin:1em 0 0 0 0;
+    padding:0 0 0 0;
+    display:table;
+}
+    .vip-section .banner{
+        width:100%;
+        height:auto;
+        margin:0 0 0 0 0;
+        padding:0 0 0 0;
+    }
+        .vip-section .banner img{
+            width:100%;
+        }
+
+.get-coupon-info {
+    width:100%;
+    height:auto;
+    margin:0 0 0 0;
+    padding:0 0 0 0;
+    font-family:Arial;
+}
+    .get-coupon-info .img{
+        width:45%;
+        height:auto;
+        margin:0 auto 0 auto;
+        padding:0 0 0 0;
+    }
+        .get-coupon-info .img img{
+            width:100%;
+        }
+    .get-coupon-info .txt{
+        width:88%;
+        height:auto;
+        margin:0.8em auto 0 auto;
+        padding:0 0 0 0;
+        font-size:0.9em;
+        color:#555;
+        text-align:center;
+    }
+

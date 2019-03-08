@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<configuration>
+  <statements>
+    <select id="GetZMJDCityData">
+      <![CDATA[   
+     SELECT DISTINCT di.DistrictID ID,
+       di.Name,
+       di.pinyin,
+       di.lat,
+       di.lon
+FROM   interestPlace a
+       INNER JOIN Interest i
+            ON  i.ID = a.IID
+            AND i.released = 1
+            AND i.[Type] = 1
+       INNER JOIN DestDB..DistrictInfo di
+            ON  di.DistrictID = a.districtID and di.Released = 1
+       INNER JOIN (
+                SELECT ipid,
+                       COUNT(1) c
+                FROM   InterestHotelRel ihr
+                WHERE  STATE > 10
+                GROUP BY
+                       ipid
+            ) ihrc
+            ON  ihrc.ipid = a.id
+WHERE  a.Released = 1
+      
+       ]]>
+    </select>
+  </statements>
+</configuration>

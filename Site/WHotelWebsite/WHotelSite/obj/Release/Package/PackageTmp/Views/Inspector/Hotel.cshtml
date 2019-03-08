@@ -1,0 +1,92 @@
+﻿@using WHotelSite
+@using WHotelSite.App_Code
+@using WHotelSite.Params
+@{
+
+    InspectorHotelParam param = ViewBag.param;
+
+    //List<PDayItem> calendar = ViewBag.calendar;
+    InspectorHotel hotel = param.Hotel;
+    
+    ViewBag.Title = string.Format("免费品鉴酒店");
+    ViewBag.Keywords = string.Format("免费品鉴酒店，品鉴酒店入住，入住");
+    ViewBag.Description = string.Format("免费品鉴酒店");
+
+    ViewBag.BodyStyle = "overflow-x:hidden;";
+    ViewBag.BodyClass = "inspectorhotelpage";
+}
+@section styles
+{
+    <style>
+        html, body {
+                height: 100%;
+                margin: 0;
+            }
+        .btn-default, .btn-primary {
+            width: 48%;
+            border: none;
+            color: #6294D1;
+            font-weight: bold;
+            font-size: 1.5em;
+        }
+
+        .box-big-btn {
+            width: 90%;
+        }
+    </style>
+
+    @Styles.Render("~/Content/css/calendar.css")
+}
+
+@section scripts
+{
+    @if (Utils.IsMobile())
+    {
+        @Scripts.Render(
+            "~/Content/js/iscroll-lite.js"
+        )
+    }
+    else
+    {
+        @Scripts.Render(
+            "~/Content/js/ctrip_cquery.js",
+            "~/Content/js/ctrip_calendar.js"
+        )
+    }
+    @*@Helpers.CalendarOptions(Html, calendar, price.DayLimitMin, price.DayLimitMax)*@
+    @Scripts.Render("~/Content/js/calendar.js", "~/Content/js/bootbox.js", "~/Content/js/hotel/packages.js", "~/Content/js/inspector/hotel.js")
+}
+<script>
+    function goto(param) {
+        var url = "@(ViewBag.AccessProtocal)" + param;
+        this.location = url;
+    }
+</script>
+<header class="inspectorhotel-dates">
+    @helper dateHelper(DateTime date) {
+    <strong>@date.Format("yyyy-MM-dd") 周@("日一二三四五六".Substring((int)date.DayOfWeek, 1))</strong>
+}
+    <form role="form">
+        <div id="dates" class="panel-date">
+            <div class="panel-checkin">
+                <span class="tit">入住日期</span> @dateHelper(param.CheckInDate)
+            </div>
+            <div class="panel-checkout">
+                <span class="tit">离店日期</span> @dateHelper(param.CheckOutDate)
+            </div>
+            <div class="panel-arrow"><img src="~/Content/images/icon-aarow1.png" /></div>
+            <input type="hidden" id="checkIn" value="@param.CheckIn" />
+            <input type="hidden" id="checkOut" value="@param.CheckOut" />
+        </div>
+    </form>
+    
+</header>
+<section class="inspectorhotel-body">
+    <article class="description">@Html.Raw(hotel.Description)</article>
+    <div class="note" style="display:none;">
+        <div class="tit">注意事项:</div>
+        <div class="info">@hotel.Note</div>
+    </div>
+</section>
+<footer class="inspectorhotel-ctrl"><button id="subbookin" data-user="@param.UserId" data-id="@param.Hotel.ID" data-hotelid="@param.Hotel.HotelID">确认提交</button></footer>
+<!--  -->

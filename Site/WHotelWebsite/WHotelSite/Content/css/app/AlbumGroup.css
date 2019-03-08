@@ -1,0 +1,84 @@
+﻿body {
+    background-color: #ffffff;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    background: #fff;
+}
+
+/*.div-body {
+    width: 100%;
+}*/
+
+.tablist {
+    width: 100%;
+    height: 3.0em;
+    margin: 0 0 0 0;
+    position: relative;
+    /*overflow: hidden;*/
+    -ms-touch-action: none;
+    cursor: pointer;
+    display: table;
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+}
+.tablist ._scroller {
+    position:fixed;
+}
+
+    .tablist .scrollLine {
+        width: auto;
+        padding: 0 0 0 0;
+        margin: 0 0 0 0;
+        display: table;
+        white-space: nowrap;
+        background-color: #ffffff;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+        .tablist .scrollLine .t-item {
+            width: 150px;
+            height: 2em;
+            line-height: 2.1em;
+            margin: 0 0 0 0;
+            padding: 0.5em 0 0.35em 0;
+            display: inline-table;
+            text-align: center;
+        }
+
+        .tablist .scrollLine .scroll-seled {
+            color: #3E9EC0;
+            border-bottom: 2px solid #3E9EC0;
+        }
+
+.albumlist {
+    width: 90%;
+    margin: 0 auto;
+}
+
+    .albumlist .albumitem {
+        width: 100%;
+        margin: 1em auto;
+        border-radius: 4px;
+    }
+
+    .albumlist img {
+        width: 100%;
+        border-radius: 3px;
+    }
+
+.scrollpageloading {
+    width: 100%;
+    height: auto;
+    margin: 3em 0 3em 0;
+    text-align: center;
+    display: table;
+}
+
+    .scrollpageloading img {
+        width: 4em;
+        margin: 0 auto 0 auto;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.24);
+        /*border:1px solid #e0e0e0;*/
+        border-radius: 4em;
+        overflow: hidden;
+    }

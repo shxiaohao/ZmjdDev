@@ -1,0 +1,80 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout0.cshtml";
+
+    HotelPhotosEntity result = Model;
+    ViewBag.Title = string.Format("{0}照片-{0}-周末酒店", result.HotelName);
+    ViewBag.Keywords = string.Format("共{0}张{1}照片，点击查看更多{1}网友点评、玩点、特色、美食、优惠价格。",result.HPList.Count,result.HotelName);
+    ViewBag.Description = string.Format("{0}照片-{0}", result.HotelName);
+
+}
+
+@section styles {
+    @Styles.Render("~/Content/css/photoswipe.css")
+    <style>
+    html, body {
+        margin: 0; padding: 0;
+        overflow: hidden;
+    }
+    #body > a {
+        display: none;
+    }
+    #body > header {
+        position: absolute;
+        z-index: 1001;
+        display: block;
+        opacity: 0.8;
+    }
+    #body .home {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 50px;
+        height: 44px;
+        background: transparent url(/Content/img/home_light.png) center center no-repeat;
+        background-size: 30px 30px;
+        z-index: 1;
+        text-indent: -200px;
+    }
+    </style>
+}
+
+@section scripts
+{
+    @Scripts.Render("~/Content/js/klass.min.js", "~/Content/js/photoswipe.js")
+    <script>
+        $(function () {
+
+            var PhotoSwipe = window.Code.PhotoSwipe
+
+            var options = {
+                preventHide: true,
+                captionAndToolbarAutoHideDelay: 0,
+                getImageSource: function (obj) {
+                    return obj.url;
+                },
+                getImageCaption: function (obj) {
+                    return obj.caption;
+                }
+            },
+                images = $('#photos a').map(function () {
+                    return { url: this.href, caption: this.title };
+                }),
+                instance = PhotoSwipe.attach(
+                    images,
+                    options
+                );
+
+            instance.show(0);
+        });
+    </script>
+}
+
+<header>
+    <a href="/" class="home">首页</a> 
+</header>
+
+<ul id="photos" style="display:none">
+@foreach(HotelPhotoEntity item in result.HPList) {
+	<li><a href="@item.URL" title="@item.Title">@item.Title</a></li>
+}
+</ul>

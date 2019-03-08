@@ -1,0 +1,299 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6ECD133E-440C-4751-896D-975902DA1AC5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HJDAPI.Models</RootNamespace>
+    <AssemblyName>HJDAPI.Models</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HJD.AccountServices.Contracts">
+      <HintPath>..\..\..\Contracts\HJD.AccountServices.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.AccountServices.Entity">
+      <HintPath>..\..\..\Contracts\HJD.AccountServices.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.CommentService.Contract">
+      <HintPath>..\..\..\Contracts\HJD.CommentService.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.CouponService.Contracts">
+      <HintPath>..\..\..\Contracts\HJD.CouponService.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.DestServices.Contract">
+      <HintPath>..\..\..\Contracts\HJD.DestServices.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.HotelManagementCenter.Domain">
+      <HintPath>..\..\..\Contracts\HJD.HotelManagementCenter.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.HotelPrice.Contract">
+      <HintPath>..\..\..\Contracts\HJD.HotelPrice.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.HotelServices.Contracts">
+      <HintPath>..\..\..\Contracts\HJD.HotelServices.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.PhotoServices.Contracts">
+      <HintPath>..\..\..\Contracts\HJD.PhotoServices.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="HJD.ProductService.Contracts">
+      <HintPath>..\..\..\Contracts\HJD.ProductService.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Library\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AccountInfoItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AccountRecordInfoEntity.cs" />
+    <Compile Include="ActivityParam.cs" />
+    <Compile Include="ActivityResult.cs" />
+    <Compile Include="AlbumSkuListEntity.cs" />
+    <Compile Include="AlipayCheckParams.cs" />
+    <Compile Include="AppErrorParam.cs" />
+    <Compile Include="AppMenuEntity.cs" />
+    <Compile Include="BaseParam.cs" />
+    <Compile Include="BaseResponseEx.cs" />
+    <Compile Include="BaseTextAndUrl.cs" />
+    <Compile Include="BecomVIPTip.cs" />
+    <Compile Include="BookInspectorHotelParam.cs" />
+    <Compile Include="BookPersonInfoEntity.cs" />
+    <Compile Include="BookVoucherHotelParam.cs" />
+    <Compile Include="BrowsingRecordResult.cs" />
+    <Compile Include="ChannelInAccountViewModel.cs" />
+    <Compile Include="ChannelLoginParam.cs" />
+    <Compile Include="ChannelMineModel.cs" />
+    <Compile Include="ChannelPosterActive.cs" />
+    <Compile Include="AppUpdateEntity.cs" />
+    <Compile Include="CheckSelectedVoucherInfoForOrderViewModel.cs" />
+    <Compile Include="Coupon\BatchAdd2RefundCouponEntity.cs" />
+    <Compile Include="Coupon\CouponOrderEntity.cs" />
+    <Compile Include="Coupon\WriteOffExchangeCouponResponse.cs" />
+    <Compile Include="JiGuangSMS\JGCallSMS.cs" />
+    <Compile Include="JiGuangSMS\TemplateSendResult.cs" />
+    <Compile Include="JiGuangSMS\VoiceCode.cs" />
+    <Compile Include="ExchangeCouponRequestParam.cs" />
+    <Compile Include="ExchangeCouponsParam.cs" />
+    <Compile Include="ExchangeNoBookEntity.cs" />
+    <Compile Include="GroupSerialItem.cs" />
+    <Compile Include="InvoiceParamEntity.cs" />
+    <Compile Include="JiGuangSMS\HttpResponse.cs" />
+    <Compile Include="JiGuangSMS\TemplateMessage.cs" />
+    <Compile Include="KeyValueEntity.cs" />
+    <Compile Include="LYResponseResultEntity.cs" />
+    <Compile Include="OrderCacheParam.cs" />
+    <Compile Include="OrderIDDetailOrderIDRelEntity.cs" />
+    <Compile Include="OrderListItemEntity.cs" />
+    <Compile Include="MenuItemEntity.cs" />
+    <Compile Include="PackageAndProductCouponDefineEntity.cs" />
+    <Compile Include="RedOrderInfoEntity.cs" />
+    <Compile Include="RedActivityInfoEntity.cs" />
+    <Compile Include="ResponseBase.cs" />
+    <Compile Include="RetailTeamDataEntity.cs" />
+    <Compile Include="ScreenConditionsEntity.cs" />
+    <Compile Include="SearchEntity.cs" />
+    <Compile Include="SearchParamsForCoupon.cs" />
+    <Compile Include="SearchParamsForCity.cs" />
+    <Compile Include="SearchParams.cs" />
+    <Compile Include="ShareModel.cs" />
+    <Compile Include="CouponOrderStepGroupEntity.cs" />
+    <Compile Include="ShortUrlRequestParam.cs" />
+    <Compile Include="ShortUrlResponse.cs" />
+    <Compile Include="Tags\TagEntity.cs" />
+    <Compile Include="TextValueEntity.cs" />
+    <Compile Include="TheBestCouponInfoForOrderViewModel.cs" />
+    <Compile Include="CheckSelectedCashCouponInfoForOrderViewModel.cs" />
+    <Compile Include="CheckSubmitOrderResonse.cs" />
+    <Compile Include="PresentCashCouponParam.cs" />
+    <Compile Include="CouponProductEntity.cs" />
+    <Compile Include="GetChannelMBankAccountListResult.cs" />
+    <Compile Include="GetChannelMOrderListResult.cs" />
+    <Compile Include="GetChannelSettleListResult.cs" />
+    <Compile Include="ConsumeUserPointsParam.cs" />
+    <Compile Include="GetRetailProductListResult.cs" />
+    <Compile Include="GroupSKUCouponActivityModel.cs" />
+    <Compile Include="ShopLoginParam.cs" />
+    <Compile Include="BuyCouponCheckNumResult.cs" />
+    <Compile Include="CancelAuthOrderParams.cs" />
+    <Compile Include="CheckOrderBeforePayRequestParams.cs" />
+    <Compile Include="CheckOrderBeforePayResponse.cs" />
+    <Compile Include="CheckUserIDAndPasswordItem.cs" />
+    <Compile Include="CheckUserIDAndPasswordResponse.cs" />
+    <Compile Include="CityInfo.cs" />
+    <Compile Include="CitySuggestItem.cs" />
+    <Compile Include="CityList.cs" />
+    <Compile Include="CollectHotelResult.cs" />
+    <Compile Include="CollectListItem.cs" />
+    <Compile Include="CollectParamItemModel.cs" />
+    <Compile Include="CollectParamModel.cs" />
+    <Compile Include="CommentDefaultInfoModel.cs" />
+    <Compile Include="CommentInfoModel.cs" />
+    <Compile Include="CommentPhotoInsertEntity.cs" />
+    <Compile Include="CommentPhotoUploadEntity.cs" />
+    <Compile Include="CommentPhotoUploadResultEntity.cs" />
+    <Compile Include="CommentShareModel.cs" />
+    <Compile Include="CouponActivityDetailModel.cs" />
+    <Compile Include="CouponParam.cs" />
+    <Compile Include="DeviceInfoModel.cs" />
+    <Compile Include="EasternAirLinesCardParam.cs" />
+    <Compile Include="EasternAirLinesRecord.cs" />
+    <Compile Include="EMC\EMCTxtMessageEntity.cs" />
+    <Compile Include="GetInspectorHotelByIdParam.cs" />
+    <Compile Include="HotelDestInfoList.cs" />
+    <Compile Include="HotelItem5.cs" />
+    <Compile Include="HotelItem6.cs" />
+    <Compile Include="HotelVoucherAndInspectorHotel.cs" />
+    <Compile Include="HotelVoucherListResult.cs" />
+    <Compile Include="InspectorHotelListResult.cs" />
+    <Compile Include="ExistsMobileAccountItem.cs" />
+    <Compile Include="ExistsMobileAccountResponse.cs" />
+    <Compile Include="GetInspectorRefHotelListParam.cs" />
+    <Compile Include="GetInspectorHotelsListParam.cs" />
+    <Compile Include="GetOrRegistPhoneUserRequestParams.cs" />
+    <Compile Include="GetOrRegistPhoneUserResponse.cs" />
+    <Compile Include="GetUserCanUseCashCouponAmountRequestParams.cs" />
+    <Compile Include="GetUserCanUseCashCouponAmountResponse.cs" />
+    <Compile Include="GetUserCommInfoReqParm.cs" />
+    <Compile Include="GetUserRebateListRequestParams.cs" />
+    <Compile Include="GetUserRebateListResponse.cs" />
+    <Compile Include="HomePageData.cs" />
+    <Compile Include="HotelClassDefine.cs" />
+    <Compile Include="HotelReviewItem.cs" />
+    <Compile Include="HotelsResult.cs" />
+    <Compile Include="HotelTop.cs" />
+    <Compile Include="HotelTopItem.cs" />
+    <Compile Include="InspectorRewardResult.cs" />
+    <Compile Include="InterestHotelsResult.cs" />
+    <Compile Include="InterestModel.cs" />
+    <Compile Include="ListResult.cs" />
+    <Compile Include="LoginResult.cs" />
+    <Compile Include="MagiCallTxtMsgEntity.cs" />
+    <Compile Include="MagiCall\EasemobEventsEntity.cs" />
+    <Compile Include="MagiCall\MCChatMessage.cs" />
+    <Compile Include="ModifyPasswordItem.cs" />
+    <Compile Include="ModifyUserPhoneItem.cs" />
+    <Compile Include="OperationResult.cs" />
+    <Compile Include="RequestParams\DeleteTravePersonById.cs" />
+    <Compile Include="RequestParams\GetInvoiceParams.cs" />
+    <Compile Include="RequestParams\GetTravelPersonByUserIdParams.cs" />
+    <Compile Include="RequestParams\GetTravelPersonParams.cs" />
+    <Compile Include="ResponseModel\GetInvoiceResponseModel.cs" />
+    <Compile Include="ResponseModel\GetTravelPersonByUserIdResponseModel.cs" />
+    <Compile Include="ResponseModel\GetTravelPersonResponseModel.cs" />
+    <Compile Include="SendAppNoticeResponse.cs" />
+    <Compile Include="ShopSearchItemEntity.cs" />
+    <Compile Include="ShortUrlEntity50r.cs" />
+    <Compile Include="Option.cs" />
+    <Compile Include="OrderCancelResult.cs" />
+    <Compile Include="OrderSubmit.cs" />
+    <Compile Include="OTAInfo.cs" />
+    <Compile Include="Package.cs" />
+    <Compile Include="PackageOrderInfo20.cs" />
+    <Compile Include="PictureItem.cs" />
+    <Compile Include="PicturesResult.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="HotelQueryParam.cs" />
+    <Compile Include="QuickSearchIdsResult.cs" />
+    <Compile Include="QuickSearchResult.cs" />
+    <Compile Include="QuickSearchSuggestItem.cs" />
+    <Compile Include="QuickSearchSuggestType.cs" />
+    <Compile Include="RegisterResult.cs" />
+    <Compile Include="BaseResponse.cs" />
+    <Compile Include="RequestOrderRebateRequestParams.cs" />
+    <Compile Include="RoomCouponActivityListItem.cs" />
+    <Compile Include="SKUCouponActivityAlbumEntity.cs" />
+    <Compile Include="SKUCouponActivityDetailModel.cs" />
+    <Compile Include="SubmitExchangeRoomOrder.cs" />
+    <Compile Include="ThirdPartyLyRequestParam.cs" />
+    <Compile Include="UmengMessage.cs" />
+    <Compile Include="UpdateCouponPhotoReqParms.cs" />
+    <Compile Include="UsedProductCouponEntity.cs" />
+    <Compile Include="UserCanUseCashCouponResponse.cs" />
+    <Compile Include="UserCanUseCashCouponRequest.cs" />
+    <Compile Include="ResourceResult.cs" />
+    <Compile Include="ResultEntity.cs" />
+    <Compile Include="ReviewQueryParam.cs" />
+    <Compile Include="ReviewResult.cs" />
+    <Compile Include="ReviewResult40.cs" />
+    <Compile Include="RoomRate.cs" />
+    <Compile Include="SubmitCommentEntity.cs" />
+    <Compile Include="SubmitCommentResultEntity.cs" />
+    <Compile Include="UserCanWritingCommentResult.cs" />
+    <Compile Include="UserCommentListModel.cs" />
+    <Compile Include="UserCommInvoiceInfoModel.cs" />
+    <Compile Include="UserInfoResult.cs" />
+    <Compile Include="UserNickNameModel.cs" />
+    <Compile Include="UserNoticesEntity.cs" />
+    <Compile Include="WalletResult.cs" />
+    <Compile Include="WapHotelsResult.cs" />
+    <Compile Include="AttractionQueryParam.cs" />
+    <Compile Include="WapAttractionResult.cs" />
+    <Compile Include="WapThemeHotelsResult.cs" />
+    <Compile Include="WapInterestHotelsResult.cs" />
+    <Compile Include="HotelItem3.cs" />
+    <Compile Include="HotePrice.cs" />
+    <Compile Include="HotePrice2.cs" />
+    <Compile Include="OTAInfo2.cs" />
+    <Compile Include="ReviewResult2.cs" />
+    <Compile Include="WapInterestHotelsResult2.cs" />
+    <Compile Include="HotePrice21.cs" />
+    <Compile Include="ResetPasswordItem.cs" />
+    <Compile Include="RegistPhoneUserItem.cs" />
+    <Compile Include="HotelItem4.cs" />
+    <Compile Include="WapInterestHotelsResult3.cs" />
+    <Compile Include="ContextBasicInfo.cs" />
+    <Compile Include="WeixinConfig.cs" />
+    <Compile Include="YZXSMSEntity.cs" />
+    <Compile Include="ZwyRequstParams.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy HJDAPI.*.dll  ..\..\..\..\..\Library\ /s/y/f/r</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

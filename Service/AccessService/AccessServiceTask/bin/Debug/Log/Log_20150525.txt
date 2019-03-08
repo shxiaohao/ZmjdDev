@@ -1,0 +1,35 @@
+
+[2015/5/25 15:07:20] Start Job [DownloadBehaviorQueueJob]
+[2015/5/25 16:08:55] Job Error:未将对象引用设置到对象的实例。
+[2015/5/25 16:08:55] Stop Job [GenBehaviorCsvJob]
+[2015/5/25 16:09:11] Job Error:未将对象引用设置到对象的实例。
+[2015/5/25 16:09:11] Stop Job [GenBehaviorCsvJob]
+[2015/5/25 16:09:33] Start Job [GenBehaviorCsvJob]
+[2015/5/25 16:09:45] WriteBehaviorList Count:45
+[2015/5/25 16:09:50] Stop Job [GenBehaviorCsvJob]
+[2015/5/25 16:11:56] Start Job [GenBehaviorCsvJob]
+[2015/5/25 16:12:35] Start Job [GenBehaviorCsvJob]
+[2015/5/25 16:13:57] Start Job [GenBehaviorCsvJob]
+[2015/5/25 16:15:31] Start Job [GenBehaviorCsvJob]
+[2015/5/25 16:41:34] Start Job [GenBehaviorCsvJob]
+[2015/5/25 16:42:47] Start Job [GenBehaviorCsvJob]
+[2015/5/25 16:43:00] WriteBehaviorList Count:17
+[2015/5/25 16:43:01] Stop Job [GenBehaviorCsvJob]
+[2015/5/25 16:44:39] Start Job [GenBehaviorCsvJob]
+[2015/5/25 16:44:39] WriteBehaviorList Count:17
+[2015/5/25 16:44:40] Job [GenBehaviorCsvJob] Error:文件“D:\Log\AccessService\BehaviorRecord\Csv\behavior_20150525.csv”正由另一进程使用，因此该进程无法访问此文件。
+[2015/5/25 16:44:40] Stop Job [GenBehaviorCsvJob]
+[2015/5/25 16:45:21] Start Job [GenBehaviorCsvJob]
+[2015/5/25 16:45:24] WriteBehaviorList Count:17
+[2015/5/25 16:45:24] Stop Job [GenBehaviorCsvJob]
+[2015/5/25 16:45:52] Start Job [GenBehaviorCsvJob]
+[2015/5/25 16:45:53] WriteBehaviorList Count:17
+[2015/5/25 16:45:54] Stop Job [GenBehaviorCsvJob]
+[2015/5/25 16:46:03] Start Job [GenBehaviorCsvJob]
+[2015/5/25 16:46:04] WriteBehaviorList Count:17
+[2015/5/25 16:46:30] Start Job [GenBehaviorCsvJob]
+[2015/5/25 16:46:31] WriteBehaviorList Count:17
+[2015/5/25 16:46:32] Stop Job [GenBehaviorCsvJob]
+[2015/5/25 16:47:13] Start Job [GenBehaviorCsvJob]
+[2015/5/25 16:47:14] WriteBehaviorList Count:17
+[2015/5/25 16:47:14] Stop Job [GenBehaviorCsvJob]

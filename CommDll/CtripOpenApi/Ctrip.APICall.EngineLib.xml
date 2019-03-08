@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Ctrip.APICall.EngineLib</name>
+    </assembly>
+    <members>
+        <member name="T:Ctrip.APICall.EngineLib.Adepter">
+            <summary>
+             适配器类
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.EngineLib.Adepter.CallAPIAsyn(Ctrip.APICall.BaseLib.BaseClass.BaseAPICallEntity)">
+            <summary>
+            异步请求 应用于平台请求
+            </summary>
+            <param name="APICallEntity">Api请求实体</param>
+        </member>
+        <member name="M:Ctrip.APICall.EngineLib.Adepter.CallAPISyn(Ctrip.APICall.BaseLib.BaseClass.BaseAPICallEntity)">
+            <summary>
+            同步请求 应用于引擎请求
+            </summary>
+            <param name="APICallEntity">Api请求实体</param>
+            <returns>返回实体</returns>
+        </member>
+        <member name="T:Ctrip.APICall.EngineLib.APICallEngine">
+            <summary>
+            API集群调用引擎
+            </summary>
+        </member>
+        <member name="F:Ctrip.APICall.EngineLib.APICallEngine._AllAPICallPluginDic">
+            <summary>
+            按业务类型上层集合
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.EngineLib.APICallEngine.#cctor">
+            <summary>
+            静态构造函数
+            </summary>
+        </member>
+        <member name="F:Ctrip.APICall.EngineLib.APICallEngine._TempQueue">
+            <summary>
+            临时Queue(非线程安全)
+            </summary>
+        </member>
+        <member name="F:Ctrip.APICall.EngineLib.APICallEngine._TempQueueLockObj">
+            <summary>
+            临时Queue读写锁
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.EngineLib.APICallEngine.WriteTempQueue(Ctrip.APICall.BaseLib.BaseClass.BaseAPICallEntity)">
+            <summary>
+            写临时Queue
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.EngineLib.APICallEngine.ReadTempQueue">
+            <summary>
+            读取临时Queue
+            </summary>
+            <returns>返回序列化实体</returns>
+        </member>
+        <member name="M:Ctrip.APICall.EngineLib.APICallEngine.GetQueueCount">
+            <summary>
+            获取队列内消息总数
+            </summary>
+            <returns>消息总数</returns>
+        </member>
+        <member name="F:Ctrip.APICall.EngineLib.APICallEngine._ThreadList">
+            <summary>
+            线程队列（注意此处定义只是加强线程持久化，同时如果提供认为线程终止入口
+            </summary>
+        </member>
+        <member name="F:Ctrip.APICall.EngineLib.APICallEngine._IsStopThread">
+            <summary>
+            是否终止线程 主要为windows服务强制关闭时使用
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.EngineLib.APICallEngine.Launch">
+            <summary>
+            引擎作为服务独立发动
+            </summary>
+        </member>
+        <member name="T:Ctrip.APICall.EngineLib.ThreaderProcesser">
+            <summary>
+            线程处理类
+            </summary>
+        </member>
+        <member name="F:Ctrip.APICall.EngineLib.ThreaderProcesser._Queue">
+            <summary>
+            消息队列
+            </summary>
+        </member>
+        <member name="F:Ctrip.APICall.EngineLib.ThreaderProcesser._Timespan">
+            <summary>
+            TimeSpan
+            </summary>
+        </member>
+        <member name="F:Ctrip.APICall.EngineLib.ThreaderProcesser._Adepter">
+            <summary>
+            适配器
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.EngineLib.ThreaderProcesser.MessageQueueMonitorProcess">
+            <summary>
+            消息队列监听处理  注意：消息监听队列 使用单线程扫描 ，Call多线程扫描队列从缓存队列获取 主要目的是减少本地或局域网络通讯成本和连接压力
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.EngineLib.ThreaderProcesser.APICallMonitorProcess">
+            <summary>
+            APICall监听处理
+            </summary>
+        </member>
+        <member name="M:Ctrip.APICall.EngineLib.ThreaderProcesser.GetMessQueueEntity">
+            <summary>
+            获取消息队列池消息
+            </summary>
+            <returns>消息实体</returns>
+        </member>
+    </members>
+</doc>

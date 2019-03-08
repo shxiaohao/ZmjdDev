@@ -1,0 +1,108 @@
+﻿@model  List<HJD.HotelServices.Contracts.CanSaleHotelInfoEntity>
+@{
+    Layout = null;
+    
+    var cssVersion = "190001010000";
+    try
+    {
+        //var last = this.GetType().Assembly.Location;
+        var last = System.Reflection.Assembly.GetExecutingAssembly().Location;
+        var lastTime = System.IO.File.GetLastWriteTime(last);
+        cssVersion = lastTime.ToString("yyyyMMddhhmm");
+    }
+    catch (Exception ex) { 
+    }
+    ViewBag.Title = "节日有房";
+}
+
+    <!DOCTYPE HTML>
+
+    <script type="text/javascript">
+        function goto(hotelid, hotelname)
+        {
+            _hmt.push(['_trackEvent', 'Qingming', 'nav', hotelname, hotelid]);
+            var url = "@(ViewBag.AccessProtocal)" + hotelid;
+            this.location = url;
+
+        }
+    </script>
+
+    <html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>节日有房</title>
+        <link href="/content/css/bootstrap.css?v=@cssVersion" rel="stylesheet">
+        <link href="/content/css/yuandan.css?v=@cssVersion" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row topimg">
+                <div class="col-xs-12">
+                    <img src="http://whphoto.b0.upaiyun.com/115CMwN0_jupiter" class="img-responsive" alt="" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="weeken2 col-xs-12">
+                    @Html.Raw(ViewBag.SatList)
+                </div>
+            </div>
+
+            @{
+                
+                Dictionary<string, int> weightDic = new Dictionary<string,int>();
+                weightDic.Add("浙江", 1000);
+                weightDic.Add("江苏", 900);
+                weightDic.Add("上海", 800);
+                
+                Dictionary<string, int> provinceDic = new Dictionary<string, int>();
+                var provinceList = Model.Select(h => h.DataPathName.Trim('.').Split('.')[2]).Distinct().OrderBy(p => p).ToList();
+                for (int i = 0; i < provinceList.Count; i++)
+                {
+                    var province = provinceList[i];
+                    var weight = weightDic.ContainsKey(province) ? weightDic[province] : 0;
+
+                    provinceDic.Add(province, (provinceList.Count - i) + weight);
+                }
+
+                foreach (var province in provinceDic.OrderByDescending(p => p.Value).ToDictionary(k => k.Key, v => v.Value).Keys)
+                {
+                     <div class="province_line"><div>@string.Format("{0}地区", province)</div></div>
+                        foreach (string city in Model.Where(p => p.DataPathName.Trim('.').Split('.')[2] == province).Select(h => h.DataPathName).Distinct().OrderBy(d => d))
+                        {
+                            <div class="title2">  <h5> @( city.Trim('.').Split('.').Last())</h5></div>
+                            <ul>
+                                @foreach (HJD.HotelServices.Contracts.CanSaleHotelInfoEntity h in Model.Where(h => h.DataPathName == city))
+                                {
+                                    <li>
+                                        <a href="javascript:;" onclick="goto(@(h.HotelId),'@( h.HotelName)')">
+                                            @( h.HotelName.Length > 13 ? h.HotelName.Substring(0, 13) + "..." : h.HotelName)
+
+                                            <span style="float: right;margin-right: 5%;color: rgb(255, 140, 1); font-size: 1em;">￥@((int)h.Businessprice)</span>
+                                            <p style="color: #999;width: 80%;">
+                                                @(h.PackageBrief)
+                                            </p>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        }       
+                }
+            }
+
+            <div class="row">
+                <div class="col-xs-12 ">
+                    <div class="tips2">
+                        咨询请洽：<i>4000-021-702</i>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+                <script type="text/javascript">
+                    var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+                    document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F3566e9570ddbe6722a51adedffbf065b' type='text/javascript'%3E%3C/script%3E"));
+                </script>
+</body>
+</html>

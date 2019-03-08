@@ -1,0 +1,257 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutApp.cshtml";
+
+    ViewBag.Title = "周边好去处";
+
+    var userid = ViewBag.UserId;
+
+    var isApp = ViewBag.IsApp;
+    var isInWeixin = ViewBag.isInWeixin;
+
+    ViewBag.LoadHmBaidu = false;
+}
+
+@section styles
+{
+    <link href="~/Content/css/framework/zmjd.swiper.min.css" rel="stylesheet" />
+    <link href="~/Content/css/app/around.css?v=@(Helpers.curAppVer())" rel="stylesheet" />
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+}
+
+<div class="null-info" style="display:none;">
+    <div class="icon"><img src="http://whfront.b0.upaiyun.com/app/img/hotel/list/img-hotels-null.png" alt="" /></div>
+    <div class="txt">当前城市暂无相关产品</div>
+</div>
+
+<div v-cloak id="weekGoodSection" class="section around-hide">
+    @*<div style="margin:0 0 0 0;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3a%2f%2fwww.zmjd100.com%2fApp%2fAround%3flat%3d0%26lng%3d0%26districtId%3d2%26geoScopeType%3d0%26_newpage%3d0">GO APP (Local) >>></a></div>*@
+    <div class="tit">
+        <div class="left">{{AlbumsInfo.albumTitle}}</div>
+        <div class="right">
+            <div class="more-link" onclick="gourl('{{AlbumsInfo.moreLink}}')">查看更多</div>
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="swiper-container hlist-panel">
+        <ul class="swiper-wrapper">
+            <li class="swiper-slide" v-for="item in AlbumsInfo.Result20" v-if="$index<5" onclick="openHotel('{{item.Id}}')">
+                <div class="item">
+                    <div class="h-img">
+                        <img v-if="$index<2||!AlbumsInfo.stepLoadImg" class="show-img" src="{{item.HotelPicUrl}}" alt="" />
+                        <img v-else class="show-img" data-orisrc="{{item.HotelPicUrl}}" src="/Content/images/seat/home-hotel-load-16x9.png" alt="" />
+                    </div>
+                    <div class="hname-info">
+                        <div class="hotel-name">{{item.Name}}</div>
+                        <div class="hotel-packagebrief">{{item.PackageBrief}}</div>
+                        <div class="hotel-price" v-if="item.VIPPrice">
+                            <span class="atv-price"><span class="zmjd-iconfont p-un">&#xe623;</span> <span class="p-un">¥</span>{{item.VIPPrice}}</span>
+                            <span class="del-price" v-if="item.VIPPrice!=item.HotelPrice">普通价 ¥{{item.MinPrice}}</span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <ul />
+    </div>
+    <div class="around-multiple-border2"></div>
+</div>
+<div id="weekGoodSection-seat" class="around-seat-slider"><img src="/Content/images/seat/img-home-seat-slider2.png" alt=""></div>
+
+<div v-cloak id="productCouponSection" class="section around-hide">
+    <div class="tit">
+        <div class="left">{{AlbumsInfo.albumTitle}}</div>
+        <div class="right">
+            <div v-if="AlbumsInfo.SKUCouponList.length>0" class="more-link" onclick="gourl('http://www.zmjiudian.com/Coupon/MoreProductList?userid={{AlbumsInfo.userid}}&category={{AlbumsInfo.category}}&districtId={{AlbumsInfo.districtId}}&districtName={{AlbumsInfo.districtName}}&geoScopeType={{AlbumsInfo.geoScopeType}}&lat={{AlbumsInfo.lat}}&lng={{AlbumsInfo.lng}}&grid=1&_newpage=1')">查看更多</div>
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="product-list" v-if="AlbumsInfo">
+        <div v-for="item in AlbumsInfo.SKUCouponList" v-if="$index<4" class="b-item {{$index%2==0?'':'b-item-r'}}" onclick="gourl('http://www.zmjiudian.com/coupon/product/{{item.SKUID}}?userid={userid}&_newpage=1&_dorpdown=1&_newtitle=1')">
+            <div v-if="$index>1" class="top-br"></div>
+            <div class="i-img">
+                <img class="lazyload-img" src="{{item.PicUrl.replace('theme', '350X350')}}" alt="" />
+            </div>
+            <div class="i-name">{{item.PageTitle}}</div>
+            <div class="i-tag">{{item.Tags}}</div>
+            <div class="i-price1" v-else><span class="zmjd-iconfont _vip">&#xe623;</span><span class="_pu">¥</span>{{item.SKUVipPrice}}</div>
+            <div class="i-price2" v-if="item.SKUMarketPrice">普通价:¥{{item.SKUPrice}}起</div>
+        </div>
+    </div>
+    <div class="around-multiple-border2"></div>
+</div>
+<div id="productCouponSection-seat" class="around-seat-slider" style="margin:2em 0 0 0;"><img class="img88" src="/Content/images/seat/seat-double-table.png" alt=""></div>
+
+<div v-cloak id="playProductCouponSection" class="section around-hide">
+    <div class="tit">
+        <div class="left">{{AlbumsInfo.albumTitle}}</div>
+        <div class="right">
+            <div v-if="AlbumsInfo.SKUCouponList.length>0" class="more-link" onclick="gourl('http://www.zmjiudian.com/Coupon/MoreProductList?userid={{AlbumsInfo.userid}}&category={{AlbumsInfo.category}}&districtId={{AlbumsInfo.districtId}}&districtName={{AlbumsInfo.districtName}}&geoScopeType={{AlbumsInfo.geoScopeType}}&lat={{AlbumsInfo.lat}}&lng={{AlbumsInfo.lng}}&grid=1&_newpage=1')">查看更多</div>
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="product-list" v-if="AlbumsInfo">
+        <div v-for="item in AlbumsInfo.SKUCouponList" v-if="$index<4" class="b-item {{$index%2==0?'':'b-item-r'}}" onclick="gourl('http://www.zmjiudian.com/coupon/product/{{item.SKUID}}?userid={userid}&_newpage=1&_dorpdown=1&_newtitle=1')">
+            <div v-if="$index>1" class="top-br"></div>
+            <div class="i-img">
+                <img class="lazyload-img" src="{{item.PicUrl.replace('theme', '350X350')}}" alt="" />
+            </div>
+            <div class="i-name">{{item.PageTitle}}</div>
+            <div class="i-tag">{{item.Tags}}</div>
+            <div class="i-price1" v-else><span class="zmjd-iconfont _vip">&#xe623;</span><span class="_pu">¥</span>{{item.SKUVipPrice}}</div>
+            <div class="i-price2" v-if="item.SKUMarketPrice">普通价:¥{{item.SKUPrice}}起</div>
+        </div>
+    </div>
+    <div class="home-multiple-border2"></div>
+</div>
+<div id="playProductCouponSection-seat" class="around-seat-slider" style="margin:2em 0 0 0;"><img class="img88" src="/Content/images/seat/seat-double-table.png" alt=""></div>
+
+<div style="margin:1em 0 0 0;"></div>
+<div style="margin:2em 0 0 0;display:none;"><a href="whotelapp://www.zmjiudian.com/gotopage?url=http%3a%2f%2f192.168.5.10%3a8020%2fWHForHtml5%2fhome.html%3fuserid%3d%7buserid%7d%26_dorpdown%3d1">GO APP (Local) >>></a></div>
+<div class="_waring around-hide"></div>
+
+<input type="hidden" id="inWeixin" value="@(isInWeixin?"1":"0")" />
+<input type="hidden" id="isApp" value="@(isApp?"1":"0")" />
+
+@section scripts
+{
+    <script src="~/Content/js/framework/vue.min.js"></script>
+    <script src="~/Content/js/framework/zmjd.swiper.min.js"></script>
+    <script src="~/Content/js/framework/jquery.lazyload.min.js"></script>
+    <script src="~/Content/js/VerifyInput.js?v=@(Helpers.curAppVer())"></script>
+    @if (isApp)
+    {
+        @*<script>
+            try {
+                onAppShareCall = function () {
+
+                    var title = "";//'@(shareTitle)';
+                    var Content = "";//'@(shareDesc)';
+                    var photoUrl = "";//'@(shareImgUrl)';
+                    var shareLink = "";
+                    try { whotel.appShareData(title, Content, photoUrl, shareLink); } catch (e) { }
+                    var returnStr = '{"title":"{0}","Content":"{1}","photoUrl":"{2}","shareLink":"{3}"}';
+                    return returnStr.format(title, Content, photoUrl, shareLink);
+                }
+            }
+            catch (e) {
+                alert(e);
+            }
+            onAppShareCall();
+        </script>*@
+    }
+    @if (isInWeixin)
+    {
+        <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+
+        <script>
+            var loadWechat = function (_shareTitle, _shareDesc, _shareLink, _shareImgUrl, _shareSucessFunc) {
+
+                GetWeixinApiConfig();//注册
+
+                wx.ready(function () {
+
+                    wx.onMenuShareTimeline({
+                        title: _shareTitle,
+                        desc: _shareDesc,
+                        link: _shareLink,
+                        imgUrl: _shareImgUrl,
+                        success: function (res) {
+                            _shareSucessFunc(res)
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                    wx.onMenuShareAppMessage({
+                        title: _shareTitle,
+                        desc: _shareDesc,
+                        link: _shareLink,
+                        imgUrl: _shareImgUrl,
+                        success: function (res) {
+                            _shareSucessFunc(res)
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                    wx.onMenuShareQQ({
+                        title: _shareTitle,
+                        desc: _shareDesc,
+                        link: _shareLink,
+                        imgUrl: _shareImgUrl,
+                        success: function (res) {
+                            _shareSucessFunc(res)
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                    wx.onMenuShareQZone({
+                        title: _shareTitle,
+                        desc: _shareDesc,
+                        link: _shareLink,
+                        imgUrl: _shareImgUrl,
+                        success: function (res) {
+                            _shareSucessFunc(res)
+                        },
+                        cancel: function (res) {
+                        }
+                    });
+
+                });
+
+                function GetWeixinApiConfig() {
+
+                    var url = location.href.split("#")[0];
+                    $.ajax({
+                        url: '/Coupon/GetWeixinConfigInfo',
+                        type: 'POST',
+                        data: { url: url },
+                        dataType: 'json',
+                        async: false,
+                        error: function () {
+                            console.log("网络服务错误");
+                        },
+                        success: function (result) {
+                            if (typeof (result.Success) != undefined && result.Success == 1) {
+                                return false;
+                            }
+                            else {
+                                //得到微信config的值
+                                var array = [
+                                    'checkJsApi',
+                                    'onMenuShareTimeline',
+                                    'onMenuShareAppMessage',
+                                    'onMenuShareQQ',
+                                    'onMenuShareQZone',
+                                    'hideOptionMenu'
+                                ];
+                                if (result.jsApiList) {
+                                    var jsArray = result.jsApiList.split(',');
+                                    for (var key in jsArray) {
+                                        array.push("" + jsArray[key]);
+                                    }
+                                }
+
+                                wx.config({
+                                    debug: false,
+                                    appId: result.appId,
+                                    timestamp: "" + result.timestamp,
+                                    nonceStr: result.nonceStr,
+                                    signature: result.signature,
+                                    jsApiList: array
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+
+            //loadWechat(shareTitle, shareDesc, shareImgUrl, encodeURI(shareLink), null);
+        </script>
+    }
+    <script src="~/Content/js/app/around.js?v=@(Helpers.curAppVer())"></script>
+}

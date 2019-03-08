@@ -1,0 +1,207 @@
+﻿body {
+    background:#f5f5f5;
+}
+
+.expiretip {
+    background-color: #F9E5D5;
+    padding: 0.5em 0 0.5em 0;
+}
+
+    .expiretip .expireicon {
+        font-size: 1.5em;
+        margin:0 0.5em 0 1em ;
+        color:#fe8000;
+    }
+
+    .expiretip .expiredesc {
+        color: #555555;
+    }
+
+.topbanner {
+    width: 100%;
+    height: auto;
+    margin-bottom: 1em;
+}
+
+    .topbanner img {
+        width: 100%;
+        height: auto;
+    }
+
+.coupon-list {
+    width: 100%;
+    height: auto;
+    margin: 0 0 0 0;
+    padding: 1em 0 5em 0;
+    display: table;
+    font-size: 1em;
+    font-family: Arial;
+    position: relative;
+}
+
+    .coupon-list .item {
+        width: 85%;
+        height: auto;
+        margin: 0 auto 1em auto;
+        padding: 0 0 0 0;
+        display: table;
+        position: relative;
+        cursor: pointer;
+    }
+
+        .coupon-list .item .top {
+            width: 100%;
+            height: auto;
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+            display: table;
+            line-height: 0.1em;
+        }
+
+            .coupon-list .item .top img {
+                width: 100%;
+            }
+
+        .coupon-list .item .line {
+            width: 100%;
+            height: auto;
+            line-height: 0.1em;
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+        }
+
+            .coupon-list .item .line img {
+                width: 100%;
+            }
+
+        .coupon-list .item .bottom {
+            width: 100%;
+            height: auto;
+            line-height: 0.1em;
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+        }
+
+            .coupon-list .item .bottom img {
+                width: 100%;
+            }
+
+        .coupon-list .item .middle {
+            width: 100%;
+            height: auto;
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+            background: url(http://whfront.b0.upaiyun.com/app/img/coupon/walletcashcoupon/coupon-cart-bg.png) repeat-y left top;
+            background-size: 100%;
+        }
+
+            .coupon-list .item .middle .money {
+                width: 30%;
+                height: auto;
+                margin: 0 0 0 0;
+                padding: 1.2em 0 1em 0;
+                float: left;
+                text-align: center;
+            }
+
+                .coupon-list .item .middle .money .val-sml {
+                    width: 100%;
+                    margin: 0 0 0 0;
+                    padding: 0 0 0 0;
+                    font-size: 1.7em;
+                    display: table;
+                    text-align: center;
+                }
+
+.nogetredcolor {
+    color: #fe8000;
+}
+
+.getredcolor {
+    color: #919191;
+}
+
+.nogetredcolortit {
+    color: #2c2c2c;
+}
+
+.coupon-list .item .middle .info {
+    width: 70%;
+    height: auto;
+    margin: 0 0 0 0;
+    padding: 1em 0 1em 0;
+    float: right;
+}
+
+    .coupon-list .item .middle .info .yilingtag {
+        width: 50px;
+        height: 50px;
+        top: 10px;
+        right: 10px;
+        position: absolute;
+        z-index:10;
+    }
+
+        .coupon-list .item .middle .info .yilingtag img {
+            width: 50px;
+            height: 50px;
+        }
+
+    .coupon-list .item .middle .info .tit {
+        width: 100%;
+        height: auto;
+        margin: 0 auto 0 auto;
+        padding: 0 0 0 0;
+        font-size: 1em;
+        font-weight: bold;
+        /*color: #2c2c2c;*/
+        position: relative;
+    }
+
+    .coupon-list .item .middle .info .time {
+        width: 100%;
+        height: auto;
+        margin: 0 auto 0 auto;
+        padding: 0 0 0 0;
+        font-size: 0.9em;
+        color: #555;
+    }
+
+.coupon-list .item .middle .rule {
+    width: 90%;
+    height: auto;
+    margin: 0 auto 0 auto;
+    padding: 0 0 0.2em 0;
+    font-size: 0.8em;
+    color: #919191;
+}
+
+.bottombtn {
+    bottom: 0;
+    position: fixed;
+    z-index:101;
+    text-align: center;
+    height: auto;
+    background-color: #f5f5f5;
+    padding-bottom:1em;
+}
+
+    .bottombtn img {
+        width: 85%;
+        height: auto;
+    }
+    .weixin-share-tip {
+        width:100%;
+        height:100%;
+        position:fixed;
+        left:0;
+        top:0;
+        z-index:1900;
+        background: rgba(0,0,0,0.80);
+        overflow-y:auto;
+        -webkit-box-sizing : border-box;
+        -webkit-overflow-scrolling : touch;
+    }
+        .weixin-share-tip img{
+            width:100%;
+        }
