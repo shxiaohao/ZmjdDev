@@ -165,7 +165,10 @@ namespace HJDAPI.Controllers
             return strReturn;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public String GetLastH5ZipVerPackageList()
         {
           //  return File.ReadAllText(@"D:\WHAPPTools\H5AppPub\Data\zipVerPackageList.txt");
