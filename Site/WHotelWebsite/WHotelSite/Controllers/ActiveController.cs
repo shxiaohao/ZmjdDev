@@ -33,8 +33,6 @@ namespace WHotelSite.Controllers
 {
     public class ActiveController : BaseController
     {
-        // GET: /Active/
-
         public const string AccessProtocal_IsApp = "whotelapp://www.zmjiudian.com/";
         public const string AccessProtocalPage_IsApp = "whotelapp://gotopage?url=http://www.zmjiudian.com/";
 
