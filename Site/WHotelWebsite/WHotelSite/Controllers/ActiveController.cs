@@ -33,7 +33,6 @@ namespace WHotelSite.Controllers
 {
     public class ActiveController : BaseController
     {
-        //
         // GET: /Active/
 
         public const string AccessProtocal_IsApp = "whotelapp://www.zmjiudian.com/";
@@ -343,9 +342,14 @@ catch (e) { }
 
             return View(list);
         }
+
         /// <summary>
         /// 节日有房
         /// </summary>
+        /// <param name="strCheckDate"></param>
+        /// <param name="userid"></param>
+        /// <param name="swvip"></param>
+        /// <param name="sid"></param>
         /// <returns></returns>
         public ActionResult Holiday(string strCheckDate = "2014-1-1", string userid = "0", string sid = "", int swvip = 0)
         {
@@ -624,7 +628,7 @@ catch (e) { }
 
             return View(list);
         }
-
+        
         public string SetUrlProtocol(string HTML)
         {
             string apptype = Request.Headers["apptype"] != null ? Request.Headers["apptype"] : "";
